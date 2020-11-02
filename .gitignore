@@ -1,0 +1,5 @@
+.DS_Store
+.terraform
+crash.log
+
+/terraform-provider-kops
