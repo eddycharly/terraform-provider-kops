@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"log"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -13,7 +11,6 @@ func ExpandEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSpec {
 	return kops.EtcdManagerSpec{
 		Image: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "image", value)
 			return value
 		}(in["image"]),
 		Env: func(in interface{}) []kops.EnvVar {
@@ -29,7 +26,6 @@ func ExpandEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSpec {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "env", value)
 			return value
 		}(in["env"]),
 	}
@@ -39,7 +35,6 @@ func FlattenEtcdManagerSpec(in kops.EtcdManagerSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"image": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "image", value)
 			return value
 		}(in.Image),
 		"env": func(in []kops.EnvVar) interface{} {
@@ -52,7 +47,6 @@ func FlattenEtcdManagerSpec(in kops.EtcdManagerSpec) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "env", value)
 			return value
 		}(in.Env),
 	}

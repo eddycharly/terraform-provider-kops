@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -14,12 +11,10 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 	return kops.TopologySpec{
 		Masters: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "masters", value)
 			return value
 		}(in["masters"]),
 		Nodes: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "nodes", value)
 			return value
 		}(in["nodes"]),
 		Bastion: func(in interface{}) *kops.BastionSpec {
@@ -31,9 +26,9 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 					return nil
 				}
 				tmp := func(in kops.BastionSpec) *kops.BastionSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.BastionSpec {
 					if in.([]interface{})[0] == nil {
@@ -43,7 +38,6 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "bastion", value)
 			return value
 		}(in["bastion"]),
 		DNS: func(in interface{}) *kops.DNSSpec {
@@ -55,9 +49,9 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 					return nil
 				}
 				tmp := func(in kops.DNSSpec) *kops.DNSSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.DNSSpec {
 					if in.([]interface{})[0] == nil {
@@ -67,7 +61,6 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "dns", value)
 			return value
 		}(in["dns"]),
 	}
@@ -77,12 +70,10 @@ func FlattenTopologySpec(in kops.TopologySpec) map[string]interface{} {
 	return map[string]interface{}{
 		"masters": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "masters", value)
 			return value
 		}(in.Masters),
 		"nodes": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "nodes", value)
 			return value
 		}(in.Nodes),
 		"bastion": func(in *kops.BastionSpec) interface{} {
@@ -96,7 +87,6 @@ func FlattenTopologySpec(in kops.TopologySpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "bastion", value)
 			return value
 		}(in.Bastion),
 		"dns": func(in *kops.DNSSpec) interface{} {
@@ -110,7 +100,6 @@ func FlattenTopologySpec(in kops.TopologySpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "dns", value)
 			return value
 		}(in.DNS),
 	}

@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -21,9 +18,9 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 					return nil
 				}
 				tmp := func(in kops.DNSAccessSpec) *kops.DNSAccessSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.DNSAccessSpec {
 					if in.([]interface{})[0] == nil {
@@ -33,7 +30,6 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "dns", value)
 			return value
 		}(in["dns"]),
 		LoadBalancer: func(in interface{}) *kops.LoadBalancerAccessSpec {
@@ -45,9 +41,9 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 					return nil
 				}
 				tmp := func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.LoadBalancerAccessSpec {
 					if in.([]interface{})[0] == nil {
@@ -57,7 +53,6 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "load_balancer", value)
 			return value
 		}(in["load_balancer"]),
 	}
@@ -76,7 +71,6 @@ func FlattenAccessSpec(in kops.AccessSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "dns", value)
 			return value
 		}(in.DNS),
 		"load_balancer": func(in *kops.LoadBalancerAccessSpec) interface{} {
@@ -90,7 +84,6 @@ func FlattenAccessSpec(in kops.AccessSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "load_balancer", value)
 			return value
 		}(in.LoadBalancer),
 	}

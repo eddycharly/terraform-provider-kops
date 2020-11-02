@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"log"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -13,7 +11,6 @@ func ExpandAmazonVPCNetworkingSpec(in map[string]interface{}) kops.AmazonVPCNetw
 	return kops.AmazonVPCNetworkingSpec{
 		ImageName: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "image_name", value)
 			return value
 		}(in["image_name"]),
 		Env: func(in interface{}) []kops.EnvVar {
@@ -29,7 +26,6 @@ func ExpandAmazonVPCNetworkingSpec(in map[string]interface{}) kops.AmazonVPCNetw
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "env", value)
 			return value
 		}(in["env"]),
 	}
@@ -39,7 +35,6 @@ func FlattenAmazonVPCNetworkingSpec(in kops.AmazonVPCNetworkingSpec) map[string]
 	return map[string]interface{}{
 		"image_name": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "image_name", value)
 			return value
 		}(in.ImageName),
 		"env": func(in []kops.EnvVar) interface{} {
@@ -52,7 +47,6 @@ func FlattenAmazonVPCNetworkingSpec(in kops.AmazonVPCNetworkingSpec) map[string]
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "env", value)
 			return value
 		}(in.Env),
 	}

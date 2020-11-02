@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -21,14 +18,13 @@ func ExpandLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "load_balancer_name", value)
 			return value
 		}(in["load_balancer_name"]),
 		TargetGroupARN: func(in interface{}) *string {
@@ -40,14 +36,13 @@ func ExpandLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "target_group_arn", value)
 			return value
 		}(in["target_group_arn"]),
 	}
@@ -64,7 +59,6 @@ func FlattenLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "load_balancer_name", value)
 			return value
 		}(in.LoadBalancerName),
 		"target_group_arn": func(in *string) interface{} {
@@ -76,7 +70,6 @@ func FlattenLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "target_group_arn", value)
 			return value
 		}(in.TargetGroupARN),
 	}

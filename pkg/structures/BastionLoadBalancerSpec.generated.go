@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"log"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -19,7 +17,6 @@ func ExpandBastionLoadBalancerSpec(in map[string]interface{}) kops.BastionLoadBa
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "additional_security_groups", value)
 			return value
 		}(in["additional_security_groups"]),
 	}
@@ -35,7 +32,6 @@ func FlattenBastionLoadBalancerSpec(in kops.BastionLoadBalancerSpec) map[string]
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "additional_security_groups", value)
 			return value
 		}(in.AdditionalSecurityGroups),
 	}

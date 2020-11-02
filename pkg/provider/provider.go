@@ -16,6 +16,11 @@ func NewProvider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("KOPS_STATE_STORE", nil),
 				Description: "Location of state storage.",
 			},
+			"aws_profile": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "AWS profile.",
+			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"kops_cluster": datasources.Cluster(),

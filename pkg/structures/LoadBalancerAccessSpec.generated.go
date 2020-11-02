@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -14,7 +11,6 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 	return kops.LoadBalancerAccessSpec{
 		Type: func(in interface{}) kops.LoadBalancerType {
 			value := kops.LoadBalancerType(ExpandString(in))
-			log.Printf("%s - %#v", "type", value)
 			return value
 		}(in["type"]),
 		IdleTimeoutSeconds: func(in interface{}) *int64 {
@@ -26,14 +22,13 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 					return nil
 				}
 				tmp := func(in int64) *int64 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int64(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "idle_timeout_seconds", value)
 			return value
 		}(in["idle_timeout_seconds"]),
 		SecurityGroupOverride: func(in interface{}) *string {
@@ -45,14 +40,13 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "security_group_override", value)
 			return value
 		}(in["security_group_override"]),
 		AdditionalSecurityGroups: func(in interface{}) []string {
@@ -63,17 +57,14 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "additional_security_groups", value)
 			return value
 		}(in["additional_security_groups"]),
 		UseForInternalApi: func(in interface{}) bool {
 			value := bool(ExpandBool(in))
-			log.Printf("%s - %#v", "use_for_internal_api", value)
 			return value
 		}(in["use_for_internal_api"]),
 		SSLCertificate: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "ssl_certificate", value)
 			return value
 		}(in["ssl_certificate"]),
 		CrossZoneLoadBalancing: func(in interface{}) *bool {
@@ -85,14 +76,13 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "cross_zone_load_balancing", value)
 			return value
 		}(in["cross_zone_load_balancing"]),
 	}
@@ -102,7 +92,6 @@ func FlattenLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]in
 	return map[string]interface{}{
 		"type": func(in kops.LoadBalancerType) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "type", value)
 			return value
 		}(in.Type),
 		"idle_timeout_seconds": func(in *int64) interface{} {
@@ -114,7 +103,6 @@ func FlattenLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]in
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "idle_timeout_seconds", value)
 			return value
 		}(in.IdleTimeoutSeconds),
 		"security_group_override": func(in *string) interface{} {
@@ -126,7 +114,6 @@ func FlattenLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]in
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "security_group_override", value)
 			return value
 		}(in.SecurityGroupOverride),
 		"additional_security_groups": func(in []string) interface{} {
@@ -137,17 +124,14 @@ func FlattenLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]in
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "additional_security_groups", value)
 			return value
 		}(in.AdditionalSecurityGroups),
 		"use_for_internal_api": func(in bool) interface{} {
 			value := FlattenBool(bool(in))
-			log.Printf("%s - %v", "use_for_internal_api", value)
 			return value
 		}(in.UseForInternalApi),
 		"ssl_certificate": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "ssl_certificate", value)
 			return value
 		}(in.SSLCertificate),
 		"cross_zone_load_balancing": func(in *bool) interface{} {
@@ -159,7 +143,6 @@ func FlattenLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]in
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "cross_zone_load_balancing", value)
 			return value
 		}(in.CrossZoneLoadBalancing),
 	}

@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -14,7 +11,6 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 	return kops.EtcdMemberSpec{
 		Name: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "name", value)
 			return value
 		}(in["name"]),
 		InstanceGroup: func(in interface{}) *string {
@@ -26,14 +22,13 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "instance_group", value)
 			return value
 		}(in["instance_group"]),
 		VolumeType: func(in interface{}) *string {
@@ -45,14 +40,13 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "volume_type", value)
 			return value
 		}(in["volume_type"]),
 		VolumeIops: func(in interface{}) *int32 {
@@ -64,14 +58,13 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "volume_iops", value)
 			return value
 		}(in["volume_iops"]),
 		VolumeSize: func(in interface{}) *int32 {
@@ -83,14 +76,13 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "volume_size", value)
 			return value
 		}(in["volume_size"]),
 		KmsKeyId: func(in interface{}) *string {
@@ -102,14 +94,13 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "kms_key_id", value)
 			return value
 		}(in["kms_key_id"]),
 		EncryptedVolume: func(in interface{}) *bool {
@@ -121,14 +112,13 @@ func ExpandEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "encrypted_volume", value)
 			return value
 		}(in["encrypted_volume"]),
 	}
@@ -138,7 +128,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"name": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "name", value)
 			return value
 		}(in.Name),
 		"instance_group": func(in *string) interface{} {
@@ -150,7 +139,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "instance_group", value)
 			return value
 		}(in.InstanceGroup),
 		"volume_type": func(in *string) interface{} {
@@ -162,7 +150,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "volume_type", value)
 			return value
 		}(in.VolumeType),
 		"volume_iops": func(in *int32) interface{} {
@@ -174,7 +161,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "volume_iops", value)
 			return value
 		}(in.VolumeIops),
 		"volume_size": func(in *int32) interface{} {
@@ -186,7 +172,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "volume_size", value)
 			return value
 		}(in.VolumeSize),
 		"kms_key_id": func(in *string) interface{} {
@@ -198,7 +183,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "kms_key_id", value)
 			return value
 		}(in.KmsKeyId),
 		"encrypted_volume": func(in *bool) interface{} {
@@ -210,7 +194,6 @@ func FlattenEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "encrypted_volume", value)
 			return value
 		}(in.EncryptedVolume),
 	}

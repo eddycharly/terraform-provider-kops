@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -21,9 +18,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.ClassicNetworkingSpec) *kops.ClassicNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.ClassicNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -33,7 +30,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "classic", value)
 			return value
 		}(in["classic"]),
 		Kubenet: func(in interface{}) *kops.KubenetNetworkingSpec {
@@ -45,9 +41,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.KubenetNetworkingSpec) *kops.KubenetNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.KubenetNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -57,7 +53,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "kubenet", value)
 			return value
 		}(in["kubenet"]),
 		External: func(in interface{}) *kops.ExternalNetworkingSpec {
@@ -69,9 +64,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.ExternalNetworkingSpec) *kops.ExternalNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.ExternalNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -81,7 +76,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "external", value)
 			return value
 		}(in["external"]),
 		CNI: func(in interface{}) *kops.CNINetworkingSpec {
@@ -93,9 +87,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CNINetworkingSpec) *kops.CNINetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.CNINetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -105,7 +99,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "cni", value)
 			return value
 		}(in["cni"]),
 		Kopeio: func(in interface{}) *kops.KopeioNetworkingSpec {
@@ -117,9 +110,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.KopeioNetworkingSpec) *kops.KopeioNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.KopeioNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -129,7 +122,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "kopeio", value)
 			return value
 		}(in["kopeio"]),
 		Weave: func(in interface{}) *kops.WeaveNetworkingSpec {
@@ -141,9 +133,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.WeaveNetworkingSpec) *kops.WeaveNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.WeaveNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -153,7 +145,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "weave", value)
 			return value
 		}(in["weave"]),
 		Flannel: func(in interface{}) *kops.FlannelNetworkingSpec {
@@ -165,9 +156,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.FlannelNetworkingSpec) *kops.FlannelNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.FlannelNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -177,7 +168,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "flannel", value)
 			return value
 		}(in["flannel"]),
 		Calico: func(in interface{}) *kops.CalicoNetworkingSpec {
@@ -189,9 +179,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CalicoNetworkingSpec) *kops.CalicoNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.CalicoNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -201,7 +191,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "calico", value)
 			return value
 		}(in["calico"]),
 		Canal: func(in interface{}) *kops.CanalNetworkingSpec {
@@ -213,9 +202,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CanalNetworkingSpec) *kops.CanalNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.CanalNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -225,7 +214,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "canal", value)
 			return value
 		}(in["canal"]),
 		Kuberouter: func(in interface{}) *kops.KuberouterNetworkingSpec {
@@ -237,9 +225,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.KuberouterNetworkingSpec) *kops.KuberouterNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.KuberouterNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -249,7 +237,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "kuberouter", value)
 			return value
 		}(in["kuberouter"]),
 		Romana: func(in interface{}) *kops.RomanaNetworkingSpec {
@@ -261,9 +248,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.RomanaNetworkingSpec) *kops.RomanaNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.RomanaNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -273,7 +260,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "romana", value)
 			return value
 		}(in["romana"]),
 		AmazonVPC: func(in interface{}) *kops.AmazonVPCNetworkingSpec {
@@ -285,9 +271,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.AmazonVPCNetworkingSpec) *kops.AmazonVPCNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.AmazonVPCNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -297,7 +283,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "amazon_vpc", value)
 			return value
 		}(in["amazon_vpc"]),
 		Cilium: func(in interface{}) *kops.CiliumNetworkingSpec {
@@ -309,9 +294,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CiliumNetworkingSpec) *kops.CiliumNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.CiliumNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -321,7 +306,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "cilium", value)
 			return value
 		}(in["cilium"]),
 		LyftVPC: func(in interface{}) *kops.LyftVPCNetworkingSpec {
@@ -333,9 +317,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.LyftVPCNetworkingSpec) *kops.LyftVPCNetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.LyftVPCNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -345,7 +329,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "lyft_vpc", value)
 			return value
 		}(in["lyft_vpc"]),
 		GCE: func(in interface{}) *kops.GCENetworkingSpec {
@@ -357,9 +340,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.GCENetworkingSpec) *kops.GCENetworkingSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.GCENetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -369,7 +352,6 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "gce", value)
 			return value
 		}(in["gce"]),
 	}
@@ -388,7 +370,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "classic", value)
 			return value
 		}(in.Classic),
 		"kubenet": func(in *kops.KubenetNetworkingSpec) interface{} {
@@ -402,7 +383,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "kubenet", value)
 			return value
 		}(in.Kubenet),
 		"external": func(in *kops.ExternalNetworkingSpec) interface{} {
@@ -416,7 +396,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "external", value)
 			return value
 		}(in.External),
 		"cni": func(in *kops.CNINetworkingSpec) interface{} {
@@ -430,7 +409,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "cni", value)
 			return value
 		}(in.CNI),
 		"kopeio": func(in *kops.KopeioNetworkingSpec) interface{} {
@@ -444,7 +422,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "kopeio", value)
 			return value
 		}(in.Kopeio),
 		"weave": func(in *kops.WeaveNetworkingSpec) interface{} {
@@ -458,7 +435,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "weave", value)
 			return value
 		}(in.Weave),
 		"flannel": func(in *kops.FlannelNetworkingSpec) interface{} {
@@ -472,7 +448,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "flannel", value)
 			return value
 		}(in.Flannel),
 		"calico": func(in *kops.CalicoNetworkingSpec) interface{} {
@@ -486,7 +461,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "calico", value)
 			return value
 		}(in.Calico),
 		"canal": func(in *kops.CanalNetworkingSpec) interface{} {
@@ -500,7 +474,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "canal", value)
 			return value
 		}(in.Canal),
 		"kuberouter": func(in *kops.KuberouterNetworkingSpec) interface{} {
@@ -514,7 +487,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "kuberouter", value)
 			return value
 		}(in.Kuberouter),
 		"romana": func(in *kops.RomanaNetworkingSpec) interface{} {
@@ -528,7 +500,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "romana", value)
 			return value
 		}(in.Romana),
 		"amazon_vpc": func(in *kops.AmazonVPCNetworkingSpec) interface{} {
@@ -542,7 +513,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "amazon_vpc", value)
 			return value
 		}(in.AmazonVPC),
 		"cilium": func(in *kops.CiliumNetworkingSpec) interface{} {
@@ -556,7 +526,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "cilium", value)
 			return value
 		}(in.Cilium),
 		"lyft_vpc": func(in *kops.LyftVPCNetworkingSpec) interface{} {
@@ -570,7 +539,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "lyft_vpc", value)
 			return value
 		}(in.LyftVPC),
 		"gce": func(in *kops.GCENetworkingSpec) interface{} {
@@ -584,7 +552,6 @@ func FlattenNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "gce", value)
 			return value
 		}(in.GCE),
 	}

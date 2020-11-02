@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
@@ -16,12 +13,10 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 	return kops.EtcdClusterSpec{
 		Name: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "name", value)
 			return value
 		}(in["name"]),
 		Provider: func(in interface{}) kops.EtcdProviderType {
 			value := kops.EtcdProviderType(ExpandString(in))
-			log.Printf("%s - %#v", "provider", value)
 			return value
 		}(in["provider"]),
 		Members: func(in interface{}) []*kops.EtcdMemberSpec {
@@ -36,9 +31,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 							return nil
 						}
 						tmp := func(in kops.EtcdMemberSpec) *kops.EtcdMemberSpec {
-							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-								return nil
-							}
+							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+							// 	return nil
+							// }
 							return &in
 						}(func(in interface{}) kops.EtcdMemberSpec {
 							if in == nil {
@@ -51,22 +46,18 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "members", value)
 			return value
 		}(in["members"]),
 		EnableEtcdTLS: func(in interface{}) bool {
 			value := bool(ExpandBool(in))
-			log.Printf("%s - %#v", "enable_etcd_tls", value)
 			return value
 		}(in["enable_etcd_tls"]),
 		EnableTLSAuth: func(in interface{}) bool {
 			value := bool(ExpandBool(in))
-			log.Printf("%s - %#v", "enable_tls_auth", value)
 			return value
 		}(in["enable_tls_auth"]),
 		Version: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "version", value)
 			return value
 		}(in["version"]),
 		LeaderElectionTimeout: func(in interface{}) *v1.Duration {
@@ -78,14 +69,13 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in v1.Duration) *v1.Duration {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(ExpandDuration(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "leader_election_timeout", value)
 			return value
 		}(in["leader_election_timeout"]),
 		HeartbeatInterval: func(in interface{}) *v1.Duration {
@@ -97,19 +87,17 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in v1.Duration) *v1.Duration {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(ExpandDuration(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "heartbeat_interval", value)
 			return value
 		}(in["heartbeat_interval"]),
 		Image: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "image", value)
 			return value
 		}(in["image"]),
 		Backups: func(in interface{}) *kops.EtcdBackupSpec {
@@ -121,9 +109,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.EtcdBackupSpec {
 					if in.([]interface{})[0] == nil {
@@ -133,7 +121,6 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "backups", value)
 			return value
 		}(in["backups"]),
 		Manager: func(in interface{}) *kops.EtcdManagerSpec {
@@ -145,9 +132,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.EtcdManagerSpec {
 					if in.([]interface{})[0] == nil {
@@ -157,7 +144,6 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "manager", value)
 			return value
 		}(in["manager"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
@@ -169,14 +155,13 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "memory_request", value)
 			return value
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
@@ -188,14 +173,13 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "cpu_request", value)
 			return value
 		}(in["cpu_request"]),
 	}
@@ -205,12 +189,10 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"name": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "name", value)
 			return value
 		}(in.Name),
 		"provider": func(in kops.EtcdProviderType) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "provider", value)
 			return value
 		}(in.Provider),
 		"members": func(in []*kops.EtcdMemberSpec) interface{} {
@@ -230,22 +212,18 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "members", value)
 			return value
 		}(in.Members),
 		"enable_etcd_tls": func(in bool) interface{} {
 			value := FlattenBool(bool(in))
-			log.Printf("%s - %v", "enable_etcd_tls", value)
 			return value
 		}(in.EnableEtcdTLS),
 		"enable_tls_auth": func(in bool) interface{} {
 			value := FlattenBool(bool(in))
-			log.Printf("%s - %v", "enable_tls_auth", value)
 			return value
 		}(in.EnableTLSAuth),
 		"version": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "version", value)
 			return value
 		}(in.Version),
 		"leader_election_timeout": func(in *v1.Duration) interface{} {
@@ -257,7 +235,6 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 					return FlattenDuration(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "leader_election_timeout", value)
 			return value
 		}(in.LeaderElectionTimeout),
 		"heartbeat_interval": func(in *v1.Duration) interface{} {
@@ -269,12 +246,10 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 					return FlattenDuration(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "heartbeat_interval", value)
 			return value
 		}(in.HeartbeatInterval),
 		"image": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "image", value)
 			return value
 		}(in.Image),
 		"backups": func(in *kops.EtcdBackupSpec) interface{} {
@@ -288,7 +263,6 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "backups", value)
 			return value
 		}(in.Backups),
 		"manager": func(in *kops.EtcdManagerSpec) interface{} {
@@ -302,7 +276,6 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "manager", value)
 			return value
 		}(in.Manager),
 		"memory_request": func(in *resource.Quantity) interface{} {
@@ -314,7 +287,6 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 					return FlattenQuantity(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "memory_request", value)
 			return value
 		}(in.MemoryRequest),
 		"cpu_request": func(in *resource.Quantity) interface{} {
@@ -326,7 +298,6 @@ func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
 					return FlattenQuantity(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "cpu_request", value)
 			return value
 		}(in.CPURequest),
 	}

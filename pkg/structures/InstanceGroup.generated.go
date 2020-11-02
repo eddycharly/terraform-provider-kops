@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"github.com/eddycharly/terraform-provider-kops/pkg/api"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -15,17 +12,14 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 	return api.InstanceGroup{
 		Name: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "name", value)
 			return value
 		}(in["name"]),
 		Role: func(in interface{}) kops.InstanceGroupRole {
 			value := kops.InstanceGroupRole(ExpandString(in))
-			log.Printf("%s - %#v", "role", value)
 			return value
 		}(in["role"]),
 		Image: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "image", value)
 			return value
 		}(in["image"]),
 		MinSize: func(in interface{}) *int32 {
@@ -37,14 +31,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "min_size", value)
 			return value
 		}(in["min_size"]),
 		MaxSize: func(in interface{}) *int32 {
@@ -56,19 +49,17 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "max_size", value)
 			return value
 		}(in["max_size"]),
 		MachineType: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "machine_type", value)
 			return value
 		}(in["machine_type"]),
 		RootVolumeSize: func(in interface{}) *int32 {
@@ -80,14 +71,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "root_volume_size", value)
 			return value
 		}(in["root_volume_size"]),
 		RootVolumeType: func(in interface{}) *string {
@@ -99,14 +89,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "root_volume_type", value)
 			return value
 		}(in["root_volume_type"]),
 		RootVolumeIops: func(in interface{}) *int32 {
@@ -118,14 +107,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "root_volume_iops", value)
 			return value
 		}(in["root_volume_iops"]),
 		RootVolumeOptimization: func(in interface{}) *bool {
@@ -137,14 +125,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "root_volume_optimization", value)
 			return value
 		}(in["root_volume_optimization"]),
 		RootVolumeDeleteOnTermination: func(in interface{}) *bool {
@@ -156,14 +143,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "root_volume_delete_on_termination", value)
 			return value
 		}(in["root_volume_delete_on_termination"]),
 		RootVolumeEncryption: func(in interface{}) *bool {
@@ -175,14 +161,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "root_volume_encryption", value)
 			return value
 		}(in["root_volume_encryption"]),
 		Volumes: func(in interface{}) []*kops.VolumeSpec {
@@ -197,9 +182,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 							return nil
 						}
 						tmp := func(in kops.VolumeSpec) *kops.VolumeSpec {
-							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-								return nil
-							}
+							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+							// 	return nil
+							// }
 							return &in
 						}(func(in interface{}) kops.VolumeSpec {
 							if in == nil {
@@ -212,7 +197,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "volumes", value)
 			return value
 		}(in["volumes"]),
 		VolumeMounts: func(in interface{}) []*kops.VolumeMountSpec {
@@ -227,9 +211,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 							return nil
 						}
 						tmp := func(in kops.VolumeMountSpec) *kops.VolumeMountSpec {
-							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-								return nil
-							}
+							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+							// 	return nil
+							// }
 							return &in
 						}(func(in interface{}) kops.VolumeMountSpec {
 							if in == nil {
@@ -242,7 +226,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "volume_mounts", value)
 			return value
 		}(in["volume_mounts"]),
 		Subnets: func(in interface{}) []string {
@@ -253,7 +236,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "subnets", value)
 			return value
 		}(in["subnets"]),
 		Zones: func(in interface{}) []string {
@@ -264,7 +246,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "zones", value)
 			return value
 		}(in["zones"]),
 		Hooks: func(in interface{}) []kops.HookSpec {
@@ -280,7 +261,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "hooks", value)
 			return value
 		}(in["hooks"]),
 		MaxPrice: func(in interface{}) *string {
@@ -292,14 +272,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "max_price", value)
 			return value
 		}(in["max_price"]),
 		SpotDurationInMinutes: func(in interface{}) *int64 {
@@ -311,14 +290,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int64) *int64 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(int64(ExpandInt(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "spot_duration_in_minutes", value)
 			return value
 		}(in["spot_duration_in_minutes"]),
 		AssociatePublicIP: func(in interface{}) *bool {
@@ -330,14 +308,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "associate_public_ip", value)
 			return value
 		}(in["associate_public_ip"]),
 		AdditionalSecurityGroups: func(in interface{}) []string {
@@ -348,7 +325,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "additional_security_groups", value)
 			return value
 		}(in["additional_security_groups"]),
 		CloudLabels: func(in interface{}) map[string]string {
@@ -362,7 +338,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "cloud_labels", value)
 			return value
 		}(in["cloud_labels"]),
 		NodeLabels: func(in interface{}) map[string]string {
@@ -376,7 +351,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "node_labels", value)
 			return value
 		}(in["node_labels"]),
 		FileAssets: func(in interface{}) []kops.FileAssetSpec {
@@ -392,12 +366,10 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "file_assets", value)
 			return value
 		}(in["file_assets"]),
 		Tenancy: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "tenancy", value)
 			return value
 		}(in["tenancy"]),
 		Kubelet: func(in interface{}) *kops.KubeletConfigSpec {
@@ -409,9 +381,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
 					if in.([]interface{})[0] == nil {
@@ -421,7 +393,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "kubelet", value)
 			return value
 		}(in["kubelet"]),
 		Taints: func(in interface{}) []string {
@@ -432,7 +403,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "taints", value)
 			return value
 		}(in["taints"]),
 		MixedInstancesPolicy: func(in interface{}) *kops.MixedInstancesPolicySpec {
@@ -444,9 +414,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.MixedInstancesPolicySpec {
 					if in.([]interface{})[0] == nil {
@@ -456,7 +426,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "mixed_instances_policy", value)
 			return value
 		}(in["mixed_instances_policy"]),
 		AdditionalUserData: func(in interface{}) []kops.UserData {
@@ -472,7 +441,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "additional_user_data", value)
 			return value
 		}(in["additional_user_data"]),
 		SuspendProcesses: func(in interface{}) []string {
@@ -483,7 +451,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "suspend_processes", value)
 			return value
 		}(in["suspend_processes"]),
 		ExternalLoadBalancers: func(in interface{}) []kops.LoadBalancer {
@@ -499,7 +466,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "external_load_balancers", value)
 			return value
 		}(in["external_load_balancers"]),
 		DetailedInstanceMonitoring: func(in interface{}) *bool {
@@ -511,14 +477,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "detailed_instance_monitoring", value)
 			return value
 		}(in["detailed_instance_monitoring"]),
 		IAM: func(in interface{}) *kops.IAMProfileSpec {
@@ -530,9 +495,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.IAMProfileSpec {
 					if in.([]interface{})[0] == nil {
@@ -542,7 +507,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "iam", value)
 			return value
 		}(in["iam"]),
 		SecurityGroupOverride: func(in interface{}) *string {
@@ -554,14 +518,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "security_group_override", value)
 			return value
 		}(in["security_group_override"]),
 		InstanceProtection: func(in interface{}) *bool {
@@ -573,14 +536,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "instance_protection", value)
 			return value
 		}(in["instance_protection"]),
 		SysctlParameters: func(in interface{}) []string {
@@ -591,7 +553,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "sysctl_parameters", value)
 			return value
 		}(in["sysctl_parameters"]),
 		RollingUpdate: func(in interface{}) *kops.RollingUpdate {
@@ -603,9 +564,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.RollingUpdate) *kops.RollingUpdate {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
 					if in.([]interface{})[0] == nil {
@@ -615,7 +576,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "rolling_update", value)
 			return value
 		}(in["rolling_update"]),
 		InstanceInterruptionBehavior: func(in interface{}) *string {
@@ -627,14 +587,13 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "instance_interruption_behavior", value)
 			return value
 		}(in["instance_interruption_behavior"]),
 	}
@@ -644,17 +603,14 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 	return map[string]interface{}{
 		"name": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "name", value)
 			return value
 		}(in.Name),
 		"role": func(in kops.InstanceGroupRole) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "role", value)
 			return value
 		}(in.Role),
 		"image": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "image", value)
 			return value
 		}(in.Image),
 		"min_size": func(in *int32) interface{} {
@@ -666,7 +622,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "min_size", value)
 			return value
 		}(in.MinSize),
 		"max_size": func(in *int32) interface{} {
@@ -678,12 +633,10 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "max_size", value)
 			return value
 		}(in.MaxSize),
 		"machine_type": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "machine_type", value)
 			return value
 		}(in.MachineType),
 		"root_volume_size": func(in *int32) interface{} {
@@ -695,7 +648,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "root_volume_size", value)
 			return value
 		}(in.RootVolumeSize),
 		"root_volume_type": func(in *string) interface{} {
@@ -707,7 +659,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "root_volume_type", value)
 			return value
 		}(in.RootVolumeType),
 		"root_volume_iops": func(in *int32) interface{} {
@@ -719,7 +670,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "root_volume_iops", value)
 			return value
 		}(in.RootVolumeIops),
 		"root_volume_optimization": func(in *bool) interface{} {
@@ -731,7 +681,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "root_volume_optimization", value)
 			return value
 		}(in.RootVolumeOptimization),
 		"root_volume_delete_on_termination": func(in *bool) interface{} {
@@ -743,7 +692,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "root_volume_delete_on_termination", value)
 			return value
 		}(in.RootVolumeDeleteOnTermination),
 		"root_volume_encryption": func(in *bool) interface{} {
@@ -755,7 +703,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "root_volume_encryption", value)
 			return value
 		}(in.RootVolumeEncryption),
 		"volumes": func(in []*kops.VolumeSpec) interface{} {
@@ -775,7 +722,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "volumes", value)
 			return value
 		}(in.Volumes),
 		"volume_mounts": func(in []*kops.VolumeMountSpec) interface{} {
@@ -795,7 +741,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "volume_mounts", value)
 			return value
 		}(in.VolumeMounts),
 		"subnets": func(in []string) interface{} {
@@ -806,7 +751,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "subnets", value)
 			return value
 		}(in.Subnets),
 		"zones": func(in []string) interface{} {
@@ -817,7 +761,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "zones", value)
 			return value
 		}(in.Zones),
 		"hooks": func(in []kops.HookSpec) interface{} {
@@ -830,7 +773,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "hooks", value)
 			return value
 		}(in.Hooks),
 		"max_price": func(in *string) interface{} {
@@ -842,7 +784,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "max_price", value)
 			return value
 		}(in.MaxPrice),
 		"spot_duration_in_minutes": func(in *int64) interface{} {
@@ -854,7 +795,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "spot_duration_in_minutes", value)
 			return value
 		}(in.SpotDurationInMinutes),
 		"associate_public_ip": func(in *bool) interface{} {
@@ -866,7 +806,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "associate_public_ip", value)
 			return value
 		}(in.AssociatePublicIP),
 		"additional_security_groups": func(in []string) interface{} {
@@ -877,7 +816,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "additional_security_groups", value)
 			return value
 		}(in.AdditionalSecurityGroups),
 		"cloud_labels": func(in map[string]string) interface{} {
@@ -888,7 +826,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				// TODO
 				return nil
 			}(in)
-			log.Printf("%s - %v", "cloud_labels", value)
 			return value
 		}(in.CloudLabels),
 		"node_labels": func(in map[string]string) interface{} {
@@ -899,7 +836,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				// TODO
 				return nil
 			}(in)
-			log.Printf("%s - %v", "node_labels", value)
 			return value
 		}(in.NodeLabels),
 		"file_assets": func(in []kops.FileAssetSpec) interface{} {
@@ -912,12 +848,10 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "file_assets", value)
 			return value
 		}(in.FileAssets),
 		"tenancy": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "tenancy", value)
 			return value
 		}(in.Tenancy),
 		"kubelet": func(in *kops.KubeletConfigSpec) interface{} {
@@ -931,7 +865,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "kubelet", value)
 			return value
 		}(in.Kubelet),
 		"taints": func(in []string) interface{} {
@@ -942,7 +875,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "taints", value)
 			return value
 		}(in.Taints),
 		"mixed_instances_policy": func(in *kops.MixedInstancesPolicySpec) interface{} {
@@ -956,7 +888,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "mixed_instances_policy", value)
 			return value
 		}(in.MixedInstancesPolicy),
 		"additional_user_data": func(in []kops.UserData) interface{} {
@@ -969,7 +900,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "additional_user_data", value)
 			return value
 		}(in.AdditionalUserData),
 		"suspend_processes": func(in []string) interface{} {
@@ -980,7 +910,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "suspend_processes", value)
 			return value
 		}(in.SuspendProcesses),
 		"external_load_balancers": func(in []kops.LoadBalancer) interface{} {
@@ -993,7 +922,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "external_load_balancers", value)
 			return value
 		}(in.ExternalLoadBalancers),
 		"detailed_instance_monitoring": func(in *bool) interface{} {
@@ -1005,7 +933,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "detailed_instance_monitoring", value)
 			return value
 		}(in.DetailedInstanceMonitoring),
 		"iam": func(in *kops.IAMProfileSpec) interface{} {
@@ -1019,7 +946,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "iam", value)
 			return value
 		}(in.IAM),
 		"security_group_override": func(in *string) interface{} {
@@ -1031,7 +957,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "security_group_override", value)
 			return value
 		}(in.SecurityGroupOverride),
 		"instance_protection": func(in *bool) interface{} {
@@ -1043,7 +968,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "instance_protection", value)
 			return value
 		}(in.InstanceProtection),
 		"sysctl_parameters": func(in []string) interface{} {
@@ -1054,7 +978,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "sysctl_parameters", value)
 			return value
 		}(in.SysctlParameters),
 		"rolling_update": func(in *kops.RollingUpdate) interface{} {
@@ -1068,7 +991,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "rolling_update", value)
 			return value
 		}(in.RollingUpdate),
 		"instance_interruption_behavior": func(in *string) interface{} {
@@ -1080,7 +1002,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "instance_interruption_behavior", value)
 			return value
 		}(in.InstanceInterruptionBehavior),
 	}

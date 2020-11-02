@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
@@ -23,6 +24,13 @@ type Config struct {
 }
 
 func ConfigureProvider(data *schema.ResourceData) (interface{}, error) {
+	profile := data.Get("aws_profile").(string)
+
+	if profile != "" {
+		os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
+		os.Setenv("AWS_PROFILE", profile)
+	}
+
 	registryPath := data.Get("state_store").(string)
 
 	basePath, err := vfs.Context.BuildVfsPath(registryPath)

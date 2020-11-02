@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"log"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -13,7 +11,6 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 	return kops.ExecContainerAction{
 		Image: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "image", value)
 			return value
 		}(in["image"]),
 		Command: func(in interface{}) []string {
@@ -24,7 +21,6 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "command", value)
 			return value
 		}(in["command"]),
 		Environment: func(in interface{}) map[string]string {
@@ -38,7 +34,6 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "environment", value)
 			return value
 		}(in["environment"]),
 	}
@@ -48,7 +43,6 @@ func FlattenExecContainerAction(in kops.ExecContainerAction) map[string]interfac
 	return map[string]interface{}{
 		"image": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "image", value)
 			return value
 		}(in.Image),
 		"command": func(in []string) interface{} {
@@ -59,7 +53,6 @@ func FlattenExecContainerAction(in kops.ExecContainerAction) map[string]interfac
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "command", value)
 			return value
 		}(in.Command),
 		"environment": func(in map[string]string) interface{} {
@@ -70,7 +63,6 @@ func FlattenExecContainerAction(in kops.ExecContainerAction) map[string]interfac
 				// TODO
 				return nil
 			}(in)
-			log.Printf("%s - %v", "environment", value)
 			return value
 		}(in.Environment),
 	}

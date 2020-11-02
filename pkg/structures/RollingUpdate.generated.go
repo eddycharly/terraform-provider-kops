@@ -1,9 +1,6 @@
 package structures
 
 import (
-	"log"
-	"reflect"
-
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -22,14 +19,13 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "drain_and_terminate", value)
 			return value
 		}(in["drain_and_terminate"]),
 		MaxUnavailable: func(in interface{}) *intstr.IntOrString {
@@ -41,14 +37,13 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 					return nil
 				}
 				tmp := func(in intstr.IntOrString) *intstr.IntOrString {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(ExpandIntOrString(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "max_unavailable", value)
 			return value
 		}(in["max_unavailable"]),
 		MaxSurge: func(in interface{}) *intstr.IntOrString {
@@ -60,14 +55,13 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 					return nil
 				}
 				tmp := func(in intstr.IntOrString) *intstr.IntOrString {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+					// 	return nil
+					// }
 					return &in
 				}(ExpandIntOrString(in))
 				return tmp
 			}(in)
-			log.Printf("%s - %#v", "max_surge", value)
 			return value
 		}(in["max_surge"]),
 	}
@@ -84,7 +78,6 @@ func FlattenRollingUpdate(in kops.RollingUpdate) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "drain_and_terminate", value)
 			return value
 		}(in.DrainAndTerminate),
 		"max_unavailable": func(in *intstr.IntOrString) interface{} {
@@ -96,7 +89,6 @@ func FlattenRollingUpdate(in kops.RollingUpdate) map[string]interface{} {
 					return FlattenIntOrString(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "max_unavailable", value)
 			return value
 		}(in.MaxUnavailable),
 		"max_surge": func(in *intstr.IntOrString) interface{} {
@@ -108,7 +100,6 @@ func FlattenRollingUpdate(in kops.RollingUpdate) map[string]interface{} {
 					return FlattenIntOrString(in)
 				}(*in)
 			}(in)
-			log.Printf("%s - %v", "max_surge", value)
 			return value
 		}(in.MaxSurge),
 	}

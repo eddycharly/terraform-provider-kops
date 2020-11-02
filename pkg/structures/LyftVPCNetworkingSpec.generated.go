@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"log"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -22,7 +20,6 @@ func ExpandLyftVPCNetworkingSpec(in map[string]interface{}) kops.LyftVPCNetworki
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "subnet_tags", value)
 			return value
 		}(in["subnet_tags"]),
 	}
@@ -38,7 +35,6 @@ func FlattenLyftVPCNetworkingSpec(in kops.LyftVPCNetworkingSpec) map[string]inte
 				// TODO
 				return nil
 			}(in)
-			log.Printf("%s - %v", "subnet_tags", value)
 			return value
 		}(in.SubnetTags),
 	}

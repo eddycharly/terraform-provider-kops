@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strings"
 	"text/template"
 
 	"github.com/Masterminds/sprig"
@@ -53,9 +54,9 @@ func (in interface{}) {{ .String }} {
 		return nil
 	}
 	tmp := func (in {{ .Elem.String }}) {{ .String }} {
-		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-			return nil
-		}
+		// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+		// 	return nil
+		// }
 		return &in
 	}({{ template "expandElem" .Elem }})
 	return tmp
@@ -88,9 +89,9 @@ func (in interface{}) {{ .String }} {
 		return nil
 	}
 	tmp := func (in {{ .Elem.String }}) {{ .String }} {
-		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-			return nil
-		}
+		// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+		// 	return nil
+		// }
 		return &in
 	}({{ template "expand" .Elem }})
 	return tmp
@@ -209,9 +210,8 @@ func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	{{- if not (has .Name $.Exclude) }}
 	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
 		value := {{ template "expand" .Type }}
-		log.Printf("%s - %#v", {{ .Name | snakecase | quote }}, value)
 		return value
-	}(in[{{ .Name | snakecase | quote }}]),
+	}(in[{{ fieldName .Name | snakecase | quote }}]),
 	{{- end }}
 	{{- end }}
 	}
@@ -221,9 +221,8 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	return map[string]interface{}{
 	{{- range (fields .) }}
 	{{- if not (has .Name $.Exclude) }}
-	{{ .Name | snakecase | quote }}: func (in {{ .Type.String }}) interface{} {
+	{{ fieldName .Name | snakecase | quote }}: func (in {{ .Type.String }}) interface{} {
 		value := {{ template "flatten" .Type }}
-		log.Printf("%s - %v", {{ .Name | snakecase | quote }}, value)
 		return value
 	}(in.{{ .Name }}),
 	{{- end }}
@@ -243,6 +242,12 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 			return ret
 		},
 		"schemaType": schemaType,
+		"fieldName": func(in string) string {
+			in = strings.ReplaceAll(in, "CIDR", "Cidr")
+			in = strings.ReplaceAll(in, "DNS", "Dns")
+			in = strings.ReplaceAll(in, "IP", "Ip")
+			return in
+		},
 		"isPtr": func(t reflect.Type) bool {
 			return t.Kind() == reflect.Ptr
 		},
@@ -321,7 +326,6 @@ func main() {
 	build(reflect.TypeOf(kops.GCENetworkingSpec{}))
 	// build(reflect.TypeOf(kops.KubeDNSConfig{}))
 
-	// build(reflect.TypeOf(kops.InstanceGroupSpec{}))
 	build(reflect.TypeOf(kops.VolumeSpec{}))
 	build(reflect.TypeOf(kops.VolumeMountSpec{}))
 	build(reflect.TypeOf(kops.MixedInstancesPolicySpec{}))

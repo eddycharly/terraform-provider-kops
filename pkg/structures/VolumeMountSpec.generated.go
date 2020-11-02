@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"log"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -13,12 +11,10 @@ func ExpandVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSpec {
 	return kops.VolumeMountSpec{
 		Device: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "device", value)
 			return value
 		}(in["device"]),
 		Filesystem: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "filesystem", value)
 			return value
 		}(in["filesystem"]),
 		FormatOptions: func(in interface{}) []string {
@@ -29,7 +25,6 @@ func ExpandVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSpec {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "format_options", value)
 			return value
 		}(in["format_options"]),
 		MountOptions: func(in interface{}) []string {
@@ -40,12 +35,10 @@ func ExpandVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSpec {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %#v", "mount_options", value)
 			return value
 		}(in["mount_options"]),
 		Path: func(in interface{}) string {
 			value := string(ExpandString(in))
-			log.Printf("%s - %#v", "path", value)
 			return value
 		}(in["path"]),
 	}
@@ -55,12 +48,10 @@ func FlattenVolumeMountSpec(in kops.VolumeMountSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"device": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "device", value)
 			return value
 		}(in.Device),
 		"filesystem": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "filesystem", value)
 			return value
 		}(in.Filesystem),
 		"format_options": func(in []string) interface{} {
@@ -71,7 +62,6 @@ func FlattenVolumeMountSpec(in kops.VolumeMountSpec) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "format_options", value)
 			return value
 		}(in.FormatOptions),
 		"mount_options": func(in []string) interface{} {
@@ -82,12 +72,10 @@ func FlattenVolumeMountSpec(in kops.VolumeMountSpec) map[string]interface{} {
 				}
 				return out
 			}(in)
-			log.Printf("%s - %v", "mount_options", value)
 			return value
 		}(in.MountOptions),
 		"path": func(in string) interface{} {
 			value := FlattenString(string(in))
-			log.Printf("%s - %v", "path", value)
 			return value
 		}(in.Path),
 	}

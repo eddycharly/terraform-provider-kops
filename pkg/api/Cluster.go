@@ -62,7 +62,6 @@ type Cluster struct {
 	// MasterKubelet                  *KubeletConfigSpec
 	// CloudConfig                    *CloudConfiguration
 	// ExternalDNS                    *ExternalDNSConfig
-
 	Networking *kops.NetworkingSpec
 	API        *kops.AccessSpec
 	// Authentication
@@ -82,27 +81,66 @@ type Cluster struct {
 
 func FromKopsCluster(cluster kops.Cluster, instanceGroups ...kops.InstanceGroup) Cluster {
 	return Cluster{
-		Name:                cluster.ObjectMeta.Name,
-		NetworkID:           cluster.Spec.NetworkID,
-		CloudProvider:       cluster.Spec.CloudProvider,
-		KubernetesVersion:   cluster.Spec.KubernetesVersion,
-		Project:             cluster.Spec.Project,
-		MasterPublicName:    cluster.Spec.MasterPublicName,
-		MasterInternalName:  cluster.Spec.MasterInternalName,
+		Name:                   cluster.ObjectMeta.Name,
+		Channel:                cluster.Spec.Channel,
+		ConfigBase:             cluster.Spec.ConfigBase,
+		CloudProvider:          cluster.Spec.CloudProvider,
+		ContainerRuntime:       cluster.Spec.ContainerRuntime,
+		KubernetesVersion:      cluster.Spec.KubernetesVersion,
+		Subnet:                 cluster.Spec.Subnets,
+		Project:                cluster.Spec.Project,
+		MasterPublicName:       cluster.Spec.MasterPublicName,
+		MasterInternalName:     cluster.Spec.MasterInternalName,
+		NetworkCIDR:            cluster.Spec.NetworkCIDR,
+		AdditionalNetworkCIDRs: cluster.Spec.AdditionalNetworkCIDRs,
+		NetworkID:              cluster.Spec.NetworkID,
+		Topology:               cluster.Spec.Topology,
+		SecretStore:            cluster.Spec.SecretStore,
+		KeyStore:               cluster.Spec.KeyStore,
+		ConfigStore:            cluster.Spec.ConfigStore,
+		DNSZone:                cluster.Spec.DNSZone,
+		// AdditionalSANs
+		ClusterDNSDomain:      cluster.Spec.ClusterDNSDomain,
+		ServiceClusterIPRange: cluster.Spec.ServiceClusterIPRange,
+		PodCIDR:               cluster.Spec.PodCIDR,
+		NonMasqueradeCIDR:     cluster.Spec.NonMasqueradeCIDR,
+		SSHAccess:             cluster.Spec.SSHAccess,
+		NodePortAccess:        cluster.Spec.NodePortAccess,
+		// EgressProxy
 		SSHKeyName:          cluster.Spec.SSHKeyName,
-		Channel:             cluster.Spec.Channel,
-		ConfigBase:          cluster.Spec.ConfigBase,
-		ConfigStore:         cluster.Spec.ConfigStore,
-		SecretStore:         cluster.Spec.SecretStore,
-		KeyStore:            cluster.Spec.KeyStore,
-		DNSZone:             cluster.Spec.DNSZone,
-		SSHAccess:           cluster.Spec.SSHAccess,
 		KubernetesAPIAccess: cluster.Spec.KubernetesAPIAccess,
-		API:                 cluster.Spec.API,
-		Topology:            cluster.Spec.Topology,
-		Subnet:              cluster.Spec.Subnets,
-		Networking:          cluster.Spec.Networking,
-		EtcdCluster:         cluster.Spec.EtcdClusters,
+		IsolateMasters:      cluster.Spec.IsolateMasters,
+		UpdatePolicy:        cluster.Spec.UpdatePolicy,
+		ExternalPolicies:    cluster.Spec.ExternalPolicies,
+		AdditionalPolicies:  cluster.Spec.AdditionalPolicies,
+		// FileAssets
+		EtcdCluster: cluster.Spec.EtcdClusters,
+		// Containerd                     *ContainerdConfig
+		// Docker                         *DockerConfig
+		// KubeDNS                        *KubeDNSConfig
+		// KubeAPIServer                  *KubeAPIServerConfig
+		// KubeControllerManager          *KubeControllerManagerConfig
+		// ExternalCloudControllerManager *CloudControllerManagerConfig
+		// KubeScheduler                  *KubeSchedulerConfig
+		// KubeProxy                      *KubeProxyConfig
+		// Kubelet                        *KubeletConfigSpec
+		// MasterKubelet                  *KubeletConfigSpec
+		// CloudConfig                    *CloudConfiguration
+		// ExternalDNS                    *ExternalDNSConfig
+		Networking: cluster.Spec.Networking,
+		API:        cluster.Spec.API,
+		// Authentication
+		// Authorization
+		// NodeAuthorization
+		CloudLabels: cluster.Spec.CloudLabels,
+		// Hooks
+		// Assets
+		// IAM
+		EncryptionConfig:    cluster.Spec.EncryptionConfig,
+		DisableSubnetTags:   cluster.Spec.DisableSubnetTags,
+		UseHostCertificates: cluster.Spec.UseHostCertificates,
+		SysctlParameters:    cluster.Spec.SysctlParameters,
+		RollingUpdate:       cluster.Spec.RollingUpdate,
 		InstanceGroup: func(in ...kops.InstanceGroup) []InstanceGroup {
 			var out []InstanceGroup
 			for _, in := range in {
@@ -119,26 +157,65 @@ func ToKopsCluster(cluster Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 			Name: cluster.Name,
 		},
 		Spec: kops.ClusterSpec{
-			NetworkID:           cluster.NetworkID,
-			CloudProvider:       cluster.CloudProvider,
-			KubernetesVersion:   cluster.KubernetesVersion,
-			Project:             cluster.Project,
-			MasterPublicName:    cluster.MasterPublicName,
-			MasterInternalName:  cluster.MasterInternalName,
+			Channel:                cluster.Channel,
+			ConfigBase:             cluster.ConfigBase,
+			CloudProvider:          cluster.CloudProvider,
+			ContainerRuntime:       cluster.ContainerRuntime,
+			KubernetesVersion:      cluster.KubernetesVersion,
+			Subnets:                cluster.Subnet,
+			Project:                cluster.Project,
+			MasterPublicName:       cluster.MasterPublicName,
+			MasterInternalName:     cluster.MasterInternalName,
+			NetworkCIDR:            cluster.NetworkCIDR,
+			AdditionalNetworkCIDRs: cluster.AdditionalNetworkCIDRs,
+			NetworkID:              cluster.NetworkID,
+			Topology:               cluster.Topology,
+			SecretStore:            cluster.SecretStore,
+			KeyStore:               cluster.KeyStore,
+			ConfigStore:            cluster.ConfigStore,
+			DNSZone:                cluster.DNSZone,
+			// AdditionalSANs
+			ClusterDNSDomain:      cluster.ClusterDNSDomain,
+			ServiceClusterIPRange: cluster.ServiceClusterIPRange,
+			PodCIDR:               cluster.PodCIDR,
+			NonMasqueradeCIDR:     cluster.NonMasqueradeCIDR,
+			SSHAccess:             cluster.SSHAccess,
+			NodePortAccess:        cluster.NodePortAccess,
+			// EgressProxy
 			SSHKeyName:          cluster.SSHKeyName,
-			Channel:             cluster.Channel,
-			ConfigBase:          cluster.ConfigBase,
-			ConfigStore:         cluster.ConfigStore,
-			SecretStore:         cluster.SecretStore,
-			KeyStore:            cluster.KeyStore,
-			DNSZone:             cluster.DNSZone,
-			SSHAccess:           cluster.SSHAccess,
 			KubernetesAPIAccess: cluster.KubernetesAPIAccess,
-			API:                 cluster.API,
-			Topology:            cluster.Topology,
-			Subnets:             cluster.Subnet,
-			Networking:          cluster.Networking,
-			EtcdClusters:        cluster.EtcdCluster,
+			IsolateMasters:      cluster.IsolateMasters,
+			UpdatePolicy:        cluster.UpdatePolicy,
+			ExternalPolicies:    cluster.ExternalPolicies,
+			AdditionalPolicies:  cluster.AdditionalPolicies,
+			// FileAssets
+			EtcdClusters: cluster.EtcdCluster,
+			// Containerd                     *ContainerdConfig
+			// Docker                         *DockerConfig
+			// KubeDNS                        *KubeDNSConfig
+			// KubeAPIServer                  *KubeAPIServerConfig
+			// KubeControllerManager          *KubeControllerManagerConfig
+			// ExternalCloudControllerManager *CloudControllerManagerConfig
+			// KubeScheduler                  *KubeSchedulerConfig
+			// KubeProxy                      *KubeProxyConfig
+			// Kubelet                        *KubeletConfigSpec
+			// MasterKubelet                  *KubeletConfigSpec
+			// CloudConfig                    *CloudConfiguration
+			// ExternalDNS                    *ExternalDNSConfig
+			Networking: cluster.Networking,
+			API:        cluster.API,
+			// Authentication
+			// Authorization
+			// NodeAuthorization
+			CloudLabels: cluster.CloudLabels,
+			// Hooks
+			// Assets
+			// IAM
+			EncryptionConfig:    cluster.EncryptionConfig,
+			DisableSubnetTags:   cluster.DisableSubnetTags,
+			UseHostCertificates: cluster.UseHostCertificates,
+			SysctlParameters:    cluster.SysctlParameters,
+			RollingUpdate:       cluster.RollingUpdate,
 		},
 	}
 	var ig []*kops.InstanceGroup
