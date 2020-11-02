@@ -3,7 +3,7 @@
 `terraform-provider-kops` brings [KOPS](https://github.com/kubernetes/kops)
 into terraform in a fully managed way, enabling idempotency through direct
 integration with the KOPS api:
-- No local_exec
+- No `local_exec`
 - No yaml templating,
 - No CLI invocations
 
