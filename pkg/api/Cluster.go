@@ -1,17 +1,8 @@
 package api
 
 import (
-	"context"
-	"fmt"
-	"io/ioutil"
-	"log"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
-	"k8s.io/kops/pkg/client/simple"
-	"k8s.io/kops/upup/pkg/fi"
-	"k8s.io/kops/upup/pkg/fi/cloudup"
-	"k8s.io/kops/upup/pkg/fi/utils"
 )
 
 type Cluster struct {
@@ -223,110 +214,4 @@ func ToKopsCluster(cluster Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 		ig = append(ig, ToKopsInstanceGroup(instanceGroup))
 	}
 	return &c, ig
-}
-
-func (cluster Cluster) Create(clientset simple.Clientset) error {
-	kopsCluster, kopsInstanceGroups := ToKopsCluster(cluster)
-
-	if err := cloudup.PerformAssignments(kopsCluster); err != nil {
-		return err
-	}
-
-	kopsCluster, err := clientset.CreateCluster(context.Background(), kopsCluster)
-	if err != nil {
-		return err
-	}
-
-	for _, instanceGroup := range kopsInstanceGroups {
-		_, err := clientset.InstanceGroupsFor(kopsCluster).Create(context.Background(), instanceGroup, metav1.CreateOptions{})
-		if err != nil {
-			return err
-		}
-	}
-
-	kopsCluster, err = clientset.GetCluster(context.Background(), kopsCluster.Name)
-	if err != nil {
-		return err
-	}
-
-	sshCredentialStore, err := clientset.SSHCredentialStore(kopsCluster)
-	if err != nil {
-		return err
-	}
-
-	f := utils.ExpandPath(*kopsCluster.Spec.SSHKeyName)
-	pubKey, err := ioutil.ReadFile(f)
-	if err != nil {
-		return fmt.Errorf("error reading SSH key file %q: %v", f, err)
-	}
-	err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, pubKey)
-	if err != nil {
-		return fmt.Errorf("error adding SSH public key: %v", err)
-	}
-
-	applyCmd := &cloudup.ApplyClusterCmd{
-		Cluster:    kopsCluster,
-		Clientset:  clientset,
-		TargetName: cloudup.TargetDirect,
-	}
-	err = applyCmd.Run(context.Background())
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (cluster Cluster) Update(clientset simple.Clientset) error {
-	kopsCluster, kopsInstanceGroups := ToKopsCluster(cluster)
-
-	if err := cloudup.PerformAssignments(kopsCluster); err != nil {
-		return err
-	}
-
-	log.Println("******** UPDATE ********")
-	kopsCluster, err := clientset.UpdateCluster(context.Background(), kopsCluster, nil)
-	if err != nil {
-		return err
-	}
-
-	for _, instanceGroup := range kopsInstanceGroups {
-		_, err := clientset.InstanceGroupsFor(kopsCluster).Update(context.Background(), instanceGroup, metav1.UpdateOptions{})
-		if err != nil {
-			return err
-		}
-	}
-
-	kopsCluster, err = clientset.GetCluster(context.Background(), kopsCluster.Name)
-	if err != nil {
-		return err
-	}
-
-	// sshCredentialStore, err := clientset.SSHCredentialStore(kopsCluster)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// f := utils.ExpandPath(*kopsCluster.Spec.SSHKeyName)
-	// pubKey, err := ioutil.ReadFile(f)
-	// if err != nil {
-	// 	return fmt.Errorf("error reading SSH key file %q: %v", f, err)
-	// }
-	// err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, pubKey)
-	// if err != nil {
-	// 	return fmt.Errorf("error adding SSH public key: %v", err)
-	// }
-
-	log.Println("******** APPLY ********")
-	applyCmd := &cloudup.ApplyClusterCmd{
-		Cluster:    kopsCluster,
-		Clientset:  clientset,
-		TargetName: cloudup.TargetDryRun,
-	}
-	err = applyCmd.Run(context.Background())
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

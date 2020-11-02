@@ -246,6 +246,9 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 			in = strings.ReplaceAll(in, "CIDR", "Cidr")
 			in = strings.ReplaceAll(in, "DNS", "Dns")
 			in = strings.ReplaceAll(in, "IP", "Ip")
+			in = strings.ReplaceAll(in, "SSH", "Ssh")
+			in = strings.ReplaceAll(in, "API", "Api")
+			in = strings.ReplaceAll(in, "SAN", "San")
 			return in
 		},
 		"isPtr": func(t reflect.Type) bool {
