@@ -158,3 +158,11 @@ resource "kops_cluster" "cluster" {
   }
 }
 ```
+
+## Getting kubeconfig file
+
+To retrieve the `kubeconfig` file for the cluster, run the following command:
+
+```shell
+kops export kubecfg --name cluster.example.com --state s3://cluster.example.com
+```
