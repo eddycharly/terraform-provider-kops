@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -22,9 +24,9 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 					return nil
 				}
 				tmp := func(in int64) *int64 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int64(ExpandInt(in)))
 				return tmp
@@ -40,9 +42,9 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 					return nil
 				}
 				tmp := func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.BastionLoadBalancerSpec {
 					if in.([]interface{})[0] == nil {

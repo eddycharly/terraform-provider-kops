@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -31,9 +33,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -49,9 +51,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -71,9 +73,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -89,9 +91,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
@@ -107,9 +109,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -125,9 +127,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -143,9 +145,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -161,9 +163,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -182,9 +184,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 							return nil
 						}
 						tmp := func(in kops.VolumeSpec) *kops.VolumeSpec {
-							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-							// 	return nil
-							// }
+							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+								return nil
+							}
 							return &in
 						}(func(in interface{}) kops.VolumeSpec {
 							if in == nil {
@@ -211,9 +213,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 							return nil
 						}
 						tmp := func(in kops.VolumeMountSpec) *kops.VolumeMountSpec {
-							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-							// 	return nil
-							// }
+							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+								return nil
+							}
 							return &in
 						}(func(in interface{}) kops.VolumeMountSpec {
 							if in == nil {
@@ -272,9 +274,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
@@ -290,9 +292,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in int64) *int64 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int64(ExpandInt(in)))
 				return tmp
@@ -308,9 +310,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -381,9 +383,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
 					if in.([]interface{})[0] == nil {
@@ -414,9 +416,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.MixedInstancesPolicySpec {
 					if in.([]interface{})[0] == nil {
@@ -477,9 +479,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -495,9 +497,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.IAMProfileSpec {
 					if in.([]interface{})[0] == nil {
@@ -518,9 +520,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
@@ -536,9 +538,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -564,9 +566,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in kops.RollingUpdate) *kops.RollingUpdate {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
 					if in.([]interface{})[0] == nil {
@@ -587,9 +589,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp

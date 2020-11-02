@@ -17,7 +17,7 @@ func CalicoNetworkingSpec() *schema.Resource {
 			"prometheus_process_metrics_enabled": BoolOptionalComputed(),
 			"major_version":                      StringOptionalComputed(),
 			"iptables_backend":                   StringOptionalComputed(),
-			"ipip_mode":                          StringOptional(),
+			"ip_ip_mode":                         StringOptional(),
 			"typha_prometheus_metrics_enabled":   BoolOptionalComputed(),
 			"typha_prometheus_metrics_port":      IntOptionalComputed(),
 			"typha_replicas":                     IntOptionalComputed(),

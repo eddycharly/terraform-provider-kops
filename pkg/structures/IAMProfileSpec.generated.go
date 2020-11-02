@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -18,9 +20,9 @@ func ExpandIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSpec {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp

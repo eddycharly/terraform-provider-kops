@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -19,9 +21,9 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -37,9 +39,9 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 					return nil
 				}
 				tmp := func(in intstr.IntOrString) *intstr.IntOrString {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandIntOrString(in))
 				return tmp
@@ -55,9 +57,9 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 					return nil
 				}
 				tmp := func(in intstr.IntOrString) *intstr.IntOrString {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandIntOrString(in))
 				return tmp

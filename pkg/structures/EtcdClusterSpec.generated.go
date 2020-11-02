@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
@@ -31,9 +33,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 							return nil
 						}
 						tmp := func(in kops.EtcdMemberSpec) *kops.EtcdMemberSpec {
-							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-							// 	return nil
-							// }
+							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+								return nil
+							}
 							return &in
 						}(func(in interface{}) kops.EtcdMemberSpec {
 							if in == nil {
@@ -69,9 +71,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in v1.Duration) *v1.Duration {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandDuration(in))
 				return tmp
@@ -87,9 +89,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in v1.Duration) *v1.Duration {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandDuration(in))
 				return tmp
@@ -109,9 +111,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.EtcdBackupSpec {
 					if in.([]interface{})[0] == nil {
@@ -132,9 +134,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.EtcdManagerSpec {
 					if in.([]interface{})[0] == nil {
@@ -155,9 +157,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -173,9 +175,9 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp

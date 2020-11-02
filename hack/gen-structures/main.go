@@ -54,9 +54,9 @@ func (in interface{}) {{ .String }} {
 		return nil
 	}
 	tmp := func (in {{ .Elem.String }}) {{ .String }} {
-		// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-		// 	return nil
-		// }
+		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+			return nil
+		}
 		return &in
 	}({{ template "expandElem" .Elem }})
 	return tmp
@@ -89,9 +89,9 @@ func (in interface{}) {{ .String }} {
 		return nil
 	}
 	tmp := func (in {{ .Elem.String }}) {{ .String }} {
-		// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-		// 	return nil
-		// }
+		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+			return nil
+		}
 		return &in
 	}({{ template "expand" .Elem }})
 	return tmp

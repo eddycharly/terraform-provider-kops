@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -18,9 +20,9 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -40,9 +42,9 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -58,9 +60,9 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 					return nil
 				}
 				tmp := func(in int64) *int64 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int64(ExpandInt(in)))
 				return tmp

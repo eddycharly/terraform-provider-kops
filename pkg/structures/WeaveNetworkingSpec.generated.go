@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -19,9 +21,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -37,9 +39,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -55,9 +57,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
@@ -73,9 +75,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -91,9 +93,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -109,9 +111,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -127,9 +129,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -149,9 +151,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -167,9 +169,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -185,9 +187,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp
@@ -203,9 +205,9 @@ func ExpandWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSp
 					return nil
 				}
 				tmp := func(in resource.Quantity) *resource.Quantity {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(ExpandQuantity(in))
 				return tmp

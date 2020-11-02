@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -56,9 +58,9 @@ func ExpandHookSpec(in map[string]interface{}) kops.HookSpec {
 					return nil
 				}
 				tmp := func(in kops.ExecContainerAction) *kops.ExecContainerAction {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.ExecContainerAction {
 					if in.([]interface{})[0] == nil {

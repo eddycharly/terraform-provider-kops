@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -18,9 +20,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.ClassicNetworkingSpec) *kops.ClassicNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.ClassicNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -41,9 +43,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.KubenetNetworkingSpec) *kops.KubenetNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.KubenetNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -64,9 +66,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.ExternalNetworkingSpec) *kops.ExternalNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.ExternalNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -87,9 +89,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CNINetworkingSpec) *kops.CNINetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.CNINetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -110,9 +112,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.KopeioNetworkingSpec) *kops.KopeioNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.KopeioNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -133,9 +135,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.WeaveNetworkingSpec) *kops.WeaveNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.WeaveNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -156,9 +158,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.FlannelNetworkingSpec) *kops.FlannelNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.FlannelNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -179,9 +181,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CalicoNetworkingSpec) *kops.CalicoNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.CalicoNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -202,9 +204,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CanalNetworkingSpec) *kops.CanalNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.CanalNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -225,9 +227,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.KuberouterNetworkingSpec) *kops.KuberouterNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.KuberouterNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -248,9 +250,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.RomanaNetworkingSpec) *kops.RomanaNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.RomanaNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -271,9 +273,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.AmazonVPCNetworkingSpec) *kops.AmazonVPCNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.AmazonVPCNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -294,9 +296,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.CiliumNetworkingSpec) *kops.CiliumNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.CiliumNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -317,9 +319,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.LyftVPCNetworkingSpec) *kops.LyftVPCNetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.LyftVPCNetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -340,9 +342,9 @@ func ExpandNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {
 					return nil
 				}
 				tmp := func(in kops.GCENetworkingSpec) *kops.GCENetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.GCENetworkingSpec {
 					if in.([]interface{})[0] == nil {

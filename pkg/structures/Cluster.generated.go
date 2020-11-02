@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -88,9 +90,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in kops.TopologySpec) *kops.TopologySpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.TopologySpec {
 					if in.([]interface{})[0] == nil {
@@ -163,9 +165,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
@@ -191,9 +193,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -209,9 +211,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in string) *string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(string(ExpandString(in)))
 				return tmp
@@ -227,9 +229,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in map[string][]string) *map[string][]string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) map[string][]string {
 					if in == nil {
@@ -260,9 +262,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in map[string]string) *map[string]string {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) map[string]string {
 					if in == nil {
@@ -290,9 +292,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 							return nil
 						}
 						tmp := func(in kops.EtcdClusterSpec) *kops.EtcdClusterSpec {
-							// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-							// 	return nil
-							// }
+							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+								return nil
+							}
 							return &in
 						}(func(in interface{}) kops.EtcdClusterSpec {
 							if in == nil {
@@ -316,9 +318,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in kops.NetworkingSpec) *kops.NetworkingSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.NetworkingSpec {
 					if in.([]interface{})[0] == nil {
@@ -339,9 +341,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in kops.AccessSpec) *kops.AccessSpec {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.AccessSpec {
 					if in.([]interface{})[0] == nil {
@@ -375,9 +377,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -397,9 +399,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in bool) *bool {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(bool(ExpandBool(in)))
 				return tmp
@@ -425,9 +427,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 					return nil
 				}
 				tmp := func(in kops.RollingUpdate) *kops.RollingUpdate {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
 					if in.([]interface{})[0] == nil {

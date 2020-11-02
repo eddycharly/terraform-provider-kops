@@ -1,6 +1,8 @@
 package structures
 
 import (
+	"reflect"
+
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -26,9 +28,9 @@ func ExpandFlannelNetworkingSpec(in map[string]interface{}) kops.FlannelNetworki
 					return nil
 				}
 				tmp := func(in int32) *int32 {
-					// if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-					// 	return nil
-					// }
+					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+						return nil
+					}
 					return &in
 				}(int32(ExpandInt(in)))
 				return tmp
