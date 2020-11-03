@@ -1,17 +1,17 @@
 # kops_etcd_cluster_spec
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `name` | String | Required |  |
-| `provider` | String | Optional |  |
-| `members` | List([EtcdMemberSpec](./EtcdMemberSpec.generated.md)) | Required |  |
-| `enable_etcd_tls` | Bool | Optional |  |
-| `enable_tls_auth` | Bool | Optional |  |
-| `version` | String | Optional |  |
-| `leader_election_timeout` | Duration | Optional |  |
-| `heartbeat_interval` | Duration | Optional |  |
-| `image` | String | Optional |  |
-| `backups` | [EtcdBackupSpec](./EtcdBackupSpec.generated.md) | Optional |  |
-| `manager` | [EtcdManagerSpec](./EtcdManagerSpec.generated.md) | Optional |  |
-| `memory_request` | Quantity | Optional |  |
-| `cpu_request` | Quantity | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `name` | String | :white_check_mark: |  |  |
+| `provider` | String |  | :white_check_mark: |  |
+| `members` | List([EtcdMemberSpec](./EtcdMemberSpec.generated.md)) | :white_check_mark: |  |  |
+| `enable_etcd_tls` | Bool |  | :white_check_mark: |  |
+| `enable_tls_auth` | Bool |  | :white_check_mark: |  |
+| `version` | String |  | :white_check_mark: |  |
+| `leader_election_timeout` | Duration |  | :white_check_mark: |  |
+| `heartbeat_interval` | Duration |  | :white_check_mark: |  |
+| `image` | String |  | :white_check_mark: |  |
+| `backups` | [EtcdBackupSpec](./EtcdBackupSpec.generated.md) |  | :white_check_mark: |  |
+| `manager` | [EtcdManagerSpec](./EtcdManagerSpec.generated.md) |  | :white_check_mark: |  |
+| `memory_request` | Quantity |  | :white_check_mark: |  |
+| `cpu_request` | Quantity |  | :white_check_mark: |  |

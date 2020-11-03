@@ -1,19 +1,19 @@
 # kops_kube_dns_config
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `cache_max_size` | Int | Optional |  |
-| `cache_max_concurrent` | Int | Optional |  |
-| `core_dns_image` | String | Optional |  |
-| `domain` | String | Optional |  |
-| `external_core_file` | String | Optional |  |
-| `image` | String | Optional |  |
-| `replicas` | Int | Optional |  |
-| `provider` | String | Optional |  |
-| `server_ip` | String | Optional |  |
-| `stub_domains` | Map(List(String)) | Optional |  |
-| `upstream_nameservers` | List(String) | Optional |  |
-| `memory_request` | Quantity | Optional |  |
-| `cpu_request` | Quantity | Optional |  |
-| `memory_limit` | Quantity | Optional |  |
-| `node_local_dns` | [NodeLocalDNSConfig](./NodeLocalDNSConfig.generated.md) | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `cache_max_size` | Int |  | :white_check_mark: |  |
+| `cache_max_concurrent` | Int |  | :white_check_mark: |  |
+| `core_dns_image` | String |  | :white_check_mark: |  |
+| `domain` | String |  | :white_check_mark: |  |
+| `external_core_file` | String |  | :white_check_mark: |  |
+| `image` | String |  | :white_check_mark: |  |
+| `replicas` | Int |  | :white_check_mark: |  |
+| `provider` | String |  | :white_check_mark: |  |
+| `server_ip` | String |  | :white_check_mark: |  |
+| `stub_domains` | Map(List(String)) |  | :white_check_mark: |  |
+| `upstream_nameservers` | List(String) |  | :white_check_mark: |  |
+| `memory_request` | Quantity |  | :white_check_mark: |  |
+| `cpu_request` | Quantity |  | :white_check_mark: |  |
+| `memory_limit` | Quantity |  | :white_check_mark: |  |
+| `node_local_dns` | [NodeLocalDNSConfig](./NodeLocalDNSConfig.generated.md) |  | :white_check_mark: |  |

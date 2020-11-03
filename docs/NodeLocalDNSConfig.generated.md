@@ -1,8 +1,8 @@
 # kops_node_local_dns_config
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `enabled` | Bool | Optional |  |
-| `local_ip` | String | Optional |  |
-| `memory_request` | Quantity | Optional |  |
-| `cpu_request` | Quantity | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `enabled` | Bool |  | :white_check_mark: |  |
+| `local_ip` | String |  | :white_check_mark: |  |
+| `memory_request` | Quantity |  | :white_check_mark: |  |
+| `cpu_request` | Quantity |  | :white_check_mark: |  |

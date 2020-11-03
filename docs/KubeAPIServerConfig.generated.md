@@ -1,99 +1,99 @@
 # kops_kube_api_server_config
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `image` | String | Optional |  |
-| `disable_basic_auth` | Bool | Optional |  |
-| `log_level` | Int | Optional |  |
-| `cloud_provider` | String | Optional |  |
-| `secure_port` | Int | Optional |  |
-| `insecure_port` | Int | Optional |  |
-| `address` | String | Optional |  |
-| `bind_address` | String | Optional |  |
-| `insecure_bind_address` | String | Optional |  |
-| `enable_bootstrap_auth_token` | Bool | Optional |  |
-| `enable_aggregator_routing` | Bool | Optional |  |
-| `admission_control` | List(String) | Optional |  |
-| `append_admission_plugins` | List(String) | Optional |  |
-| `enable_admission_plugins` | List(String) | Optional |  |
-| `disable_admission_plugins` | List(String) | Optional |  |
-| `admission_control_config_file` | String | Optional |  |
-| `service_cluster_ip_range` | String | Optional |  |
-| `service_node_port_range` | String | Optional |  |
-| `etcd_servers` | List(String) | Optional |  |
-| `etcd_servers_overrides` | List(String) | Optional |  |
-| `etcd_ca_file` | String | Optional |  |
-| `etcd_cert_file` | String | Optional |  |
-| `etcd_key_file` | String | Optional |  |
-| `basic_auth_file` | String | Optional |  |
-| `client_ca_file` | String | Optional |  |
-| `tls_cert_file` | String | Optional |  |
-| `tls_private_key_file` | String | Optional |  |
-| `tls_cipher_suites` | List(String) | Optional |  |
-| `tls_min_version` | String | Optional |  |
-| `token_auth_file` | String | Optional |  |
-| `allow_privileged` | Bool | Optional |  |
-| `api_server_count` | Int | Optional |  |
-| `runtime_config` | Map(String) | Optional |  |
-| `kubelet_client_certificate` | String | Optional |  |
-| `kubelet_certificate_authority` | String | Optional |  |
-| `kubelet_client_key` | String | Optional |  |
-| `anonymous_auth` | Bool | Optional |  |
-| `kubelet_preferred_address_types` | List(String) | Optional |  |
-| `storage_backend` | String | Optional |  |
-| `oidc_username_claim` | String | Optional |  |
-| `oidc_username_prefix` | String | Optional |  |
-| `oidc_groups_claim` | String | Optional |  |
-| `oidc_groups_prefix` | String | Optional |  |
-| `oidc_issuer_url` | String | Optional |  |
-| `oidc_client_id` | String | Optional |  |
-| `oidc_required_claim` | List(String) | Optional |  |
-| `oidcca_file` | String | Optional |  |
-| `proxy_client_cert_file` | String | Optional |  |
-| `proxy_client_key_file` | String | Optional |  |
-| `audit_log_format` | String | Optional |  |
-| `audit_log_path` | String | Optional |  |
-| `audit_log_max_age` | Int | Optional |  |
-| `audit_log_max_backups` | Int | Optional |  |
-| `audit_log_max_size` | Int | Optional |  |
-| `audit_policy_file` | String | Optional |  |
-| `audit_webhook_batch_buffer_size` | Int | Optional |  |
-| `audit_webhook_batch_max_size` | Int | Optional |  |
-| `audit_webhook_batch_max_wait` | Duration | Optional |  |
-| `audit_webhook_batch_throttle_burst` | Int | Optional |  |
-| `audit_webhook_batch_throttle_enable` | Bool | Optional |  |
-| `audit_webhook_batch_throttle_qps` | Quantity | Optional |  |
-| `audit_webhook_config_file` | String | Optional |  |
-| `audit_webhook_initial_backoff` | Duration | Optional |  |
-| `audit_webhook_mode` | String | Optional |  |
-| `authentication_token_webhook_config_file` | String | Optional |  |
-| `authentication_token_webhook_cache_ttl` | Duration | Optional |  |
-| `authorization_mode` | String | Optional |  |
-| `authorization_webhook_config_file` | String | Optional |  |
-| `authorization_webhook_cache_authorized_ttl` | Duration | Optional |  |
-| `authorization_webhook_cache_unauthorized_ttl` | Duration | Optional |  |
-| `authorization_rbac_super_user` | String | Optional |  |
-| `encryption_provider_config` | String | Optional |  |
-| `experimental_encryption_provider_config` | String | Optional |  |
-| `requestheader_username_headers` | List(String) | Optional |  |
-| `requestheader_group_headers` | List(String) | Optional |  |
-| `requestheader_extra_header_prefixes` | List(String) | Optional |  |
-| `requestheader_client_ca_file` | String | Optional |  |
-| `requestheader_allowed_names` | List(String) | Optional |  |
-| `feature_gates` | Map(String) | Optional |  |
-| `max_requests_inflight` | Int | Optional |  |
-| `max_mutating_requests_inflight` | Int | Optional |  |
-| `http_2max_streams_per_connection` | Int | Optional |  |
-| `etcd_quorum_read` | Bool | Optional |  |
-| `request_timeout` | Duration | Optional |  |
-| `min_request_timeout` | Int | Optional |  |
-| `target_ram_mb` | Int | Optional |  |
-| `service_account_key_file` | List(String) | Optional |  |
-| `service_account_signing_key_file` | String | Optional |  |
-| `service_account_issuer` | String | Optional |  |
-| `service_account_jwksuri` | String | Optional |  |
-| `api_audiences` | List(String) | Optional |  |
-| `cpu_request` | String | Optional |  |
-| `event_ttl` | Duration | Optional |  |
-| `audit_dynamic_configuration` | Bool | Optional |  |
-| `enable_profiling` | Bool | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `image` | String |  | :white_check_mark: |  |
+| `disable_basic_auth` | Bool |  | :white_check_mark: |  |
+| `log_level` | Int |  | :white_check_mark: |  |
+| `cloud_provider` | String |  | :white_check_mark: |  |
+| `secure_port` | Int |  | :white_check_mark: |  |
+| `insecure_port` | Int |  | :white_check_mark: |  |
+| `address` | String |  | :white_check_mark: |  |
+| `bind_address` | String |  | :white_check_mark: |  |
+| `insecure_bind_address` | String |  | :white_check_mark: |  |
+| `enable_bootstrap_auth_token` | Bool |  | :white_check_mark: |  |
+| `enable_aggregator_routing` | Bool |  | :white_check_mark: |  |
+| `admission_control` | List(String) |  | :white_check_mark: |  |
+| `append_admission_plugins` | List(String) |  | :white_check_mark: |  |
+| `enable_admission_plugins` | List(String) |  | :white_check_mark: |  |
+| `disable_admission_plugins` | List(String) |  | :white_check_mark: |  |
+| `admission_control_config_file` | String |  | :white_check_mark: |  |
+| `service_cluster_ip_range` | String |  | :white_check_mark: |  |
+| `service_node_port_range` | String |  | :white_check_mark: |  |
+| `etcd_servers` | List(String) |  | :white_check_mark: |  |
+| `etcd_servers_overrides` | List(String) |  | :white_check_mark: |  |
+| `etcd_ca_file` | String |  | :white_check_mark: |  |
+| `etcd_cert_file` | String |  | :white_check_mark: |  |
+| `etcd_key_file` | String |  | :white_check_mark: |  |
+| `basic_auth_file` | String |  | :white_check_mark: |  |
+| `client_ca_file` | String |  | :white_check_mark: |  |
+| `tls_cert_file` | String |  | :white_check_mark: |  |
+| `tls_private_key_file` | String |  | :white_check_mark: |  |
+| `tls_cipher_suites` | List(String) |  | :white_check_mark: |  |
+| `tls_min_version` | String |  | :white_check_mark: |  |
+| `token_auth_file` | String |  | :white_check_mark: |  |
+| `allow_privileged` | Bool |  | :white_check_mark: |  |
+| `api_server_count` | Int |  | :white_check_mark: |  |
+| `runtime_config` | Map(String) |  | :white_check_mark: |  |
+| `kubelet_client_certificate` | String |  | :white_check_mark: |  |
+| `kubelet_certificate_authority` | String |  | :white_check_mark: |  |
+| `kubelet_client_key` | String |  | :white_check_mark: |  |
+| `anonymous_auth` | Bool |  | :white_check_mark: |  |
+| `kubelet_preferred_address_types` | List(String) |  | :white_check_mark: |  |
+| `storage_backend` | String |  | :white_check_mark: |  |
+| `oidc_username_claim` | String |  | :white_check_mark: |  |
+| `oidc_username_prefix` | String |  | :white_check_mark: |  |
+| `oidc_groups_claim` | String |  | :white_check_mark: |  |
+| `oidc_groups_prefix` | String |  | :white_check_mark: |  |
+| `oidc_issuer_url` | String |  | :white_check_mark: |  |
+| `oidc_client_id` | String |  | :white_check_mark: |  |
+| `oidc_required_claim` | List(String) |  | :white_check_mark: |  |
+| `oidcca_file` | String |  | :white_check_mark: |  |
+| `proxy_client_cert_file` | String |  | :white_check_mark: |  |
+| `proxy_client_key_file` | String |  | :white_check_mark: |  |
+| `audit_log_format` | String |  | :white_check_mark: |  |
+| `audit_log_path` | String |  | :white_check_mark: |  |
+| `audit_log_max_age` | Int |  | :white_check_mark: |  |
+| `audit_log_max_backups` | Int |  | :white_check_mark: |  |
+| `audit_log_max_size` | Int |  | :white_check_mark: |  |
+| `audit_policy_file` | String |  | :white_check_mark: |  |
+| `audit_webhook_batch_buffer_size` | Int |  | :white_check_mark: |  |
+| `audit_webhook_batch_max_size` | Int |  | :white_check_mark: |  |
+| `audit_webhook_batch_max_wait` | Duration |  | :white_check_mark: |  |
+| `audit_webhook_batch_throttle_burst` | Int |  | :white_check_mark: |  |
+| `audit_webhook_batch_throttle_enable` | Bool |  | :white_check_mark: |  |
+| `audit_webhook_batch_throttle_qps` | Quantity |  | :white_check_mark: |  |
+| `audit_webhook_config_file` | String |  | :white_check_mark: |  |
+| `audit_webhook_initial_backoff` | Duration |  | :white_check_mark: |  |
+| `audit_webhook_mode` | String |  | :white_check_mark: |  |
+| `authentication_token_webhook_config_file` | String |  | :white_check_mark: |  |
+| `authentication_token_webhook_cache_ttl` | Duration |  | :white_check_mark: |  |
+| `authorization_mode` | String |  | :white_check_mark: |  |
+| `authorization_webhook_config_file` | String |  | :white_check_mark: |  |
+| `authorization_webhook_cache_authorized_ttl` | Duration |  | :white_check_mark: |  |
+| `authorization_webhook_cache_unauthorized_ttl` | Duration |  | :white_check_mark: |  |
+| `authorization_rbac_super_user` | String |  | :white_check_mark: |  |
+| `encryption_provider_config` | String |  | :white_check_mark: |  |
+| `experimental_encryption_provider_config` | String |  | :white_check_mark: |  |
+| `requestheader_username_headers` | List(String) |  | :white_check_mark: |  |
+| `requestheader_group_headers` | List(String) |  | :white_check_mark: |  |
+| `requestheader_extra_header_prefixes` | List(String) |  | :white_check_mark: |  |
+| `requestheader_client_ca_file` | String |  | :white_check_mark: |  |
+| `requestheader_allowed_names` | List(String) |  | :white_check_mark: |  |
+| `feature_gates` | Map(String) |  | :white_check_mark: |  |
+| `max_requests_inflight` | Int |  | :white_check_mark: |  |
+| `max_mutating_requests_inflight` | Int |  | :white_check_mark: |  |
+| `http_2max_streams_per_connection` | Int |  | :white_check_mark: |  |
+| `etcd_quorum_read` | Bool |  | :white_check_mark: |  |
+| `request_timeout` | Duration |  | :white_check_mark: |  |
+| `min_request_timeout` | Int |  | :white_check_mark: |  |
+| `target_ram_mb` | Int |  | :white_check_mark: |  |
+| `service_account_key_file` | List(String) |  | :white_check_mark: |  |
+| `service_account_signing_key_file` | String |  | :white_check_mark: |  |
+| `service_account_issuer` | String |  | :white_check_mark: |  |
+| `service_account_jwksuri` | String |  | :white_check_mark: |  |
+| `api_audiences` | List(String) |  | :white_check_mark: |  |
+| `cpu_request` | String |  | :white_check_mark: |  |
+| `event_ttl` | Duration |  | :white_check_mark: |  |
+| `audit_dynamic_configuration` | Bool |  | :white_check_mark: |  |
+| `enable_profiling` | Bool |  | :white_check_mark: |  |

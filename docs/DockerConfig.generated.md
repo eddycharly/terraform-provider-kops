@@ -1,30 +1,30 @@
 # kops_docker_config
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `authorization_plugins` | List(String) | Optional |  |
-| `bridge` | String | Optional |  |
-| `bridge_ip` | String | Optional |  |
-| `data_root` | String | Optional |  |
-| `default_ulimit` | List(String) | Optional |  |
-| `exec_opt` | List(String) | Optional |  |
-| `exec_root` | String | Optional |  |
-| `experimental` | Bool | Optional |  |
-| `health_check` | Bool | Optional |  |
-| `hosts` | List(String) | Optional |  |
-| `ip_masq` | Bool | Optional |  |
-| `ip_tables` | Bool | Optional |  |
-| `insecure_registry` | String | Optional |  |
-| `insecure_registries` | List(String) | Optional |  |
-| `live_restore` | Bool | Optional |  |
-| `log_driver` | String | Optional |  |
-| `log_level` | String | Optional |  |
-| `log_opt` | List(String) | Optional |  |
-| `metrics_address` | String | Optional |  |
-| `mtu` | Int | Optional |  |
-| `registry_mirrors` | List(String) | Optional |  |
-| `skip_install` | Bool | Optional |  |
-| `storage` | String | Optional |  |
-| `storage_opts` | List(String) | Optional |  |
-| `user_namespace_remap` | String | Optional |  |
-| `version` | String | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `authorization_plugins` | List(String) |  | :white_check_mark: |  |
+| `bridge` | String |  | :white_check_mark: |  |
+| `bridge_ip` | String |  | :white_check_mark: |  |
+| `data_root` | String |  | :white_check_mark: |  |
+| `default_ulimit` | List(String) |  | :white_check_mark: |  |
+| `exec_opt` | List(String) |  | :white_check_mark: |  |
+| `exec_root` | String |  | :white_check_mark: |  |
+| `experimental` | Bool |  | :white_check_mark: |  |
+| `health_check` | Bool |  | :white_check_mark: |  |
+| `hosts` | List(String) |  | :white_check_mark: |  |
+| `ip_masq` | Bool |  | :white_check_mark: |  |
+| `ip_tables` | Bool |  | :white_check_mark: |  |
+| `insecure_registry` | String |  | :white_check_mark: |  |
+| `insecure_registries` | List(String) |  | :white_check_mark: |  |
+| `live_restore` | Bool |  | :white_check_mark: |  |
+| `log_driver` | String |  | :white_check_mark: |  |
+| `log_level` | String |  | :white_check_mark: |  |
+| `log_opt` | List(String) |  | :white_check_mark: |  |
+| `metrics_address` | String |  | :white_check_mark: |  |
+| `mtu` | Int |  | :white_check_mark: |  |
+| `registry_mirrors` | List(String) |  | :white_check_mark: |  |
+| `skip_install` | Bool |  | :white_check_mark: |  |
+| `storage` | String |  | :white_check_mark: |  |
+| `storage_opts` | List(String) |  | :white_check_mark: |  |
+| `user_namespace_remap` | String |  | :white_check_mark: |  |
+| `version` | String |  | :white_check_mark: |  |

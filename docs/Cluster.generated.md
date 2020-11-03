@@ -1,72 +1,72 @@
 # kops_cluster
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `name` | String | Required |  |
-| `channel` | String | Optional |  |
-| `addons` | List([AddonSpec](./AddonSpec.generated.md)) | Optional |  |
-| `config_base` | String | Optional | Computed |
-| `cloud_provider` | String | Required |  |
-| `container_runtime` | String | Optional |  |
-| `kubernetes_version` | String | Optional |  |
-| `subnet` | List([ClusterSubnetSpec](./ClusterSubnetSpec.generated.md)) | Required |  |
-| `project` | String | Optional |  |
-| `master_public_name` | String | Optional | Computed |
-| `master_internal_name` | String | Optional | Computed |
-| `network_cidr` | String | Optional | Computed |
-| `additional_network_cidrs` | List(String) | Optional |  |
-| `network_id` | String | Required |  |
-| `topology` | [TopologySpec](./TopologySpec.generated.md) | Required |  |
-| `secret_store` | String | Optional |  |
-| `key_store` | String | Optional |  |
-| `config_store` | String | Optional |  |
-| `dns_zone` | String | Optional |  |
-| `additional_sans` | List(String) | Optional |  |
-| `cluster_dns_domain` | String | Optional |  |
-| `service_cluster_ip_range` | String | Optional |  |
-| `pod_cidr` | String | Optional |  |
-| `non_masquerade_cidr` | String | Optional | Computed |
-| `ssh_access` | List(String) | Optional |  |
-| `node_port_access` | List(String) | Optional |  |
-| `egress_proxy` | [EgressProxySpec](./EgressProxySpec.generated.md) | Optional |  |
-| `ssh_key_name` | String | Optional |  |
-| `kubernetes_api_access` | List(String) | Optional |  |
-| `isolate_masters` | Bool | Optional |  |
-| `update_policy` | String | Optional |  |
-| `external_policies` | Map(List(String)) | Optional |  |
-| `additional_policies` | Map(String) | Optional |  |
-| `file_assets` | List([FileAssetSpec](./FileAssetSpec.generated.md)) | Optional |  |
-| `etcd_cluster` | List([EtcdClusterSpec](./EtcdClusterSpec.generated.md)) | Required |  |
-| `containerd` | [ContainerdConfig](./ContainerdConfig.generated.md) | Optional |  |
-| `docker` | [DockerConfig](./DockerConfig.generated.md) | Optional |  |
-| `kube_dns` | [KubeDNSConfig](./KubeDNSConfig.generated.md) | Optional |  |
-| `kube_api_server` | [KubeAPIServerConfig](./KubeAPIServerConfig.generated.md) | Optional |  |
-| `kube_controller_manager` | [KubeControllerManagerConfig](./KubeControllerManagerConfig.generated.md) | Optional |  |
-| `external_cloud_controller_manager` | [CloudControllerManagerConfig](./CloudControllerManagerConfig.generated.md) | Optional |  |
-| `kube_scheduler` | [KubeSchedulerConfig](./KubeSchedulerConfig.generated.md) | Optional |  |
-| `kube_proxy` | [KubeProxyConfig](./KubeProxyConfig.generated.md) | Optional |  |
-| `kubelet` | [KubeletConfigSpec](./KubeletConfigSpec.generated.md) | Optional |  |
-| `master_kubelet` | [KubeletConfigSpec](./KubeletConfigSpec.generated.md) | Optional |  |
-| `cloud_config` | [CloudConfiguration](./CloudConfiguration.generated.md) | Optional |  |
-| `external_dns` | [ExternalDNSConfig](./ExternalDNSConfig.generated.md) | Optional |  |
-| `networking` | [NetworkingSpec](./NetworkingSpec.generated.md) | Required |  |
-| `api` | [AccessSpec](./AccessSpec.generated.md) | Optional |  |
-| `authentication` | [AuthenticationSpec](./AuthenticationSpec.generated.md) | Optional |  |
-| `authorization` | [AuthorizationSpec](./AuthorizationSpec.generated.md) | Optional |  |
-| `node_authorization` | [NodeAuthorizationSpec](./NodeAuthorizationSpec.generated.md) | Optional |  |
-| `cloud_labels` | Map(String) | Optional |  |
-| `hooks` | List([HookSpec](./HookSpec.generated.md)) | Optional |  |
-| `assets` | [Assets](./Assets.generated.md) | Optional |  |
-| `iam` | [IAMSpec](./IAMSpec.generated.md) | Optional | Computed |
-| `encryption_config` | Bool | Optional |  |
-| `disable_subnet_tags` | Bool | Optional |  |
-| `use_host_certificates` | Bool | Optional |  |
-| `sysctl_parameters` | List(String) | Optional |  |
-| `rolling_update` | [RollingUpdate](./RollingUpdate.generated.md) | Optional |  |
-| `kube_server` | String | Optional | Computed |
-| `kube_certificate_authority` | String | Optional | Computed |
-| `kube_client_certificate` | String | Optional | Computed |
-| `kube_client_key` | String | Optional | Computed |
-| `kube_username` | String | Optional | Computed |
-| `kube_password` | String | Optional | Computed |
-| `instance_group` | List([InstanceGroup](./InstanceGroup.generated.md)) | Required |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `name` | String | :white_check_mark: |  |  |
+| `channel` | String |  | :white_check_mark: |  |
+| `addons` | List([AddonSpec](./AddonSpec.generated.md)) |  | :white_check_mark: |  |
+| `config_base` | String |  | :white_check_mark: | :white_check_mark: |
+| `cloud_provider` | String | :white_check_mark: |  |  |
+| `container_runtime` | String |  | :white_check_mark: |  |
+| `kubernetes_version` | String |  | :white_check_mark: |  |
+| `subnet` | List([ClusterSubnetSpec](./ClusterSubnetSpec.generated.md)) | :white_check_mark: |  |  |
+| `project` | String |  | :white_check_mark: |  |
+| `master_public_name` | String |  | :white_check_mark: | :white_check_mark: |
+| `master_internal_name` | String |  | :white_check_mark: | :white_check_mark: |
+| `network_cidr` | String |  | :white_check_mark: | :white_check_mark: |
+| `additional_network_cidrs` | List(String) |  | :white_check_mark: |  |
+| `network_id` | String | :white_check_mark: |  |  |
+| `topology` | [TopologySpec](./TopologySpec.generated.md) | :white_check_mark: |  |  |
+| `secret_store` | String |  | :white_check_mark: |  |
+| `key_store` | String |  | :white_check_mark: |  |
+| `config_store` | String |  | :white_check_mark: |  |
+| `dns_zone` | String |  | :white_check_mark: |  |
+| `additional_sans` | List(String) |  | :white_check_mark: |  |
+| `cluster_dns_domain` | String |  | :white_check_mark: |  |
+| `service_cluster_ip_range` | String |  | :white_check_mark: |  |
+| `pod_cidr` | String |  | :white_check_mark: |  |
+| `non_masquerade_cidr` | String |  | :white_check_mark: | :white_check_mark: |
+| `ssh_access` | List(String) |  | :white_check_mark: |  |
+| `node_port_access` | List(String) |  | :white_check_mark: |  |
+| `egress_proxy` | [EgressProxySpec](./EgressProxySpec.generated.md) |  | :white_check_mark: |  |
+| `ssh_key_name` | String |  | :white_check_mark: |  |
+| `kubernetes_api_access` | List(String) |  | :white_check_mark: |  |
+| `isolate_masters` | Bool |  | :white_check_mark: |  |
+| `update_policy` | String |  | :white_check_mark: |  |
+| `external_policies` | Map(List(String)) |  | :white_check_mark: |  |
+| `additional_policies` | Map(String) |  | :white_check_mark: |  |
+| `file_assets` | List([FileAssetSpec](./FileAssetSpec.generated.md)) |  | :white_check_mark: |  |
+| `etcd_cluster` | List([EtcdClusterSpec](./EtcdClusterSpec.generated.md)) | :white_check_mark: |  |  |
+| `containerd` | [ContainerdConfig](./ContainerdConfig.generated.md) |  | :white_check_mark: |  |
+| `docker` | [DockerConfig](./DockerConfig.generated.md) |  | :white_check_mark: |  |
+| `kube_dns` | [KubeDNSConfig](./KubeDNSConfig.generated.md) |  | :white_check_mark: |  |
+| `kube_api_server` | [KubeAPIServerConfig](./KubeAPIServerConfig.generated.md) |  | :white_check_mark: |  |
+| `kube_controller_manager` | [KubeControllerManagerConfig](./KubeControllerManagerConfig.generated.md) |  | :white_check_mark: |  |
+| `external_cloud_controller_manager` | [CloudControllerManagerConfig](./CloudControllerManagerConfig.generated.md) |  | :white_check_mark: |  |
+| `kube_scheduler` | [KubeSchedulerConfig](./KubeSchedulerConfig.generated.md) |  | :white_check_mark: |  |
+| `kube_proxy` | [KubeProxyConfig](./KubeProxyConfig.generated.md) |  | :white_check_mark: |  |
+| `kubelet` | [KubeletConfigSpec](./KubeletConfigSpec.generated.md) |  | :white_check_mark: |  |
+| `master_kubelet` | [KubeletConfigSpec](./KubeletConfigSpec.generated.md) |  | :white_check_mark: |  |
+| `cloud_config` | [CloudConfiguration](./CloudConfiguration.generated.md) |  | :white_check_mark: |  |
+| `external_dns` | [ExternalDNSConfig](./ExternalDNSConfig.generated.md) |  | :white_check_mark: |  |
+| `networking` | [NetworkingSpec](./NetworkingSpec.generated.md) | :white_check_mark: |  |  |
+| `api` | [AccessSpec](./AccessSpec.generated.md) |  | :white_check_mark: |  |
+| `authentication` | [AuthenticationSpec](./AuthenticationSpec.generated.md) |  | :white_check_mark: |  |
+| `authorization` | [AuthorizationSpec](./AuthorizationSpec.generated.md) |  | :white_check_mark: |  |
+| `node_authorization` | [NodeAuthorizationSpec](./NodeAuthorizationSpec.generated.md) |  | :white_check_mark: |  |
+| `cloud_labels` | Map(String) |  | :white_check_mark: |  |
+| `hooks` | List([HookSpec](./HookSpec.generated.md)) |  | :white_check_mark: |  |
+| `assets` | [Assets](./Assets.generated.md) |  | :white_check_mark: |  |
+| `iam` | [IAMSpec](./IAMSpec.generated.md) |  | :white_check_mark: | :white_check_mark: |
+| `encryption_config` | Bool |  | :white_check_mark: |  |
+| `disable_subnet_tags` | Bool |  | :white_check_mark: |  |
+| `use_host_certificates` | Bool |  | :white_check_mark: |  |
+| `sysctl_parameters` | List(String) |  | :white_check_mark: |  |
+| `rolling_update` | [RollingUpdate](./RollingUpdate.generated.md) |  | :white_check_mark: |  |
+| `kube_server` | String |  |  | :white_check_mark: |
+| `kube_certificate_authority` | String |  |  | :white_check_mark: |
+| `kube_client_certificate` | String |  |  | :white_check_mark: |
+| `kube_client_key` | String |  |  | :white_check_mark: |
+| `kube_username` | String |  |  | :white_check_mark: |
+| `kube_password` | String |  |  | :white_check_mark: |
+| `instance_group` | List([InstanceGroup](./InstanceGroup.generated.md)) | :white_check_mark: |  |  |

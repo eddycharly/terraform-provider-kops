@@ -14,9 +14,10 @@ import (
 )
 
 type options struct {
-	exclude  []string
-	required []string
-	computed []string
+	exclude      []string
+	required     []string
+	computed     []string
+	computedOnly []string
 }
 
 func excluded(excluded ...string) func(o options) options {
@@ -36,6 +37,13 @@ func required(required ...string) func(o options) options {
 func computed(computed ...string) func(o options) options {
 	return func(o options) options {
 		o.computed = append(o.computed, computed...)
+		return o
+	}
+}
+
+func computedOnly(computedOnly ...string) func(o options) options {
+	return func(o options) options {
+		o.computedOnly = append(o.computedOnly, computedOnly...)
 		return o
 	}
 }
@@ -83,6 +91,7 @@ func isValueType(in reflect.Type) bool {
 func funcMap(o options) template.FuncMap {
 	required := sets.NewString(o.required...)
 	computed := sets.NewString(o.computed...)
+	computedOnly := sets.NewString(o.computedOnly...)
 	return template.FuncMap{
 		"fields": func(t reflect.Type) []reflect.StructField {
 			var ret []reflect.StructField
@@ -101,14 +110,20 @@ func funcMap(o options) template.FuncMap {
 				if computed.Has(in) {
 					out += "Computed"
 				}
+				if computedOnly.Has(in) {
+					out = "Computed"
+				}
 			}
 			return out
 		},
 		"isRequired": func(in string) bool {
 			return required.Has(in)
 		},
+		"isOptional": func(in string) bool {
+			return !required.Has(in) && !computedOnly.Has(in)
+		},
 		"isComputed": func(in string) bool {
-			return computed.Has(in)
+			return computed.Has(in) || computedOnly.Has(in)
 		},
 		"fieldName":   fieldName,
 		"isValueType": isValueType,
@@ -163,19 +178,23 @@ IntOrString
 {{- end }}
 
 {{- define "required" -}}
-{{ if isRequired .Name }}Required{{ else }}Optional{{ end }}
+{{ if isRequired .Name }}:white_check_mark:{{ end }}
+{{- end }}
+
+{{- define "optional" -}}
+{{ if isOptional .Name }}:white_check_mark:{{ end }}
 {{- end }}
 
 {{- define "computed" -}}
-{{ if isComputed .Name }}Computed{{ end }}
+{{ if isComputed .Name }}:white_check_mark:{{ end }}
 {{- end }}
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
 {{- with .Type -}}
 {{- range (fields .) -}}
 {{- if not (has .Name $.Exclude) }}
-| {{ fieldName .Name | snakecase | code }} | {{ template "type" .Type }} | {{ template "required" . }} | {{ template "computed" . }} |
+| {{ fieldName .Name | snakecase | code }} | {{ template "type" .Type }} | {{ template "required" . }} | {{ template "optional" . }} | {{ template "computed" . }} |
 {{- end -}}
 {{- end -}}
 {{- end }}
@@ -516,7 +535,7 @@ func main() {
 	build(api.Cluster{},
 		required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
-		computed("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
+		computedOnly("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
 	)
 	build(kops.AddonSpec{},
 		required("Manifest"),

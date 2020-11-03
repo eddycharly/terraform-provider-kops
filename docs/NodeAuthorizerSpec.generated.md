@@ -1,12 +1,12 @@
 # kops_node_authorizer_spec
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `authorizer` | String | Optional |  |
-| `features` | List(String) | Optional |  |
-| `image` | String | Optional |  |
-| `node_url` | String | Optional |  |
-| `port` | Int | Optional |  |
-| `interval` | Duration | Optional |  |
-| `timeout` | Duration | Optional |  |
-| `token_ttl` | Duration | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `authorizer` | String |  | :white_check_mark: |  |
+| `features` | List(String) |  | :white_check_mark: |  |
+| `image` | String |  | :white_check_mark: |  |
+| `node_url` | String |  | :white_check_mark: |  |
+| `port` | Int |  | :white_check_mark: |  |
+| `interval` | Duration |  | :white_check_mark: |  |
+| `timeout` | Duration |  | :white_check_mark: |  |
+| `token_ttl` | Duration |  | :white_check_mark: |  |

@@ -1,5 +1,5 @@
 # kops_dns_spec
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `type` | String | Required |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `type` | String | :white_check_mark: |  |  |

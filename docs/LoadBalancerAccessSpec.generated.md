@@ -1,11 +1,11 @@
 # kops_load_balancer_access_spec
 
-| attribute | type | optional/required | computed |
-| --- | --- | --- | --- |
-| `type` | String | Required |  |
-| `idle_timeout_seconds` | Int | Optional |  |
-| `security_group_override` | String | Optional |  |
-| `additional_security_groups` | List(String) | Optional |  |
-| `use_for_internal_api` | Bool | Optional |  |
-| `ssl_certificate` | String | Optional |  |
-| `cross_zone_load_balancing` | Bool | Optional |  |
+| attribute | type | optional | required | computed |
+| --- | --- | --- | --- | --- |
+| `type` | String | :white_check_mark: |  |  |
+| `idle_timeout_seconds` | Int |  | :white_check_mark: |  |
+| `security_group_override` | String |  | :white_check_mark: |  |
+| `additional_security_groups` | List(String) |  | :white_check_mark: |  |
+| `use_for_internal_api` | Bool |  | :white_check_mark: |  |
+| `ssl_certificate` | String |  | :white_check_mark: |  |
+| `cross_zone_load_balancing` | Bool |  | :white_check_mark: |  |
