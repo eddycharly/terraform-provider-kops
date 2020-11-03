@@ -34,7 +34,8 @@ func getClusterAndInstanceGroups(name string, clientset simple.Clientset) (*kops
 	}
 	var kigs []*kops.InstanceGroup
 	for _, ig := range instanceGroups.Items {
-		kigs = append(kigs, &ig)
+		x := ig
+		kigs = append(kigs, &x)
 	}
 	return cluster, kigs, err
 }

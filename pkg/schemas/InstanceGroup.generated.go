@@ -9,7 +9,7 @@ func InstanceGroup() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name":                              RequiredString(),
 			"role":                              RequiredString(),
-			"image":                             OptionalString(),
+			"image":                             OptionalComputedString(),
 			"min_size":                          RequiredInt(),
 			"max_size":                          RequiredInt(),
 			"machine_type":                      RequiredString(),

@@ -4,7 +4,7 @@
 | --- | --- | --- | --- |
 | `name` | String | Required |  |
 | `role` | String | Required |  |
-| `image` | String | Optional |  |
+| `image` | String | Optional | Computed |
 | `min_size` | Int | Required |  |
 | `max_size` | Int | Required |  |
 | `machine_type` | String | Required |  |

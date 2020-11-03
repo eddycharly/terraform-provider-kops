@@ -57,6 +57,10 @@ func OptionalMap(elem *schema.Schema) *schema.Schema {
 	return Schema(schema.TypeMap, elem, false, true, false, 0)
 }
 
+func OptionalComputedMap(elem *schema.Schema) *schema.Schema {
+	return Schema(schema.TypeMap, elem, false, true, true, 0)
+}
+
 func RequiredMap(elem *schema.Schema) *schema.Schema {
 	return Schema(schema.TypeMap, elem, true, false, false, 0)
 }
@@ -65,6 +69,10 @@ func RequiredMap(elem *schema.Schema) *schema.Schema {
 
 func OptionalStruct(elem *schema.Resource) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, false, 1)
+}
+
+func OptionalComputedStruct(elem *schema.Resource) *schema.Schema {
+	return Schema(schema.TypeList, elem, false, true, true, 1)
 }
 
 func RequiredStruct(elem *schema.Resource) *schema.Schema {
@@ -81,6 +89,10 @@ func OptionalList(elem interface{}) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, false, 0)
 }
 
+func OptionalComputedList(elem interface{}) *schema.Schema {
+	return Schema(schema.TypeList, elem, false, true, true, 0)
+}
+
 func RequiredList(elem interface{}) *schema.Schema {
 	return Schema(schema.TypeList, elem, true, false, false, 0)
 }
@@ -93,6 +105,10 @@ func String() *schema.Schema {
 
 func OptionalString() *schema.Schema {
 	return SimpleOptional(schema.TypeString)
+}
+
+func OptionalComputedString() *schema.Schema {
+	return SimpleOptionalComputed(schema.TypeString)
 }
 
 func RequiredString() *schema.Schema {
@@ -109,6 +125,10 @@ func OptionalBool() *schema.Schema {
 	return SimpleOptional(schema.TypeBool)
 }
 
+func OptionalComputedBool() *schema.Schema {
+	return SimpleOptionalComputed(schema.TypeBool)
+}
+
 func RequiredBool() *schema.Schema {
 	return SimpleRequired(schema.TypeBool)
 }
@@ -123,6 +143,10 @@ func OptionalInt() *schema.Schema {
 	return SimpleOptional(schema.TypeInt)
 }
 
+func OptionalComputedInt() *schema.Schema {
+	return SimpleOptionalComputed(schema.TypeInt)
+}
+
 func RequiredInt() *schema.Schema {
 	return SimpleRequired(schema.TypeInt)
 }
@@ -135,6 +159,10 @@ func Float() *schema.Schema {
 
 func OptionalFloat() *schema.Schema {
 	return SimpleOptional(schema.TypeFloat)
+}
+
+func OptionalComputedFloat() *schema.Schema {
+	return SimpleOptionalComputed(schema.TypeFloat)
 }
 
 func RequiredFloat() *schema.Schema {

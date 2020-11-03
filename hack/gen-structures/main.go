@@ -98,6 +98,9 @@ func funcMap(o options) template.FuncMap {
 				out += "Required"
 			} else {
 				out += "Optional"
+				if computed.Has(in) {
+					out += "Computed"
+				}
 			}
 			return out
 		},
@@ -510,7 +513,11 @@ func build(i interface{}, o ...func(o options) options) {
 }
 
 func main() {
-	build(api.Cluster{}, required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"))
+	build(
+		api.Cluster{},
+		required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
+		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
+	)
 	build(kops.AddonSpec{}, required("Manifest"))
 	build(kops.EgressProxySpec{}, required("HTTPProxy"))
 	build(kops.HTTPProxy{}, required("Host", "Port"))
@@ -542,7 +549,11 @@ func main() {
 	build(kops.AlwaysAllowAuthorizationSpec{})
 	build(kops.RBACAuthorizationSpec{})
 	build(kops.NodeAuthorizerSpec{})
-	build(api.InstanceGroup{}, required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"))
+	build(
+		api.InstanceGroup{},
+		required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
+		computed("Image"),
+	)
 	build(kops.AccessSpec{})
 	build(kops.DNSAccessSpec{})
 	build(kops.LoadBalancerAccessSpec{}, required("Type"))

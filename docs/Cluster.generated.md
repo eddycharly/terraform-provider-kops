@@ -5,15 +5,15 @@
 | `name` | String | Required |  |
 | `channel` | String | Optional |  |
 | `addons` | List([AddonSpec](./AddonSpec.generated.md)) | Optional |  |
-| `config_base` | String | Optional |  |
+| `config_base` | String | Optional | Computed |
 | `cloud_provider` | String | Required |  |
 | `container_runtime` | String | Optional |  |
 | `kubernetes_version` | String | Optional |  |
 | `subnet` | List([ClusterSubnetSpec](./ClusterSubnetSpec.generated.md)) | Required |  |
 | `project` | String | Optional |  |
-| `master_public_name` | String | Optional |  |
-| `master_internal_name` | String | Optional |  |
-| `network_cidr` | String | Optional |  |
+| `master_public_name` | String | Optional | Computed |
+| `master_internal_name` | String | Optional | Computed |
+| `network_cidr` | String | Optional | Computed |
 | `additional_network_cidrs` | List(String) | Optional |  |
 | `network_id` | String | Required |  |
 | `topology` | [TopologySpec](./TopologySpec.generated.md) | Required |  |
@@ -25,7 +25,7 @@
 | `cluster_dns_domain` | String | Optional |  |
 | `service_cluster_ip_range` | String | Optional |  |
 | `pod_cidr` | String | Optional |  |
-| `non_masquerade_cidr` | String | Optional |  |
+| `non_masquerade_cidr` | String | Optional | Computed |
 | `ssh_access` | List(String) | Optional |  |
 | `node_port_access` | List(String) | Optional |  |
 | `egress_proxy` | [EgressProxySpec](./EgressProxySpec.generated.md) | Optional |  |
@@ -57,7 +57,7 @@
 | `cloud_labels` | Map(String) | Optional |  |
 | `hooks` | List([HookSpec](./HookSpec.generated.md)) | Optional |  |
 | `assets` | [Assets](./Assets.generated.md) | Optional |  |
-| `iam` | [IAMSpec](./IAMSpec.generated.md) | Optional |  |
+| `iam` | [IAMSpec](./IAMSpec.generated.md) | Optional | Computed |
 | `encryption_config` | Bool | Optional |  |
 | `disable_subnet_tags` | Bool | Optional |  |
 | `use_host_certificates` | Bool | Optional |  |
