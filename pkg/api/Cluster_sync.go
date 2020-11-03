@@ -59,7 +59,7 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	kube, err := getKubeCertificateAndToken(name, clientset)
+	kube, err := getKubeConfig(name, clientset)
 	if err != nil {
 		return nil, err
 	}
@@ -170,21 +170,26 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-
+	configBuilder, err := getKubeConfig(name, clientset)
+	if err != nil {
+		return err
+	}
+	config, err := configBuilder.BuildRestConfig()
+	if err != nil {
+		return err
+	}
 	// TODO cloud only
-	// TODO validate
-
-	// k8sClient, err = kubernetes.NewForConfig(config)
-	// if err != nil {
-	// 	return fmt.Errorf("cannot build kube client for %q: %v", kc.Name, err)
-	// }
-	// nodeList, err := k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
-	// if err != nil {
-	// 	return fmt.Errorf("error listing nodes in cluster: %v", err)
-	// }
-	// if nodeList != nil {
-	// 	nodes = nodeList.Items
-	// }
+	k8sClient, err = kubernetes.NewForConfig(config)
+	if err != nil {
+		return fmt.Errorf("cannot build kube client for %q: %v", kc.Name, err)
+	}
+	nodeList, err := k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		return fmt.Errorf("error listing nodes in cluster: %v", err)
+	}
+	if nodeList != nil {
+		nodes = nodeList.Items
+	}
 	list, err := clientset.InstanceGroupsFor(kc).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		return err
@@ -212,7 +217,7 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 		K8sClient:               k8sClient,
 		FailOnDrainError:        false,
 		FailOnValidate:          false,
-		CloudOnly:               true,
+		CloudOnly:               false,
 		ClusterName:             kc.Name,
 		PostDrainDelay:          5 * time.Second,
 		ValidationTimeout:       15 * time.Minute,
@@ -238,7 +243,7 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 		return nil
 	}
 	var clusterValidator validation.ClusterValidator
-	if false /*!options.CloudOnly*/ {
+	if true /*!options.CloudOnly*/ {
 		clusterValidator, err = validation.NewClusterValidator(kc, cloud, list, k8sClient)
 		if err != nil {
 			return fmt.Errorf("cannot create cluster validator: %v", err)
@@ -248,7 +253,7 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	return d.RollingUpdate(context.Background(), groups, kc, list)
 }
 
-func getKubeCertificateAndToken(name string, clientset simple.Clientset) (*kubeconfig.KubeconfigBuilder, error) {
+func getKubeConfig(name string, clientset simple.Clientset) (*kubeconfig.KubeconfigBuilder, error) {
 	cluster, err := clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return nil, err
