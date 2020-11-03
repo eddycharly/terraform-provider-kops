@@ -6,6 +6,11 @@ import (
 
 // Tools
 
+func Sensitive(s *schema.Schema) *schema.Schema {
+	s.Sensitive = true
+	return s
+}
+
 func Schema(t schema.ValueType, elem interface{}, required, optional, computed bool, maxItems int) *schema.Schema {
 	return &schema.Schema{
 		Type:     t,

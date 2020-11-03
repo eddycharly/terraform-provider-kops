@@ -18,6 +18,7 @@ type options struct {
 	required     []string
 	computed     []string
 	computedOnly []string
+	sensitive    []string
 }
 
 func excluded(excluded ...string) func(o options) options {
@@ -44,6 +45,13 @@ func computed(computed ...string) func(o options) options {
 func computedOnly(computedOnly ...string) func(o options) options {
 	return func(o options) options {
 		o.computedOnly = append(o.computedOnly, computedOnly...)
+		return o
+	}
+}
+
+func sensitive(sensitive ...string) func(o options) options {
+	return func(o options) options {
+		o.sensitive = append(o.sensitive, sensitive...)
 		return o
 	}
 }
@@ -92,6 +100,7 @@ func funcMap(o options) template.FuncMap {
 	required := sets.NewString(o.required...)
 	computed := sets.NewString(o.computed...)
 	computedOnly := sets.NewString(o.computedOnly...)
+	sensitive := sets.NewString(o.sensitive...)
 	return template.FuncMap{
 		"fields": func(t reflect.Type) []reflect.StructField {
 			var ret []reflect.StructField
@@ -101,21 +110,6 @@ func funcMap(o options) template.FuncMap {
 			return ret
 		},
 		"schemaType": schemaType,
-		"schemaModifier": func(in string) string {
-			out := ""
-			if required.Has(in) {
-				out += "Required"
-			} else {
-				out += "Optional"
-				if computed.Has(in) {
-					out += "Computed"
-				}
-				if computedOnly.Has(in) {
-					out = "Computed"
-				}
-			}
-			return out
-		},
 		"isRequired": func(in string) bool {
 			return required.Has(in)
 		},
@@ -124,6 +118,9 @@ func funcMap(o options) template.FuncMap {
 		},
 		"isComputed": func(in string) bool {
 			return computed.Has(in) || computedOnly.Has(in)
+		},
+		"isSensitive": func(in string) bool {
+			return sensitive.Has(in)
 		},
 		"fieldName":   fieldName,
 		"isValueType": isValueType,
@@ -261,6 +258,27 @@ Struct({{ .Name }}())
 {{- end -}}
 {{- end -}}
 
+{{- define "modifier" -}}
+{{- if isRequired . -}}
+Required
+{{- else -}}
+{{- if isOptional . -}}
+Optional
+{{- end -}}
+{{- if isComputed . -}}
+Computed
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "prop" -}}
+{{- if isSensitive .Name -}}
+Sensitive({{ template "modifier" .Name }}{{ template "schema" .Type }})
+{{- else -}}
+{{ template "modifier" .Name }}{{ template "schema" .Type }}
+{{- end -}}
+{{- end -}}
+
 {{- with .Type }}
 
 func {{ .Name }}() *schema.Resource {
@@ -268,7 +286,7 @@ func {{ .Name }}() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			{{- range (fields .) }}
 			{{- if not (has .Name $.Exclude) }}
-			{{ fieldName .Name | snakecase | quote }}: {{ schemaModifier .Name }}{{- template "schema" .Type }},
+			{{ fieldName .Name | snakecase | quote }}: {{ template "prop" . }},
 			{{- end }}
 			{{- end }}
 		},
@@ -529,6 +547,7 @@ func main() {
 		required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
 		computedOnly("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
+		sensitive("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
 	)
 	build(kops.AddonSpec{},
 		required("Manifest"),
