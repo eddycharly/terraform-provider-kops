@@ -68,6 +68,12 @@ func Cluster() *schema.Resource {
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(RollingUpdate()),
+			"kube_server":                       OptionalComputedString(),
+			"kube_certificate_authority":        OptionalComputedString(),
+			"kube_client_certificate":           OptionalComputedString(),
+			"kube_client_key":                   OptionalComputedString(),
+			"kube_username":                     OptionalComputedString(),
+			"kube_password":                     OptionalComputedString(),
 			"instance_group":                    RequiredList(InstanceGroup()),
 		},
 	}

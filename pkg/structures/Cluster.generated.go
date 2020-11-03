@@ -805,6 +805,30 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 			}(in)
 			return value
 		}(in["rolling_update"]),
+		KubeServer: func(in interface{}) string {
+			value := string(ExpandString(in))
+			return value
+		}(in["kube_server"]),
+		KubeCertificateAuthority: func(in interface{}) string {
+			value := string(ExpandString(in))
+			return value
+		}(in["kube_certificate_authority"]),
+		KubeClientCertificate: func(in interface{}) string {
+			value := string(ExpandString(in))
+			return value
+		}(in["kube_client_certificate"]),
+		KubeClientKey: func(in interface{}) string {
+			value := string(ExpandString(in))
+			return value
+		}(in["kube_client_key"]),
+		KubeUsername: func(in interface{}) string {
+			value := string(ExpandString(in))
+			return value
+		}(in["kube_username"]),
+		KubePassword: func(in interface{}) string {
+			value := string(ExpandString(in))
+			return value
+		}(in["kube_password"]),
 		InstanceGroup: func(in interface{}) []*api.InstanceGroup {
 			value := func(in interface{}) []*api.InstanceGroup {
 				var out []*api.InstanceGroup
@@ -1427,6 +1451,30 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 			}(in)
 			return value
 		}(in.RollingUpdate),
+		"kube_server": func(in string) interface{} {
+			value := FlattenString(string(in))
+			return value
+		}(in.KubeServer),
+		"kube_certificate_authority": func(in string) interface{} {
+			value := FlattenString(string(in))
+			return value
+		}(in.KubeCertificateAuthority),
+		"kube_client_certificate": func(in string) interface{} {
+			value := FlattenString(string(in))
+			return value
+		}(in.KubeClientCertificate),
+		"kube_client_key": func(in string) interface{} {
+			value := FlattenString(string(in))
+			return value
+		}(in.KubeClientKey),
+		"kube_username": func(in string) interface{} {
+			value := FlattenString(string(in))
+			return value
+		}(in.KubeUsername),
+		"kube_password": func(in string) interface{} {
+			value := FlattenString(string(in))
+			return value
+		}(in.KubePassword),
 		"instance_group": func(in []*api.InstanceGroup) interface{} {
 			value := func(in []*api.InstanceGroup) []interface{} {
 				var out []interface{}

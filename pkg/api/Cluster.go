@@ -3,6 +3,7 @@ package api
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
+	"k8s.io/kops/pkg/kubeconfig"
 )
 
 type Cluster struct {
@@ -67,10 +68,16 @@ type Cluster struct {
 	UseHostCertificates            *bool
 	SysctlParameters               []string
 	RollingUpdate                  *kops.RollingUpdate
+	KubeServer                     string
+	KubeCertificateAuthority       string
+	KubeClientCertificate          string
+	KubeClientKey                  string
+	KubeUsername                   string
+	KubePassword                   string
 	InstanceGroup                  []*InstanceGroup
 }
 
-func FromKopsCluster(cluster *kops.Cluster, instanceGroups ...*kops.InstanceGroup) *Cluster {
+func fromKopsCluster(cluster *kops.Cluster, config *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
 	return &Cluster{
 		Name:                           cluster.ObjectMeta.Name,
 		Channel:                        cluster.Spec.Channel,
@@ -132,17 +139,23 @@ func FromKopsCluster(cluster *kops.Cluster, instanceGroups ...*kops.InstanceGrou
 		UseHostCertificates:            cluster.Spec.UseHostCertificates,
 		SysctlParameters:               cluster.Spec.SysctlParameters,
 		RollingUpdate:                  cluster.Spec.RollingUpdate,
+		KubeServer:                     config.Server,
+		KubeCertificateAuthority:       string(config.CACert),
+		KubeClientCertificate:          string(config.ClientCert),
+		KubeClientKey:                  string(config.ClientKey),
+		KubeUsername:                   config.KubeUser,
+		KubePassword:                   config.KubePassword,
 		InstanceGroup: func(in ...*kops.InstanceGroup) []*InstanceGroup {
 			var out []*InstanceGroup
 			for _, in := range in {
-				out = append(out, FromKopsInstanceGroup(in))
+				out = append(out, fromKopsInstanceGroup(in))
 			}
 			return out
 		}(instanceGroups...),
 	}
 }
 
-func ToKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
+func toKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 	c := kops.Cluster{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: cluster.Name,
@@ -211,7 +224,7 @@ func ToKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 	}
 	var ig []*kops.InstanceGroup
 	for _, instanceGroup := range cluster.InstanceGroup {
-		ig = append(ig, ToKopsInstanceGroup(instanceGroup))
+		ig = append(ig, toKopsInstanceGroup(instanceGroup))
 	}
 	return &c, ig
 }

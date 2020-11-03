@@ -10,10 +10,13 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/cloudinstances"
+	"k8s.io/kops/pkg/commands"
 	"k8s.io/kops/pkg/instancegroups"
+	"k8s.io/kops/pkg/kubeconfig"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
 	"k8s.io/kops/pkg/validation"
@@ -56,7 +59,11 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	return FromKopsCluster(kc, kig...), nil
+	kube, err := getKubeCertificateAndToken(name, clientset)
+	if err != nil {
+		return nil, err
+	}
+	return fromKopsCluster(kc, kube, kig...), nil
 }
 
 func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error) {
@@ -64,7 +71,7 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 	if err != nil {
 		return nil, err
 	}
-	kc, _ := ToKopsCluster(cluster)
+	kc, _ := toKopsCluster(cluster)
 	if err := cloudup.PerformAssignments(kc); err != nil {
 		return nil, err
 	}
@@ -239,4 +246,25 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	}
 	d.ClusterValidator = clusterValidator
 	return d.RollingUpdate(context.Background(), groups, kc, list)
+}
+
+func getKubeCertificateAndToken(name string, clientset simple.Clientset) (*kubeconfig.KubeconfigBuilder, error) {
+	cluster, err := clientset.GetCluster(context.Background(), name)
+	if err != nil {
+		return nil, err
+	}
+	keyStore, err := clientset.KeyStore(cluster)
+	if err != nil {
+		return nil, err
+	}
+	secretStore, err := clientset.SecretStore(cluster)
+	if err != nil {
+		return nil, err
+	}
+	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, clientcmd.NewDefaultPathOptions())
+	if err != nil {
+		return nil, err
+	}
+
+	return conf, nil
 }

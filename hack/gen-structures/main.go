@@ -513,14 +513,20 @@ func build(i interface{}, o ...func(o options) options) {
 }
 
 func main() {
-	build(
-		api.Cluster{},
+	build(api.Cluster{},
 		required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
+		computed("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
 	)
-	build(kops.AddonSpec{}, required("Manifest"))
-	build(kops.EgressProxySpec{}, required("HTTPProxy"))
-	build(kops.HTTPProxy{}, required("Host", "Port"))
+	build(kops.AddonSpec{},
+		required("Manifest"),
+	)
+	build(kops.EgressProxySpec{},
+		required("HTTPProxy"),
+	)
+	build(kops.HTTPProxy{},
+		required("Host", "Port"),
+	)
 	build(kops.ContainerdConfig{})
 	build(kops.DockerConfig{})
 	build(kops.KubeDNSConfig{})
@@ -549,24 +555,46 @@ func main() {
 	build(kops.AlwaysAllowAuthorizationSpec{})
 	build(kops.RBACAuthorizationSpec{})
 	build(kops.NodeAuthorizerSpec{})
-	build(
-		api.InstanceGroup{},
+	build(api.InstanceGroup{},
 		required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
 		computed("Image"),
 	)
 	build(kops.AccessSpec{})
 	build(kops.DNSAccessSpec{})
-	build(kops.LoadBalancerAccessSpec{}, required("Type"))
-	build(kops.EtcdClusterSpec{}, required("Name", "Members"))
-	build(kops.EtcdBackupSpec{}, required("BackupStore", "Image"))
-	build(kops.EtcdManagerSpec{}, required("Image"))
-	build(kops.EtcdMemberSpec{}, required("Name", "InstanceGroup"))
-	build(kops.EnvVar{}, required("Name"))
-	build(kops.ClusterSubnetSpec{}, required("Name", "ProviderID", "Type", "Zone"), computed("CIDR"))
-	build(kops.TopologySpec{}, required("Masters", "Nodes", "DNS"))
-	build(kops.BastionSpec{}, required("BastionPublicName"))
-	build(kops.BastionLoadBalancerSpec{}, required("AdditionalSecurityGroups"))
-	build(kops.DNSSpec{}, required("Type"))
+	build(kops.LoadBalancerAccessSpec{},
+		required("Type"),
+	)
+	build(kops.EtcdClusterSpec{},
+		required("Name", "Members"),
+	)
+	build(kops.EtcdBackupSpec{},
+		required("BackupStore", "Image"),
+	)
+	build(kops.EtcdManagerSpec{},
+		required("Image"),
+	)
+	build(kops.EtcdMemberSpec{},
+		required("Name", "InstanceGroup"),
+	)
+	build(kops.EnvVar{},
+		required("Name"),
+	)
+	build(kops.ClusterSubnetSpec{},
+		required("Name", "ProviderID", "Type", "Zone"),
+		computed("CIDR"),
+	)
+	build(kops.TopologySpec{},
+		required("Masters", "Nodes", "DNS"),
+	)
+	build(kops.BastionSpec{},
+		required("BastionPublicName"),
+	)
+	build(kops.BastionLoadBalancerSpec{},
+		required("AdditionalSecurityGroups"),
+	)
+	build(kops.DNSSpec{},
+		required("Type"),
+	)
 	build(kops.NetworkingSpec{})
 	build(kops.ClassicNetworkingSpec{})
 	build(kops.KubenetNetworkingSpec{})
@@ -583,14 +611,28 @@ func main() {
 	build(kops.CiliumNetworkingSpec{})
 	build(kops.LyftVPCNetworkingSpec{})
 	build(kops.GCENetworkingSpec{})
-	build(kops.VolumeSpec{}, required("Device"))
-	build(kops.VolumeMountSpec{}, required("Device", "Filesystem", "Path"))
+	build(kops.VolumeSpec{},
+		required("Device"),
+	)
+	build(kops.VolumeMountSpec{},
+		required("Device", "Filesystem", "Path"),
+	)
 	build(kops.MixedInstancesPolicySpec{})
-	build(kops.UserData{}, required("Name", "Type", "Content"))
+	build(kops.UserData{},
+		required("Name", "Type", "Content"),
+	)
 	build(kops.LoadBalancer{})
-	build(kops.IAMProfileSpec{}, required("Profile"))
-	build(kops.HookSpec{}, required("Name"))
-	build(kops.ExecContainerAction{}, required("Image"))
-	build(kops.FileAssetSpec{}, required("Name", "Path", "Content"))
+	build(kops.IAMProfileSpec{},
+		required("Profile"),
+	)
+	build(kops.HookSpec{},
+		required("Name"),
+	)
+	build(kops.ExecContainerAction{},
+		required("Image"),
+	)
+	build(kops.FileAssetSpec{},
+		required("Name", "Path", "Content"),
+	)
 	build(kops.RollingUpdate{})
 }

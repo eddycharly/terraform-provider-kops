@@ -32,7 +32,7 @@ func deleteInstanceGroup(cluster *kops.Cluster, instanceGroup *kops.InstanceGrou
 }
 
 func SyncInstanceGroups(cluster *Cluster, clientset simple.Clientset) error {
-	kc, kig := ToKopsCluster(cluster)
+	kc, kig := toKopsCluster(cluster)
 	synced := sets.NewString()
 	for _, ig := range kig {
 		_, err := clientset.InstanceGroupsFor(kc).Get(context.Background(), ig.Name, metav1.GetOptions{})

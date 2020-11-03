@@ -63,4 +63,10 @@
 | `use_host_certificates` | Bool | Optional |  |
 | `sysctl_parameters` | List(String) | Optional |  |
 | `rolling_update` | [RollingUpdate](./RollingUpdate.generated.md) | Optional |  |
+| `kube_server` | String | Optional | Computed |
+| `kube_certificate_authority` | String | Optional | Computed |
+| `kube_client_certificate` | String | Optional | Computed |
+| `kube_client_key` | String | Optional | Computed |
+| `kube_username` | String | Optional | Computed |
+| `kube_password` | String | Optional | Computed |
 | `instance_group` | List([InstanceGroup](./InstanceGroup.generated.md)) | Required |  |
