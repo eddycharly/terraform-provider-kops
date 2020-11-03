@@ -1,5 +1,8 @@
 # terraform-provider-kops
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/eddycharly/terraform-provider-kops/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/eddycharly/terraform-provider-kops)](https://goreportcard.com/report/eddycharly/terraform-provider-kops)
+
 `terraform-provider-kops` brings [KOPS](https://github.com/kubernetes/kops)
 into terraform in a fully managed way, enabling idempotency through direct
 integration with the KOPS api:
