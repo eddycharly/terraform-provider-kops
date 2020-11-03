@@ -14,6 +14,10 @@ integration with the KOPS api:
 
 Currently using KOPS `v1.18.2` and compatible with terraform `0.12` and higher.
 
+**NOTE**: For now, provisioning the network is not supported. The network must
+be created separately and given to the provider through cluster attribute
+`network_id` and subnets attributes `provider_id`.
+
 ## How does it work
 
 The provider declares a single `kops_cluster` resource that holds the whole
