@@ -3,8 +3,8 @@
 | attribute | type | optional/required | computed |
 | --- | --- | --- | --- |
 | `name` | String | Required |  |
-| `cidr` | String | Optional |  |
-| `zone` | String | Optional |  |
+| `cidr` | String | Optional | Computed |
+| `zone` | String | Required |  |
 | `region` | String | Optional |  |
 | `provider_id` | String | Required |  |
 | `egress` | String | Optional |  |

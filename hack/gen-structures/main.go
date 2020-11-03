@@ -16,6 +16,28 @@ import (
 type options struct {
 	exclude  []string
 	required []string
+	computed []string
+}
+
+func excluded(excluded ...string) func(o options) options {
+	return func(o options) options {
+		o.exclude = append(o.exclude, excluded...)
+		return o
+	}
+}
+
+func required(required ...string) func(o options) options {
+	return func(o options) options {
+		o.required = append(o.required, required...)
+		return o
+	}
+}
+
+func computed(computed ...string) func(o options) options {
+	return func(o options) options {
+		o.computed = append(o.computed, computed...)
+		return o
+	}
 }
 
 func schemaType(in reflect.Type) string {
@@ -55,6 +77,62 @@ func isValueType(in reflect.Type) bool {
 		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString"
 	default:
 		panic(fmt.Sprintf("unknown kind %v", in.Kind()))
+	}
+}
+
+func funcMap(o options) template.FuncMap {
+	required := sets.NewString(o.required...)
+	computed := sets.NewString(o.computed...)
+	return template.FuncMap{
+		"fields": func(t reflect.Type) []reflect.StructField {
+			var ret []reflect.StructField
+			for i := 0; i < t.NumField(); i++ {
+				ret = append(ret, t.Field(i))
+			}
+			return ret
+		},
+		"schemaType": schemaType,
+		"schemaModifier": func(in string) string {
+			out := ""
+			if required.Has(in) {
+				out += "Required"
+			} else {
+				out += "Optional"
+			}
+			return out
+		},
+		"isRequired": func(in string) bool {
+			return required.Has(in)
+		},
+		"isComputed": func(in string) bool {
+			return computed.Has(in)
+		},
+		"fieldName":   fieldName,
+		"isValueType": isValueType,
+		"code": func(in string) string {
+			return fmt.Sprintf("`%s`", in)
+		},
+		"isPtr": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Ptr
+		},
+		"isList": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Slice
+		},
+		"isStruct": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct
+		},
+		"isMap": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Map
+		},
+		"isDuration": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
+		},
+		"isQuantity": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
+		},
+		"isIntOrString": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
+		},
 	}
 }
 
@@ -99,50 +177,7 @@ IntOrString
 {{- end -}}
 {{- end }}
 `
-	required := sets.NewString(o.required...)
-
-	tmpl := template.New("doc").Funcs(template.FuncMap{
-		"fields": func(t reflect.Type) []reflect.StructField {
-			var ret []reflect.StructField
-			for i := 0; i < t.NumField(); i++ {
-				ret = append(ret, t.Field(i))
-			}
-			return ret
-		},
-		"schemaType": schemaType,
-		"isRequired": func(in string) bool {
-			return required.Has(in)
-		},
-		"isComputed": func(in string) bool {
-			// TODO
-			return false
-		},
-		"fieldName": fieldName,
-		"code": func(in string) string {
-			return fmt.Sprintf("`%s`", in)
-		},
-		"isPtr": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Ptr
-		},
-		"isList": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Slice
-		},
-		"isStruct": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct
-		},
-		"isMap": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Map
-		},
-		"isDuration": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
-		},
-		"isQuantity": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
-		},
-		"isIntOrString": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
-		},
-	}).Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
 
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
@@ -220,49 +255,7 @@ func {{ .Name }}() *schema.Resource {
 
 {{- end }}
 `
-	required := sets.NewString(o.required...)
-
-	tmpl := template.New("doc").Funcs(template.FuncMap{
-		"fields": func(t reflect.Type) []reflect.StructField {
-			var ret []reflect.StructField
-			for i := 0; i < t.NumField(); i++ {
-				ret = append(ret, t.Field(i))
-			}
-			return ret
-		},
-		"schemaType": schemaType,
-		"schemaModifier": func(in string) string {
-			out := ""
-			if required.Has(in) {
-				out += "Required"
-			} else {
-				out += "Optional"
-			}
-			return out
-		},
-		"fieldName": fieldName,
-		"isPtr": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Ptr
-		},
-		"isList": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Slice
-		},
-		"isStruct": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct
-		},
-		"isMap": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Map
-		},
-		"isDuration": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
-		},
-		"isQuantity": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
-		},
-		"isIntOrString": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
-		},
-	}).Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
 
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
@@ -487,39 +480,7 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 
 {{- end }}
 `
-	tmpl := template.New("doc").Funcs(template.FuncMap{
-		"fields": func(t reflect.Type) []reflect.StructField {
-			var ret []reflect.StructField
-			for i := 0; i < t.NumField(); i++ {
-				ret = append(ret, t.Field(i))
-			}
-			return ret
-		},
-		"schemaType":  schemaType,
-		"fieldName":   fieldName,
-		"isValueType": isValueType,
-		"isPtr": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Ptr
-		},
-		"isList": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Slice
-		},
-		"isStruct": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct
-		},
-		"isMap": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Map
-		},
-		"isDuration": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
-		},
-		"isQuantity": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
-		},
-		"isIntOrString": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
-		},
-	}).Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
 
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
@@ -534,20 +495,6 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 		"Exclude": o.exclude,
 	}); err != nil {
 		panic(err)
-	}
-}
-
-func required(required ...string) func(o options) options {
-	return func(o options) options {
-		o.required = append(o.required, required...)
-		return o
-	}
-}
-
-func excluded(excluded ...string) func(o options) options {
-	return func(o options) options {
-		o.exclude = append(o.exclude, excluded...)
-		return o
 	}
 }
 
@@ -604,7 +551,7 @@ func main() {
 	build(kops.EtcdManagerSpec{}, required("Image"))
 	build(kops.EtcdMemberSpec{}, required("Name", "InstanceGroup"))
 	build(kops.EnvVar{}, required("Name"))
-	build(kops.ClusterSubnetSpec{}, required("Name", "ProviderID", "Type"))
+	build(kops.ClusterSubnetSpec{}, required("Name", "ProviderID", "Type", "Zone"), computed("CIDR"))
 	build(kops.TopologySpec{}, required("Masters", "Nodes", "DNS"))
 	build(kops.BastionSpec{}, required("BastionPublicName"))
 	build(kops.BastionLoadBalancerSpec{}, required("AdditionalSecurityGroups"))

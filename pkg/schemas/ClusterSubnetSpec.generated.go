@@ -9,7 +9,7 @@ func ClusterSubnetSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name":        RequiredString(),
 			"cidr":        OptionalString(),
-			"zone":        OptionalString(),
+			"zone":        RequiredString(),
 			"region":      OptionalString(),
 			"provider_id": RequiredString(),
 			"egress":      OptionalString(),

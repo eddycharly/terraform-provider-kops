@@ -106,18 +106,21 @@ resource "kops_cluster" "cluster" {
     name        = "private-0"
     provider_id = "subnet-0"
     type        = "Private"
+    zone        = "zone-0"
   }
 
   subnet {
     name        = "private-1"
     provider_id = "subnet-1"
     type        = "Private"
+    zone        = "zone-1"
   }
 
   subnet {
     name        = "private-2"
     provider_id = "subnet-2"
     type        = "Private"
+    zone        = "zone-2"
   }
 
   # master instance groups
