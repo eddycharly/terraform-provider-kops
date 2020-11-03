@@ -10,11 +10,11 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 	}
 	return kops.AuthenticationSpec{
 		Kopeio: func(in interface{}) *kops.KopeioAuthenticationSpec {
-			value := func(in interface{}) *kops.KopeioAuthenticationSpec {
+			return func(in interface{}) *kops.KopeioAuthenticationSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.KopeioAuthenticationSpec) *kops.KopeioAuthenticationSpec {
@@ -26,14 +26,13 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 					return (ExpandKopeioAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["kopeio"]),
 		Aws: func(in interface{}) *kops.AwsAuthenticationSpec {
-			value := func(in interface{}) *kops.AwsAuthenticationSpec {
+			return func(in interface{}) *kops.AwsAuthenticationSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.AwsAuthenticationSpec) *kops.AwsAuthenticationSpec {
@@ -45,7 +44,6 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 					return (ExpandAwsAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["aws"]),
 	}
 }
@@ -53,7 +51,7 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 func FlattenAuthenticationSpec(in kops.AuthenticationSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"kopeio": func(in *kops.KopeioAuthenticationSpec) interface{} {
-			value := func(in *kops.KopeioAuthenticationSpec) interface{} {
+			return func(in *kops.KopeioAuthenticationSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -63,10 +61,9 @@ func FlattenAuthenticationSpec(in kops.AuthenticationSpec) map[string]interface{
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.Kopeio),
 		"aws": func(in *kops.AwsAuthenticationSpec) interface{} {
-			value := func(in *kops.AwsAuthenticationSpec) interface{} {
+			return func(in *kops.AwsAuthenticationSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -76,7 +73,6 @@ func FlattenAuthenticationSpec(in kops.AuthenticationSpec) map[string]interface{
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.Aws),
 	}
 }

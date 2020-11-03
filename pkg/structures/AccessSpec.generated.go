@@ -10,11 +10,11 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 	}
 	return kops.AccessSpec{
 		DNS: func(in interface{}) *kops.DNSAccessSpec {
-			value := func(in interface{}) *kops.DNSAccessSpec {
+			return func(in interface{}) *kops.DNSAccessSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.DNSAccessSpec) *kops.DNSAccessSpec {
@@ -26,14 +26,13 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 					return (ExpandDNSAccessSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["dns"]),
 		LoadBalancer: func(in interface{}) *kops.LoadBalancerAccessSpec {
-			value := func(in interface{}) *kops.LoadBalancerAccessSpec {
+			return func(in interface{}) *kops.LoadBalancerAccessSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec {
@@ -45,7 +44,6 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 					return (ExpandLoadBalancerAccessSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["load_balancer"]),
 	}
 }
@@ -53,7 +51,7 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 func FlattenAccessSpec(in kops.AccessSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"dns": func(in *kops.DNSAccessSpec) interface{} {
-			value := func(in *kops.DNSAccessSpec) interface{} {
+			return func(in *kops.DNSAccessSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -63,10 +61,9 @@ func FlattenAccessSpec(in kops.AccessSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.DNS),
 		"load_balancer": func(in *kops.LoadBalancerAccessSpec) interface{} {
-			value := func(in *kops.LoadBalancerAccessSpec) interface{} {
+			return func(in *kops.LoadBalancerAccessSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -76,7 +73,6 @@ func FlattenAccessSpec(in kops.AccessSpec) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.LoadBalancer),
 	}
 }

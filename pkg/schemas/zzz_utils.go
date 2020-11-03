@@ -116,7 +116,7 @@ func OptionalString() *schema.Schema {
 }
 
 func ComputedString() *schema.Schema {
-	return SimpleOptional(schema.TypeString)
+	return SimpleComputed(schema.TypeString)
 }
 
 func OptionalComputedString() *schema.Schema {

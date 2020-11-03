@@ -10,12 +10,10 @@ func ExpandHTTPProxy(in map[string]interface{}) kops.HTTPProxy {
 	}
 	return kops.HTTPProxy{
 		Host: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["host"]),
 		Port: func(in interface{}) int {
-			value := int(ExpandInt(in))
-			return value
+			return int(ExpandInt(in))
 		}(in["port"]),
 	}
 }
@@ -23,12 +21,10 @@ func ExpandHTTPProxy(in map[string]interface{}) kops.HTTPProxy {
 func FlattenHTTPProxy(in kops.HTTPProxy) map[string]interface{} {
 	return map[string]interface{}{
 		"host": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Host),
 		"port": func(in int) interface{} {
-			value := FlattenInt(int(in))
-			return value
+			return FlattenInt(int(in))
 		}(in.Port),
 	}
 }

@@ -10,11 +10,11 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 	}
 	return kops.AuthorizationSpec{
 		AlwaysAllow: func(in interface{}) *kops.AlwaysAllowAuthorizationSpec {
-			value := func(in interface{}) *kops.AlwaysAllowAuthorizationSpec {
+			return func(in interface{}) *kops.AlwaysAllowAuthorizationSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.AlwaysAllowAuthorizationSpec) *kops.AlwaysAllowAuthorizationSpec {
@@ -26,14 +26,13 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 					return (ExpandAlwaysAllowAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["always_allow"]),
 		RBAC: func(in interface{}) *kops.RBACAuthorizationSpec {
-			value := func(in interface{}) *kops.RBACAuthorizationSpec {
+			return func(in interface{}) *kops.RBACAuthorizationSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.RBACAuthorizationSpec) *kops.RBACAuthorizationSpec {
@@ -45,7 +44,6 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 					return (ExpandRBACAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["rbac"]),
 	}
 }
@@ -53,7 +51,7 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 func FlattenAuthorizationSpec(in kops.AuthorizationSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"always_allow": func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
-			value := func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
+			return func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -63,10 +61,9 @@ func FlattenAuthorizationSpec(in kops.AuthorizationSpec) map[string]interface{} 
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.AlwaysAllow),
 		"rbac": func(in *kops.RBACAuthorizationSpec) interface{} {
-			value := func(in *kops.RBACAuthorizationSpec) interface{} {
+			return func(in *kops.RBACAuthorizationSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -76,7 +73,6 @@ func FlattenAuthorizationSpec(in kops.AuthorizationSpec) map[string]interface{} 
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.RBAC),
 	}
 }

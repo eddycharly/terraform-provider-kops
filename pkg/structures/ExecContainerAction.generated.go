@@ -10,21 +10,19 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 	}
 	return kops.ExecContainerAction{
 		Image: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["image"]),
 		Command: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["command"]),
 		Environment: func(in interface{}) map[string]string {
-			value := func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
 				}
@@ -34,7 +32,6 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 				}
 				return out
 			}(in)
-			return value
 		}(in["environment"]),
 	}
 }
@@ -42,28 +39,25 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 func FlattenExecContainerAction(in kops.ExecContainerAction) map[string]interface{} {
 	return map[string]interface{}{
 		"image": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Image),
 		"command": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.Command),
 		"environment": func(in map[string]string) interface{} {
-			value := func(in map[string]string) map[string]interface{} {
+			return func(in map[string]string) map[string]interface{} {
 				if in == nil {
 					return nil
 				}
 				// TODO
 				return nil
 			}(in)
-			return value
 		}(in.Environment),
 	}
 }

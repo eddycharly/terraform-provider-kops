@@ -10,36 +10,28 @@ func ExpandClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubnetSpec {
 	}
 	return kops.ClusterSubnetSpec{
 		Name: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["name"]),
 		CIDR: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["cidr"]),
 		Zone: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["zone"]),
 		Region: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["region"]),
 		ProviderID: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["provider_id"]),
 		Egress: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["egress"]),
 		Type: func(in interface{}) kops.SubnetType {
-			value := kops.SubnetType(ExpandString(in))
-			return value
+			return kops.SubnetType(ExpandString(in))
 		}(in["type"]),
 		PublicIP: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["public_ip"]),
 	}
 }
@@ -47,36 +39,28 @@ func ExpandClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubnetSpec {
 func FlattenClusterSubnetSpec(in kops.ClusterSubnetSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"name": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Name),
 		"cidr": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.CIDR),
 		"zone": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Zone),
 		"region": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Region),
 		"provider_id": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.ProviderID),
 		"egress": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Egress),
 		"type": func(in kops.SubnetType) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Type),
 		"public_ip": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.PublicIP),
 	}
 }

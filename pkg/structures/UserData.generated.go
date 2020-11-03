@@ -10,16 +10,13 @@ func ExpandUserData(in map[string]interface{}) kops.UserData {
 	}
 	return kops.UserData{
 		Name: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["name"]),
 		Type: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["type"]),
 		Content: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["content"]),
 	}
 }
@@ -27,16 +24,13 @@ func ExpandUserData(in map[string]interface{}) kops.UserData {
 func FlattenUserData(in kops.UserData) map[string]interface{} {
 	return map[string]interface{}{
 		"name": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Name),
 		"type": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Type),
 		"content": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Content),
 	}
 }

@@ -10,12 +10,10 @@ func ExpandEtcdBackupSpec(in map[string]interface{}) kops.EtcdBackupSpec {
 	}
 	return kops.EtcdBackupSpec{
 		BackupStore: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["backup_store"]),
 		Image: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["image"]),
 	}
 }
@@ -23,12 +21,10 @@ func ExpandEtcdBackupSpec(in map[string]interface{}) kops.EtcdBackupSpec {
 func FlattenEtcdBackupSpec(in kops.EtcdBackupSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"backup_store": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.BackupStore),
 		"image": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Image),
 	}
 }

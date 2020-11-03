@@ -12,29 +12,26 @@ func ExpandFlannelNetworkingSpec(in map[string]interface{}) kops.FlannelNetworki
 	}
 	return kops.FlannelNetworkingSpec{
 		Backend: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["backend"]),
 		DisableTxChecksumOffloading: func(in interface{}) bool {
-			value := bool(ExpandBool(in))
-			return value
+			return bool(ExpandBool(in))
 		}(in["disable_tx_checksum_offloading"]),
 		IptablesResyncSeconds: func(in interface{}) *int32 {
-			value := func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(int32(ExpandInt(in)))
 			}(in)
-			return value
 		}(in["iptables_resync_seconds"]),
 	}
 }
@@ -42,15 +39,13 @@ func ExpandFlannelNetworkingSpec(in map[string]interface{}) kops.FlannelNetworki
 func FlattenFlannelNetworkingSpec(in kops.FlannelNetworkingSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"backend": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Backend),
 		"disable_tx_checksum_offloading": func(in bool) interface{} {
-			value := FlattenBool(bool(in))
-			return value
+			return FlattenBool(bool(in))
 		}(in.DisableTxChecksumOffloading),
 		"iptables_resync_seconds": func(in *int32) interface{} {
-			value := func(in *int32) interface{} {
+			return func(in *int32) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -58,7 +53,6 @@ func FlattenFlannelNetworkingSpec(in kops.FlannelNetworkingSpec) map[string]inte
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.IptablesResyncSeconds),
 	}
 }

@@ -13,59 +13,55 @@ func ExpandNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalDNSConfig
 	}
 	return kops.NodeLocalDNSConfig{
 		Enabled: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["enabled"]),
 		LocalIP: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["local_ip"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
-			value := func(in interface{}) *resource.Quantity {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in resource.Quantity) *resource.Quantity {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(ExpandQuantity(in))
 			}(in)
-			return value
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
-			value := func(in interface{}) *resource.Quantity {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in resource.Quantity) *resource.Quantity {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(ExpandQuantity(in))
 			}(in)
-			return value
 		}(in["cpu_request"]),
 	}
 }
@@ -73,7 +69,7 @@ func ExpandNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalDNSConfig
 func FlattenNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{} {
 	return map[string]interface{}{
 		"enabled": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -81,14 +77,12 @@ func FlattenNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.Enabled),
 		"local_ip": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.LocalIP),
 		"memory_request": func(in *resource.Quantity) interface{} {
-			value := func(in *resource.Quantity) interface{} {
+			return func(in *resource.Quantity) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -96,10 +90,9 @@ func FlattenNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{
 					return FlattenQuantity(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.MemoryRequest),
 		"cpu_request": func(in *resource.Quantity) interface{} {
-			value := func(in *resource.Quantity) interface{} {
+			return func(in *resource.Quantity) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -107,7 +100,6 @@ func FlattenNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{
 					return FlattenQuantity(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.CPURequest),
 	}
 }

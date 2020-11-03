@@ -10,8 +10,7 @@ func ExpandAddonSpec(in map[string]interface{}) kops.AddonSpec {
 	}
 	return kops.AddonSpec{
 		Manifest: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["manifest"]),
 	}
 }
@@ -19,8 +18,7 @@ func ExpandAddonSpec(in map[string]interface{}) kops.AddonSpec {
 func FlattenAddonSpec(in kops.AddonSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"manifest": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Manifest),
 	}
 }

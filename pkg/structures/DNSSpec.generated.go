@@ -10,8 +10,7 @@ func ExpandDNSSpec(in map[string]interface{}) kops.DNSSpec {
 	}
 	return kops.DNSSpec{
 		Type: func(in interface{}) kops.DNSType {
-			value := kops.DNSType(ExpandString(in))
-			return value
+			return kops.DNSType(ExpandString(in))
 		}(in["type"]),
 	}
 }
@@ -19,8 +18,7 @@ func ExpandDNSSpec(in map[string]interface{}) kops.DNSSpec {
 func FlattenDNSSpec(in kops.DNSSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"type": func(in kops.DNSType) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Type),
 	}
 }

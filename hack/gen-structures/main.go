@@ -318,15 +318,10 @@ func (in interface{}) {{ .String }} {
 	if in == nil {
 		return nil
 	}
-	if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 		return nil
 	}
 	return func (in {{ .Elem.String }}) {{ .String }} {
-		{{- if isValueType . }}
-		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-			return nil
-		}
-		{{- end }}
 		return &in
 	}({{ template "expandElem" .Elem }})
 }(in)
@@ -354,15 +349,10 @@ func (in interface{}) {{ .String }} {
 	if in == nil {
 		return nil
 	}
-	if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 		return nil
 	}
 	return func (in {{ .Elem.String }}) {{ .String }} {
-		{{- if isValueType . }}
-		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-			return nil
-		}
-		{{- end }}
 		return &in
 	}({{ template "expand" .Elem }})
 }(in)
@@ -479,8 +469,12 @@ func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	{{- range (fields .) }}
 	{{- if not (has .Name $.Exclude) }}
 	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
-		value := {{ template "expand" .Type }}
-		return value
+		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .Name)) }}
+		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+			return nil
+		}
+		{{- end }}
+		return {{ template "expand" .Type }}
 	}(in[{{ fieldName .Name | snakecase | quote }}]),
 	{{- end }}
 	{{- end }}
@@ -492,8 +486,7 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	{{- range (fields .) }}
 	{{- if not (has .Name $.Exclude) }}
 	{{ fieldName .Name | snakecase | quote }}: func (in {{ .Type.String }}) interface{} {
-		value := {{ template "flatten" .Type }}
-		return value
+		return {{ template "flatten" .Type }}
 	}(in.{{ .Name }}),
 	{{- end }}
 	{{- end }}

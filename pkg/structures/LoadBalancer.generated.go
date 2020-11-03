@@ -12,38 +12,36 @@ func ExpandLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 	}
 	return kops.LoadBalancer{
 		LoadBalancerName: func(in interface{}) *string {
-			value := func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-			return value
 		}(in["load_balancer_name"]),
 		TargetGroupARN: func(in interface{}) *string {
-			value := func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-			return value
 		}(in["target_group_arn"]),
 	}
 }
@@ -51,7 +49,7 @@ func ExpandLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 func FlattenLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
 	return map[string]interface{}{
 		"load_balancer_name": func(in *string) interface{} {
-			value := func(in *string) interface{} {
+			return func(in *string) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -59,10 +57,9 @@ func FlattenLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.LoadBalancerName),
 		"target_group_arn": func(in *string) interface{} {
-			value := func(in *string) interface{} {
+			return func(in *string) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -70,7 +67,6 @@ func FlattenLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.TargetGroupARN),
 	}
 }

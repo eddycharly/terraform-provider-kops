@@ -10,12 +10,10 @@ func ExpandRomanaNetworkingSpec(in map[string]interface{}) kops.RomanaNetworking
 	}
 	return kops.RomanaNetworkingSpec{
 		DaemonServiceIP: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["daemon_service_ip"]),
 		EtcdServiceIP: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["etcd_service_ip"]),
 	}
 }
@@ -23,12 +21,10 @@ func ExpandRomanaNetworkingSpec(in map[string]interface{}) kops.RomanaNetworking
 func FlattenRomanaNetworkingSpec(in kops.RomanaNetworkingSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"daemon_service_ip": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.DaemonServiceIP),
 		"etcd_service_ip": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.EtcdServiceIP),
 	}
 }

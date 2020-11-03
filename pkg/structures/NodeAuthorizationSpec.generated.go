@@ -10,11 +10,11 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 	}
 	return kops.NodeAuthorizationSpec{
 		NodeAuthorizer: func(in interface{}) *kops.NodeAuthorizerSpec {
-			value := func(in interface{}) *kops.NodeAuthorizerSpec {
+			return func(in interface{}) *kops.NodeAuthorizerSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec {
@@ -26,7 +26,6 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 					return (ExpandNodeAuthorizerSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["node_authorizer"]),
 	}
 }
@@ -34,7 +33,7 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 func FlattenNodeAuthorizationSpec(in kops.NodeAuthorizationSpec) map[string]interface{} {
 	return map[string]interface{}{
 		"node_authorizer": func(in *kops.NodeAuthorizerSpec) interface{} {
-			value := func(in *kops.NodeAuthorizerSpec) interface{} {
+			return func(in *kops.NodeAuthorizerSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -44,7 +43,6 @@ func FlattenNodeAuthorizationSpec(in kops.NodeAuthorizationSpec) map[string]inte
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.NodeAuthorizer),
 	}
 }

@@ -13,166 +13,148 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 	}
 	return api.InstanceGroup{
 		Name: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["name"]),
 		Role: func(in interface{}) kops.InstanceGroupRole {
-			value := kops.InstanceGroupRole(ExpandString(in))
-			return value
+			return kops.InstanceGroupRole(ExpandString(in))
 		}(in["role"]),
 		Image: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["image"]),
 		MinSize: func(in interface{}) *int32 {
-			value := func(in interface{}) *int32 {
+			return func(in interface{}) *int32 {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(int32(ExpandInt(in)))
 			}(in)
-			return value
 		}(in["min_size"]),
 		MaxSize: func(in interface{}) *int32 {
-			value := func(in interface{}) *int32 {
+			return func(in interface{}) *int32 {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(int32(ExpandInt(in)))
 			}(in)
-			return value
 		}(in["max_size"]),
 		MachineType: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["machine_type"]),
 		RootVolumeSize: func(in interface{}) *int32 {
-			value := func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(int32(ExpandInt(in)))
 			}(in)
-			return value
 		}(in["root_volume_size"]),
 		RootVolumeType: func(in interface{}) *string {
-			value := func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-			return value
 		}(in["root_volume_type"]),
 		RootVolumeIops: func(in interface{}) *int32 {
-			value := func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in int32) *int32 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(int32(ExpandInt(in)))
 			}(in)
-			return value
 		}(in["root_volume_iops"]),
 		RootVolumeOptimization: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["root_volume_optimization"]),
 		RootVolumeDeleteOnTermination: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["root_volume_delete_on_termination"]),
 		RootVolumeEncryption: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["root_volume_encryption"]),
 		Volumes: func(in interface{}) []*kops.VolumeSpec {
-			value := func(in interface{}) []*kops.VolumeSpec {
+			return func(in interface{}) []*kops.VolumeSpec {
 				var out []*kops.VolumeSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) *kops.VolumeSpec {
 						if in == nil {
 							return nil
 						}
-						if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 							return nil
 						}
 						return func(in kops.VolumeSpec) *kops.VolumeSpec {
@@ -187,17 +169,16 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["volumes"]),
 		VolumeMounts: func(in interface{}) []*kops.VolumeMountSpec {
-			value := func(in interface{}) []*kops.VolumeMountSpec {
+			return func(in interface{}) []*kops.VolumeMountSpec {
 				var out []*kops.VolumeMountSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) *kops.VolumeMountSpec {
 						if in == nil {
 							return nil
 						}
-						if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 							return nil
 						}
 						return func(in kops.VolumeMountSpec) *kops.VolumeMountSpec {
@@ -212,30 +193,27 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["volume_mounts"]),
 		Subnets: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["subnets"]),
 		Zones: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["zones"]),
 		Hooks: func(in interface{}) []kops.HookSpec {
-			value := func(in interface{}) []kops.HookSpec {
+			return func(in interface{}) []kops.HookSpec {
 				var out []kops.HookSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.HookSpec {
@@ -247,71 +225,66 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["hooks"]),
 		MaxPrice: func(in interface{}) *string {
-			value := func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-			return value
 		}(in["max_price"]),
 		SpotDurationInMinutes: func(in interface{}) *int64 {
-			value := func(in interface{}) *int64 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int64 {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in int64) *int64 {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(int64(ExpandInt(in)))
 			}(in)
-			return value
 		}(in["spot_duration_in_minutes"]),
 		AssociatePublicIP: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["associate_public_ip"]),
 		AdditionalSecurityGroups: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["additional_security_groups"]),
 		CloudLabels: func(in interface{}) map[string]string {
-			value := func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
 				}
@@ -321,10 +294,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["cloud_labels"]),
 		NodeLabels: func(in interface{}) map[string]string {
-			value := func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
 				}
@@ -334,10 +306,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["node_labels"]),
 		FileAssets: func(in interface{}) []kops.FileAssetSpec {
-			value := func(in interface{}) []kops.FileAssetSpec {
+			return func(in interface{}) []kops.FileAssetSpec {
 				var out []kops.FileAssetSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.FileAssetSpec {
@@ -349,18 +320,16 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["file_assets"]),
 		Tenancy: func(in interface{}) string {
-			value := string(ExpandString(in))
-			return value
+			return string(ExpandString(in))
 		}(in["tenancy"]),
 		Kubelet: func(in interface{}) *kops.KubeletConfigSpec {
-			value := func(in interface{}) *kops.KubeletConfigSpec {
+			return func(in interface{}) *kops.KubeletConfigSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
@@ -372,24 +341,22 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return (ExpandKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["kubelet"]),
 		Taints: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["taints"]),
 		MixedInstancesPolicy: func(in interface{}) *kops.MixedInstancesPolicySpec {
-			value := func(in interface{}) *kops.MixedInstancesPolicySpec {
+			return func(in interface{}) *kops.MixedInstancesPolicySpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
@@ -401,10 +368,9 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return (ExpandMixedInstancesPolicySpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["mixed_instances_policy"]),
 		AdditionalUserData: func(in interface{}) []kops.UserData {
-			value := func(in interface{}) []kops.UserData {
+			return func(in interface{}) []kops.UserData {
 				var out []kops.UserData
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.UserData {
@@ -416,20 +382,18 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["additional_user_data"]),
 		SuspendProcesses: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["suspend_processes"]),
 		ExternalLoadBalancers: func(in interface{}) []kops.LoadBalancer {
-			value := func(in interface{}) []kops.LoadBalancer {
+			return func(in interface{}) []kops.LoadBalancer {
 				var out []kops.LoadBalancer
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.LoadBalancer {
@@ -441,31 +405,29 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				}
 				return out
 			}(in)
-			return value
 		}(in["external_load_balancers"]),
 		DetailedInstanceMonitoring: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["detailed_instance_monitoring"]),
 		IAM: func(in interface{}) *kops.IAMProfileSpec {
-			value := func(in interface{}) *kops.IAMProfileSpec {
+			return func(in interface{}) *kops.IAMProfileSpec {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
@@ -477,58 +439,54 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return (ExpandIAMProfileSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["iam"]),
 		SecurityGroupOverride: func(in interface{}) *string {
-			value := func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-			return value
 		}(in["security_group_override"]),
 		InstanceProtection: func(in interface{}) *bool {
-			value := func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in bool) *bool {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-			return value
 		}(in["instance_protection"]),
 		SysctlParameters: func(in interface{}) []string {
-			value := func(in interface{}) []string {
+			return func(in interface{}) []string {
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in["sysctl_parameters"]),
 		RollingUpdate: func(in interface{}) *kops.RollingUpdate {
-			value := func(in interface{}) *kops.RollingUpdate {
+			return func(in interface{}) *kops.RollingUpdate {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in kops.RollingUpdate) *kops.RollingUpdate {
@@ -540,24 +498,22 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					return (ExpandRollingUpdate(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-			return value
 		}(in["rolling_update"]),
 		InstanceInterruptionBehavior: func(in interface{}) *string {
-			value := func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
-				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
 				return func(in string) *string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-			return value
 		}(in["instance_interruption_behavior"]),
 	}
 }
@@ -565,19 +521,16 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 	return map[string]interface{}{
 		"name": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Name),
 		"role": func(in kops.InstanceGroupRole) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Role),
 		"image": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Image),
 		"min_size": func(in *int32) interface{} {
-			value := func(in *int32) interface{} {
+			return func(in *int32) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -585,10 +538,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.MinSize),
 		"max_size": func(in *int32) interface{} {
-			value := func(in *int32) interface{} {
+			return func(in *int32) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -596,14 +548,12 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.MaxSize),
 		"machine_type": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.MachineType),
 		"root_volume_size": func(in *int32) interface{} {
-			value := func(in *int32) interface{} {
+			return func(in *int32) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -611,10 +561,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.RootVolumeSize),
 		"root_volume_type": func(in *string) interface{} {
-			value := func(in *string) interface{} {
+			return func(in *string) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -622,10 +571,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.RootVolumeType),
 		"root_volume_iops": func(in *int32) interface{} {
-			value := func(in *int32) interface{} {
+			return func(in *int32) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -633,10 +581,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.RootVolumeIops),
 		"root_volume_optimization": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -644,10 +591,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.RootVolumeOptimization),
 		"root_volume_delete_on_termination": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -655,10 +601,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.RootVolumeDeleteOnTermination),
 		"root_volume_encryption": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -666,10 +611,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.RootVolumeEncryption),
 		"volumes": func(in []*kops.VolumeSpec) interface{} {
-			value := func(in []*kops.VolumeSpec) []interface{} {
+			return func(in []*kops.VolumeSpec) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, func(in *kops.VolumeSpec) interface{} {
@@ -685,10 +629,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			return value
 		}(in.Volumes),
 		"volume_mounts": func(in []*kops.VolumeMountSpec) interface{} {
-			value := func(in []*kops.VolumeMountSpec) []interface{} {
+			return func(in []*kops.VolumeMountSpec) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, func(in *kops.VolumeMountSpec) interface{} {
@@ -704,30 +647,27 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			return value
 		}(in.VolumeMounts),
 		"subnets": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.Subnets),
 		"zones": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.Zones),
 		"hooks": func(in []kops.HookSpec) interface{} {
-			value := func(in []kops.HookSpec) []interface{} {
+			return func(in []kops.HookSpec) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, func(in kops.HookSpec) interface{} {
@@ -736,10 +676,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			return value
 		}(in.Hooks),
 		"max_price": func(in *string) interface{} {
-			value := func(in *string) interface{} {
+			return func(in *string) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -747,10 +686,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.MaxPrice),
 		"spot_duration_in_minutes": func(in *int64) interface{} {
-			value := func(in *int64) interface{} {
+			return func(in *int64) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -758,10 +696,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenInt(int(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.SpotDurationInMinutes),
 		"associate_public_ip": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -769,40 +706,36 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.AssociatePublicIP),
 		"additional_security_groups": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.AdditionalSecurityGroups),
 		"cloud_labels": func(in map[string]string) interface{} {
-			value := func(in map[string]string) map[string]interface{} {
+			return func(in map[string]string) map[string]interface{} {
 				if in == nil {
 					return nil
 				}
 				// TODO
 				return nil
 			}(in)
-			return value
 		}(in.CloudLabels),
 		"node_labels": func(in map[string]string) interface{} {
-			value := func(in map[string]string) map[string]interface{} {
+			return func(in map[string]string) map[string]interface{} {
 				if in == nil {
 					return nil
 				}
 				// TODO
 				return nil
 			}(in)
-			return value
 		}(in.NodeLabels),
 		"file_assets": func(in []kops.FileAssetSpec) interface{} {
-			value := func(in []kops.FileAssetSpec) []interface{} {
+			return func(in []kops.FileAssetSpec) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, func(in kops.FileAssetSpec) interface{} {
@@ -811,14 +744,12 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			return value
 		}(in.FileAssets),
 		"tenancy": func(in string) interface{} {
-			value := FlattenString(string(in))
-			return value
+			return FlattenString(string(in))
 		}(in.Tenancy),
 		"kubelet": func(in *kops.KubeletConfigSpec) interface{} {
-			value := func(in *kops.KubeletConfigSpec) interface{} {
+			return func(in *kops.KubeletConfigSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -828,20 +759,18 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.Kubelet),
 		"taints": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.Taints),
 		"mixed_instances_policy": func(in *kops.MixedInstancesPolicySpec) interface{} {
-			value := func(in *kops.MixedInstancesPolicySpec) interface{} {
+			return func(in *kops.MixedInstancesPolicySpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -851,10 +780,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.MixedInstancesPolicy),
 		"additional_user_data": func(in []kops.UserData) interface{} {
-			value := func(in []kops.UserData) []interface{} {
+			return func(in []kops.UserData) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, func(in kops.UserData) interface{} {
@@ -863,20 +791,18 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			return value
 		}(in.AdditionalUserData),
 		"suspend_processes": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.SuspendProcesses),
 		"external_load_balancers": func(in []kops.LoadBalancer) interface{} {
-			value := func(in []kops.LoadBalancer) []interface{} {
+			return func(in []kops.LoadBalancer) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, func(in kops.LoadBalancer) interface{} {
@@ -885,10 +811,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 				}
 				return out
 			}(in)
-			return value
 		}(in.ExternalLoadBalancers),
 		"detailed_instance_monitoring": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -896,10 +821,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.DetailedInstanceMonitoring),
 		"iam": func(in *kops.IAMProfileSpec) interface{} {
-			value := func(in *kops.IAMProfileSpec) interface{} {
+			return func(in *kops.IAMProfileSpec) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -909,10 +833,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.IAM),
 		"security_group_override": func(in *string) interface{} {
-			value := func(in *string) interface{} {
+			return func(in *string) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -920,10 +843,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.SecurityGroupOverride),
 		"instance_protection": func(in *bool) interface{} {
-			value := func(in *bool) interface{} {
+			return func(in *bool) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -931,20 +853,18 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenBool(bool(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.InstanceProtection),
 		"sysctl_parameters": func(in []string) interface{} {
-			value := func(in []string) []interface{} {
+			return func(in []string) []interface{} {
 				var out []interface{}
 				for _, in := range in {
 					out = append(out, FlattenString(string(in)))
 				}
 				return out
 			}(in)
-			return value
 		}(in.SysctlParameters),
 		"rolling_update": func(in *kops.RollingUpdate) interface{} {
-			value := func(in *kops.RollingUpdate) interface{} {
+			return func(in *kops.RollingUpdate) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -954,10 +874,9 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					}(in)
 				}(*in)
 			}(in)
-			return value
 		}(in.RollingUpdate),
 		"instance_interruption_behavior": func(in *string) interface{} {
-			value := func(in *string) interface{} {
+			return func(in *string) interface{} {
 				if in == nil {
 					return nil
 				}
@@ -965,7 +884,6 @@ func FlattenInstanceGroup(in api.InstanceGroup) map[string]interface{} {
 					return FlattenString(string(in))
 				}(*in)
 			}(in)
-			return value
 		}(in.InstanceInterruptionBehavior),
 	}
 }
