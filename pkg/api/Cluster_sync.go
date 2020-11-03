@@ -9,6 +9,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/pkg/resources"
+	"k8s.io/kops/pkg/resources/ops"
 	"k8s.io/kops/upup/pkg/fi"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 	"k8s.io/kops/upup/pkg/fi/utils"
@@ -115,4 +117,42 @@ func SyncCluster(cluster Cluster, clientset simple.Clientset) (*Cluster, error) 
 		return nil, err
 	}
 	return GetCluster(cluster.Name, clientset)
+}
+
+func DeleteCluster(name string, clientset simple.Clientset) error {
+	kc, err := clientset.GetCluster(context.Background(), name)
+	if err != nil {
+		return err
+	}
+	cloud, err := cloudup.BuildCloud(kc)
+	if err != nil {
+		return err
+	}
+	// TODO shall we get region from cluster spec ?
+	allResources, err := ops.ListResources(cloud, kc.Name, "")
+	if err != nil {
+		return err
+	}
+	clusterResources := make(map[string]*resources.Resource)
+	for k, resource := range allResources {
+		if resource.Shared {
+			continue
+		}
+		clusterResources[k] = resource
+	}
+	if len(clusterResources) != 0 {
+		var l []*resources.Resource
+		for _, v := range clusterResources {
+			l = append(l, v)
+		}
+		err = ops.DeleteResources(cloud, clusterResources)
+		if err != nil {
+			return err
+		}
+	}
+	err = clientset.DeleteCluster(context.Background(), kc)
+	if err != nil {
+		return err
+	}
+	return nil
 }

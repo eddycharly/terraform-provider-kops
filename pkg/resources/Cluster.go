@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"context"
-
 	"github.com/eddycharly/terraform-provider-kops/pkg/api"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
@@ -58,12 +56,11 @@ func ClusterRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func ClusterDelete(d *schema.ResourceData, m interface{}) error {
-	clientset := config.Clientset(m)
-	cluster, err := clientset.GetCluster(context.Background(), d.Id())
+	err := api.DeleteCluster(d.Id(), config.Clientset(m))
 	if err != nil {
 		return err
 	}
-	return clientset.DeleteCluster(context.Background(), cluster)
+	return nil
 }
 
 func ClusterExists(d *schema.ResourceData, m interface{}) (bool, error) {
