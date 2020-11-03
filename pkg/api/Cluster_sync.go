@@ -4,13 +4,19 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"time"
 
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/pkg/cloudinstances"
+	"k8s.io/kops/pkg/instancegroups"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
+	"k8s.io/kops/pkg/validation"
 	"k8s.io/kops/upup/pkg/fi"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 	"k8s.io/kops/upup/pkg/fi/utils"
@@ -104,6 +110,10 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 	if err != nil {
 		return nil, err
 	}
+	err = rollingUpdate(cluster.Name, clientset)
+	if err != nil {
+		return nil, err
+	}
 	return GetCluster(cluster.Name, clientset)
 }
 
@@ -143,4 +153,89 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 		return err
 	}
 	return nil
+}
+
+func rollingUpdate(name string, clientset simple.Clientset) error {
+	kc, err := clientset.GetCluster(context.Background(), name)
+	if err != nil {
+		return err
+	}
+	var k8sClient kubernetes.Interface
+	var nodes []v1.Node
+
+	// TODO cloud only
+	// TODO validate
+
+	// k8sClient, err = kubernetes.NewForConfig(config)
+	// if err != nil {
+	// 	return fmt.Errorf("cannot build kube client for %q: %v", kc.Name, err)
+	// }
+	// nodeList, err := k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
+	// if err != nil {
+	// 	return fmt.Errorf("error listing nodes in cluster: %v", err)
+	// }
+	// if nodeList != nil {
+	// 	nodes = nodeList.Items
+	// }
+	list, err := clientset.InstanceGroupsFor(kc).List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		return err
+	}
+	var instanceGroups []*kops.InstanceGroup
+	for i := range list.Items {
+		instanceGroups = append(instanceGroups, &list.Items[i])
+	}
+	cloud, err := cloudup.BuildCloud(kc)
+	if err != nil {
+		return err
+	}
+	groups, err := cloud.GetCloudGroups(kc, instanceGroups, false, nodes)
+	if err != nil {
+		return err
+	}
+	// TODO make this configurable
+	d := &instancegroups.RollingUpdateCluster{
+		MasterInterval:          15 * time.Second,
+		NodeInterval:            15 * time.Second,
+		BastionInterval:         15 * time.Second,
+		Interactive:             false,
+		Force:                   false,
+		Cloud:                   cloud,
+		K8sClient:               k8sClient,
+		FailOnDrainError:        false,
+		FailOnValidate:          false,
+		CloudOnly:               true,
+		ClusterName:             kc.Name,
+		PostDrainDelay:          5 * time.Second,
+		ValidationTimeout:       15 * time.Minute,
+		ValidateCount:           2,
+		ValidateTickDuration:    30 * time.Second,
+		ValidateSuccessDuration: 10 * time.Second,
+	}
+	err = d.AdjustNeedUpdate(groups, kc, list)
+	if err != nil {
+		return err
+	}
+	var l []*cloudinstances.CloudInstanceGroup
+	for _, v := range groups {
+		l = append(l, v)
+	}
+	needUpdate := false
+	for _, group := range groups {
+		if len(group.NeedUpdate) != 0 {
+			needUpdate = true
+		}
+	}
+	if !needUpdate {
+		return nil
+	}
+	var clusterValidator validation.ClusterValidator
+	if false /*!options.CloudOnly*/ {
+		clusterValidator, err = validation.NewClusterValidator(kc, cloud, list, k8sClient)
+		if err != nil {
+			return fmt.Errorf("cannot create cluster validator: %v", err)
+		}
+	}
+	d.ClusterValidator = clusterValidator
+	return d.RollingUpdate(context.Background(), groups, kc, list)
 }
