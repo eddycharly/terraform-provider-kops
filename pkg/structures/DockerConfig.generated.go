@@ -29,13 +29,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["bridge"]),
@@ -47,13 +46,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["bridge_ip"]),
@@ -65,13 +63,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["data_root"]),
@@ -103,13 +100,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["exec_root"]),
@@ -121,13 +117,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["experimental"]),
@@ -153,13 +148,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["ip_masq"]),
@@ -171,13 +165,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["ip_tables"]),
@@ -189,13 +182,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["insecure_registry"]),
@@ -217,13 +209,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["live_restore"]),
@@ -235,13 +226,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["log_driver"]),
@@ -253,13 +243,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["log_level"]),
@@ -281,13 +270,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["metrics_address"]),
@@ -299,13 +287,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["mtu"]),
@@ -331,13 +318,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["storage"]),
@@ -363,13 +349,12 @@ func ExpandDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["version"]),

@@ -23,13 +23,12 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["idle_timeout_seconds"]),
@@ -41,13 +40,12 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["security_group_override"]),
@@ -77,13 +75,12 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["cross_zone_load_balancing"]),

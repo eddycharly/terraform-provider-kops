@@ -25,13 +25,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["disable_basic_auth"]),
@@ -71,13 +70,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_bootstrap_auth_token"]),
@@ -89,13 +87,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_aggregator_routing"]),
@@ -225,13 +222,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["allow_privileged"]),
@@ -243,13 +239,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["api_server_count"]),
@@ -286,13 +281,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["anonymous_auth"]),
@@ -314,13 +308,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["storage_backend"]),
@@ -332,13 +325,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidc_username_claim"]),
@@ -350,13 +342,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidc_username_prefix"]),
@@ -368,13 +359,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidc_groups_claim"]),
@@ -386,13 +376,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidc_groups_prefix"]),
@@ -404,13 +393,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidc_issuer_url"]),
@@ -422,13 +410,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidc_client_id"]),
@@ -450,13 +437,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["oidcca_file"]),
@@ -468,13 +454,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["proxy_client_cert_file"]),
@@ -486,13 +471,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["proxy_client_key_file"]),
@@ -504,13 +488,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_log_format"]),
@@ -522,13 +505,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_log_path"]),
@@ -540,13 +522,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_log_max_age"]),
@@ -558,13 +539,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_log_max_backups"]),
@@ -576,13 +556,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_log_max_size"]),
@@ -598,13 +577,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_batch_buffer_size"]),
@@ -616,13 +594,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_batch_max_size"]),
@@ -634,13 +611,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_batch_max_wait"]),
@@ -652,13 +628,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_batch_throttle_burst"]),
@@ -670,13 +645,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_batch_throttle_enable"]),
@@ -688,13 +662,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_batch_throttle_qps"]),
@@ -710,13 +683,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_webhook_initial_backoff"]),
@@ -732,13 +704,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["authentication_token_webhook_config_file"]),
@@ -750,13 +721,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["authentication_token_webhook_cache_ttl"]),
@@ -768,13 +738,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["authorization_mode"]),
@@ -786,13 +755,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["authorization_webhook_config_file"]),
@@ -804,13 +772,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["authorization_webhook_cache_authorized_ttl"]),
@@ -822,13 +789,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["authorization_webhook_cache_unauthorized_ttl"]),
@@ -840,13 +806,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["authorization_rbac_super_user"]),
@@ -858,13 +823,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["encryption_provider_config"]),
@@ -876,13 +840,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["experimental_encryption_provider_config"]),
@@ -959,13 +922,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["http_2max_streams_per_connection"]),
@@ -977,13 +939,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["etcd_quorum_read"]),
@@ -995,13 +956,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["request_timeout"]),
@@ -1013,13 +973,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["min_request_timeout"]),
@@ -1045,13 +1004,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["service_account_signing_key_file"]),
@@ -1063,13 +1021,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["service_account_issuer"]),
@@ -1081,13 +1038,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["service_account_jwksuri"]),
@@ -1113,13 +1069,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["event_ttl"]),
@@ -1131,13 +1086,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["audit_dynamic_configuration"]),
@@ -1149,13 +1103,12 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_profiling"]),

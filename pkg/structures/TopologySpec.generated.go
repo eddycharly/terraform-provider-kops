@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -27,10 +25,7 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.BastionSpec) *kops.BastionSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.BastionSpec) *kops.BastionSpec {
 					return &in
 				}(func(in interface{}) kops.BastionSpec {
 					if in.([]interface{})[0] == nil {
@@ -38,7 +33,6 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 					}
 					return (ExpandBastionSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["bastion"]),
@@ -50,10 +44,7 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.DNSSpec) *kops.DNSSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.DNSSpec) *kops.DNSSpec {
 					return &in
 				}(func(in interface{}) kops.DNSSpec {
 					if in.([]interface{})[0] == nil {
@@ -61,7 +52,6 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 					}
 					return (ExpandDNSSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["dns"]),

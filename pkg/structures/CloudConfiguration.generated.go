@@ -19,13 +19,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["multizone"]),
@@ -37,13 +36,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["node_tags"]),
@@ -55,13 +53,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["node_instance_prefix"]),
@@ -77,13 +74,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["disable_security_group_ingress"]),
@@ -95,13 +91,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["elb_security_group"]),
@@ -113,13 +108,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_username"]),
@@ -131,13 +125,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_password"]),
@@ -149,13 +142,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_server"]),
@@ -167,13 +159,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_datacenter"]),
@@ -185,13 +176,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_resource_pool"]),
@@ -203,13 +193,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_datastore"]),
@@ -221,13 +210,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["v_sphere_core_dns_server"]),
@@ -239,13 +227,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["spotinst_product"]),
@@ -257,13 +244,12 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["spotinst_orientation"]),
@@ -275,10 +261,7 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.OpenstackConfiguration) *kops.OpenstackConfiguration {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.OpenstackConfiguration) *kops.OpenstackConfiguration {
 					return &in
 				}(func(in interface{}) kops.OpenstackConfiguration {
 					if in.([]interface{})[0] == nil {
@@ -286,7 +269,6 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 					}
 					return (ExpandOpenstackConfiguration(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["openstack"]),

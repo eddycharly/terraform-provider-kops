@@ -32,13 +32,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["min_size"]),
@@ -50,13 +49,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["max_size"]),
@@ -72,13 +70,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["root_volume_size"]),
@@ -90,13 +87,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["root_volume_type"]),
@@ -108,13 +104,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["root_volume_iops"]),
@@ -126,13 +121,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["root_volume_optimization"]),
@@ -144,13 +138,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["root_volume_delete_on_termination"]),
@@ -162,13 +155,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["root_volume_encryption"]),
@@ -183,10 +175,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 						if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 							return nil
 						}
-						tmp := func(in kops.VolumeSpec) *kops.VolumeSpec {
-							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-								return nil
-							}
+						return func(in kops.VolumeSpec) *kops.VolumeSpec {
 							return &in
 						}(func(in interface{}) kops.VolumeSpec {
 							if in == nil {
@@ -194,7 +183,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 							}
 							return (ExpandVolumeSpec(in.(map[string]interface{})))
 						}(in))
-						return tmp
 					}(in))
 				}
 				return out
@@ -212,10 +200,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 						if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 							return nil
 						}
-						tmp := func(in kops.VolumeMountSpec) *kops.VolumeMountSpec {
-							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-								return nil
-							}
+						return func(in kops.VolumeMountSpec) *kops.VolumeMountSpec {
 							return &in
 						}(func(in interface{}) kops.VolumeMountSpec {
 							if in == nil {
@@ -223,7 +208,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 							}
 							return (ExpandVolumeMountSpec(in.(map[string]interface{})))
 						}(in))
-						return tmp
 					}(in))
 				}
 				return out
@@ -273,13 +257,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["max_price"]),
@@ -291,13 +274,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["spot_duration_in_minutes"]),
@@ -309,13 +291,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["associate_public_ip"]),
@@ -382,10 +363,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
 					if in.([]interface{})[0] == nil {
@@ -393,7 +371,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					}
 					return (ExpandKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["kubelet"]),
@@ -415,10 +392,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
 					return &in
 				}(func(in interface{}) kops.MixedInstancesPolicySpec {
 					if in.([]interface{})[0] == nil {
@@ -426,7 +400,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					}
 					return (ExpandMixedInstancesPolicySpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["mixed_instances_policy"]),
@@ -478,13 +451,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["detailed_instance_monitoring"]),
@@ -496,10 +468,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
 					return &in
 				}(func(in interface{}) kops.IAMProfileSpec {
 					if in.([]interface{})[0] == nil {
@@ -507,7 +476,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					}
 					return (ExpandIAMProfileSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["iam"]),
@@ -519,13 +487,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["security_group_override"]),
@@ -537,13 +504,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["instance_protection"]),
@@ -565,10 +531,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.RollingUpdate) *kops.RollingUpdate {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.RollingUpdate) *kops.RollingUpdate {
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
 					if in.([]interface{})[0] == nil {
@@ -576,7 +539,6 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 					}
 					return (ExpandRollingUpdate(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["rolling_update"]),
@@ -588,13 +550,12 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["instance_interruption_behavior"]),

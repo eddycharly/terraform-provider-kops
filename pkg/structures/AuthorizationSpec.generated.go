@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -19,10 +17,7 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.AlwaysAllowAuthorizationSpec) *kops.AlwaysAllowAuthorizationSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.AlwaysAllowAuthorizationSpec) *kops.AlwaysAllowAuthorizationSpec {
 					return &in
 				}(func(in interface{}) kops.AlwaysAllowAuthorizationSpec {
 					if in.([]interface{})[0] == nil {
@@ -30,7 +25,6 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 					}
 					return (ExpandAlwaysAllowAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["always_allow"]),
@@ -42,10 +36,7 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.RBACAuthorizationSpec) *kops.RBACAuthorizationSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.RBACAuthorizationSpec) *kops.RBACAuthorizationSpec {
 					return &in
 				}(func(in interface{}) kops.RBACAuthorizationSpec {
 					if in.([]interface{})[0] == nil {
@@ -53,7 +44,6 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 					}
 					return (ExpandRBACAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["rbac"]),

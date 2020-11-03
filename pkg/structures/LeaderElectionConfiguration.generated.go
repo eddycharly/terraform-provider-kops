@@ -20,13 +20,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect"]),
@@ -38,13 +37,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect_lease_duration"]),
@@ -56,13 +54,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect_renew_deadline_duration"]),
@@ -74,13 +71,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect_resource_lock"]),
@@ -92,13 +88,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect_resource_name"]),
@@ -110,13 +105,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect_resource_namespace"]),
@@ -128,13 +122,12 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_elect_retry_period"]),

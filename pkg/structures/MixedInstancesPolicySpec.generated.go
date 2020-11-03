@@ -29,13 +29,12 @@ func ExpandMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstanc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["on_demand_allocation_strategy"]),
@@ -47,13 +46,12 @@ func ExpandMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstanc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["on_demand_base"]),
@@ -65,13 +63,12 @@ func ExpandMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstanc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["on_demand_above_base"]),
@@ -83,13 +80,12 @@ func ExpandMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstanc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["spot_allocation_strategy"]),
@@ -101,13 +97,12 @@ func ExpandMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstanc
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["spot_instance_pools"]),

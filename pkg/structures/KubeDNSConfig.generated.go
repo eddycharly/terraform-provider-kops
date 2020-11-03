@@ -85,13 +85,12 @@ func ExpandKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["memory_request"]),
@@ -103,13 +102,12 @@ func ExpandKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["cpu_request"]),
@@ -121,13 +119,12 @@ func ExpandKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["memory_limit"]),
@@ -139,10 +136,7 @@ func ExpandKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.NodeLocalDNSConfig) *kops.NodeLocalDNSConfig {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.NodeLocalDNSConfig) *kops.NodeLocalDNSConfig {
 					return &in
 				}(func(in interface{}) kops.NodeLocalDNSConfig {
 					if in.([]interface{})[0] == nil {
@@ -150,7 +144,6 @@ func ExpandKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 					}
 					return (ExpandNodeLocalDNSConfig(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["node_local_dns"]),

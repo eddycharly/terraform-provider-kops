@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -19,10 +17,7 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec {
 					return &in
 				}(func(in interface{}) kops.NodeAuthorizerSpec {
 					if in.([]interface{})[0] == nil {
@@ -30,7 +25,6 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 					}
 					return (ExpandNodeAuthorizerSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["node_authorizer"]),

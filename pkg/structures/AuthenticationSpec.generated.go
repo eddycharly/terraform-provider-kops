@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -19,10 +17,7 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.KopeioAuthenticationSpec) *kops.KopeioAuthenticationSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.KopeioAuthenticationSpec) *kops.KopeioAuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.KopeioAuthenticationSpec {
 					if in.([]interface{})[0] == nil {
@@ -30,7 +25,6 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 					}
 					return (ExpandKopeioAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["kopeio"]),
@@ -42,10 +36,7 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.AwsAuthenticationSpec) *kops.AwsAuthenticationSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.AwsAuthenticationSpec) *kops.AwsAuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.AwsAuthenticationSpec {
 					if in.([]interface{})[0] == nil {
@@ -53,7 +44,6 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 					}
 					return (ExpandAwsAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["aws"]),

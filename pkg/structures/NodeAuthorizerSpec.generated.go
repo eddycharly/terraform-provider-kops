@@ -24,10 +24,7 @@ func ExpandNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in []string) *[]string {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in []string) *[]string {
 					return &in
 				}(func(in interface{}) []string {
 					var out []string
@@ -36,7 +33,6 @@ func ExpandNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec
 					}
 					return out
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["features"]),
@@ -60,13 +56,12 @@ func ExpandNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["interval"]),
@@ -78,13 +73,12 @@ func ExpandNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["timeout"]),
@@ -96,13 +90,12 @@ func ExpandNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["token_ttl"]),

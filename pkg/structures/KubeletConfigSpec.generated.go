@@ -24,13 +24,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["anonymous_auth"]),
@@ -80,13 +79,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["require_kubeconfig"]),
@@ -98,13 +96,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["log_level"]),
@@ -128,13 +125,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["seccomp_profile_root"]),
@@ -146,13 +142,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["allow_privileged"]),
@@ -164,13 +159,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_debugging_handlers"]),
@@ -182,13 +176,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["register_node"]),
@@ -200,13 +193,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["node_status_update_frequency"]),
@@ -242,13 +234,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["read_only_port"]),
@@ -268,13 +259,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["configure_cbr_00"]),
@@ -290,13 +280,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["babysit_daemons"]),
@@ -308,13 +297,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["max_pods"]),
@@ -334,13 +322,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["resolver_config"]),
@@ -352,13 +339,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["reconcile_cidr"]),
@@ -370,13 +356,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["register_schedulable"]),
@@ -388,13 +373,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["serialize_image_pulls"]),
@@ -423,13 +407,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_custom_metrics"]),
@@ -441,13 +424,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["network_plugin_mtu"]),
@@ -459,13 +441,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["image_gc_high_threshold_percent"]),
@@ -477,13 +458,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["image_gc_low_threshold_percent"]),
@@ -495,13 +475,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["image_pull_progress_deadline"]),
@@ -513,13 +492,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["eviction_hard"]),
@@ -539,13 +517,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["eviction_pressure_transition_period"]),
@@ -630,13 +607,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["runtime_request_timeout"]),
@@ -648,13 +624,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["volume_stats_agg_period"]),
@@ -666,13 +641,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["fail_swap_on"]),
@@ -704,13 +678,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["streaming_connection_idle_timeout"]),
@@ -722,13 +695,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["docker_disable_shared_pid"]),
@@ -744,13 +716,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["authentication_token_webhook"]),
@@ -762,13 +733,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["authentication_token_webhook_cache_ttl"]),
@@ -780,13 +750,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["cpucfs_quota"]),
@@ -798,13 +767,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["cpucfs_quota_period"]),
@@ -820,13 +788,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["registry_pull_qps"]),
@@ -838,13 +805,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["registry_burst"]),
@@ -860,13 +826,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["rotate_certificates"]),
@@ -878,13 +843,12 @@ func ExpandKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["protect_kernel_defaults"]),

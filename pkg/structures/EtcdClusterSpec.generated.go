@@ -32,10 +32,7 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 						if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 							return nil
 						}
-						tmp := func(in kops.EtcdMemberSpec) *kops.EtcdMemberSpec {
-							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-								return nil
-							}
+						return func(in kops.EtcdMemberSpec) *kops.EtcdMemberSpec {
 							return &in
 						}(func(in interface{}) kops.EtcdMemberSpec {
 							if in == nil {
@@ -43,7 +40,6 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 							}
 							return (ExpandEtcdMemberSpec(in.(map[string]interface{})))
 						}(in))
-						return tmp
 					}(in))
 				}
 				return out
@@ -70,13 +66,12 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_election_timeout"]),
@@ -88,13 +83,12 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["heartbeat_interval"]),
@@ -110,10 +104,7 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec {
 					return &in
 				}(func(in interface{}) kops.EtcdBackupSpec {
 					if in.([]interface{})[0] == nil {
@@ -121,7 +112,6 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					}
 					return (ExpandEtcdBackupSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["backups"]),
@@ -133,10 +123,7 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec {
 					return &in
 				}(func(in interface{}) kops.EtcdManagerSpec {
 					if in.([]interface{})[0] == nil {
@@ -144,7 +131,6 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 					}
 					return (ExpandEtcdManagerSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["manager"]),
@@ -156,13 +142,12 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["memory_request"]),
@@ -174,13 +159,12 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["cpu_request"]),

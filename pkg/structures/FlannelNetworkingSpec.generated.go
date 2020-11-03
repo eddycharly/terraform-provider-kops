@@ -27,13 +27,12 @@ func ExpandFlannelNetworkingSpec(in map[string]interface{}) kops.FlannelNetworki
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["iptables_resync_seconds"]),

@@ -19,13 +19,12 @@ func ExpandOpenstackMonitor(in map[string]interface{}) kops.OpenstackMonitor {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["delay"]),
@@ -37,13 +36,12 @@ func ExpandOpenstackMonitor(in map[string]interface{}) kops.OpenstackMonitor {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["timeout"]),
@@ -55,13 +53,12 @@ func ExpandOpenstackMonitor(in map[string]interface{}) kops.OpenstackMonitor {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int) *int {
+				return func(in int) *int {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["max_retries"]),

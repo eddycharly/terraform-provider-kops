@@ -19,13 +19,12 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["delete_on_termination"]),
@@ -41,13 +40,12 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["encrypted"]),
@@ -59,13 +57,12 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["iops"]),

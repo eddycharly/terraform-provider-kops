@@ -43,6 +43,21 @@ func fieldName(in string) string {
 	return in
 }
 
+func isValueType(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Ptr:
+		return isValueType(in.Elem())
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64, reflect.String, reflect.Bool:
+		return true
+	case reflect.Slice, reflect.Map:
+		return false
+	case reflect.Struct:
+		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString"
+	default:
+		panic(fmt.Sprintf("unknown kind %v", in.Kind()))
+	}
+}
+
 func buildDoc(t reflect.Type, o options) {
 	tmplString := `# kops_{{ fieldName .Type.Name | snakecase }}
 
@@ -291,13 +306,14 @@ func (in interface{}) {{ .String }} {
 	if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 		return nil
 	}
-	tmp := func (in {{ .Elem.String }}) {{ .String }} {
+	return func (in {{ .Elem.String }}) {{ .String }} {
+		{{- if isValueType . }}
 		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 			return nil
 		}
+		{{- end }}
 		return &in
 	}({{ template "expandElem" .Elem }})
-	return tmp
 }(in)
 {{- else if isDuration . -}}
 ExpandDuration(in)
@@ -326,13 +342,14 @@ func (in interface{}) {{ .String }} {
 	if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 		return nil
 	}
-	tmp := func (in {{ .Elem.String }}) {{ .String }} {
+	return func (in {{ .Elem.String }}) {{ .String }} {
+		{{- if isValueType . }}
 		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 			return nil
 		}
+		{{- end }}
 		return &in
 	}({{ template "expand" .Elem }})
-	return tmp
 }(in)
 {{- else if isList . -}}
 func (in interface{}) {{ .String }} {
@@ -478,8 +495,9 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 			}
 			return ret
 		},
-		"schemaType": schemaType,
-		"fieldName":  fieldName,
+		"schemaType":  schemaType,
+		"fieldName":   fieldName,
+		"isValueType": isValueType,
 		"isPtr": func(t reflect.Type) bool {
 			return t.Kind() == reflect.Ptr
 		},

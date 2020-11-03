@@ -20,13 +20,12 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["drain_and_terminate"]),
@@ -38,13 +37,12 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in intstr.IntOrString) *intstr.IntOrString {
+				return func(in intstr.IntOrString) *intstr.IntOrString {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandIntOrString(in))
-				return tmp
 			}(in)
 			return value
 		}(in["max_unavailable"]),
@@ -56,13 +54,12 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in intstr.IntOrString) *intstr.IntOrString {
+				return func(in intstr.IntOrString) *intstr.IntOrString {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandIntOrString(in))
-				return tmp
 			}(in)
 			return value
 		}(in["max_surge"]),

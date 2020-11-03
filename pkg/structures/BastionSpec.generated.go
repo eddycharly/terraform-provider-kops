@@ -23,13 +23,12 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int64) *int64 {
+				return func(in int64) *int64 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int64(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["idle_timeout_seconds"]),
@@ -41,10 +40,7 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec {
 					return &in
 				}(func(in interface{}) kops.BastionLoadBalancerSpec {
 					if in.([]interface{})[0] == nil {
@@ -52,7 +48,6 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 					}
 					return (ExpandBastionLoadBalancerSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["load_balancer"]),

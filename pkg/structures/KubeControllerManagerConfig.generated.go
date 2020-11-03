@@ -49,13 +49,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["allocate_node_cidrs"]),
@@ -67,13 +66,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["node_cidr_mask_size"]),
@@ -85,13 +83,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["configure_cloud_routes"]),
@@ -113,13 +110,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in string) *string {
+				return func(in string) *string {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(string(ExpandString(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["cidr_allocator_type"]),
@@ -135,10 +131,7 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration {
 					return &in
 				}(func(in interface{}) kops.LeaderElectionConfiguration {
 					if in.([]interface{})[0] == nil {
@@ -146,7 +139,6 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 					}
 					return (ExpandLeaderElectionConfiguration(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_election"]),
@@ -158,13 +150,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["attach_detach_reconcile_sync_period"]),
@@ -176,13 +167,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["disable_attach_detach_reconcile_sync"]),
@@ -194,13 +184,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["terminated_pod_gc_threshold"]),
@@ -212,13 +201,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["node_monitor_period"]),
@@ -230,13 +218,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["node_monitor_grace_period"]),
@@ -248,13 +235,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["pod_eviction_timeout"]),
@@ -266,13 +252,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["use_service_account_credentials"]),
@@ -284,13 +269,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["horizontal_pod_autoscaler_sync_period"]),
@@ -302,13 +286,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["horizontal_pod_autoscaler_downscale_delay"]),
@@ -320,13 +303,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["horizontal_pod_autoscaler_downscale_stabilization"]),
@@ -338,13 +320,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["horizontal_pod_autoscaler_upscale_delay"]),
@@ -356,13 +337,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["horizontal_pod_autoscaler_tolerance"]),
@@ -374,13 +354,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["horizontal_pod_autoscaler_use_rest_clients"]),
@@ -392,13 +371,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in v1.Duration) *v1.Duration {
+				return func(in v1.Duration) *v1.Duration {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandDuration(in))
-				return tmp
 			}(in)
 			return value
 		}(in["experimental_cluster_signing_duration"]),
@@ -441,13 +419,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["kube_api_qps"]),
@@ -459,13 +436,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["kube_api_burst"]),
@@ -477,13 +453,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_deployment_syncs"]),
@@ -495,13 +470,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_endpoint_syncs"]),
@@ -513,13 +487,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_namespace_syncs"]),
@@ -531,13 +504,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_replicaset_syncs"]),
@@ -549,13 +521,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_service_syncs"]),
@@ -567,13 +538,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_resource_quota_syncs"]),
@@ -585,13 +555,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_serviceaccount_token_syncs"]),
@@ -603,13 +572,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["concurrent_rc_syncs"]),
@@ -621,13 +589,12 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_profiling"]),

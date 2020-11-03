@@ -24,13 +24,12 @@ func ExpandAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticati
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["memory_request"]),
@@ -42,13 +41,12 @@ func ExpandAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticati
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["cpu_request"]),
@@ -60,13 +58,12 @@ func ExpandAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticati
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["memory_limit"]),
@@ -78,13 +75,12 @@ func ExpandAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticati
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["cpu_limit"]),

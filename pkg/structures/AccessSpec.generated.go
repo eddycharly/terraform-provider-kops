@@ -1,8 +1,6 @@
 package structures
 
 import (
-	"reflect"
-
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -19,10 +17,7 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.DNSAccessSpec) *kops.DNSAccessSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.DNSAccessSpec) *kops.DNSAccessSpec {
 					return &in
 				}(func(in interface{}) kops.DNSAccessSpec {
 					if in.([]interface{})[0] == nil {
@@ -30,7 +25,6 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 					}
 					return (ExpandDNSAccessSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["dns"]),
@@ -42,10 +36,7 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec {
 					return &in
 				}(func(in interface{}) kops.LoadBalancerAccessSpec {
 					if in.([]interface{})[0] == nil {
@@ -53,7 +44,6 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 					}
 					return (ExpandLoadBalancerAccessSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["load_balancer"]),

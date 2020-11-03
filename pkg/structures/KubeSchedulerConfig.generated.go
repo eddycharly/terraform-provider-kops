@@ -32,10 +32,7 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration {
-					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-						return nil
-					}
+				return func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration {
 					return &in
 				}(func(in interface{}) kops.LeaderElectionConfiguration {
 					if in.([]interface{})[0] == nil {
@@ -43,7 +40,6 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 					}
 					return (ExpandLeaderElectionConfiguration(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
-				return tmp
 			}(in)
 			return value
 		}(in["leader_election"]),
@@ -55,13 +51,12 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["use_policy_config_map"]),
@@ -86,13 +81,12 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in int32) *int32 {
+				return func(in int32) *int32 {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(int32(ExpandInt(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["max_persistent_volumes"]),
@@ -104,13 +98,12 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in resource.Quantity) *resource.Quantity {
+				return func(in resource.Quantity) *resource.Quantity {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(ExpandQuantity(in))
-				return tmp
 			}(in)
 			return value
 		}(in["qps"]),
@@ -126,13 +119,12 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 				if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
 					return nil
 				}
-				tmp := func(in bool) *bool {
+				return func(in bool) *bool {
 					if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 						return nil
 					}
 					return &in
 				}(bool(ExpandBool(in)))
-				return tmp
 			}(in)
 			return value
 		}(in["enable_profiling"]),

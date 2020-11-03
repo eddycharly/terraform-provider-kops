@@ -1,45 +1,45 @@
 package structures
 
 import (
+	"time"
+
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 // IntOrString
 
 func ExpandIntOrString(in interface{}) intstr.IntOrString {
-	// TODO
-	return intstr.IntOrString{}
+	return intstr.Parse(in.(string))
 }
 
 func FlattenIntOrString(in intstr.IntOrString) interface{} {
-	// TODO
-	return nil
+	return in.String()
 }
 
 // Duration
 
-func ExpandDuration(in interface{}) v1.Duration {
-	// TODO
-	return v1.Duration{}
+func ExpandDuration(in interface{}) metav1.Duration {
+	d, _ := time.ParseDuration(in.(string))
+	return metav1.Duration{
+		Duration: d,
+	}
 }
 
-func FlattenDuration(in v1.Duration) interface{} {
-	// TODO
-	return nil
+func FlattenDuration(in metav1.Duration) interface{} {
+	return in.String()
 }
 
 // Quantity
 
 func ExpandQuantity(in interface{}) resource.Quantity {
-	// TODO
-	return resource.Quantity{}
+	q, _ := resource.ParseQuantity(in.(string))
+	return q
 }
 
 func FlattenQuantity(in resource.Quantity) interface{} {
-	// TODO
-	return nil
+	return in.String()
 }
 
 // Int
