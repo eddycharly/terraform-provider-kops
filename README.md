@@ -19,6 +19,20 @@ cluster state and instance groups.
 It is implemented this way because KOPS needs the full cluster state to apply
 changes.
 
+## Why use it
+
+KOPS is an amazing tool but it can be challenging to integrate in an IAC stack.
+
+Typical solutions usually involve running KOPS CLI in shell scripts or generating
+KOPS templates manually and force syncing them with the KOPS store.
+
+In most cases, getting something idempotent is difficult because you need to
+somewhat keep the state of the cluster and are responsible for deleting obsolete
+instange groups for example.
+
+That's where terraform shines, state management. This provider takes care of
+creating, updating and deleting instance groups as they evolve over time.
+
 ## Building the provider
 
 To build the provider, clone this repository and run the following command:
