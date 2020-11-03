@@ -41,6 +41,12 @@ instange groups for example.
 That's where terraform shines, state management. This provider takes care of
 creating, updating and deleting instance groups as they evolve over time.
 
+Even if KOPS provides `kops update cluster --target terraform` to create the
+terraform configuration for a KOPS cluster, it is still necessary to run
+`kops rolling-update cluster` to recycle instance groups when the change.
+With this provider, this is all taken care of and you should never need to run
+KOPS manually.
+
 ## Building the provider
 
 To build the provider, clone this repository and run the following command:
