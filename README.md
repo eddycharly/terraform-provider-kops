@@ -52,6 +52,10 @@ command instead:
 make install
 ```
 
+## Docs
+
+The full documentation is available in the [docs](./docs/README.md) folder.
+
 ## Using the provider
 
 To use the provider you will need to register it in your terraform code:

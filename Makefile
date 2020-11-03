@@ -8,6 +8,7 @@ clean:
 	@rm -f terraform-provider-kops
 	@rm -rf ./pkg/schemas/*.generated.go
 	@rm -rf ./pkg/structures/*.generated.go
+	@rm -rf ./docs/*.generated.md
 
 .PHONY: gen-code
 gen-code:

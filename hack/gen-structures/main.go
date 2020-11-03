@@ -42,6 +42,107 @@ func fieldName(in string) string {
 	in = strings.ReplaceAll(in, "SAN", "San")
 	return in
 }
+
+func buildDoc(t reflect.Type, o options) {
+	tmplString := `# kops_{{ fieldName .Type.Name | snakecase }}
+
+{{- define "type" -}}
+{{- if isPtr . -}}
+{{- template "type" .Elem }}
+{{- else if isList . -}}
+List({{- template "type" .Elem }})
+{{- else if isMap . -}}
+Map({{- template "type" .Elem }})
+{{- else if isDuration . -}}
+Duration
+{{- else if isQuantity . -}}
+Quantity
+{{- else if isIntOrString . -}}
+IntOrString
+{{- else if isStruct . -}}
+[{{ .Name }}](./{{ .Name }}.generated.md)
+{{- else -}}
+{{- schemaType . -}}
+{{- end -}}
+{{- end }}
+
+{{- define "required" -}}
+{{ if isRequired .Name }}Required{{ else }}Optional{{ end }}
+{{- end }}
+
+{{- define "computed" -}}
+{{ if isComputed .Name }}Computed{{ end }}
+{{- end }}
+
+| attribute | type | optional/required | computed |
+| --- | --- | --- | --- |
+{{- with .Type -}}
+{{- range (fields .) -}}
+{{- if not (has .Name $.Exclude) }}
+| {{ fieldName .Name | snakecase | code }} | {{ template "type" .Type }} | {{ template "required" . }} | {{ template "computed" . }} |
+{{- end -}}
+{{- end -}}
+{{- end }}
+`
+	required := sets.NewString(o.required...)
+
+	tmpl := template.New("doc").Funcs(template.FuncMap{
+		"fields": func(t reflect.Type) []reflect.StructField {
+			var ret []reflect.StructField
+			for i := 0; i < t.NumField(); i++ {
+				ret = append(ret, t.Field(i))
+			}
+			return ret
+		},
+		"schemaType": schemaType,
+		"isRequired": func(in string) bool {
+			return required.Has(in)
+		},
+		"isComputed": func(in string) bool {
+			// TODO
+			return false
+		},
+		"fieldName": fieldName,
+		"code": func(in string) string {
+			return fmt.Sprintf("`%s`", in)
+		},
+		"isPtr": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Ptr
+		},
+		"isList": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Slice
+		},
+		"isStruct": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct
+		},
+		"isMap": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Map
+		},
+		"isDuration": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
+		},
+		"isQuantity": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
+		},
+		"isIntOrString": func(t reflect.Type) bool {
+			return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
+		},
+	}).Funcs(sprig.TxtFuncMap())
+
+	if _, err := tmpl.Parse(tmplString); err != nil {
+		panic(err)
+	}
+
+	f, _ := os.Create("docs/" + t.Name() + ".generated.md")
+	defer f.Close()
+
+	if err := tmpl.Execute(f, map[string]interface{}{
+		"Type":    t,
+		"Exclude": o.exclude,
+	}); err != nil {
+		panic(err)
+	}
+}
 func buildSchema(t reflect.Type, o options) {
 	tmplString := `
 package {{ .Package }}
@@ -432,91 +533,88 @@ func excluded(excluded ...string) func(o options) options {
 	}
 }
 
-func build(t reflect.Type, o options) {
-	buildStructure(t, o)
-}
-
-func build2(i interface{}, o ...func(o options) options) {
+func build(i interface{}, o ...func(o options) options) {
 	opts := options{}
 	for _, opt := range o {
 		opts = opt(opts)
 	}
 	t := reflect.TypeOf(i)
+	buildDoc(t, opts)
 	buildStructure(t, opts)
 	buildSchema(t, opts)
 }
 
 func main() {
-	build2(api.Cluster{}, required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"))
-	build2(kops.AddonSpec{}, required("Manifest"))
-	build2(kops.EgressProxySpec{}, required("HTTPProxy"))
-	build2(kops.HTTPProxy{}, required("Host", "Port"))
-	build2(kops.ContainerdConfig{})
-	build2(kops.DockerConfig{})
-	build2(kops.KubeDNSConfig{})
-	build2(kops.KubeAPIServerConfig{})
-	build2(kops.KubeControllerManagerConfig{})
-	build2(kops.CloudControllerManagerConfig{})
-	build2(kops.KubeSchedulerConfig{})
-	build2(kops.KubeProxyConfig{})
-	build2(kops.KubeletConfigSpec{})
-	build2(kops.CloudConfiguration{})
-	build2(kops.ExternalDNSConfig{})
-	build2(kops.OpenstackConfiguration{})
-	build2(kops.OpenstackLoadbalancerConfig{})
-	build2(kops.OpenstackMonitor{})
-	build2(kops.OpenstackRouter{})
-	build2(kops.OpenstackBlockStorageConfig{})
-	build2(kops.LeaderElectionConfiguration{})
-	build2(kops.NodeLocalDNSConfig{})
-	build2(kops.AuthenticationSpec{})
-	build2(kops.AuthorizationSpec{})
-	build2(kops.NodeAuthorizationSpec{})
-	build2(kops.Assets{})
-	build2(kops.IAMSpec{})
-	build2(kops.KopeioAuthenticationSpec{})
-	build2(kops.AwsAuthenticationSpec{})
-	build2(kops.AlwaysAllowAuthorizationSpec{})
-	build2(kops.RBACAuthorizationSpec{})
-	build2(kops.NodeAuthorizerSpec{})
-	build2(api.InstanceGroup{}, required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"))
-	build2(kops.AccessSpec{})
-	build2(kops.DNSAccessSpec{})
-	build2(kops.LoadBalancerAccessSpec{}, required("Type"))
-	build2(kops.EtcdClusterSpec{}, required("Name", "Members"))
-	build2(kops.EtcdBackupSpec{}, required("BackupStore", "Image"))
-	build2(kops.EtcdManagerSpec{}, required("Image"))
-	build2(kops.EtcdMemberSpec{}, required("Name", "InstanceGroup"))
-	build2(kops.EnvVar{}, required("Name"))
-	build2(kops.ClusterSubnetSpec{}, required("Name", "ProviderID", "Type"))
-	build2(kops.TopologySpec{}, required("Masters", "Nodes", "DNS"))
-	build2(kops.BastionSpec{}, required("BastionPublicName"))
-	build2(kops.BastionLoadBalancerSpec{}, required("AdditionalSecurityGroups"))
-	build2(kops.DNSSpec{}, required("Type"))
-	build2(kops.NetworkingSpec{})
-	build2(kops.ClassicNetworkingSpec{})
-	build2(kops.KubenetNetworkingSpec{})
-	build2(kops.ExternalNetworkingSpec{})
-	build2(kops.CNINetworkingSpec{})
-	build2(kops.KopeioNetworkingSpec{})
-	build2(kops.WeaveNetworkingSpec{})
-	build2(kops.FlannelNetworkingSpec{})
-	build2(kops.CalicoNetworkingSpec{})
-	build2(kops.CanalNetworkingSpec{})
-	build2(kops.KuberouterNetworkingSpec{})
-	build2(kops.RomanaNetworkingSpec{})
-	build2(kops.AmazonVPCNetworkingSpec{})
-	build2(kops.CiliumNetworkingSpec{})
-	build2(kops.LyftVPCNetworkingSpec{})
-	build2(kops.GCENetworkingSpec{})
-	build2(kops.VolumeSpec{}, required("Device"))
-	build2(kops.VolumeMountSpec{}, required("Device", "Filesystem", "Path"))
-	build2(kops.MixedInstancesPolicySpec{})
-	build2(kops.UserData{}, required("Name", "Type", "Content"))
-	build2(kops.LoadBalancer{})
-	build2(kops.IAMProfileSpec{}, required("Profile"))
-	build2(kops.HookSpec{}, required("Name"))
-	build2(kops.ExecContainerAction{}, required("Image"))
-	build2(kops.FileAssetSpec{}, required("Name", "Path", "Content"))
-	build2(kops.RollingUpdate{})
+	build(api.Cluster{}, required("Name", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"))
+	build(kops.AddonSpec{}, required("Manifest"))
+	build(kops.EgressProxySpec{}, required("HTTPProxy"))
+	build(kops.HTTPProxy{}, required("Host", "Port"))
+	build(kops.ContainerdConfig{})
+	build(kops.DockerConfig{})
+	build(kops.KubeDNSConfig{})
+	build(kops.KubeAPIServerConfig{})
+	build(kops.KubeControllerManagerConfig{})
+	build(kops.CloudControllerManagerConfig{})
+	build(kops.KubeSchedulerConfig{})
+	build(kops.KubeProxyConfig{})
+	build(kops.KubeletConfigSpec{})
+	build(kops.CloudConfiguration{})
+	build(kops.ExternalDNSConfig{})
+	build(kops.OpenstackConfiguration{})
+	build(kops.OpenstackLoadbalancerConfig{})
+	build(kops.OpenstackMonitor{})
+	build(kops.OpenstackRouter{})
+	build(kops.OpenstackBlockStorageConfig{})
+	build(kops.LeaderElectionConfiguration{})
+	build(kops.NodeLocalDNSConfig{})
+	build(kops.AuthenticationSpec{})
+	build(kops.AuthorizationSpec{})
+	build(kops.NodeAuthorizationSpec{})
+	build(kops.Assets{})
+	build(kops.IAMSpec{})
+	build(kops.KopeioAuthenticationSpec{})
+	build(kops.AwsAuthenticationSpec{})
+	build(kops.AlwaysAllowAuthorizationSpec{})
+	build(kops.RBACAuthorizationSpec{})
+	build(kops.NodeAuthorizerSpec{})
+	build(api.InstanceGroup{}, required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"))
+	build(kops.AccessSpec{})
+	build(kops.DNSAccessSpec{})
+	build(kops.LoadBalancerAccessSpec{}, required("Type"))
+	build(kops.EtcdClusterSpec{}, required("Name", "Members"))
+	build(kops.EtcdBackupSpec{}, required("BackupStore", "Image"))
+	build(kops.EtcdManagerSpec{}, required("Image"))
+	build(kops.EtcdMemberSpec{}, required("Name", "InstanceGroup"))
+	build(kops.EnvVar{}, required("Name"))
+	build(kops.ClusterSubnetSpec{}, required("Name", "ProviderID", "Type"))
+	build(kops.TopologySpec{}, required("Masters", "Nodes", "DNS"))
+	build(kops.BastionSpec{}, required("BastionPublicName"))
+	build(kops.BastionLoadBalancerSpec{}, required("AdditionalSecurityGroups"))
+	build(kops.DNSSpec{}, required("Type"))
+	build(kops.NetworkingSpec{})
+	build(kops.ClassicNetworkingSpec{})
+	build(kops.KubenetNetworkingSpec{})
+	build(kops.ExternalNetworkingSpec{})
+	build(kops.CNINetworkingSpec{})
+	build(kops.KopeioNetworkingSpec{})
+	build(kops.WeaveNetworkingSpec{})
+	build(kops.FlannelNetworkingSpec{})
+	build(kops.CalicoNetworkingSpec{})
+	build(kops.CanalNetworkingSpec{})
+	build(kops.KuberouterNetworkingSpec{})
+	build(kops.RomanaNetworkingSpec{})
+	build(kops.AmazonVPCNetworkingSpec{})
+	build(kops.CiliumNetworkingSpec{})
+	build(kops.LyftVPCNetworkingSpec{})
+	build(kops.GCENetworkingSpec{})
+	build(kops.VolumeSpec{}, required("Device"))
+	build(kops.VolumeMountSpec{}, required("Device", "Filesystem", "Path"))
+	build(kops.MixedInstancesPolicySpec{})
+	build(kops.UserData{}, required("Name", "Type", "Content"))
+	build(kops.LoadBalancer{})
+	build(kops.IAMProfileSpec{}, required("Profile"))
+	build(kops.HookSpec{}, required("Name"))
+	build(kops.ExecContainerAction{}, required("Image"))
+	build(kops.FileAssetSpec{}, required("Name", "Path", "Content"))
+	build(kops.RollingUpdate{})
 }
