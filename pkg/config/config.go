@@ -18,9 +18,9 @@ A valid value follows the format s3://<bucket>.
 Trailing slash will be trimmed.`
 )
 
-type Config struct {
+type config struct {
 	stateStore string
-	Clientset  simple.Clientset
+	clientset  simple.Clientset
 }
 
 func ConfigureProvider(data *schema.ResourceData) (interface{}, error) {
@@ -44,8 +44,12 @@ func ConfigureProvider(data *schema.ResourceData) (interface{}, error) {
 
 	clientset := vfsclientset.NewVFSClientset(basePath)
 
-	return &Config{
-		Clientset:  clientset,
+	return &config{
+		clientset:  clientset,
 		stateStore: registryPath,
 	}, nil
+}
+
+func Clientset(in interface{}) simple.Clientset {
+	return in.(*config).clientset
 }

@@ -26,8 +26,7 @@ func Cluster() *schema.Resource {
 
 func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 	cluster := structures.ExpandCluster(d.Get("").(map[string]interface{}))
-	clientset := m.(*config.Config).Clientset
-	_, err := api.SyncCluster(cluster, clientset)
+	_, err := api.SyncCluster(cluster, config.Clientset(m))
 	if err != nil {
 		return err
 	}
@@ -37,8 +36,7 @@ func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 
 func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
 	cluster := structures.ExpandCluster(d.Get("").(map[string]interface{}))
-	clientset := m.(*config.Config).Clientset
-	_, err := api.SyncCluster(cluster, clientset)
+	_, err := api.SyncCluster(cluster, config.Clientset(m))
 	if err != nil {
 		return err
 	}
@@ -46,8 +44,7 @@ func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func ClusterRead(d *schema.ResourceData, m interface{}) error {
-	clientset := m.(*config.Config).Clientset
-	cluster, err := api.GetCluster(d.Id(), clientset)
+	cluster, err := api.GetCluster(d.Id(), config.Clientset(m))
 	if err != nil {
 		return err
 	}
@@ -61,7 +58,7 @@ func ClusterRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func ClusterDelete(d *schema.ResourceData, m interface{}) error {
-	clientset := m.(*config.Config).Clientset
+	clientset := config.Clientset(m)
 	cluster, err := clientset.GetCluster(context.Background(), d.Id())
 	if err != nil {
 		return err
@@ -70,6 +67,5 @@ func ClusterDelete(d *schema.ResourceData, m interface{}) error {
 }
 
 func ClusterExists(d *schema.ResourceData, m interface{}) (bool, error) {
-	clientset := m.(*config.Config).Clientset
-	return api.ClusterExists(d.Id(), clientset)
+	return api.ClusterExists(d.Id(), config.Clientset(m))
 }
