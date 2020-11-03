@@ -441,15 +441,29 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 			}(in)
 			return value
 		}(in["rolling_update"]),
-		InstanceGroup: func(in interface{}) []api.InstanceGroup {
-			value := func(in interface{}) []api.InstanceGroup {
-				var out []api.InstanceGroup
+		InstanceGroup: func(in interface{}) []*api.InstanceGroup {
+			value := func(in interface{}) []*api.InstanceGroup {
+				var out []*api.InstanceGroup
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) api.InstanceGroup {
+					out = append(out, func(in interface{}) *api.InstanceGroup {
 						if in == nil {
-							return api.InstanceGroup{}
+							return nil
 						}
-						return (ExpandInstanceGroup(in.(map[string]interface{})))
+						if slice, ok := in.([]interface{}); ok && len(slice) == 0 {
+							return nil
+						}
+						tmp := func(in api.InstanceGroup) *api.InstanceGroup {
+							if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+								return nil
+							}
+							return &in
+						}(func(in interface{}) api.InstanceGroup {
+							if in == nil {
+								return api.InstanceGroup{}
+							}
+							return (ExpandInstanceGroup(in.(map[string]interface{})))
+						}(in))
+						return tmp
 					}(in))
 				}
 				return out
@@ -773,12 +787,19 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 			}(in)
 			return value
 		}(in.RollingUpdate),
-		"instance_group": func(in []api.InstanceGroup) interface{} {
-			value := func(in []api.InstanceGroup) []interface{} {
+		"instance_group": func(in []*api.InstanceGroup) interface{} {
+			value := func(in []*api.InstanceGroup) []interface{} {
 				var out []interface{}
 				for _, in := range in {
-					out = append(out, func(in api.InstanceGroup) interface{} {
-						return FlattenInstanceGroup(in)
+					out = append(out, func(in *api.InstanceGroup) interface{} {
+						if in == nil {
+							return nil
+						}
+						return func(in api.InstanceGroup) interface{} {
+							return func(in api.InstanceGroup) interface{} {
+								return FlattenInstanceGroup(in)
+							}(in)
+						}(*in)
 					}(in))
 				}
 				return out

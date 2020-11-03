@@ -16,17 +16,21 @@ import (
 	"k8s.io/kops/upup/pkg/fi/utils"
 )
 
-func getClusterAndInstanceGroups(name string, clientset simple.Clientset) (*kops.Cluster, []kops.InstanceGroup, error) {
+func getClusterAndInstanceGroups(name string, clientset simple.Clientset) (*kops.Cluster, []*kops.InstanceGroup, error) {
 	cluster, err := clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return nil, nil, err
 	}
-	ig := clientset.InstanceGroupsFor(cluster)
-	instanceGroups, err := ig.List(context.Background(), metav1.ListOptions{})
+	igs := clientset.InstanceGroupsFor(cluster)
+	instanceGroups, err := igs.List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		return nil, nil, err
 	}
-	return cluster, instanceGroups.Items, err
+	var kigs []*kops.InstanceGroup
+	for _, ig := range instanceGroups.Items {
+		kigs = append(kigs, &ig)
+	}
+	return cluster, kigs, err
 }
 
 func ClusterExists(name string, clientset simple.Clientset) (bool, error) {
@@ -45,16 +49,15 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	c := FromKopsCluster(*kc, kig...)
-	return &c, nil
+	return FromKopsCluster(kc, kig...), nil
 }
 
-func SyncCluster(cluster Cluster, clientset simple.Clientset) (*Cluster, error) {
+func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error) {
 	exists, err := ClusterExists(cluster.Name, clientset)
 	if err != nil {
 		return nil, err
 	}
-	kc, kig := ToKopsCluster(cluster)
+	kc, _ := ToKopsCluster(cluster)
 	if err := cloudup.PerformAssignments(kc); err != nil {
 		return nil, err
 	}
@@ -72,6 +75,7 @@ func SyncCluster(cluster Cluster, clientset simple.Clientset) (*Cluster, error) 
 		if err != nil {
 			return nil, err
 		}
+		// TODO improve this part
 		sshCredentialStore, err := clientset.SSHCredentialStore(kc)
 		if err != nil {
 			return nil, err
@@ -90,23 +94,7 @@ func SyncCluster(cluster Cluster, clientset simple.Clientset) (*Cluster, error) 
 	if err != nil {
 		return nil, err
 	}
-	for _, ig := range kig {
-		_, err = clientset.InstanceGroupsFor(kc).Get(context.Background(), ig.Name, metav1.GetOptions{})
-		if err != nil {
-			if errors.IsNotFound(err) {
-				_, err = clientset.InstanceGroupsFor(kc).Create(context.Background(), ig, metav1.CreateOptions{})
-				if err != nil {
-					return nil, err
-				}
-			}
-			return nil, err
-		} else {
-			_, err = clientset.InstanceGroupsFor(kc).Update(context.Background(), ig, metav1.UpdateOptions{})
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
+	SyncInstanceGroups(cluster, clientset)
 	apply := &cloudup.ApplyClusterCmd{
 		Cluster:    kc,
 		Clientset:  clientset,

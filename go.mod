@@ -1,6 +1,6 @@
 module github.com/eddycharly/terraform-provider-kops
 
-go 1.15
+go 1.13
 
 // Version kubernetes-1.18.0 => tag v0.18.6
 
@@ -48,13 +48,14 @@ replace k8s.io/code-generator => k8s.io/code-generator v0.18.6
 
 replace github.com/gophercloud/gophercloud => github.com/gophercloud/gophercloud v0.9.0
 
+replace golang.org/x/sys => golang.org/x/sys v0.0.0-20200826173525-f9321e4c35a6
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.29.1
+
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/hashicorp/terraform v0.13.5
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.1.0
-	golang.org/x/tools v0.0.0-20201031021630-582c62ec74d0 // indirect
-	google.golang.org/grpc/examples v0.0.0-20201030225255-4e179b8d3ec4 // indirect
 	k8s.io/apimachinery v0.19.3
 	k8s.io/kops v1.18.2
 )

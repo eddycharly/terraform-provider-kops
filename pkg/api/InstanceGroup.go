@@ -46,8 +46,8 @@ type InstanceGroup struct {
 	InstanceInterruptionBehavior  *string
 }
 
-func FromKopsInstanceGroup(instanceGroup kops.InstanceGroup) InstanceGroup {
-	return InstanceGroup{
+func FromKopsInstanceGroup(instanceGroup *kops.InstanceGroup) *InstanceGroup {
+	return &InstanceGroup{
 		Name:                          instanceGroup.ObjectMeta.Name,
 		Role:                          instanceGroup.Spec.Role,
 		Image:                         instanceGroup.Spec.Image,
@@ -89,7 +89,7 @@ func FromKopsInstanceGroup(instanceGroup kops.InstanceGroup) InstanceGroup {
 	}
 }
 
-func ToKopsInstanceGroup(instanceGroup InstanceGroup) *kops.InstanceGroup {
+func ToKopsInstanceGroup(instanceGroup *InstanceGroup) *kops.InstanceGroup {
 	return &kops.InstanceGroup{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: instanceGroup.Name,

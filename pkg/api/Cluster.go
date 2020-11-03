@@ -67,11 +67,11 @@ type Cluster struct {
 	UseHostCertificates *bool
 	SysctlParameters    []string
 	RollingUpdate       *kops.RollingUpdate
-	InstanceGroup       []InstanceGroup
+	InstanceGroup       []*InstanceGroup
 }
 
-func FromKopsCluster(cluster kops.Cluster, instanceGroups ...kops.InstanceGroup) Cluster {
-	return Cluster{
+func FromKopsCluster(cluster *kops.Cluster, instanceGroups ...*kops.InstanceGroup) *Cluster {
+	return &Cluster{
 		Name:                   cluster.ObjectMeta.Name,
 		Channel:                cluster.Spec.Channel,
 		ConfigBase:             cluster.Spec.ConfigBase,
@@ -132,8 +132,8 @@ func FromKopsCluster(cluster kops.Cluster, instanceGroups ...kops.InstanceGroup)
 		UseHostCertificates: cluster.Spec.UseHostCertificates,
 		SysctlParameters:    cluster.Spec.SysctlParameters,
 		RollingUpdate:       cluster.Spec.RollingUpdate,
-		InstanceGroup: func(in ...kops.InstanceGroup) []InstanceGroup {
-			var out []InstanceGroup
+		InstanceGroup: func(in ...*kops.InstanceGroup) []*InstanceGroup {
+			var out []*InstanceGroup
 			for _, in := range in {
 				out = append(out, FromKopsInstanceGroup(in))
 			}
@@ -142,7 +142,7 @@ func FromKopsCluster(cluster kops.Cluster, instanceGroups ...kops.InstanceGroup)
 	}
 }
 
-func ToKopsCluster(cluster Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
+func ToKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 	c := kops.Cluster{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: cluster.Name,
