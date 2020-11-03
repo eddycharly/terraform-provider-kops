@@ -72,6 +72,7 @@ resource "kops_cluster" "cluster" {
   cloud_provider       = "aws"
   kubernetes_version   = "stable"
   dns_zone             = "example.com"
+  network_id           = "net-0"
 
   networking {
     calico {}
@@ -89,23 +90,20 @@ resource "kops_cluster" "cluster" {
   # cluster subnets
   subnet {
     name        = "private-0"
-    cidr        = "10.0.64.0/19"
+    provider_id = "subnet-0"
     type        = "Private"
-    zone        = "eu-west-3a"
   }
 
   subnet {
     name        = "private-1"
-    cidr        = "10.0.96.0/19"
+    provider_id = "subnet-1"
     type        = "Private"
-    zone        = "eu-west-3b"
   }
 
   subnet {
     name        = "private-2"
-    cidr        = "10.0.128.0/19"
+    provider_id = "subnet-2"
     type        = "Private"
-    zone        = "eu-west-3c"
   }
 
   # master instance groups
@@ -176,6 +174,11 @@ resource "kops_cluster" "cluster" {
   }
 }
 ```
+
+More examples are available in the `/examples` folder:
+- [Basic example](./examples/basic)
+- [Aws profile example](./examples/aws-profile)
+- [Bastion example](./examples/bastion)
 
 ## Importing an existing cluster
 

@@ -29,3 +29,24 @@ fmt:
 .PHONY: install
 install: all
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/darwin_amd64/terraform-provider-kops
+
+.PHONY: examples
+examples: example-basic
+
+.PHONY: example-basic
+example-basic: install
+	@terraform init ./examples/basic
+	@terraform validate ./examples/basic
+	@terraform plan ./examples/basic
+
+.PHONY: example-aws-profile
+example-aws-profile: install
+	@terraform init ./examples/aws-profile
+	@terraform validate ./examples/aws-profile
+	@terraform plan ./examples/aws-profile
+
+.PHONY: example-bastion
+example-bastion: install
+	@terraform init ./examples/bastion
+	@terraform validate ./examples/bastion
+	@terraform plan ./examples/bastion
