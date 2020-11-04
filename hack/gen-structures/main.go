@@ -549,6 +549,7 @@ func main() {
 		computedOnly("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
 		sensitive("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
 	)
+	build(api.RollingUpdateOptions{})
 	build(kops.AddonSpec{},
 		required("Manifest"),
 	)

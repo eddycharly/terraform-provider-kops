@@ -75,6 +75,7 @@ func Cluster() *schema.Resource {
 			"kube_username":                     Sensitive(ComputedString()),
 			"kube_password":                     Sensitive(ComputedString()),
 			"instance_group":                    RequiredList(InstanceGroup()),
+			"rolling_update_options":            OptionalStruct(RollingUpdateOptions()),
 		},
 	}
 }

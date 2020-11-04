@@ -70,3 +70,4 @@
 | `kube_username` | String |  |  | :white_check_mark: |
 | `kube_password` | String |  |  | :white_check_mark: |
 | `instance_group` | List([InstanceGroup](./InstanceGroup.generated.md)) | :white_check_mark: |  |  |
+| `rolling_update_options` | [RollingUpdateOptions](./RollingUpdateOptions.generated.md) |  | :white_check_mark: |  |

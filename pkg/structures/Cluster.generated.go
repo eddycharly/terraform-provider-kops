@@ -786,6 +786,24 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return out
 			}(in)
 		}(in["instance_group"]),
+		RollingUpdateOptions: func(in interface{}) *api.RollingUpdateOptions {
+			return func(in interface{}) *api.RollingUpdateOptions {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in api.RollingUpdateOptions) *api.RollingUpdateOptions {
+					return &in
+				}(func(in interface{}) api.RollingUpdateOptions {
+					if in.([]interface{})[0] == nil {
+						return api.RollingUpdateOptions{}
+					}
+					return (ExpandRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["rolling_update_options"]),
 	}
 }
 
@@ -1358,5 +1376,17 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 				return out
 			}(in)
 		}(in.InstanceGroup),
+		"rolling_update_options": func(in *api.RollingUpdateOptions) interface{} {
+			return func(in *api.RollingUpdateOptions) interface{} {
+				if in == nil {
+					return nil
+				}
+				return func(in api.RollingUpdateOptions) interface{} {
+					return func(in api.RollingUpdateOptions) []map[string]interface{} {
+						return []map[string]interface{}{FlattenRollingUpdateOptions(in)}
+					}(in)
+				}(*in)
+			}(in)
+		}(in.RollingUpdateOptions),
 	}
 }

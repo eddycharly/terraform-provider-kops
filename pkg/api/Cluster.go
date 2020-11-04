@@ -75,6 +75,7 @@ type Cluster struct {
 	KubeUsername                   string
 	KubePassword                   string
 	InstanceGroup                  []*InstanceGroup
+	RollingUpdateOptions           *RollingUpdateOptions
 }
 
 func fromKopsCluster(cluster *kops.Cluster, config *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {

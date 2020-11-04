@@ -124,7 +124,7 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 		return nil, err
 	}
 	if doRollingUpdate {
-		err = rollingUpdate(cluster.Name, clientset)
+		err = rollingUpdate(cluster.Name, clientset, cluster.RollingUpdateOptions)
 		if err != nil {
 			return nil, err
 		}
@@ -147,7 +147,6 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 	if err != nil {
 		return err
 	}
-	// TODO shall we get region from cluster spec ?
 	allResources, err := ops.ListResources(cloud, kc.Name, "")
 	if err != nil {
 		return err
@@ -176,7 +175,7 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 	return nil
 }
 
-func rollingUpdate(name string, clientset simple.Clientset) error {
+func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpdateOptions) error {
 	kc, err := clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return err
@@ -191,7 +190,6 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	if err != nil {
 		return err
 	}
-	// TODO cloud only
 	k8sClient, err = kubernetes.NewForConfig(config)
 	if err != nil {
 		return fmt.Errorf("cannot build kube client for %q: %v", kc.Name, err)
@@ -201,7 +199,6 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	nodeList, err := k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		cloudOnly = true
-		// return fmt.Errorf("error listing nodes in cluster: %v", err)
 	}
 	if nodeList != nil {
 		nodes = nodeList.Items
@@ -222,22 +219,56 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	if err != nil {
 		return err
 	}
-	// TODO make this configurable
+	MasterInterval := 15 * time.Second
+	NodeInterval := 15 * time.Second
+	BastionInterval := 15 * time.Second
+	FailOnDrainError := false
+	FailOnValidate := false
+	PostDrainDelay := 5 * time.Second
+	ValidationTimeout := 15 * time.Minute
+	ValidateCount := 2
+
+	if options != nil {
+		if options.MasterInterval != nil {
+			MasterInterval = options.MasterInterval.Duration
+		}
+		if options.NodeInterval != nil {
+			NodeInterval = options.NodeInterval.Duration
+		}
+		if options.BastionInterval != nil {
+			BastionInterval = options.BastionInterval.Duration
+		}
+		if options.FailOnDrainError != nil {
+			FailOnDrainError = *options.FailOnDrainError
+		}
+		if options.FailOnValidate != nil {
+			FailOnValidate = *options.FailOnValidate
+		}
+		if options.PostDrainDelay != nil {
+			PostDrainDelay = options.PostDrainDelay.Duration
+		}
+		if options.ValidationTimeout != nil {
+			ValidationTimeout = options.ValidationTimeout.Duration
+		}
+		if options.ValidateCount != nil {
+			ValidateCount = *options.ValidateCount
+		}
+	}
 	d := &instancegroups.RollingUpdateCluster{
-		MasterInterval:          15 * time.Second,
-		NodeInterval:            15 * time.Second,
-		BastionInterval:         15 * time.Second,
+		MasterInterval:          MasterInterval,
+		NodeInterval:            NodeInterval,
+		BastionInterval:         BastionInterval,
 		Interactive:             false,
 		Force:                   false,
 		Cloud:                   cloud,
 		K8sClient:               k8sClient,
-		FailOnDrainError:        false,
-		FailOnValidate:          false,
+		FailOnDrainError:        FailOnDrainError,
+		FailOnValidate:          FailOnValidate,
 		CloudOnly:               cloudOnly,
 		ClusterName:             kc.Name,
-		PostDrainDelay:          5 * time.Second,
-		ValidationTimeout:       15 * time.Minute,
-		ValidateCount:           2,
+		PostDrainDelay:          PostDrainDelay,
+		ValidationTimeout:       ValidationTimeout,
+		ValidateCount:           ValidateCount,
 		ValidateTickDuration:    30 * time.Second,
 		ValidateSuccessDuration: 10 * time.Second,
 	}
@@ -258,12 +289,9 @@ func rollingUpdate(name string, clientset simple.Clientset) error {
 	if !needUpdate {
 		return nil
 	}
-	var clusterValidator validation.ClusterValidator
-	if true /*!options.CloudOnly*/ {
-		clusterValidator, err = validation.NewClusterValidator(kc, cloud, list, k8sClient)
-		if err != nil {
-			return fmt.Errorf("cannot create cluster validator: %v", err)
-		}
+	clusterValidator, err := validation.NewClusterValidator(kc, cloud, list, k8sClient)
+	if err != nil {
+		return fmt.Errorf("cannot create cluster validator: %v", err)
 	}
 	d.ClusterValidator = clusterValidator
 	return d.RollingUpdate(context.Background(), groups, kc, list)
@@ -301,7 +329,6 @@ func validateCluster(name string, clientSet simple.Clientset) error {
 	if err != nil {
 		return err
 	}
-	// TODO cloud only
 	k8sClient, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return fmt.Errorf("cannot build kubernetes api client for %q: %v", kc.Name, err)
