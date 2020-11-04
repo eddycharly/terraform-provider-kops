@@ -55,7 +55,7 @@ replace google.golang.org/grpc => google.golang.org/grpc v1.29.1
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.1.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.2.0
 	k8s.io/api v0.18.6
 	k8s.io/apimachinery v0.19.3
 	k8s.io/client-go v0.18.6
