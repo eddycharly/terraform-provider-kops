@@ -15,6 +15,9 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
+		AdminSshKey: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["admin_ssh_key"]),
 		Channel: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["channel"]),
@@ -812,6 +815,9 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 		"name": func(in string) interface{} {
 			return FlattenString(string(in))
 		}(in.Name),
+		"admin_ssh_key": func(in string) interface{} {
+			return FlattenString(string(in))
+		}(in.AdminSshKey),
 		"channel": func(in string) interface{} {
 			return FlattenString(string(in))
 		}(in.Channel),

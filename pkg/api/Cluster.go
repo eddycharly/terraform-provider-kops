@@ -8,6 +8,7 @@ import (
 
 type Cluster struct {
 	Name                           string
+	AdminSshKey                    string
 	Channel                        string
 	Addons                         []kops.AddonSpec
 	ConfigBase                     string

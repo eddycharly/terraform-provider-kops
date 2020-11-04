@@ -3,6 +3,7 @@
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
 | `name` | String | :white_check_mark: |  |  |
+| `admin_ssh_key` | String | :white_check_mark: |  |  |
 | `channel` | String |  | :white_check_mark: |  |
 | `addons` | List([AddonSpec](./AddonSpec.generated.md)) |  | :white_check_mark: |  |
 | `config_base` | String |  | :white_check_mark: | :white_check_mark: |

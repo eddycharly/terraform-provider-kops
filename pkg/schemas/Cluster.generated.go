@@ -8,6 +8,7 @@ func Cluster() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":                              RequiredString(),
+			"admin_ssh_key":                     Sensitive(RequiredString()),
 			"channel":                           OptionalString(),
 			"addons":                            OptionalList(AddonSpec()),
 			"config_base":                       OptionalComputedString(),
@@ -68,7 +69,7 @@ func Cluster() *schema.Resource {
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(RollingUpdate()),
-			"kube_server":                       Sensitive(ComputedString()),
+			"kube_server":                       ComputedString(),
 			"kube_certificate_authority":        Sensitive(ComputedString()),
 			"kube_client_certificate":           Sensitive(ComputedString()),
 			"kube_client_key":                   Sensitive(ComputedString()),

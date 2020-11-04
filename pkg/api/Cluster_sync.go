@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"time"
 
 	v1 "k8s.io/api/core/v1"
@@ -23,7 +22,6 @@ import (
 	"k8s.io/kops/pkg/validation"
 	"k8s.io/kops/upup/pkg/fi"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
-	"k8s.io/kops/upup/pkg/fi/utils"
 )
 
 func getClusterAndInstanceGroups(name string, clientset simple.Clientset) (*kops.Cluster, []*kops.InstanceGroup, error) {
@@ -94,20 +92,15 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 		if err != nil {
 			return nil, err
 		}
-		// TODO improve this part
-		sshCredentialStore, err := clientset.SSHCredentialStore(kc)
-		if err != nil {
-			return nil, err
-		}
-		f := utils.ExpandPath(*cluster.SSHKeyName)
-		pubKey, err := ioutil.ReadFile(f)
-		if err != nil {
-			return nil, fmt.Errorf("error reading SSH key file %q: %v", f, err)
-		}
-		err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, pubKey)
-		if err != nil {
-			return nil, fmt.Errorf("error adding SSH public key: %v", err)
-		}
+	}
+	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	pubKey := []byte(cluster.AdminSshKey)
+	err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, pubKey)
+	if err != nil {
+		return nil, fmt.Errorf("error adding SSH public key: %v", err)
 	}
 	kc, err = clientset.GetCluster(context.Background(), cluster.Name)
 	if err != nil {
@@ -227,7 +220,6 @@ func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpda
 	PostDrainDelay := 5 * time.Second
 	ValidationTimeout := 15 * time.Minute
 	ValidateCount := 2
-
 	if options != nil {
 		if options.MasterInterval != nil {
 			MasterInterval = options.MasterInterval.Duration
