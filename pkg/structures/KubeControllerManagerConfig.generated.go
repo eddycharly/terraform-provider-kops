@@ -790,8 +790,11 @@ func FlattenKubeControllerManagerConfig(in kops.KubeControllerManagerConfig) map
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.FeatureGates),
 		"tls_cipher_suites": func(in []string) interface{} {

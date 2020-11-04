@@ -997,8 +997,17 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 						if in == nil {
 							return nil
 						}
-						// TODO
-						return nil
+						out := map[string]interface{}{}
+						for key, in := range in {
+							out[key] = func(in []string) []interface{} {
+								var out []interface{}
+								for _, in := range in {
+									out = append(out, FlattenString(string(in)))
+								}
+								return out
+							}(in)
+						}
+						return out
 					}(in)
 				}(*in)
 			}(in)
@@ -1013,8 +1022,11 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 						if in == nil {
 							return nil
 						}
-						// TODO
-						return nil
+						out := map[string]interface{}{}
+						for key, in := range in {
+							out[key] = FlattenString(string(in))
+						}
+						return out
 					}(in)
 				}(*in)
 			}(in)
@@ -1257,8 +1269,11 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.CloudLabels),
 		"hooks": func(in []kops.HookSpec) interface{} {

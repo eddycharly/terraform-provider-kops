@@ -51,3 +51,25 @@ example-bastion: install
 	@terraform init ./examples/bastion
 	@terraform validate ./examples/bastion
 	@terraform plan ./examples/bastion
+
+.PHONY: demo-1
+demo-1:
+	@terraform init ./demo-1
+	@terraform validate ./demo-1
+	@terraform apply ./demo-1
+
+.PHONY: clean-demo-1
+clean-demo-1:
+	@terraform init ./demo-1
+	@terraform destroy ./demo-1
+
+.PHONY: demo-2
+demo-2:
+	@terraform init ./demo-2
+	@terraform validate ./demo-2
+	@terraform apply ./demo-2
+
+.PHONY: clean-demo-2
+clean-demo-2:
+	@terraform init ./demo-2
+	@terraform destroy ./demo-2

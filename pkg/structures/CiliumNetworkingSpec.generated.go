@@ -322,8 +322,11 @@ func FlattenCiliumNetworkingSpec(in kops.CiliumNetworkingSpec) map[string]interf
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.ContainerRuntimeEndpoint),
 		"debug": func(in bool) interface{} {
@@ -430,8 +433,11 @@ func FlattenCiliumNetworkingSpec(in kops.CiliumNetworkingSpec) map[string]interf
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.LogOpt),
 		"logstash": func(in bool) interface{} {

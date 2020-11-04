@@ -1022,8 +1022,11 @@ func FlattenKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} 
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.NodeLabels),
 		"non_masquerade_cidr": func(in string) interface{} {
@@ -1128,8 +1131,11 @@ func FlattenKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} 
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.FeatureGates),
 		"kube_reserved": func(in map[string]string) interface{} {
@@ -1137,8 +1143,11 @@ func FlattenKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} 
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.KubeReserved),
 		"kube_reserved_cgroup": func(in string) interface{} {
@@ -1149,8 +1158,11 @@ func FlattenKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} 
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.SystemReserved),
 		"system_reserved_cgroup": func(in string) interface{} {

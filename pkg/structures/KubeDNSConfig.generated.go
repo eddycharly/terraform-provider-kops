@@ -169,8 +169,17 @@ func FlattenKubeDNSConfig(in kops.KubeDNSConfig) map[string]interface{} {
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = func(in []string) []interface{} {
+						var out []interface{}
+						for _, in := range in {
+							out = append(out, FlattenString(string(in)))
+						}
+						return out
+					}(in)
+				}
+				return out
 			}(in)
 		}(in.StubDomains),
 		"upstream_nameservers": func(in []string) interface{} {

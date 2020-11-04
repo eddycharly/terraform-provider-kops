@@ -459,8 +459,11 @@ func (in map[string]{{ .Elem.String }}) map[string]interface{} {
 	if in == nil {
 		return nil
 	}
-	// TODO
-	return nil
+	out := map[string]interface{}{}
+	for key, in := range in {
+		out[key] = {{ template "flattenElem" .Elem }}
+	}
+	return out
 }(in)
 {{- else if isDuration . -}}
 FlattenDuration(in)

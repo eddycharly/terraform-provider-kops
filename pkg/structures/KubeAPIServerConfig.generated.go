@@ -1200,8 +1200,11 @@ func FlattenKubeAPIServerConfig(in kops.KubeAPIServerConfig) map[string]interfac
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.RuntimeConfig),
 		"kubelet_client_certificate": func(in string) interface{} {
@@ -1604,8 +1607,11 @@ func FlattenKubeAPIServerConfig(in kops.KubeAPIServerConfig) map[string]interfac
 				if in == nil {
 					return nil
 				}
-				// TODO
-				return nil
+				out := map[string]interface{}{}
+				for key, in := range in {
+					out[key] = FlattenString(string(in))
+				}
+				return out
 			}(in)
 		}(in.FeatureGates),
 		"max_requests_inflight": func(in int32) interface{} {
