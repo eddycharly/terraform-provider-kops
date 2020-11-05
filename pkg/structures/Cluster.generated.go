@@ -747,24 +747,6 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				}(in))
 			}(in)
 		}(in["rolling_update"]),
-		KubeServer: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_server"]),
-		KubeCertificateAuthority: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_certificate_authority"]),
-		KubeClientCertificate: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_client_certificate"]),
-		KubeClientKey: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_client_key"]),
-		KubeUsername: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_username"]),
-		KubePassword: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_password"]),
 		InstanceGroup: func(in interface{}) []*api.InstanceGroup {
 			return func(in interface{}) []*api.InstanceGroup {
 				var out []*api.InstanceGroup
@@ -789,6 +771,24 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return out
 			}(in)
 		}(in["instance_group"]),
+		KubeConfig: func(in interface{}) *api.KubeConfig {
+			return func(in interface{}) *api.KubeConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in api.KubeConfig) *api.KubeConfig {
+					return &in
+				}(func(in interface{}) api.KubeConfig {
+					if in.([]interface{})[0] == nil {
+						return api.KubeConfig{}
+					}
+					return (ExpandKubeConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["kube_config"]),
 		RollingUpdateOptions: func(in interface{}) *api.RollingUpdateOptions {
 			return func(in interface{}) *api.RollingUpdateOptions {
 				if in == nil {
@@ -1361,24 +1361,6 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 				}(*in)
 			}(in)
 		}(in.RollingUpdate),
-		"kube_server": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeServer),
-		"kube_certificate_authority": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeCertificateAuthority),
-		"kube_client_certificate": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeClientCertificate),
-		"kube_client_key": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeClientKey),
-		"kube_username": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeUsername),
-		"kube_password": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubePassword),
 		"instance_group": func(in []*api.InstanceGroup) interface{} {
 			return func(in []*api.InstanceGroup) []interface{} {
 				var out []interface{}
@@ -1397,6 +1379,18 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 				return out
 			}(in)
 		}(in.InstanceGroup),
+		"kube_config": func(in *api.KubeConfig) interface{} {
+			return func(in *api.KubeConfig) interface{} {
+				if in == nil {
+					return nil
+				}
+				return func(in api.KubeConfig) interface{} {
+					return func(in api.KubeConfig) []map[string]interface{} {
+						return []map[string]interface{}{FlattenKubeConfig(in)}
+					}(in)
+				}(*in)
+			}(in)
+		}(in.KubeConfig),
 		"rolling_update_options": func(in *api.RollingUpdateOptions) interface{} {
 			return func(in *api.RollingUpdateOptions) interface{} {
 				if in == nil {

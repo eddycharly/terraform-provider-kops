@@ -64,11 +64,6 @@
 | `use_host_certificates` | Bool |  | :white_check_mark: |  |
 | `sysctl_parameters` | List(String) |  | :white_check_mark: |  |
 | `rolling_update` | [RollingUpdate](./RollingUpdate.generated.md) |  | :white_check_mark: |  |
-| `kube_server` | String |  |  | :white_check_mark: |
-| `kube_certificate_authority` | String |  |  | :white_check_mark: |
-| `kube_client_certificate` | String |  |  | :white_check_mark: |
-| `kube_client_key` | String |  |  | :white_check_mark: |
-| `kube_username` | String |  |  | :white_check_mark: |
-| `kube_password` | String |  |  | :white_check_mark: |
 | `instance_group` | List([InstanceGroup](./InstanceGroup.generated.md)) | :white_check_mark: |  |  |
+| `kube_config` | [KubeConfig](./KubeConfig.generated.md) |  |  | :white_check_mark: |
 | `rolling_update_options` | [RollingUpdateOptions](./RollingUpdateOptions.generated.md) |  | :white_check_mark: |  |
