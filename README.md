@@ -71,6 +71,15 @@ The full documentation is available in the [docs](./docs/README.md) folder.
 To use the provider you will need to register it in your terraform code:
 
 ```hcl
+terraform {
+  required_providers {
+    kops = {
+      source   = "github/eddycharly/kops"
+      versions = ["0.0.1"]
+    }
+  }
+}
+
 provider "kops" {
   state_store = "s3://cluster.example.com"
   // optionally use an AWS profile
