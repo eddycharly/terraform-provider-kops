@@ -58,9 +58,17 @@ make all
 If you want to install the built provider after building it, run the following
 command instead:
 
-```shell
-make install
-```
+- on linux
+
+  ```shell
+  make install-linux
+  ```
+
+- on macos
+
+  ```shell
+  make install-darwin
+  ```
 
 ## Docs
 
@@ -92,7 +100,7 @@ provider "kops" {
 ```hcl
 resource "kops_cluster" "cluster" {
   name                 = "cluster.example.com"
-  admin_ssh_key        = file("path to ssh public key file")
+  admin_ssh_key        = file("path_to_ssh public key file")
   cloud_provider       = "aws"
   kubernetes_version   = "stable"
   dns_zone             = "example.com"
