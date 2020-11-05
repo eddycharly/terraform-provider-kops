@@ -28,12 +28,12 @@ fmt:
 	@go fmt ./pkg/...
 
 .PHONY: install-linux
-install: all
+install-linux: all
 	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/linux_amd64
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/linux_amd64/terraform-provider-kops
 
 .PHONY: install-darwin
-install: all
+install-darwin: all
 	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/darwin_amd64
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/darwin_amd64/terraform-provider-kops
 
