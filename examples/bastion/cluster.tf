@@ -14,8 +14,10 @@ resource "kops_cluster" "cluster" {
     masters = "private"
     nodes   = "private"
     bastion {
-      bastion_public_name        = "bastion.cluster.example.com"
-      additional_security_groups = ["sg-0"]
+      bastion_public_name = "bastion.cluster.example.com"
+      load_balancer {
+        additional_security_groups = ["sg-0"]
+      }
     }
     dns {
       type = "Private"
