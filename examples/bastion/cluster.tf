@@ -1,5 +1,6 @@
 resource "kops_cluster" "cluster" {
   name               = "cluster.example.com"
+  admin_ssh_key      = file("${path.module}/../dummy_ssh.pub")
   cloud_provider     = "aws"
   kubernetes_version = "stable"
   dns_zone           = "example.com"
