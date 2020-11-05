@@ -16,5 +16,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Install goimports
         run: go get golang.org/x/tools/cmd/goimports
-      - name: Make all
-        run: make all
+      - name: Install terraform
+        run: |
+          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+          mv terraform /usr/bin
+          rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+      - name: Build install and validate against examples
+        run: make examples

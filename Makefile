@@ -32,7 +32,7 @@ install: all
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/darwin_amd64/terraform-provider-kops
 
 .PHONY: examples
-examples: example-basic
+examples: example-basic example-aws-profile example-bastion
 
 .PHONY: example-basic
 example-basic: install
