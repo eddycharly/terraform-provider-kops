@@ -187,11 +187,9 @@ func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpda
 	if err != nil {
 		return fmt.Errorf("cannot build kube client for %q: %v", kc.Name, err)
 	}
-	cloudOnly := false
-	// In case of a creation, it will fail but it's probably not important as there should be no nodes anyway
 	nodeList, err := k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
 	if err != nil {
-		cloudOnly = true
+		return err
 	}
 	if nodeList != nil {
 		nodes = nodeList.Items
@@ -256,7 +254,7 @@ func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpda
 		K8sClient:               k8sClient,
 		FailOnDrainError:        FailOnDrainError,
 		FailOnValidate:          FailOnValidate,
-		CloudOnly:               cloudOnly,
+		CloudOnly:               false,
 		ClusterName:             kc.Name,
 		PostDrainDelay:          PostDrainDelay,
 		ValidationTimeout:       ValidationTimeout,
