@@ -3,3 +3,5 @@
 crash.log
 
 /terraform-provider-kops
+*.tfstate
+*.tfstate.backup

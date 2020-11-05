@@ -8,19 +8,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Install goimports
+        run: go get golang.org/x/tools/cmd/goimports
+      - name: Install terraform
+        run: |
+          TERRAFORM_VERSION=0.13.4
+          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+          sudo mv terraform /usr/bin
+          rm *
       - name: Install Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.13
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install goimports
-        run: go get golang.org/x/tools/cmd/goimports
-      - name: Install terraform
-        run: |
-          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          mv terraform /usr/bin
-          rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
       - name: Build install and validate against examples
         run: make examples
