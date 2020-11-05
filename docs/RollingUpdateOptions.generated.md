@@ -2,6 +2,7 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
+| `skip` | Bool |  | :white_check_mark: |  |
 | `master_interval` | Duration |  | :white_check_mark: |  |
 | `node_interval` | Duration |  | :white_check_mark: |  |
 | `bastion_interval` | Duration |  | :white_check_mark: |  |

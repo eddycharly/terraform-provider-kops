@@ -553,6 +553,7 @@ func main() {
 		sensitive("AdminSshKey"),
 	)
 	build(api.RollingUpdateOptions{})
+	build(api.ValidateOptions{})
 	build(api.KubeConfig{},
 		computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
