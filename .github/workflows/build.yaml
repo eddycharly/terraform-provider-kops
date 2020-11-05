@@ -24,4 +24,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build install and validate against examples
-        run: make examples
+        run: |
+          make install-linux
+          make examples
