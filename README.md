@@ -38,14 +38,30 @@ In most cases, getting something idempotent is difficult because you need to
 somewhat keep the state of the cluster and are responsible for deleting obsolete
 instange groups for example.
 
-That's where terraform shines, state management. This provider takes care of
-creating, updating and deleting instance groups as they evolve over time.
+This is where `terraform` shines in, state management. This provider takes care
+of creating, updating and deleting instance groups as they evolve over time.
 
 Even if KOPS provides `kops update cluster --target terraform` to create the
 terraform configuration for a KOPS cluster, it is still necessary to run
 `kops rolling-update cluster` to recycle instance groups when the change.
 With this provider, this is all taken care of and you should never need to run
 KOPS manually.
+
+## Docs
+
+The full documentation is available in the [docs](./docs/README.md) folder.
+
+## Installing the provider
+
+To install the provider, download the release for your distribution from the
+[releases page](https://github.com/eddycharly/terraform-provider-kops/releases)
+and refer to the terraform instructions on 
+[plugins install](https://www.terraform.io/docs/plugins/basics.html#installing-plugins).
+
+The provider should be published on the [terraform registry](https://registry.terraform.io/)
+soon.
+I'm just waiting to reach at least the beta stage before getting it advertised
+and more generally available.
 
 ## Building the provider
 
@@ -69,10 +85,6 @@ command instead:
   ```shell
   make install-darwin
   ```
-
-## Docs
-
-The full documentation is available in the [docs](./docs/README.md) folder.
 
 ## Using the provider
 
