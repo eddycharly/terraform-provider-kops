@@ -72,7 +72,7 @@ make all
 ```
 
 If you want to install the built provider after building it, run the following
-command instead (working only on macos for now):
+command instead (working on linux and macos):
 
 ```shell
 make install
