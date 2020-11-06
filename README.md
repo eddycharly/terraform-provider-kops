@@ -72,19 +72,11 @@ make all
 ```
 
 If you want to install the built provider after building it, run the following
-command instead:
+command instead (working only on macos for now):
 
-- on linux
-
-  ```shell
-  make install-linux
-  ```
-
-- on macos
-
-  ```shell
-  make install-darwin
-  ```
+```shell
+make install
+```
 
 ## Using the provider
 
