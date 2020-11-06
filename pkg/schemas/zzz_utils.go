@@ -6,11 +6,6 @@ import (
 
 // Tools
 
-func Sensitive(s *schema.Schema) *schema.Schema {
-	s.Sensitive = true
-	return s
-}
-
 func Schema(t schema.ValueType, elem interface{}, required, optional, computed bool, maxItems int) *schema.Schema {
 	return &schema.Schema{
 		Type:     t,
@@ -40,6 +35,18 @@ func SimpleComputed(t schema.ValueType) *schema.Schema {
 
 func SimpleOptionalComputed(t schema.ValueType) *schema.Schema {
 	return Simple(t, false, true, true)
+}
+
+func Sensitive(s *schema.Schema) *schema.Schema {
+	s.Sensitive = true
+	return s
+}
+
+func SuppressDiff(s *schema.Schema) *schema.Schema {
+	s.DiffSuppressFunc = func(_, _, _ string, _ *schema.ResourceData) bool {
+		return true
+	}
+	return s
 }
 
 // Quantity

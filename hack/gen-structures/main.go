@@ -19,6 +19,7 @@ type options struct {
 	computed     []string
 	computedOnly []string
 	sensitive    []string
+	suppressDiff []string
 }
 
 func excluded(excluded ...string) func(o options) options {
@@ -52,6 +53,13 @@ func computedOnly(computedOnly ...string) func(o options) options {
 func sensitive(sensitive ...string) func(o options) options {
 	return func(o options) options {
 		o.sensitive = append(o.sensitive, sensitive...)
+		return o
+	}
+}
+
+func suppressDiff(suppressDiff ...string) func(o options) options {
+	return func(o options) options {
+		o.suppressDiff = append(o.suppressDiff, suppressDiff...)
 		return o
 	}
 }
@@ -101,6 +109,7 @@ func funcMap(o options) template.FuncMap {
 	computed := sets.NewString(o.computed...)
 	computedOnly := sets.NewString(o.computedOnly...)
 	sensitive := sets.NewString(o.sensitive...)
+	suppressDiff := sets.NewString(o.suppressDiff...)
 	return template.FuncMap{
 		"fields": func(t reflect.Type) []reflect.StructField {
 			var ret []reflect.StructField
@@ -121,6 +130,9 @@ func funcMap(o options) template.FuncMap {
 		},
 		"isSensitive": func(in string) bool {
 			return sensitive.Has(in)
+		},
+		"suppressDiff": func(in string) bool {
+			return suppressDiff.Has(in)
 		},
 		"fieldName":   fieldName,
 		"isValueType": isValueType,
@@ -212,6 +224,7 @@ IntOrString
 		panic(err)
 	}
 }
+
 func buildSchema(t reflect.Type, o options) {
 	tmplString := `
 package {{ .Package }}
@@ -286,7 +299,12 @@ func {{ .Name }}() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			{{- range (fields .) }}
 			{{- if not (has .Name $.Exclude) }}
-			{{ fieldName .Name | snakecase | quote }}: {{ template "prop" . }},
+			{{ fieldName .Name | snakecase | quote }}:
+			{{- if suppressDiff .Name -}}
+			SuppressDiff({{ template "prop" . }}),
+			{{- else -}}
+			{{ template "prop" . }},
+			{{- end -}}
 			{{- end }}
 			{{- end }}
 		},
@@ -551,6 +569,7 @@ func main() {
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
 		computedOnly("KubeConfig"),
 		sensitive("AdminSshKey", "KubeConfig"),
+		suppressDiff("RollingUpdateOptions", "ValidateOptions"),
 	)
 	build(api.RollingUpdateOptions{})
 	build(api.ValidateOptions{})

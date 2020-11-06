@@ -71,8 +71,8 @@ func Cluster() *schema.Resource {
 			"rolling_update":                    OptionalStruct(RollingUpdate()),
 			"instance_group":                    RequiredList(InstanceGroup()),
 			"kube_config":                       Sensitive(ComputedStruct(KubeConfig())),
-			"rolling_update_options":            OptionalStruct(RollingUpdateOptions()),
-			"validate_options":                  OptionalStruct(ValidateOptions()),
+			"rolling_update_options":            SuppressDiff(OptionalStruct(RollingUpdateOptions())),
+			"validate_options":                  SuppressDiff(OptionalStruct(ValidateOptions())),
 		},
 	}
 }
