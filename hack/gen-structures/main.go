@@ -549,10 +549,14 @@ func main() {
 	build(api.Cluster{},
 		required("Name", "AdminSshKey", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
-		computedOnly("KubeServer", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
-		sensitive("AdminSshKey", "KubeCertificateAuthority", "KubeClientCertificate", "KubeClientKey", "KubeUsername", "KubePassword"),
+		computedOnly("KubeConfig"),
+		sensitive("AdminSshKey"),
 	)
 	build(api.RollingUpdateOptions{})
+	build(api.KubeConfig{},
+		computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+		sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+	)
 	build(kops.AddonSpec{},
 		required("Manifest"),
 	)

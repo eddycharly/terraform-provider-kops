@@ -69,17 +69,12 @@ type Cluster struct {
 	UseHostCertificates            *bool
 	SysctlParameters               []string
 	RollingUpdate                  *kops.RollingUpdate
-	KubeServer                     string
-	KubeCertificateAuthority       string
-	KubeClientCertificate          string
-	KubeClientKey                  string
-	KubeUsername                   string
-	KubePassword                   string
 	InstanceGroup                  []*InstanceGroup
+	KubeConfig                     *KubeConfig
 	RollingUpdateOptions           *RollingUpdateOptions
 }
 
-func fromKopsCluster(cluster *kops.Cluster, config *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
+func fromKopsCluster(cluster *kops.Cluster, kubeConfig *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
 	return &Cluster{
 		Name:                           cluster.ObjectMeta.Name,
 		Channel:                        cluster.Spec.Channel,
@@ -141,12 +136,7 @@ func fromKopsCluster(cluster *kops.Cluster, config *kubeconfig.KubeconfigBuilder
 		UseHostCertificates:            cluster.Spec.UseHostCertificates,
 		SysctlParameters:               cluster.Spec.SysctlParameters,
 		RollingUpdate:                  cluster.Spec.RollingUpdate,
-		KubeServer:                     config.Server,
-		KubeCertificateAuthority:       string(config.CACert),
-		KubeClientCertificate:          string(config.ClientCert),
-		KubeClientKey:                  string(config.ClientKey),
-		KubeUsername:                   config.KubeUser,
-		KubePassword:                   config.KubePassword,
+		KubeConfig:                     fromKubeconfigBuilder(kubeConfig),
 		InstanceGroup: func(in ...*kops.InstanceGroup) []*InstanceGroup {
 			var out []*InstanceGroup
 			for _, in := range in {

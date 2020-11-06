@@ -84,6 +84,10 @@ func OptionalStruct(elem *schema.Resource) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, false, 1)
 }
 
+func ComputedStruct(elem *schema.Resource) *schema.Schema {
+	return Schema(schema.TypeList, elem, false, false, true, 0)
+}
+
 func OptionalComputedStruct(elem *schema.Resource) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, true, 1)
 }
