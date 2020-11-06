@@ -1,4 +1,5 @@
 PROVIDER_VERSION := "0.0.1"
+OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
 
 .PHONY: all
 all: clean gen-code fmt build
@@ -29,26 +30,26 @@ fmt:
 
 .PHONY: install
 install: all
-	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/darwin_amd64
-	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/darwin_amd64/terraform-provider-kops
+	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64
+	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64/terraform-provider-kops
 
 .PHONY: examples
 examples: example-basic example-aws-profile example-bastion
 
 .PHONY: example-basic
-example-basic:
+example-basic: install
 	@terraform init ./examples/basic
 	@terraform validate ./examples/basic
 	@terraform plan ./examples/basic
 
 .PHONY: example-aws-profile
-example-aws-profile:
+example-aws-profile: install
 	@terraform init ./examples/aws-profile
 	@terraform validate ./examples/aws-profile
 	@terraform plan ./examples/aws-profile
 
 .PHONY: example-bastion
-example-bastion:
+example-bastion: install
 	@terraform init ./examples/bastion
 	@terraform validate ./examples/bastion
 	@terraform plan ./examples/bastion

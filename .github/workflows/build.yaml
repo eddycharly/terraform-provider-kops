@@ -36,5 +36,4 @@ jobs:
           key: go-mod
       - name: Build install and validate against examples
         run: |
-          make install-linux
           make examples
