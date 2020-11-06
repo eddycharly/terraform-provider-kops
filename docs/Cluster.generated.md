@@ -67,3 +67,4 @@
 | `instance_group` | List([InstanceGroup](./InstanceGroup.generated.md)) | :white_check_mark: |  |  |
 | `kube_config` | [KubeConfig](./KubeConfig.generated.md) |  |  | :white_check_mark: |
 | `rolling_update_options` | [RollingUpdateOptions](./RollingUpdateOptions.generated.md) |  | :white_check_mark: |  |
+| `validate_options` | [ValidateOptions](./ValidateOptions.generated.md) |  | :white_check_mark: |  |

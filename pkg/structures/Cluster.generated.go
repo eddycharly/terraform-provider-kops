@@ -789,24 +789,22 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				}(in))
 			}(in)
 		}(in["kube_config"]),
-		RollingUpdateOptions: func(in interface{}) *api.RollingUpdateOptions {
-			return func(in interface{}) *api.RollingUpdateOptions {
-				if in == nil {
-					return nil
+		RollingUpdateOptions: func(in interface{}) api.RollingUpdateOptions {
+			return func(in interface{}) api.RollingUpdateOptions {
+				if in.([]interface{})[0] == nil {
+					return api.RollingUpdateOptions{}
 				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in api.RollingUpdateOptions) *api.RollingUpdateOptions {
-					return &in
-				}(func(in interface{}) api.RollingUpdateOptions {
-					if in.([]interface{})[0] == nil {
-						return api.RollingUpdateOptions{}
-					}
-					return (ExpandRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
+				return (ExpandRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
 			}(in)
 		}(in["rolling_update_options"]),
+		ValidateOptions: func(in interface{}) api.ValidateOptions {
+			return func(in interface{}) api.ValidateOptions {
+				if in.([]interface{})[0] == nil {
+					return api.ValidateOptions{}
+				}
+				return (ExpandValidateOptions(in.([]interface{})[0].(map[string]interface{})))
+			}(in)
+		}(in["validate_options"]),
 	}
 }
 
@@ -1391,17 +1389,15 @@ func FlattenCluster(in api.Cluster) map[string]interface{} {
 				}(*in)
 			}(in)
 		}(in.KubeConfig),
-		"rolling_update_options": func(in *api.RollingUpdateOptions) interface{} {
-			return func(in *api.RollingUpdateOptions) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in api.RollingUpdateOptions) interface{} {
-					return func(in api.RollingUpdateOptions) []map[string]interface{} {
-						return []map[string]interface{}{FlattenRollingUpdateOptions(in)}
-					}(in)
-				}(*in)
+		"rolling_update_options": func(in api.RollingUpdateOptions) interface{} {
+			return func(in api.RollingUpdateOptions) []map[string]interface{} {
+				return []map[string]interface{}{FlattenRollingUpdateOptions(in)}
 			}(in)
 		}(in.RollingUpdateOptions),
+		"validate_options": func(in api.ValidateOptions) interface{} {
+			return func(in api.ValidateOptions) []map[string]interface{} {
+				return []map[string]interface{}{FlattenValidateOptions(in)}
+			}(in)
+		}(in.ValidateOptions),
 	}
 }

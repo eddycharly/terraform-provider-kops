@@ -7,6 +7,7 @@ import (
 func RollingUpdateOptions() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"skip":                OptionalBool(),
 			"master_interval":     OptionalDuration(),
 			"node_interval":       OptionalDuration(),
 			"bastion_interval":    OptionalDuration(),

@@ -70,9 +70,8 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 	if err != nil {
 		return nil, err
 	}
-	doRollingUpdate := false
-	doValidateCluster := true
-
+	needsRollingUpdate := false
+	needsValidateCluster := true
 	kc, _ := toKopsCluster(cluster)
 	if err := cloudup.PerformAssignments(kc); err != nil {
 		return nil, err
@@ -82,7 +81,7 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 		if err != nil {
 			return nil, err
 		}
-		doRollingUpdate = true
+		needsRollingUpdate = true
 	} else {
 		kc, err = clientset.CreateCluster(context.Background(), kc)
 		if err != nil {
@@ -116,14 +115,14 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 	if err != nil {
 		return nil, err
 	}
-	if doRollingUpdate {
+	if needsRollingUpdate {
 		err = rollingUpdate(cluster.Name, clientset, cluster.RollingUpdateOptions)
 		if err != nil {
 			return nil, err
 		}
 	}
-	if doValidateCluster {
-		err = validateCluster(cluster.Name, clientset)
+	if needsValidateCluster {
+		err = validateCluster(cluster.Name, clientset, cluster.ValidateOptions)
 		if err != nil {
 			return nil, err
 		}
@@ -168,7 +167,10 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 	return nil
 }
 
-func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpdateOptions) error {
+func rollingUpdate(name string, clientset simple.Clientset, options RollingUpdateOptions) error {
+	if options.Skip {
+		return nil
+	}
 	kc, err := clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return err
@@ -213,36 +215,26 @@ func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpda
 	MasterInterval := 15 * time.Second
 	NodeInterval := 15 * time.Second
 	BastionInterval := 15 * time.Second
-	FailOnDrainError := false
-	FailOnValidate := false
 	PostDrainDelay := 5 * time.Second
 	ValidationTimeout := 15 * time.Minute
 	ValidateCount := 2
-	if options != nil {
-		if options.MasterInterval != nil {
-			MasterInterval = options.MasterInterval.Duration
-		}
-		if options.NodeInterval != nil {
-			NodeInterval = options.NodeInterval.Duration
-		}
-		if options.BastionInterval != nil {
-			BastionInterval = options.BastionInterval.Duration
-		}
-		if options.FailOnDrainError != nil {
-			FailOnDrainError = *options.FailOnDrainError
-		}
-		if options.FailOnValidate != nil {
-			FailOnValidate = *options.FailOnValidate
-		}
-		if options.PostDrainDelay != nil {
-			PostDrainDelay = options.PostDrainDelay.Duration
-		}
-		if options.ValidationTimeout != nil {
-			ValidationTimeout = options.ValidationTimeout.Duration
-		}
-		if options.ValidateCount != nil {
-			ValidateCount = *options.ValidateCount
-		}
+	if options.MasterInterval != nil {
+		MasterInterval = options.MasterInterval.Duration
+	}
+	if options.NodeInterval != nil {
+		NodeInterval = options.NodeInterval.Duration
+	}
+	if options.BastionInterval != nil {
+		BastionInterval = options.BastionInterval.Duration
+	}
+	if options.PostDrainDelay != nil {
+		PostDrainDelay = options.PostDrainDelay.Duration
+	}
+	if options.ValidationTimeout != nil {
+		ValidationTimeout = options.ValidationTimeout.Duration
+	}
+	if options.ValidateCount != nil {
+		ValidateCount = *options.ValidateCount
 	}
 	d := &instancegroups.RollingUpdateCluster{
 		MasterInterval:          MasterInterval,
@@ -252,8 +244,8 @@ func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpda
 		Force:                   false,
 		Cloud:                   cloud,
 		K8sClient:               k8sClient,
-		FailOnDrainError:        FailOnDrainError,
-		FailOnValidate:          FailOnValidate,
+		FailOnDrainError:        options.FailOnDrainError,
+		FailOnValidate:          options.FailOnValidate,
 		CloudOnly:               false,
 		ClusterName:             kc.Name,
 		PostDrainDelay:          PostDrainDelay,
@@ -287,7 +279,10 @@ func rollingUpdate(name string, clientset simple.Clientset, options *RollingUpda
 	return d.RollingUpdate(context.Background(), groups, kc, list)
 }
 
-func validateCluster(name string, clientSet simple.Clientset) error {
+func validateCluster(name string, clientSet simple.Clientset, options ValidateOptions) error {
+	if options.Skip {
+		return nil
+	}
 	kc, err := clientSet.GetCluster(context.Background(), name)
 	if err != nil {
 		return err
@@ -324,9 +319,16 @@ func validateCluster(name string, clientSet simple.Clientset) error {
 		return fmt.Errorf("cannot build kubernetes api client for %q: %v", kc.Name, err)
 	}
 
-	timeout := time.Now().Add(15 * time.Minute)
+	timeout := time.Now()
+	if options.Timeout != nil {
+		timeout = timeout.Add(options.Timeout.Duration)
+	} else {
+		timeout = timeout.Add(15 * time.Minute)
+	}
 	pollInterval := 10 * time.Second
-
+	if options.PollInterval != nil {
+		pollInterval = options.PollInterval.Duration
+	}
 	validator, err := validation.NewClusterValidator(kc, cloud, list, k8sClient)
 	if err != nil {
 		return fmt.Errorf("unexpected error creating validatior: %v", err)

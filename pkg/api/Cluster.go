@@ -71,7 +71,8 @@ type Cluster struct {
 	RollingUpdate                  *kops.RollingUpdate
 	InstanceGroup                  []*InstanceGroup
 	KubeConfig                     *KubeConfig
-	RollingUpdateOptions           *RollingUpdateOptions
+	RollingUpdateOptions           RollingUpdateOptions
+	ValidateOptions                ValidateOptions
 }
 
 func fromKopsCluster(cluster *kops.Cluster, kubeConfig *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {

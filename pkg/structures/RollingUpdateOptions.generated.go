@@ -12,6 +12,9 @@ func ExpandRollingUpdateOptions(in map[string]interface{}) api.RollingUpdateOpti
 		panic("expand RollingUpdateOptions failure, in is nil")
 	}
 	return api.RollingUpdateOptions{
+		Skip: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["skip"]),
 		MasterInterval: func(in interface{}) *v1.Duration {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -60,37 +63,11 @@ func ExpandRollingUpdateOptions(in map[string]interface{}) api.RollingUpdateOpti
 				}(ExpandDuration(in))
 			}(in)
 		}(in["bastion_interval"]),
-		FailOnDrainError: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
+		FailOnDrainError: func(in interface{}) bool {
+			return bool(ExpandBool(in))
 		}(in["fail_on_drain_error"]),
-		FailOnValidate: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
+		FailOnValidate: func(in interface{}) bool {
+			return bool(ExpandBool(in))
 		}(in["fail_on_validate"]),
 		PostDrainDelay: func(in interface{}) *v1.Duration {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
@@ -145,6 +122,9 @@ func ExpandRollingUpdateOptions(in map[string]interface{}) api.RollingUpdateOpti
 
 func FlattenRollingUpdateOptions(in api.RollingUpdateOptions) map[string]interface{} {
 	return map[string]interface{}{
+		"skip": func(in bool) interface{} {
+			return FlattenBool(bool(in))
+		}(in.Skip),
 		"master_interval": func(in *v1.Duration) interface{} {
 			return func(in *v1.Duration) interface{} {
 				if in == nil {
@@ -175,25 +155,11 @@ func FlattenRollingUpdateOptions(in api.RollingUpdateOptions) map[string]interfa
 				}(*in)
 			}(in)
 		}(in.BastionInterval),
-		"fail_on_drain_error": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
+		"fail_on_drain_error": func(in bool) interface{} {
+			return FlattenBool(bool(in))
 		}(in.FailOnDrainError),
-		"fail_on_validate": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
+		"fail_on_validate": func(in bool) interface{} {
+			return FlattenBool(bool(in))
 		}(in.FailOnValidate),
 		"post_drain_delay": func(in *v1.Duration) interface{} {
 			return func(in *v1.Duration) interface{} {
