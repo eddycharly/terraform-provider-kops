@@ -20,7 +20,7 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 				return func(in kops.AlwaysAllowAuthorizationSpec) *kops.AlwaysAllowAuthorizationSpec {
 					return &in
 				}(func(in interface{}) kops.AlwaysAllowAuthorizationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.AlwaysAllowAuthorizationSpec{}
 					}
 					return (ExpandAlwaysAllowAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -38,7 +38,7 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 				return func(in kops.RBACAuthorizationSpec) *kops.RBACAuthorizationSpec {
 					return &in
 				}(func(in interface{}) kops.RBACAuthorizationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.RBACAuthorizationSpec{}
 					}
 					return (ExpandRBACAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))

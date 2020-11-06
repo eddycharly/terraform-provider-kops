@@ -96,7 +96,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.TopologySpec) *kops.TopologySpec {
 					return &in
 				}(func(in interface{}) kops.TopologySpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.TopologySpec{}
 					}
 					return (ExpandTopologySpec(in.([]interface{})[0].(map[string]interface{})))
@@ -165,7 +165,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.EgressProxySpec) *kops.EgressProxySpec {
 					return &in
 				}(func(in interface{}) kops.EgressProxySpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.EgressProxySpec{}
 					}
 					return (ExpandEgressProxySpec(in.([]interface{})[0].(map[string]interface{})))
@@ -328,7 +328,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.ContainerdConfig) *kops.ContainerdConfig {
 					return &in
 				}(func(in interface{}) kops.ContainerdConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.ContainerdConfig{}
 					}
 					return (ExpandContainerdConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -346,7 +346,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.DockerConfig) *kops.DockerConfig {
 					return &in
 				}(func(in interface{}) kops.DockerConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.DockerConfig{}
 					}
 					return (ExpandDockerConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -364,7 +364,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeDNSConfig) *kops.KubeDNSConfig {
 					return &in
 				}(func(in interface{}) kops.KubeDNSConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeDNSConfig{}
 					}
 					return (ExpandKubeDNSConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -382,7 +382,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeAPIServerConfig) *kops.KubeAPIServerConfig {
 					return &in
 				}(func(in interface{}) kops.KubeAPIServerConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeAPIServerConfig{}
 					}
 					return (ExpandKubeAPIServerConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -400,7 +400,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeControllerManagerConfig) *kops.KubeControllerManagerConfig {
 					return &in
 				}(func(in interface{}) kops.KubeControllerManagerConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeControllerManagerConfig{}
 					}
 					return (ExpandKubeControllerManagerConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -418,7 +418,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.CloudControllerManagerConfig) *kops.CloudControllerManagerConfig {
 					return &in
 				}(func(in interface{}) kops.CloudControllerManagerConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.CloudControllerManagerConfig{}
 					}
 					return (ExpandCloudControllerManagerConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -436,7 +436,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeSchedulerConfig) *kops.KubeSchedulerConfig {
 					return &in
 				}(func(in interface{}) kops.KubeSchedulerConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeSchedulerConfig{}
 					}
 					return (ExpandKubeSchedulerConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -454,7 +454,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeProxyConfig) *kops.KubeProxyConfig {
 					return &in
 				}(func(in interface{}) kops.KubeProxyConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeProxyConfig{}
 					}
 					return (ExpandKubeProxyConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -472,7 +472,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeletConfigSpec{}
 					}
 					return (ExpandKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -490,7 +490,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeletConfigSpec{}
 					}
 					return (ExpandKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -508,7 +508,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.CloudConfiguration) *kops.CloudConfiguration {
 					return &in
 				}(func(in interface{}) kops.CloudConfiguration {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.CloudConfiguration{}
 					}
 					return (ExpandCloudConfiguration(in.([]interface{})[0].(map[string]interface{})))
@@ -526,7 +526,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.ExternalDNSConfig) *kops.ExternalDNSConfig {
 					return &in
 				}(func(in interface{}) kops.ExternalDNSConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.ExternalDNSConfig{}
 					}
 					return (ExpandExternalDNSConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -544,7 +544,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.NetworkingSpec) *kops.NetworkingSpec {
 					return &in
 				}(func(in interface{}) kops.NetworkingSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.NetworkingSpec{}
 					}
 					return (ExpandNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -562,7 +562,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.AccessSpec) *kops.AccessSpec {
 					return &in
 				}(func(in interface{}) kops.AccessSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.AccessSpec{}
 					}
 					return (ExpandAccessSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -580,7 +580,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.AuthenticationSpec) *kops.AuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.AuthenticationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.AuthenticationSpec{}
 					}
 					return (ExpandAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -598,7 +598,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.AuthorizationSpec) *kops.AuthorizationSpec {
 					return &in
 				}(func(in interface{}) kops.AuthorizationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.AuthorizationSpec{}
 					}
 					return (ExpandAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -616,7 +616,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.NodeAuthorizationSpec) *kops.NodeAuthorizationSpec {
 					return &in
 				}(func(in interface{}) kops.NodeAuthorizationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.NodeAuthorizationSpec{}
 					}
 					return (ExpandNodeAuthorizationSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -660,7 +660,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.Assets) *kops.Assets {
 					return &in
 				}(func(in interface{}) kops.Assets {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.Assets{}
 					}
 					return (ExpandAssets(in.([]interface{})[0].(map[string]interface{})))
@@ -678,7 +678,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.IAMSpec) *kops.IAMSpec {
 					return &in
 				}(func(in interface{}) kops.IAMSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.IAMSpec{}
 					}
 					return (ExpandIAMSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -740,7 +740,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in kops.RollingUpdate) *kops.RollingUpdate {
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.RollingUpdate{}
 					}
 					return (ExpandRollingUpdate(in.([]interface{})[0].(map[string]interface{})))
@@ -782,7 +782,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return func(in api.KubeConfig) *api.KubeConfig {
 					return &in
 				}(func(in interface{}) api.KubeConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return api.KubeConfig{}
 					}
 					return (ExpandKubeConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -791,7 +791,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 		}(in["kube_config"]),
 		RollingUpdateOptions: func(in interface{}) api.RollingUpdateOptions {
 			return func(in interface{}) api.RollingUpdateOptions {
-				if in.([]interface{})[0] == nil {
+				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return api.RollingUpdateOptions{}
 				}
 				return (ExpandRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
@@ -799,7 +799,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 		}(in["rolling_update_options"]),
 		ValidateOptions: func(in interface{}) api.ValidateOptions {
 			return func(in interface{}) api.ValidateOptions {
-				if in.([]interface{})[0] == nil {
+				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return api.ValidateOptions{}
 				}
 				return (ExpandValidateOptions(in.([]interface{})[0].(map[string]interface{})))

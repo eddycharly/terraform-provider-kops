@@ -53,7 +53,7 @@ func ExpandHookSpec(in map[string]interface{}) kops.HookSpec {
 				return func(in kops.ExecContainerAction) *kops.ExecContainerAction {
 					return &in
 				}(func(in interface{}) kops.ExecContainerAction {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.ExecContainerAction{}
 					}
 					return (ExpandExecContainerAction(in.([]interface{})[0].(map[string]interface{})))

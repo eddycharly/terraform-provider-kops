@@ -20,7 +20,7 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				return func(in kops.DNSAccessSpec) *kops.DNSAccessSpec {
 					return &in
 				}(func(in interface{}) kops.DNSAccessSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.DNSAccessSpec{}
 					}
 					return (ExpandDNSAccessSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -38,7 +38,7 @@ func ExpandAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				return func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec {
 					return &in
 				}(func(in interface{}) kops.LoadBalancerAccessSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.LoadBalancerAccessSpec{}
 					}
 					return (ExpandLoadBalancerAccessSpec(in.([]interface{})[0].(map[string]interface{})))

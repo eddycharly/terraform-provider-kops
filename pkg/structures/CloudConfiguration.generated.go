@@ -249,7 +249,7 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 				return func(in kops.OpenstackConfiguration) *kops.OpenstackConfiguration {
 					return &in
 				}(func(in interface{}) kops.OpenstackConfiguration {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackConfiguration{}
 					}
 					return (ExpandOpenstackConfiguration(in.([]interface{})[0].(map[string]interface{})))

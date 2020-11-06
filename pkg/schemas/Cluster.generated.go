@@ -70,7 +70,7 @@ func Cluster() *schema.Resource {
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(RollingUpdate()),
 			"instance_group":                    RequiredList(InstanceGroup()),
-			"kube_config":                       ComputedStruct(KubeConfig()),
+			"kube_config":                       Sensitive(ComputedStruct(KubeConfig())),
 			"rolling_update_options":            OptionalStruct(RollingUpdateOptions()),
 			"validate_options":                  OptionalStruct(ValidateOptions()),
 		},

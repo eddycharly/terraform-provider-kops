@@ -20,7 +20,7 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 				return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec {
 					return &in
 				}(func(in interface{}) kops.NodeAuthorizerSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.NodeAuthorizerSpec{}
 					}
 					return (ExpandNodeAuthorizerSpec(in.([]interface{})[0].(map[string]interface{})))

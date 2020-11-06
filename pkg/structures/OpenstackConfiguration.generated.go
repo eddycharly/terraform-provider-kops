@@ -22,7 +22,7 @@ func ExpandOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfi
 				return func(in kops.OpenstackLoadbalancerConfig) *kops.OpenstackLoadbalancerConfig {
 					return &in
 				}(func(in interface{}) kops.OpenstackLoadbalancerConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackLoadbalancerConfig{}
 					}
 					return (ExpandOpenstackLoadbalancerConfig(in.([]interface{})[0].(map[string]interface{})))
@@ -40,7 +40,7 @@ func ExpandOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfi
 				return func(in kops.OpenstackMonitor) *kops.OpenstackMonitor {
 					return &in
 				}(func(in interface{}) kops.OpenstackMonitor {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackMonitor{}
 					}
 					return (ExpandOpenstackMonitor(in.([]interface{})[0].(map[string]interface{})))
@@ -58,7 +58,7 @@ func ExpandOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfi
 				return func(in kops.OpenstackRouter) *kops.OpenstackRouter {
 					return &in
 				}(func(in interface{}) kops.OpenstackRouter {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackRouter{}
 					}
 					return (ExpandOpenstackRouter(in.([]interface{})[0].(map[string]interface{})))
@@ -76,7 +76,7 @@ func ExpandOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfi
 				return func(in kops.OpenstackBlockStorageConfig) *kops.OpenstackBlockStorageConfig {
 					return &in
 				}(func(in interface{}) kops.OpenstackBlockStorageConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackBlockStorageConfig{}
 					}
 					return (ExpandOpenstackBlockStorageConfig(in.([]interface{})[0].(map[string]interface{})))

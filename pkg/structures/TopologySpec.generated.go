@@ -26,7 +26,7 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				return func(in kops.BastionSpec) *kops.BastionSpec {
 					return &in
 				}(func(in interface{}) kops.BastionSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.BastionSpec{}
 					}
 					return (ExpandBastionSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -44,7 +44,7 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				return func(in kops.DNSSpec) *kops.DNSSpec {
 					return &in
 				}(func(in interface{}) kops.DNSSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.DNSSpec{}
 					}
 					return (ExpandDNSSpec(in.([]interface{})[0].(map[string]interface{})))

@@ -20,7 +20,7 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 				return func(in kops.KopeioAuthenticationSpec) *kops.KopeioAuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.KopeioAuthenticationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KopeioAuthenticationSpec{}
 					}
 					return (ExpandKopeioAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -38,7 +38,7 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 				return func(in kops.AwsAuthenticationSpec) *kops.AwsAuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.AwsAuthenticationSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.AwsAuthenticationSpec{}
 					}
 					return (ExpandAwsAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))

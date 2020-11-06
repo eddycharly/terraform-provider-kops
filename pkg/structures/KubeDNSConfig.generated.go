@@ -125,7 +125,7 @@ func ExpandKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				return func(in kops.NodeLocalDNSConfig) *kops.NodeLocalDNSConfig {
 					return &in
 				}(func(in interface{}) kops.NodeLocalDNSConfig {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.NodeLocalDNSConfig{}
 					}
 					return (ExpandNodeLocalDNSConfig(in.([]interface{})[0].(map[string]interface{})))

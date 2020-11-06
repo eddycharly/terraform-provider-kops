@@ -41,7 +41,7 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 				return func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec {
 					return &in
 				}(func(in interface{}) kops.BastionLoadBalancerSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.BastionLoadBalancerSpec{}
 					}
 					return (ExpandBastionLoadBalancerSpec(in.([]interface{})[0].(map[string]interface{})))

@@ -17,13 +17,11 @@ func deleteInstanceGroup(cluster *kops.Cluster, instanceGroup *kops.InstanceGrou
 	if err != nil {
 		return err
 	}
-
 	d := &instancegroups.DeleteInstanceGroup{
 		Cluster:   cluster,
 		Cloud:     cloud,
 		Clientset: clientset,
 	}
-
 	err = d.DeleteInstanceGroup(instanceGroup)
 	if err != nil {
 		return err

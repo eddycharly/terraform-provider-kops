@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	v1 "k8s.io/api/core/v1"
@@ -66,32 +67,38 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 }
 
 func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error) {
+	log.Println("ClusterExists")
 	exists, err := ClusterExists(cluster.Name, clientset)
 	if err != nil {
 		return nil, err
 	}
 	needsRollingUpdate := false
 	needsValidateCluster := true
+	log.Println("toKopsCluster")
 	kc, _ := toKopsCluster(cluster)
 	if err := cloudup.PerformAssignments(kc); err != nil {
 		return nil, err
 	}
 	if exists {
+		log.Println("UpdateCluster")
 		kc, err = clientset.UpdateCluster(context.Background(), kc, nil)
 		if err != nil {
 			return nil, err
 		}
 		needsRollingUpdate = true
 	} else {
+		log.Println("CreateCluster")
 		kc, err = clientset.CreateCluster(context.Background(), kc)
 		if err != nil {
 			return nil, err
 		}
+		log.Println("GetCluster")
 		kc, err = clientset.GetCluster(context.Background(), cluster.Name)
 		if err != nil {
 			return nil, err
 		}
 	}
+	log.Println("SSHCredentialStore")
 	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
 	if err != nil {
 		return nil, err

@@ -121,7 +121,7 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 				return func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration {
 					return &in
 				}(func(in interface{}) kops.LeaderElectionConfiguration {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.LeaderElectionConfiguration{}
 					}
 					return (ExpandLeaderElectionConfiguration(in.([]interface{})[0].(map[string]interface{})))

@@ -401,7 +401,7 @@ ExpandQuantity(in)
 ExpandIntOrString(in)
 {{- else if isStruct . -}}
 func (in interface{}) {{ .String }} {
-	if in.([]interface{})[0] == nil {
+	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 		return {{ .String }}{}
 	}
 	return (Expand{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
@@ -550,7 +550,7 @@ func main() {
 		required("Name", "AdminSshKey", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
 		computedOnly("KubeConfig"),
-		sensitive("AdminSshKey"),
+		sensitive("AdminSshKey", "KubeConfig"),
 	)
 	build(api.RollingUpdateOptions{})
 	build(api.ValidateOptions{})

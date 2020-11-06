@@ -335,7 +335,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.KubeletConfigSpec{}
 					}
 					return (ExpandKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -362,7 +362,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				return func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
 					return &in
 				}(func(in interface{}) kops.MixedInstancesPolicySpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.MixedInstancesPolicySpec{}
 					}
 					return (ExpandMixedInstancesPolicySpec(in.([]interface{})[0].(map[string]interface{})))
@@ -433,7 +433,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				return func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
 					return &in
 				}(func(in interface{}) kops.IAMProfileSpec {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.IAMProfileSpec{}
 					}
 					return (ExpandIAMProfileSpec(in.([]interface{})[0].(map[string]interface{})))
@@ -492,7 +492,7 @@ func ExpandInstanceGroup(in map[string]interface{}) api.InstanceGroup {
 				return func(in kops.RollingUpdate) *kops.RollingUpdate {
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
-					if in.([]interface{})[0] == nil {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.RollingUpdate{}
 					}
 					return (ExpandRollingUpdate(in.([]interface{})[0].(map[string]interface{})))

@@ -11,7 +11,7 @@ func ExpandEgressProxySpec(in map[string]interface{}) kops.EgressProxySpec {
 	return kops.EgressProxySpec{
 		HTTPProxy: func(in interface{}) kops.HTTPProxy {
 			return func(in interface{}) kops.HTTPProxy {
-				if in.([]interface{})[0] == nil {
+				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return kops.HTTPProxy{}
 				}
 				return (ExpandHTTPProxy(in.([]interface{})[0].(map[string]interface{})))
