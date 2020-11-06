@@ -63,7 +63,19 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	return fromKopsCluster(kc, kube, kig...), nil
+	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	pubKeys, err := sshCredentialStore.FindSSHPublicKeys(fi.SecretNameSSHPrimary)
+	if err != nil {
+		return nil, err
+	}
+	cluster := fromKopsCluster(kc, kube, kig...)
+	if len(pubKeys) > 0 {
+		cluster.AdminSshKey = pubKeys[0].Spec.PublicKey
+	}
+	return cluster, nil
 }
 
 func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error) {
