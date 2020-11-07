@@ -94,8 +94,10 @@ terraform {
 
 provider "kops" {
   state_store = "s3://cluster.example.com"
-  // optionally use an AWS profile
-  aws_profile = "example_profile"
+  // optionally set up your cloud provider access config
+  aws {
+    profile = "example_profile"
+  }
 }
 ```
 
@@ -104,7 +106,7 @@ provider "kops" {
 ```hcl
 resource "kops_cluster" "cluster" {
   name                 = "cluster.example.com"
-  admin_ssh_key        = file("path_to_ssh public key file")
+  admin_ssh_key        = file("path to ssh public key file")
   cloud_provider       = "aws"
   kubernetes_version   = "stable"
   dns_zone             = "example.com"

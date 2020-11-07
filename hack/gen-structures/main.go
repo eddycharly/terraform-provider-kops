@@ -564,6 +564,10 @@ func build(i interface{}, o ...func(o options) options) {
 }
 
 func main() {
+	build(api.ProviderConfig{},
+		required("StateStore"),
+	)
+	build(api.AwsConfig{})
 	build(api.Cluster{},
 		required("Name", "AdminSshKey", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),

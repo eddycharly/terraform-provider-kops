@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/eddycharly/terraform-provider-kops/pkg/structures"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/kops/pkg/client/simple"
@@ -18,38 +19,24 @@ A valid value follows the format s3://<bucket>.
 Trailing slash will be trimmed.`
 )
 
-type config struct {
-	stateStore string
-	clientset  simple.Clientset
-}
-
-func ConfigureProvider(data *schema.ResourceData) (interface{}, error) {
-	profile := data.Get("aws_profile").(string)
-
-	if profile != "" {
-		os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
-		os.Setenv("AWS_PROFILE", profile)
+func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
+	providerConfig := structures.ExpandProviderConfig(d.Get("").(map[string]interface{}))
+	if providerConfig.Aws != nil {
+		if providerConfig.Aws.Profile != "" {
+			os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
+			os.Setenv("AWS_PROFILE", providerConfig.Aws.Profile)
+		}
 	}
-
-	registryPath := data.Get("state_store").(string)
-
-	basePath, err := vfs.Context.BuildVfsPath(registryPath)
+	basePath, err := vfs.Context.BuildVfsPath(providerConfig.StateStore)
 	if err != nil {
-		return nil, fmt.Errorf("error building path for %q: %v", registryPath, err)
+		return nil, fmt.Errorf("error building path for %q: %v", providerConfig.StateStore, err)
 	}
-
 	if !vfs.IsClusterReadable(basePath) {
-		return nil, field.Invalid(field.NewPath("State Store"), registryPath, invalidStateError)
+		return nil, field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError)
 	}
-
-	clientset := vfsclientset.NewVFSClientset(basePath)
-
-	return &config{
-		clientset:  clientset,
-		stateStore: registryPath,
-	}, nil
+	return vfsclientset.NewVFSClientset(basePath), nil
 }
 
 func Clientset(in interface{}) simple.Clientset {
-	return in.(*config).clientset
+	return in.(simple.Clientset)
 }
