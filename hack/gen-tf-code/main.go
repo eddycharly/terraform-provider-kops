@@ -190,22 +190,22 @@ Quantity
 {{- else if isIntOrString . -}}
 IntOrString
 {{- else if isStruct . -}}
-[{{ .Name }}](./{{ .Name }}.generated.md)
+[{{ .Name }}](./{{ .Name }}.md)
 {{- else -}}
 {{- schemaType . -}}
 {{- end -}}
 {{- end }}
 
 {{- define "required" -}}
-{{ if isRequired .Name }}:white_check_mark:{{ end }}
+{{ if isRequired .Name }}Yes{{ end }}
 {{- end }}
 
 {{- define "optional" -}}
-{{ if isOptional .Name }}:white_check_mark:{{ end }}
+{{ if isOptional .Name }}Yes{{ end }}
 {{- end }}
 
 {{- define "computed" -}}
-{{ if isComputed .Name }}:white_check_mark:{{ end }}
+{{ if isComputed .Name }}Yes{{ end }}
 {{- end }}
 
 | attribute | type | optional | required | computed |

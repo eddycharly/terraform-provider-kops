@@ -2,8 +2,8 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `loadbalancer` | [OpenstackLoadbalancerConfig](./OpenstackLoadbalancerConfig.generated.md) |  | :white_check_mark: |  |
-| `monitor` | [OpenstackMonitor](./OpenstackMonitor.generated.md) |  | :white_check_mark: |  |
-| `router` | [OpenstackRouter](./OpenstackRouter.generated.md) |  | :white_check_mark: |  |
-| `block_storage` | [OpenstackBlockStorageConfig](./OpenstackBlockStorageConfig.generated.md) |  | :white_check_mark: |  |
-| `insecure_skip_verify` | Bool |  | :white_check_mark: |  |
+| `loadbalancer` | [OpenstackLoadbalancerConfig](./OpenstackLoadbalancerConfig.md) |  | Yes |  |
+| `monitor` | [OpenstackMonitor](./OpenstackMonitor.md) |  | Yes |  |
+| `router` | [OpenstackRouter](./OpenstackRouter.md) |  | Yes |  |
+| `block_storage` | [OpenstackBlockStorageConfig](./OpenstackBlockStorageConfig.md) |  | Yes |  |
+| `insecure_skip_verify` | Bool |  | Yes |  |

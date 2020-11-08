@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `image_name` | String |  | :white_check_mark: |  |
-| `env` | List([EnvVar](./EnvVar.generated.md)) |  | :white_check_mark: |  |
+| `image_name` | String |  | Yes |  |
+| `env` | List([EnvVar](./EnvVar.md)) |  | Yes |  |

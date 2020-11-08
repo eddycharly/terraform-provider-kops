@@ -2,11 +2,11 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `authorizer` | String |  | :white_check_mark: |  |
-| `features` | List(String) |  | :white_check_mark: |  |
-| `image` | String |  | :white_check_mark: |  |
-| `node_url` | String |  | :white_check_mark: |  |
-| `port` | Int |  | :white_check_mark: |  |
-| `interval` | Duration |  | :white_check_mark: |  |
-| `timeout` | Duration |  | :white_check_mark: |  |
-| `token_ttl` | Duration |  | :white_check_mark: |  |
+| `authorizer` | String |  | Yes |  |
+| `features` | List(String) |  | Yes |  |
+| `image` | String |  | Yes |  |
+| `node_url` | String |  | Yes |  |
+| `port` | Int |  | Yes |  |
+| `interval` | Duration |  | Yes |  |
+| `timeout` | Duration |  | Yes |  |
+| `token_ttl` | Duration |  | Yes |  |

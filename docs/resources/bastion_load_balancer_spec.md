@@ -2,4 +2,4 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `additional_security_groups` | List(String) | :white_check_mark: |  |  |
+| `additional_security_groups` | List(String) | Yes |  |  |

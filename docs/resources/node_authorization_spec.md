@@ -2,4 +2,4 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `node_authorizer` | [NodeAuthorizerSpec](./NodeAuthorizerSpec.generated.md) |  | :white_check_mark: |  |
+| `node_authorizer` | [NodeAuthorizerSpec](./NodeAuthorizerSpec.md) |  | Yes |  |

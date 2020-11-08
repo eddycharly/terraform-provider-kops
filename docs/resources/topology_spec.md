@@ -2,7 +2,7 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `masters` | String | :white_check_mark: |  |  |
-| `nodes` | String | :white_check_mark: |  |  |
-| `bastion` | [BastionSpec](./BastionSpec.generated.md) |  | :white_check_mark: |  |
-| `dns` | [DNSSpec](./DNSSpec.generated.md) | :white_check_mark: |  |  |
+| `masters` | String | Yes |  |  |
+| `nodes` | String | Yes |  |  |
+| `bastion` | [BastionSpec](./BastionSpec.md) |  | Yes |  |
+| `dns` | [DNSSpec](./DNSSpec.md) | Yes |  |  |

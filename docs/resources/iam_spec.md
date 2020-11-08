@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `legacy` | Bool |  | :white_check_mark: |  |
-| `allow_container_registry` | Bool |  | :white_check_mark: |  |
+| `legacy` | Bool |  | Yes |  |
+| `allow_container_registry` | Bool |  | Yes |  |

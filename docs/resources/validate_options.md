@@ -2,6 +2,6 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `skip` | Bool |  | :white_check_mark: |  |
-| `timeout` | Duration |  | :white_check_mark: |  |
-| `poll_interval` | Duration |  | :white_check_mark: |  |
+| `skip` | Bool |  | Yes |  |
+| `timeout` | Duration |  | Yes |  |
+| `poll_interval` | Duration |  | Yes |  |

@@ -2,18 +2,18 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `chain_insert_mode` | String |  | :white_check_mark: |  |
-| `cpu_request` | Quantity |  | :white_check_mark: |  |
-| `default_endpoint_to_host_action` | String |  | :white_check_mark: |  |
-| `disable_flannel_forward_rules` | Bool |  | :white_check_mark: |  |
-| `disable_tx_checksum_offloading` | Bool |  | :white_check_mark: |  |
-| `iptables_backend` | String |  | :white_check_mark: |  |
-| `log_severity_sys` | String |  | :white_check_mark: |  |
-| `mtu` | Int |  | :white_check_mark: |  |
-| `prometheus_go_metrics_enabled` | Bool |  | :white_check_mark: |  |
-| `prometheus_metrics_enabled` | Bool |  | :white_check_mark: |  |
-| `prometheus_metrics_port` | Int |  | :white_check_mark: |  |
-| `prometheus_process_metrics_enabled` | Bool |  | :white_check_mark: |  |
-| `typha_prometheus_metrics_enabled` | Bool |  | :white_check_mark: |  |
-| `typha_prometheus_metrics_port` | Int |  | :white_check_mark: |  |
-| `typha_replicas` | Int |  | :white_check_mark: |  |
+| `chain_insert_mode` | String |  | Yes |  |
+| `cpu_request` | Quantity |  | Yes |  |
+| `default_endpoint_to_host_action` | String |  | Yes |  |
+| `disable_flannel_forward_rules` | Bool |  | Yes |  |
+| `disable_tx_checksum_offloading` | Bool |  | Yes |  |
+| `iptables_backend` | String |  | Yes |  |
+| `log_severity_sys` | String |  | Yes |  |
+| `mtu` | Int |  | Yes |  |
+| `prometheus_go_metrics_enabled` | Bool |  | Yes |  |
+| `prometheus_metrics_enabled` | Bool |  | Yes |  |
+| `prometheus_metrics_port` | Int |  | Yes |  |
+| `prometheus_process_metrics_enabled` | Bool |  | Yes |  |
+| `typha_prometheus_metrics_enabled` | Bool |  | Yes |  |
+| `typha_prometheus_metrics_port` | Int |  | Yes |  |
+| `typha_replicas` | Int |  | Yes |  |

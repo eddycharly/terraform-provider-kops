@@ -2,4 +2,4 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `subnet_tags` | Map(String) |  | :white_check_mark: |  |
+| `subnet_tags` | Map(String) |  | Yes |  |

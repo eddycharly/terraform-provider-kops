@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `host` | String | :white_check_mark: |  |  |
-| `port` | Int | :white_check_mark: |  |  |
+| `host` | String | Yes |  |  |
+| `port` | Int | Yes |  |  |

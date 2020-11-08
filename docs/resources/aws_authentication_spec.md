@@ -2,8 +2,8 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `image` | String |  | :white_check_mark: |  |
-| `memory_request` | Quantity |  | :white_check_mark: |  |
-| `cpu_request` | Quantity |  | :white_check_mark: |  |
-| `memory_limit` | Quantity |  | :white_check_mark: |  |
-| `cpu_limit` | Quantity |  | :white_check_mark: |  |
+| `image` | String |  | Yes |  |
+| `memory_request` | Quantity |  | Yes |  |
+| `cpu_request` | Quantity |  | Yes |  |
+| `memory_limit` | Quantity |  | Yes |  |
+| `cpu_limit` | Quantity |  | Yes |  |

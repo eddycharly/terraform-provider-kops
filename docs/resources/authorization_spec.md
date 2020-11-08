@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `always_allow` | [AlwaysAllowAuthorizationSpec](./AlwaysAllowAuthorizationSpec.generated.md) |  | :white_check_mark: |  |
-| `rbac` | [RBACAuthorizationSpec](./RBACAuthorizationSpec.generated.md) |  | :white_check_mark: |  |
+| `always_allow` | [AlwaysAllowAuthorizationSpec](./AlwaysAllowAuthorizationSpec.md) |  | Yes |  |
+| `rbac` | [RBACAuthorizationSpec](./RBACAuthorizationSpec.md) |  | Yes |  |

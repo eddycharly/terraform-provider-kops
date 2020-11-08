@@ -2,16 +2,16 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `name` | String | :white_check_mark: |  |  |
-| `provider` | String |  | :white_check_mark: |  |
-| `members` | List([EtcdMemberSpec](./EtcdMemberSpec.generated.md)) | :white_check_mark: |  |  |
-| `enable_etcd_tls` | Bool |  | :white_check_mark: |  |
-| `enable_tls_auth` | Bool |  | :white_check_mark: |  |
-| `version` | String |  | :white_check_mark: |  |
-| `leader_election_timeout` | Duration |  | :white_check_mark: |  |
-| `heartbeat_interval` | Duration |  | :white_check_mark: |  |
-| `image` | String |  | :white_check_mark: |  |
-| `backups` | [EtcdBackupSpec](./EtcdBackupSpec.generated.md) |  | :white_check_mark: |  |
-| `manager` | [EtcdManagerSpec](./EtcdManagerSpec.generated.md) |  | :white_check_mark: |  |
-| `memory_request` | Quantity |  | :white_check_mark: |  |
-| `cpu_request` | Quantity |  | :white_check_mark: |  |
+| `name` | String | Yes |  |  |
+| `provider` | String |  | Yes |  |
+| `members` | List([EtcdMemberSpec](./EtcdMemberSpec.md)) | Yes |  |  |
+| `enable_etcd_tls` | Bool |  | Yes |  |
+| `enable_tls_auth` | Bool |  | Yes |  |
+| `version` | String |  | Yes |  |
+| `leader_election_timeout` | Duration |  | Yes |  |
+| `heartbeat_interval` | Duration |  | Yes |  |
+| `image` | String |  | Yes |  |
+| `backups` | [EtcdBackupSpec](./EtcdBackupSpec.md) |  | Yes |  |
+| `manager` | [EtcdManagerSpec](./EtcdManagerSpec.md) |  | Yes |  |
+| `memory_request` | Quantity |  | Yes |  |
+| `cpu_request` | Quantity |  | Yes |  |

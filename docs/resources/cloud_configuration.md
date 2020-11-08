@@ -2,19 +2,19 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `multizone` | Bool |  | :white_check_mark: |  |
-| `node_tags` | String |  | :white_check_mark: |  |
-| `node_instance_prefix` | String |  | :white_check_mark: |  |
-| `gce_service_account` | String |  | :white_check_mark: |  |
-| `disable_security_group_ingress` | Bool |  | :white_check_mark: |  |
-| `elb_security_group` | String |  | :white_check_mark: |  |
-| `v_sphere_username` | String |  | :white_check_mark: |  |
-| `v_sphere_password` | String |  | :white_check_mark: |  |
-| `v_sphere_server` | String |  | :white_check_mark: |  |
-| `v_sphere_datacenter` | String |  | :white_check_mark: |  |
-| `v_sphere_resource_pool` | String |  | :white_check_mark: |  |
-| `v_sphere_datastore` | String |  | :white_check_mark: |  |
-| `v_sphere_core_dns_server` | String |  | :white_check_mark: |  |
-| `spotinst_product` | String |  | :white_check_mark: |  |
-| `spotinst_orientation` | String |  | :white_check_mark: |  |
-| `openstack` | [OpenstackConfiguration](./OpenstackConfiguration.generated.md) |  | :white_check_mark: |  |
+| `multizone` | Bool |  | Yes |  |
+| `node_tags` | String |  | Yes |  |
+| `node_instance_prefix` | String |  | Yes |  |
+| `gce_service_account` | String |  | Yes |  |
+| `disable_security_group_ingress` | Bool |  | Yes |  |
+| `elb_security_group` | String |  | Yes |  |
+| `v_sphere_username` | String |  | Yes |  |
+| `v_sphere_password` | String |  | Yes |  |
+| `v_sphere_server` | String |  | Yes |  |
+| `v_sphere_datacenter` | String |  | Yes |  |
+| `v_sphere_resource_pool` | String |  | Yes |  |
+| `v_sphere_datastore` | String |  | Yes |  |
+| `v_sphere_core_dns_server` | String |  | Yes |  |
+| `spotinst_product` | String |  | Yes |  |
+| `spotinst_orientation` | String |  | Yes |  |
+| `openstack` | [OpenstackConfiguration](./OpenstackConfiguration.md) |  | Yes |  |

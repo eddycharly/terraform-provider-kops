@@ -2,6 +2,6 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `name` | String | :white_check_mark: |  |  |
-| `type` | String | :white_check_mark: |  |  |
-| `content` | String | :white_check_mark: |  |  |
+| `name` | String | Yes |  |  |
+| `type` | String | Yes |  |  |
+| `content` | String | Yes |  |  |

@@ -2,6 +2,6 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `version` | String |  | :white_check_mark: |  |
-| `ignore_az` | Bool |  | :white_check_mark: |  |
-| `override_az` | String |  | :white_check_mark: |  |
+| `version` | String |  | Yes |  |
+| `ignore_az` | Bool |  | Yes |  |
+| `override_az` | String |  | Yes |  |

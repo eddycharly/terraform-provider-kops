@@ -2,4 +2,4 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `manifest` | String | :white_check_mark: |  |  |
+| `manifest` | String | Yes |  |  |

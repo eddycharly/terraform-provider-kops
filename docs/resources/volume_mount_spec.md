@@ -2,8 +2,8 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `device` | String | :white_check_mark: |  |  |
-| `filesystem` | String | :white_check_mark: |  |  |
-| `format_options` | List(String) |  | :white_check_mark: |  |
-| `mount_options` | List(String) |  | :white_check_mark: |  |
-| `path` | String | :white_check_mark: |  |  |
+| `device` | String | Yes |  |  |
+| `filesystem` | String | Yes |  |  |
+| `format_options` | List(String) |  | Yes |  |
+| `mount_options` | List(String) |  | Yes |  |
+| `path` | String | Yes |  |  |

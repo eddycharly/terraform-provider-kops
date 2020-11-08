@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `backup_store` | String | :white_check_mark: |  |  |
-| `image` | String | :white_check_mark: |  |  |
+| `backup_store` | String | Yes |  |  |
+| `image` | String | Yes |  |  |

@@ -2,11 +2,11 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `name` | String | :white_check_mark: |  |  |
-| `disabled` | Bool |  | :white_check_mark: |  |
-| `roles` | List(String) |  | :white_check_mark: |  |
-| `requires` | List(String) |  | :white_check_mark: |  |
-| `before` | List(String) |  | :white_check_mark: |  |
-| `exec_container` | [ExecContainerAction](./ExecContainerAction.generated.md) |  | :white_check_mark: |  |
-| `manifest` | String |  | :white_check_mark: |  |
-| `use_raw_manifest` | Bool |  | :white_check_mark: |  |
+| `name` | String | Yes |  |  |
+| `disabled` | Bool |  | Yes |  |
+| `roles` | List(String) |  | Yes |  |
+| `requires` | List(String) |  | Yes |  |
+| `before` | List(String) |  | Yes |  |
+| `exec_container` | [ExecContainerAction](./ExecContainerAction.md) |  | Yes |  |
+| `manifest` | String |  | Yes |  |
+| `use_raw_manifest` | Bool |  | Yes |  |

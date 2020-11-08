@@ -2,4 +2,4 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `profile` | String | :white_check_mark: |  |  |
+| `profile` | String | Yes |  |  |

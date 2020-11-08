@@ -2,9 +2,9 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `delete_on_termination` | Bool |  | :white_check_mark: |  |
-| `device` | String | :white_check_mark: |  |  |
-| `encrypted` | Bool |  | :white_check_mark: |  |
-| `iops` | Int |  | :white_check_mark: |  |
-| `size` | Int |  | :white_check_mark: |  |
-| `type` | String |  | :white_check_mark: |  |
+| `delete_on_termination` | Bool |  | Yes |  |
+| `device` | String | Yes |  |  |
+| `encrypted` | Bool |  | Yes |  |
+| `iops` | Int |  | Yes |  |
+| `size` | Int |  | Yes |  |
+| `type` | String |  | Yes |  |

@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `daemon_service_ip` | String |  | :white_check_mark: |  |
-| `etcd_service_ip` | String |  | :white_check_mark: |  |
+| `daemon_service_ip` | String |  | Yes |  |
+| `etcd_service_ip` | String |  | Yes |  |

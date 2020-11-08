@@ -2,6 +2,6 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `container_registry` | String |  | :white_check_mark: |  |
-| `file_repository` | String |  | :white_check_mark: |  |
-| `container_proxy` | String |  | :white_check_mark: |  |
+| `container_registry` | String |  | Yes |  |
+| `file_repository` | String |  | Yes |  |
+| `container_proxy` | String |  | Yes |  |

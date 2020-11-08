@@ -2,7 +2,7 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `enabled` | Bool |  | :white_check_mark: |  |
-| `local_ip` | String |  | :white_check_mark: |  |
-| `memory_request` | Quantity |  | :white_check_mark: |  |
-| `cpu_request` | Quantity |  | :white_check_mark: |  |
+| `enabled` | Bool |  | Yes |  |
+| `local_ip` | String |  | Yes |  |
+| `memory_request` | Quantity |  | Yes |  |
+| `cpu_request` | Quantity |  | Yes |  |

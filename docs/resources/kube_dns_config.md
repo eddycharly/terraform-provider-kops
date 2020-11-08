@@ -2,18 +2,18 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `cache_max_size` | Int |  | :white_check_mark: |  |
-| `cache_max_concurrent` | Int |  | :white_check_mark: |  |
-| `core_dns_image` | String |  | :white_check_mark: |  |
-| `domain` | String |  | :white_check_mark: |  |
-| `external_core_file` | String |  | :white_check_mark: |  |
-| `image` | String |  | :white_check_mark: |  |
-| `replicas` | Int |  | :white_check_mark: |  |
-| `provider` | String |  | :white_check_mark: |  |
-| `server_ip` | String |  | :white_check_mark: |  |
-| `stub_domains` | Map(List(String)) |  | :white_check_mark: |  |
-| `upstream_nameservers` | List(String) |  | :white_check_mark: |  |
-| `memory_request` | Quantity |  | :white_check_mark: |  |
-| `cpu_request` | Quantity |  | :white_check_mark: |  |
-| `memory_limit` | Quantity |  | :white_check_mark: |  |
-| `node_local_dns` | [NodeLocalDNSConfig](./NodeLocalDNSConfig.generated.md) |  | :white_check_mark: |  |
+| `cache_max_size` | Int |  | Yes |  |
+| `cache_max_concurrent` | Int |  | Yes |  |
+| `core_dns_image` | String |  | Yes |  |
+| `domain` | String |  | Yes |  |
+| `external_core_file` | String |  | Yes |  |
+| `image` | String |  | Yes |  |
+| `replicas` | Int |  | Yes |  |
+| `provider` | String |  | Yes |  |
+| `server_ip` | String |  | Yes |  |
+| `stub_domains` | Map(List(String)) |  | Yes |  |
+| `upstream_nameservers` | List(String) |  | Yes |  |
+| `memory_request` | Quantity |  | Yes |  |
+| `cpu_request` | Quantity |  | Yes |  |
+| `memory_limit` | Quantity |  | Yes |  |
+| `node_local_dns` | [NodeLocalDNSConfig](./NodeLocalDNSConfig.md) |  | Yes |  |

@@ -2,6 +2,6 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `external_network` | String |  | :white_check_mark: |  |
-| `dns_servers` | String |  | :white_check_mark: |  |
-| `external_subnet` | String |  | :white_check_mark: |  |
+| `external_network` | String |  | Yes |  |
+| `dns_servers` | String |  | Yes |  |
+| `external_subnet` | String |  | Yes |  |

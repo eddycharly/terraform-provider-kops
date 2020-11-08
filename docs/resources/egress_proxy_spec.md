@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `http_proxy` | [HTTPProxy](./HTTPProxy.generated.md) | :white_check_mark: |  |  |
-| `proxy_excludes` | String |  | :white_check_mark: |  |
+| `http_proxy` | [HTTPProxy](./HTTPProxy.md) | Yes |  |  |
+| `proxy_excludes` | String |  | Yes |  |

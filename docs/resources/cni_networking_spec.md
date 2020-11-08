@@ -2,4 +2,4 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `uses_secondary_ip` | Bool |  | :white_check_mark: |  |
+| `uses_secondary_ip` | Bool |  | Yes |  |

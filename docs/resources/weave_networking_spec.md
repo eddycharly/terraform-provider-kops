@@ -2,16 +2,16 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `mtu` | Int |  | :white_check_mark: |  |
-| `conn_limit` | Int |  | :white_check_mark: |  |
-| `no_masq_local` | Int |  | :white_check_mark: |  |
-| `memory_request` | Quantity |  | :white_check_mark: |  |
-| `cpu_request` | Quantity |  | :white_check_mark: |  |
-| `memory_limit` | Quantity |  | :white_check_mark: |  |
-| `cpu_limit` | Quantity |  | :white_check_mark: |  |
-| `net_extra_args` | String |  | :white_check_mark: |  |
-| `npc_memory_request` | Quantity |  | :white_check_mark: |  |
-| `npccpu_request` | Quantity |  | :white_check_mark: |  |
-| `npc_memory_limit` | Quantity |  | :white_check_mark: |  |
-| `npccpu_limit` | Quantity |  | :white_check_mark: |  |
-| `npc_extra_args` | String |  | :white_check_mark: |  |
+| `mtu` | Int |  | Yes |  |
+| `conn_limit` | Int |  | Yes |  |
+| `no_masq_local` | Int |  | Yes |  |
+| `memory_request` | Quantity |  | Yes |  |
+| `cpu_request` | Quantity |  | Yes |  |
+| `memory_limit` | Quantity |  | Yes |  |
+| `cpu_limit` | Quantity |  | Yes |  |
+| `net_extra_args` | String |  | Yes |  |
+| `npc_memory_request` | Quantity |  | Yes |  |
+| `npccpu_request` | Quantity |  | Yes |  |
+| `npc_memory_limit` | Quantity |  | Yes |  |
+| `npccpu_limit` | Quantity |  | Yes |  |
+| `npc_extra_args` | String |  | Yes |  |

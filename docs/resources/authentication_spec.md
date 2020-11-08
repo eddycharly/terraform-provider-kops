@@ -2,5 +2,5 @@
 
 | attribute | type | optional | required | computed |
 | --- | --- | --- | --- | --- |
-| `kopeio` | [KopeioAuthenticationSpec](./KopeioAuthenticationSpec.generated.md) |  | :white_check_mark: |  |
-| `aws` | [AwsAuthenticationSpec](./AwsAuthenticationSpec.generated.md) |  | :white_check_mark: |  |
+| `kopeio` | [KopeioAuthenticationSpec](./KopeioAuthenticationSpec.md) |  | Yes |  |
+| `aws` | [AwsAuthenticationSpec](./AwsAuthenticationSpec.md) |  | Yes |  |
