@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"go/ast"
+	"log"
 	"os"
 	"reflect"
 	"regexp"
@@ -10,6 +12,7 @@ import (
 
 	"github.com/Masterminds/sprig"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api"
+	"golang.org/x/tools/go/packages"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -138,11 +141,42 @@ func getSubResources(t reflect.Type, seen map[reflect.Type]bool) []reflect.Type 
 		f := t.Field(i)
 		ret = append(ret, getSubResources(f.Type, seen)...)
 	}
-	fmt.Printf("%s - %d\n", t.Name(), len(ret))
 	return ret
 }
 
-func funcMap(op map[reflect.Type]*options) template.FuncMap {
+func getResourceComment(packName, structName string, c map[string]map[string]map[string]string) string {
+	if p, ok := c[packName]; ok {
+		if s, ok := p[structName]; ok {
+			ret := strings.ReplaceAll(strings.TrimSpace(s[""]), "\n", "<br />")
+			if ret != "" {
+				if !strings.HasSuffix(ret, ".") {
+					ret = ret + "."
+				}
+				return ret
+			}
+		}
+	}
+	return ""
+}
+
+func getAttributeComment(packName, structName, fieldName string, c map[string]map[string]map[string]string) string {
+	if p, ok := c[packName]; ok {
+		if s, ok := p[structName]; ok {
+			if a, ok := s[fieldName]; ok {
+				ret := strings.ReplaceAll(strings.TrimSpace(a), "\n", "<br />")
+				if ret != "" {
+					if !strings.HasSuffix(ret, ".") {
+						ret = ret + "."
+					}
+					return ret
+				}
+			}
+		}
+	}
+	return ""
+}
+
+func funcMap(op map[reflect.Type]*options, c map[string]map[string]map[string]string) template.FuncMap {
 	return template.FuncMap{
 		"fields": func(t reflect.Type) []reflect.StructField {
 			var ret []reflect.StructField
@@ -152,8 +186,14 @@ func funcMap(op map[reflect.Type]*options) template.FuncMap {
 			return ret
 		},
 		"schemaType": schemaType,
+		"resourceComment": func(t reflect.Type) string {
+			return getResourceComment(t.PkgPath(), t.Name(), c)
+		},
+		"attributeComment": func(t reflect.Type, f reflect.StructField) string {
+			return getAttributeComment(t.PkgPath(), t.Name(), f.Name, c)
+		},
 		"subResources": func(t reflect.Type) []reflect.Type {
-			return getSubResources(t, map[reflect.Type]bool{})
+			return getSubResources(t, map[reflect.Type]bool{})[1:]
 		},
 		"isExcluded": func(in string, t reflect.Type) bool {
 			return op[t].exclude.Has(in)
@@ -202,10 +242,15 @@ func funcMap(op map[reflect.Type]*options) template.FuncMap {
 	}
 }
 
-func buildDoc(i interface{}, o map[reflect.Type]*options) {
+func buildDoc(i interface{}, o map[reflect.Type]*options, c map[string]map[string]map[string]string) {
 	t := reflect.TypeOf(i)
 	tmplString := `# kops_{{ fieldName .Name | snakecase }}
 
+{{- $comment := resourceComment . }}
+{{ if $comment }}
+{{ $comment }}
+{{- end }}
+	
 {{- define "type" -}}
 {{- if isPtr . -}}
 {{- template "type" .Elem }}
@@ -235,27 +280,35 @@ The following arguments are supported:
 - {{ fieldName .Name | snakecase | code }}
 {{- if isOptional .Name $ }} - (Optional){{ end }}
 {{- if isRequired .Name $ }} - (Required){{ end }}
-{{- if isComputed .Name $ }} - (Computed){{ end }} - {{ template "type" .Type }}
+{{- if isComputed .Name $ }} - (Computed){{ end }} - {{ template "type" .Type }}{{ if (attributeComment $ .) }} - {{ attributeComment $ . }}{{ end }}
 {{- end }}
 {{- end }}
 
 ## Nested resources
 {{ range $type := (subResources .) }}
 ### {{ fieldName .Name | snakecase }}
+{{- $comment := resourceComment $type }}
+{{ if $comment }}
+{{ $comment }}
+{{- end }}
 {{ $fields := fields . -}}
 {{ if eq 0 (len $fields) }}
 This resource has no attributes.
 {{- else -}}
+
+#### Argument Reference
+
+The following arguments are supported:
 {{ range $fields }}
 - {{ fieldName .Name | snakecase | code }}
 {{- if isOptional .Name $type }} - (Optional){{ end }}
 {{- if isRequired .Name $type }} - (Required){{ end }}
-{{- if isComputed .Name $type }} - (Computed){{ end }} - {{ template "type" .Type }}
+{{- if isComputed .Name $type }} - (Computed){{ end }} - {{ template "type" .Type }}{{ if (attributeComment $type .) }} - {{ attributeComment $type . }}{{ end }}
 {{- end -}}
 {{- end }}
 {{ end }}
 `
-	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("doc").Funcs(funcMap(o, c)).Funcs(sprig.TxtFuncMap())
 
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
@@ -344,7 +397,7 @@ func {{ .Name }}() *schema.Resource {
 	}
 }
 `
-	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("doc").Funcs(funcMap(o, nil)).Funcs(sprig.TxtFuncMap())
 
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
@@ -557,7 +610,7 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	}
 }
 `
-	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("doc").Funcs(funcMap(o, nil)).Funcs(sprig.TxtFuncMap())
 
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
@@ -594,14 +647,73 @@ func build(g ...generated) map[reflect.Type]*options {
 		o[gen.t] = gen.o
 	}
 	for _, gen := range g {
-		// buildDoc(gen.t, gen.o)
 		buildStructure(gen.t, o)
 		buildSchema(gen.t, o)
 	}
 	return o
 }
 
+func (p *parser) parseStruct(typeSpec *ast.TypeSpec) map[string]string {
+	ret := make(map[string]string)
+	structure, ok := typeSpec.Type.(*ast.StructType)
+	if ok {
+		for _, field := range structure.Fields.List {
+			for _, name := range field.Names {
+				ret[name.Name] = field.Doc.Text()
+			}
+		}
+	}
+	return ret
+}
+
+func (p *parser) parsePackage(pack *packages.Package) {
+	if _, ok := p.packs[pack.ID]; !ok {
+		p.packs[pack.ID] = make(map[string]map[string]string)
+		for _, v := range pack.Imports {
+			p.parsePackage(v)
+		}
+		for _, node := range pack.Syntax {
+			for _, decl := range node.Decls {
+				genDecl, ok := decl.(*ast.GenDecl)
+				if ok {
+					for _, spec := range genDecl.Specs {
+						typeSpec, ok := spec.(*ast.TypeSpec)
+						if ok {
+							p.packs[pack.ID][typeSpec.Name.Name] = p.parseStruct(typeSpec)
+							p.packs[pack.ID][typeSpec.Name.Name][""] = genDecl.Doc.Text()
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+type parser struct {
+	packages []*packages.Package
+	packs    map[string]map[string]map[string]string
+}
+
 func main() {
+	log.Println("loading packages...")
+	cfg := packages.Config{
+		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles | packages.NeedImports | packages.NeedDeps | packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo,
+	}
+	packs, err := packages.Load(
+		&cfg,
+		"github.com/eddycharly/terraform-provider-kops/pkg/api",
+	)
+	if err != nil {
+		panic(err)
+	}
+	parser := parser{
+		packages: packs,
+		packs:    make(map[string]map[string]map[string]string),
+	}
+	for _, pack := range packs {
+		parser.parsePackage(pack)
+	}
+	log.Println("generating schemas, expanders and flatteners...")
 	typeMap := build(
 		generate(api.ProviderConfig{},
 			required("StateStore"),
@@ -738,5 +850,6 @@ func main() {
 		),
 		generate(kops.RollingUpdate{}),
 	)
-	buildDoc(api.Cluster{}, typeMap)
+	log.Println("generating docs...")
+	buildDoc(api.Cluster{}, typeMap, parser.packs)
 }

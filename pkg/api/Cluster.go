@@ -6,43 +6,106 @@ import (
 	"k8s.io/kops/pkg/kubeconfig"
 )
 
+// Cluster defines the configuration for a cluster
+// It includes cluster instance groups.
 type Cluster struct {
-	Name                           string
-	AdminSshKey                    string
-	Channel                        string
-	Addons                         []kops.AddonSpec
-	ConfigBase                     string
-	CloudProvider                  string
-	ContainerRuntime               string
-	KubernetesVersion              string
-	Subnet                         []kops.ClusterSubnetSpec
-	Project                        string
-	MasterPublicName               string
-	MasterInternalName             string
-	NetworkCIDR                    string
-	AdditionalNetworkCIDRs         []string
-	NetworkID                      string
-	Topology                       *kops.TopologySpec
-	SecretStore                    string
-	KeyStore                       string
-	ConfigStore                    string
-	DNSZone                        string
-	AdditionalSANs                 []string
-	ClusterDNSDomain               string
-	ServiceClusterIPRange          string
-	PodCIDR                        string
-	NonMasqueradeCIDR              string
-	SSHAccess                      []string
-	NodePortAccess                 []string
-	EgressProxy                    *kops.EgressProxySpec
-	SSHKeyName                     *string
-	KubernetesAPIAccess            []string
-	IsolateMasters                 *bool
-	UpdatePolicy                   *string
-	ExternalPolicies               *map[string][]string
-	AdditionalPolicies             *map[string]string
-	FileAssets                     []kops.FileAssetSpec
-	EtcdCluster                    []*kops.EtcdClusterSpec
+	// The cluster name
+	Name string
+	// The cluster admin ssh key
+	AdminSshKey string
+	// The Channel we are following
+	Channel string
+	// Additional addons that should be installed on the cluster
+	Addons []kops.AddonSpec
+	// ConfigBase is the path where we store configuration for the cluster
+	// This might be different than the location where the cluster spec itself is stored,
+	// both because this must be accessible to the cluster,
+	// and because it might be on a different cloud or storage system (etcd vs S3)
+	ConfigBase string
+	// The CloudProvider to use (aws or gce)
+	CloudProvider string
+	// Container runtime to use for Kubernetes
+	ContainerRuntime string
+	// The version of kubernetes to install (optional, and can be a "spec" like stable)
+	KubernetesVersion string
+	// Configuration of subnets we are targeting
+	Subnet []kops.ClusterSubnetSpec
+	// Project is the cloud project we should use, required on GCE
+	Project string
+	// MasterPublicName is the external DNS name for the master nodes
+	MasterPublicName string
+	// MasterInternalName is the internal DNS name for the master nodes
+	MasterInternalName string
+	// NetworkCIDR is the CIDR used for the AWS VPC / GCE Network, or otherwise allocated to k8s
+	// This is a real CIDR, not the internal k8s network
+	// On AWS, it maps to the VPC CIDR.  It is not required on GCE.
+	NetworkCIDR string
+	// AdditionalNetworkCIDRs is a list of additional CIDR used for the AWS VPC
+	// or otherwise allocated to k8s. This is a real CIDR, not the internal k8s network
+	// On AWS, it maps to any additional CIDRs added to a VPC.
+	AdditionalNetworkCIDRs []string
+	// NetworkID is an identifier of a network, if we want to reuse/share an existing network (e.g. an AWS VPC)
+	NetworkID string
+	// Topology defines the type of network topology to use on the cluster - default public
+	// This is heavily weighted towards AWS for the time being, but should also be agnostic enough
+	// to port out to GCE later if needed
+	Topology *kops.TopologySpec
+	// SecretStore is the VFS path to where secrets are stored
+	SecretStore string
+	// KeyStore is the VFS path to where SSL keys and certificates are stored
+	KeyStore string
+	// ConfigStore is the VFS path to where the configuration (Cluster, InstanceGroups etc) is stored
+	ConfigStore string
+	// DNSZone is the DNS zone we should use when configuring DNS
+	// This is because some clouds let us define a managed zone foo.bar, and then have
+	// kubernetes.dev.foo.bar, without needing to define dev.foo.bar as a hosted zone.
+	// DNSZone will probably be a suffix of the MasterPublicName and MasterInternalName
+	// Note that DNSZone can either by the host name of the zone (containing dots),
+	// or can be an identifier for the zone.
+	DNSZone string
+	// AdditionalSANs adds additional Subject Alternate Names to apiserver cert that kops generates
+	AdditionalSANs []string
+	// ClusterDNSDomain is the suffix we use for internal DNS names (normally cluster.local)
+	ClusterDNSDomain string
+	// ServiceClusterIPRange is the CIDR, from the internal network, where we allocate IPs for services
+	ServiceClusterIPRange string
+	// PodCIDR is the CIDR from which we allocate IPs for pods
+	PodCIDR string
+	// NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)
+	// It cannot overlap ServiceClusterIPRange
+	NonMasqueradeCIDR string
+	// SSHAccess is a list of the CIDRs that can access SSH.
+	SSHAccess []string
+	// NodePortAccess is a list of the CIDRs that can access the node ports range (30000-32767).
+	NodePortAccess []string
+	// HTTPProxy defines connection information to support use of a private cluster behind an forward HTTP Proxy
+	EgressProxy *kops.EgressProxySpec
+	// SSHKeyName specifies a preexisting SSH key to use
+	SSHKeyName *string
+	// KubernetesAPIAccess is a list of the CIDRs that can access the Kubernetes API endpoint (master HTTPS)
+	KubernetesAPIAccess []string
+	// IsolateMasters determines whether we should lock down masters so that they are not on the pod network.
+	// true is the kube-up behaviour, but it is very surprising: it means that daemonsets only work on the master
+	// if they have hostNetwork=true.
+	// false is now the default, and it will:
+	//  * give the master a normal PodCIDR
+	//  * run kube-proxy on the master
+	//  * enable debugging handlers on the master, so kubectl logs works
+	IsolateMasters *bool
+	// UpdatePolicy determines the policy for applying upgrades automatically.
+	// Valid values:
+	//   'external' do not apply updates automatically - they are applied manually or by an external system
+	//   missing: default policy (currently OS security upgrades that do not require a reboot)
+	UpdatePolicy *string
+	// ExternalPolicies allows the insertion of pre-existing managed policies on IG Roles
+	ExternalPolicies *map[string][]string
+	// Additional policies to add for roles
+	AdditionalPolicies *map[string]string
+	// A collection of files assets for deployed cluster wide
+	FileAssets []kops.FileAssetSpec
+	// EtcdClusters stores the configuration for each cluster
+	EtcdCluster []*kops.EtcdClusterSpec
+	// Component configurations
 	Containerd                     *kops.ContainerdConfig
 	Docker                         *kops.DockerConfig
 	KubeDNS                        *kops.KubeDNSConfig
@@ -55,24 +118,45 @@ type Cluster struct {
 	MasterKubelet                  *kops.KubeletConfigSpec
 	CloudConfig                    *kops.CloudConfiguration
 	ExternalDNS                    *kops.ExternalDNSConfig
-	Networking                     *kops.NetworkingSpec
-	API                            *kops.AccessSpec
-	Authentication                 *kops.AuthenticationSpec
-	Authorization                  *kops.AuthorizationSpec
-	NodeAuthorization              *kops.NodeAuthorizationSpec
-	CloudLabels                    map[string]string
-	Hooks                          []kops.HookSpec
-	Assets                         *kops.Assets
-	IAM                            *kops.IAMSpec
-	EncryptionConfig               *bool
-	DisableSubnetTags              bool
-	UseHostCertificates            *bool
-	SysctlParameters               []string
-	RollingUpdate                  *kops.RollingUpdate
-	InstanceGroup                  []*InstanceGroup
-	KubeConfig                     *KubeConfig
-	RollingUpdateOptions           RollingUpdateOptions
-	ValidateOptions                ValidateOptions
+	// Networking configuration
+	Networking *kops.NetworkingSpec
+	// API field controls how the API is exposed outside the cluster
+	API *kops.AccessSpec
+	// Authentication field controls how the cluster is configured for authentication
+	Authentication *kops.AuthenticationSpec
+	// Authorization field controls how the cluster is configured for authorization
+	Authorization *kops.AuthorizationSpec
+	// NodeAuthorization defined the custom node authorization configuration
+	NodeAuthorization *kops.NodeAuthorizationSpec
+	// Tags for AWS instance groups
+	CloudLabels map[string]string
+	// Hooks for custom actions e.g. on first installation
+	Hooks []kops.HookSpec
+	// Assets is alternative locations for files and containers; the API under construction, will remove this comment once this API is fully functional.
+	Assets *kops.Assets
+	// IAM field adds control over the IAM security policies applied to resources
+	IAM *kops.IAMSpec
+	// EncryptionConfig controls if encryption is enabled
+	EncryptionConfig *bool
+	// DisableSubnetTags controls if subnets are tagged in AWS
+	DisableSubnetTags bool
+	// UseHostCertificates will mount /etc/ssl/certs to inside needed containers.
+	// This is needed if some APIs do have self-signed certs
+	UseHostCertificates *bool
+	// SysctlParameters will configure kernel parameters using sysctl(8). When
+	// specified, each parameter must follow the form variable=value, the way
+	// it would appear in sysctl.conf.
+	SysctlParameters []string
+	// RollingUpdate defines the default rolling-update settings for instance groups
+	RollingUpdate *kops.RollingUpdate
+	// InstanceGroup defines the list of instance groups making the cluster
+	InstanceGroup []*InstanceGroup
+	// KubeConfig holds the necessary information to connect to the cluster
+	KubeConfig *KubeConfig
+	// RollingUpdateOptions contains the options used when doing a cluster rolling update
+	RollingUpdateOptions RollingUpdateOptions
+	// ValidateOptions contains the options used when validating the cluster
+	ValidateOptions ValidateOptions
 }
 
 func fromKopsCluster(cluster *kops.Cluster, kubeConfig *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
