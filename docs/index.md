@@ -171,6 +171,11 @@ resource "kops_cluster" "cluster" {
 }
 ```
 
+## Provider configuration
+
+The supported provider configuration elements are detailed in the
+[provider_config](./resources/provider_config.md) su resource docs section.
+
 ## Importing an existing cluster
 
 You can import an existing cluster by creating a `kops_cluster` configuration
