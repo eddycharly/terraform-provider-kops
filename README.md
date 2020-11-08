@@ -53,15 +53,18 @@ The full documentation is available in the [docs](./docs/README.md) folder.
 
 ## Installing the provider
 
-To install the provider, download the release for your distribution from the
-[releases page](https://github.com/eddycharly/terraform-provider-kops/releases)
-and refer to the terraform instructions on 
-[plugins install](https://www.terraform.io/docs/plugins/basics.html#installing-plugins).
+To install the provider, add it in the terraform `required_providers` set.
 
-The provider should be published on the [terraform registry](https://registry.terraform.io/)
-soon.
-I'm just waiting to reach at least the beta stage before getting it advertised
-and more generally available.
+```hcl
+terraform {
+  required_providers {
+    kops = {
+      source  = "eddycharly/kops"
+      version = "0.1.0-alpha.5"
+    }
+  }
+}
+```
 
 ## Building the provider
 
