@@ -563,150 +563,166 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	}
 }
 
-func build(i interface{}, o ...func(o options) options) {
-	opts := options{}
-	for _, opt := range o {
-		opts = opt(opts)
+func build(g ...generated) {
+	for _, gen := range g {
+		buildDoc(gen.t, gen.o)
+		buildStructure(gen.t, gen.o)
+		buildSchema(gen.t, gen.o)
+	}
+}
+
+type generated struct {
+	t reflect.Type
+	o options
+}
+
+func generate(i interface{}, opts ...func(o options) options) generated {
+	o := options{}
+	for _, opt := range opts {
+		o = opt(o)
 	}
 	t := reflect.TypeOf(i)
-	buildDoc(t, opts)
-	buildStructure(t, opts)
-	buildSchema(t, opts)
+	return generated{
+		t: t,
+		o: o,
+	}
 }
 
 func main() {
-	build(api.ProviderConfig{},
-		required("StateStore"),
+	build(
+		generate(api.ProviderConfig{},
+			required("StateStore"),
+		),
+		generate(api.AwsConfig{}),
+		generate(api.Cluster{},
+			required("Name", "AdminSshKey", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
+			computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
+			computedOnly("KubeConfig"),
+			sensitive("AdminSshKey", "KubeConfig"),
+			suppressDiff("RollingUpdateOptions", "ValidateOptions"),
+		),
+		generate(api.RollingUpdateOptions{}),
+		generate(api.ValidateOptions{}),
+		generate(api.KubeConfig{},
+			computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+			sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+		),
+		generate(kops.AddonSpec{},
+			required("Manifest"),
+		),
+		generate(kops.EgressProxySpec{},
+			required("HTTPProxy"),
+		),
+		generate(kops.HTTPProxy{},
+			required("Host", "Port"),
+		),
+		generate(kops.ContainerdConfig{}),
+		generate(kops.DockerConfig{}),
+		generate(kops.KubeDNSConfig{}),
+		generate(kops.KubeAPIServerConfig{}),
+		generate(kops.KubeControllerManagerConfig{}),
+		generate(kops.CloudControllerManagerConfig{}),
+		generate(kops.KubeSchedulerConfig{}),
+		generate(kops.KubeProxyConfig{}),
+		generate(kops.KubeletConfigSpec{}),
+		generate(kops.CloudConfiguration{}),
+		generate(kops.ExternalDNSConfig{}),
+		generate(kops.OpenstackConfiguration{}),
+		generate(kops.OpenstackLoadbalancerConfig{}),
+		generate(kops.OpenstackMonitor{}),
+		generate(kops.OpenstackRouter{}),
+		generate(kops.OpenstackBlockStorageConfig{}),
+		generate(kops.LeaderElectionConfiguration{}),
+		generate(kops.NodeLocalDNSConfig{}),
+		generate(kops.AuthenticationSpec{}),
+		generate(kops.AuthorizationSpec{}),
+		generate(kops.NodeAuthorizationSpec{}),
+		generate(kops.Assets{}),
+		generate(kops.IAMSpec{}),
+		generate(kops.KopeioAuthenticationSpec{}),
+		generate(kops.AwsAuthenticationSpec{}),
+		generate(kops.AlwaysAllowAuthorizationSpec{}),
+		generate(kops.RBACAuthorizationSpec{}),
+		generate(kops.NodeAuthorizerSpec{}),
+		generate(api.InstanceGroup{},
+			required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
+			computed("Image"),
+		),
+		generate(kops.AccessSpec{}),
+		generate(kops.DNSAccessSpec{}),
+		generate(kops.LoadBalancerAccessSpec{},
+			required("Type"),
+		),
+		generate(kops.EtcdClusterSpec{},
+			required("Name", "Members"),
+		),
+		generate(kops.EtcdBackupSpec{},
+			required("BackupStore", "Image"),
+		),
+		generate(kops.EtcdManagerSpec{},
+			required("Image"),
+		),
+		generate(kops.EtcdMemberSpec{},
+			required("Name", "InstanceGroup"),
+		),
+		generate(kops.EnvVar{},
+			required("Name"),
+		),
+		generate(kops.ClusterSubnetSpec{},
+			required("Name", "ProviderID", "Type", "Zone"),
+			computed("CIDR"),
+		),
+		generate(kops.TopologySpec{},
+			required("Masters", "Nodes", "DNS"),
+		),
+		generate(kops.BastionSpec{},
+			required("BastionPublicName"),
+		),
+		generate(kops.BastionLoadBalancerSpec{},
+			required("AdditionalSecurityGroups"),
+		),
+		generate(kops.DNSSpec{},
+			required("Type"),
+		),
+		generate(kops.NetworkingSpec{}),
+		generate(kops.ClassicNetworkingSpec{}),
+		generate(kops.KubenetNetworkingSpec{}),
+		generate(kops.ExternalNetworkingSpec{}),
+		generate(kops.CNINetworkingSpec{}),
+		generate(kops.KopeioNetworkingSpec{}),
+		generate(kops.WeaveNetworkingSpec{}),
+		generate(kops.FlannelNetworkingSpec{}),
+		generate(kops.CalicoNetworkingSpec{}),
+		generate(kops.CanalNetworkingSpec{}),
+		generate(kops.KuberouterNetworkingSpec{}),
+		generate(kops.RomanaNetworkingSpec{}),
+		generate(kops.AmazonVPCNetworkingSpec{}),
+		generate(kops.CiliumNetworkingSpec{}),
+		generate(kops.LyftVPCNetworkingSpec{}),
+		generate(kops.GCENetworkingSpec{}),
+		generate(kops.VolumeSpec{},
+			required("Device"),
+		),
+		generate(kops.VolumeMountSpec{},
+			required("Device", "Filesystem", "Path"),
+		),
+		generate(kops.MixedInstancesPolicySpec{}),
+		generate(kops.UserData{},
+			required("Name", "Type", "Content"),
+		),
+		generate(kops.LoadBalancer{}),
+		generate(kops.IAMProfileSpec{},
+			required("Profile"),
+		),
+		generate(kops.HookSpec{},
+			required("Name"),
+		),
+		generate(kops.ExecContainerAction{},
+			required("Image"),
+		),
+		generate(kops.FileAssetSpec{},
+			required("Name", "Path", "Content"),
+		),
+		generate(kops.RollingUpdate{}),
 	)
-	build(api.AwsConfig{})
-	build(api.Cluster{},
-		required("Name", "AdminSshKey", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
-		computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
-		computedOnly("KubeConfig"),
-		sensitive("AdminSshKey", "KubeConfig"),
-		suppressDiff("RollingUpdateOptions", "ValidateOptions"),
-	)
-	build(api.RollingUpdateOptions{})
-	build(api.ValidateOptions{})
-	build(api.KubeConfig{},
-		computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
-		sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
-	)
-	build(kops.AddonSpec{},
-		required("Manifest"),
-	)
-	build(kops.EgressProxySpec{},
-		required("HTTPProxy"),
-	)
-	build(kops.HTTPProxy{},
-		required("Host", "Port"),
-	)
-	build(kops.ContainerdConfig{})
-	build(kops.DockerConfig{})
-	build(kops.KubeDNSConfig{})
-	build(kops.KubeAPIServerConfig{})
-	build(kops.KubeControllerManagerConfig{})
-	build(kops.CloudControllerManagerConfig{})
-	build(kops.KubeSchedulerConfig{})
-	build(kops.KubeProxyConfig{})
-	build(kops.KubeletConfigSpec{})
-	build(kops.CloudConfiguration{})
-	build(kops.ExternalDNSConfig{})
-	build(kops.OpenstackConfiguration{})
-	build(kops.OpenstackLoadbalancerConfig{})
-	build(kops.OpenstackMonitor{})
-	build(kops.OpenstackRouter{})
-	build(kops.OpenstackBlockStorageConfig{})
-	build(kops.LeaderElectionConfiguration{})
-	build(kops.NodeLocalDNSConfig{})
-	build(kops.AuthenticationSpec{})
-	build(kops.AuthorizationSpec{})
-	build(kops.NodeAuthorizationSpec{})
-	build(kops.Assets{})
-	build(kops.IAMSpec{})
-	build(kops.KopeioAuthenticationSpec{})
-	build(kops.AwsAuthenticationSpec{})
-	build(kops.AlwaysAllowAuthorizationSpec{})
-	build(kops.RBACAuthorizationSpec{})
-	build(kops.NodeAuthorizerSpec{})
-	build(api.InstanceGroup{},
-		required("Name", "Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
-		computed("Image"),
-	)
-	build(kops.AccessSpec{})
-	build(kops.DNSAccessSpec{})
-	build(kops.LoadBalancerAccessSpec{},
-		required("Type"),
-	)
-	build(kops.EtcdClusterSpec{},
-		required("Name", "Members"),
-	)
-	build(kops.EtcdBackupSpec{},
-		required("BackupStore", "Image"),
-	)
-	build(kops.EtcdManagerSpec{},
-		required("Image"),
-	)
-	build(kops.EtcdMemberSpec{},
-		required("Name", "InstanceGroup"),
-	)
-	build(kops.EnvVar{},
-		required("Name"),
-	)
-	build(kops.ClusterSubnetSpec{},
-		required("Name", "ProviderID", "Type", "Zone"),
-		computed("CIDR"),
-	)
-	build(kops.TopologySpec{},
-		required("Masters", "Nodes", "DNS"),
-	)
-	build(kops.BastionSpec{},
-		required("BastionPublicName"),
-	)
-	build(kops.BastionLoadBalancerSpec{},
-		required("AdditionalSecurityGroups"),
-	)
-	build(kops.DNSSpec{},
-		required("Type"),
-	)
-	build(kops.NetworkingSpec{})
-	build(kops.ClassicNetworkingSpec{})
-	build(kops.KubenetNetworkingSpec{})
-	build(kops.ExternalNetworkingSpec{})
-	build(kops.CNINetworkingSpec{})
-	build(kops.KopeioNetworkingSpec{})
-	build(kops.WeaveNetworkingSpec{})
-	build(kops.FlannelNetworkingSpec{})
-	build(kops.CalicoNetworkingSpec{})
-	build(kops.CanalNetworkingSpec{})
-	build(kops.KuberouterNetworkingSpec{})
-	build(kops.RomanaNetworkingSpec{})
-	build(kops.AmazonVPCNetworkingSpec{})
-	build(kops.CiliumNetworkingSpec{})
-	build(kops.LyftVPCNetworkingSpec{})
-	build(kops.GCENetworkingSpec{})
-	build(kops.VolumeSpec{},
-		required("Device"),
-	)
-	build(kops.VolumeMountSpec{},
-		required("Device", "Filesystem", "Path"),
-	)
-	build(kops.MixedInstancesPolicySpec{})
-	build(kops.UserData{},
-		required("Name", "Type", "Content"),
-	)
-	build(kops.LoadBalancer{})
-	build(kops.IAMProfileSpec{},
-		required("Profile"),
-	)
-	build(kops.HookSpec{},
-		required("Name"),
-	)
-	build(kops.ExecContainerAction{},
-		required("Image"),
-	)
-	build(kops.FileAssetSpec{},
-		required("Name", "Path", "Content"),
-	)
-	build(kops.RollingUpdate{})
 }
