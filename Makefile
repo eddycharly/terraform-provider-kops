@@ -2,7 +2,7 @@ PROVIDER_VERSION := "0.0.1"
 OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
 
 .PHONY: all
-all: clean gen-code fmt build
+all: clean gen fmt build
 
 .PHONY: clean
 clean:
@@ -10,14 +10,22 @@ clean:
 	@rm -rf ./pkg/schemas/*.generated.go
 	@rm -rf ./pkg/structures/*.generated.go
 	@rm -rf ./docs/*.generated.md
+	@rm -rf ./website/docs/resources/*.md
 
-.PHONY: gen-code
-gen-code:
-	@go run ./hack/gen-structures/main.go
+.PHONY: gen-tf-code
+gen-tf-code:
+	@go run ./hack/gen-tf-code/main.go
 	@go fmt ./pkg/schemas/...
 	@go fmt ./pkg/structures/...
 	@~/go/bin/goimports -w ./pkg/schemas/
 	@~/go/bin/goimports -w ./pkg/structures/
+
+.PHONY: gen-website-docs
+gen-website-docs:
+	@go run ./hack/gen-website-docs/main.go
+
+.PHONY: gen
+gen: gen-tf-code gen-website-docs
 
 .PHONY: build
 build:

@@ -1,7 +1,4 @@
-# terraform-provider-kops
-
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/eddycharly/terraform-provider-kops/blob/master/LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/eddycharly/terraform-provider-kops)](https://goreportcard.com/report/eddycharly/terraform-provider-kops)
+# KOPS Provider
 
 `terraform-provider-kops` brings [KOPS](https://github.com/kubernetes/kops)
 into terraform in a fully managed way, enabling idempotency through direct
@@ -14,7 +11,7 @@ integration with the KOPS api:
 
 Currently using KOPS `v1.18.2` and compatible with terraform `0.12` and higher.
 
-**NOTE**: For now, provisioning the network is not supported. The network must
+!> For now, provisioning the network is not supported. The network must
 be created separately and given to the provider through cluster attribute
 `network_id` and subnets attributes `provider_id`.
 
@@ -47,51 +44,9 @@ terraform configuration for a KOPS cluster, it is still necessary to run
 With this provider, this is all taken care of and you should never need to run
 KOPS manually.
 
-## Docs
-
-The full documentation is available in the [docs](./docs/README.md) folder.
-
-## Installing the provider
-
-To install the provider, download the release for your distribution from the
-[releases page](https://github.com/eddycharly/terraform-provider-kops/releases)
-and refer to the terraform instructions on 
-[plugins install](https://www.terraform.io/docs/plugins/basics.html#installing-plugins).
-
-The provider should be published on the [terraform registry](https://registry.terraform.io/)
-soon.
-I'm just waiting to reach at least the beta stage before getting it advertised
-and more generally available.
-
-## Building the provider
-
-To build the provider, clone this repository and run the following command:
-
-```shell
-make all
-```
-
-If you want to install the built provider after building it, run the following
-command instead (working on linux and macos):
-
-```shell
-make install
-```
-
-## Using the provider
-
-To use the provider you will need to register it in your terraform code:
+## Example Usage
 
 ```hcl
-terraform {
-  required_providers {
-    kops = {
-      source   = "github/eddycharly/kops"
-      versions = ["0.0.1"]
-    }
-  }
-}
-
 provider "kops" {
   state_store = "s3://cluster.example.com"
   // optionally set up your cloud provider access config
@@ -99,11 +54,7 @@ provider "kops" {
     profile = "example_profile"
   }
 }
-```
 
-## Using the kops_cluster resource
-
-```hcl
 resource "kops_cluster" "cluster" {
   name                 = "cluster.example.com"
   admin_ssh_key        = file("path to ssh public key file")
@@ -215,11 +166,6 @@ resource "kops_cluster" "cluster" {
   }
 }
 ```
-
-More examples are available in the `/examples` folder:
-- [Basic example](./examples/basic)
-- [Aws profile example](./examples/aws-profile)
-- [Bastion example](./examples/bastion)
 
 ## Importing an existing cluster
 
