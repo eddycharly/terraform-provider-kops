@@ -49,7 +49,9 @@ KOPS manually.
 
 ## Docs
 
-The full documentation is available in the [docs](./docs/README.md) folder.
+The full documentation is available in the [docs](./docs/index.md) folder or
+on the [terraform registry](https://registry.terraform.io/providers/eddycharly/kops/latest/docs)
+provider page.
 
 ## Installing the provider
 

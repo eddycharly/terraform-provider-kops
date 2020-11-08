@@ -20,12 +20,8 @@ gen-tf-code:
 	@~/go/bin/goimports -w ./pkg/schemas/
 	@~/go/bin/goimports -w ./pkg/structures/
 
-.PHONY: gen-website-docs
-gen-website-docs:
-	@go run ./hack/gen-website-docs/main.go
-
 .PHONY: gen
-gen: gen-tf-code gen-website-docs
+gen: gen-tf-code
 
 .PHONY: build
 build:

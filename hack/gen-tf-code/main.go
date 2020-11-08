@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -12,6 +13,15 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/kops/pkg/apis/kops"
 )
+
+var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
+
+func toSnakeCase(str string) string {
+	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
+	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
+	return strings.ToLower(snake)
+}
 
 type options struct {
 	exclude      []string
@@ -214,7 +224,8 @@ IntOrString
 		panic(err)
 	}
 
-	f, _ := os.Create("docs/" + t.Name() + ".generated.md")
+	fileName := toSnakeCase(fieldName(t.Name())) + ".md"
+	f, _ := os.Create("docs/resources/" + fileName)
 	defer f.Close()
 
 	if err := tmpl.Execute(f, map[string]interface{}{
