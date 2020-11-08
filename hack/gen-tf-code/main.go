@@ -24,53 +24,58 @@ func toSnakeCase(str string) string {
 }
 
 type options struct {
-	exclude      []string
-	required     []string
-	computed     []string
-	computedOnly []string
-	sensitive    []string
-	suppressDiff []string
+	exclude      sets.String
+	required     sets.String
+	computed     sets.String
+	computedOnly sets.String
+	sensitive    sets.String
+	suppressDiff sets.String
 }
 
-func excluded(excluded ...string) func(o options) options {
-	return func(o options) options {
-		o.exclude = append(o.exclude, excluded...)
-		return o
+func newOptions() *options {
+	return &options{
+		exclude:      sets.NewString(),
+		required:     sets.NewString(),
+		computed:     sets.NewString(),
+		computedOnly: sets.NewString(),
+		sensitive:    sets.NewString(),
+		suppressDiff: sets.NewString(),
 	}
 }
 
-func required(required ...string) func(o options) options {
-	return func(o options) options {
-		o.required = append(o.required, required...)
-		return o
+func excluded(excluded ...string) func(o *options) {
+	return func(o *options) {
+		o.exclude.Insert(excluded...)
 	}
 }
 
-func computed(computed ...string) func(o options) options {
-	return func(o options) options {
-		o.computed = append(o.computed, computed...)
-		return o
+func required(required ...string) func(o *options) {
+	return func(o *options) {
+		o.required.Insert(required...)
 	}
 }
 
-func computedOnly(computedOnly ...string) func(o options) options {
-	return func(o options) options {
-		o.computedOnly = append(o.computedOnly, computedOnly...)
-		return o
+func computed(computed ...string) func(o *options) {
+	return func(o *options) {
+		o.computed.Insert(computed...)
 	}
 }
 
-func sensitive(sensitive ...string) func(o options) options {
-	return func(o options) options {
-		o.sensitive = append(o.sensitive, sensitive...)
-		return o
+func computedOnly(computedOnly ...string) func(o *options) {
+	return func(o *options) {
+		o.computedOnly.Insert(computedOnly...)
 	}
 }
 
-func suppressDiff(suppressDiff ...string) func(o options) options {
-	return func(o options) options {
-		o.suppressDiff = append(o.suppressDiff, suppressDiff...)
-		return o
+func sensitive(sensitive ...string) func(o *options) {
+	return func(o *options) {
+		o.sensitive.Insert(sensitive...)
+	}
+}
+
+func suppressDiff(suppressDiff ...string) func(o *options) {
+	return func(o *options) {
+		o.suppressDiff.Insert(suppressDiff...)
 	}
 }
 
@@ -114,12 +119,30 @@ func isValueType(in reflect.Type) bool {
 	}
 }
 
-func funcMap(o options) template.FuncMap {
-	required := sets.NewString(o.required...)
-	computed := sets.NewString(o.computed...)
-	computedOnly := sets.NewString(o.computedOnly...)
-	sensitive := sets.NewString(o.sensitive...)
-	suppressDiff := sets.NewString(o.suppressDiff...)
+func getSubResources(t reflect.Type, seen map[reflect.Type]bool) []reflect.Type {
+	if t.Kind() == reflect.Array || t.Kind() == reflect.Map || t.Kind() == reflect.Slice || t.Kind() == reflect.Ptr {
+		return getSubResources(t.Elem(), seen)
+	}
+	if t.Kind() != reflect.Struct {
+		return nil
+	}
+	if isValueType(t) {
+		return nil
+	}
+	if _, ok := seen[t]; ok {
+		return nil
+	}
+	seen[t] = true
+	ret := []reflect.Type{t}
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		ret = append(ret, getSubResources(f.Type, seen)...)
+	}
+	fmt.Printf("%s - %d\n", t.Name(), len(ret))
+	return ret
+}
+
+func funcMap(op map[reflect.Type]*options) template.FuncMap {
 	return template.FuncMap{
 		"fields": func(t reflect.Type) []reflect.StructField {
 			var ret []reflect.StructField
@@ -129,20 +152,26 @@ func funcMap(o options) template.FuncMap {
 			return ret
 		},
 		"schemaType": schemaType,
-		"isRequired": func(in string) bool {
-			return required.Has(in)
+		"subResources": func(t reflect.Type) []reflect.Type {
+			return getSubResources(t, map[reflect.Type]bool{})
 		},
-		"isOptional": func(in string) bool {
-			return !required.Has(in) && !computedOnly.Has(in)
+		"isExcluded": func(in string, t reflect.Type) bool {
+			return op[t].exclude.Has(in)
 		},
-		"isComputed": func(in string) bool {
-			return computed.Has(in) || computedOnly.Has(in)
+		"isRequired": func(in string, t reflect.Type) bool {
+			return op[t].required.Has(in)
 		},
-		"isSensitive": func(in string) bool {
-			return sensitive.Has(in)
+		"isOptional": func(in string, t reflect.Type) bool {
+			return !op[t].required.Has(in) && !op[t].computedOnly.Has(in)
 		},
-		"suppressDiff": func(in string) bool {
-			return suppressDiff.Has(in)
+		"isComputed": func(in string, t reflect.Type) bool {
+			return op[t].computed.Has(in) || op[t].computedOnly.Has(in)
+		},
+		"isSensitive": func(in string, t reflect.Type) bool {
+			return op[t].sensitive.Has(in)
+		},
+		"suppressDiff": func(in string, t reflect.Type) bool {
+			return op[t].suppressDiff.Has(in)
 		},
 		"fieldName":   fieldName,
 		"isValueType": isValueType,
@@ -173,8 +202,9 @@ func funcMap(o options) template.FuncMap {
 	}
 }
 
-func buildDoc(t reflect.Type, o options) {
-	tmplString := `# kops_{{ fieldName .Type.Name | snakecase }}
+func buildDoc(i interface{}, o map[reflect.Type]*options) {
+	t := reflect.TypeOf(i)
+	tmplString := `# kops_{{ fieldName .Name | snakecase }}
 
 {{- define "type" -}}
 {{- if isPtr . -}}
@@ -190,33 +220,40 @@ Quantity
 {{- else if isIntOrString . -}}
 IntOrString
 {{- else if isStruct . -}}
-[{{ .Name }}](./{{ .Name }}.md)
+[{{ .Name | snakecase }}](#{{ .Name | snakecase }})
 {{- else -}}
 {{- schemaType . -}}
 {{- end -}}
 {{- end }}
 
-{{- define "required" -}}
-{{ if isRequired .Name }}Yes{{ end }}
-{{- end }}
+## Argument Reference
 
-{{- define "optional" -}}
-{{ if isOptional .Name }}Yes{{ end }}
-{{- end }}
+The following arguments are supported:
 
-{{- define "computed" -}}
-{{ if isComputed .Name }}Yes{{ end }}
-{{- end }}
-
-| attribute | type | optional | required | computed |
-| --- | --- | --- | --- | --- |
-{{- with .Type -}}
 {{- range (fields .) -}}
-{{- if not (has .Name $.Exclude) }}
-| {{ fieldName .Name | snakecase | code }} | {{ template "type" .Type }} | {{ template "required" . }} | {{ template "optional" . }} | {{ template "computed" . }} |
-{{- end -}}
+{{- if not (isExcluded .Name $) }}
+- {{ fieldName .Name | snakecase | code }}
+{{- if isOptional .Name $ }} - (Optional){{ end }}
+{{- if isRequired .Name $ }} - (Required){{ end }}
+{{- if isComputed .Name $ }} - (Computed){{ end }} - {{ template "type" .Type }}
+{{- end }}
+{{- end }}
+
+## Nested resources
+{{ range $type := (subResources .) }}
+### {{ fieldName .Name | snakecase }}
+{{ $fields := fields . -}}
+{{ if eq 0 (len $fields) }}
+This resource has no attributes.
+{{- else -}}
+{{ range $fields }}
+- {{ fieldName .Name | snakecase | code }}
+{{- if isOptional .Name $type }} - (Optional){{ end }}
+{{- if isRequired .Name $type }} - (Required){{ end }}
+{{- if isComputed .Name $type }} - (Computed){{ end }} - {{ template "type" .Type }}
 {{- end -}}
 {{- end }}
+{{ end }}
 `
 	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
 
@@ -228,17 +265,14 @@ IntOrString
 	f, _ := os.Create("docs/resources/" + fileName)
 	defer f.Close()
 
-	if err := tmpl.Execute(f, map[string]interface{}{
-		"Type":    t,
-		"Exclude": o.exclude,
-	}); err != nil {
+	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
 	}
 }
 
-func buildSchema(t reflect.Type, o options) {
+func buildSchema(t reflect.Type, o map[reflect.Type]*options) {
 	tmplString := `
-package {{ .Package }}
+package schemas
 
 import (
 	"encoding/json"
@@ -280,49 +314,35 @@ Struct({{ .Name }}())
 {{- else -}}
 {{- schemaType . -}}()
 {{- end -}}
-{{- end -}}
-
-{{- define "modifier" -}}
-{{- if isRequired . -}}
-Required
-{{- else -}}
-{{- if isOptional . -}}
-Optional
-{{- end -}}
-{{- if isComputed . -}}
-Computed
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{- define "prop" -}}
-{{- if isSensitive .Name -}}
-Sensitive({{ template "modifier" .Name }}{{ template "schema" .Type }})
-{{- else -}}
-{{ template "modifier" .Name }}{{ template "schema" .Type }}
-{{- end -}}
-{{- end -}}
-
-{{- with .Type }}
+{{- end }}
 
 func {{ .Name }}() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			{{- range (fields .) }}
-			{{- if not (has .Name $.Exclude) }}
+			{{- if not (isExcluded .Name $) }}
 			{{ fieldName .Name | snakecase | quote }}:
-			{{- if suppressDiff .Name -}}
-			SuppressDiff({{ template "prop" . }}),
-			{{- else -}}
-			{{ template "prop" . }},
+			{{- $sensitive := isSensitive .Name $ -}}
+			{{- $suppressDiff := suppressDiff .Name $ -}}
+			{{- if $suppressDiff -}}SuppressDiff({{- end -}}
+			{{- if $sensitive -}}Sensitive({{- end -}}
+			{{- if isRequired .Name $ -}}
+			Required
+			{{- else if isOptional .Name $ -}}
+			Optional
 			{{- end -}}
-			{{- end }}
+			{{- if isComputed .Name $ -}}
+			Computed
+			{{- end -}}
+			{{ template "schema" .Type }}
+			{{- if $suppressDiff -}}){{- end -}}
+			{{- if $sensitive -}}){{- end -}}
+			,
+			{{- end -}}
 			{{- end }}
 		},
 	}
 }
-
-{{- end }}
 `
 	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
 
@@ -333,18 +353,14 @@ func {{ .Name }}() *schema.Resource {
 	f, _ := os.Create("pkg/schemas/" + t.Name() + ".generated.go")
 	defer f.Close()
 
-	if err := tmpl.Execute(f, map[string]interface{}{
-		"Package": "schemas",
-		"Type":    t,
-		"Exclude": o.exclude,
-	}); err != nil {
+	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
 	}
 }
 
-func buildStructure(t reflect.Type, o options) {
+func buildStructure(t reflect.Type, o map[reflect.Type]*options) {
 	tmplString := `
-package {{ .Package }}
+package structures
 
 import (
 	"encoding/json"
@@ -507,9 +523,7 @@ func (in {{ .String }}) []map[string]interface{} {
 {{- else -}}
 Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
 {{- end -}}
-{{- end -}}
-
-{{- with .Type }}
+{{- end }}
 
 func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	if in == nil {
@@ -517,9 +531,9 @@ func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	}
 	return {{ .String }}{
 	{{- range (fields .) }}
-	{{- if not (has .Name $.Exclude) }}
+	{{- if not (isExcluded .Name $) }}
 	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
-		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .Name)) }}
+		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .Name $)) }}
 		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 			return nil
 		}
@@ -534,7 +548,7 @@ func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
 func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	return map[string]interface{}{
 	{{- range (fields .) }}
-	{{- if not (has .Name $.Exclude) }}
+	{{- if not (isExcluded .Name $) }}
 	{{ fieldName .Name | snakecase | quote }}: func (in {{ .Type.String }}) interface{} {
 		return {{ template "flatten" .Type }}
 	}(in.{{ .Name }}),
@@ -542,8 +556,6 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	{{- end }}
 	}
 }
-
-{{- end }}
 `
 	tmpl := template.New("doc").Funcs(funcMap(o)).Funcs(sprig.TxtFuncMap())
 
@@ -554,32 +566,20 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	f, _ := os.Create("pkg/structures/" + t.Name() + ".generated.go")
 	defer f.Close()
 
-	if err := tmpl.Execute(f, map[string]interface{}{
-		"Package": "structures",
-		"Type":    t,
-		"Exclude": o.exclude,
-	}); err != nil {
+	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
-	}
-}
-
-func build(g ...generated) {
-	for _, gen := range g {
-		buildDoc(gen.t, gen.o)
-		buildStructure(gen.t, gen.o)
-		buildSchema(gen.t, gen.o)
 	}
 }
 
 type generated struct {
 	t reflect.Type
-	o options
+	o *options
 }
 
-func generate(i interface{}, opts ...func(o options) options) generated {
-	o := options{}
+func generate(i interface{}, opts ...func(o *options)) generated {
+	o := newOptions()
 	for _, opt := range opts {
-		o = opt(o)
+		opt(o)
 	}
 	t := reflect.TypeOf(i)
 	return generated{
@@ -588,8 +588,21 @@ func generate(i interface{}, opts ...func(o options) options) generated {
 	}
 }
 
+func build(g ...generated) map[reflect.Type]*options {
+	o := map[reflect.Type]*options{}
+	for _, gen := range g {
+		o[gen.t] = gen.o
+	}
+	for _, gen := range g {
+		// buildDoc(gen.t, gen.o)
+		buildStructure(gen.t, o)
+		buildSchema(gen.t, o)
+	}
+	return o
+}
+
 func main() {
-	build(
+	typeMap := build(
 		generate(api.ProviderConfig{},
 			required("StateStore"),
 		),
@@ -725,4 +738,5 @@ func main() {
 		),
 		generate(kops.RollingUpdate{}),
 	)
+	buildDoc(api.Cluster{}, typeMap)
 }

@@ -10,7 +10,7 @@ clean:
 	@rm -rf ./pkg/schemas/*.generated.go
 	@rm -rf ./pkg/structures/*.generated.go
 	@rm -rf ./docs/*.generated.md
-	@rm -rf ./website/docs/resources/*.md
+	@rm -rf ./docs/resources/*.md
 
 .PHONY: gen-tf-code
 gen-tf-code:
