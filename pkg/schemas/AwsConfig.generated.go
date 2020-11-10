@@ -8,6 +8,7 @@ func AwsConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"profile":     OptionalString(),
+			"region":      OptionalString(),
 			"assume_role": OptionalStruct(AwsAssumeRole()),
 		},
 	}

@@ -6,5 +6,6 @@ type AwsAssumeRole struct {
 
 type AwsConfig struct {
 	Profile    string
+	Region     string
 	AssumeRole *AwsAssumeRole
 }

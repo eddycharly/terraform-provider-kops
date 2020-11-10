@@ -12,6 +12,9 @@ func ExpandAwsConfig(in map[string]interface{}) api.AwsConfig {
 		Profile: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["profile"]),
+		Region: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["region"]),
 		AssumeRole: func(in interface{}) *api.AwsAssumeRole {
 			return func(in interface{}) *api.AwsAssumeRole {
 				if in == nil {
@@ -38,6 +41,9 @@ func FlattenAwsConfig(in api.AwsConfig) map[string]interface{} {
 		"profile": func(in string) interface{} {
 			return FlattenString(string(in))
 		}(in.Profile),
+		"region": func(in string) interface{} {
+			return FlattenString(string(in))
+		}(in.Region),
 		"assume_role": func(in *api.AwsAssumeRole) interface{} {
 			return func(in *api.AwsAssumeRole) interface{} {
 				if in == nil {

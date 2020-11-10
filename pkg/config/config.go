@@ -47,25 +47,26 @@ func initCredentials(config *api.AwsConfig) error {
 	if config == nil {
 		return nil
 	}
+	if config.Region != "" {
+		os.Setenv("AWS_DEFAULT_REGION", config.Region)
+	}
 	if config.Profile != "" {
 		os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
 		os.Setenv("AWS_PROFILE", config.Profile)
 	}
-	{
-		if config.AssumeRole != nil {
-			svc := sts.New(session.New())
-			input := &sts.AssumeRoleInput{
-				RoleArn:         aws.String(config.AssumeRole.RoleArn),
-				RoleSessionName: aws.String("TF-PROVIDER-KOPS"),
-			}
-			result, err := svc.AssumeRole(input)
-			if err != nil {
-				return err
-			}
-			os.Setenv("AWS_ACCESS_KEY_ID", *result.Credentials.AccessKeyId)
-			os.Setenv("AWS_SECRET_ACCESS_KEY", *result.Credentials.SecretAccessKey)
-			os.Setenv("AWS_SESSION_TOKEN", *result.Credentials.SessionToken)
+	if config.AssumeRole != nil {
+		svc := sts.New(session.New())
+		input := &sts.AssumeRoleInput{
+			RoleArn:         aws.String(config.AssumeRole.RoleArn),
+			RoleSessionName: aws.String("TF-PROVIDER-KOPS"),
 		}
+		result, err := svc.AssumeRole(input)
+		if err != nil {
+			return err
+		}
+		os.Setenv("AWS_ACCESS_KEY_ID", *result.Credentials.AccessKeyId)
+		os.Setenv("AWS_SECRET_ACCESS_KEY", *result.Credentials.SecretAccessKey)
+		os.Setenv("AWS_SESSION_TOKEN", *result.Credentials.SessionToken)
 	}
 	return nil
 }
