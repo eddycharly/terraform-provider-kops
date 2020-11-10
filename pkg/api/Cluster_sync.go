@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -19,7 +20,6 @@ import (
 	"k8s.io/kops/pkg/kubeconfig"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
-	"k8s.io/kops/pkg/validation"
 	"k8s.io/kops/upup/pkg/fi"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
@@ -283,7 +283,7 @@ func rollingUpdate(name string, clientset simple.Clientset, options RollingUpdat
 	if !needUpdate {
 		return nil
 	}
-	clusterValidator, err := validation.NewClusterValidator(kc, cloud, list, k8sClient)
+	clusterValidator, err := validation.NewClusterValidator(kc, cloud, list, config, k8sClient)
 	if err != nil {
 		return fmt.Errorf("cannot create cluster validator: %v", err)
 	}
@@ -336,7 +336,7 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 	if options.PollInterval != nil {
 		pollInterval = options.PollInterval.Duration
 	}
-	validator, err := validation.NewClusterValidator(kc, cloud, list, k8sClient)
+	validator, err := validation.NewClusterValidator(kc, cloud, list, config, k8sClient)
 	if err != nil {
 		return fmt.Errorf("unexpected error creating validatior: %v", err)
 	}
@@ -345,7 +345,6 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 		if time.Now().After(timeout) {
 			return fmt.Errorf("wait time exceeded during validation")
 		}
-
 		result, err := validator.Validate()
 		if err != nil {
 			consecutive = 0
@@ -353,7 +352,6 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 			time.Sleep(pollInterval)
 			continue
 		}
-
 		if len(result.Failures) == 0 {
 			consecutive++
 			if consecutive < 0 {
