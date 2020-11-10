@@ -66,7 +66,7 @@ terraform {
   required_providers {
     kops = {
       source  = "eddycharly/kops"
-      version = "0.1.0-alpha.8"
+      version = "0.1.0-alpha.9"
     }
   }
 }
@@ -228,6 +228,7 @@ resource "kops_cluster" "cluster" {
 More examples are available in the `/examples` folder:
 - [Basic example](./examples/basic)
 - [Aws profile example](./examples/aws-profile)
+- [Aws assume role](./examples/aws-assume-role)
 - [Bastion example](./examples/bastion)
 
 ## Importing an existing cluster

@@ -38,7 +38,7 @@ install: all
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64/terraform-provider-kops
 
 .PHONY: examples
-examples: example-basic example-aws-profile example-bastion
+examples: example-basic example-aws-profile example-aws-assume-role example-bastion
 
 .PHONY: example-basic
 example-basic: install
@@ -51,6 +51,11 @@ example-aws-profile: install
 	@terraform init ./examples/aws-profile
 	@terraform validate ./examples/aws-profile
 	@terraform plan ./examples/aws-profile
+
+.PHONY: example-aws-assume-role
+example-aws-assume-role: install
+	@terraform init ./examples/aws-assume-role
+	@terraform validate ./examples/aws-assume-role
 
 .PHONY: example-bastion
 example-bastion: install
