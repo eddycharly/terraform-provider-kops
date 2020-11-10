@@ -719,6 +719,7 @@ func main() {
 			required("StateStore"),
 		),
 		generate(api.AwsConfig{}),
+		generate(api.AwsAssumeRole{}),
 		generate(api.Cluster{},
 			required("Name", "AdminSshKey", "CloudProvider", "Subnet", "NetworkID", "Topology", "EtcdCluster", "Networking", "InstanceGroup"),
 			computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
