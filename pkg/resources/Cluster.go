@@ -24,7 +24,7 @@ func Cluster() *schema.Resource {
 
 func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 	cluster := structures.ExpandCluster(d.Get("").(map[string]interface{}))
-	_, err := api.SyncCluster(&cluster, config.Clientset(m))
+	_, err := api.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 
 func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
 	cluster := structures.ExpandCluster(d.Get("").(map[string]interface{}))
-	_, err := api.SyncCluster(&cluster, config.Clientset(m))
+	_, err := api.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	if err != nil {
 		return err
 	}

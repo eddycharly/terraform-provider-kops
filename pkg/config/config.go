@@ -23,6 +23,12 @@ A valid value follows the format s3://<bucket>.
 Trailing slash will be trimmed.`
 )
 
+type config struct {
+	clientset            simple.Clientset
+	rollingUpdateOptions api.RollingUpdateOptions
+	validateOptions      api.ValidateOptions
+}
+
 func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
 	providerConfig := structures.ExpandProviderConfig(d.Get("").(map[string]interface{}))
 	err := initCredentials(providerConfig.Aws)
@@ -36,11 +42,23 @@ func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
 	if !vfs.IsClusterReadable(basePath) {
 		return nil, field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError)
 	}
-	return vfsclientset.NewVFSClientset(basePath), nil
+	return &config{
+		clientset:            vfsclientset.NewVFSClientset(basePath),
+		rollingUpdateOptions: providerConfig.RollingUpdateOptions,
+		validateOptions:      providerConfig.ValidateOptions,
+	}, nil
 }
 
 func Clientset(in interface{}) simple.Clientset {
-	return in.(simple.Clientset)
+	return in.(*config).clientset
+}
+
+func RollingUpdateOptions(in interface{}) api.RollingUpdateOptions {
+	return in.(*config).rollingUpdateOptions
+}
+
+func ValidateOptions(in interface{}) api.ValidateOptions {
+	return in.(*config).validateOptions
 }
 
 func initCredentials(config *api.AwsConfig) error {

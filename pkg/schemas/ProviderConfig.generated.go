@@ -7,8 +7,10 @@ import (
 func ProviderConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"state_store": RequiredString(),
-			"aws":         OptionalStruct(AwsConfig()),
+			"state_store":            RequiredString(),
+			"aws":                    OptionalStruct(AwsConfig()),
+			"rolling_update_options": OptionalStruct(RollingUpdateOptions()),
+			"validate_options":       OptionalStruct(ValidateOptions()),
 		},
 	}
 }

@@ -11,7 +11,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/klog"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/cloudinstances"
@@ -78,39 +77,33 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	return cluster, nil
 }
 
-func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error) {
-	log.Println("ClusterExists")
+func SyncCluster(cluster *Cluster, clientset simple.Clientset, ruo RollingUpdateOptions, vo ValidateOptions) (*Cluster, error) {
 	exists, err := ClusterExists(cluster.Name, clientset)
 	if err != nil {
 		return nil, err
 	}
 	needsRollingUpdate := false
 	needsValidateCluster := true
-	log.Println("toKopsCluster")
 	kc, _ := toKopsCluster(cluster)
 	if err := cloudup.PerformAssignments(kc); err != nil {
 		return nil, err
 	}
 	if exists {
-		log.Println("UpdateCluster")
 		kc, err = clientset.UpdateCluster(context.Background(), kc, nil)
 		if err != nil {
 			return nil, err
 		}
 		needsRollingUpdate = true
 	} else {
-		log.Println("CreateCluster")
 		kc, err = clientset.CreateCluster(context.Background(), kc)
 		if err != nil {
 			return nil, err
 		}
-		log.Println("GetCluster")
 		kc, err = clientset.GetCluster(context.Background(), cluster.Name)
 		if err != nil {
 			return nil, err
 		}
 	}
-	log.Println("SSHCredentialStore")
 	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
 	if err != nil {
 		return nil, err
@@ -135,13 +128,13 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset) (*Cluster, error)
 		return nil, err
 	}
 	if needsRollingUpdate {
-		err = rollingUpdate(cluster.Name, clientset, cluster.RollingUpdateOptions)
+		err = rollingUpdate(cluster.Name, clientset, ruo)
 		if err != nil {
 			return nil, err
 		}
 	}
 	if needsValidateCluster {
-		err = validateCluster(cluster.Name, clientset, cluster.ValidateOptions)
+		err = validateCluster(cluster.Name, clientset, vo)
 		if err != nil {
 			return nil, err
 		}
@@ -310,21 +303,17 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 	if err != nil {
 		return err
 	}
-
 	list, err := clientSet.InstanceGroupsFor(kc).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		return fmt.Errorf("cannot get InstanceGroups for %q: %v", kc.ObjectMeta.Name, err)
 	}
-
 	var instanceGroups []kops.InstanceGroup
 	for _, ig := range list.Items {
 		instanceGroups = append(instanceGroups, ig)
 	}
-
 	if len(instanceGroups) == 0 {
 		return fmt.Errorf("no InstanceGroup objects found")
 	}
-
 	configBuilder, err := getKubeConfig(name, clientSet)
 	if err != nil {
 		return err
@@ -337,7 +326,6 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 	if err != nil {
 		return fmt.Errorf("cannot build kubernetes api client for %q: %v", kc.Name, err)
 	}
-
 	timeout := time.Now()
 	if options.Timeout != nil {
 		timeout = timeout.Add(options.Timeout.Duration)
@@ -352,7 +340,6 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 	if err != nil {
 		return fmt.Errorf("unexpected error creating validatior: %v", err)
 	}
-
 	consecutive := 0
 	for {
 		if time.Now().After(timeout) {
@@ -362,7 +349,7 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 		result, err := validator.Validate()
 		if err != nil {
 			consecutive = 0
-			klog.Warningf("(will retry): unexpected error during validation: %v", err)
+			log.Printf("(will retry): unexpected error during validation: %v\n", err)
 			time.Sleep(pollInterval)
 			continue
 		}
@@ -370,7 +357,7 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 		if len(result.Failures) == 0 {
 			consecutive++
 			if consecutive < 0 {
-				klog.Infof("(will retry): cluster passed validation %d consecutive times", consecutive)
+				log.Printf("(will retry): cluster passed validation %d consecutive times\n", consecutive)
 				time.Sleep(pollInterval)
 				continue
 			} else {
@@ -378,7 +365,7 @@ func validateCluster(name string, clientSet simple.Clientset, options ValidateOp
 			}
 		} else {
 			if consecutive == 0 {
-				klog.Warningf("(will retry): cluster not yet healthy")
+				log.Println("(will retry): cluster not yet healthy")
 				time.Sleep(pollInterval)
 				continue
 			}

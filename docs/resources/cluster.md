@@ -69,8 +69,6 @@ The following arguments are supported:
 - `rolling_update` - (Optional) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.
 - `instance_group` - (Required) - List([instance_group](#instance_group)) - InstanceGroup defines the list of instance groups making the cluster.
 - `kube_config` - (Computed) - [kube_config](#kube_config) - KubeConfig holds the necessary information to connect to the cluster.
-- `rolling_update_options` - (Optional) - [rolling_update_options](#rolling_update_options) - RollingUpdateOptions contains the options used when doing a cluster rolling update.
-- `validate_options` - (Optional) - [validate_options](#validate_options) - ValidateOptions contains the options used when validating the cluster.
 
 ## Nested resources
 
@@ -1280,30 +1278,4 @@ The following arguments are supported:
 - `ca_cert` - (Computed) - String
 - `client_cert` - (Computed) - String
 - `client_key` - (Computed) - String
-
-### rolling_update_options
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `skip` - (Optional) - Bool
-- `master_interval` - (Optional) - Duration
-- `node_interval` - (Optional) - Duration
-- `bastion_interval` - (Optional) - Duration
-- `fail_on_drain_error` - (Optional) - Bool
-- `fail_on_validate` - (Optional) - Bool
-- `post_drain_delay` - (Optional) - Duration
-- `validation_timeout` - (Optional) - Duration
-- `validate_count` - (Optional) - Int
-
-### validate_options
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `skip` - (Optional) - Bool
-- `timeout` - (Optional) - Duration
-- `poll_interval` - (Optional) - Duration
 

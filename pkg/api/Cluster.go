@@ -153,10 +153,6 @@ type Cluster struct {
 	InstanceGroup []*InstanceGroup
 	// KubeConfig holds the necessary information to connect to the cluster
 	KubeConfig *KubeConfig
-	// RollingUpdateOptions contains the options used when doing a cluster rolling update
-	RollingUpdateOptions RollingUpdateOptions
-	// ValidateOptions contains the options used when validating the cluster
-	ValidateOptions ValidateOptions
 }
 
 func fromKopsCluster(cluster *kops.Cluster, kubeConfig *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
