@@ -29,21 +29,25 @@ func ExpandAmazonVPCNetworkingSpec(in map[string]interface{}) kops.AmazonVPCNetw
 	}
 }
 
+func FlattenAmazonVPCNetworkingSpecInto(in kops.AmazonVPCNetworkingSpec, out map[string]interface{}) {
+	out["image_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ImageName)
+	out["env"] = func(in []kops.EnvVar) interface{} {
+		return func(in []kops.EnvVar) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.EnvVar) interface{} {
+					return FlattenEnvVar(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Env)
+}
+
 func FlattenAmazonVPCNetworkingSpec(in kops.AmazonVPCNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"image_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ImageName),
-		"env": func(in []kops.EnvVar) interface{} {
-			return func(in []kops.EnvVar) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in kops.EnvVar) interface{} {
-						return FlattenEnvVar(in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.Env),
-	}
+	out := map[string]interface{}{}
+	FlattenAmazonVPCNetworkingSpecInto(in, out)
+	return out
 }

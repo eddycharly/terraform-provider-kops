@@ -15,10 +15,14 @@ func ExpandDNSSpec(in map[string]interface{}) kops.DNSSpec {
 	}
 }
 
+func FlattenDNSSpecInto(in kops.DNSSpec, out map[string]interface{}) {
+	out["type"] = func(in kops.DNSType) interface{} {
+		return FlattenString(string(in))
+	}(in.Type)
+}
+
 func FlattenDNSSpec(in kops.DNSSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"type": func(in kops.DNSType) interface{} {
-			return FlattenString(string(in))
-		}(in.Type),
-	}
+	out := map[string]interface{}{}
+	FlattenDNSSpecInto(in, out)
+	return out
 }

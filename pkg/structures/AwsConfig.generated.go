@@ -36,25 +36,29 @@ func ExpandAwsConfig(in map[string]interface{}) api.AwsConfig {
 	}
 }
 
+func FlattenAwsConfigInto(in api.AwsConfig, out map[string]interface{}) {
+	out["profile"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Profile)
+	out["region"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Region)
+	out["assume_role"] = func(in *api.AwsAssumeRole) interface{} {
+		return func(in *api.AwsAssumeRole) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in api.AwsAssumeRole) interface{} {
+				return func(in api.AwsAssumeRole) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAwsAssumeRole(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AssumeRole)
+}
+
 func FlattenAwsConfig(in api.AwsConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"profile": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Profile),
-		"region": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Region),
-		"assume_role": func(in *api.AwsAssumeRole) interface{} {
-			return func(in *api.AwsAssumeRole) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in api.AwsAssumeRole) interface{} {
-					return func(in api.AwsAssumeRole) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAwsAssumeRole(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.AssumeRole),
-	}
+	out := map[string]interface{}{}
+	FlattenAwsConfigInto(in, out)
+	return out
 }

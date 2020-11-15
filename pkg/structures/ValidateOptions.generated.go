@@ -50,30 +50,34 @@ func ExpandValidateOptions(in map[string]interface{}) api.ValidateOptions {
 	}
 }
 
+func FlattenValidateOptionsInto(in api.ValidateOptions, out map[string]interface{}) {
+	out["skip"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Skip)
+	out["timeout"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.Timeout)
+	out["poll_interval"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.PollInterval)
+}
+
 func FlattenValidateOptions(in api.ValidateOptions) map[string]interface{} {
-	return map[string]interface{}{
-		"skip": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Skip),
-		"timeout": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.Timeout),
-		"poll_interval": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.PollInterval),
-	}
+	out := map[string]interface{}{}
+	FlattenValidateOptionsInto(in, out)
+	return out
 }

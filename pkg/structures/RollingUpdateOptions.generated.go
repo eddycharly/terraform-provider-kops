@@ -120,76 +120,80 @@ func ExpandRollingUpdateOptions(in map[string]interface{}) api.RollingUpdateOpti
 	}
 }
 
+func FlattenRollingUpdateOptionsInto(in api.RollingUpdateOptions, out map[string]interface{}) {
+	out["skip"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Skip)
+	out["master_interval"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.MasterInterval)
+	out["node_interval"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.NodeInterval)
+	out["bastion_interval"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.BastionInterval)
+	out["fail_on_drain_error"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.FailOnDrainError)
+	out["fail_on_validate"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.FailOnValidate)
+	out["post_drain_delay"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.PostDrainDelay)
+	out["validation_timeout"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.ValidationTimeout)
+	out["validate_count"] = func(in *int) interface{} {
+		return func(in *int) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ValidateCount)
+}
+
 func FlattenRollingUpdateOptions(in api.RollingUpdateOptions) map[string]interface{} {
-	return map[string]interface{}{
-		"skip": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Skip),
-		"master_interval": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.MasterInterval),
-		"node_interval": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.NodeInterval),
-		"bastion_interval": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.BastionInterval),
-		"fail_on_drain_error": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.FailOnDrainError),
-		"fail_on_validate": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.FailOnValidate),
-		"post_drain_delay": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.PostDrainDelay),
-		"validation_timeout": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.ValidationTimeout),
-		"validate_count": func(in *int) interface{} {
-			return func(in *int) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ValidateCount),
-	}
+	out := map[string]interface{}{}
+	FlattenRollingUpdateOptionsInto(in, out)
+	return out
 }

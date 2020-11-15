@@ -71,46 +71,50 @@ func ExpandVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 	}
 }
 
+func FlattenVolumeSpecInto(in kops.VolumeSpec, out map[string]interface{}) {
+	out["delete_on_termination"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.DeleteOnTermination)
+	out["device"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Device)
+	out["encrypted"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.Encrypted)
+	out["iops"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.Iops)
+	out["size"] = func(in int64) interface{} {
+		return FlattenInt(int(in))
+	}(in.Size)
+	out["type"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Type)
+}
+
 func FlattenVolumeSpec(in kops.VolumeSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"delete_on_termination": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.DeleteOnTermination),
-		"device": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Device),
-		"encrypted": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.Encrypted),
-		"iops": func(in *int64) interface{} {
-			return func(in *int64) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int64) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.Iops),
-		"size": func(in int64) interface{} {
-			return FlattenInt(int(in))
-		}(in.Size),
-		"type": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Type),
-	}
+	out := map[string]interface{}{}
+	FlattenVolumeSpecInto(in, out)
+	return out
 }

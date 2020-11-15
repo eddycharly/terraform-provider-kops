@@ -114,77 +114,81 @@ func ExpandCloudControllerManagerConfig(in map[string]interface{}) kops.CloudCon
 	}
 }
 
+func FlattenCloudControllerManagerConfigInto(in kops.CloudControllerManagerConfig, out map[string]interface{}) {
+	out["master"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Master)
+	out["log_level"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.LogLevel)
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["cloud_provider"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CloudProvider)
+	out["cluster_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterName)
+	out["cluster_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterCIDR)
+	out["allocate_node_cidrs"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AllocateNodeCIDRs)
+	out["configure_cloud_routes"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.ConfigureCloudRoutes)
+	out["cidr_allocator_type"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.CIDRAllocatorType)
+	out["leader_election"] = func(in *kops.LeaderElectionConfiguration) interface{} {
+		return func(in *kops.LeaderElectionConfiguration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.LeaderElectionConfiguration) interface{} {
+				return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
+					return []map[string]interface{}{FlattenLeaderElectionConfiguration(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElection)
+	out["use_service_account_credentials"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.UseServiceAccountCredentials)
+}
+
 func FlattenCloudControllerManagerConfig(in kops.CloudControllerManagerConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"master": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Master),
-		"log_level": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.LogLevel),
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"cloud_provider": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CloudProvider),
-		"cluster_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClusterName),
-		"cluster_cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClusterCIDR),
-		"allocate_node_cidrs": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.AllocateNodeCIDRs),
-		"configure_cloud_routes": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.ConfigureCloudRoutes),
-		"cidr_allocator_type": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.CIDRAllocatorType),
-		"leader_election": func(in *kops.LeaderElectionConfiguration) interface{} {
-			return func(in *kops.LeaderElectionConfiguration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.LeaderElectionConfiguration) interface{} {
-					return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
-						return []map[string]interface{}{FlattenLeaderElectionConfiguration(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElection),
-		"use_service_account_credentials": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.UseServiceAccountCredentials),
-	}
+	out := map[string]interface{}{}
+	FlattenCloudControllerManagerConfigInto(in, out)
+	return out
 }

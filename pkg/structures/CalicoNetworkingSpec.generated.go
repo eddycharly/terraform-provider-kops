@@ -86,66 +86,70 @@ func ExpandCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNetworking
 	}
 }
 
+func FlattenCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out map[string]interface{}) {
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPURequest)
+	out["cross_subnet"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.CrossSubnet)
+	out["log_severity_screen"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogSeverityScreen)
+	out["mtu"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MTU)
+	out["prometheus_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PrometheusMetricsEnabled)
+	out["prometheus_metrics_port"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.PrometheusMetricsPort)
+	out["prometheus_go_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PrometheusGoMetricsEnabled)
+	out["prometheus_process_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PrometheusProcessMetricsEnabled)
+	out["major_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MajorVersion)
+	out["iptables_backend"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IptablesBackend)
+	out["ip_ip_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IPIPMode)
+	out["typha_prometheus_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.TyphaPrometheusMetricsEnabled)
+	out["typha_prometheus_metrics_port"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.TyphaPrometheusMetricsPort)
+	out["typha_replicas"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.TyphaReplicas)
+	out["wireguard_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.WireguardEnabled)
+}
+
 func FlattenCalicoNetworkingSpec(in kops.CalicoNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"cpu_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.CPURequest),
-		"cross_subnet": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.CrossSubnet),
-		"log_severity_screen": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LogSeverityScreen),
-		"mtu": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.MTU),
-		"prometheus_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PrometheusMetricsEnabled),
-		"prometheus_metrics_port": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.PrometheusMetricsPort),
-		"prometheus_go_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PrometheusGoMetricsEnabled),
-		"prometheus_process_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PrometheusProcessMetricsEnabled),
-		"major_version": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.MajorVersion),
-		"iptables_backend": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.IptablesBackend),
-		"ip_ip_mode": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.IPIPMode),
-		"typha_prometheus_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.TyphaPrometheusMetricsEnabled),
-		"typha_prometheus_metrics_port": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.TyphaPrometheusMetricsPort),
-		"typha_replicas": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.TyphaReplicas),
-		"wireguard_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.WireguardEnabled),
-	}
+	out := map[string]interface{}{}
+	FlattenCalicoNetworkingSpecInto(in, out)
+	return out
 }

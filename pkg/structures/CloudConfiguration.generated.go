@@ -259,162 +259,166 @@ func ExpandCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration
 	}
 }
 
+func FlattenCloudConfigurationInto(in kops.CloudConfiguration, out map[string]interface{}) {
+	out["multizone"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.Multizone)
+	out["node_tags"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.NodeTags)
+	out["node_instance_prefix"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.NodeInstancePrefix)
+	out["gce_service_account"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.GCEServiceAccount)
+	out["disable_security_group_ingress"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.DisableSecurityGroupIngress)
+	out["elb_security_group"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ElbSecurityGroup)
+	out["v_sphere_username"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSphereUsername)
+	out["v_sphere_password"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSpherePassword)
+	out["v_sphere_server"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSphereServer)
+	out["v_sphere_datacenter"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSphereDatacenter)
+	out["v_sphere_resource_pool"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSphereResourcePool)
+	out["v_sphere_datastore"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSphereDatastore)
+	out["v_sphere_core_dns_server"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.VSphereCoreDNSServer)
+	out["spotinst_product"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.SpotinstProduct)
+	out["spotinst_orientation"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.SpotinstOrientation)
+	out["openstack"] = func(in *kops.OpenstackConfiguration) interface{} {
+		return func(in *kops.OpenstackConfiguration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackConfiguration) interface{} {
+				return func(in kops.OpenstackConfiguration) []map[string]interface{} {
+					return []map[string]interface{}{FlattenOpenstackConfiguration(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Openstack)
+}
+
 func FlattenCloudConfiguration(in kops.CloudConfiguration) map[string]interface{} {
-	return map[string]interface{}{
-		"multizone": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.Multizone),
-		"node_tags": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.NodeTags),
-		"node_instance_prefix": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.NodeInstancePrefix),
-		"gce_service_account": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.GCEServiceAccount),
-		"disable_security_group_ingress": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.DisableSecurityGroupIngress),
-		"elb_security_group": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ElbSecurityGroup),
-		"v_sphere_username": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSphereUsername),
-		"v_sphere_password": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSpherePassword),
-		"v_sphere_server": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSphereServer),
-		"v_sphere_datacenter": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSphereDatacenter),
-		"v_sphere_resource_pool": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSphereResourcePool),
-		"v_sphere_datastore": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSphereDatastore),
-		"v_sphere_core_dns_server": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.VSphereCoreDNSServer),
-		"spotinst_product": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.SpotinstProduct),
-		"spotinst_orientation": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.SpotinstOrientation),
-		"openstack": func(in *kops.OpenstackConfiguration) interface{} {
-			return func(in *kops.OpenstackConfiguration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.OpenstackConfiguration) interface{} {
-					return func(in kops.OpenstackConfiguration) []map[string]interface{} {
-						return []map[string]interface{}{FlattenOpenstackConfiguration(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Openstack),
-	}
+	out := map[string]interface{}{}
+	FlattenCloudConfigurationInto(in, out)
+	return out
 }

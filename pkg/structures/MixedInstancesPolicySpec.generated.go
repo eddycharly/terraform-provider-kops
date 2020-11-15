@@ -103,66 +103,70 @@ func ExpandMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstanc
 	}
 }
 
+func FlattenMixedInstancesPolicySpecInto(in kops.MixedInstancesPolicySpec, out map[string]interface{}) {
+	out["instances"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Instances)
+	out["on_demand_allocation_strategy"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OnDemandAllocationStrategy)
+	out["on_demand_base"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.OnDemandBase)
+	out["on_demand_above_base"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.OnDemandAboveBase)
+	out["spot_allocation_strategy"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.SpotAllocationStrategy)
+	out["spot_instance_pools"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.SpotInstancePools)
+}
+
 func FlattenMixedInstancesPolicySpec(in kops.MixedInstancesPolicySpec) map[string]interface{} {
-	return map[string]interface{}{
-		"instances": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Instances),
-		"on_demand_allocation_strategy": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OnDemandAllocationStrategy),
-		"on_demand_base": func(in *int64) interface{} {
-			return func(in *int64) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int64) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.OnDemandBase),
-		"on_demand_above_base": func(in *int64) interface{} {
-			return func(in *int64) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int64) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.OnDemandAboveBase),
-		"spot_allocation_strategy": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.SpotAllocationStrategy),
-		"spot_instance_pools": func(in *int64) interface{} {
-			return func(in *int64) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int64) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.SpotInstancePools),
-	}
+	out := map[string]interface{}{}
+	FlattenMixedInstancesPolicySpecInto(in, out)
+	return out
 }

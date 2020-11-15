@@ -11,6 +11,11 @@ func ExpandDNSAccessSpec(in map[string]interface{}) kops.DNSAccessSpec {
 	return kops.DNSAccessSpec{}
 }
 
+func FlattenDNSAccessSpecInto(in kops.DNSAccessSpec, out map[string]interface{}) {
+}
+
 func FlattenDNSAccessSpec(in kops.DNSAccessSpec) map[string]interface{} {
-	return map[string]interface{}{}
+	out := map[string]interface{}{}
+	FlattenDNSAccessSpecInto(in, out)
+	return out
 }

@@ -69,58 +69,62 @@ func ExpandHookSpec(in map[string]interface{}) kops.HookSpec {
 	}
 }
 
+func FlattenHookSpecInto(in kops.HookSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Name)
+	out["disabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Disabled)
+	out["roles"] = func(in []kops.InstanceGroupRole) interface{} {
+		return func(in []kops.InstanceGroupRole) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Roles)
+	out["requires"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Requires)
+	out["before"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Before)
+	out["exec_container"] = func(in *kops.ExecContainerAction) interface{} {
+		return func(in *kops.ExecContainerAction) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ExecContainerAction) interface{} {
+				return func(in kops.ExecContainerAction) []map[string]interface{} {
+					return []map[string]interface{}{FlattenExecContainerAction(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.ExecContainer)
+	out["manifest"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Manifest)
+	out["use_raw_manifest"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.UseRawManifest)
+}
+
 func FlattenHookSpec(in kops.HookSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"disabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Disabled),
-		"roles": func(in []kops.InstanceGroupRole) interface{} {
-			return func(in []kops.InstanceGroupRole) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Roles),
-		"requires": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Requires),
-		"before": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Before),
-		"exec_container": func(in *kops.ExecContainerAction) interface{} {
-			return func(in *kops.ExecContainerAction) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.ExecContainerAction) interface{} {
-					return func(in kops.ExecContainerAction) []map[string]interface{} {
-						return []map[string]interface{}{FlattenExecContainerAction(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.ExecContainer),
-		"manifest": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Manifest),
-		"use_raw_manifest": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.UseRawManifest),
-	}
+	out := map[string]interface{}{}
+	FlattenHookSpecInto(in, out)
+	return out
 }

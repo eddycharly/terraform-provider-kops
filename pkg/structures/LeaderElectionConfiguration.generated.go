@@ -127,77 +127,81 @@ func ExpandLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderEle
 	}
 }
 
+func FlattenLeaderElectionConfigurationInto(in kops.LeaderElectionConfiguration, out map[string]interface{}) {
+	out["leader_elect"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.LeaderElect)
+	out["leader_elect_lease_duration"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElectLeaseDuration)
+	out["leader_elect_renew_deadline_duration"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElectRenewDeadlineDuration)
+	out["leader_elect_resource_lock"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.LeaderElectResourceLock)
+	out["leader_elect_resource_name"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.LeaderElectResourceName)
+	out["leader_elect_resource_namespace"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.LeaderElectResourceNamespace)
+	out["leader_elect_retry_period"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElectRetryPeriod)
+}
+
 func FlattenLeaderElectionConfiguration(in kops.LeaderElectionConfiguration) map[string]interface{} {
-	return map[string]interface{}{
-		"leader_elect": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.LeaderElect),
-		"leader_elect_lease_duration": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElectLeaseDuration),
-		"leader_elect_renew_deadline_duration": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElectRenewDeadlineDuration),
-		"leader_elect_resource_lock": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.LeaderElectResourceLock),
-		"leader_elect_resource_name": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.LeaderElectResourceName),
-		"leader_elect_resource_namespace": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.LeaderElectResourceNamespace),
-		"leader_elect_retry_period": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElectRetryPeriod),
-	}
+	out := map[string]interface{}{}
+	FlattenLeaderElectionConfigurationInto(in, out)
+	return out
 }

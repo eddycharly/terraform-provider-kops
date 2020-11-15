@@ -46,27 +46,31 @@ func ExpandLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 	}
 }
 
+func FlattenLoadBalancerInto(in kops.LoadBalancer, out map[string]interface{}) {
+	out["load_balancer_name"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.LoadBalancerName)
+	out["target_group_arn"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.TargetGroupARN)
+}
+
 func FlattenLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
-	return map[string]interface{}{
-		"load_balancer_name": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.LoadBalancerName),
-		"target_group_arn": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.TargetGroupARN),
-	}
+	out := map[string]interface{}{}
+	FlattenLoadBalancerInto(in, out)
+	return out
 }

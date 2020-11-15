@@ -158,107 +158,111 @@ func ExpandEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
 	}
 }
 
-func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"provider": func(in kops.EtcdProviderType) interface{} {
-			return FlattenString(string(in))
-		}(in.Provider),
-		"members": func(in []*kops.EtcdMemberSpec) interface{} {
-			return func(in []*kops.EtcdMemberSpec) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in *kops.EtcdMemberSpec) interface{} {
-						if in == nil {
-							return nil
-						}
+func FlattenEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Name)
+	out["provider"] = func(in kops.EtcdProviderType) interface{} {
+		return FlattenString(string(in))
+	}(in.Provider)
+	out["members"] = func(in []*kops.EtcdMemberSpec) interface{} {
+		return func(in []*kops.EtcdMemberSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in *kops.EtcdMemberSpec) interface{} {
+					if in == nil {
+						return nil
+					}
+					return func(in kops.EtcdMemberSpec) interface{} {
 						return func(in kops.EtcdMemberSpec) interface{} {
-							return func(in kops.EtcdMemberSpec) interface{} {
-								return FlattenEtcdMemberSpec(in)
-							}(in)
-						}(*in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.Members),
-		"enable_etcd_tls": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableEtcdTLS),
-		"enable_tls_auth": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableTLSAuth),
-		"version": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Version),
-		"leader_election_timeout": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElectionTimeout),
-		"heartbeat_interval": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.HeartbeatInterval),
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"backups": func(in *kops.EtcdBackupSpec) interface{} {
-			return func(in *kops.EtcdBackupSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.EtcdBackupSpec) interface{} {
-					return func(in kops.EtcdBackupSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenEtcdBackupSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Backups),
-		"manager": func(in *kops.EtcdManagerSpec) interface{} {
-			return func(in *kops.EtcdManagerSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.EtcdManagerSpec) interface{} {
-					return func(in kops.EtcdManagerSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenEtcdManagerSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Manager),
-		"memory_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.MemoryRequest),
-		"cpu_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.CPURequest),
-	}
+							return FlattenEtcdMemberSpec(in)
+						}(in)
+					}(*in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Members)
+	out["enable_etcd_tls"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableEtcdTLS)
+	out["enable_tls_auth"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableTLSAuth)
+	out["version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Version)
+	out["leader_election_timeout"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElectionTimeout)
+	out["heartbeat_interval"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HeartbeatInterval)
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["backups"] = func(in *kops.EtcdBackupSpec) interface{} {
+		return func(in *kops.EtcdBackupSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.EtcdBackupSpec) interface{} {
+				return func(in kops.EtcdBackupSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenEtcdBackupSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Backups)
+	out["manager"] = func(in *kops.EtcdManagerSpec) interface{} {
+		return func(in *kops.EtcdManagerSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.EtcdManagerSpec) interface{} {
+				return func(in kops.EtcdManagerSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenEtcdManagerSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Manager)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPURequest)
+}
+
+func FlattenEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenEtcdClusterSpecInto(in, out)
+	return out
 }

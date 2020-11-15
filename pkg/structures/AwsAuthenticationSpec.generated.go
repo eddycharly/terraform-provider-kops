@@ -82,50 +82,54 @@ func ExpandAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticati
 	}
 }
 
+func FlattenAwsAuthenticationSpecInto(in kops.AwsAuthenticationSpec, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPURequest)
+	out["memory_limit"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.MemoryLimit)
+	out["cpu_limit"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPULimit)
+}
+
 func FlattenAwsAuthenticationSpec(in kops.AwsAuthenticationSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"memory_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.MemoryRequest),
-		"cpu_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.CPURequest),
-		"memory_limit": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.MemoryLimit),
-		"cpu_limit": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.CPULimit),
-	}
+	out := map[string]interface{}{}
+	FlattenAwsAuthenticationSpecInto(in, out)
+	return out
 }

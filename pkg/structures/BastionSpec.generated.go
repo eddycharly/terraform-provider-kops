@@ -51,32 +51,36 @@ func ExpandBastionSpec(in map[string]interface{}) kops.BastionSpec {
 	}
 }
 
+func FlattenBastionSpecInto(in kops.BastionSpec, out map[string]interface{}) {
+	out["bastion_public_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BastionPublicName)
+	out["idle_timeout_seconds"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.IdleTimeoutSeconds)
+	out["load_balancer"] = func(in *kops.BastionLoadBalancerSpec) interface{} {
+		return func(in *kops.BastionLoadBalancerSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.BastionLoadBalancerSpec) interface{} {
+				return func(in kops.BastionLoadBalancerSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenBastionLoadBalancerSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.LoadBalancer)
+}
+
 func FlattenBastionSpec(in kops.BastionSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"bastion_public_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.BastionPublicName),
-		"idle_timeout_seconds": func(in *int64) interface{} {
-			return func(in *int64) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int64) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.IdleTimeoutSeconds),
-		"load_balancer": func(in *kops.BastionLoadBalancerSpec) interface{} {
-			return func(in *kops.BastionLoadBalancerSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.BastionLoadBalancerSpec) interface{} {
-					return func(in kops.BastionLoadBalancerSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenBastionLoadBalancerSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.LoadBalancer),
-	}
+	out := map[string]interface{}{}
+	FlattenBastionSpecInto(in, out)
+	return out
 }

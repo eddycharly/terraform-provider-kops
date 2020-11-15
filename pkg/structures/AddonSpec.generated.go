@@ -15,10 +15,14 @@ func ExpandAddonSpec(in map[string]interface{}) kops.AddonSpec {
 	}
 }
 
+func FlattenAddonSpecInto(in kops.AddonSpec, out map[string]interface{}) {
+	out["manifest"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Manifest)
+}
+
 func FlattenAddonSpec(in kops.AddonSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"manifest": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Manifest),
-	}
+	out := map[string]interface{}{}
+	FlattenAddonSpecInto(in, out)
+	return out
 }

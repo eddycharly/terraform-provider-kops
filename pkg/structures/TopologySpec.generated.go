@@ -54,37 +54,41 @@ func ExpandTopologySpec(in map[string]interface{}) kops.TopologySpec {
 	}
 }
 
+func FlattenTopologySpecInto(in kops.TopologySpec, out map[string]interface{}) {
+	out["masters"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Masters)
+	out["nodes"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Nodes)
+	out["bastion"] = func(in *kops.BastionSpec) interface{} {
+		return func(in *kops.BastionSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.BastionSpec) interface{} {
+				return func(in kops.BastionSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenBastionSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Bastion)
+	out["dns"] = func(in *kops.DNSSpec) interface{} {
+		return func(in *kops.DNSSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.DNSSpec) interface{} {
+				return func(in kops.DNSSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDNSSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.DNS)
+}
+
 func FlattenTopologySpec(in kops.TopologySpec) map[string]interface{} {
-	return map[string]interface{}{
-		"masters": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Masters),
-		"nodes": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Nodes),
-		"bastion": func(in *kops.BastionSpec) interface{} {
-			return func(in *kops.BastionSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.BastionSpec) interface{} {
-					return func(in kops.BastionSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenBastionSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Bastion),
-		"dns": func(in *kops.DNSSpec) interface{} {
-			return func(in *kops.DNSSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.DNSSpec) interface{} {
-					return func(in kops.DNSSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenDNSSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.DNS),
-	}
+	out := map[string]interface{}{}
+	FlattenTopologySpecInto(in, out)
+	return out
 }

@@ -29,21 +29,25 @@ func ExpandEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSpec {
 	}
 }
 
+func FlattenEtcdManagerSpecInto(in kops.EtcdManagerSpec, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["env"] = func(in []kops.EnvVar) interface{} {
+		return func(in []kops.EnvVar) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.EnvVar) interface{} {
+					return FlattenEnvVar(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Env)
+}
+
 func FlattenEtcdManagerSpec(in kops.EtcdManagerSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"env": func(in []kops.EnvVar) interface{} {
-			return func(in []kops.EnvVar) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in kops.EnvVar) interface{} {
-						return FlattenEnvVar(in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.Env),
-	}
+	out := map[string]interface{}{}
+	FlattenEtcdManagerSpecInto(in, out)
+	return out
 }

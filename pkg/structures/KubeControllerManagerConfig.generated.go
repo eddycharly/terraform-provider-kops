@@ -558,369 +558,373 @@ func ExpandKubeControllerManagerConfig(in map[string]interface{}) kops.KubeContr
 	}
 }
 
+func FlattenKubeControllerManagerConfigInto(in kops.KubeControllerManagerConfig, out map[string]interface{}) {
+	out["master"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Master)
+	out["log_level"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.LogLevel)
+	out["service_account_private_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ServiceAccountPrivateKeyFile)
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["cloud_provider"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CloudProvider)
+	out["cluster_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterName)
+	out["cluster_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterCIDR)
+	out["allocate_node_cidrs"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AllocateNodeCIDRs)
+	out["node_cidr_mask_size"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.NodeCIDRMaskSize)
+	out["configure_cloud_routes"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.ConfigureCloudRoutes)
+	out["controllers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Controllers)
+	out["cidr_allocator_type"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.CIDRAllocatorType)
+	out["root_ca_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.RootCAFile)
+	out["leader_election"] = func(in *kops.LeaderElectionConfiguration) interface{} {
+		return func(in *kops.LeaderElectionConfiguration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.LeaderElectionConfiguration) interface{} {
+				return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
+					return []map[string]interface{}{FlattenLeaderElectionConfiguration(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElection)
+	out["attach_detach_reconcile_sync_period"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.AttachDetachReconcileSyncPeriod)
+	out["disable_attach_detach_reconcile_sync"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.DisableAttachDetachReconcileSync)
+	out["terminated_pod_gc_threshold"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.TerminatedPodGCThreshold)
+	out["node_monitor_period"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.NodeMonitorPeriod)
+	out["node_monitor_grace_period"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.NodeMonitorGracePeriod)
+	out["pod_eviction_timeout"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.PodEvictionTimeout)
+	out["use_service_account_credentials"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.UseServiceAccountCredentials)
+	out["horizontal_pod_autoscaler_sync_period"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerSyncPeriod)
+	out["horizontal_pod_autoscaler_downscale_delay"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerDownscaleDelay)
+	out["horizontal_pod_autoscaler_downscale_stabilization"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerDownscaleStabilization)
+	out["horizontal_pod_autoscaler_upscale_delay"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerUpscaleDelay)
+	out["horizontal_pod_autoscaler_tolerance"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerTolerance)
+	out["horizontal_pod_autoscaler_use_rest_clients"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerUseRestClients)
+	out["experimental_cluster_signing_duration"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.ExperimentalClusterSigningDuration)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.FeatureGates)
+	out["tls_cipher_suites"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.TLSCipherSuites)
+	out["tls_min_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSMinVersion)
+	out["min_resync_period"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MinResyncPeriod)
+	out["kube_api_qps"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.KubeAPIQPS)
+	out["kube_api_burst"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.KubeAPIBurst)
+	out["concurrent_deployment_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentDeploymentSyncs)
+	out["concurrent_endpoint_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentEndpointSyncs)
+	out["concurrent_namespace_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentNamespaceSyncs)
+	out["concurrent_replicaset_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentReplicasetSyncs)
+	out["concurrent_service_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentServiceSyncs)
+	out["concurrent_resource_quota_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentResourceQuotaSyncs)
+	out["concurrent_serviceaccount_token_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentServiceaccountTokenSyncs)
+	out["concurrent_rc_syncs"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ConcurrentRcSyncs)
+	out["enable_profiling"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableProfiling)
+}
+
 func FlattenKubeControllerManagerConfig(in kops.KubeControllerManagerConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"master": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Master),
-		"log_level": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.LogLevel),
-		"service_account_private_key_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ServiceAccountPrivateKeyFile),
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"cloud_provider": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CloudProvider),
-		"cluster_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClusterName),
-		"cluster_cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClusterCIDR),
-		"allocate_node_cidrs": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.AllocateNodeCIDRs),
-		"node_cidr_mask_size": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.NodeCIDRMaskSize),
-		"configure_cloud_routes": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.ConfigureCloudRoutes),
-		"controllers": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Controllers),
-		"cidr_allocator_type": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.CIDRAllocatorType),
-		"root_ca_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.RootCAFile),
-		"leader_election": func(in *kops.LeaderElectionConfiguration) interface{} {
-			return func(in *kops.LeaderElectionConfiguration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.LeaderElectionConfiguration) interface{} {
-					return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
-						return []map[string]interface{}{FlattenLeaderElectionConfiguration(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElection),
-		"attach_detach_reconcile_sync_period": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.AttachDetachReconcileSyncPeriod),
-		"disable_attach_detach_reconcile_sync": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.DisableAttachDetachReconcileSync),
-		"terminated_pod_gc_threshold": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.TerminatedPodGCThreshold),
-		"node_monitor_period": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.NodeMonitorPeriod),
-		"node_monitor_grace_period": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.NodeMonitorGracePeriod),
-		"pod_eviction_timeout": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.PodEvictionTimeout),
-		"use_service_account_credentials": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.UseServiceAccountCredentials),
-		"horizontal_pod_autoscaler_sync_period": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.HorizontalPodAutoscalerSyncPeriod),
-		"horizontal_pod_autoscaler_downscale_delay": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.HorizontalPodAutoscalerDownscaleDelay),
-		"horizontal_pod_autoscaler_downscale_stabilization": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.HorizontalPodAutoscalerDownscaleStabilization),
-		"horizontal_pod_autoscaler_upscale_delay": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.HorizontalPodAutoscalerUpscaleDelay),
-		"horizontal_pod_autoscaler_tolerance": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.HorizontalPodAutoscalerTolerance),
-		"horizontal_pod_autoscaler_use_rest_clients": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.HorizontalPodAutoscalerUseRestClients),
-		"experimental_cluster_signing_duration": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.ExperimentalClusterSigningDuration),
-		"feature_gates": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.FeatureGates),
-		"tls_cipher_suites": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.TLSCipherSuites),
-		"tls_min_version": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.TLSMinVersion),
-		"min_resync_period": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.MinResyncPeriod),
-		"kube_api_qps": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.KubeAPIQPS),
-		"kube_api_burst": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.KubeAPIBurst),
-		"concurrent_deployment_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentDeploymentSyncs),
-		"concurrent_endpoint_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentEndpointSyncs),
-		"concurrent_namespace_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentNamespaceSyncs),
-		"concurrent_replicaset_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentReplicasetSyncs),
-		"concurrent_service_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentServiceSyncs),
-		"concurrent_resource_quota_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentResourceQuotaSyncs),
-		"concurrent_serviceaccount_token_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentServiceaccountTokenSyncs),
-		"concurrent_rc_syncs": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.ConcurrentRcSyncs),
-		"enable_profiling": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EnableProfiling),
-	}
+	out := map[string]interface{}{}
+	FlattenKubeControllerManagerConfigInto(in, out)
+	return out
 }

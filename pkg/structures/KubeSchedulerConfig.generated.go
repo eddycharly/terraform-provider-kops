@@ -121,83 +121,87 @@ func ExpandKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConf
 	}
 }
 
+func FlattenKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out map[string]interface{}) {
+	out["master"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Master)
+	out["log_level"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.LogLevel)
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["leader_election"] = func(in *kops.LeaderElectionConfiguration) interface{} {
+		return func(in *kops.LeaderElectionConfiguration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.LeaderElectionConfiguration) interface{} {
+				return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
+					return []map[string]interface{}{FlattenLeaderElectionConfiguration(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.LeaderElection)
+	out["use_policy_config_map"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.UsePolicyConfigMap)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.FeatureGates)
+	out["max_persistent_volumes"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MaxPersistentVolumes)
+	out["qps"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.Qps)
+	out["burst"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.Burst)
+	out["enable_profiling"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableProfiling)
+}
+
 func FlattenKubeSchedulerConfig(in kops.KubeSchedulerConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"master": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Master),
-		"log_level": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.LogLevel),
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"leader_election": func(in *kops.LeaderElectionConfiguration) interface{} {
-			return func(in *kops.LeaderElectionConfiguration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.LeaderElectionConfiguration) interface{} {
-					return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
-						return []map[string]interface{}{FlattenLeaderElectionConfiguration(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.LeaderElection),
-		"use_policy_config_map": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.UsePolicyConfigMap),
-		"feature_gates": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.FeatureGates),
-		"max_persistent_volumes": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.MaxPersistentVolumes),
-		"qps": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.Qps),
-		"burst": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.Burst),
-		"enable_profiling": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EnableProfiling),
-	}
+	out := map[string]interface{}{}
+	FlattenKubeSchedulerConfigInto(in, out)
+	return out
 }

@@ -36,23 +36,27 @@ func ExpandFlannelNetworkingSpec(in map[string]interface{}) kops.FlannelNetworki
 	}
 }
 
+func FlattenFlannelNetworkingSpecInto(in kops.FlannelNetworkingSpec, out map[string]interface{}) {
+	out["backend"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Backend)
+	out["disable_tx_checksum_offloading"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableTxChecksumOffloading)
+	out["iptables_resync_seconds"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.IptablesResyncSeconds)
+}
+
 func FlattenFlannelNetworkingSpec(in kops.FlannelNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"backend": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Backend),
-		"disable_tx_checksum_offloading": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableTxChecksumOffloading),
-		"iptables_resync_seconds": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.IptablesResyncSeconds),
-	}
+	out := map[string]interface{}{}
+	FlattenFlannelNetworkingSpecInto(in, out)
+	return out
 }

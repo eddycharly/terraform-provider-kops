@@ -21,16 +21,20 @@ func ExpandUserData(in map[string]interface{}) kops.UserData {
 	}
 }
 
+func FlattenUserDataInto(in kops.UserData, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Name)
+	out["type"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Type)
+	out["content"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Content)
+}
+
 func FlattenUserData(in kops.UserData) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"type": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Type),
-		"content": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Content),
-	}
+	out := map[string]interface{}{}
+	FlattenUserDataInto(in, out)
+	return out
 }

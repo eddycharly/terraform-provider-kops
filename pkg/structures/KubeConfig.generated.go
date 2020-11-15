@@ -39,34 +39,38 @@ func ExpandKubeConfig(in map[string]interface{}) api.KubeConfig {
 	}
 }
 
+func FlattenKubeConfigInto(in api.KubeConfig, out map[string]interface{}) {
+	out["server"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Server)
+	out["context"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Context)
+	out["namespace"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Namespace)
+	out["kube_bearer_token"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubeBearerToken)
+	out["kube_user"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubeUser)
+	out["kube_password"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubePassword)
+	out["ca_cert"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CaCert)
+	out["client_cert"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClientCert)
+	out["client_key"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClientKey)
+}
+
 func FlattenKubeConfig(in api.KubeConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"server": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Server),
-		"context": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Context),
-		"namespace": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Namespace),
-		"kube_bearer_token": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeBearerToken),
-		"kube_user": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeUser),
-		"kube_password": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubePassword),
-		"ca_cert": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CaCert),
-		"client_cert": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClientCert),
-		"client_key": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClientKey),
-	}
+	out := map[string]interface{}{}
+	FlattenKubeConfigInto(in, out)
+	return out
 }

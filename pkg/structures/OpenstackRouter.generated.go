@@ -62,37 +62,41 @@ func ExpandOpenstackRouter(in map[string]interface{}) kops.OpenstackRouter {
 	}
 }
 
+func FlattenOpenstackRouterInto(in kops.OpenstackRouter, out map[string]interface{}) {
+	out["external_network"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ExternalNetwork)
+	out["dns_servers"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.DNSServers)
+	out["external_subnet"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ExternalSubnet)
+}
+
 func FlattenOpenstackRouter(in kops.OpenstackRouter) map[string]interface{} {
-	return map[string]interface{}{
-		"external_network": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ExternalNetwork),
-		"dns_servers": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.DNSServers),
-		"external_subnet": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ExternalSubnet),
-	}
+	out := map[string]interface{}{}
+	FlattenOpenstackRouterInto(in, out)
+	return out
 }

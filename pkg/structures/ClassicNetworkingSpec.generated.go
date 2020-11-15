@@ -11,6 +11,11 @@ func ExpandClassicNetworkingSpec(in map[string]interface{}) kops.ClassicNetworki
 	return kops.ClassicNetworkingSpec{}
 }
 
+func FlattenClassicNetworkingSpecInto(in kops.ClassicNetworkingSpec, out map[string]interface{}) {
+}
+
 func FlattenClassicNetworkingSpec(in kops.ClassicNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{}
+	out := map[string]interface{}{}
+	FlattenClassicNetworkingSpecInto(in, out)
+	return out
 }

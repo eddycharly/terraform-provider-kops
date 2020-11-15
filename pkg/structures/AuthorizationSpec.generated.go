@@ -48,31 +48,35 @@ func ExpandAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {
 	}
 }
 
+func FlattenAuthorizationSpecInto(in kops.AuthorizationSpec, out map[string]interface{}) {
+	out["always_allow"] = func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
+		return func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AlwaysAllowAuthorizationSpec) interface{} {
+				return func(in kops.AlwaysAllowAuthorizationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAlwaysAllowAuthorizationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AlwaysAllow)
+	out["rbac"] = func(in *kops.RBACAuthorizationSpec) interface{} {
+		return func(in *kops.RBACAuthorizationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.RBACAuthorizationSpec) interface{} {
+				return func(in kops.RBACAuthorizationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenRBACAuthorizationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.RBAC)
+}
+
 func FlattenAuthorizationSpec(in kops.AuthorizationSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"always_allow": func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
-			return func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.AlwaysAllowAuthorizationSpec) interface{} {
-					return func(in kops.AlwaysAllowAuthorizationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAlwaysAllowAuthorizationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.AlwaysAllow),
-		"rbac": func(in *kops.RBACAuthorizationSpec) interface{} {
-			return func(in *kops.RBACAuthorizationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.RBACAuthorizationSpec) interface{} {
-					return func(in kops.RBACAuthorizationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenRBACAuthorizationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.RBAC),
-	}
+	out := map[string]interface{}{}
+	FlattenAuthorizationSpecInto(in, out)
+	return out
 }

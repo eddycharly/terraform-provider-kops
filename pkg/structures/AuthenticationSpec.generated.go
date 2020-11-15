@@ -48,31 +48,35 @@ func ExpandAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec
 	}
 }
 
+func FlattenAuthenticationSpecInto(in kops.AuthenticationSpec, out map[string]interface{}) {
+	out["kopeio"] = func(in *kops.KopeioAuthenticationSpec) interface{} {
+		return func(in *kops.KopeioAuthenticationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KopeioAuthenticationSpec) interface{} {
+				return func(in kops.KopeioAuthenticationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKopeioAuthenticationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Kopeio)
+	out["aws"] = func(in *kops.AwsAuthenticationSpec) interface{} {
+		return func(in *kops.AwsAuthenticationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AwsAuthenticationSpec) interface{} {
+				return func(in kops.AwsAuthenticationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAwsAuthenticationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Aws)
+}
+
 func FlattenAuthenticationSpec(in kops.AuthenticationSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"kopeio": func(in *kops.KopeioAuthenticationSpec) interface{} {
-			return func(in *kops.KopeioAuthenticationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KopeioAuthenticationSpec) interface{} {
-					return func(in kops.KopeioAuthenticationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKopeioAuthenticationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Kopeio),
-		"aws": func(in *kops.AwsAuthenticationSpec) interface{} {
-			return func(in *kops.AwsAuthenticationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.AwsAuthenticationSpec) interface{} {
-					return func(in kops.AwsAuthenticationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAwsAuthenticationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Aws),
-	}
+	out := map[string]interface{}{}
+	FlattenAuthenticationSpecInto(in, out)
+	return out
 }

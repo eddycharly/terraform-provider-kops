@@ -25,17 +25,21 @@ func ExpandIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSpec {
 	}
 }
 
+func FlattenIAMProfileSpecInto(in kops.IAMProfileSpec, out map[string]interface{}) {
+	out["profile"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Profile)
+}
+
 func FlattenIAMProfileSpec(in kops.IAMProfileSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"profile": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.Profile),
-	}
+	out := map[string]interface{}{}
+	FlattenIAMProfileSpecInto(in, out)
+	return out
 }

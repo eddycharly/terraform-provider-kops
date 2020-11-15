@@ -86,66 +86,70 @@ func ExpandCanalNetworkingSpec(in map[string]interface{}) kops.CanalNetworkingSp
 	}
 }
 
+func FlattenCanalNetworkingSpecInto(in kops.CanalNetworkingSpec, out map[string]interface{}) {
+	out["chain_insert_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ChainInsertMode)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPURequest)
+	out["default_endpoint_to_host_action"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.DefaultEndpointToHostAction)
+	out["disable_flannel_forward_rules"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableFlannelForwardRules)
+	out["disable_tx_checksum_offloading"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableTxChecksumOffloading)
+	out["iptables_backend"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IptablesBackend)
+	out["log_severity_sys"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogSeveritySys)
+	out["mtu"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MTU)
+	out["prometheus_go_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PrometheusGoMetricsEnabled)
+	out["prometheus_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PrometheusMetricsEnabled)
+	out["prometheus_metrics_port"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.PrometheusMetricsPort)
+	out["prometheus_process_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PrometheusProcessMetricsEnabled)
+	out["typha_prometheus_metrics_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.TyphaPrometheusMetricsEnabled)
+	out["typha_prometheus_metrics_port"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.TyphaPrometheusMetricsPort)
+	out["typha_replicas"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.TyphaReplicas)
+}
+
 func FlattenCanalNetworkingSpec(in kops.CanalNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"chain_insert_mode": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ChainInsertMode),
-		"cpu_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.CPURequest),
-		"default_endpoint_to_host_action": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.DefaultEndpointToHostAction),
-		"disable_flannel_forward_rules": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableFlannelForwardRules),
-		"disable_tx_checksum_offloading": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableTxChecksumOffloading),
-		"iptables_backend": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.IptablesBackend),
-		"log_severity_sys": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LogSeveritySys),
-		"mtu": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.MTU),
-		"prometheus_go_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PrometheusGoMetricsEnabled),
-		"prometheus_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PrometheusMetricsEnabled),
-		"prometheus_metrics_port": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.PrometheusMetricsPort),
-		"prometheus_process_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PrometheusProcessMetricsEnabled),
-		"typha_prometheus_metrics_enabled": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.TyphaPrometheusMetricsEnabled),
-		"typha_prometheus_metrics_port": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.TyphaPrometheusMetricsPort),
-		"typha_replicas": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.TyphaReplicas),
-	}
+	out := map[string]interface{}{}
+	FlattenCanalNetworkingSpecInto(in, out)
+	return out
 }

@@ -62,37 +62,41 @@ func ExpandOpenstackMonitor(in map[string]interface{}) kops.OpenstackMonitor {
 	}
 }
 
+func FlattenOpenstackMonitorInto(in kops.OpenstackMonitor, out map[string]interface{}) {
+	out["delay"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Delay)
+	out["timeout"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Timeout)
+	out["max_retries"] = func(in *int) interface{} {
+		return func(in *int) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MaxRetries)
+}
+
 func FlattenOpenstackMonitor(in kops.OpenstackMonitor) map[string]interface{} {
-	return map[string]interface{}{
-		"delay": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.Delay),
-		"timeout": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.Timeout),
-		"max_retries": func(in *int) interface{} {
-			return func(in *int) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.MaxRetries),
-	}
+	out := map[string]interface{}{}
+	FlattenOpenstackMonitorInto(in, out)
+	return out
 }

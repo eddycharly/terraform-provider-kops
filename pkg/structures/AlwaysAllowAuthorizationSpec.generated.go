@@ -11,6 +11,11 @@ func ExpandAlwaysAllowAuthorizationSpec(in map[string]interface{}) kops.AlwaysAl
 	return kops.AlwaysAllowAuthorizationSpec{}
 }
 
+func FlattenAlwaysAllowAuthorizationSpecInto(in kops.AlwaysAllowAuthorizationSpec, out map[string]interface{}) {
+}
+
 func FlattenAlwaysAllowAuthorizationSpec(in kops.AlwaysAllowAuthorizationSpec) map[string]interface{} {
-	return map[string]interface{}{}
+	out := map[string]interface{}{}
+	FlattenAlwaysAllowAuthorizationSpecInto(in, out)
+	return out
 }

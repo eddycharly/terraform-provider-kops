@@ -36,23 +36,27 @@ func ExpandExternalDNSConfig(in map[string]interface{}) kops.ExternalDNSConfig {
 	}
 }
 
+func FlattenExternalDNSConfigInto(in kops.ExternalDNSConfig, out map[string]interface{}) {
+	out["disable"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Disable)
+	out["watch_ingress"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.WatchIngress)
+	out["watch_namespace"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.WatchNamespace)
+}
+
 func FlattenExternalDNSConfig(in kops.ExternalDNSConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"disable": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Disable),
-		"watch_ingress": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.WatchIngress),
-		"watch_namespace": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.WatchNamespace),
-	}
+	out := map[string]interface{}{}
+	FlattenExternalDNSConfigInto(in, out)
+	return out
 }

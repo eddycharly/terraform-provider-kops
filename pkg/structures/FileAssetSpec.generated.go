@@ -33,28 +33,32 @@ func ExpandFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec {
 	}
 }
 
+func FlattenFileAssetSpecInto(in kops.FileAssetSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Name)
+	out["path"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Path)
+	out["roles"] = func(in []kops.InstanceGroupRole) interface{} {
+		return func(in []kops.InstanceGroupRole) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Roles)
+	out["content"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Content)
+	out["is_base_64"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.IsBase64)
+}
+
 func FlattenFileAssetSpec(in kops.FileAssetSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"path": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Path),
-		"roles": func(in []kops.InstanceGroupRole) interface{} {
-			return func(in []kops.InstanceGroupRole) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Roles),
-		"content": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Content),
-		"is_base_64": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.IsBase64),
-	}
+	out := map[string]interface{}{}
+	FlattenFileAssetSpecInto(in, out)
+	return out
 }

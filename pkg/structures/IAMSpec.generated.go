@@ -18,13 +18,17 @@ func ExpandIAMSpec(in map[string]interface{}) kops.IAMSpec {
 	}
 }
 
+func FlattenIAMSpecInto(in kops.IAMSpec, out map[string]interface{}) {
+	out["legacy"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Legacy)
+	out["allow_container_registry"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.AllowContainerRegistry)
+}
+
 func FlattenIAMSpec(in kops.IAMSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"legacy": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Legacy),
-		"allow_container_registry": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.AllowContainerRegistry),
-	}
+	out := map[string]interface{}{}
+	FlattenIAMSpecInto(in, out)
+	return out
 }

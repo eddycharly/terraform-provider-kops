@@ -11,6 +11,11 @@ func ExpandGCENetworkingSpec(in map[string]interface{}) kops.GCENetworkingSpec {
 	return kops.GCENetworkingSpec{}
 }
 
+func FlattenGCENetworkingSpecInto(in kops.GCENetworkingSpec, out map[string]interface{}) {
+}
+
 func FlattenGCENetworkingSpec(in kops.GCENetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{}
+	out := map[string]interface{}{}
+	FlattenGCENetworkingSpecInto(in, out)
+	return out
 }

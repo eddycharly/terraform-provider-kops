@@ -36,31 +36,35 @@ func ExpandExecContainerAction(in map[string]interface{}) kops.ExecContainerActi
 	}
 }
 
+func FlattenExecContainerActionInto(in kops.ExecContainerAction, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["command"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Command)
+	out["environment"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Environment)
+}
+
 func FlattenExecContainerAction(in kops.ExecContainerAction) map[string]interface{} {
-	return map[string]interface{}{
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"command": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Command),
-		"environment": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.Environment),
-	}
+	out := map[string]interface{}{}
+	FlattenExecContainerActionInto(in, out)
+	return out
 }

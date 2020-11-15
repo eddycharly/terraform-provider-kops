@@ -1020,729 +1020,733 @@ func ExpandKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPIServerConf
 	}
 }
 
+func FlattenKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["disable_basic_auth"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.DisableBasicAuth)
+	out["log_level"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.LogLevel)
+	out["cloud_provider"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CloudProvider)
+	out["secure_port"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.SecurePort)
+	out["insecure_port"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.InsecurePort)
+	out["address"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Address)
+	out["bind_address"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BindAddress)
+	out["insecure_bind_address"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.InsecureBindAddress)
+	out["enable_bootstrap_auth_token"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableBootstrapAuthToken)
+	out["enable_aggregator_routing"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableAggregatorRouting)
+	out["admission_control"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AdmissionControl)
+	out["append_admission_plugins"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AppendAdmissionPlugins)
+	out["enable_admission_plugins"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.EnableAdmissionPlugins)
+	out["disable_admission_plugins"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.DisableAdmissionPlugins)
+	out["admission_control_config_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AdmissionControlConfigFile)
+	out["service_cluster_ip_range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ServiceClusterIPRange)
+	out["service_node_port_range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ServiceNodePortRange)
+	out["etcd_servers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.EtcdServers)
+	out["etcd_servers_overrides"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.EtcdServersOverrides)
+	out["etcd_ca_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.EtcdCAFile)
+	out["etcd_cert_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.EtcdCertFile)
+	out["etcd_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.EtcdKeyFile)
+	out["basic_auth_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BasicAuthFile)
+	out["client_ca_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClientCAFile)
+	out["tls_cert_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSCertFile)
+	out["tls_private_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSPrivateKeyFile)
+	out["tls_cipher_suites"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.TLSCipherSuites)
+	out["tls_min_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSMinVersion)
+	out["token_auth_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TokenAuthFile)
+	out["allow_privileged"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AllowPrivileged)
+	out["api_server_count"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.APIServerCount)
+	out["runtime_config"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.RuntimeConfig)
+	out["kubelet_client_certificate"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubeletClientCertificate)
+	out["kubelet_certificate_authority"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubeletCertificateAuthority)
+	out["kubelet_client_key"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubeletClientKey)
+	out["anonymous_auth"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AnonymousAuth)
+	out["kubelet_preferred_address_types"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.KubeletPreferredAddressTypes)
+	out["storage_backend"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.StorageBackend)
+	out["oidc_username_claim"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCUsernameClaim)
+	out["oidc_username_prefix"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCUsernamePrefix)
+	out["oidc_groups_claim"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCGroupsClaim)
+	out["oidc_groups_prefix"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCGroupsPrefix)
+	out["oidc_issuer_url"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCIssuerURL)
+	out["oidc_client_id"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCClientID)
+	out["oidc_required_claim"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.OIDCRequiredClaim)
+	out["oidcca_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OIDCCAFile)
+	out["proxy_client_cert_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ProxyClientCertFile)
+	out["proxy_client_key_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ProxyClientKeyFile)
+	out["audit_log_format"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.AuditLogFormat)
+	out["audit_log_path"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.AuditLogPath)
+	out["audit_log_max_age"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.AuditLogMaxAge)
+	out["audit_log_max_backups"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.AuditLogMaxBackups)
+	out["audit_log_max_size"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.AuditLogMaxSize)
+	out["audit_policy_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuditPolicyFile)
+	out["audit_webhook_batch_buffer_size"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.AuditWebhookBatchBufferSize)
+	out["audit_webhook_batch_max_size"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.AuditWebhookBatchMaxSize)
+	out["audit_webhook_batch_max_wait"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.AuditWebhookBatchMaxWait)
+	out["audit_webhook_batch_throttle_burst"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.AuditWebhookBatchThrottleBurst)
+	out["audit_webhook_batch_throttle_enable"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AuditWebhookBatchThrottleEnable)
+	out["audit_webhook_batch_throttle_qps"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.AuditWebhookBatchThrottleQps)
+	out["audit_webhook_config_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuditWebhookConfigFile)
+	out["audit_webhook_initial_backoff"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.AuditWebhookInitialBackoff)
+	out["audit_webhook_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuditWebhookMode)
+	out["authentication_token_webhook_config_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.AuthenticationTokenWebhookConfigFile)
+	out["authentication_token_webhook_cache_ttl"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.AuthenticationTokenWebhookCacheTTL)
+	out["authorization_mode"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.AuthorizationMode)
+	out["authorization_webhook_config_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.AuthorizationWebhookConfigFile)
+	out["authorization_webhook_cache_authorized_ttl"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.AuthorizationWebhookCacheAuthorizedTTL)
+	out["authorization_webhook_cache_unauthorized_ttl"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.AuthorizationWebhookCacheUnauthorizedTTL)
+	out["authorization_rbac_super_user"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.AuthorizationRBACSuperUser)
+	out["encryption_provider_config"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.EncryptionProviderConfig)
+	out["experimental_encryption_provider_config"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ExperimentalEncryptionProviderConfig)
+	out["requestheader_username_headers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.RequestheaderUsernameHeaders)
+	out["requestheader_group_headers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.RequestheaderGroupHeaders)
+	out["requestheader_extra_header_prefixes"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.RequestheaderExtraHeaderPrefixes)
+	out["requestheader_client_ca_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.RequestheaderClientCAFile)
+	out["requestheader_allowed_names"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.RequestheaderAllowedNames)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.FeatureGates)
+	out["max_requests_inflight"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.MaxRequestsInflight)
+	out["max_mutating_requests_inflight"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.MaxMutatingRequestsInflight)
+	out["http_2max_streams_per_connection"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.HTTP2MaxStreamsPerConnection)
+	out["etcd_quorum_read"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EtcdQuorumRead)
+	out["request_timeout"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.RequestTimeout)
+	out["min_request_timeout"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MinRequestTimeout)
+	out["target_ram_mb"] = func(in int32) interface{} {
+		return FlattenInt(int(in))
+	}(in.TargetRamMb)
+	out["service_account_key_file"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.ServiceAccountKeyFile)
+	out["service_account_signing_key_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ServiceAccountSigningKeyFile)
+	out["service_account_issuer"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ServiceAccountIssuer)
+	out["service_account_jwksuri"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ServiceAccountJWKSURI)
+	out["api_audiences"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.APIAudiences)
+	out["cpu_request"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CPURequest)
+	out["event_ttl"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.EventTTL)
+	out["audit_dynamic_configuration"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AuditDynamicConfiguration)
+	out["enable_profiling"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableProfiling)
+}
+
 func FlattenKubeAPIServerConfig(in kops.KubeAPIServerConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"disable_basic_auth": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.DisableBasicAuth),
-		"log_level": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.LogLevel),
-		"cloud_provider": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CloudProvider),
-		"secure_port": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.SecurePort),
-		"insecure_port": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.InsecurePort),
-		"address": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Address),
-		"bind_address": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.BindAddress),
-		"insecure_bind_address": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.InsecureBindAddress),
-		"enable_bootstrap_auth_token": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EnableBootstrapAuthToken),
-		"enable_aggregator_routing": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EnableAggregatorRouting),
-		"admission_control": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.AdmissionControl),
-		"append_admission_plugins": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.AppendAdmissionPlugins),
-		"enable_admission_plugins": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.EnableAdmissionPlugins),
-		"disable_admission_plugins": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.DisableAdmissionPlugins),
-		"admission_control_config_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AdmissionControlConfigFile),
-		"service_cluster_ip_range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ServiceClusterIPRange),
-		"service_node_port_range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ServiceNodePortRange),
-		"etcd_servers": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.EtcdServers),
-		"etcd_servers_overrides": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.EtcdServersOverrides),
-		"etcd_ca_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.EtcdCAFile),
-		"etcd_cert_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.EtcdCertFile),
-		"etcd_key_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.EtcdKeyFile),
-		"basic_auth_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.BasicAuthFile),
-		"client_ca_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClientCAFile),
-		"tls_cert_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.TLSCertFile),
-		"tls_private_key_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.TLSPrivateKeyFile),
-		"tls_cipher_suites": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.TLSCipherSuites),
-		"tls_min_version": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.TLSMinVersion),
-		"token_auth_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.TokenAuthFile),
-		"allow_privileged": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.AllowPrivileged),
-		"api_server_count": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.APIServerCount),
-		"runtime_config": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.RuntimeConfig),
-		"kubelet_client_certificate": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeletClientCertificate),
-		"kubelet_certificate_authority": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeletCertificateAuthority),
-		"kubelet_client_key": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubeletClientKey),
-		"anonymous_auth": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.AnonymousAuth),
-		"kubelet_preferred_address_types": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.KubeletPreferredAddressTypes),
-		"storage_backend": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.StorageBackend),
-		"oidc_username_claim": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCUsernameClaim),
-		"oidc_username_prefix": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCUsernamePrefix),
-		"oidc_groups_claim": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCGroupsClaim),
-		"oidc_groups_prefix": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCGroupsPrefix),
-		"oidc_issuer_url": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCIssuerURL),
-		"oidc_client_id": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCClientID),
-		"oidc_required_claim": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.OIDCRequiredClaim),
-		"oidcca_file": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OIDCCAFile),
-		"proxy_client_cert_file": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ProxyClientCertFile),
-		"proxy_client_key_file": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ProxyClientKeyFile),
-		"audit_log_format": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.AuditLogFormat),
-		"audit_log_path": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.AuditLogPath),
-		"audit_log_max_age": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.AuditLogMaxAge),
-		"audit_log_max_backups": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.AuditLogMaxBackups),
-		"audit_log_max_size": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.AuditLogMaxSize),
-		"audit_policy_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AuditPolicyFile),
-		"audit_webhook_batch_buffer_size": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.AuditWebhookBatchBufferSize),
-		"audit_webhook_batch_max_size": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.AuditWebhookBatchMaxSize),
-		"audit_webhook_batch_max_wait": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.AuditWebhookBatchMaxWait),
-		"audit_webhook_batch_throttle_burst": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.AuditWebhookBatchThrottleBurst),
-		"audit_webhook_batch_throttle_enable": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.AuditWebhookBatchThrottleEnable),
-		"audit_webhook_batch_throttle_qps": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.AuditWebhookBatchThrottleQps),
-		"audit_webhook_config_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AuditWebhookConfigFile),
-		"audit_webhook_initial_backoff": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.AuditWebhookInitialBackoff),
-		"audit_webhook_mode": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AuditWebhookMode),
-		"authentication_token_webhook_config_file": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.AuthenticationTokenWebhookConfigFile),
-		"authentication_token_webhook_cache_ttl": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.AuthenticationTokenWebhookCacheTTL),
-		"authorization_mode": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.AuthorizationMode),
-		"authorization_webhook_config_file": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.AuthorizationWebhookConfigFile),
-		"authorization_webhook_cache_authorized_ttl": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.AuthorizationWebhookCacheAuthorizedTTL),
-		"authorization_webhook_cache_unauthorized_ttl": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.AuthorizationWebhookCacheUnauthorizedTTL),
-		"authorization_rbac_super_user": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.AuthorizationRBACSuperUser),
-		"encryption_provider_config": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.EncryptionProviderConfig),
-		"experimental_encryption_provider_config": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ExperimentalEncryptionProviderConfig),
-		"requestheader_username_headers": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.RequestheaderUsernameHeaders),
-		"requestheader_group_headers": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.RequestheaderGroupHeaders),
-		"requestheader_extra_header_prefixes": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.RequestheaderExtraHeaderPrefixes),
-		"requestheader_client_ca_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.RequestheaderClientCAFile),
-		"requestheader_allowed_names": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.RequestheaderAllowedNames),
-		"feature_gates": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.FeatureGates),
-		"max_requests_inflight": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.MaxRequestsInflight),
-		"max_mutating_requests_inflight": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.MaxMutatingRequestsInflight),
-		"http_2max_streams_per_connection": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.HTTP2MaxStreamsPerConnection),
-		"etcd_quorum_read": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EtcdQuorumRead),
-		"request_timeout": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.RequestTimeout),
-		"min_request_timeout": func(in *int32) interface{} {
-			return func(in *int32) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int32) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.MinRequestTimeout),
-		"target_ram_mb": func(in int32) interface{} {
-			return FlattenInt(int(in))
-		}(in.TargetRamMb),
-		"service_account_key_file": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.ServiceAccountKeyFile),
-		"service_account_signing_key_file": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ServiceAccountSigningKeyFile),
-		"service_account_issuer": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ServiceAccountIssuer),
-		"service_account_jwksuri": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ServiceAccountJWKSURI),
-		"api_audiences": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.APIAudiences),
-		"cpu_request": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CPURequest),
-		"event_ttl": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.EventTTL),
-		"audit_dynamic_configuration": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.AuditDynamicConfiguration),
-		"enable_profiling": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EnableProfiling),
-	}
+	out := map[string]interface{}{}
+	FlattenKubeAPIServerConfigInto(in, out)
+	return out
 }

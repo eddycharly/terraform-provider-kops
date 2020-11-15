@@ -15,10 +15,14 @@ func ExpandAwsAssumeRole(in map[string]interface{}) api.AwsAssumeRole {
 	}
 }
 
+func FlattenAwsAssumeRoleInto(in api.AwsAssumeRole, out map[string]interface{}) {
+	out["role_arn"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.RoleArn)
+}
+
 func FlattenAwsAssumeRole(in api.AwsAssumeRole) map[string]interface{} {
-	return map[string]interface{}{
-		"role_arn": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.RoleArn),
-	}
+	out := map[string]interface{}{}
+	FlattenAwsAssumeRoleInto(in, out)
+	return out
 }

@@ -11,6 +11,11 @@ func ExpandKopeioNetworkingSpec(in map[string]interface{}) kops.KopeioNetworking
 	return kops.KopeioNetworkingSpec{}
 }
 
+func FlattenKopeioNetworkingSpecInto(in kops.KopeioNetworkingSpec, out map[string]interface{}) {
+}
+
 func FlattenKopeioNetworkingSpec(in kops.KopeioNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{}
+	out := map[string]interface{}{}
+	FlattenKopeioNetworkingSpecInto(in, out)
+	return out
 }

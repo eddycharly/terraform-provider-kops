@@ -62,37 +62,41 @@ func ExpandOpenstackBlockStorageConfig(in map[string]interface{}) kops.Openstack
 	}
 }
 
+func FlattenOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorageConfig, out map[string]interface{}) {
+	out["version"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Version)
+	out["ignore_az"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.IgnoreAZ)
+	out["override_az"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.OverrideAZ)
+}
+
 func FlattenOpenstackBlockStorageConfig(in kops.OpenstackBlockStorageConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"version": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.Version),
-		"ignore_az": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.IgnoreAZ),
-		"override_az": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.OverrideAZ),
-	}
+	out := map[string]interface{}{}
+	FlattenOpenstackBlockStorageConfigInto(in, out)
+	return out
 }

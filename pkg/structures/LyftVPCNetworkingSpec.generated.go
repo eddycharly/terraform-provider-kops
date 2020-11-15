@@ -24,19 +24,23 @@ func ExpandLyftVPCNetworkingSpec(in map[string]interface{}) kops.LyftVPCNetworki
 	}
 }
 
+func FlattenLyftVPCNetworkingSpecInto(in kops.LyftVPCNetworkingSpec, out map[string]interface{}) {
+	out["subnet_tags"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.SubnetTags)
+}
+
 func FlattenLyftVPCNetworkingSpec(in kops.LyftVPCNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"subnet_tags": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.SubnetTags),
-	}
+	out := map[string]interface{}{}
+	FlattenLyftVPCNetworkingSpecInto(in, out)
+	return out
 }

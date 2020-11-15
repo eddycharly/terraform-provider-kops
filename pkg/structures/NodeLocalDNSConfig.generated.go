@@ -66,40 +66,44 @@ func ExpandNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalDNSConfig
 	}
 }
 
+func FlattenNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.Enabled)
+	out["local_ip"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LocalIP)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPURequest)
+}
+
 func FlattenNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"enabled": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.Enabled),
-		"local_ip": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LocalIP),
-		"memory_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.MemoryRequest),
-		"cpu_request": func(in *resource.Quantity) interface{} {
-			return func(in *resource.Quantity) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in resource.Quantity) interface{} {
-					return FlattenQuantity(in)
-				}(*in)
-			}(in)
-		}(in.CPURequest),
-	}
+	out := map[string]interface{}{}
+	FlattenNodeLocalDNSConfigInto(in, out)
+	return out
 }

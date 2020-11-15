@@ -63,37 +63,41 @@ func ExpandRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 	}
 }
 
+func FlattenRollingUpdateInto(in kops.RollingUpdate, out map[string]interface{}) {
+	out["drain_and_terminate"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.DrainAndTerminate)
+	out["max_unavailable"] = func(in *intstr.IntOrString) interface{} {
+		return func(in *intstr.IntOrString) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in intstr.IntOrString) interface{} {
+				return FlattenIntOrString(in)
+			}(*in)
+		}(in)
+	}(in.MaxUnavailable)
+	out["max_surge"] = func(in *intstr.IntOrString) interface{} {
+		return func(in *intstr.IntOrString) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in intstr.IntOrString) interface{} {
+				return FlattenIntOrString(in)
+			}(*in)
+		}(in)
+	}(in.MaxSurge)
+}
+
 func FlattenRollingUpdate(in kops.RollingUpdate) map[string]interface{} {
-	return map[string]interface{}{
-		"drain_and_terminate": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.DrainAndTerminate),
-		"max_unavailable": func(in *intstr.IntOrString) interface{} {
-			return func(in *intstr.IntOrString) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in intstr.IntOrString) interface{} {
-					return FlattenIntOrString(in)
-				}(*in)
-			}(in)
-		}(in.MaxUnavailable),
-		"max_surge": func(in *intstr.IntOrString) interface{} {
-			return func(in *intstr.IntOrString) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in intstr.IntOrString) interface{} {
-					return FlattenIntOrString(in)
-				}(*in)
-			}(in)
-		}(in.MaxSurge),
-	}
+	out := map[string]interface{}{}
+	FlattenRollingUpdateInto(in, out)
+	return out
 }

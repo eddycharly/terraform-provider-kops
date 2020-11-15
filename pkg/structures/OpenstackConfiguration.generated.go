@@ -102,65 +102,69 @@ func ExpandOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfi
 	}
 }
 
+func FlattenOpenstackConfigurationInto(in kops.OpenstackConfiguration, out map[string]interface{}) {
+	out["loadbalancer"] = func(in *kops.OpenstackLoadbalancerConfig) interface{} {
+		return func(in *kops.OpenstackLoadbalancerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackLoadbalancerConfig) interface{} {
+				return func(in kops.OpenstackLoadbalancerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenOpenstackLoadbalancerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Loadbalancer)
+	out["monitor"] = func(in *kops.OpenstackMonitor) interface{} {
+		return func(in *kops.OpenstackMonitor) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackMonitor) interface{} {
+				return func(in kops.OpenstackMonitor) []map[string]interface{} {
+					return []map[string]interface{}{FlattenOpenstackMonitor(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Monitor)
+	out["router"] = func(in *kops.OpenstackRouter) interface{} {
+		return func(in *kops.OpenstackRouter) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackRouter) interface{} {
+				return func(in kops.OpenstackRouter) []map[string]interface{} {
+					return []map[string]interface{}{FlattenOpenstackRouter(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Router)
+	out["block_storage"] = func(in *kops.OpenstackBlockStorageConfig) interface{} {
+		return func(in *kops.OpenstackBlockStorageConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackBlockStorageConfig) interface{} {
+				return func(in kops.OpenstackBlockStorageConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenOpenstackBlockStorageConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.BlockStorage)
+	out["insecure_skip_verify"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.InsecureSkipVerify)
+}
+
 func FlattenOpenstackConfiguration(in kops.OpenstackConfiguration) map[string]interface{} {
-	return map[string]interface{}{
-		"loadbalancer": func(in *kops.OpenstackLoadbalancerConfig) interface{} {
-			return func(in *kops.OpenstackLoadbalancerConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.OpenstackLoadbalancerConfig) interface{} {
-					return func(in kops.OpenstackLoadbalancerConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenOpenstackLoadbalancerConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Loadbalancer),
-		"monitor": func(in *kops.OpenstackMonitor) interface{} {
-			return func(in *kops.OpenstackMonitor) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.OpenstackMonitor) interface{} {
-					return func(in kops.OpenstackMonitor) []map[string]interface{} {
-						return []map[string]interface{}{FlattenOpenstackMonitor(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Monitor),
-		"router": func(in *kops.OpenstackRouter) interface{} {
-			return func(in *kops.OpenstackRouter) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.OpenstackRouter) interface{} {
-					return func(in kops.OpenstackRouter) []map[string]interface{} {
-						return []map[string]interface{}{FlattenOpenstackRouter(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Router),
-		"block_storage": func(in *kops.OpenstackBlockStorageConfig) interface{} {
-			return func(in *kops.OpenstackBlockStorageConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.OpenstackBlockStorageConfig) interface{} {
-					return func(in kops.OpenstackBlockStorageConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenOpenstackBlockStorageConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.BlockStorage),
-		"insecure_skip_verify": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.InsecureSkipVerify),
-	}
+	out := map[string]interface{}{}
+	FlattenOpenstackConfigurationInto(in, out)
+	return out
 }

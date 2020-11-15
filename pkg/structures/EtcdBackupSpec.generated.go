@@ -18,13 +18,17 @@ func ExpandEtcdBackupSpec(in map[string]interface{}) kops.EtcdBackupSpec {
 	}
 }
 
+func FlattenEtcdBackupSpecInto(in kops.EtcdBackupSpec, out map[string]interface{}) {
+	out["backup_store"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BackupStore)
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+}
+
 func FlattenEtcdBackupSpec(in kops.EtcdBackupSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"backup_store": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.BackupStore),
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-	}
+	out := map[string]interface{}{}
+	FlattenEtcdBackupSpecInto(in, out)
+	return out
 }

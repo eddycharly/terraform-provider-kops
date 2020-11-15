@@ -36,31 +36,35 @@ func ExpandClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubnetSpec {
 	}
 }
 
+func FlattenClusterSubnetSpecInto(in kops.ClusterSubnetSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Name)
+	out["cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CIDR)
+	out["zone"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Zone)
+	out["region"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Region)
+	out["provider_id"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ProviderID)
+	out["egress"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Egress)
+	out["type"] = func(in kops.SubnetType) interface{} {
+		return FlattenString(string(in))
+	}(in.Type)
+	out["public_ip"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.PublicIP)
+}
+
 func FlattenClusterSubnetSpec(in kops.ClusterSubnetSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CIDR),
-		"zone": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Zone),
-		"region": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Region),
-		"provider_id": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ProviderID),
-		"egress": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Egress),
-		"type": func(in kops.SubnetType) interface{} {
-			return FlattenString(string(in))
-		}(in.Type),
-		"public_ip": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.PublicIP),
-	}
+	out := map[string]interface{}{}
+	FlattenClusterSubnetSpecInto(in, out)
+	return out
 }

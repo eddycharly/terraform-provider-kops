@@ -279,274 +279,278 @@ func ExpandCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNetworking
 	}
 }
 
+func FlattenCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out map[string]interface{}) {
+	out["version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Version)
+	out["access_log"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AccessLog)
+	out["agent_labels"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AgentLabels)
+	out["agent_prometheus_port"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.AgentPrometheusPort)
+	out["allow_localhost"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AllowLocalhost)
+	out["auto_ipv_6node_routes"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.AutoIpv6NodeRoutes)
+	out["bpf_root"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BPFRoot)
+	out["container_runtime"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.ContainerRuntime)
+	out["container_runtime_endpoint"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.ContainerRuntimeEndpoint)
+	out["debug"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Debug)
+	out["debug_verbose"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.DebugVerbose)
+	out["device"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Device)
+	out["disable_conntrack"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableConntrack)
+	out["disable_ipv_4"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableIpv4)
+	out["disable_k8s_services"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableK8sServices)
+	out["enable_policy"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.EnablePolicy)
+	out["enable_tracing"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableTracing)
+	out["enable_prometheus_metrics"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnablePrometheusMetrics)
+	out["envoy_log"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.EnvoyLog)
+	out["ipv_4cluster_cidr_mask_size"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Ipv4ClusterCIDRMaskSize)
+	out["ipv_4node"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv4Node)
+	out["ipv_4range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv4Range)
+	out["ipv_4service_range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv4ServiceRange)
+	out["ipv_6cluster_alloc_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv6ClusterAllocCidr)
+	out["ipv_6node"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv6Node)
+	out["ipv_6range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv6Range)
+	out["ipv_6service_range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipv6ServiceRange)
+	out["k8s_api_server"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.K8sAPIServer)
+	out["k8s_kubeconfig_path"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.K8sKubeconfigPath)
+	out["keep_bpf_templates"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.KeepBPFTemplates)
+	out["keep_config"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.KeepConfig)
+	out["label_prefix_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LabelPrefixFile)
+	out["labels"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Labels)
+	out["lb"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LB)
+	out["lib_dir"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LibDir)
+	out["log_drivers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.LogDrivers)
+	out["log_opt"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.LogOpt)
+	out["logstash"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Logstash)
+	out["logstash_agent"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogstashAgent)
+	out["logstash_probe_timer"] = func(in uint32) interface{} {
+		return FlattenInt(int(in))
+	}(in.LogstashProbeTimer)
+	out["disable_masquerade"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableMasquerade)
+	out["nat_46range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Nat46Range)
+	out["pprof"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Pprof)
+	out["prefilter_device"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.PrefilterDevice)
+	out["prometheus_serve_addr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.PrometheusServeAddr)
+	out["restore"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Restore)
+	out["single_cluster_route"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.SingleClusterRoute)
+	out["socket_path"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.SocketPath)
+	out["state_dir"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.StateDir)
+	out["trace_payload_len"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.TracePayloadLen)
+	out["tunnel"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Tunnel)
+	out["enable_ipv_6"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableIpv6)
+	out["enable_ipv_4"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableIpv4)
+	out["monitor_aggregation"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MonitorAggregation)
+	out["bpfct_global_tcp_max"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.BPFCTGlobalTCPMax)
+	out["bpfct_global_any_max"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.BPFCTGlobalAnyMax)
+	out["preallocate_bpf_maps"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.PreallocateBPFMaps)
+	out["sidecar_istio_proxy_image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.SidecarIstioProxyImage)
+	out["cluster_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterName)
+	out["to_fqdns_dns_reject_response_code"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ToFqdnsDNSRejectResponseCode)
+	out["to_fqdns_enable_poller"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.ToFqdnsEnablePoller)
+	out["container_runtime_labels"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ContainerRuntimeLabels)
+	out["ipam"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Ipam)
+	out["ip_tables_rules_noinstall"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.IPTablesRulesNoinstall)
+	out["auto_direct_node_routes"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.AutoDirectNodeRoutes)
+	out["enable_node_port"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableNodePort)
+	out["etcd_managed"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EtcdManaged)
+	out["enable_remote_node_identity"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableRemoteNodeIdentity)
+	out["remove_cbr_bridge"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.RemoveCbrBridge)
+	out["restart_pods"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.RestartPods)
+	out["reconfigure_kubelet"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.ReconfigureKubelet)
+	out["node_init_bootstrap_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NodeInitBootstrapFile)
+	out["cni_bin_path"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CniBinPath)
+}
+
 func FlattenCiliumNetworkingSpec(in kops.CiliumNetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"version": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Version),
-		"access_log": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AccessLog),
-		"agent_labels": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.AgentLabels),
-		"agent_prometheus_port": func(in int) interface{} {
-			return FlattenInt(int(in))
-		}(in.AgentPrometheusPort),
-		"allow_localhost": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AllowLocalhost),
-		"auto_ipv_6node_routes": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.AutoIpv6NodeRoutes),
-		"bpf_root": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.BPFRoot),
-		"container_runtime": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.ContainerRuntime),
-		"container_runtime_endpoint": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.ContainerRuntimeEndpoint),
-		"debug": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Debug),
-		"debug_verbose": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.DebugVerbose),
-		"device": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Device),
-		"disable_conntrack": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableConntrack),
-		"disable_ipv_4": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableIpv4),
-		"disable_k8s_services": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableK8sServices),
-		"enable_policy": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.EnablePolicy),
-		"enable_tracing": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableTracing),
-		"enable_prometheus_metrics": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnablePrometheusMetrics),
-		"envoy_log": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.EnvoyLog),
-		"ipv_4cluster_cidr_mask_size": func(in int) interface{} {
-			return FlattenInt(int(in))
-		}(in.Ipv4ClusterCIDRMaskSize),
-		"ipv_4node": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv4Node),
-		"ipv_4range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv4Range),
-		"ipv_4service_range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv4ServiceRange),
-		"ipv_6cluster_alloc_cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv6ClusterAllocCidr),
-		"ipv_6node": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv6Node),
-		"ipv_6range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv6Range),
-		"ipv_6service_range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipv6ServiceRange),
-		"k8s_api_server": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.K8sAPIServer),
-		"k8s_kubeconfig_path": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.K8sKubeconfigPath),
-		"keep_bpf_templates": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.KeepBPFTemplates),
-		"keep_config": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.KeepConfig),
-		"label_prefix_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LabelPrefixFile),
-		"labels": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.Labels),
-		"lb": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LB),
-		"lib_dir": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LibDir),
-		"log_drivers": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.LogDrivers),
-		"log_opt": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.LogOpt),
-		"logstash": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Logstash),
-		"logstash_agent": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.LogstashAgent),
-		"logstash_probe_timer": func(in uint32) interface{} {
-			return FlattenInt(int(in))
-		}(in.LogstashProbeTimer),
-		"disable_masquerade": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableMasquerade),
-		"nat_46range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Nat46Range),
-		"pprof": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Pprof),
-		"prefilter_device": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.PrefilterDevice),
-		"prometheus_serve_addr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.PrometheusServeAddr),
-		"restore": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.Restore),
-		"single_cluster_route": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.SingleClusterRoute),
-		"socket_path": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.SocketPath),
-		"state_dir": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.StateDir),
-		"trace_payload_len": func(in int) interface{} {
-			return FlattenInt(int(in))
-		}(in.TracePayloadLen),
-		"tunnel": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Tunnel),
-		"enable_ipv_6": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableIpv6),
-		"enable_ipv_4": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableIpv4),
-		"monitor_aggregation": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.MonitorAggregation),
-		"bpfct_global_tcp_max": func(in int) interface{} {
-			return FlattenInt(int(in))
-		}(in.BPFCTGlobalTCPMax),
-		"bpfct_global_any_max": func(in int) interface{} {
-			return FlattenInt(int(in))
-		}(in.BPFCTGlobalAnyMax),
-		"preallocate_bpf_maps": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.PreallocateBPFMaps),
-		"sidecar_istio_proxy_image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.SidecarIstioProxyImage),
-		"cluster_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClusterName),
-		"to_fqdns_dns_reject_response_code": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ToFqdnsDNSRejectResponseCode),
-		"to_fqdns_enable_poller": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.ToFqdnsEnablePoller),
-		"container_runtime_labels": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ContainerRuntimeLabels),
-		"ipam": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Ipam),
-		"ip_tables_rules_noinstall": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.IPTablesRulesNoinstall),
-		"auto_direct_node_routes": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.AutoDirectNodeRoutes),
-		"enable_node_port": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableNodePort),
-		"etcd_managed": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EtcdManaged),
-		"enable_remote_node_identity": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.EnableRemoteNodeIdentity),
-		"remove_cbr_bridge": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.RemoveCbrBridge),
-		"restart_pods": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.RestartPods),
-		"reconfigure_kubelet": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.ReconfigureKubelet),
-		"node_init_bootstrap_file": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.NodeInitBootstrapFile),
-		"cni_bin_path": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CniBinPath),
-	}
+	out := map[string]interface{}{}
+	FlattenCiliumNetworkingSpecInto(in, out)
+	return out
 }

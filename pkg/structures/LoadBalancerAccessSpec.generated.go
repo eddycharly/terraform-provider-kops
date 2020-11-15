@@ -80,55 +80,59 @@ func ExpandLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAc
 	}
 }
 
+func FlattenLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec, out map[string]interface{}) {
+	out["type"] = func(in kops.LoadBalancerType) interface{} {
+		return FlattenString(string(in))
+	}(in.Type)
+	out["idle_timeout_seconds"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.IdleTimeoutSeconds)
+	out["security_group_override"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.SecurityGroupOverride)
+	out["additional_security_groups"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AdditionalSecurityGroups)
+	out["use_for_internal_api"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.UseForInternalApi)
+	out["ssl_certificate"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.SSLCertificate)
+	out["cross_zone_load_balancing"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.CrossZoneLoadBalancing)
+}
+
 func FlattenLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"type": func(in kops.LoadBalancerType) interface{} {
-			return FlattenString(string(in))
-		}(in.Type),
-		"idle_timeout_seconds": func(in *int64) interface{} {
-			return func(in *int64) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in int64) interface{} {
-					return FlattenInt(int(in))
-				}(*in)
-			}(in)
-		}(in.IdleTimeoutSeconds),
-		"security_group_override": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.SecurityGroupOverride),
-		"additional_security_groups": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.AdditionalSecurityGroups),
-		"use_for_internal_api": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.UseForInternalApi),
-		"ssl_certificate": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.SSLCertificate),
-		"cross_zone_load_balancing": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.CrossZoneLoadBalancing),
-	}
+	out := map[string]interface{}{}
+	FlattenLoadBalancerAccessSpecInto(in, out)
+	return out
 }

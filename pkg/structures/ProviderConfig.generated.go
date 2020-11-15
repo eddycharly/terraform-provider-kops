@@ -49,32 +49,36 @@ func ExpandProviderConfig(in map[string]interface{}) api.ProviderConfig {
 	}
 }
 
+func FlattenProviderConfigInto(in api.ProviderConfig, out map[string]interface{}) {
+	out["state_store"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.StateStore)
+	out["aws"] = func(in *api.AwsConfig) interface{} {
+		return func(in *api.AwsConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in api.AwsConfig) interface{} {
+				return func(in api.AwsConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAwsConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Aws)
+	out["rolling_update_options"] = func(in api.RollingUpdateOptions) interface{} {
+		return func(in api.RollingUpdateOptions) []map[string]interface{} {
+			return []map[string]interface{}{FlattenRollingUpdateOptions(in)}
+		}(in)
+	}(in.RollingUpdateOptions)
+	out["validate_options"] = func(in api.ValidateOptions) interface{} {
+		return func(in api.ValidateOptions) []map[string]interface{} {
+			return []map[string]interface{}{FlattenValidateOptions(in)}
+		}(in)
+	}(in.ValidateOptions)
+}
+
 func FlattenProviderConfig(in api.ProviderConfig) map[string]interface{} {
-	return map[string]interface{}{
-		"state_store": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.StateStore),
-		"aws": func(in *api.AwsConfig) interface{} {
-			return func(in *api.AwsConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in api.AwsConfig) interface{} {
-					return func(in api.AwsConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAwsConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Aws),
-		"rolling_update_options": func(in api.RollingUpdateOptions) interface{} {
-			return func(in api.RollingUpdateOptions) []map[string]interface{} {
-				return []map[string]interface{}{FlattenRollingUpdateOptions(in)}
-			}(in)
-		}(in.RollingUpdateOptions),
-		"validate_options": func(in api.ValidateOptions) interface{} {
-			return func(in api.ValidateOptions) []map[string]interface{} {
-				return []map[string]interface{}{FlattenValidateOptions(in)}
-			}(in)
-		}(in.ValidateOptions),
-	}
+	out := map[string]interface{}{}
+	FlattenProviderConfigInto(in, out)
+	return out
 }

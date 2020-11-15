@@ -18,13 +18,17 @@ func ExpandEnvVar(in map[string]interface{}) kops.EnvVar {
 	}
 }
 
+func FlattenEnvVarInto(in kops.EnvVar, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Name)
+	out["value"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Value)
+}
+
 func FlattenEnvVar(in kops.EnvVar) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"value": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Value),
-	}
+	out := map[string]interface{}{}
+	FlattenEnvVarInto(in, out)
+	return out
 }

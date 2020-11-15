@@ -30,19 +30,23 @@ func ExpandNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizati
 	}
 }
 
+func FlattenNodeAuthorizationSpecInto(in kops.NodeAuthorizationSpec, out map[string]interface{}) {
+	out["node_authorizer"] = func(in *kops.NodeAuthorizerSpec) interface{} {
+		return func(in *kops.NodeAuthorizerSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NodeAuthorizerSpec) interface{} {
+				return func(in kops.NodeAuthorizerSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenNodeAuthorizerSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.NodeAuthorizer)
+}
+
 func FlattenNodeAuthorizationSpec(in kops.NodeAuthorizationSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"node_authorizer": func(in *kops.NodeAuthorizerSpec) interface{} {
-			return func(in *kops.NodeAuthorizerSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.NodeAuthorizerSpec) interface{} {
-					return func(in kops.NodeAuthorizerSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenNodeAuthorizerSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.NodeAuthorizer),
-	}
+	out := map[string]interface{}{}
+	FlattenNodeAuthorizationSpecInto(in, out)
+	return out
 }

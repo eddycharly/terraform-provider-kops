@@ -94,65 +94,69 @@ func ExpandNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec
 	}
 }
 
+func FlattenNodeAuthorizerSpecInto(in kops.NodeAuthorizerSpec, out map[string]interface{}) {
+	out["authorizer"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Authorizer)
+	out["features"] = func(in *[]string) interface{} {
+		return func(in *[]string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in []string) interface{} {
+				return func(in []string) []interface{} {
+					var out []interface{}
+					for _, in := range in {
+						out = append(out, FlattenString(string(in)))
+					}
+					return out
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Features)
+	out["image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Image)
+	out["node_url"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NodeURL)
+	out["port"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Port)
+	out["interval"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.Interval)
+	out["timeout"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.Timeout)
+	out["token_ttl"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.TokenTTL)
+}
+
 func FlattenNodeAuthorizerSpec(in kops.NodeAuthorizerSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"authorizer": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Authorizer),
-		"features": func(in *[]string) interface{} {
-			return func(in *[]string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in []string) interface{} {
-					return func(in []string) []interface{} {
-						var out []interface{}
-						for _, in := range in {
-							out = append(out, FlattenString(string(in)))
-						}
-						return out
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Features),
-		"image": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Image),
-		"node_url": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.NodeURL),
-		"port": func(in int) interface{} {
-			return FlattenInt(int(in))
-		}(in.Port),
-		"interval": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.Interval),
-		"timeout": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.Timeout),
-		"token_ttl": func(in *v1.Duration) interface{} {
-			return func(in *v1.Duration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in v1.Duration) interface{} {
-					return FlattenDuration(in)
-				}(*in)
-			}(in)
-		}(in.TokenTTL),
-	}
+	out := map[string]interface{}{}
+	FlattenNodeAuthorizerSpecInto(in, out)
+	return out
 }

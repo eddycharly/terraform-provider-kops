@@ -15,10 +15,14 @@ func ExpandCNINetworkingSpec(in map[string]interface{}) kops.CNINetworkingSpec {
 	}
 }
 
+func FlattenCNINetworkingSpecInto(in kops.CNINetworkingSpec, out map[string]interface{}) {
+	out["uses_secondary_ip"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.UsesSecondaryIP)
+}
+
 func FlattenCNINetworkingSpec(in kops.CNINetworkingSpec) map[string]interface{} {
-	return map[string]interface{}{
-		"uses_secondary_ip": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.UsesSecondaryIP),
-	}
+	out := map[string]interface{}{}
+	FlattenCNINetworkingSpecInto(in, out)
+	return out
 }

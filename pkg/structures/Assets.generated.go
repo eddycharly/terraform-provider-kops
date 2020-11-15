@@ -62,37 +62,41 @@ func ExpandAssets(in map[string]interface{}) kops.Assets {
 	}
 }
 
+func FlattenAssetsInto(in kops.Assets, out map[string]interface{}) {
+	out["container_registry"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ContainerRegistry)
+	out["file_repository"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.FileRepository)
+	out["container_proxy"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ContainerProxy)
+}
+
 func FlattenAssets(in kops.Assets) map[string]interface{} {
-	return map[string]interface{}{
-		"container_registry": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ContainerRegistry),
-		"file_repository": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.FileRepository),
-		"container_proxy": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.ContainerProxy),
-	}
+	out := map[string]interface{}{}
+	FlattenAssetsInto(in, out)
+	return out
 }
