@@ -627,12 +627,16 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
 	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
+		{{- if not .Anonymous -}}
 		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) }}
 		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 			return nil
 		}
 		{{- end }}
 		return {{ template "expand" .Type }}
+		{{- else -}}
+		return Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
+		{{- end }}
 	}({{ if .Anonymous }}in{{ else }}in[{{ fieldName . | snakecase | quote }}]{{ end }}),
 	{{- end }}
 	{{- end }}

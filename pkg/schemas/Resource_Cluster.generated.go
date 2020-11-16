@@ -90,12 +90,7 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 			return string(ExpandString(in))
 		}(in["admin_ssh_key"]),
 		ClusterSpec: func(in interface{}) kops.ClusterSpec {
-			return func(in interface{}) kops.ClusterSpec {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return kops.ClusterSpec{}
-				}
-				return (ExpandResourceClusterSpec(in.([]interface{})[0].(map[string]interface{})))
-			}(in)
+			return ExpandResourceClusterSpec(in.(map[string]interface{}))
 		}(in),
 		InstanceGroup: func(in interface{}) []*resources.InstanceGroup {
 			return func(in interface{}) []*resources.InstanceGroup {

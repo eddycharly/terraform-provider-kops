@@ -60,12 +60,7 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 			return string(ExpandString(in))
 		}(in["name"]),
 		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
-			return func(in interface{}) kops.InstanceGroupSpec {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return kops.InstanceGroupSpec{}
-				}
-				return (ExpandResourceInstanceGroupSpec(in.([]interface{})[0].(map[string]interface{})))
-			}(in)
+			return ExpandResourceInstanceGroupSpec(in.(map[string]interface{}))
 		}(in),
 	}
 }

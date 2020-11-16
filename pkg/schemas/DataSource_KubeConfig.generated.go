@@ -32,12 +32,7 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
 		Config: func(in interface{}) kube.Config {
-			return func(in interface{}) kube.Config {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return kube.Config{}
-				}
-				return (ExpandDataSourceConfig(in.([]interface{})[0].(map[string]interface{})))
-			}(in)
+			return ExpandDataSourceConfig(in.(map[string]interface{}))
 		}(in),
 	}
 }
