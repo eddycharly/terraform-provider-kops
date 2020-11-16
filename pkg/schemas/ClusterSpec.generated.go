@@ -1,23 +1,16 @@
-package structures
+package schemas
 
 import (
 	"reflect"
 
-	"github.com/eddycharly/terraform-provider-kops/pkg/api"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func ExpandCluster(in map[string]interface{}) api.Cluster {
+func ExpandClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 	if in == nil {
-		panic("expand Cluster failure, in is nil")
+		panic("expand ClusterSpec failure, in is nil")
 	}
-	return api.Cluster{
-		Name: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["name"]),
-		AdminSshKey: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["admin_ssh_key"]),
+	return kops.ClusterSpec{
 		Channel: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["channel"]),
@@ -47,7 +40,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 		KubernetesVersion: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["kubernetes_version"]),
-		Subnet: func(in interface{}) []kops.ClusterSubnetSpec {
+		Subnets: func(in interface{}) []kops.ClusterSubnetSpec {
 			return func(in interface{}) []kops.ClusterSubnetSpec {
 				var out []kops.ClusterSubnetSpec
 				for _, in := range in.([]interface{}) {
@@ -293,7 +286,7 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				return out
 			}(in)
 		}(in["file_assets"]),
-		EtcdCluster: func(in interface{}) []*kops.EtcdClusterSpec {
+		EtcdClusters: func(in interface{}) []*kops.EtcdClusterSpec {
 			return func(in interface{}) []*kops.EtcdClusterSpec {
 				var out []*kops.EtcdClusterSpec
 				for _, in := range in.([]interface{}) {
@@ -747,631 +740,557 @@ func ExpandCluster(in map[string]interface{}) api.Cluster {
 				}(in))
 			}(in)
 		}(in["rolling_update"]),
-		InstanceGroup: func(in interface{}) []*api.InstanceGroup {
-			return func(in interface{}) []*api.InstanceGroup {
-				var out []*api.InstanceGroup
-				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) *api.InstanceGroup {
-						if in == nil {
-							return nil
-						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in api.InstanceGroup) *api.InstanceGroup {
-							return &in
-						}(func(in interface{}) api.InstanceGroup {
-							if in == nil {
-								return api.InstanceGroup{}
-							}
-							return (ExpandInstanceGroup(in.(map[string]interface{})))
-						}(in))
-					}(in))
-				}
-				return out
-			}(in)
-		}(in["instance_group"]),
-		KubeConfig: func(in interface{}) *api.KubeConfig {
-			return func(in interface{}) *api.KubeConfig {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in api.KubeConfig) *api.KubeConfig {
-					return &in
-				}(func(in interface{}) api.KubeConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return api.KubeConfig{}
-					}
-					return (ExpandKubeConfig(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["kube_config"]),
 	}
 }
 
-func FlattenCluster(in api.Cluster) map[string]interface{} {
-	return map[string]interface{}{
-		"name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Name),
-		"admin_ssh_key": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.AdminSshKey),
-		"channel": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Channel),
-		"addons": func(in []kops.AddonSpec) interface{} {
-			return func(in []kops.AddonSpec) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in kops.AddonSpec) interface{} {
-						return FlattenAddonSpec(in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.Addons),
-		"config_base": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ConfigBase),
-		"cloud_provider": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.CloudProvider),
-		"container_runtime": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ContainerRuntime),
-		"kubernetes_version": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KubernetesVersion),
-		"subnet": func(in []kops.ClusterSubnetSpec) interface{} {
-			return func(in []kops.ClusterSubnetSpec) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in kops.ClusterSubnetSpec) interface{} {
-						return FlattenClusterSubnetSpec(in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.Subnet),
-		"project": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.Project),
-		"master_public_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.MasterPublicName),
-		"master_internal_name": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.MasterInternalName),
-		"network_cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.NetworkCIDR),
-		"additional_network_cidrs": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.AdditionalNetworkCIDRs),
-		"network_id": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.NetworkID),
-		"topology": func(in *kops.TopologySpec) interface{} {
-			return func(in *kops.TopologySpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.TopologySpec) interface{} {
-					return func(in kops.TopologySpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenTopologySpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Topology),
-		"secret_store": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.SecretStore),
-		"key_store": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.KeyStore),
-		"config_store": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ConfigStore),
-		"dns_zone": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.DNSZone),
-		"additional_sans": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.AdditionalSANs),
-		"cluster_dns_domain": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ClusterDNSDomain),
-		"service_cluster_ip_range": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.ServiceClusterIPRange),
-		"pod_cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.PodCIDR),
-		"non_masquerade_cidr": func(in string) interface{} {
-			return FlattenString(string(in))
-		}(in.NonMasqueradeCIDR),
-		"ssh_access": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.SSHAccess),
-		"node_port_access": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.NodePortAccess),
-		"egress_proxy": func(in *kops.EgressProxySpec) interface{} {
-			return func(in *kops.EgressProxySpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.EgressProxySpec) interface{} {
-					return func(in kops.EgressProxySpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenEgressProxySpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.EgressProxy),
-		"ssh_key_name": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.SSHKeyName),
-		"kubernetes_api_access": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.KubernetesAPIAccess),
-		"isolate_masters": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.IsolateMasters),
-		"update_policy": func(in *string) interface{} {
-			return func(in *string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in string) interface{} {
-					return FlattenString(string(in))
-				}(*in)
-			}(in)
-		}(in.UpdatePolicy),
-		"external_policies": func(in *map[string][]string) interface{} {
-			return func(in *map[string][]string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in map[string][]string) interface{} {
-					return func(in map[string][]string) map[string]interface{} {
-						if in == nil {
-							return nil
-						}
-						out := map[string]interface{}{}
-						for key, in := range in {
-							out[key] = func(in []string) []interface{} {
-								var out []interface{}
-								for _, in := range in {
-									out = append(out, FlattenString(string(in)))
-								}
-								return out
-							}(in)
-						}
-						return out
-					}(in)
-				}(*in)
-			}(in)
-		}(in.ExternalPolicies),
-		"additional_policies": func(in *map[string]string) interface{} {
-			return func(in *map[string]string) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in map[string]string) interface{} {
-					return func(in map[string]string) map[string]interface{} {
-						if in == nil {
-							return nil
-						}
-						out := map[string]interface{}{}
-						for key, in := range in {
-							out[key] = FlattenString(string(in))
-						}
-						return out
-					}(in)
-				}(*in)
-			}(in)
-		}(in.AdditionalPolicies),
-		"file_assets": func(in []kops.FileAssetSpec) interface{} {
-			return func(in []kops.FileAssetSpec) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in kops.FileAssetSpec) interface{} {
-						return FlattenFileAssetSpec(in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.FileAssets),
-		"etcd_cluster": func(in []*kops.EtcdClusterSpec) interface{} {
-			return func(in []*kops.EtcdClusterSpec) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in *kops.EtcdClusterSpec) interface{} {
-						if in == nil {
-							return nil
-						}
+func FlattenClusterSpecInto(in kops.ClusterSpec, out map[string]interface{}) {
+	out["channel"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Channel)
+	out["addons"] = func(in []kops.AddonSpec) interface{} {
+		return func(in []kops.AddonSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.AddonSpec) interface{} {
+					return FlattenAddonSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Addons)
+	out["config_base"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ConfigBase)
+	out["cloud_provider"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CloudProvider)
+	out["container_runtime"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ContainerRuntime)
+	out["kubernetes_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KubernetesVersion)
+	out["subnet"] = func(in []kops.ClusterSubnetSpec) interface{} {
+		return func(in []kops.ClusterSubnetSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.ClusterSubnetSpec) interface{} {
+					return FlattenClusterSubnetSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Subnets)
+	out["project"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Project)
+	out["master_public_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MasterPublicName)
+	out["master_internal_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MasterInternalName)
+	out["network_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NetworkCIDR)
+	out["additional_network_cidrs"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AdditionalNetworkCIDRs)
+	out["network_id"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NetworkID)
+	out["topology"] = func(in *kops.TopologySpec) interface{} {
+		return func(in *kops.TopologySpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.TopologySpec) interface{} {
+				return func(in kops.TopologySpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenTopologySpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Topology)
+	out["secret_store"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.SecretStore)
+	out["key_store"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.KeyStore)
+	out["config_store"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ConfigStore)
+	out["dns_zone"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.DNSZone)
+	out["additional_sans"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AdditionalSANs)
+	out["cluster_dns_domain"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterDNSDomain)
+	out["service_cluster_ip_range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ServiceClusterIPRange)
+	out["pod_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.PodCIDR)
+	out["non_masquerade_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NonMasqueradeCIDR)
+	out["ssh_access"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.SSHAccess)
+	out["node_port_access"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.NodePortAccess)
+	out["egress_proxy"] = func(in *kops.EgressProxySpec) interface{} {
+		return func(in *kops.EgressProxySpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.EgressProxySpec) interface{} {
+				return func(in kops.EgressProxySpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenEgressProxySpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.EgressProxy)
+	out["ssh_key_name"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.SSHKeyName)
+	out["kubernetes_api_access"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.KubernetesAPIAccess)
+	out["isolate_masters"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.IsolateMasters)
+	out["update_policy"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.UpdatePolicy)
+	out["external_policies"] = func(in *map[string][]string) interface{} {
+		return func(in *map[string][]string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in map[string][]string) interface{} {
+				return func(in map[string][]string) map[string]interface{} {
+					if in == nil {
+						return nil
+					}
+					out := map[string]interface{}{}
+					for key, in := range in {
+						out[key] = func(in []string) []interface{} {
+							var out []interface{}
+							for _, in := range in {
+								out = append(out, FlattenString(string(in)))
+							}
+							return out
+						}(in)
+					}
+					return out
+				}(in)
+			}(*in)
+		}(in)
+	}(in.ExternalPolicies)
+	out["additional_policies"] = func(in *map[string]string) interface{} {
+		return func(in *map[string]string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in map[string]string) interface{} {
+				return func(in map[string]string) map[string]interface{} {
+					if in == nil {
+						return nil
+					}
+					out := map[string]interface{}{}
+					for key, in := range in {
+						out[key] = FlattenString(string(in))
+					}
+					return out
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AdditionalPolicies)
+	out["file_assets"] = func(in []kops.FileAssetSpec) interface{} {
+		return func(in []kops.FileAssetSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.FileAssetSpec) interface{} {
+					return FlattenFileAssetSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.FileAssets)
+	out["etcd_cluster"] = func(in []*kops.EtcdClusterSpec) interface{} {
+		return func(in []*kops.EtcdClusterSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in *kops.EtcdClusterSpec) interface{} {
+					if in == nil {
+						return nil
+					}
+					return func(in kops.EtcdClusterSpec) interface{} {
 						return func(in kops.EtcdClusterSpec) interface{} {
-							return func(in kops.EtcdClusterSpec) interface{} {
-								return FlattenEtcdClusterSpec(in)
-							}(in)
-						}(*in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.EtcdCluster),
-		"containerd": func(in *kops.ContainerdConfig) interface{} {
-			return func(in *kops.ContainerdConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.ContainerdConfig) interface{} {
-					return func(in kops.ContainerdConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenContainerdConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Containerd),
-		"docker": func(in *kops.DockerConfig) interface{} {
-			return func(in *kops.DockerConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.DockerConfig) interface{} {
-					return func(in kops.DockerConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenDockerConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Docker),
-		"kube_dns": func(in *kops.KubeDNSConfig) interface{} {
-			return func(in *kops.KubeDNSConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeDNSConfig) interface{} {
-					return func(in kops.KubeDNSConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeDNSConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.KubeDNS),
-		"kube_api_server": func(in *kops.KubeAPIServerConfig) interface{} {
-			return func(in *kops.KubeAPIServerConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeAPIServerConfig) interface{} {
-					return func(in kops.KubeAPIServerConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeAPIServerConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.KubeAPIServer),
-		"kube_controller_manager": func(in *kops.KubeControllerManagerConfig) interface{} {
-			return func(in *kops.KubeControllerManagerConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeControllerManagerConfig) interface{} {
-					return func(in kops.KubeControllerManagerConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeControllerManagerConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.KubeControllerManager),
-		"external_cloud_controller_manager": func(in *kops.CloudControllerManagerConfig) interface{} {
-			return func(in *kops.CloudControllerManagerConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.CloudControllerManagerConfig) interface{} {
-					return func(in kops.CloudControllerManagerConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenCloudControllerManagerConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.ExternalCloudControllerManager),
-		"kube_scheduler": func(in *kops.KubeSchedulerConfig) interface{} {
-			return func(in *kops.KubeSchedulerConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeSchedulerConfig) interface{} {
-					return func(in kops.KubeSchedulerConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeSchedulerConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.KubeScheduler),
-		"kube_proxy": func(in *kops.KubeProxyConfig) interface{} {
-			return func(in *kops.KubeProxyConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeProxyConfig) interface{} {
-					return func(in kops.KubeProxyConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeProxyConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.KubeProxy),
-		"kubelet": func(in *kops.KubeletConfigSpec) interface{} {
-			return func(in *kops.KubeletConfigSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeletConfigSpec) interface{} {
-					return func(in kops.KubeletConfigSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeletConfigSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Kubelet),
-		"master_kubelet": func(in *kops.KubeletConfigSpec) interface{} {
-			return func(in *kops.KubeletConfigSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.KubeletConfigSpec) interface{} {
-					return func(in kops.KubeletConfigSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeletConfigSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.MasterKubelet),
-		"cloud_config": func(in *kops.CloudConfiguration) interface{} {
-			return func(in *kops.CloudConfiguration) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.CloudConfiguration) interface{} {
-					return func(in kops.CloudConfiguration) []map[string]interface{} {
-						return []map[string]interface{}{FlattenCloudConfiguration(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.CloudConfig),
-		"external_dns": func(in *kops.ExternalDNSConfig) interface{} {
-			return func(in *kops.ExternalDNSConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.ExternalDNSConfig) interface{} {
-					return func(in kops.ExternalDNSConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenExternalDNSConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.ExternalDNS),
-		"networking": func(in *kops.NetworkingSpec) interface{} {
-			return func(in *kops.NetworkingSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.NetworkingSpec) interface{} {
-					return func(in kops.NetworkingSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenNetworkingSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Networking),
-		"api": func(in *kops.AccessSpec) interface{} {
-			return func(in *kops.AccessSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.AccessSpec) interface{} {
-					return func(in kops.AccessSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAccessSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.API),
-		"authentication": func(in *kops.AuthenticationSpec) interface{} {
-			return func(in *kops.AuthenticationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.AuthenticationSpec) interface{} {
-					return func(in kops.AuthenticationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAuthenticationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Authentication),
-		"authorization": func(in *kops.AuthorizationSpec) interface{} {
-			return func(in *kops.AuthorizationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.AuthorizationSpec) interface{} {
-					return func(in kops.AuthorizationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAuthorizationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Authorization),
-		"node_authorization": func(in *kops.NodeAuthorizationSpec) interface{} {
-			return func(in *kops.NodeAuthorizationSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.NodeAuthorizationSpec) interface{} {
-					return func(in kops.NodeAuthorizationSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenNodeAuthorizationSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.NodeAuthorization),
-		"cloud_labels": func(in map[string]string) interface{} {
-			return func(in map[string]string) map[string]interface{} {
-				if in == nil {
-					return nil
-				}
-				out := map[string]interface{}{}
-				for key, in := range in {
-					out[key] = FlattenString(string(in))
-				}
-				return out
-			}(in)
-		}(in.CloudLabels),
-		"hooks": func(in []kops.HookSpec) interface{} {
-			return func(in []kops.HookSpec) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in kops.HookSpec) interface{} {
-						return FlattenHookSpec(in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.Hooks),
-		"assets": func(in *kops.Assets) interface{} {
-			return func(in *kops.Assets) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.Assets) interface{} {
-					return func(in kops.Assets) []map[string]interface{} {
-						return []map[string]interface{}{FlattenAssets(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.Assets),
-		"iam": func(in *kops.IAMSpec) interface{} {
-			return func(in *kops.IAMSpec) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.IAMSpec) interface{} {
-					return func(in kops.IAMSpec) []map[string]interface{} {
-						return []map[string]interface{}{FlattenIAMSpec(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.IAM),
-		"encryption_config": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.EncryptionConfig),
-		"disable_subnet_tags": func(in bool) interface{} {
-			return FlattenBool(bool(in))
-		}(in.DisableSubnetTags),
-		"use_host_certificates": func(in *bool) interface{} {
-			return func(in *bool) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in bool) interface{} {
-					return FlattenBool(bool(in))
-				}(*in)
-			}(in)
-		}(in.UseHostCertificates),
-		"sysctl_parameters": func(in []string) interface{} {
-			return func(in []string) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, FlattenString(string(in)))
-				}
-				return out
-			}(in)
-		}(in.SysctlParameters),
-		"rolling_update": func(in *kops.RollingUpdate) interface{} {
-			return func(in *kops.RollingUpdate) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in kops.RollingUpdate) interface{} {
-					return func(in kops.RollingUpdate) []map[string]interface{} {
-						return []map[string]interface{}{FlattenRollingUpdate(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.RollingUpdate),
-		"instance_group": func(in []*api.InstanceGroup) interface{} {
-			return func(in []*api.InstanceGroup) []interface{} {
-				var out []interface{}
-				for _, in := range in {
-					out = append(out, func(in *api.InstanceGroup) interface{} {
-						if in == nil {
-							return nil
-						}
-						return func(in api.InstanceGroup) interface{} {
-							return func(in api.InstanceGroup) interface{} {
-								return FlattenInstanceGroup(in)
-							}(in)
-						}(*in)
-					}(in))
-				}
-				return out
-			}(in)
-		}(in.InstanceGroup),
-		"kube_config": func(in *api.KubeConfig) interface{} {
-			return func(in *api.KubeConfig) interface{} {
-				if in == nil {
-					return nil
-				}
-				return func(in api.KubeConfig) interface{} {
-					return func(in api.KubeConfig) []map[string]interface{} {
-						return []map[string]interface{}{FlattenKubeConfig(in)}
-					}(in)
-				}(*in)
-			}(in)
-		}(in.KubeConfig),
-	}
+							return FlattenEtcdClusterSpec(in)
+						}(in)
+					}(*in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.EtcdClusters)
+	out["containerd"] = func(in *kops.ContainerdConfig) interface{} {
+		return func(in *kops.ContainerdConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ContainerdConfig) interface{} {
+				return func(in kops.ContainerdConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenContainerdConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Containerd)
+	out["docker"] = func(in *kops.DockerConfig) interface{} {
+		return func(in *kops.DockerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.DockerConfig) interface{} {
+				return func(in kops.DockerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDockerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Docker)
+	out["kube_dns"] = func(in *kops.KubeDNSConfig) interface{} {
+		return func(in *kops.KubeDNSConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeDNSConfig) interface{} {
+				return func(in kops.KubeDNSConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeDNSConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.KubeDNS)
+	out["kube_api_server"] = func(in *kops.KubeAPIServerConfig) interface{} {
+		return func(in *kops.KubeAPIServerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeAPIServerConfig) interface{} {
+				return func(in kops.KubeAPIServerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeAPIServerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.KubeAPIServer)
+	out["kube_controller_manager"] = func(in *kops.KubeControllerManagerConfig) interface{} {
+		return func(in *kops.KubeControllerManagerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeControllerManagerConfig) interface{} {
+				return func(in kops.KubeControllerManagerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeControllerManagerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.KubeControllerManager)
+	out["external_cloud_controller_manager"] = func(in *kops.CloudControllerManagerConfig) interface{} {
+		return func(in *kops.CloudControllerManagerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.CloudControllerManagerConfig) interface{} {
+				return func(in kops.CloudControllerManagerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenCloudControllerManagerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.ExternalCloudControllerManager)
+	out["kube_scheduler"] = func(in *kops.KubeSchedulerConfig) interface{} {
+		return func(in *kops.KubeSchedulerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeSchedulerConfig) interface{} {
+				return func(in kops.KubeSchedulerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeSchedulerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.KubeScheduler)
+	out["kube_proxy"] = func(in *kops.KubeProxyConfig) interface{} {
+		return func(in *kops.KubeProxyConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeProxyConfig) interface{} {
+				return func(in kops.KubeProxyConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeProxyConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.KubeProxy)
+	out["kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
+		return func(in *kops.KubeletConfigSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeletConfigSpec) interface{} {
+				return func(in kops.KubeletConfigSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeletConfigSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Kubelet)
+	out["master_kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
+		return func(in *kops.KubeletConfigSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KubeletConfigSpec) interface{} {
+				return func(in kops.KubeletConfigSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenKubeletConfigSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.MasterKubelet)
+	out["cloud_config"] = func(in *kops.CloudConfiguration) interface{} {
+		return func(in *kops.CloudConfiguration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.CloudConfiguration) interface{} {
+				return func(in kops.CloudConfiguration) []map[string]interface{} {
+					return []map[string]interface{}{FlattenCloudConfiguration(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.CloudConfig)
+	out["external_dns"] = func(in *kops.ExternalDNSConfig) interface{} {
+		return func(in *kops.ExternalDNSConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ExternalDNSConfig) interface{} {
+				return func(in kops.ExternalDNSConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenExternalDNSConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.ExternalDNS)
+	out["networking"] = func(in *kops.NetworkingSpec) interface{} {
+		return func(in *kops.NetworkingSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NetworkingSpec) interface{} {
+				return func(in kops.NetworkingSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenNetworkingSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Networking)
+	out["api"] = func(in *kops.AccessSpec) interface{} {
+		return func(in *kops.AccessSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AccessSpec) interface{} {
+				return func(in kops.AccessSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAccessSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.API)
+	out["authentication"] = func(in *kops.AuthenticationSpec) interface{} {
+		return func(in *kops.AuthenticationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AuthenticationSpec) interface{} {
+				return func(in kops.AuthenticationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAuthenticationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Authentication)
+	out["authorization"] = func(in *kops.AuthorizationSpec) interface{} {
+		return func(in *kops.AuthorizationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AuthorizationSpec) interface{} {
+				return func(in kops.AuthorizationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAuthorizationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Authorization)
+	out["node_authorization"] = func(in *kops.NodeAuthorizationSpec) interface{} {
+		return func(in *kops.NodeAuthorizationSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NodeAuthorizationSpec) interface{} {
+				return func(in kops.NodeAuthorizationSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenNodeAuthorizationSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.NodeAuthorization)
+	out["cloud_labels"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.CloudLabels)
+	out["hooks"] = func(in []kops.HookSpec) interface{} {
+		return func(in []kops.HookSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.HookSpec) interface{} {
+					return FlattenHookSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Hooks)
+	out["assets"] = func(in *kops.Assets) interface{} {
+		return func(in *kops.Assets) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.Assets) interface{} {
+				return func(in kops.Assets) []map[string]interface{} {
+					return []map[string]interface{}{FlattenAssets(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Assets)
+	out["iam"] = func(in *kops.IAMSpec) interface{} {
+		return func(in *kops.IAMSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.IAMSpec) interface{} {
+				return func(in kops.IAMSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenIAMSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.IAM)
+	out["encryption_config"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EncryptionConfig)
+	out["disable_subnet_tags"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableSubnetTags)
+	out["use_host_certificates"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.UseHostCertificates)
+	out["sysctl_parameters"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.SysctlParameters)
+	out["rolling_update"] = func(in *kops.RollingUpdate) interface{} {
+		return func(in *kops.RollingUpdate) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.RollingUpdate) interface{} {
+				return func(in kops.RollingUpdate) []map[string]interface{} {
+					return []map[string]interface{}{FlattenRollingUpdate(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.RollingUpdate)
+}
+
+func FlattenClusterSpec(in kops.ClusterSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenClusterSpecInto(in, out)
+	return out
 }

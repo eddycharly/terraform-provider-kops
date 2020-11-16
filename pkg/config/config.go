@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api"
-	"github.com/eddycharly/terraform-provider-kops/pkg/structures"
+	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/kops/pkg/client/simple"
@@ -30,7 +30,7 @@ type config struct {
 }
 
 func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
-	providerConfig := structures.ExpandProviderConfig(d.Get("").(map[string]interface{}))
+	providerConfig := schemas.ExpandProviderConfig(d.Get("").(map[string]interface{}))
 	err := initCredentials(providerConfig.Aws)
 	if err != nil {
 		return nil, err

@@ -1,7 +1,12 @@
 package schemas
 
 import (
+	"time"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"k8s.io/apimachinery/pkg/api/resource"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 // Tools
@@ -55,16 +60,44 @@ func OptionalQuantity() *schema.Schema {
 	return OptionalString()
 }
 
+func ExpandQuantity(in interface{}) resource.Quantity {
+	q, _ := resource.ParseQuantity(in.(string))
+	return q
+}
+
+func FlattenQuantity(in resource.Quantity) interface{} {
+	return in.String()
+}
+
 // Duration
 
 func OptionalDuration() *schema.Schema {
 	return OptionalString()
 }
 
+func ExpandDuration(in interface{}) metav1.Duration {
+	d, _ := time.ParseDuration(in.(string))
+	return metav1.Duration{
+		Duration: d,
+	}
+}
+
+func FlattenDuration(in metav1.Duration) interface{} {
+	return in.String()
+}
+
 // IntOrString
 
 func OptionalIntOrString() *schema.Schema {
 	return OptionalString()
+}
+
+func ExpandIntOrString(in interface{}) intstr.IntOrString {
+	return intstr.Parse(in.(string))
+}
+
+func FlattenIntOrString(in intstr.IntOrString) interface{} {
+	return in.String()
 }
 
 // Map
@@ -139,6 +172,14 @@ func OptionalComputedString() *schema.Schema {
 	return SimpleOptionalComputed(schema.TypeString)
 }
 
+func ExpandString(in interface{}) string {
+	return in.(string)
+}
+
+func FlattenString(in string) interface{} {
+	return in
+}
+
 // Bool
 
 func Bool() *schema.Schema {
@@ -159,6 +200,14 @@ func ComputedBool() *schema.Schema {
 
 func OptionalComputedBool() *schema.Schema {
 	return SimpleOptionalComputed(schema.TypeBool)
+}
+
+func ExpandBool(in interface{}) bool {
+	return in.(bool)
+}
+
+func FlattenBool(in bool) interface{} {
+	return in
 }
 
 // Int
@@ -183,6 +232,14 @@ func OptionalComputedInt() *schema.Schema {
 	return SimpleOptionalComputed(schema.TypeInt)
 }
 
+func ExpandInt(in interface{}) int {
+	return in.(int)
+}
+
+func FlattenInt(in int) interface{} {
+	return in
+}
+
 // Float
 
 func Float() *schema.Schema {
@@ -203,4 +260,12 @@ func ComputedFloat() *schema.Schema {
 
 func OptionalComputedFloat() *schema.Schema {
 	return SimpleOptionalComputed(schema.TypeFloat)
+}
+
+func ExpandFloat(in interface{}) float64 {
+	return in.(float64)
+}
+
+func FlattenFloat(in float64) interface{} {
+	return in
 }

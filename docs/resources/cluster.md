@@ -75,6 +75,7 @@ The following arguments are supported:
 ### addon_spec
 
 AddonSpec defines an addon that we want to install in the cluster.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -84,6 +85,7 @@ The following arguments are supported:
 ### cluster_subnet_spec
 
 ClusterSubnetSpec defines a subnet.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -155,6 +157,7 @@ The following arguments are supported:
 ### file_asset_spec
 
 FileAssetSpec defines the structure for a file asset.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -168,6 +171,7 @@ The following arguments are supported:
 ### etcd_cluster_spec
 
 EtcdClusterSpec is the etcd cluster specification.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -189,6 +193,7 @@ The following arguments are supported:
 ### etcd_member_spec
 
 EtcdMemberSpec is a specification for a etcd member.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -204,6 +209,7 @@ The following arguments are supported:
 ### etcd_backup_spec
 
 EtcdBackupSpec describes how we want to do backups of etcd.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -214,6 +220,7 @@ The following arguments are supported:
 ### etcd_manager_spec
 
 EtcdManagerSpec describes how we configure the etcd manager.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -224,6 +231,7 @@ The following arguments are supported:
 ### env_var
 
 EnvVar represents an environment variable present in a Container.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -234,6 +242,7 @@ The following arguments are supported:
 ### containerd_config
 
 ContainerdConfig is the configuration for containerd.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -249,6 +258,7 @@ The following arguments are supported:
 ### docker_config
 
 DockerConfig is the configuration for docker.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -283,6 +293,7 @@ The following arguments are supported:
 ### kube_dns_config
 
 KubeDNSConfig defines the kube dns configuration.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -306,6 +317,7 @@ The following arguments are supported:
 ### node_local_dns_config
 
 NodeLocalDNSConfig are options of the node-local-dns.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -318,6 +330,7 @@ The following arguments are supported:
 ### kube_api_server_config
 
 KubeAPIServerConfig defines the configuration for the kube api.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -421,6 +434,7 @@ The following arguments are supported:
 ### kube_controller_manager_config
 
 KubeControllerManagerConfig is the configuration for the controller.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -472,6 +486,7 @@ The following arguments are supported:
 ### leader_election_configuration
 
 LeaderElectionConfiguration defines the configuration of leader election<br />clients for components that can run with leader election enabled.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -487,6 +502,7 @@ The following arguments are supported:
 ### cloud_controller_manager_config
 
 CloudControllerManagerConfig is the configuration of the cloud controller.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -506,6 +522,7 @@ The following arguments are supported:
 ### kube_scheduler_config
 
 KubeSchedulerConfig is the configuration for the kube-scheduler.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -524,6 +541,7 @@ The following arguments are supported:
 ### kube_proxy_config
 
 KubeProxyConfig defines the configuration for a proxy.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -552,6 +570,7 @@ The following arguments are supported:
 ### kubelet_config_spec
 
 KubeletConfigSpec defines the kubelet configuration.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -639,6 +658,7 @@ The following arguments are supported:
 ### cloud_configuration
 
 CloudConfiguration defines the cloud provider configuration.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -663,6 +683,7 @@ The following arguments are supported:
 ### openstack_configuration
 
 OpenstackConfiguration defines cloud config elements for the openstack cloud provider.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -676,6 +697,7 @@ The following arguments are supported:
 ### openstack_loadbalancer_config
 
 OpenstackLoadbalancerConfig defines the config for a neutron loadbalancer.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -692,6 +714,7 @@ The following arguments are supported:
 ### openstack_monitor
 
 OpenstackMonitor defines the config for a health monitor.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -703,6 +726,7 @@ The following arguments are supported:
 ### openstack_router
 
 OpenstackRouter defines the config for a router.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -724,6 +748,7 @@ The following arguments are supported:
 ### external_dns_config
 
 ExternalDNSConfig are options of the dns-controller.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -735,6 +760,7 @@ The following arguments are supported:
 ### networking_spec
 
 NetworkingSpec allows selection and configuration of a networking plugin.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -759,11 +785,13 @@ The following arguments are supported:
 
 ClassicNetworkingSpec is the specification of classic networking mode, integrated into kubernetes.<br />Support been removed since Kubernetes 1.4.
 
+
 This resource has no attributes.
 
 ### kubenet_networking_spec
 
 KubenetNetworkingSpec is the specification for kubenet networking, largely integrated but intended to replace classic.
+
 
 This resource has no attributes.
 
@@ -771,11 +799,13 @@ This resource has no attributes.
 
 ExternalNetworkingSpec is the specification for networking that is implemented by a user-provided Daemonset that uses the Kubenet kubelet networking plugin.
 
+
 This resource has no attributes.
 
 ### cni_networking_spec
 
 CNINetworkingSpec is the specification for networking that is implemented by a user-provided Daemonset, which uses the CNI kubelet networking plugin.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -786,11 +816,13 @@ The following arguments are supported:
 
 KopeioNetworkingSpec declares that we want Kopeio networking.
 
+
 This resource has no attributes.
 
 ### weave_networking_spec
 
 WeaveNetworkingSpec declares that we want Weave networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -812,6 +844,7 @@ The following arguments are supported:
 ### flannel_networking_spec
 
 FlannelNetworkingSpec declares that we want Flannel networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -823,6 +856,7 @@ The following arguments are supported:
 ### calico_networking_spec
 
 CalicoNetworkingSpec declares that we want Calico networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -846,6 +880,7 @@ The following arguments are supported:
 ### canal_networking_spec
 
 CanalNetworkingSpec declares that we want Canal networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -870,11 +905,13 @@ The following arguments are supported:
 
 KuberouterNetworkingSpec declares that we want Kube-router networking.
 
+
 This resource has no attributes.
 
 ### romana_networking_spec
 
 RomanaNetworkingSpec declares that we want Romana networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -885,6 +922,7 @@ The following arguments are supported:
 ### amazon_vpc_networking_spec
 
 AmazonVPCNetworkingSpec declares that we want Amazon VPC CNI networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -895,6 +933,7 @@ The following arguments are supported:
 ### cilium_networking_spec
 
 CiliumNetworkingSpec declares that we want Cilium networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -976,6 +1015,7 @@ The following arguments are supported:
 ### lyft_vpc_networking_spec
 
 LyftVPCNetworkingSpec declares that we want to use the cni-ipvlan-vpc-k8s CNI networking.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -986,11 +1026,13 @@ The following arguments are supported:
 
 GCENetworkingSpec is the specification of GCE's native networking mode, using IP aliases.
 
+
 This resource has no attributes.
 
 ### access_spec
 
 AccessSpec provides configuration details related to kubeapi dns and ELB access.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1006,6 +1048,7 @@ This resource has no attributes.
 ### load_balancer_access_spec
 
 LoadBalancerAccessSpec provides configuration details related to API LoadBalancer and its access.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1066,6 +1109,7 @@ This resource has no attributes.
 ### node_authorization_spec
 
 NodeAuthorizationSpec is used to node authorization.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1075,6 +1119,7 @@ The following arguments are supported:
 ### node_authorizer_spec
 
 NodeAuthorizerSpec defines the configuration for a node authorizer.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1091,6 +1136,7 @@ The following arguments are supported:
 ### hook_spec
 
 HookSpec is a definition hook.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1107,6 +1153,7 @@ The following arguments are supported:
 ### exec_container_action
 
 ExecContainerAction defines an hood action.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1118,6 +1165,7 @@ The following arguments are supported:
 ### assets
 
 Assets defines the privately hosted assets.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1129,6 +1177,7 @@ The following arguments are supported:
 ### iam_spec
 
 IAMSpec adds control over the IAM security policies applied to resources.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1149,12 +1198,13 @@ The following arguments are supported:
 ### instance_group
 
 InstanceGroup represents a group of instances (either nodes or masters) with the same configuration.
+
 #### Argument Reference
 
 The following arguments are supported:
 
 - `name` - (Required) - String - Instance group name.
-- `role` - (Required) - String - Determines the role of instances in this group: masters or nodes.
+- `role` - (Required) - String - Type determines the role of instances in this group: masters or nodes.
 - `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Required) - Int - MaxSize is the maximum size of the pool.
@@ -1195,6 +1245,7 @@ The following arguments are supported:
 ### volume_spec
 
 VolumeSpec defined the spec for an additional volume attached to the instance group.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1209,6 +1260,7 @@ The following arguments are supported:
 ### volume_mount_spec
 
 VolumeMountSpec defines the specification for mounting a device.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1222,6 +1274,7 @@ The following arguments are supported:
 ### mixed_instances_policy_spec
 
 MixedInstancesPolicySpec defines the specification for an autoscaling group backed by a ec2 fleet.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1236,6 +1289,7 @@ The following arguments are supported:
 ### user_data
 
 UserData defines a user-data section.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1247,6 +1301,7 @@ The following arguments are supported:
 ### load_balancer
 
 LoadBalancers defines a load balancer.
+
 #### Argument Reference
 
 The following arguments are supported:
@@ -1257,6 +1312,7 @@ The following arguments are supported:
 ### iam_profile_spec
 
 IAMProfileSpec is the AWS IAM Profile to attach to instances in this instance<br />group. Specify the ARN for the IAM instance profile (AWS only).
+
 #### Argument Reference
 
 The following arguments are supported:

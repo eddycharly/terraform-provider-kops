@@ -8,7 +8,6 @@ all: clean gen fmt build
 clean:
 	@rm -f terraform-provider-kops
 	@rm -rf ./pkg/schemas/*.generated.go
-	@rm -rf ./pkg/structures/*.generated.go
 	@rm -rf ./docs/*.generated.md
 	@rm -rf ./docs/resources/*.md
 
@@ -16,9 +15,7 @@ clean:
 gen-tf-code:
 	@go run ./hack/gen-tf-code/main.go
 	@go fmt ./pkg/schemas/...
-	@go fmt ./pkg/structures/...
 	@~/go/bin/goimports -w ./pkg/schemas/
-	@~/go/bin/goimports -w ./pkg/structures/
 
 .PHONY: gen
 gen: gen-tf-code
