@@ -13,6 +13,7 @@ import (
 
 	"github.com/Masterminds/sprig"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"golang.org/x/tools/go/packages"
@@ -225,6 +226,7 @@ func getAttributeComment(packName, structName, fieldName string, c map[string]ma
 }
 
 func funcMap(op map[reflect.Type]*options, scope string, c map[string]map[string]_struct) template.FuncMap {
+	dataSource := scope == "DataSource"
 	return template.FuncMap{
 		"scope": func() string {
 			return scope
@@ -252,10 +254,13 @@ func funcMap(op map[reflect.Type]*options, scope string, c map[string]map[string
 			return op[in.Owner].required.Has(in.Name)
 		},
 		"isOptional": func(in _field) bool {
-			return !op[in.Owner].required.Has(in.Name) && !op[in.Owner].computedOnly.Has(in.Name)
+			return !dataSource && (!op[in.Owner].required.Has(in.Name) && !op[in.Owner].computedOnly.Has(in.Name))
 		},
 		"isComputed": func(in _field) bool {
-			return op[in.Owner].computed.Has(in.Name) || op[in.Owner].computedOnly.Has(in.Name)
+			if op[in.Owner].required.Has(in.Name) {
+				return false
+			}
+			return dataSource || (op[in.Owner].computed.Has(in.Name) || op[in.Owner].computedOnly.Has(in.Name))
 		},
 		"isSensitive": func(in _field) bool {
 			return op[in.Owner].sensitive.Has(in.Name)
@@ -396,6 +401,10 @@ import (
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -821,6 +830,7 @@ func main() {
 	packs, err := packages.Load(
 		&cfg,
 		"github.com/eddycharly/terraform-provider-kops/pkg/api/config",
+		"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources",
 		"github.com/eddycharly/terraform-provider-kops/pkg/api/kube",
 		"github.com/eddycharly/terraform-provider-kops/pkg/api/resources",
 	)
@@ -986,6 +996,17 @@ func main() {
 		generate(config.RollingUpdate{}),
 		generate(config.Validate{}),
 	)
+	dataSourcesMap := build(
+		"DataSource",
+		generate(datasources.KubeConfig{},
+			required("ClusterName"),
+		),
+		generate(
+			kube.Config{},
+			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+		),
+	)
 	log.Println("generating docs...")
-	buildDoc(resources.Cluster{}, "docs/resources/", funcMap(resourcesMap, "doc", parser.packs), sprig.TxtFuncMap())
+	buildDoc(resources.Cluster{}, "docs/resources/", funcMap(resourcesMap, "Resource", parser.packs), sprig.TxtFuncMap())
+	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", funcMap(dataSourcesMap, "DataSource", parser.packs), sprig.TxtFuncMap())
 }

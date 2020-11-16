@@ -1325,13 +1325,13 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `server` - (Computed) - String
-- `context` - (Computed) - String
-- `namespace` - (Computed) - String
-- `kube_bearer_token` - (Computed) - String
-- `kube_user` - (Computed) - String
-- `kube_password` - (Computed) - String
-- `ca_cert` - (Computed) - String
-- `client_cert` - (Computed) - String
-- `client_key` - (Computed) - String
+- `server` - (Computed) - String - Kubernetes server url.
+- `context` - (Computed) - String - Kubernetes context.
+- `namespace` - (Computed) - String - Kubernetes namespace.
+- `kube_bearer_token` - (Computed) - String - Kubernetes bearer token.
+- `kube_user` - (Computed) - String - Kubernetes user.
+- `kube_password` - (Computed) - String - Kubernetes password.
+- `ca_cert` - (Computed) - String - Kubernetes cluster certificate.
+- `client_cert` - (Computed) - String - Kubernetes client certificate.
+- `client_key` - (Computed) - String - Kubernetes client key.
 

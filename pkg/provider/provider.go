@@ -2,6 +2,7 @@ package provider
 
 import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
+	"github.com/eddycharly/terraform-provider-kops/pkg/datasources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -10,9 +11,9 @@ import (
 func NewProvider() *schema.Provider {
 	return &schema.Provider{
 		Schema: schemas.ConfigProvider().Schema,
-		// DataSourcesMap: map[string]*schema.Resource{
-		// 	"kops_cluster": datasources.Cluster(),
-		// },
+		DataSourcesMap: map[string]*schema.Resource{
+			"kops_kube_config": datasources.KubeConfig(),
+		},
 		ResourcesMap: map[string]*schema.Resource{
 			"kops_cluster": resources.Cluster(),
 		},

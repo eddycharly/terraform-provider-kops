@@ -3,15 +3,24 @@ package kube
 import "k8s.io/kops/pkg/kubeconfig"
 
 type Config struct {
-	Server          string
-	Context         string
-	Namespace       string
+	// Kubernetes server url
+	Server string
+	// Kubernetes context
+	Context string
+	// Kubernetes namespace
+	Namespace string
+	// Kubernetes bearer token
 	KubeBearerToken string
-	KubeUser        string
-	KubePassword    string
-	CaCert          string
-	ClientCert      string
-	ClientKey       string
+	// Kubernetes user
+	KubeUser string
+	// Kubernetes password
+	KubePassword string
+	// Kubernetes cluster certificate
+	CaCert string
+	// Kubernetes client certificate
+	ClientCert string
+	// Kubernetes client key
+	ClientKey string
 }
 
 func FromKubeconfigBuilder(kubeConfig *kubeconfig.KubeconfigBuilder) *Config {

@@ -59,7 +59,7 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	kube, err := getKubeConfig(name, clientset)
+	kube, err := GetKubeConfig(name, clientset)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +190,7 @@ func rollingUpdate(name string, clientset simple.Clientset, options config.Rolli
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-	configBuilder, err := getKubeConfig(name, clientset)
+	configBuilder, err := GetKubeConfig(name, clientset)
 	if err != nil {
 		return err
 	}
@@ -315,7 +315,7 @@ func validateCluster(name string, clientSet simple.Clientset, options config.Val
 	if len(instanceGroups) == 0 {
 		return fmt.Errorf("no InstanceGroup objects found")
 	}
-	configBuilder, err := getKubeConfig(name, clientSet)
+	configBuilder, err := GetKubeConfig(name, clientSet)
 	if err != nil {
 		return err
 	}
@@ -372,7 +372,7 @@ func validateCluster(name string, clientSet simple.Clientset, options config.Val
 	}
 }
 
-func getKubeConfig(name string, clientset simple.Clientset) (*kubeconfig.KubeconfigBuilder, error) {
+func GetKubeConfig(name string, clientset simple.Clientset) (*kubeconfig.KubeconfigBuilder, error) {
 	cluster, err := clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return nil, err
