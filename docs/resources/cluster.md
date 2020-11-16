@@ -68,7 +68,7 @@ The following arguments are supported:
 - `sysctl_parameters` - (Optional) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Optional) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.
 - `instance_group` - (Required) - List([instance_group](#instance_group)) - InstanceGroup defines the list of instance groups making the cluster.
-- `kube_config` - (Computed) - [kube_config](#kube_config) - KubeConfig holds the necessary information to connect to the cluster.
+- `kube_config` - (Computed) - [config](#config) - KubeConfig holds the necessary information to connect to the cluster.
 
 ## Nested resources
 
@@ -1319,7 +1319,7 @@ The following arguments are supported:
 
 - `profile` - (Required) - String - Profile is the AWS IAM Profile to attach to instances in this instance group.<br />Specify the ARN for the IAM instance profile. (AWS only).
 
-### kube_config
+### config
 
 #### Argument Reference
 

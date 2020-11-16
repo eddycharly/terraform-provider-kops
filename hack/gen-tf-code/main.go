@@ -12,7 +12,9 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"golang.org/x/tools/go/packages"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/kops/pkg/apis/kops"
@@ -222,8 +224,11 @@ func getAttributeComment(packName, structName, fieldName string, c map[string]ma
 	return ""
 }
 
-func funcMap(op map[reflect.Type]*options, c map[string]map[string]_struct) template.FuncMap {
+func funcMap(op map[reflect.Type]*options, scope string, c map[string]map[string]_struct) template.FuncMap {
 	return template.FuncMap{
+		"scope": func() string {
+			return scope
+		},
 		"fields": getFields,
 		"needsSchema": func(t reflect.Type) bool {
 			return !op[t].noSchema
@@ -379,7 +384,7 @@ The following arguments are supported:
 	}
 }
 
-func buildSchema(t reflect.Type, p string, funcMaps ...template.FuncMap) {
+func buildSchema(t reflect.Type, p string, scope string, funcMaps ...template.FuncMap) {
 	tmplString := `
 package schemas
 
@@ -399,7 +404,7 @@ import (
 {{- if isPtr . -}}
 {{- template "schemaElem" .Elem }}
 {{- else if isStruct . -}}
-{{ .Name }}()
+{{ scope }}{{ .Name }}()
 {{- else -}}
 {{- template "schema" . -}}
 {{- end -}}
@@ -419,14 +424,14 @@ Quantity()
 {{- else if isIntOrString . -}}
 IntOrString()
 {{- else if isStruct . -}}
-Struct({{ .Name }}())
+Struct({{ scope }}{{ .Name }}())
 {{- else -}}
 {{- schemaType . -}}()
 {{- end -}}
 {{- end }}
 
 {{ if needsSchema . }}
-func {{ .Name }}() *schema.Resource {
+func {{ scope }}{{ .Name }}() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			{{- range (fields . true) }}
@@ -479,7 +484,7 @@ func (in interface{}) {{ .String }} {
 	if in == nil {
 		return {{ .String }}{}
 	}
-	return (Expand{{ .Name }}(in.(map[string]interface{})))
+	return (Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})))
 }(in)
 {{- else -}}
 {{ template "expand" . }}
@@ -529,7 +534,7 @@ func (in interface{}) {{ .String }} {
 	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 		return {{ .String }}{}
 	}
-	return (Expand{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
+	return (Expand{{ scope }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
 }(in)
 {{- else -}}
 {{ .String }}(Expand{{ schemaType . }}(in))
@@ -554,7 +559,7 @@ FlattenQuantity(in)
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
 func (in {{ .String }}) interface{} {
-	return Flatten{{ .Name }}(in)
+	return Flatten{{ scope }}{{ .Name }}(in)
 }(in)
 {{- else -}}
 {{ template "flatten" . }}
@@ -598,14 +603,14 @@ FlattenQuantity(in)
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
 func (in {{ .String }}) []map[string]interface{} {
-	return []map[string]interface{}{Flatten{{ .Name }}(in)}
+	return []map[string]interface{}{Flatten{{ scope }}{{ .Name }}(in)}
 }(in)
 {{- else -}}
 Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
 {{- end -}}
 {{- end }}
 
-func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
+func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	if in == nil {
 		panic("expand {{ .Name }} failure, in is nil")
 	}
@@ -625,11 +630,11 @@ func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	}
 }
 
-func Flatten{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
+func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
 	{{ if .Anonymous -}}
-	Flatten{{ .Type.Name }}Into(in.{{ .Name }}, out)
+	Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
 	{{- else -}}
 	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
 		return {{ template "flatten" .Type }}
@@ -639,9 +644,9 @@ func Flatten{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
 	{{- end }}
 }
 
-func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
+func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	out := map[string]interface{}{}
-	Flatten{{ .Name }}Into(in, out)
+	Flatten{{ scope }}{{ .Name }}Into(in, out)
 	return out
 }
 `
@@ -652,230 +657,8 @@ func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
 	}
-	f, _ := os.Create(path.Join(p, t.Name()+".generated.go"))
+	f, _ := os.Create(path.Join(p, fmt.Sprintf("%s_%s.generated.go", scope, t.Name())))
 	defer f.Close()
-	if err := tmpl.Execute(f, t); err != nil {
-		panic(err)
-	}
-}
-
-func buildStructure(t reflect.Type, p string, funcMaps ...template.FuncMap) {
-	tmplString := `
-package structures
-
-import (
-	"encoding/json"
-	"log"
-	"strings"
-	"time"
-
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kops/pkg/apis/kops"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api"
-)
-
-{{- define "expandElem" -}}
-{{- if isPtr . -}}
-func (in interface{}) {{ .String }} {
-	if in == nil {
-		return nil
-	}
-	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-		return nil
-	}
-	return func (in {{ .Elem.String }}) {{ .String }} {
-		return &in
-	}({{ template "expandElem" .Elem }})
-}(in)
-{{- else if isDuration . -}}
-ExpandDuration(in)
-{{- else if isQuantity . -}}
-ExpandQuantity(in)
-{{- else if isIntOrString . -}}
-ExpandIntOrString(in)
-{{- else if isStruct . -}}
-func (in interface{}) {{ .String }} {
-	if in == nil {
-		return {{ .String }}{}
-	}
-	return (Expand{{ .Name }}(in.(map[string]interface{})))
-}(in)
-{{- else -}}
-{{ template "expand" . }}
-{{- end -}}
-{{- end -}}
-
-{{- define "expand" -}}
-{{- if isPtr . -}}
-func (in interface{}) {{ .String }} {
-	if in == nil {
-		return nil
-	}
-	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-		return nil
-	}
-	return func (in {{ .Elem.String }}) {{ .String }} {
-		return &in
-	}({{ template "expand" .Elem }})
-}(in)
-{{- else if isList . -}}
-func (in interface{}) {{ .String }} {
-	var out {{ .String }}
-	for _, in := range in.([]interface{}) {
-		out = append(out, {{ template "expandElem" .Elem }})
-	}
-	return out
-}(in)
-{{- else if isMap . -}}
-func (in interface{}) map[string]{{ .Elem.String }} {
-	if in == nil {
-		return nil
-	}
-	out := {{ .String }}{}
-	for key, in := range in.(map[string]interface{}) {
-		out[key] = {{ template "expand" .Elem }}
-	}
-	return out
-}(in)
-{{- else if isDuration . -}}
-ExpandDuration(in)
-{{- else if isQuantity . -}}
-ExpandQuantity(in)
-{{- else if isIntOrString . -}}
-ExpandIntOrString(in)
-{{- else if isStruct . -}}
-func (in interface{}) {{ .String }} {
-	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-		return {{ .String }}{}
-	}
-	return (Expand{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
-}(in)
-{{- else -}}
-{{ .String }}(Expand{{ schemaType . }}(in))
-{{- end -}}
-{{- end -}}
-
-{{- define "flattenElem" -}}
-{{- if isPtr . -}}
-func (in {{ .String }}) interface{} {
-	if in == nil {
-		return nil
-	}
-	return func (in {{ .Elem.String }}) interface{} {
-		return {{ template "flattenElem" .Elem }}
-	}(*in)
-}(in)
-{{- else if isDuration . -}}
-FlattenDuration(in)
-{{- else if isQuantity . -}}
-FlattenQuantity(in)
-{{- else if isIntOrString . -}}
-FlattenIntOrString(in)
-{{- else if isStruct . -}}
-func (in {{ .String }}) interface{} {
-	return Flatten{{ .Name }}(in)
-}(in)
-{{- else -}}
-{{ template "flatten" . }}
-{{- end -}}
-{{- end -}}
-
-{{- define "flatten" -}}
-{{- if isPtr . -}}
-func (in {{ .String }}) interface{} {
-	if in == nil {
-		return nil
-	}
-	return func (in {{ .Elem.String }}) interface{} {
-		return {{ template "flatten" .Elem }}
-	}(*in)
-}(in)
-{{- else if isList . -}}
-func (in {{ .String }}) []interface{} {
-	var out []interface{}
-	for _, in := range in {
-		out = append(out, {{ template "flattenElem" .Elem }})
-	}
-	return out
-}(in)
-{{- else if isMap . -}}
-func (in map[string]{{ .Elem.String }}) map[string]interface{} {
-	if in == nil {
-		return nil
-	}
-	out := map[string]interface{}{}
-	for key, in := range in {
-		out[key] = {{ template "flattenElem" .Elem }}
-	}
-	return out
-}(in)
-{{- else if isDuration . -}}
-FlattenDuration(in)
-{{- else if isQuantity . -}}
-FlattenQuantity(in)
-{{- else if isIntOrString . -}}
-FlattenIntOrString(in)
-{{- else if isStruct . -}}
-func (in {{ .String }}) []map[string]interface{} {
-	return []map[string]interface{}{Flatten{{ .Name }}(in)}
-}(in)
-{{- else -}}
-Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
-{{- end -}}
-{{- end }}
-
-func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
-	if in == nil {
-		panic("expand {{ .Name }} failure, in is nil")
-	}
-	return {{ .String }}{
-	{{- range (fields . false) }}
-	{{- if not (isExcluded .) }}
-	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
-		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) }}
-		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-			return nil
-		}
-		{{- end }}
-		return {{ template "expand" .Type }}
-	}({{ if .Anonymous }}in{{ else }}in[{{ fieldName . | snakecase | quote }}]{{ end }}),
-	{{- end }}
-	{{- end }}
-	}
-}
-
-func Flatten{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
-	{{- range (fields . false) }}
-	{{- if not (isExcluded .) }}
-	{{ if .Anonymous -}}
-	Flatten{{ .Type.Name }}Into(in.{{ .Name }}, out)
-	{{- else -}}
-	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
-		return {{ template "flatten" .Type }}
-	}(in.{{ .Name }})
-	{{- end }}
-	{{- end }}
-	{{- end }}
-}
-
-func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
-	out := map[string]interface{}{}
-	Flatten{{ .Name }}Into(in, out)
-	return out
-}
-`
-	tmpl := template.New("doc")
-	for _, funcMap := range funcMaps {
-		tmpl = tmpl.Funcs(funcMap)
-	}
-	if _, err := tmpl.Parse(tmplString); err != nil {
-		panic(err)
-	}
-	f, _ := os.Create(path.Join(p, t.Name()+".generated.go"))
-	defer f.Close()
-
 	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
 	}
@@ -907,18 +690,17 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	}
 }
 
-func build(g ...generated) map[reflect.Type]*options {
+func build(scope string, g ...generated) map[reflect.Type]*options {
 	o := map[reflect.Type]*options{}
 	for _, gen := range g {
 		o[gen.t] = gen.o
 	}
 	funcMaps := []template.FuncMap{
-		funcMap(o, nil),
+		funcMap(o, scope, nil),
 		sprig.TxtFuncMap(),
 	}
 	for _, gen := range g {
-		// buildStructure(gen.t, "pkg/structures", funcMaps...)
-		buildSchema(gen.t, "pkg/schemas", funcMaps...)
+		buildSchema(gen.t, "pkg/schemas", scope, funcMaps...)
 	}
 	return o
 }
@@ -1038,7 +820,9 @@ func main() {
 	}
 	packs, err := packages.Load(
 		&cfg,
-		"github.com/eddycharly/terraform-provider-kops/pkg/api",
+		"github.com/eddycharly/terraform-provider-kops/pkg/api/config",
+		"github.com/eddycharly/terraform-provider-kops/pkg/api/kube",
+		"github.com/eddycharly/terraform-provider-kops/pkg/api/resources",
 	)
 	if err != nil {
 		panic(err)
@@ -1052,21 +836,15 @@ func main() {
 	}
 	log.Println("generating schemas, expanders and flatteners...")
 	resourcesMap := build(
-		generate(api.ProviderConfig{},
-			required("StateStore"),
-		),
-		generate(api.AwsConfig{}),
-		generate(api.AwsAssumeRole{}),
-		generate(api.RollingUpdateOptions{}),
-		generate(api.ValidateOptions{}),
-		generate(api.KubeConfig{},
-			computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
-			sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
-		),
-		generate(api.Cluster{},
+		"Resource",
+		generate(resources.Cluster{},
 			required("Name", "AdminSshKey", "InstanceGroup"),
 			computedOnly("KubeConfig"),
 			sensitive("AdminSshKey", "KubeConfig"),
+		),
+		generate(kube.Config{},
+			computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+			sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
 		generate(kops.ClusterSpec{},
 			noSchema(),
@@ -1113,7 +891,7 @@ func main() {
 		generate(kops.AlwaysAllowAuthorizationSpec{}),
 		generate(kops.RBACAuthorizationSpec{}),
 		generate(kops.NodeAuthorizerSpec{}),
-		generate(api.InstanceGroup{},
+		generate(resources.InstanceGroup{},
 			required("Name"),
 		),
 		generate(kops.InstanceGroupSpec{},
@@ -1198,6 +976,16 @@ func main() {
 		),
 		generate(kops.RollingUpdate{}),
 	)
+	/*configMap := */ build(
+		"Config",
+		generate(config.Provider{},
+			required("StateStore"),
+		),
+		generate(config.Aws{}),
+		generate(config.AwsAssumeRole{}),
+		generate(config.RollingUpdate{}),
+		generate(config.Validate{}),
+	)
 	log.Println("generating docs...")
-	buildDoc(api.Cluster{}, "docs/resources/", funcMap(resourcesMap, parser.packs), sprig.TxtFuncMap())
+	buildDoc(resources.Cluster{}, "docs/resources/", funcMap(resourcesMap, "doc", parser.packs), sprig.TxtFuncMap())
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
@@ -23,14 +23,14 @@ A valid value follows the format s3://<bucket>.
 Trailing slash will be trimmed.`
 )
 
-type config struct {
+type options struct {
 	clientset            simple.Clientset
-	rollingUpdateOptions api.RollingUpdateOptions
-	validateOptions      api.ValidateOptions
+	rollingUpdateOptions config.RollingUpdate
+	validateOptions      config.Validate
 }
 
 func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
-	providerConfig := schemas.ExpandProviderConfig(d.Get("").(map[string]interface{}))
+	providerConfig := schemas.ExpandConfigProvider(d.Get("").(map[string]interface{}))
 	err := initCredentials(providerConfig.Aws)
 	if err != nil {
 		return nil, err
@@ -42,26 +42,26 @@ func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
 	if !vfs.IsClusterReadable(basePath) {
 		return nil, field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError)
 	}
-	return &config{
+	return &options{
 		clientset:            vfsclientset.NewVFSClientset(basePath),
-		rollingUpdateOptions: providerConfig.RollingUpdateOptions,
-		validateOptions:      providerConfig.ValidateOptions,
+		rollingUpdateOptions: providerConfig.RollingUpdate,
+		validateOptions:      providerConfig.Validate,
 	}, nil
 }
 
 func Clientset(in interface{}) simple.Clientset {
-	return in.(*config).clientset
+	return in.(*options).clientset
 }
 
-func RollingUpdateOptions(in interface{}) api.RollingUpdateOptions {
-	return in.(*config).rollingUpdateOptions
+func RollingUpdateOptions(in interface{}) config.RollingUpdate {
+	return in.(*options).rollingUpdateOptions
 }
 
-func ValidateOptions(in interface{}) api.ValidateOptions {
-	return in.(*config).validateOptions
+func ValidateOptions(in interface{}) config.Validate {
+	return in.(*options).validateOptions
 }
 
-func initCredentials(config *api.AwsConfig) error {
+func initCredentials(config *config.Aws) error {
 	if config == nil {
 		return nil
 	}
