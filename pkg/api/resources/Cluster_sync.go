@@ -118,7 +118,10 @@ func SyncCluster(cluster *Cluster, clientset simple.Clientset, ruo config.Rollin
 	if err != nil {
 		return nil, err
 	}
-	syncInstanceGroups(cluster, clientset)
+	err = syncInstanceGroups(cluster, clientset)
+	if err != nil {
+		return nil, err
+	}
 	apply := &cloudup.ApplyClusterCmd{
 		Cluster:    kc,
 		Clientset:  clientset,
