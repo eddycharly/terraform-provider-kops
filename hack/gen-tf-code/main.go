@@ -224,7 +224,10 @@ func getAttributeComment(packName, structName, fieldName string, c map[string]ma
 
 func funcMap(op map[reflect.Type]*options, c map[string]map[string]_struct) template.FuncMap {
 	return template.FuncMap{
-		"fields":     getFields,
+		"fields": getFields,
+		"needsSchema": func(t reflect.Type) bool {
+			return !op[t].noSchema
+		},
 		"schemaType": schemaType,
 		"resourceComment": func(t reflect.Type) string {
 			return getResourceComment(t.PkgPath(), t.Name(), c)
@@ -261,6 +264,9 @@ func funcMap(op map[reflect.Type]*options, c map[string]map[string]_struct) temp
 			}
 			return fieldName(in.Name)
 		},
+		"schemaName": func(in string) string {
+			return fieldName(in)
+		},
 		"isValueType": isValueType,
 		"code": func(in string) string {
 			return fmt.Sprintf("`%s`", in)
@@ -291,7 +297,7 @@ func funcMap(op map[reflect.Type]*options, c map[string]map[string]_struct) temp
 
 func buildDoc(i interface{}, p string, funcMaps ...template.FuncMap) {
 	t := reflect.TypeOf(i)
-	tmplString := `# kops_{{ .Name | snakecase }}
+	tmplString := `# kops_{{ schemaName .Name | snakecase }}
 
 {{- $comment := resourceComment . }}
 {{ if $comment }}
@@ -312,7 +318,7 @@ Quantity
 {{- else if isIntOrString . -}}
 IntOrString
 {{- else if isStruct . -}}
-[{{ .Name | snakecase }}](#{{ .Name | snakecase }})
+[{{ schemaName .Name | snakecase }}](#{{ schemaName .Name | snakecase }})
 {{- else -}}
 {{- schemaType . -}}
 {{- end -}}
@@ -333,7 +339,7 @@ The following arguments are supported:
 
 ## Nested resources
 {{ range $type := (subResources .) }}
-### {{ .Name | snakecase }}
+### {{ schemaName .Name | snakecase }}
 {{- $comment := resourceComment $type }}
 {{ if $comment }}
 {{ $comment }}
@@ -419,6 +425,7 @@ Struct({{ .Name }}())
 {{- end -}}
 {{- end }}
 
+{{ if needsSchema . }}
 func {{ .Name }}() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -445,6 +452,197 @@ func {{ .Name }}() *schema.Resource {
 			{{- end }}
 		},
 	}
+}
+{{ end }}
+
+{{- define "expandElem" -}}
+{{- if isPtr . -}}
+func (in interface{}) {{ .String }} {
+	if in == nil {
+		return nil
+	}
+	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+		return nil
+	}
+	return func (in {{ .Elem.String }}) {{ .String }} {
+		return &in
+	}({{ template "expandElem" .Elem }})
+}(in)
+{{- else if isDuration . -}}
+ExpandDuration(in)
+{{- else if isQuantity . -}}
+ExpandQuantity(in)
+{{- else if isIntOrString . -}}
+ExpandIntOrString(in)
+{{- else if isStruct . -}}
+func (in interface{}) {{ .String }} {
+	if in == nil {
+		return {{ .String }}{}
+	}
+	return (Expand{{ .Name }}(in.(map[string]interface{})))
+}(in)
+{{- else -}}
+{{ template "expand" . }}
+{{- end -}}
+{{- end -}}
+
+{{- define "expand" -}}
+{{- if isPtr . -}}
+func (in interface{}) {{ .String }} {
+	if in == nil {
+		return nil
+	}
+	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+		return nil
+	}
+	return func (in {{ .Elem.String }}) {{ .String }} {
+		return &in
+	}({{ template "expand" .Elem }})
+}(in)
+{{- else if isList . -}}
+func (in interface{}) {{ .String }} {
+	var out {{ .String }}
+	for _, in := range in.([]interface{}) {
+		out = append(out, {{ template "expandElem" .Elem }})
+	}
+	return out
+}(in)
+{{- else if isMap . -}}
+func (in interface{}) map[string]{{ .Elem.String }} {
+	if in == nil {
+		return nil
+	}
+	out := {{ .String }}{}
+	for key, in := range in.(map[string]interface{}) {
+		out[key] = {{ template "expand" .Elem }}
+	}
+	return out
+}(in)
+{{- else if isDuration . -}}
+ExpandDuration(in)
+{{- else if isQuantity . -}}
+ExpandQuantity(in)
+{{- else if isIntOrString . -}}
+ExpandIntOrString(in)
+{{- else if isStruct . -}}
+func (in interface{}) {{ .String }} {
+	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+		return {{ .String }}{}
+	}
+	return (Expand{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
+}(in)
+{{- else -}}
+{{ .String }}(Expand{{ schemaType . }}(in))
+{{- end -}}
+{{- end -}}
+
+{{- define "flattenElem" -}}
+{{- if isPtr . -}}
+func (in {{ .String }}) interface{} {
+	if in == nil {
+		return nil
+	}
+	return func (in {{ .Elem.String }}) interface{} {
+		return {{ template "flattenElem" .Elem }}
+	}(*in)
+}(in)
+{{- else if isDuration . -}}
+FlattenDuration(in)
+{{- else if isQuantity . -}}
+FlattenQuantity(in)
+{{- else if isIntOrString . -}}
+FlattenIntOrString(in)
+{{- else if isStruct . -}}
+func (in {{ .String }}) interface{} {
+	return Flatten{{ .Name }}(in)
+}(in)
+{{- else -}}
+{{ template "flatten" . }}
+{{- end -}}
+{{- end -}}
+
+{{- define "flatten" -}}
+{{- if isPtr . -}}
+func (in {{ .String }}) interface{} {
+	if in == nil {
+		return nil
+	}
+	return func (in {{ .Elem.String }}) interface{} {
+		return {{ template "flatten" .Elem }}
+	}(*in)
+}(in)
+{{- else if isList . -}}
+func (in {{ .String }}) []interface{} {
+	var out []interface{}
+	for _, in := range in {
+		out = append(out, {{ template "flattenElem" .Elem }})
+	}
+	return out
+}(in)
+{{- else if isMap . -}}
+func (in map[string]{{ .Elem.String }}) map[string]interface{} {
+	if in == nil {
+		return nil
+	}
+	out := map[string]interface{}{}
+	for key, in := range in {
+		out[key] = {{ template "flattenElem" .Elem }}
+	}
+	return out
+}(in)
+{{- else if isDuration . -}}
+FlattenDuration(in)
+{{- else if isQuantity . -}}
+FlattenQuantity(in)
+{{- else if isIntOrString . -}}
+FlattenIntOrString(in)
+{{- else if isStruct . -}}
+func (in {{ .String }}) []map[string]interface{} {
+	return []map[string]interface{}{Flatten{{ .Name }}(in)}
+}(in)
+{{- else -}}
+Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
+{{- end -}}
+{{- end }}
+
+func Expand{{ .Name }}(in map[string]interface{}) {{ .String }} {
+	if in == nil {
+		panic("expand {{ .Name }} failure, in is nil")
+	}
+	return {{ .String }}{
+	{{- range (fields . false) }}
+	{{- if not (isExcluded .) }}
+	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
+		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) }}
+		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+			return nil
+		}
+		{{- end }}
+		return {{ template "expand" .Type }}
+	}({{ if .Anonymous }}in{{ else }}in[{{ fieldName . | snakecase | quote }}]{{ end }}),
+	{{- end }}
+	{{- end }}
+	}
+}
+
+func Flatten{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
+	{{- range (fields . false) }}
+	{{- if not (isExcluded .) }}
+	{{ if .Anonymous -}}
+	Flatten{{ .Type.Name }}Into(in.{{ .Name }}, out)
+	{{- else -}}
+	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
+		return {{ template "flatten" .Type }}
+	}(in.{{ .Name }})
+	{{- end }}
+	{{- end }}
+	{{- end }}
+}
+
+func Flatten{{ .Name }}(in {{ .String }}) map[string]interface{} {
+	out := map[string]interface{}{}
+	Flatten{{ .Name }}Into(in, out)
+	return out
 }
 `
 	tmpl := template.New("doc")
@@ -719,10 +917,8 @@ func build(g ...generated) map[reflect.Type]*options {
 		sprig.TxtFuncMap(),
 	}
 	for _, gen := range g {
-		buildStructure(gen.t, "pkg/structures", funcMaps...)
-		if !o[gen.t].noSchema {
-			buildSchema(gen.t, "pkg/schemas", funcMaps...)
-		}
+		// buildStructure(gen.t, "pkg/structures", funcMaps...)
+		buildSchema(gen.t, "pkg/schemas", funcMaps...)
 	}
 	return o
 }
@@ -1004,7 +1200,4 @@ func main() {
 	)
 	log.Println("generating docs...")
 	buildDoc(api.Cluster{}, "docs/resources/", funcMap(resourcesMap, parser.packs), sprig.TxtFuncMap())
-	buildDoc(api.KubeConfig{}, "docs/data-sources/", funcMap(resourcesMap, parser.packs), sprig.TxtFuncMap())
-	buildDoc(api.InstanceGroup{}, "docs/data-sources/", funcMap(resourcesMap, parser.packs), sprig.TxtFuncMap())
-	buildDoc(api.Cluster{}, "docs/data-sources/", funcMap(resourcesMap, parser.packs), sprig.TxtFuncMap())
 }
