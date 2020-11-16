@@ -1005,12 +1005,30 @@ func main() {
 		generate(datasources.KubeConfig{},
 			required("ClusterName"),
 		),
-		generate(
-			kube.Config{},
+		generate(kube.Config{},
+			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
+		generate(datasources.InstanceGroup{},
+			required("ClusterName", "Name"),
+		),
+		generate(kops.InstanceGroupSpec{},
+			noSchema(),
+		),
+		generate(kops.VolumeSpec{}),
+		generate(kops.VolumeMountSpec{}),
+		generate(kops.HookSpec{}),
+		generate(kops.FileAssetSpec{}),
+		generate(kops.KubeletConfigSpec{}),
+		generate(kops.MixedInstancesPolicySpec{}),
+		generate(kops.UserData{}),
+		generate(kops.LoadBalancer{}),
+		generate(kops.IAMProfileSpec{}),
+		generate(kops.RollingUpdate{}),
+		generate(kops.ExecContainerAction{}),
 	)
 	log.Println("generating docs...")
 	buildDoc(resources.Cluster{}, "docs/resources/", funcMap(resourcesMap, "Resource", parser.packs), sprig.TxtFuncMap())
 	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", funcMap(dataSourcesMap, "DataSource", parser.packs), sprig.TxtFuncMap())
+	buildDoc(datasources.InstanceGroup{}, "docs/data-sources/", funcMap(dataSourcesMap, "DataSource", parser.packs), sprig.TxtFuncMap())
 }

@@ -12,7 +12,8 @@ func NewProvider() *schema.Provider {
 	return &schema.Provider{
 		Schema: schemas.ConfigProvider().Schema,
 		DataSourcesMap: map[string]*schema.Resource{
-			"kops_kube_config": datasources.KubeConfig(),
+			"kops_kube_config":    datasources.KubeConfig(),
+			"kops_instance_group": datasources.InstanceGroup(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"kops_cluster": resources.Cluster(),

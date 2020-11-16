@@ -75,6 +75,10 @@ func OptionalDuration() *schema.Schema {
 	return OptionalString()
 }
 
+func ComputedDuration() *schema.Schema {
+	return ComputedString()
+}
+
 func ExpandDuration(in interface{}) metav1.Duration {
 	d, _ := time.ParseDuration(in.(string))
 	return metav1.Duration{
@@ -90,6 +94,10 @@ func FlattenDuration(in metav1.Duration) interface{} {
 
 func OptionalIntOrString() *schema.Schema {
 	return OptionalString()
+}
+
+func ComputedIntOrString() *schema.Schema {
+	return ComputedString()
 }
 
 func ExpandIntOrString(in interface{}) intstr.IntOrString {
@@ -108,6 +116,10 @@ func RequiredMap(elem *schema.Schema) *schema.Schema {
 
 func OptionalMap(elem *schema.Schema) *schema.Schema {
 	return Schema(schema.TypeMap, elem, false, true, false, 0)
+}
+
+func ComputedMap(elem *schema.Schema) *schema.Schema {
+	return Schema(schema.TypeMap, elem, false, false, true, 0)
 }
 
 func OptionalComputedMap(elem *schema.Schema) *schema.Schema {
@@ -144,6 +156,10 @@ func RequiredList(elem interface{}) *schema.Schema {
 
 func OptionalList(elem interface{}) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, false, 0)
+}
+
+func ComputedList(elem interface{}) *schema.Schema {
+	return Schema(schema.TypeList, elem, false, false, true, 0)
 }
 
 func OptionalComputedList(elem interface{}) *schema.Schema {

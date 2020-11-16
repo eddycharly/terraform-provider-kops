@@ -1,30 +1,30 @@
 package datasources
 
 import (
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func KubeConfig() *schema.Resource {
+func InstanceGroup() *schema.Resource {
 	return &schema.Resource{
-		Read: KubeConfigRead,
+		Read: InstanceGroupRead,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.DataSourceKubeConfig().Schema,
+		Schema: schemas.DataSourceInstanceGroup().Schema,
 	}
 }
 
-func KubeConfigRead(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 	clusterName := d.Get("cluster_name").(string)
-	kubeConfigBuilder, err := resources.GetKubeConfig(clusterName, config.Clientset(m))
+	name := d.Get("name").(string)
+	instanceGroup, err := resources.GetInstanceGroup(clusterName, name, config.Clientset(m))
 	if err != nil {
 		return err
 	}
-	for k, v := range schemas.FlattenDataSourceConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
+	for k, v := range schemas.FlattenDataSourceInstanceGroupSpec(instanceGroup.Spec) {
 		d.Set(k, v)
 	}
 	d.SetId("-")

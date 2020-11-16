@@ -1,6 +1,6 @@
 # kops_kube_config
 
-Cluster defines the configuration for a cluster<br />It includes cluster instance groups.
+KubeConfig represents the kubernets configuration needed to access a cluster.
 
 ## Argument Reference
 

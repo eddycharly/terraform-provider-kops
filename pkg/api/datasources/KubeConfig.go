@@ -4,8 +4,7 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 )
 
-// Cluster defines the configuration for a cluster
-// It includes cluster instance groups.
+// KubeConfig represents the kubernets configuration needed to access a cluster
 type KubeConfig struct {
 	// The cluster name
 	ClusterName string

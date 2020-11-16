@@ -88,3 +88,15 @@ func syncInstanceGroups(cluster *Cluster, clientset simple.Clientset) error {
 	}
 	return nil
 }
+
+func GetInstanceGroup(clusterName, name string, clientset simple.Clientset) (*kops.InstanceGroup, error) {
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
+	if err != nil {
+		return nil, err
+	}
+	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Get(context.Background(), name, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return instanceGroup, nil
+}
