@@ -1,6 +1,8 @@
 package datasources
 
 import (
+	"log"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
@@ -24,7 +26,10 @@ func KubeConfigRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	kubeConfig.Config = *kube.FromKubeconfigBuilder(kubeConfigBuilder)
-	schemas.FlattenDataSourceKubeConfigInto(kubeConfig, d.Get("").(map[string]interface{}))
+	for k, v := range schemas.FlattenDataSourceConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
+		log.Printf("%s - %s\n", k, v)
+		d.Set(k, v)
+	}
+	d.SetId(kubeConfig.ClusterName)
 	return nil
 }
