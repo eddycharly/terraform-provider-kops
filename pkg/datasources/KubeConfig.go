@@ -14,7 +14,7 @@ func KubeConfig() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.ResourceCluster().Schema,
+		Schema: schemas.DataSourceConfig().Schema,
 	}
 }
 
