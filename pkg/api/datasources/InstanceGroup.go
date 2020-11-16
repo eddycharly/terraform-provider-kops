@@ -1,14 +1,10 @@
 package datasources
 
-import (
-	"k8s.io/kops/pkg/apis/kops"
-)
+import "github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 
 // InstanceGroup defines a cluster instance group
 type InstanceGroup struct {
 	// The cluster name
 	ClusterName string
-	// The instance group name
-	Name string
-	kops.InstanceGroupSpec
+	resources.InstanceGroup
 }

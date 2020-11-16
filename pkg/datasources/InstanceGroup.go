@@ -13,7 +13,7 @@ func InstanceGroup() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.DataSourceInstanceGroup().Schema,
+		Schema: schemas.DataSourceDatasourcesInstanceGroup().Schema,
 	}
 }
 
@@ -24,7 +24,7 @@ func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	for k, v := range schemas.FlattenDataSourceInstanceGroupSpec(instanceGroup.Spec) {
+	for k, v := range schemas.FlattenDataSourceKopsInstanceGroupSpec(instanceGroup.Spec) {
 		d.Set(k, v)
 	}
 	d.SetId("-")

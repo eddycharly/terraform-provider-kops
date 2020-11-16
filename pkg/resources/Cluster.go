@@ -17,12 +17,12 @@ func Cluster() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.ResourceCluster().Schema,
+		Schema: schemas.ResourceResourcesCluster().Schema,
 	}
 }
 
 func ClusterCreate(d *schema.ResourceData, m interface{}) error {
-	cluster := schemas.ExpandResourceCluster(d.Get("").(map[string]interface{}))
+	cluster := schemas.ExpandResourceResourcesCluster(d.Get("").(map[string]interface{}))
 	_, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 }
 
 func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
-	cluster := schemas.ExpandResourceCluster(d.Get("").(map[string]interface{}))
+	cluster := schemas.ExpandResourceResourcesCluster(d.Get("").(map[string]interface{}))
 	_, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	if err != nil {
 		return err
@@ -45,7 +45,7 @@ func ClusterRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	flattened := schemas.FlattenResourceCluster(*cluster)
+	flattened := schemas.FlattenResourceResourcesCluster(*cluster)
 	for key, value := range flattened {
 		if err := d.Set(key, value); err != nil {
 			return err

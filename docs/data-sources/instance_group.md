@@ -6,7 +6,7 @@ InstanceGroup defines a cluster instance group.
 
 The following arguments are supported:
 - `cluster_name` - (Required) - String - The cluster name.
-- `name` - (Required) - String - The instance group name.
+- `name` - (Required) - String - Instance group name.
 - `role` - (Computed) - String - Type determines the role of instances in this group: masters or nodes.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.

@@ -10,7 +10,7 @@ import (
 
 func NewProvider() *schema.Provider {
 	return &schema.Provider{
-		Schema: schemas.ConfigProvider().Schema,
+		Schema: schemas.ConfigConfigProvider().Schema,
 		DataSourcesMap: map[string]*schema.Resource{
 			"kops_kube_config":    datasources.KubeConfig(),
 			"kops_instance_group": datasources.InstanceGroup(),

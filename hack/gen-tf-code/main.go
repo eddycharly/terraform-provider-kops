@@ -231,6 +231,10 @@ func funcMap(op map[reflect.Type]*options, scope string, c map[string]map[string
 		"scope": func() string {
 			return scope
 		},
+		"package": func(t reflect.Type) string {
+			split := strings.Split(t.PkgPath(), "/")
+			return split[len(split)-1]
+		},
 		"fields": getFields,
 		"needsSchema": func(t reflect.Type) bool {
 			return !op[t].noSchema
@@ -413,7 +417,7 @@ import (
 {{- if isPtr . -}}
 {{- template "schemaElem" .Elem }}
 {{- else if isStruct . -}}
-{{ scope }}{{ .Name }}()
+{{ scope }}{{ package . | camelcase }}{{ .Name }}()
 {{- else -}}
 {{- template "schema" . -}}
 {{- end -}}
@@ -433,14 +437,14 @@ Quantity()
 {{- else if isIntOrString . -}}
 IntOrString()
 {{- else if isStruct . -}}
-Struct({{ scope }}{{ .Name }}())
+Struct({{ scope }}{{ package . | camelcase }}{{ .Name }}())
 {{- else -}}
 {{- schemaType . -}}()
 {{- end -}}
 {{- end }}
 
 {{ if needsSchema . }}
-func {{ scope }}{{ .Name }}() *schema.Resource {
+func {{ scope }}{{ package . | camelcase }}{{ .Name }}() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			{{- range (fields . true) }}
@@ -493,7 +497,7 @@ func (in interface{}) {{ .String }} {
 	if in == nil {
 		return {{ .String }}{}
 	}
-	return (Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})))
+	return (Expand{{ scope }}{{ package . | camelcase }}{{ .Name }}(in.(map[string]interface{})))
 }(in)
 {{- else -}}
 {{ template "expand" . }}
@@ -543,7 +547,7 @@ func (in interface{}) {{ .String }} {
 	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 		return {{ .String }}{}
 	}
-	return (Expand{{ scope }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
+	return (Expand{{ scope }}{{ package . | camelcase }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
 }(in)
 {{- else -}}
 {{ .String }}(Expand{{ schemaType . }}(in))
@@ -568,7 +572,7 @@ FlattenQuantity(in)
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
 func (in {{ .String }}) interface{} {
-	return Flatten{{ scope }}{{ .Name }}(in)
+	return Flatten{{ scope }}{{ package . | camelcase }}{{ .Name }}(in)
 }(in)
 {{- else -}}
 {{ template "flatten" . }}
@@ -612,14 +616,14 @@ FlattenQuantity(in)
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
 func (in {{ .String }}) []map[string]interface{} {
-	return []map[string]interface{}{Flatten{{ scope }}{{ .Name }}(in)}
+	return []map[string]interface{}{Flatten{{ scope }}{{ package . | camelcase }}{{ .Name }}(in)}
 }(in)
 {{- else -}}
 Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
 {{- end -}}
 {{- end }}
 
-func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
+func Expand{{ scope }}{{ package . | camelcase }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	if in == nil {
 		panic("expand {{ .Name }} failure, in is nil")
 	}
@@ -635,7 +639,7 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 		{{- end }}
 		return {{ template "expand" .Type }}
 		{{- else -}}
-		return Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
+		return Expand{{ scope }}{{ package .Type | camelcase }}{{ .Type.Name }}(in.(map[string]interface{}))
 		{{- end }}
 	}({{ if .Anonymous }}in{{ else }}in[{{ fieldName . | snakecase | quote }}]{{ end }}),
 	{{- end }}
@@ -643,11 +647,11 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	}
 }
 
-func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
+func Flatten{{ scope }}{{ package . | camelcase }}{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
 	{{ if .Anonymous -}}
-	Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
+	Flatten{{ scope }}{{ package .Type | camelcase }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
 	{{- else -}}
 	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
 		return {{ template "flatten" .Type }}
@@ -657,9 +661,9 @@ func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interfac
 	{{- end }}
 }
 
-func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
+func Flatten{{ scope }}{{ package . | camelcase }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	out := map[string]interface{}{}
-	Flatten{{ scope }}{{ .Name }}Into(in, out)
+	Flatten{{ scope }}{{ package . | camelcase }}{{ .Name }}Into(in, out)
 	return out
 }
 `
@@ -670,7 +674,8 @@ func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
 	}
-	f, _ := os.Create(path.Join(p, fmt.Sprintf("%s_%s.generated.go", scope, t.Name())))
+	split := strings.Split(t.PkgPath(), "/")
+	f, _ := os.Create(path.Join(p, fmt.Sprintf("%s_%s_%s.generated.go", scope, split[len(split)-1], t.Name())))
 	defer f.Close()
 	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
@@ -1006,11 +1011,80 @@ func main() {
 			required("ClusterName"),
 		),
 		generate(kube.Config{},
-			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
+		generate(resources.Cluster{},
+			required("Name"),
+		),
+		generate(kops.ClusterSpec{},
+			exclude("GossipConfig", "DNSControllerGossipConfig", "Target"),
+		),
+		generate(kops.AddonSpec{}),
+		generate(kops.GossipConfig{}),
+		generate(kops.ClusterSubnetSpec{}),
+		generate(kops.TopologySpec{}),
+		generate(kops.DNSControllerGossipConfig{}),
+		generate(kops.EgressProxySpec{}),
+		generate(kops.EtcdClusterSpec{}),
+		generate(kops.ContainerdConfig{}),
+		generate(kops.DockerConfig{}),
+		generate(kops.KubeDNSConfig{}),
+		generate(kops.KubeAPIServerConfig{}),
+		generate(kops.KubeControllerManagerConfig{}),
+		generate(kops.CloudControllerManagerConfig{}),
+		generate(kops.KubeSchedulerConfig{}),
+		generate(kops.KubeProxyConfig{}),
+		generate(kops.CloudConfiguration{}),
+		generate(kops.ExternalDNSConfig{}),
+		generate(kops.NetworkingSpec{}),
+		generate(kops.AccessSpec{}),
+		generate(kops.AuthenticationSpec{}),
+		generate(kops.DNSAccessSpec{}),
+		generate(kops.LoadBalancerAccessSpec{}),
+		generate(kops.KopeioAuthenticationSpec{}),
+		generate(kops.AwsAuthenticationSpec{}),
+		generate(kops.OpenstackConfiguration{}),
+		generate(kops.LeaderElectionConfiguration{}),
+		generate(kops.AuthorizationSpec{}),
+		generate(kops.NodeAuthorizationSpec{}),
+		generate(kops.Assets{}),
+		generate(kops.IAMSpec{}),
+		generate(kops.AlwaysAllowAuthorizationSpec{}),
+		generate(kops.RBACAuthorizationSpec{}),
+		generate(kops.HTTPProxy{}),
+		generate(kops.EtcdMemberSpec{}),
+		generate(kops.EtcdBackupSpec{}),
+		generate(kops.EtcdManagerSpec{}),
+		generate(kops.NodeLocalDNSConfig{}),
+		generate(kops.ClassicNetworkingSpec{}),
+		generate(kops.KubenetNetworkingSpec{}),
+		generate(kops.ExternalNetworkingSpec{}),
+		generate(kops.CNINetworkingSpec{}),
+		generate(kops.EnvVar{}),
+		generate(kops.KopeioNetworkingSpec{}),
+		generate(kops.WeaveNetworkingSpec{}),
+		generate(kops.FlannelNetworkingSpec{}),
+		generate(kops.CalicoNetworkingSpec{}),
+		generate(kops.CanalNetworkingSpec{}),
+		generate(kops.KuberouterNetworkingSpec{}),
+		generate(kops.RomanaNetworkingSpec{}),
+		generate(kops.AmazonVPCNetworkingSpec{}),
+		generate(kops.CiliumNetworkingSpec{}),
+		generate(kops.LyftVPCNetworkingSpec{}),
+		generate(kops.GCENetworkingSpec{}),
+		generate(kops.NodeAuthorizerSpec{}),
+		generate(kops.OpenstackLoadbalancerConfig{}),
+		generate(kops.OpenstackMonitor{}),
+		generate(kops.OpenstackRouter{}),
+		generate(kops.OpenstackBlockStorageConfig{}),
+		generate(kops.BastionSpec{}),
+		generate(kops.DNSSpec{}),
+		generate(kops.BastionLoadBalancerSpec{}),
 		generate(datasources.InstanceGroup{},
-			required("ClusterName", "Name"),
+			required("ClusterName"),
+		),
+		generate(resources.InstanceGroup{},
+			required("Name"),
 		),
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),

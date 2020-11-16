@@ -14,7 +14,7 @@ func KubeConfig() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.DataSourceKubeConfig().Schema,
+		Schema: schemas.DataSourceDatasourcesKubeConfig().Schema,
 	}
 }
 
@@ -24,7 +24,7 @@ func KubeConfigRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	for k, v := range schemas.FlattenDataSourceConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
+	for k, v := range schemas.FlattenDataSourceKubeConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
 		d.Set(k, v)
 	}
 	d.SetId("-")

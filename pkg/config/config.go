@@ -30,7 +30,7 @@ type options struct {
 }
 
 func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
-	providerConfig := schemas.ExpandConfigProvider(d.Get("").(map[string]interface{}))
+	providerConfig := schemas.ExpandConfigConfigProvider(d.Get("").(map[string]interface{}))
 	err := initCredentials(providerConfig.Aws)
 	if err != nil {
 		return nil, err
