@@ -56,7 +56,7 @@ require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/aws/aws-sdk-go v1.35.33
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.1.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.3.0
 	golang.org/x/tools v0.0.0-20200713011307-fd294ab11aed
 	k8s.io/api v0.19.4
 	k8s.io/apimachinery v0.19.4
