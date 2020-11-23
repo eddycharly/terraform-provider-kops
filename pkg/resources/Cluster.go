@@ -3,7 +3,7 @@ package resources
 import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
-	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	resourcesschema "github.com/eddycharly/terraform-provider-kops/pkg/schemas/resources"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -17,12 +17,12 @@ func Cluster() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.ResourceResourcesCluster().Schema,
+		Schema: resourcesschema.ResourceCluster().Schema,
 	}
 }
 
 func ClusterCreate(d *schema.ResourceData, m interface{}) error {
-	cluster := schemas.ExpandResourceResourcesCluster(d.Get("").(map[string]interface{}))
+	cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
 	_, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 }
 
 func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
-	cluster := schemas.ExpandResourceResourcesCluster(d.Get("").(map[string]interface{}))
+	cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
 	_, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	if err != nil {
 		return err
@@ -45,7 +45,7 @@ func ClusterRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	flattened := schemas.FlattenResourceResourcesCluster(*cluster)
+	flattened := resourcesschema.FlattenResourceCluster(*cluster)
 	for key, value := range flattened {
 		if err := d.Set(key, value); err != nil {
 			return err

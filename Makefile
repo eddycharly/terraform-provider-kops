@@ -15,14 +15,14 @@ clean:
 gen-tf-code:
 	@go run ./hack/gen-tf-code/main.go
 	@go fmt ./pkg/schemas/...
-	@~/go/bin/goimports -w ./pkg/schemas/
+	@~/go/bin/goimports -w ./pkg/schemas
 
 .PHONY: gen
 gen: gen-tf-code
 
 .PHONY: build
 build:
-	@CGO_ENABLED=0 go build ./cmd/terraform-provider-kops
+	@CGO_ENABLED=0 go build -ldflags="-s -w" ./cmd/terraform-provider-kops
 
 .PHONY: fmt
 fmt:
