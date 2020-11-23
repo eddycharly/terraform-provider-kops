@@ -3,7 +3,8 @@ package datasources
 import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
-	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	datasourcesschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/datasources"
+	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -13,7 +14,7 @@ func InstanceGroup() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.DataSourceInstanceGroup().Schema,
+		Schema: datasourcesschemas.DataSourceInstanceGroup().Schema,
 	}
 }
 
@@ -24,7 +25,7 @@ func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	for k, v := range schemas.FlattenDataSourceInstanceGroupSpec(instanceGroup.Spec) {
+	for k, v := range kopsschemas.FlattenDataSourceInstanceGroupSpec(instanceGroup.Spec) {
 		d.Set(k, v)
 	}
 	d.SetId("-")

@@ -4,7 +4,8 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
-	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	datasourcesschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/datasources"
+	kubeschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kube"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -14,7 +15,7 @@ func KubeConfig() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-		Schema: schemas.DataSourceKubeConfig().Schema,
+		Schema: datasourcesschemas.DataSourceKubeConfig().Schema,
 	}
 }
 
@@ -24,7 +25,7 @@ func KubeConfigRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	for k, v := range schemas.FlattenDataSourceConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
+	for k, v := range kubeschemas.FlattenResourceConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
 		d.Set(k, v)
 	}
 	d.SetId("-")

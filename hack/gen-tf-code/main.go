@@ -225,52 +225,80 @@ func getAttributeComment(packName, structName, fieldName string, c map[string]ma
 	return ""
 }
 
-func funcMap(op map[reflect.Type]*options, scope string, c map[string]map[string]_struct) template.FuncMap {
+var mappings = map[string]string{
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/config":      "config",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources": "datasources",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube":        "kube",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources":   "resources",
+	"k8s.io/kops/pkg/apis/kops":                                         "kops",
+}
+
+func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope string, parser parser) template.FuncMap {
 	dataSource := scope == "DataSource"
 	return template.FuncMap{
 		"scope": func() string {
 			return scope
 		},
+		"imports": func() map[string]string {
+			out := make(map[string]string)
+			for i, v := range parser.packages[baseType.PkgPath()].Imports {
+				if v, ok := mappings[i]; ok {
+					out["github.com/eddycharly/terraform-provider-kops/pkg/schemas/"+v] = v + "schemas"
+				}
+				for i2 := range parser.packages[v.PkgPath].Imports {
+					if v, ok := mappings[i2]; ok {
+						out["github.com/eddycharly/terraform-provider-kops/pkg/schemas/"+v] = v + "schemas"
+					}
+				}
+			}
+			return out
+		},
+		"mapping": func(t reflect.Type) string {
+			if baseType.PkgPath() == t.PkgPath() {
+				return ""
+			}
+			return mappings[t.PkgPath()] + "schemas."
+		},
 		"fields": getFields,
 		"needsSchema": func(t reflect.Type) bool {
-			return !op[t].noSchema
+			return !optionsMap[t].noSchema
 		},
 		"schemaType": schemaType,
 		"resourceComment": func(t reflect.Type) string {
-			return getResourceComment(t.PkgPath(), t.Name(), c)
+			return getResourceComment(t.PkgPath(), t.Name(), parser.packs)
 		},
 		"attributeComment": func(f _field) string {
-			return getAttributeComment(f.Owner.PkgPath(), f.Owner.Name(), f.Name, c)
+			return getAttributeComment(f.Owner.PkgPath(), f.Owner.Name(), f.Name, parser.packs)
 		},
 		"subResources": func(t reflect.Type) []reflect.Type {
 			return getSubResources(t, map[reflect.Type]bool{}, func(in _field) bool {
-				return op[in.Owner].exclude.Has(in.Name)
+				return optionsMap[in.Owner].exclude.Has(in.Name)
 			})[1:]
 		},
 		"isExcluded": func(in _field) bool {
-			return op[in.Owner].exclude.Has(in.Name)
+			return optionsMap[in.Owner].exclude.Has(in.Name)
 		},
 		"isRequired": func(in _field) bool {
-			return op[in.Owner].required.Has(in.Name)
+			return optionsMap[in.Owner].required.Has(in.Name)
 		},
 		"isOptional": func(in _field) bool {
-			return !dataSource && (!op[in.Owner].required.Has(in.Name) && !op[in.Owner].computedOnly.Has(in.Name))
+			return !dataSource && (!optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name))
 		},
 		"isComputed": func(in _field) bool {
-			if op[in.Owner].required.Has(in.Name) {
+			if optionsMap[in.Owner].required.Has(in.Name) {
 				return false
 			}
-			return dataSource || (op[in.Owner].computed.Has(in.Name) || op[in.Owner].computedOnly.Has(in.Name))
+			return dataSource || (optionsMap[in.Owner].computed.Has(in.Name) || optionsMap[in.Owner].computedOnly.Has(in.Name))
 		},
 		"isSensitive": func(in _field) bool {
-			return op[in.Owner].sensitive.Has(in.Name)
+			return optionsMap[in.Owner].sensitive.Has(in.Name)
 		},
 		"suppressDiff": func(in _field) bool {
-			return op[in.Owner].suppressDiff.Has(in.Name)
+			return optionsMap[in.Owner].suppressDiff.Has(in.Name)
 		},
 		"fieldName": func(in _field) string {
-			if op[in.Owner].rename[in.Name] != "" {
-				return fieldName(op[in.Owner].rename[in.Name])
+			if optionsMap[in.Owner].rename[in.Name] != "" {
+				return fieldName(optionsMap[in.Owner].rename[in.Name])
 			}
 			return fieldName(in.Name)
 		},
@@ -305,7 +333,7 @@ func funcMap(op map[reflect.Type]*options, scope string, c map[string]map[string
 	}
 }
 
-func buildDoc(i interface{}, p string, funcMaps ...template.FuncMap) {
+func buildDoc(i interface{}, p string, optionsMap map[reflect.Type]*options, scope string, parser parser) {
 	t := reflect.TypeOf(i)
 	tmplString := `# kops_{{ schemaName .Name | snakecase }}
 
@@ -374,16 +402,25 @@ The following arguments are supported:
 {{ end }}
 `
 	tmpl := template.New("doc")
+	funcMaps := []template.FuncMap{
+		funcMap(t, optionsMap, scope, parser),
+		sprig.TxtFuncMap(),
+	}
 	for _, funcMap := range funcMaps {
 		tmpl = tmpl.Funcs(funcMap)
 	}
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
 	}
+	if err := os.MkdirAll(p, 0755); err != nil {
+		panic(fmt.Sprintf("Failed to create directories for %s", p))
+	}
 	fileName := toSnakeCase(fieldName(t.Name())) + ".md"
-	f, _ := os.Create(path.Join(p, fileName))
+	f, err := os.Create(path.Join(p, fileName))
+	if err != nil {
+		panic(fmt.Sprintf("Failed to create file %s", path.Join(p, fileName)))
+	}
 	defer f.Close()
-
 	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
 	}
@@ -407,13 +444,19 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	{{ range $k, $v := imports -}}
+	{{ $v }} {{ $k | quote }}
+	{{ end -}}
 )
+
+var _ = Schema
 
 {{- define "schemaElem" -}}
 {{- if isPtr . -}}
 {{- template "schemaElem" .Elem }}
 {{- else if isStruct . -}}
-{{ scope }}{{ .Name }}()
+{{ mapping . }}{{ scope }}{{ .Name }}()
 {{- else -}}
 {{- template "schema" . -}}
 {{- end -}}
@@ -433,7 +476,7 @@ Quantity()
 {{- else if isIntOrString . -}}
 IntOrString()
 {{- else if isStruct . -}}
-Struct({{ scope }}{{ .Name }}())
+Struct({{ mapping . }}{{ scope }}{{ .Name }}())
 {{- else -}}
 {{- schemaType . -}}()
 {{- end -}}
@@ -493,7 +536,7 @@ func (in interface{}) {{ .String }} {
 	if in == nil {
 		return {{ .String }}{}
 	}
-	return (Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})))
+	return ({{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})))
 }(in)
 {{- else -}}
 {{ template "expand" . }}
@@ -543,7 +586,7 @@ func (in interface{}) {{ .String }} {
 	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 		return {{ .String }}{}
 	}
-	return (Expand{{ scope }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
+	return ({{ mapping . }}Expand{{ scope }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
 }(in)
 {{- else -}}
 {{ .String }}(Expand{{ schemaType . }}(in))
@@ -568,7 +611,7 @@ FlattenQuantity(in)
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
 func (in {{ .String }}) interface{} {
-	return Flatten{{ scope }}{{ .Name }}(in)
+	return {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in)
 }(in)
 {{- else -}}
 {{ template "flatten" . }}
@@ -612,7 +655,7 @@ FlattenQuantity(in)
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
 func (in {{ .String }}) []map[string]interface{} {
-	return []map[string]interface{}{Flatten{{ scope }}{{ .Name }}(in)}
+	return []map[string]interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
 }(in)
 {{- else -}}
 Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
@@ -635,7 +678,7 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 		{{- end }}
 		return {{ template "expand" .Type }}
 		{{- else -}}
-		return Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
+		return {{ mapping .Type }}Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
 		{{- end }}
 	}({{ if .Anonymous }}in{{ else }}in[{{ fieldName . | snakecase | quote }}]{{ end }}),
 	{{- end }}
@@ -647,7 +690,7 @@ func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interfac
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
 	{{ if .Anonymous -}}
-	Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
+	{{ mapping .Type }}Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
 	{{- else -}}
 	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
 		return {{ template "flatten" .Type }}
@@ -670,7 +713,15 @@ func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	if _, err := tmpl.Parse(tmplString); err != nil {
 		panic(err)
 	}
-	f, _ := os.Create(path.Join(p, fmt.Sprintf("%s_%s.generated.go", scope, t.Name())))
+	folder := p
+	if err := os.MkdirAll(folder, 0755); err != nil {
+		panic(fmt.Sprintf("Failed to create directories for %s", folder))
+	}
+	fileName := fmt.Sprintf("%s_%s.generated.go", scope, t.Name())
+	f, err := os.Create(path.Join(folder, fileName))
+	if err != nil {
+		panic(fmt.Sprintf("Failed to create file %s", path.Join(p, fileName)))
+	}
 	defer f.Close()
 	if err := tmpl.Execute(f, t); err != nil {
 		panic(err)
@@ -703,17 +754,17 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	}
 }
 
-func build(scope string, g ...generated) map[reflect.Type]*options {
+func build(scope string, parser parser, g ...generated) map[reflect.Type]*options {
 	o := map[reflect.Type]*options{}
 	for _, gen := range g {
 		o[gen.t] = gen.o
 	}
-	funcMaps := []template.FuncMap{
-		funcMap(o, scope, nil),
-		sprig.TxtFuncMap(),
-	}
 	for _, gen := range g {
-		buildSchema(gen.t, "pkg/schemas", scope, funcMaps...)
+		funcMaps := []template.FuncMap{
+			funcMap(gen.t, o, scope, parser),
+			sprig.TxtFuncMap(),
+		}
+		buildSchema(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 	}
 	return o
 }
@@ -767,6 +818,7 @@ func (p *parser) parseStruct(pack *packages.Package, typeSpec *ast.TypeSpec, doc
 }
 
 func (p *parser) parsePackage(pack *packages.Package) {
+	p.packages[pack.PkgPath] = pack
 	if _, ok := p.packs[pack.ID]; !ok {
 		p.packs[pack.ID] = make(map[string]_struct)
 		for _, v := range pack.Imports {
@@ -822,7 +874,7 @@ func (s _struct) lookup(in string, c map[string]map[string]_struct) string {
 }
 
 type parser struct {
-	packages []*packages.Package
+	packages map[string]*packages.Package
 	packs    map[string]map[string]_struct
 }
 
@@ -842,7 +894,7 @@ func main() {
 		panic(err)
 	}
 	parser := parser{
-		packages: packs,
+		packages: make(map[string]*packages.Package),
 		packs:    make(map[string]map[string]_struct),
 	}
 	for _, pack := range packs {
@@ -851,6 +903,7 @@ func main() {
 	log.Println("generating schemas, expanders and flatteners...")
 	resourcesMap := build(
 		"Resource",
+		parser,
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey", "InstanceGroup"),
 			computedOnly("KubeConfig"),
@@ -992,6 +1045,7 @@ func main() {
 	)
 	/*configMap := */ build(
 		"Config",
+		parser,
 		generate(config.Provider{},
 			required("StateStore"),
 		),
@@ -1002,15 +1056,85 @@ func main() {
 	)
 	dataSourcesMap := build(
 		"DataSource",
+		parser,
 		generate(datasources.KubeConfig{},
 			required("ClusterName"),
 		),
 		generate(kube.Config{},
-			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
+		generate(resources.Cluster{},
+			required("Name"),
+		),
+		generate(kops.ClusterSpec{},
+			exclude("GossipConfig", "DNSControllerGossipConfig", "Target"),
+		),
+		generate(kops.AddonSpec{}),
+		generate(kops.GossipConfig{}),
+		generate(kops.ClusterSubnetSpec{}),
+		generate(kops.TopologySpec{}),
+		generate(kops.DNSControllerGossipConfig{}),
+		generate(kops.EgressProxySpec{}),
+		generate(kops.EtcdClusterSpec{}),
+		generate(kops.ContainerdConfig{}),
+		generate(kops.DockerConfig{}),
+		generate(kops.KubeDNSConfig{}),
+		generate(kops.KubeAPIServerConfig{}),
+		generate(kops.KubeControllerManagerConfig{}),
+		generate(kops.CloudControllerManagerConfig{}),
+		generate(kops.KubeSchedulerConfig{}),
+		generate(kops.KubeProxyConfig{}),
+		generate(kops.CloudConfiguration{}),
+		generate(kops.ExternalDNSConfig{}),
+		generate(kops.NetworkingSpec{}),
+		generate(kops.AccessSpec{}),
+		generate(kops.AuthenticationSpec{}),
+		generate(kops.DNSAccessSpec{}),
+		generate(kops.LoadBalancerAccessSpec{}),
+		generate(kops.KopeioAuthenticationSpec{}),
+		generate(kops.AwsAuthenticationSpec{}),
+		generate(kops.OpenstackConfiguration{}),
+		generate(kops.LeaderElectionConfiguration{}),
+		generate(kops.AuthorizationSpec{}),
+		generate(kops.NodeAuthorizationSpec{}),
+		generate(kops.Assets{}),
+		generate(kops.IAMSpec{}),
+		generate(kops.AlwaysAllowAuthorizationSpec{}),
+		generate(kops.RBACAuthorizationSpec{}),
+		generate(kops.HTTPProxy{}),
+		generate(kops.EtcdMemberSpec{}),
+		generate(kops.EtcdBackupSpec{}),
+		generate(kops.EtcdManagerSpec{}),
+		generate(kops.NodeLocalDNSConfig{}),
+		generate(kops.ClassicNetworkingSpec{}),
+		generate(kops.KubenetNetworkingSpec{}),
+		generate(kops.ExternalNetworkingSpec{}),
+		generate(kops.CNINetworkingSpec{}),
+		generate(kops.EnvVar{}),
+		generate(kops.KopeioNetworkingSpec{}),
+		generate(kops.WeaveNetworkingSpec{}),
+		generate(kops.FlannelNetworkingSpec{}),
+		generate(kops.CalicoNetworkingSpec{}),
+		generate(kops.CanalNetworkingSpec{}),
+		generate(kops.KuberouterNetworkingSpec{}),
+		generate(kops.RomanaNetworkingSpec{}),
+		generate(kops.AmazonVPCNetworkingSpec{}),
+		generate(kops.CiliumNetworkingSpec{}),
+		generate(kops.LyftVPCNetworkingSpec{}),
+		generate(kops.GCENetworkingSpec{}),
+		generate(kops.NodeAuthorizerSpec{}),
+		generate(kops.OpenstackLoadbalancerConfig{}),
+		generate(kops.OpenstackMonitor{}),
+		generate(kops.OpenstackRouter{}),
+		generate(kops.OpenstackBlockStorageConfig{}),
+		generate(kops.BastionSpec{}),
+		generate(kops.DNSSpec{}),
+		generate(kops.BastionLoadBalancerSpec{}),
 		generate(datasources.InstanceGroup{},
-			required("ClusterName", "Name"),
+			required("ClusterName"),
+		),
+		generate(resources.InstanceGroup{},
+			required("Name"),
 		),
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),
@@ -1028,7 +1152,8 @@ func main() {
 		generate(kops.ExecContainerAction{}),
 	)
 	log.Println("generating docs...")
-	buildDoc(resources.Cluster{}, "docs/resources/", funcMap(resourcesMap, "Resource", parser.packs), sprig.TxtFuncMap())
-	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", funcMap(dataSourcesMap, "DataSource", parser.packs), sprig.TxtFuncMap())
-	buildDoc(datasources.InstanceGroup{}, "docs/data-sources/", funcMap(dataSourcesMap, "DataSource", parser.packs), sprig.TxtFuncMap())
+	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser)
+	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
+	buildDoc(datasources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
+	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
 }

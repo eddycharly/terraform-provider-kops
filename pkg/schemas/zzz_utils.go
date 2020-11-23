@@ -60,6 +60,10 @@ func OptionalQuantity() *schema.Schema {
 	return OptionalString()
 }
 
+func ComputedQuantity() *schema.Schema {
+	return ComputedString()
+}
+
 func ExpandQuantity(in interface{}) resource.Quantity {
 	q, _ := resource.ParseQuantity(in.(string))
 	return q
