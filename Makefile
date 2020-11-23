@@ -7,8 +7,13 @@ all: clean gen fmt build
 .PHONY: clean
 clean:
 	@rm -f terraform-provider-kops
-	@rm -rf ./pkg/schemas/*.generated.go
-	@rm -rf ./docs/*.generated.md
+	@rm -rf ./pkg/schemas/config
+	@rm -rf ./pkg/schemas/datasources
+	@rm -rf ./pkg/schemas/kops
+	@rm -rf ./pkg/schemas/kube
+	@rm -rf ./pkg/schemas/resources
+	@rm -rf ./docs/data-sources/*.md
+	@rm -rf ./docs/provider-config/*.md
 	@rm -rf ./docs/resources/*.md
 
 .PHONY: gen-tf-code

@@ -178,7 +178,7 @@ The following arguments are supported:
 
 - `name` - (Required) - String - Name is the name of the etcd cluster (main, events etc).
 - `provider` - (Optional) - String - Provider is the provider used to run etcd: standalone, manager.<br />We default to manager for kubernetes 1.11 or if the manager is configured; otherwise standalone.
-- `members` - (Required) - List([etcd_member_spec](#etcd_member_spec)) - Members stores the configurations for each member of the cluster (including the data volume).
+- `member` - (Required) - List([etcd_member_spec](#etcd_member_spec)) - Members stores the configurations for each member of the cluster (including the data volume).
 - `enable_etcd_tls` - (Optional) - Bool - EnableEtcdTLS indicates the etcd service should use TLS between peers and clients.
 - `enable_tls_auth` - (Optional) - Bool - EnableTLSAuth indicates client and peer TLS auth should be enforced.
 - `version` - (Optional) - String - Version is the version of etcd to run i.e. 2.1.2, 3.0.17 etcd.

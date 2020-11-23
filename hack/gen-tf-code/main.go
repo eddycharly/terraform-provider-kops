@@ -33,6 +33,7 @@ func toSnakeCase(str string) string {
 type options struct {
 	noSchema     bool
 	exclude      sets.String
+	asSets       sets.String
 	rename       map[string]string
 	required     sets.String
 	computed     sets.String
@@ -44,6 +45,7 @@ type options struct {
 func newOptions() *options {
 	return &options{
 		exclude:      sets.NewString(),
+		asSets:       sets.NewString(),
 		rename:       make(map[string]string),
 		required:     sets.NewString(),
 		computed:     sets.NewString(),
@@ -62,6 +64,12 @@ func noSchema() func(o *options) {
 func exclude(excluded ...string) func(o *options) {
 	return func(o *options) {
 		o.exclude.Insert(excluded...)
+	}
+}
+
+func asSets(s ...string) func(o *options) {
+	return func(o *options) {
+		o.asSets.Insert(s...)
 	}
 }
 
@@ -277,6 +285,9 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		},
 		"isExcluded": func(in _field) bool {
 			return optionsMap[in.Owner].exclude.Has(in.Name)
+		},
+		"isSet": func(in _field) bool {
+			return optionsMap[in.Owner].asSets.Has(in.Name)
 		},
 		"isRequired": func(in _field) bool {
 			return optionsMap[in.Owner].required.Has(in.Name)
@@ -500,6 +511,9 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			{{- end -}}
 			{{- if isComputed . -}}
 			Computed
+			{{- end -}}
+			{{- if isSet . -}}
+			Set
 			{{- end -}}
 			{{ template "schema" .Type }}
 			{{- if $suppressDiff -}}){{- end -}}
@@ -740,6 +754,7 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	}
 	t := reflect.TypeOf(i)
 	verifyFields(t, o.exclude.List()...)
+	verifyFields(t, o.asSets.List()...)
 	verifyFields(t, o.required.List()...)
 	verifyFields(t, o.computed.List()...)
 	verifyFields(t, o.computedOnly.List()...)
@@ -906,6 +921,7 @@ func main() {
 		parser,
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey", "InstanceGroup"),
+			asSets("InstanceGroup"),
 			computedOnly("KubeConfig"),
 			sensitive("AdminSshKey", "KubeConfig"),
 		),
@@ -973,6 +989,7 @@ func main() {
 		),
 		generate(kops.EtcdClusterSpec{},
 			required("Name", "Members"),
+			rename("Members", "Member"),
 		),
 		generate(kops.EtcdBackupSpec{},
 			required("BackupStore", "Image"),
@@ -1043,7 +1060,7 @@ func main() {
 		),
 		generate(kops.RollingUpdate{}),
 	)
-	/*configMap := */ build(
+	configMap := build(
 		"Config",
 		parser,
 		generate(config.Provider{},
@@ -1156,4 +1173,5 @@ func main() {
 	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
 	buildDoc(datasources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
 	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
+	buildDoc(config.Provider{}, "docs/provider-config/", configMap, "Config", parser)
 }
