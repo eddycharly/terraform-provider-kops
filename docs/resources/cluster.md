@@ -1209,12 +1209,12 @@ The following arguments are supported:
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Required) - Int - MaxSize is the maximum size of the pool.
 - `machine_type` - (Required) - String - MachineType is the instance class.
-- `root_volume_size` - (Optional) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
-- `root_volume_type` - (Optional) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
-- `root_volume_iops` - (Optional) - Int - If volume type is io1, then we need to specify the number of Iops.
-- `root_volume_optimization` - (Optional) - Bool - RootVolumeOptimization enables EBS optimization for an instance.
-- `root_volume_delete_on_termination` - (Optional) - Bool - RootVolumeDeleteOnTermination configures root volume retention policy upon instance termination.<br />The root volume is deleted by default. Cluster deletion does not remove retained root volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
-- `root_volume_encryption` - (Optional) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
+- `root_volume_size` - (Optional) - (Computed) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
+- `root_volume_type` - (Optional) - (Computed) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
+- `root_volume_iops` - (Optional) - (Computed) - Int - If volume type is io1, then we need to specify the number of Iops.
+- `root_volume_optimization` - (Optional) - (Computed) - Bool - RootVolumeOptimization enables EBS optimization for an instance.
+- `root_volume_delete_on_termination` - (Optional) - (Computed) - Bool - RootVolumeDeleteOnTermination configures root volume retention policy upon instance termination.<br />The root volume is deleted by default. Cluster deletion does not remove retained root volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
+- `root_volume_encryption` - (Optional) - (Computed) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
 - `volumes` - (Optional) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this InstanceGroup.
 - `volume_mounts` - (Optional) - List([volume_mount_spec](#volume_mount_spec)) - VolumeMounts a collection of volume mounts.
 - `subnets` - (Required) - List(String) - Subnets is the names of the Subnets (as specified in the Cluster) where machines in this instance group should be placed.

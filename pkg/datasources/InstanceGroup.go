@@ -12,7 +12,7 @@ func InstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Read: InstanceGroupRead,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: datasourcesschemas.DataSourceInstanceGroup().Schema,
 	}

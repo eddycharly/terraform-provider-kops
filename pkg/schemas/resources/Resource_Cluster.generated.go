@@ -77,7 +77,7 @@ func ResourceCluster() *schema.Resource {
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(kopsschemas.ResourceRollingUpdate()),
-			"instance_group":                    RequiredSetList(ResourceInstanceGroup()),
+			"instance_group":                    RequiredList(ResourceInstanceGroup()),
 			"kube_config":                       Sensitive(ComputedStruct(kubeschemas.ResourceConfig())),
 		},
 	}

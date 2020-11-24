@@ -152,9 +152,10 @@ func OptionalComputedStruct(elem *schema.Resource) *schema.Schema {
 
 func RequiredSetList(elem interface{}) *schema.Schema {
 	s := Schema(schema.TypeSet, elem, true, false, false, 0)
-	s.Set = func(in interface{}) int {
-		return schema.HashString(in.(map[string]interface{})["name"])
-	}
+	// s.Set = func(in interface{}) int {
+	// 	log.Println("********************************** " + in.(map[string]interface{})["name"].(string))
+	// 	return schema.HashString(in.(map[string]interface{})["name"])
+	// }
 	return s
 }
 

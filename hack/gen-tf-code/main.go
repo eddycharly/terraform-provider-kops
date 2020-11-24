@@ -690,7 +690,13 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 			return nil
 		}
 		{{- end }}
+		{{ if isSet . -}}
+		return func (in interface{}) {{ .Type.String }} {
+			return {{ template "expand" .Type }}
+		}(in.(*schema.Set).List())
+		{{- else -}}
 		return {{ template "expand" .Type }}
+		{{- end -}}
 		{{- else -}}
 		return {{ mapping .Type }}Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
 		{{- end }}
@@ -921,7 +927,7 @@ func main() {
 		parser,
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey", "InstanceGroup"),
-			asSets("InstanceGroup"),
+			// asSets("InstanceGroup"),
 			computedOnly("KubeConfig"),
 			sensitive("AdminSshKey", "KubeConfig"),
 		),
@@ -981,6 +987,7 @@ func main() {
 			noSchema(),
 			required("Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
 			computed("Image"),
+			computed("RootVolumeSize", "RootVolumeType", "RootVolumeIops", "RootVolumeOptimization", "RootVolumeDeleteOnTermination", "RootVolumeEncryption"),
 		),
 		generate(kops.AccessSpec{}),
 		generate(kops.DNSAccessSpec{}),

@@ -13,7 +13,7 @@ func KubeConfig() *schema.Resource {
 	return &schema.Resource{
 		Read: KubeConfigRead,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: datasourcesschemas.DataSourceKubeConfig().Schema,
 	}

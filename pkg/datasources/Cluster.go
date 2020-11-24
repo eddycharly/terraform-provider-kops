@@ -11,7 +11,7 @@ func Cluster() *schema.Resource {
 	return &schema.Resource{
 		Read: ClusterRead,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: resourceschemas.DataSourceCluster().Schema,
 	}
