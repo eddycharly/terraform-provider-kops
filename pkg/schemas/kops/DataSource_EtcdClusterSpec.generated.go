@@ -17,7 +17,7 @@ func DataSourceEtcdClusterSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name":                    ComputedString(),
 			"provider":                ComputedString(),
-			"members":                 ComputedList(DataSourceEtcdMemberSpec()),
+			"member":                  ComputedList(DataSourceEtcdMemberSpec()),
 			"enable_etcd_tls":         ComputedBool(),
 			"enable_tls_auth":         ComputedBool(),
 			"version":                 ComputedString(),
@@ -66,7 +66,7 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				}
 				return out
 			}(in)
-		}(in["members"]),
+		}(in["member"]),
 		EnableEtcdTLS: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_etcd_tls"]),
@@ -189,7 +189,7 @@ func FlattenDataSourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[strin
 	out["provider"] = func(in kops.EtcdProviderType) interface{} {
 		return FlattenString(string(in))
 	}(in.Provider)
-	out["members"] = func(in []*kops.EtcdMemberSpec) interface{} {
+	out["member"] = func(in []*kops.EtcdMemberSpec) interface{} {
 		return func(in []*kops.EtcdMemberSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {

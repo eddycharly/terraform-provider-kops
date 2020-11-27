@@ -13,7 +13,7 @@ The following arguments are supported:
 - `cloud_provider` - (Computed) - String - The CloudProvider to use (aws or gce).
 - `container_runtime` - (Computed) - String - Container runtime to use for Kubernetes.
 - `kubernetes_version` - (Computed) - String - The version of kubernetes to install (optional, and can be a "spec" like stable).
-- `subnets` - (Computed) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Configuration of subnets we are targeting.
+- `subnet` - (Computed) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Configuration of subnets we are targeting.
 - `project` - (Computed) - String - Project is the cloud project we should use, required on GCE.
 - `master_public_name` - (Computed) - String - MasterPublicName is the external DNS name for the master nodes.
 - `master_internal_name` - (Computed) - String - MasterInternalName is the internal DNS name for the master nodes.
@@ -40,7 +40,7 @@ The following arguments are supported:
 - `external_policies` - (Computed) - Map(List(String)) - ExternalPolicies allows the insertion of pre-existing managed policies on IG Roles.
 - `additional_policies` - (Computed) - Map(String) - Additional policies to add for roles.
 - `file_assets` - (Computed) - List([file_asset_spec](#file_asset_spec)) - A collection of files assets for deployed cluster wide.
-- `etcd_clusters` - (Computed) - List([etcd_cluster_spec](#etcd_cluster_spec)) - EtcdClusters stores the configuration for each cluster.
+- `etcd_cluster` - (Computed) - List([etcd_cluster_spec](#etcd_cluster_spec)) - EtcdClusters stores the configuration for each cluster.
 - `containerd` - (Computed) - [containerd_config](#containerd_config) - Component configurations.
 - `docker` - (Computed) - [docker_config](#docker_config)
 - `kube_dns` - (Computed) - [kube_dns_config](#kube_dns_config)
@@ -178,7 +178,7 @@ The following arguments are supported:
 
 - `name` - (Computed) - String - Name is the name of the etcd cluster (main, events etc).
 - `provider` - (Computed) - String - Provider is the provider used to run etcd: standalone, manager.<br />We default to manager for kubernetes 1.11 or if the manager is configured; otherwise standalone.
-- `members` - (Computed) - List([etcd_member_spec](#etcd_member_spec)) - Members stores the configurations for each member of the cluster (including the data volume).
+- `member` - (Computed) - List([etcd_member_spec](#etcd_member_spec)) - Members stores the configurations for each member of the cluster (including the data volume).
 - `enable_etcd_tls` - (Computed) - Bool - EnableEtcdTLS indicates the etcd service should use TLS between peers and clients.
 - `enable_tls_auth` - (Computed) - Bool - EnableTLSAuth indicates client and peer TLS auth should be enforced.
 - `version` - (Computed) - String - Version is the version of etcd to run i.e. 2.1.2, 3.0.17 etcd.

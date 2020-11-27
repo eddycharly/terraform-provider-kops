@@ -19,7 +19,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"cloud_provider":                    ComputedString(),
 			"container_runtime":                 ComputedString(),
 			"kubernetes_version":                ComputedString(),
-			"subnets":                           ComputedList(DataSourceClusterSubnetSpec()),
+			"subnet":                            ComputedList(DataSourceClusterSubnetSpec()),
 			"project":                           ComputedString(),
 			"master_public_name":                ComputedString(),
 			"master_internal_name":              ComputedString(),
@@ -46,7 +46,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"external_policies":                 ComputedMap(List(String())),
 			"additional_policies":               ComputedMap(String()),
 			"file_assets":                       ComputedList(DataSourceFileAssetSpec()),
-			"etcd_clusters":                     ComputedList(DataSourceEtcdClusterSpec()),
+			"etcd_cluster":                      ComputedList(DataSourceEtcdClusterSpec()),
 			"containerd":                        ComputedStruct(DataSourceContainerdConfig()),
 			"docker":                            ComputedStruct(DataSourceDockerConfig()),
 			"kube_dns":                          ComputedStruct(DataSourceKubeDNSConfig()),
@@ -124,7 +124,7 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}
 				return out
 			}(in)
-		}(in["subnets"]),
+		}(in["subnet"]),
 		Project: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["project"]),
@@ -380,7 +380,7 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}
 				return out
 			}(in)
-		}(in["etcd_clusters"]),
+		}(in["etcd_cluster"]),
 		Containerd: func(in interface{}) *kops.ContainerdConfig {
 			return func(in interface{}) *kops.ContainerdConfig {
 				if in == nil {
@@ -841,7 +841,7 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 	out["kubernetes_version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.KubernetesVersion)
-	out["subnets"] = func(in []kops.ClusterSubnetSpec) interface{} {
+	out["subnet"] = func(in []kops.ClusterSubnetSpec) interface{} {
 		return func(in []kops.ClusterSubnetSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
@@ -1045,7 +1045,7 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			return out
 		}(in)
 	}(in.FileAssets)
-	out["etcd_clusters"] = func(in []*kops.EtcdClusterSpec) interface{} {
+	out["etcd_cluster"] = func(in []*kops.EtcdClusterSpec) interface{} {
 		return func(in []*kops.EtcdClusterSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
