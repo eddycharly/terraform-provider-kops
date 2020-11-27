@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceEtcdManagerSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"image": RequiredString(),
+			"image": OptionalString(),
 			"env":   OptionalList(ResourceEnvVar()),
 		},
 	}

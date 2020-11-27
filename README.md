@@ -188,17 +188,17 @@ resource "kops_cluster" "cluster" {
   etcd_cluster {
     name            = "main"
 
-    members {
+    member {
       name             = "master-0"
       instance_group   = "master-0"
     }
 
-    members {
+    member {
       name             = "master-1"
       instance_group   = "master-1"
     }
 
-    members {
+    member {
       name             = "master-2"
       instance_group   = "master-2"
     }
@@ -207,17 +207,17 @@ resource "kops_cluster" "cluster" {
   etcd_cluster {
     name            = "events"
 
-    members {
+    member {
       name             = "master-0"
       instance_group   = "master-0"
     }
 
-    members {
+    member {
       name             = "master-1"
       instance_group   = "master-1"
     }
 
-    members {
+    member {
       name             = "master-2"
       instance_group   = "master-2"
     }

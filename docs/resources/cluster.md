@@ -225,7 +225,7 @@ EtcdManagerSpec describes how we configure the etcd manager.
 
 The following arguments are supported:
 
-- `image` - (Required) - String - Image is the etcd manager image to use.
+- `image` - (Optional) - String - Image is the etcd manager image to use.
 - `env` - (Optional) - List([env_var](#env_var)) - Env allows users to pass in env variables to the etcd-manager container.<br />Variables starting with ETCD_ will be further passed down to the etcd process.<br />This allows etcd setting to be overwriten. No config validation is done.<br />A list of etcd config ENV vars can be found at https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/configuration.md.
 
 ### env_var
