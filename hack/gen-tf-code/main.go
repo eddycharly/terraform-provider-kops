@@ -986,8 +986,6 @@ func main() {
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),
 			required("Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
-			computed("Image"),
-			computed("RootVolumeSize", "RootVolumeType", "RootVolumeIops", "RootVolumeOptimization", "RootVolumeDeleteOnTermination", "RootVolumeEncryption"),
 		),
 		generate(kops.AccessSpec{}),
 		generate(kops.DNSAccessSpec{}),
