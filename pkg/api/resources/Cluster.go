@@ -45,7 +45,9 @@ func toKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 	}
 	var ig []*kops.InstanceGroup
 	for _, instanceGroup := range cluster.InstanceGroup {
-		ig = append(ig, toKopsInstanceGroup(instanceGroup))
+		if instanceGroup != nil && instanceGroup.Name != "" {
+			ig = append(ig, toKopsInstanceGroup(instanceGroup))
+		}
 	}
 	return &c, ig
 }

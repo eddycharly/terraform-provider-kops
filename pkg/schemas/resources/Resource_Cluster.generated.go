@@ -19,15 +19,15 @@ func ResourceCluster() *schema.Resource {
 			"admin_ssh_key":                     Sensitive(RequiredString()),
 			"channel":                           OptionalString(),
 			"addons":                            OptionalList(kopsschemas.ResourceAddonSpec()),
-			"config_base":                       OptionalComputedString(),
+			"config_base":                       OptionalString(),
 			"cloud_provider":                    RequiredString(),
 			"container_runtime":                 OptionalString(),
 			"kubernetes_version":                OptionalString(),
 			"subnet":                            RequiredList(kopsschemas.ResourceClusterSubnetSpec()),
 			"project":                           OptionalString(),
-			"master_public_name":                OptionalComputedString(),
-			"master_internal_name":              OptionalComputedString(),
-			"network_cidr":                      OptionalComputedString(),
+			"master_public_name":                OptionalString(),
+			"master_internal_name":              OptionalString(),
+			"network_cidr":                      OptionalString(),
 			"additional_network_cidrs":          OptionalList(String()),
 			"network_id":                        RequiredString(),
 			"topology":                          RequiredStruct(kopsschemas.ResourceTopologySpec()),
@@ -39,7 +39,7 @@ func ResourceCluster() *schema.Resource {
 			"cluster_dns_domain":                OptionalString(),
 			"service_cluster_ip_range":          OptionalString(),
 			"pod_cidr":                          OptionalString(),
-			"non_masquerade_cidr":               OptionalComputedString(),
+			"non_masquerade_cidr":               OptionalString(),
 			"ssh_access":                        OptionalList(String()),
 			"node_port_access":                  OptionalList(String()),
 			"egress_proxy":                      OptionalStruct(kopsschemas.ResourceEgressProxySpec()),
@@ -71,13 +71,13 @@ func ResourceCluster() *schema.Resource {
 			"cloud_labels":                      OptionalMap(String()),
 			"hooks":                             OptionalList(kopsschemas.ResourceHookSpec()),
 			"assets":                            OptionalStruct(kopsschemas.ResourceAssets()),
-			"iam":                               OptionalComputedStruct(kopsschemas.ResourceIAMSpec()),
+			"iam":                               OptionalStruct(kopsschemas.ResourceIAMSpec()),
 			"encryption_config":                 OptionalBool(),
 			"disable_subnet_tags":               OptionalBool(),
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(kopsschemas.ResourceRollingUpdate()),
-			"instance_group":                    RequiredList(ResourceInstanceGroup()),
+			"instance_group":                    RequiredSetList(ResourceInstanceGroup()),
 			"kube_config":                       Sensitive(ComputedStruct(kubeschemas.ResourceConfig())),
 		},
 	}
@@ -99,27 +99,29 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		}(in),
 		InstanceGroup: func(in interface{}) []*resources.InstanceGroup {
 			return func(in interface{}) []*resources.InstanceGroup {
-				var out []*resources.InstanceGroup
-				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) *resources.InstanceGroup {
-						if in == nil {
-							return nil
-						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in resources.InstanceGroup) *resources.InstanceGroup {
-							return &in
-						}(func(in interface{}) resources.InstanceGroup {
+				return func(in interface{}) []*resources.InstanceGroup {
+					var out []*resources.InstanceGroup
+					for _, in := range in.([]interface{}) {
+						out = append(out, func(in interface{}) *resources.InstanceGroup {
 							if in == nil {
-								return resources.InstanceGroup{}
+								return nil
 							}
-							return (ExpandResourceInstanceGroup(in.(map[string]interface{})))
+							if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+								return nil
+							}
+							return func(in resources.InstanceGroup) *resources.InstanceGroup {
+								return &in
+							}(func(in interface{}) resources.InstanceGroup {
+								if in == nil {
+									return resources.InstanceGroup{}
+								}
+								return (ExpandResourceInstanceGroup(in.(map[string]interface{})))
+							}(in))
 						}(in))
-					}(in))
-				}
-				return out
-			}(in)
+					}
+					return out
+				}(in)
+			}(in.(*schema.Set).List())
 		}(in["instance_group"]),
 		KubeConfig: func(in interface{}) *kube.Config {
 			return func(in interface{}) *kube.Config {
