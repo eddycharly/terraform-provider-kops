@@ -26,7 +26,9 @@ func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	for k, v := range kopsschemas.FlattenDataSourceInstanceGroupSpec(instanceGroup.Spec) {
-		d.Set(k, v)
+		if err := d.Set(k, v); err != nil {
+			return err
+		}
 	}
 	d.SetId("-")
 	return nil

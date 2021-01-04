@@ -12,7 +12,7 @@ func ResourceClusterSubnetSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":        RequiredString(),
-			"cidr":        OptionalComputedString(),
+			"cidr":        OptionalString(),
 			"zone":        RequiredString(),
 			"region":      OptionalString(),
 			"provider_id": RequiredString(),

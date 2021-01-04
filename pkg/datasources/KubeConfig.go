@@ -26,7 +26,9 @@ func KubeConfigRead(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	for k, v := range kubeschemas.FlattenResourceConfig(*kube.FromKubeconfigBuilder(kubeConfigBuilder)) {
-		d.Set(k, v)
+		if err := d.Set(k, v); err != nil {
+			return err
+		}
 	}
 	d.SetId("-")
 	return nil
