@@ -941,6 +941,7 @@ func main() {
 			rename("Subnets", "Subnet"),
 			rename("EtcdClusters", "EtcdCluster"),
 			required("CloudProvider", "Subnets", "NetworkID", "Topology", "EtcdClusters", "Networking"),
+			computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
 		),
 		generate(kops.AddonSpec{},
 			required("Manifest"),

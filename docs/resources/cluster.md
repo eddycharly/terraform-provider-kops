@@ -9,15 +9,15 @@ The following arguments are supported:
 - `admin_ssh_key` - (Required) - String - The cluster admin ssh key.
 - `channel` - (Optional) - String - The Channel we are following.
 - `addons` - (Optional) - List([addon_spec](#addon_spec)) - Additional addons that should be installed on the cluster.
-- `config_base` - (Optional) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different than the location where the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).
+- `config_base` - (Optional) - (Computed) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different than the location where the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).
 - `cloud_provider` - (Required) - String - The CloudProvider to use (aws or gce).
 - `container_runtime` - (Optional) - String - Container runtime to use for Kubernetes.
 - `kubernetes_version` - (Optional) - String - The version of kubernetes to install (optional, and can be a "spec" like stable).
 - `subnet` - (Required) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Configuration of subnets we are targeting.
 - `project` - (Optional) - String - Project is the cloud project we should use, required on GCE.
-- `master_public_name` - (Optional) - String - MasterPublicName is the external DNS name for the master nodes.
-- `master_internal_name` - (Optional) - String - MasterInternalName is the internal DNS name for the master nodes.
-- `network_cidr` - (Optional) - String - NetworkCIDR is the CIDR used for the AWS VPC / GCE Network, or otherwise allocated to k8s<br />This is a real CIDR, not the internal k8s network<br />On AWS, it maps to the VPC CIDR.  It is not required on GCE.
+- `master_public_name` - (Optional) - (Computed) - String - MasterPublicName is the external DNS name for the master nodes.
+- `master_internal_name` - (Optional) - (Computed) - String - MasterInternalName is the internal DNS name for the master nodes.
+- `network_cidr` - (Optional) - (Computed) - String - NetworkCIDR is the CIDR used for the AWS VPC / GCE Network, or otherwise allocated to k8s<br />This is a real CIDR, not the internal k8s network<br />On AWS, it maps to the VPC CIDR.  It is not required on GCE.
 - `additional_network_cidrs` - (Optional) - List(String) - AdditionalNetworkCIDRs is a list of additional CIDR used for the AWS VPC<br />or otherwise allocated to k8s. This is a real CIDR, not the internal k8s network<br />On AWS, it maps to any additional CIDRs added to a VPC.
 - `network_id` - (Required) - String - NetworkID is an identifier of a network, if we want to reuse/share an existing network (e.g. an AWS VPC).
 - `topology` - (Required) - [topology_spec](#topology_spec) - Topology defines the type of network topology to use on the cluster - default public<br />This is heavily weighted towards AWS for the time being, but should also be agnostic enough<br />to port out to GCE later if needed.
@@ -29,7 +29,7 @@ The following arguments are supported:
 - `cluster_dns_domain` - (Optional) - String - ClusterDNSDomain is the suffix we use for internal DNS names (normally cluster.local).
 - `service_cluster_ip_range` - (Optional) - String - ServiceClusterIPRange is the CIDR, from the internal network, where we allocate IPs for services.
 - `pod_cidr` - (Optional) - String - PodCIDR is the CIDR from which we allocate IPs for pods.
-- `non_masquerade_cidr` - (Optional) - String - NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)<br />It cannot overlap ServiceClusterIPRange.
+- `non_masquerade_cidr` - (Optional) - (Computed) - String - NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)<br />It cannot overlap ServiceClusterIPRange.
 - `ssh_access` - (Optional) - List(String) - SSHAccess is a list of the CIDRs that can access SSH.
 - `node_port_access` - (Optional) - List(String) - NodePortAccess is a list of the CIDRs that can access the node ports range (30000-32767).
 - `egress_proxy` - (Optional) - [egress_proxy_spec](#egress_proxy_spec) - HTTPProxy defines connection information to support use of a private cluster behind an forward HTTP Proxy.
@@ -61,7 +61,7 @@ The following arguments are supported:
 - `cloud_labels` - (Optional) - Map(String) - Tags for AWS instance groups.
 - `hooks` - (Optional) - List([hook_spec](#hook_spec)) - Hooks for custom actions e.g. on first installation.
 - `assets` - (Optional) - [assets](#assets) - Assets is alternative locations for files and containers; the API under construction, will remove this comment once this API is fully functional.
-- `iam` - (Optional) - [iam_spec](#iam_spec) - IAM field adds control over the IAM security policies applied to resources.
+- `iam` - (Optional) - (Computed) - [iam_spec](#iam_spec) - IAM field adds control over the IAM security policies applied to resources.
 - `encryption_config` - (Optional) - Bool - EncryptionConfig controls if encryption is enabled.
 - `disable_subnet_tags` - (Optional) - Bool - DisableSubnetTags controls if subnets are tagged in AWS.
 - `use_host_certificates` - (Optional) - Bool - UseHostCertificates will mount /etc/ssl/certs to inside needed containers.<br />This is needed if some APIs do have self-signed certs.
