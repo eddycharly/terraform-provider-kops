@@ -1007,6 +1007,7 @@ func main() {
 		),
 		generate(kops.ClusterSubnetSpec{},
 			required("Name", "ProviderID", "Type", "Zone"),
+			computed("CIDR"),
 		),
 		generate(kops.TopologySpec{},
 			required("Masters", "Nodes", "DNS"),

@@ -91,7 +91,7 @@ ClusterSubnetSpec defines a subnet.
 The following arguments are supported:
 
 - `name` - (Required) - String - Name is the name of the subnet.
-- `cidr` - (Optional) - String - CIDR is the network cidr of the subnet.
+- `cidr` - (Optional) - (Computed) - String - CIDR is the network cidr of the subnet.
 - `zone` - (Required) - String - Zone is the zone the subnet is in, set for subnets that are zonally scoped.
 - `region` - (Optional) - String - Region is the region the subnet is in, set for subnets that are regionally scoped.
 - `provider_id` - (Required) - String - ProviderID is the cloud provider id for the objects associated with the zone (the subnet on AWS).
