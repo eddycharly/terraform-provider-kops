@@ -53,7 +53,7 @@ replace golang.org/x/sys => golang.org/x/sys v0.0.0-20200826173525-f9321e4c35a6
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/aws/aws-sdk-go v1.36.20
+	github.com/aws/aws-sdk-go v1.36.25
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.4.0
 	golang.org/x/tools v0.0.0-20201121010211-780cb80bd7fb
 	google.golang.org/grpc/examples v0.0.0-20201121004645-9da74c039bbf // indirect
