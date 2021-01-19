@@ -25,14 +25,14 @@ func fromKopsInstanceGroup(clusterName string, instanceGroup *kops.InstanceGroup
 	}
 }
 
-// func toKopsInstanceGroup(instanceGroup *InstanceGroup) *kops.InstanceGroup {
-// 	return &kops.InstanceGroup{
-// 		ObjectMeta: metav1.ObjectMeta{
-// 			Name: instanceGroup.Name,
-// 		},
-// 		Spec: instanceGroup.InstanceGroupSpec,
-// 	}
-// }
+func toKopsInstanceGroup(name string, spec kops.InstanceGroupSpec) *kops.InstanceGroup {
+	return &kops.InstanceGroup{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: name,
+		},
+		Spec: spec,
+	}
+}
 
 // func deleteInstanceGroup(cluster *kops.Cluster, instanceGroup *kops.InstanceGroup, clientset simple.Clientset) error {
 // 	cloud, err := cloudup.BuildCloud(cluster)
@@ -98,4 +98,39 @@ func GetInstanceGroup(clusterName, name string, clientset simple.Clientset) (*In
 		return nil, err
 	}
 	return fromKopsInstanceGroup(clusterName, instanceGroup), nil
+}
+
+func CreateInstanceGroup(clusterName, name string, spec kops.InstanceGroupSpec, clientset simple.Clientset) (*InstanceGroup, error) {
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
+	if err != nil {
+		return nil, err
+	}
+	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Create(context.Background(), toKopsInstanceGroup(name, spec), metav1.CreateOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return fromKopsInstanceGroup(clusterName, instanceGroup), nil
+}
+
+func UpdateInstanceGroup(clusterName, name string, spec kops.InstanceGroupSpec, clientset simple.Clientset) (*InstanceGroup, error) {
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
+	if err != nil {
+		return nil, err
+	}
+	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Update(context.Background(), toKopsInstanceGroup(name, spec), metav1.UpdateOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return fromKopsInstanceGroup(clusterName, instanceGroup), nil
+}
+
+func DeleteInstanceGroup(clusterName, name string, clientset simple.Clientset) error {
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
+	if err != nil {
+		return err
+	}
+	if err := clientset.InstanceGroupsFor(cluster).Delete(context.Background(), name, metav1.DeleteOptions{}); err != nil {
+		return err
+	}
+	return nil
 }

@@ -87,7 +87,7 @@ resource "kops_cluster" "cluster" {
 }
 
 resource "kops_instance_group" "master-0" {
-  cluster_name = kops_cluster.cluster.name
+  cluster_name = kops_cluster.cluster.id
   name         = "master-0"
   role         = "Master"
   min_size     = 1
@@ -97,7 +97,7 @@ resource "kops_instance_group" "master-0" {
 }
 
 resource "kops_instance_group" "master-1" {
-  cluster_name = kops_cluster.cluster.name
+  cluster_name = kops_cluster.cluster.id
   name         = "master-1"
   role         = "Master"
   min_size     = 1
@@ -107,7 +107,7 @@ resource "kops_instance_group" "master-1" {
 }
 
 resource "kops_instance_group" "master-2" {
-  cluster_name = kops_cluster.cluster.name
+  cluster_name = kops_cluster.cluster.id
   name         = "master-2"
   role         = "Master"
   min_size     = 1
@@ -117,7 +117,7 @@ resource "kops_instance_group" "master-2" {
 }
 
 resource "kops_instance_group" "bastion-0" {
-  cluster_name = kops_cluster.cluster.name
+  cluster_name = kops_cluster.cluster.id
   name         = "bastion-0"
   role         = "Bastion"
   min_size     = 1

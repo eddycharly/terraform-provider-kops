@@ -16,7 +16,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"cluster_name":                      RequiredString(),
 			"name":                              RequiredString(),
 			"role":                              RequiredString(),
-			"image":                             OptionalString(),
+			"image":                             OptionalComputedString(),
 			"min_size":                          RequiredInt(),
 			"max_size":                          RequiredInt(),
 			"machine_type":                      RequiredString(),

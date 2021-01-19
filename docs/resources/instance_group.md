@@ -8,7 +8,7 @@ The following arguments are supported:
 - `cluster_name` - (Required) - String - The cluster name the instance group belongs to.
 - `name` - (Required) - String - Instance group name.
 - `role` - (Required) - String - Type determines the role of instances in this group: masters or nodes.
-- `image` - (Optional) - String - Image is the instance (ami etc) we should use.
+- `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Required) - Int - MaxSize is the maximum size of the pool.
 - `machine_type` - (Required) - String - MachineType is the instance class.
