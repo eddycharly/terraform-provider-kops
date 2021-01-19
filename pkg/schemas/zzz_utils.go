@@ -148,12 +148,6 @@ func OptionalComputedStruct(elem *schema.Resource) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, true, 1)
 }
 
-// Set
-
-func RequiredSetList(elem *schema.Resource) *schema.Schema {
-	return Schema(schema.TypeSet, elem, true, false, false, 0)
-}
-
 // List
 
 func List(elem interface{}) *schema.Schema {

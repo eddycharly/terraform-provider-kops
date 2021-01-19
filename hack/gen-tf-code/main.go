@@ -926,10 +926,8 @@ func main() {
 		"Resource",
 		parser,
 		generate(resources.Cluster{},
-			required("Name", "AdminSshKey", "InstanceGroup"),
-			asSets("InstanceGroup"),
-			computedOnly("KubeConfig"),
-			sensitive("AdminSshKey", "KubeConfig"),
+			required("Name", "AdminSshKey"),
+			sensitive("AdminSshKey"),
 		),
 		generate(kube.Config{},
 			computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
@@ -981,7 +979,7 @@ func main() {
 		generate(kops.RBACAuthorizationSpec{}),
 		generate(kops.NodeAuthorizerSpec{}),
 		generate(resources.InstanceGroup{},
-			required("Name"),
+			required("ClusterName", "Name"),
 		),
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),
@@ -1154,8 +1152,8 @@ func main() {
 		generate(kops.BastionSpec{}),
 		generate(kops.DNSSpec{}),
 		generate(kops.BastionLoadBalancerSpec{}),
-		generate(datasources.InstanceGroup{},
-			required("ClusterName"),
+		generate(resources.InstanceGroup{},
+			required("ClusterName", "Name"),
 		),
 		generate(resources.InstanceGroup{},
 			required("Name"),
@@ -1177,8 +1175,9 @@ func main() {
 	)
 	log.Println("generating docs...")
 	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser)
+	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser)
 	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
-	buildDoc(datasources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
+	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
 	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
 	buildDoc(config.Provider{}, "docs/provider-config/", configMap, "Config", parser)
 }

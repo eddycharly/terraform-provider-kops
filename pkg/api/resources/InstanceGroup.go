@@ -14,6 +14,8 @@ import (
 
 // InstanceGroup represents a group of instances (either nodes or masters) with the same configuration
 type InstanceGroup struct {
+	// The cluster name the instance group belongs to
+	ClusterName string
 	// Instance group name
 	Name string
 	kops.InstanceGroupSpec

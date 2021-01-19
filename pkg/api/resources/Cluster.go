@@ -1,7 +1,6 @@
 package resources
 
 import (
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/kubeconfig"
@@ -15,24 +14,20 @@ type Cluster struct {
 	// The cluster admin ssh key
 	AdminSshKey string
 	kops.ClusterSpec
-	// InstanceGroup defines the list of instance groups making the cluster
-	InstanceGroup []*InstanceGroup
-	// KubeConfig holds the necessary information to connect to the cluster
-	KubeConfig *kube.Config
 }
 
 func fromKopsCluster(cluster *kops.Cluster, kubeConfig *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
 	return &Cluster{
 		Name:        cluster.ObjectMeta.Name,
 		ClusterSpec: cluster.Spec,
-		KubeConfig:  kube.FromKubeconfigBuilder(kubeConfig),
-		InstanceGroup: func(in ...*kops.InstanceGroup) []*InstanceGroup {
-			var out []*InstanceGroup
-			for _, in := range in {
-				out = append(out, fromKopsInstanceGroup(in))
-			}
-			return out
-		}(instanceGroups...),
+		// KubeConfig:  kube.FromKubeconfigBuilder(kubeConfig),
+		// InstanceGroup: func(in ...*kops.InstanceGroup) []*InstanceGroup {
+		// 	var out []*InstanceGroup
+		// 	for _, in := range in {
+		// 		out = append(out, fromKopsInstanceGroup(in))
+		// 	}
+		// 	return out
+		// }(instanceGroups...),
 	}
 }
 
@@ -43,11 +38,12 @@ func toKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 		},
 		Spec: cluster.ClusterSpec,
 	}
-	var ig []*kops.InstanceGroup
-	for _, instanceGroup := range cluster.InstanceGroup {
-		if instanceGroup != nil && instanceGroup.Name != "" {
-			ig = append(ig, toKopsInstanceGroup(instanceGroup))
-		}
-	}
-	return &c, ig
+	// var ig []*kops.InstanceGroup
+	// for _, instanceGroup := range cluster.InstanceGroup {
+	// 	if instanceGroup != nil && instanceGroup.Name != "" {
+	// 		ig = append(ig, toKopsInstanceGroup(instanceGroup))
+	// 	}
+	// }
+	// return &c, ig
+	return &c, nil
 }

@@ -13,6 +13,7 @@ var _ = Schema
 func DataSourceInstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"cluster_name":                      ComputedString(),
 			"name":                              RequiredString(),
 			"role":                              ComputedString(),
 			"image":                             ComputedString(),
@@ -60,6 +61,9 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
+		ClusterName: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cluster_name"]),
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
@@ -70,6 +74,9 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 }
 
 func FlattenDataSourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
+	out["cluster_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterName)
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
