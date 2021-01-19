@@ -7,20 +7,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func Cluster() *schema.Resource {
+func InstanceGroup() *schema.Resource {
 	return &schema.Resource{
-		Create: ClusterCreate,
-		Read:   ClusterRead,
-		Update: ClusterUpdate,
-		Delete: ClusterDelete,
+		Create: InstanceGroupCreate,
+		Read:   InstanceGroupRead,
+		Update: InstanceGroupUpdate,
+		Delete: InstanceGroupDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Schema: resourcesschema.ResourceCluster().Schema,
+		Schema: resourcesschema.ResourceInstanceGroup().Schema,
 	}
 }
 
-func ClusterCreate(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 	// cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
 	// _, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	// if err != nil {
@@ -30,7 +30,7 @@ func ClusterCreate(d *schema.ResourceData, m interface{}) error {
 	return ClusterRead(d, m)
 }
 
-func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 	// cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
 	// _, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
 	// if err != nil {
@@ -39,22 +39,24 @@ func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
 	return ClusterRead(d, m)
 }
 
-func ClusterRead(d *schema.ResourceData, m interface{}) error {
-	cluster, err := resources.GetCluster(d.Id(), config.Clientset(m))
+func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
+	clusterName := d.Get("cluster_name").(string)
+	name := d.Get("name").(string)
+	instanceGroup, err := resources.GetInstanceGroup(clusterName, name, config.Clientset(m))
 	if err != nil {
 		return err
 	}
-	flattened := resourcesschema.FlattenResourceCluster(*cluster)
+	flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
 	for key, value := range flattened {
 		if err := d.Set(key, value); err != nil {
 			return err
 		}
 	}
-	d.SetId(cluster.Name)
+	d.SetId(instanceGroup.ClusterName + "/" + instanceGroup.Name)
 	return nil
 }
 
-func ClusterDelete(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupDelete(d *schema.ResourceData, m interface{}) error {
 	// err := resources.DeleteCluster(d.Id(), config.Clientset(m))
 	// if err != nil {
 	// 	return err

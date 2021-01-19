@@ -1,9 +1,12 @@
 package resources
 
 import (
+	"context"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
-	"k8s.io/kops/pkg/kubeconfig"
+	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/upup/pkg/fi"
 )
 
 // Cluster defines the configuration for a cluster
@@ -16,18 +19,10 @@ type Cluster struct {
 	kops.ClusterSpec
 }
 
-func fromKopsCluster(cluster *kops.Cluster, kubeConfig *kubeconfig.KubeconfigBuilder, instanceGroups ...*kops.InstanceGroup) *Cluster {
+func fromKopsCluster(cluster *kops.Cluster) *Cluster {
 	return &Cluster{
 		Name:        cluster.ObjectMeta.Name,
 		ClusterSpec: cluster.Spec,
-		// KubeConfig:  kube.FromKubeconfigBuilder(kubeConfig),
-		// InstanceGroup: func(in ...*kops.InstanceGroup) []*InstanceGroup {
-		// 	var out []*InstanceGroup
-		// 	for _, in := range in {
-		// 		out = append(out, fromKopsInstanceGroup(in))
-		// 	}
-		// 	return out
-		// }(instanceGroups...),
 	}
 }
 
@@ -46,4 +41,24 @@ func toKopsCluster(cluster *Cluster) (*kops.Cluster, []*kops.InstanceGroup) {
 	// }
 	// return &c, ig
 	return &c, nil
+}
+
+func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
+	kc, err := clientset.GetCluster(context.Background(), name)
+	if err != nil {
+		return nil, err
+	}
+	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	pubKeys, err := sshCredentialStore.FindSSHPublicKeys(fi.SecretNameSSHPrimary)
+	if err != nil {
+		return nil, err
+	}
+	cluster := fromKopsCluster(kc)
+	if len(pubKeys) > 0 {
+		cluster.AdminSshKey = pubKeys[0].Spec.PublicKey
+	}
+	return cluster, nil
 }
