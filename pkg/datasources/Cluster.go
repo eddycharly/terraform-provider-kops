@@ -9,10 +9,7 @@ import (
 
 func Cluster() *schema.Resource {
 	return &schema.Resource{
-		Read: ClusterRead,
-		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
-		},
+		Read:   ClusterRead,
 		Schema: resourceschemas.DataSourceCluster().Schema,
 	}
 }
