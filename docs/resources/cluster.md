@@ -1,6 +1,6 @@
 # kops_cluster
 
-Cluster defines the configuration for a cluster<br />It includes cluster instance groups.
+Cluster defines the configuration for a cluster.
 
 ## Argument Reference
 

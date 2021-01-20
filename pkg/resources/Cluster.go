@@ -21,43 +21,41 @@ func Cluster() *schema.Resource {
 }
 
 func ClusterCreate(d *schema.ResourceData, m interface{}) error {
-	// cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
-	// _, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
-	// if err != nil {
-	// 	return err
-	// }
-	// d.SetId(cluster.Name)
+	cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
+	if cluster, err := resources.CreateCluster(cluster.Name, cluster.AdminSshKey, cluster.ClusterSpec, config.Clientset(m)); err != nil {
+		return err
+	} else {
+		d.SetId(cluster.Name)
+	}
 	return ClusterRead(d, m)
 }
 
 func ClusterUpdate(d *schema.ResourceData, m interface{}) error {
-	// cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
-	// _, err := resources.SyncCluster(&cluster, config.Clientset(m), config.RollingUpdateOptions(m), config.ValidateOptions(m))
-	// if err != nil {
-	// 	return err
-	// }
+	cluster := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
+	if _, err := resources.UpdateCluster(cluster.Name, cluster.AdminSshKey, cluster.ClusterSpec, config.Clientset(m)); err != nil {
+		return err
+	}
 	return ClusterRead(d, m)
 }
 
 func ClusterRead(d *schema.ResourceData, m interface{}) error {
-	cluster, err := resources.GetCluster(d.Id(), config.Clientset(m))
-	if err != nil {
+	if cluster, err := resources.GetCluster(d.Id(), config.Clientset(m)); err != nil {
 		return err
-	}
-	flattened := resourcesschema.FlattenResourceCluster(*cluster)
-	for key, value := range flattened {
-		if err := d.Set(key, value); err != nil {
-			return err
+	} else {
+		flattened := resourcesschema.FlattenResourceCluster(*cluster)
+		for key, value := range flattened {
+			if err := d.Set(key, value); err != nil {
+				return err
+			}
 		}
+		d.SetId(cluster.Name)
 	}
-	d.SetId(cluster.Name)
 	return nil
 }
 
 func ClusterDelete(d *schema.ResourceData, m interface{}) error {
-	// err := resources.DeleteCluster(d.Id(), config.Clientset(m))
-	// if err != nil {
-	// 	return err
-	// }
+	if err := resources.DeleteCluster(d.Id(), config.Clientset(m)); err != nil {
+		return err
+	}
 	return nil
 }
