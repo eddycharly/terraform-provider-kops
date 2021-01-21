@@ -41,34 +41,6 @@ resource "kops_cluster" "cluster" {
     zone        = "zone-2"
   }
 
-  # master instance groups
-  instance_group {
-    name         = "master-0"
-    role         = "Master"
-    min_size     = 1
-    max_size     = 1
-    machine_type = "t3.medium"
-    subnets      = ["private-0"]
-  }
-
-  instance_group {
-    name         = "master-1"
-    role         = "Master"
-    min_size     = 1
-    max_size     = 1
-    machine_type = "t3.medium"
-    subnets      = ["private-1"]
-  }
-
-  instance_group {
-    name         = "master-2"
-    role         = "Master"
-    min_size     = 1
-    max_size     = 1
-    machine_type = "t3.medium"
-    subnets      = ["private-2"]
-  }
-
   # etcd clusters
   etcd_cluster {
     name = "main"
@@ -107,4 +79,37 @@ resource "kops_cluster" "cluster" {
       instance_group = "master-2"
     }
   }
+}
+
+resource "kops_instance_group" "master-0" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-0"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-0"]
+  depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_instance_group" "master-1" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-1"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-1"]
+  depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_instance_group" "master-2" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-2"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-2"]
+  depends_on   = [kops_cluster.cluster]
 }

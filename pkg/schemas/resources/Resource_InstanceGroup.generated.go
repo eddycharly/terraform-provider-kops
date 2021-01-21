@@ -13,9 +13,10 @@ var _ = Schema
 func ResourceInstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"cluster_name":                      RequiredString(),
 			"name":                              RequiredString(),
 			"role":                              RequiredString(),
-			"image":                             OptionalString(),
+			"image":                             OptionalComputedString(),
 			"min_size":                          RequiredInt(),
 			"max_size":                          RequiredInt(),
 			"machine_type":                      RequiredString(),
@@ -60,6 +61,9 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
+		ClusterName: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cluster_name"]),
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
@@ -70,6 +74,9 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 }
 
 func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
+	out["cluster_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterName)
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)

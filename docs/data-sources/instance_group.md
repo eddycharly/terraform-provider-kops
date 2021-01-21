@@ -1,11 +1,11 @@
 # kops_instance_group
 
-InstanceGroup defines a cluster instance group.
+InstanceGroup represents a group of instances (either nodes or masters) with the same configuration.
 
 ## Argument Reference
 
 The following arguments are supported:
-- `cluster_name` - (Required) - String - The cluster name.
+- `cluster_name` - (Computed) - String - The cluster name the instance group belongs to.
 - `name` - (Required) - String - Instance group name.
 - `role` - (Computed) - String - Type determines the role of instances in this group: masters or nodes.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
