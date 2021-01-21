@@ -344,14 +344,11 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 	}
 }
 
-func buildDoc(i interface{}, p string, optionsMap map[reflect.Type]*options, scope string, parser parser) {
+func buildDoc(i interface{}, p string, optionsMap map[reflect.Type]*options, scope string, parser parser, header, footer string) {
 	t := reflect.TypeOf(i)
-	tmplString := `# kops_{{ schemaName .Name | snakecase }}
+	tmplString := fmt.Sprintf(`# kops_{{ schemaName .Name | snakecase }}
 
-{{- $comment := resourceComment . }}
-{{ if $comment }}
-{{ $comment }}
-{{- end }}
+%s
 
 {{- define "type" -}}
 {{- if isPtr . -}}
@@ -411,7 +408,10 @@ The following arguments are supported:
 {{- end }}
 {{- end }}
 {{ end }}
-`
+
+%s
+`, header, footer)
+
 	tmpl := template.New("doc")
 	funcMaps := []template.FuncMap{
 		funcMap(t, optionsMap, scope, parser),
@@ -1175,10 +1175,10 @@ func main() {
 		generate(kops.ExecContainerAction{}),
 	)
 	log.Println("generating docs...")
-	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser)
-	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser)
-	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
-	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
-	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser)
-	buildDoc(config.Provider{}, "docs/provider-config/", configMap, "Config", parser)
+	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
+	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
+	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataKubeConfigHeader, "")
+	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterHeader, "")
+	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
+	buildDoc(config.Provider{}, "docs/provider-config/", configMap, "Config", parser, genericHeader, "")
 }

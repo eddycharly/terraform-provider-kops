@@ -1,6 +1,15 @@
 # kops_instance_group
 
-InstanceGroup represents a group of instances (either nodes or masters) with the same configuration.
+Provides a kOps cluster instance group data source.
+
+## Example usage
+
+```hcl
+data "kops_instance_group" "ig-0" {
+  cluster_name = "cluster.example.com"
+  name         = "ig-0"
+}
+```
 
 ## Argument Reference
 
@@ -264,4 +273,6 @@ The following arguments are supported:
 - `drain_and_terminate` - (Computed) - Bool - DrainAndTerminate enables draining and terminating nodes during rolling updates.<br />Defaults to true.
 - `max_unavailable` - (Computed) - IntOrString - MaxUnavailable is the maximum number of nodes that can be unavailable during the update.<br />The value can be an absolute number (for example 5) or a percentage of desired<br />nodes (for example 10%).<br />The absolute number is calculated from a percentage by rounding down.<br />Defaults to 1 if MaxSurge is 0, otherwise defaults to 0.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />down to 70% of desired nodes immediately when the rolling update<br />starts. Once new nodes are ready, more old nodes can be drained,<br />ensuring that the total number of nodes available at all times<br />during the update is at least 70% of desired nodes.<br />+optional.
 - `max_surge` - (Computed) - IntOrString - MaxSurge is the maximum number of extra nodes that can be created<br />during the update.<br />The value can be an absolute number (for example 5) or a percentage of<br />desired machines (for example 10%).<br />The absolute number is calculated from a percentage by rounding up.<br />Has no effect on instance groups with role "Master".<br />Defaults to 1 on AWS, 0 otherwise.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />up immediately when the rolling update starts, such that the total<br />number of old and new nodes do not exceed 130% of desired<br />nodes.<br />+optional.
+
+
 

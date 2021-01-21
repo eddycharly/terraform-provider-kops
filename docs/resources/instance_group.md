@@ -1,6 +1,49 @@
 # kops_instance_group
 
-InstanceGroup represents a group of instances (either nodes or masters) with the same configuration.
+Provides a kOps cluster instance group.
+
+## Example usage
+
+```hcl
+resource "kops_cluster" "cluster" {
+  name                 = "cluster.example.com"
+
+  // ....
+}
+
+resource "kops_instance_group" "master-0" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-0"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-0"]
+  depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_instance_group" "master-1" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-1"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-1"]
+  depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_instance_group" "master-2" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-2"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-2"]
+  depends_on   = [kops_cluster.cluster]
+}
+```
 
 ## Argument Reference
 
@@ -264,4 +307,34 @@ The following arguments are supported:
 - `drain_and_terminate` - (Optional) - Bool - DrainAndTerminate enables draining and terminating nodes during rolling updates.<br />Defaults to true.
 - `max_unavailable` - (Optional) - IntOrString - MaxUnavailable is the maximum number of nodes that can be unavailable during the update.<br />The value can be an absolute number (for example 5) or a percentage of desired<br />nodes (for example 10%).<br />The absolute number is calculated from a percentage by rounding down.<br />Defaults to 1 if MaxSurge is 0, otherwise defaults to 0.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />down to 70% of desired nodes immediately when the rolling update<br />starts. Once new nodes are ready, more old nodes can be drained,<br />ensuring that the total number of nodes available at all times<br />during the update is at least 70% of desired nodes.<br />+optional.
 - `max_surge` - (Optional) - IntOrString - MaxSurge is the maximum number of extra nodes that can be created<br />during the update.<br />The value can be an absolute number (for example 5) or a percentage of<br />desired machines (for example 10%).<br />The absolute number is calculated from a percentage by rounding up.<br />Has no effect on instance groups with role "Master".<br />Defaults to 1 on AWS, 0 otherwise.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />up immediately when the rolling update starts, such that the total<br />number of old and new nodes do not exceed 130% of desired<br />nodes.<br />+optional.
+
+
+## Import
+
+You can import an existing cluster by creating a `kops_instance_group` configuration
+and running the `terraform import` command:
+
+1. Create a terraform configuration:
+
+    ```hcl
+    provider "kops" {
+      state_store = "s3://cluster.example.com"
+    }
+
+    resource "kops_instance_group" "ig-0" {
+      cluster_namename  = "ig-0"
+      name              = "cluster.example.com"
+      
+      // ....
+    }
+    ```
+
+1. Run `terraform import`:
+
+    ```shell
+    terraform import kops_instance_group.ig-0 cluster.example.com/ig-0
+    ```
+
+~> The id of the instance group to be imported must be given in the 
+`cluster name/instance group name` format.
 
