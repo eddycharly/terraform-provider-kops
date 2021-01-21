@@ -17,8 +17,9 @@ func NewProvider() *schema.Provider {
 			"kops_instance_group": datasources.InstanceGroup(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"kops_cluster":        resources.Cluster(),
-			"kops_instance_group": resources.InstanceGroup(),
+			"kops_cluster":         resources.Cluster(),
+			"kops_cluster_updater": resources.ClusterUpdater(),
+			"kops_instance_group":  resources.InstanceGroup(),
 		},
 		ConfigureFunc: config.ConfigureProvider,
 	}
