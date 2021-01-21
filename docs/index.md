@@ -46,7 +46,7 @@ terraform configuration for a KOPS cluster, it is still necessary to run
 With this provider, this is all taken care of and you should never need to run
 KOPS manually.
 
-## Example Usage
+## Example usage
 
 ```hcl
 provider "kops" {
@@ -171,6 +171,18 @@ resource "kops_instance_group" "master-2" {
   machine_type = "t3.medium"
   subnets      = ["private-2"]
   depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_cluster_updater" "updater" {
+  cluster_name = kops_cluster.cluster.name
+
+  # ensures rolling update happens after the cluster and instance groups are up to date
+  depends_on   = [
+    kops_cluster.cluster,
+    kops_instance_group.master-0,
+    kops_instance_group.master-1,
+    kops_instance_group.master-2
+  ]
 }
 ```
 

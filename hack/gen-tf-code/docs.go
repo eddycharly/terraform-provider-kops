@@ -18,11 +18,12 @@ const genericHeader = `
 `
 
 var (
-	resourceClusterHeader       = readFile("hack/gen-tf-code/resource-cluster-header.md")
-	resourceClusterFooter       = readFile("hack/gen-tf-code/resource-cluster-footer.md")
-	resourceInstanceGroupHeader = readFile("hack/gen-tf-code/resource-instance-group-header.md")
-	resourceInstanceGroupFooter = readFile("hack/gen-tf-code/resource-instance-group-footer.md")
-	dataKubeConfigHeader        = readFile("hack/gen-tf-code/data-kube-config-header.md")
-	dataClusterHeader           = readFile("hack/gen-tf-code/data-cluster-header.md")
-	dataInstanceGroupHeader     = readFile("hack/gen-tf-code/data-instance-group-header.md")
+	resourceClusterHeader        = readFile("hack/gen-tf-code/resource-cluster-header.md")
+	resourceClusterFooter        = readFile("hack/gen-tf-code/resource-cluster-footer.md")
+	resourceClusterUpdaterHeader = readFile("hack/gen-tf-code/resource-cluster-updater-header.md")
+	resourceInstanceGroupHeader  = readFile("hack/gen-tf-code/resource-instance-group-header.md")
+	resourceInstanceGroupFooter  = readFile("hack/gen-tf-code/resource-instance-group-footer.md")
+	dataKubeConfigHeader         = readFile("hack/gen-tf-code/data-kube-config-header.md")
+	dataClusterHeader            = readFile("hack/gen-tf-code/data-cluster-header.md")
+	dataInstanceGroupHeader      = readFile("hack/gen-tf-code/data-instance-group-header.md")
 )

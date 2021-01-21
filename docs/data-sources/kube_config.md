@@ -35,7 +35,6 @@ The following arguments are supported:
 - `client_cert` - (Computed) - String - Kubernetes client certificate.
 - `client_key` - (Computed) - String - Kubernetes client key.
 
-## Nested resources
 
 
 

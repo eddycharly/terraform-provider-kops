@@ -129,3 +129,21 @@ resource "kops_instance_group" "bastion-0" {
   subnets      = ["private-0"]
   depends_on   = [kops_cluster.cluster]
 }
+
+resource "kops_cluster_updater" "updater" {
+  cluster_name = kops_cluster.cluster.name
+
+  # ensures rolling update happens after the cluster and instance groups are up to date
+  depends_on   = [
+    kops_cluster.cluster,
+    kops_instance_group.master-0,
+    kops_instance_group.master-1,
+    kops_instance_group.master-2,
+    kops_instance_group.bastion-0
+  ]
+}
+
+data "kops_kube_config" "kube_config" {
+  cluster_name = kops_cluster.cluster.name
+  depends_on   = [kops_cluster_updater.updater]
+}

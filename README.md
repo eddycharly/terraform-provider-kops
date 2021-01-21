@@ -108,7 +108,7 @@ provider "kops" {
 }
 ```
 
-## Using kops_cluster and kops_instance_group resources
+## Example usage
 
 ```hcl
 resource "kops_cluster" "cluster" {
@@ -225,6 +225,18 @@ resource "kops_instance_group" "master-2" {
   machine_type = "t3.medium"
   subnets      = ["private-2"]
   depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_cluster_updater" "updater" {
+  cluster_name = kops_cluster.cluster.name
+
+  # ensures rolling update happens after the cluster and instance groups are up to date
+  depends_on   = [
+    kops_cluster.cluster,
+    kops_instance_group.master-0,
+    kops_instance_group.master-1,
+    kops_instance_group.master-2
+  ]
 }
 ```
 

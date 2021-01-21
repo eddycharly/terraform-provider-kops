@@ -383,6 +383,7 @@ The following arguments are supported:
 {{- end }}
 {{- end }}
 
+{{ if (subResources .) -}}
 ## Nested resources
 {{ range $type := (subResources .) }}
 ### {{ schemaName .Name | snakecase }}
@@ -408,6 +409,7 @@ The following arguments are supported:
 {{- end }}
 {{- end }}
 {{ end }}
+{{- end }}
 
 %s
 `, header, footer)
@@ -925,13 +927,12 @@ func main() {
 	resourcesMap := build(
 		"Resource",
 		parser,
+		generate(resources.ClusterUpdater{},
+			required("ClusterName"),
+		),
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey"),
 			sensitive("AdminSshKey"),
-		),
-		generate(kube.Config{},
-			computedOnly("Server", "Context", "Namespace", "KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
-			sensitive("KubeBearerToken", "KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
 		generate(kops.ClusterSpec{},
 			noSchema(),
@@ -1080,6 +1081,7 @@ func main() {
 			required("ClusterName"),
 		),
 		generate(kube.Config{},
+			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
 		generate(resources.Cluster{},
@@ -1177,6 +1179,7 @@ func main() {
 	log.Println("generating docs...")
 	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
 	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
+	buildDoc(resources.ClusterUpdater{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterUpdaterHeader, "")
 	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataKubeConfigHeader, "")
 	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterHeader, "")
 	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
