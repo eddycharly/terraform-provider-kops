@@ -21,9 +21,10 @@ that we can help troubleshooting if necessary and update the docs.
 
 ## How does it work
 
-The provider declares resources that hold the cluster state and instance groups:
+The provider declares resources that hold or manage the cluster state:
 - `kops_cluster` defines the cluster state
 - `kops_instance_group` defines the state of the instance groups of a given cluster
+- `kops_cluster_updater` manages cluster rolling updates
 
 ## Why use it
 
