@@ -1,12 +1,8 @@
 package kube
 
 import (
-	"context"
-
-	"k8s.io/client-go/tools/clientcmd"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	"k8s.io/kops/pkg/client/simple"
-	"k8s.io/kops/pkg/commands"
-	"k8s.io/kops/pkg/kubeconfig"
 )
 
 type Config struct {
@@ -31,19 +27,7 @@ type Config struct {
 }
 
 func GetConfig(name string, clientset simple.Clientset) (*Config, error) {
-	cluster, err := clientset.GetCluster(context.Background(), name)
-	if err != nil {
-		return nil, err
-	}
-	keyStore, err := clientset.KeyStore(cluster)
-	if err != nil {
-		return nil, err
-	}
-	secretStore, err := clientset.SecretStore(cluster)
-	if err != nil {
-		return nil, err
-	}
-	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, clientcmd.NewDefaultPathOptions())
+	conf, err := utils.GetKubeConfigBuilder(name, clientset)
 	if err != nil {
 		return nil, err
 	}
