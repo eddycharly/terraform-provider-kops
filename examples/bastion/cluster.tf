@@ -142,3 +142,8 @@ resource "kops_cluster_updater" "updater" {
     kops_instance_group.bastion-0
   ]
 }
+
+data "kops_kube_config" "kube_config" {
+  cluster_name = kops_cluster.cluster.name
+  depends_on   = [kops_cluster_updater.updater]
+}
