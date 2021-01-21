@@ -22,7 +22,7 @@ type Cluster struct {
 	kops.ClusterSpec
 }
 
-func fromKopsCluster(adminSshKey string, cluster *kops.Cluster) *Cluster {
+func makeCluster(adminSshKey string, cluster *kops.Cluster) *Cluster {
 	return &Cluster{
 		Name:        cluster.ObjectMeta.Name,
 		AdminSshKey: adminSshKey,
@@ -30,7 +30,7 @@ func fromKopsCluster(adminSshKey string, cluster *kops.Cluster) *Cluster {
 	}
 }
 
-func toKopsCluster(name string, spec kops.ClusterSpec) *kops.Cluster {
+func makeKopsCluster(name string, spec kops.ClusterSpec) *kops.Cluster {
 	return &kops.Cluster{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -52,12 +52,12 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	cluster := fromKopsCluster(pubKeys[0].Spec.PublicKey, kc)
+	cluster := makeCluster(pubKeys[0].Spec.PublicKey, kc)
 	return cluster, nil
 }
 
 func CreateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc, err := clientset.CreateCluster(context.Background(), toKopsCluster(name, spec))
+	kc, err := clientset.CreateCluster(context.Background(), makeKopsCluster(name, spec))
 	if err != nil {
 		return nil, err
 	}
@@ -78,11 +78,11 @@ func CreateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset si
 	if err != nil {
 		return nil, err
 	}
-	return fromKopsCluster(adminSshKey, kc), nil
+	return makeCluster(adminSshKey, kc), nil
 }
 
 func UpdateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc, err := clientset.UpdateCluster(context.Background(), toKopsCluster(name, spec), nil)
+	kc, err := clientset.UpdateCluster(context.Background(), makeKopsCluster(name, spec), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func UpdateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset si
 	if err != nil {
 		return nil, err
 	}
-	return fromKopsCluster(adminSshKey, kc), nil
+	return makeCluster(adminSshKey, kc), nil
 }
 
 func DeleteCluster(name string, clientset simple.Clientset) error {

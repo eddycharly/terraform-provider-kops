@@ -21,11 +21,9 @@ that we can help troubleshooting if necessary and update the docs.
 
 ## How does it work
 
-The provider declares a single `kops_cluster` resource that holds the whole
-cluster state and instance groups.
-
-It is implemented this way because KOPS needs the full cluster state to apply
-changes.
+The provider declares resources that hold the cluster state and instance groups:
+- `kops_cluster` defines the cluster state
+- `kops_instance_group` defines the state of the instance groups of a given cluster
 
 ## Why use it
 
@@ -102,34 +100,6 @@ resource "kops_cluster" "cluster" {
     zone        = "zone-2"
   }
 
-  # master instance groups
-  instance_group {
-    name                     = "master-0"
-    role                     = "Master"
-    min_size                 = 1
-    max_size                 = 1
-    machine_type             = "t3.medium"
-    subnets                  = ["private-0"]
-  }
-
-  instance_group {
-    name                     = "master-1"
-    role                     = "Master"
-    min_size                 = 1
-    max_size                 = 1
-    machine_type             = "t3.medium"
-    subnets                  = ["private-1"]
-  }
-
-  instance_group {
-    name                     = "master-2"
-    role                     = "Master"
-    min_size                 = 1
-    max_size                 = 1
-    machine_type             = "t3.medium"
-    subnets                  = ["private-2"]
-  }
-
   # etcd clusters
   etcd_cluster {
     name            = "main"
@@ -169,6 +139,39 @@ resource "kops_cluster" "cluster" {
     }
   }
 }
+
+resource "kops_instance_group" "master-0" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-0"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-0"]
+  depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_instance_group" "master-1" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-1"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-1"]
+  depends_on   = [kops_cluster.cluster]
+}
+
+resource "kops_instance_group" "master-2" {
+  cluster_name = kops_cluster.cluster.name
+  name         = "master-2"
+  role         = "Master"
+  min_size     = 1
+  max_size     = 1
+  machine_type = "t3.medium"
+  subnets      = ["private-2"]
+  depends_on   = [kops_cluster.cluster]
+}
 ```
 
 ## Provider configuration
@@ -200,6 +203,35 @@ and running the `terraform import` command:
     ```shell
     terraform import kops_cluster.cluster cluster.example.com
     ```
+
+## Importing an existing instance group
+
+You can import an existing cluster by creating a `kops_instance_group` configuration
+and running the `terraform import` command:
+
+1. Create a terraform configuration:
+
+    ```hcl
+    provider "kops" {
+      state_store = "s3://cluster.example.com"
+    }
+
+    resource "kops_instance_group" "ig-0" {
+      cluster_namename  = "ig-0"
+      name              = "cluster.example.com"
+      
+      // ....
+    }
+    ```
+
+1. Run `terraform import`:
+
+    ```shell
+    terraform import kops_instance_group.ig-0 cluster.example.com/ig-0
+    ```
+
+~> The id of the instance group to be imported must be given in the 
+`cluster name/instance group name` format.
 
 ## Getting kubeconfig file
 
