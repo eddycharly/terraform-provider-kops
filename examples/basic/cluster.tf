@@ -114,16 +114,21 @@ resource "kops_instance_group" "master-2" {
   depends_on   = [kops_cluster.cluster]
 }
 
-resource "kops_cluster_updater" "updater" {
+data "kops_cluster_status" "status" {
   cluster_name = kops_cluster.cluster.name
 
-  # ensures rolling update happens after the cluster and instance groups are up to date
+  # ensures the cluster and instance groups are up to date
   depends_on   = [
     kops_cluster.cluster,
     kops_instance_group.master-0,
     kops_instance_group.master-1,
     kops_instance_group.master-2
   ]
+}
+
+resource "kops_cluster_updater" "updater" {
+  count        = data.kops_cluster_status.status.needs_update ? 1 : 0
+  cluster_name = kops_cluster.cluster.name
 }
 
 data "kops_kube_config" "kube_config" {
