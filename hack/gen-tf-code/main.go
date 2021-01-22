@@ -1080,6 +1080,9 @@ func main() {
 		generate(datasources.KubeConfig{},
 			required("ClusterName"),
 		),
+		generate(datasources.ClusterStatus{},
+			required("ClusterName"),
+		),
 		generate(kube.Config{},
 			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
@@ -1177,11 +1180,15 @@ func main() {
 		generate(kops.ExecContainerAction{}),
 	)
 	log.Println("generating docs...")
+	// resources
 	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
 	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
 	buildDoc(resources.ClusterUpdater{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterUpdaterHeader, "")
+	// data sources
+	buildDoc(datasources.ClusterStatus{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterStatusHeader, "")
 	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataKubeConfigHeader, "")
 	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterHeader, "")
 	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
+	// config
 	buildDoc(config.Provider{}, "docs/provider-config/", configMap, "Config", parser, genericHeader, "")
 }
