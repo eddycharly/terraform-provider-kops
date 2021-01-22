@@ -1,15 +1,15 @@
-# KOPS Provider
+# kOps Provider
 
-`terraform-provider-kops` brings [KOPS](https://github.com/kubernetes/kops)
+`terraform-provider-kops` brings [kOps](https://github.com/kubernetes/kops)
 into terraform in a fully managed way, enabling idempotency through direct
-integration with the KOPS api:
+integration with the kOps api:
 - No `local_exec`
 - No yaml templating,
 - No CLI invocations
 
 ... just **pure go code**.
 
-Currently using KOPS `v1.18.2` and compatible with terraform `0.12` and higher.
+Currently using kOps `v1.18.2` and compatible with terraform `0.12` and higher.
 
 ~> For now, provisioning the network is not supported. The network must
 be created separately and given to the provider through cluster attribute
@@ -28,11 +28,11 @@ The provider declares resources that hold or manage the cluster state:
 
 ## Why use it
 
-KOPS is an amazing tool but it can be challenging to integrate in an IAC
+kOps is an amazing tool but it can be challenging to integrate in an IAC
 (infrastructure as code) stack.
 
-Typical solutions usually involve running KOPS CLI in shell scripts or generating
-KOPS templates manually and force syncing them with the KOPS store.
+Typical solutions usually involve running kOps CLI in shell scripts or generating
+kOps templates manually and force syncing them with the kOps store.
 
 In most cases, getting something idempotent is difficult because you need to
 somewhat keep the state of the cluster and are responsible for deleting obsolete
@@ -41,11 +41,11 @@ instange groups for example.
 This is where `terraform` shines in, state management. This provider takes care
 of creating, updating and deleting instance groups as they evolve over time.
 
-Even if KOPS provides `kops update cluster --target terraform` to create the
-terraform configuration for a KOPS cluster, it is still necessary to run
+Even if kOps provides `kops update cluster --target terraform` to create the
+terraform configuration for a kOps cluster, it is still necessary to run
 `kops rolling-update cluster` to recycle instance groups when the change.
 With this provider, this is all taken care of and you should never need to run
-KOPS manually.
+kOps manually.
 
 ## Example usage
 
