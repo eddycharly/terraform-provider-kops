@@ -12,7 +12,7 @@ integration with the kOps api:
 
 ... just **pure go code**.
 
-Currently using kOps `v1.18.2` and compatible with terraform `0.12` and higher.
+Currently using kOps `v1.18.3` and compatible with terraform `0.12` and higher.
 
 **NOTES**
 - For now, provisioning the network is not supported. The network must

@@ -27,6 +27,7 @@ func ResourceWeaveNetworkingSpec() *schema.Resource {
 			"npc_memory_limit":   OptionalQuantity(),
 			"npccpu_limit":       OptionalQuantity(),
 			"npc_extra_args":     OptionalString(),
+			"version":            OptionalString(),
 		},
 	}
 }
@@ -218,6 +219,9 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 		NPCExtraArgs: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["npc_extra_args"]),
+		Version: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["version"]),
 	}
 }
 
@@ -338,6 +342,9 @@ func FlattenResourceWeaveNetworkingSpecInto(in kops.WeaveNetworkingSpec, out map
 	out["npc_extra_args"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.NPCExtraArgs)
+	out["version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Version)
 }
 
 func FlattenResourceWeaveNetworkingSpec(in kops.WeaveNetworkingSpec) map[string]interface{} {

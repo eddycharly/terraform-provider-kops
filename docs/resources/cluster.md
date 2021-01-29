@@ -925,6 +925,7 @@ The following arguments are supported:
 - `npc_memory_limit` - (Optional) - Quantity - NPCMemoryLimit memory limit of weave npc container. Default 200Mi.
 - `npccpu_limit` - (Optional) - Quantity - NPCCPULimit CPU limit of weave npc container.
 - `npc_extra_args` - (Optional) - String - NPCExtraArgs are extra arguments that are passed to weave-npc.
+- `version` - (Optional) - String - Version specifies the Weave container image tag. The default depends on the kOps version.
 
 ### flannel_networking_spec
 
