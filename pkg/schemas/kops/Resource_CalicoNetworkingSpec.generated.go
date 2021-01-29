@@ -14,8 +14,21 @@ var _ = Schema
 func ResourceCalicoNetworkingSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"registry":                  OptionalString(),
+			"version":                   OptionalString(),
+			"aws_src_dst_check":         OptionalString(),
+			"bpf_enabled":               OptionalBool(),
+			"bpf_external_service_mode": OptionalString(),
+			"bpf_kube_proxy_iptables_cleanup_enabled": OptionalBool(),
+			"bpf_log_level":                      OptionalString(),
+			"chain_insert_mode":                  OptionalString(),
 			"cpu_request":                        OptionalQuantity(),
 			"cross_subnet":                       OptionalBool(),
+			"encapsulation_mode":                 OptionalString(),
+			"ip_ip_mode":                         OptionalString(),
+			"ipv_4auto_detection_method":         OptionalString(),
+			"ipv_6auto_detection_method":         OptionalString(),
+			"iptables_backend":                   OptionalString(),
 			"log_severity_screen":                OptionalString(),
 			"mtu":                                OptionalInt(),
 			"prometheus_metrics_enabled":         OptionalBool(),
@@ -23,8 +36,6 @@ func ResourceCalicoNetworkingSpec() *schema.Resource {
 			"prometheus_go_metrics_enabled":      OptionalBool(),
 			"prometheus_process_metrics_enabled": OptionalBool(),
 			"major_version":                      OptionalString(),
-			"iptables_backend":                   OptionalString(),
-			"ip_ip_mode":                         OptionalString(),
 			"typha_prometheus_metrics_enabled":   OptionalBool(),
 			"typha_prometheus_metrics_port":      OptionalInt(),
 			"typha_replicas":                     OptionalInt(),
@@ -38,6 +49,30 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 		panic("expand CalicoNetworkingSpec failure, in is nil")
 	}
 	return kops.CalicoNetworkingSpec{
+		Registry: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["registry"]),
+		Version: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["version"]),
+		AWSSrcDstCheck: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["aws_src_dst_check"]),
+		BPFEnabled: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["bpf_enabled"]),
+		BPFExternalServiceMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["bpf_external_service_mode"]),
+		BPFKubeProxyIptablesCleanupEnabled: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["bpf_kube_proxy_iptables_cleanup_enabled"]),
+		BPFLogLevel: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["bpf_log_level"]),
+		ChainInsertMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["chain_insert_mode"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -57,6 +92,21 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 		CrossSubnet: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["cross_subnet"]),
+		EncapsulationMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["encapsulation_mode"]),
+		IPIPMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["ip_ip_mode"]),
+		IPv4AutoDetectionMethod: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["ipv_4auto_detection_method"]),
+		IPv6AutoDetectionMethod: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["ipv_6auto_detection_method"]),
+		IptablesBackend: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["iptables_backend"]),
 		LogSeverityScreen: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["log_severity_screen"]),
@@ -91,12 +141,6 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 		MajorVersion: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["major_version"]),
-		IptablesBackend: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["iptables_backend"]),
-		IPIPMode: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ip_ip_mode"]),
 		TyphaPrometheusMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["typha_prometheus_metrics_enabled"]),
@@ -113,6 +157,30 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 }
 
 func FlattenResourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out map[string]interface{}) {
+	out["registry"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Registry)
+	out["version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Version)
+	out["aws_src_dst_check"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AWSSrcDstCheck)
+	out["bpf_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.BPFEnabled)
+	out["bpf_external_service_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BPFExternalServiceMode)
+	out["bpf_kube_proxy_iptables_cleanup_enabled"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.BPFKubeProxyIptablesCleanupEnabled)
+	out["bpf_log_level"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BPFLogLevel)
+	out["chain_insert_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ChainInsertMode)
 	out["cpu_request"] = func(in *resource.Quantity) interface{} {
 		return func(in *resource.Quantity) interface{} {
 			if in == nil {
@@ -126,6 +194,21 @@ func FlattenResourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out m
 	out["cross_subnet"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.CrossSubnet)
+	out["encapsulation_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.EncapsulationMode)
+	out["ip_ip_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IPIPMode)
+	out["ipv_4auto_detection_method"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IPv4AutoDetectionMethod)
+	out["ipv_6auto_detection_method"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IPv6AutoDetectionMethod)
+	out["iptables_backend"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IptablesBackend)
 	out["log_severity_screen"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.LogSeverityScreen)
@@ -154,12 +237,6 @@ func FlattenResourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out m
 	out["major_version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MajorVersion)
-	out["iptables_backend"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.IptablesBackend)
-	out["ip_ip_mode"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.IPIPMode)
 	out["typha_prometheus_metrics_enabled"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.TyphaPrometheusMetricsEnabled)

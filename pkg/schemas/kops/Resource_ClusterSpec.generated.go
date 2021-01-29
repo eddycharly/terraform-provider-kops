@@ -289,25 +289,15 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				return out
 			}(in)
 		}(in["file_assets"]),
-		EtcdClusters: func(in interface{}) []*kops.EtcdClusterSpec {
-			return func(in interface{}) []*kops.EtcdClusterSpec {
-				var out []*kops.EtcdClusterSpec
+		EtcdClusters: func(in interface{}) []kops.EtcdClusterSpec {
+			return func(in interface{}) []kops.EtcdClusterSpec {
+				var out []kops.EtcdClusterSpec
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) *kops.EtcdClusterSpec {
+					out = append(out, func(in interface{}) kops.EtcdClusterSpec {
 						if in == nil {
-							return nil
+							return kops.EtcdClusterSpec{}
 						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in kops.EtcdClusterSpec) *kops.EtcdClusterSpec {
-							return &in
-						}(func(in interface{}) kops.EtcdClusterSpec {
-							if in == nil {
-								return kops.EtcdClusterSpec{}
-							}
-							return (ExpandResourceEtcdClusterSpec(in.(map[string]interface{})))
-						}(in))
+						return (ExpandResourceEtcdClusterSpec(in.(map[string]interface{})))
 					}(in))
 				}
 				return out
@@ -529,6 +519,42 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["external_dns"]),
+		NodeTerminationHandler: func(in interface{}) *kops.NodeTerminationHandlerConfig {
+			return func(in interface{}) *kops.NodeTerminationHandlerConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.NodeTerminationHandlerConfig) *kops.NodeTerminationHandlerConfig {
+					return &in
+				}(func(in interface{}) kops.NodeTerminationHandlerConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.NodeTerminationHandlerConfig{}
+					}
+					return (ExpandResourceNodeTerminationHandlerConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["node_termination_handler"]),
+		MetricsServer: func(in interface{}) *kops.MetricsServerConfig {
+			return func(in interface{}) *kops.MetricsServerConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.MetricsServerConfig) *kops.MetricsServerConfig {
+					return &in
+				}(func(in interface{}) kops.MetricsServerConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.MetricsServerConfig{}
+					}
+					return (ExpandResourceMetricsServerConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["metrics_server"]),
 		Networking: func(in interface{}) *kops.NetworkingSpec {
 			return func(in interface{}) *kops.NetworkingSpec {
 				if in == nil {
@@ -743,6 +769,24 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["rolling_update"]),
+		ClusterAutoscaler: func(in interface{}) *kops.ClusterAutoscalerConfig {
+			return func(in interface{}) *kops.ClusterAutoscalerConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.ClusterAutoscalerConfig) *kops.ClusterAutoscalerConfig {
+					return &in
+				}(func(in interface{}) kops.ClusterAutoscalerConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.ClusterAutoscalerConfig{}
+					}
+					return (ExpandResourceClusterAutoscalerConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["cluster_autoscaler"]),
 	}
 }
 
@@ -977,19 +1021,12 @@ func FlattenResourceClusterSpecInto(in kops.ClusterSpec, out map[string]interfac
 			return out
 		}(in)
 	}(in.FileAssets)
-	out["etcd_cluster"] = func(in []*kops.EtcdClusterSpec) interface{} {
-		return func(in []*kops.EtcdClusterSpec) []interface{} {
+	out["etcd_cluster"] = func(in []kops.EtcdClusterSpec) interface{} {
+		return func(in []kops.EtcdClusterSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in *kops.EtcdClusterSpec) interface{} {
-					if in == nil {
-						return nil
-					}
-					return func(in kops.EtcdClusterSpec) interface{} {
-						return func(in kops.EtcdClusterSpec) interface{} {
-							return FlattenResourceEtcdClusterSpec(in)
-						}(in)
-					}(*in)
+				out = append(out, func(in kops.EtcdClusterSpec) interface{} {
+					return FlattenResourceEtcdClusterSpec(in)
 				}(in))
 			}
 			return out
@@ -1139,6 +1176,30 @@ func FlattenResourceClusterSpecInto(in kops.ClusterSpec, out map[string]interfac
 			}(*in)
 		}(in)
 	}(in.ExternalDNS)
+	out["node_termination_handler"] = func(in *kops.NodeTerminationHandlerConfig) interface{} {
+		return func(in *kops.NodeTerminationHandlerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NodeTerminationHandlerConfig) interface{} {
+				return func(in kops.NodeTerminationHandlerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceNodeTerminationHandlerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.NodeTerminationHandler)
+	out["metrics_server"] = func(in *kops.MetricsServerConfig) interface{} {
+		return func(in *kops.MetricsServerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.MetricsServerConfig) interface{} {
+				return func(in kops.MetricsServerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceMetricsServerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.MetricsServer)
 	out["networking"] = func(in *kops.NetworkingSpec) interface{} {
 		return func(in *kops.NetworkingSpec) interface{} {
 			if in == nil {
@@ -1290,6 +1351,18 @@ func FlattenResourceClusterSpecInto(in kops.ClusterSpec, out map[string]interfac
 			}(*in)
 		}(in)
 	}(in.RollingUpdate)
+	out["cluster_autoscaler"] = func(in *kops.ClusterAutoscalerConfig) interface{} {
+		return func(in *kops.ClusterAutoscalerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ClusterAutoscalerConfig) interface{} {
+				return func(in kops.ClusterAutoscalerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceClusterAutoscalerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.ClusterAutoscaler)
 }
 
 func FlattenResourceClusterSpec(in kops.ClusterSpec) map[string]interface{} {

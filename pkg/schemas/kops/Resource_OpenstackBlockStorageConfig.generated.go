@@ -13,9 +13,10 @@ var _ = Schema
 func ResourceOpenstackBlockStorageConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"version":     OptionalString(),
-			"ignore_az":   OptionalBool(),
-			"override_az": OptionalString(),
+			"version":              OptionalString(),
+			"ignore_az":            OptionalBool(),
+			"override_az":          OptionalString(),
+			"create_storage_class": OptionalBool(),
 		},
 	}
 }
@@ -73,6 +74,22 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["override_az"]),
+		CreateStorageClass: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["create_storage_class"]),
 	}
 }
 
@@ -107,6 +124,16 @@ func FlattenResourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorag
 			}(*in)
 		}(in)
 	}(in.OverrideAZ)
+	out["create_storage_class"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.CreateStorageClass)
 }
 
 func FlattenResourceOpenstackBlockStorageConfig(in kops.OpenstackBlockStorageConfig) map[string]interface{} {

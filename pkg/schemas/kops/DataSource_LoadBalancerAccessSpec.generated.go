@@ -13,12 +13,14 @@ var _ = Schema
 func DataSourceLoadBalancerAccessSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"class":                      ComputedString(),
 			"type":                       ComputedString(),
 			"idle_timeout_seconds":       ComputedInt(),
 			"security_group_override":    ComputedString(),
 			"additional_security_groups": ComputedList(String()),
 			"use_for_internal_api":       ComputedBool(),
 			"ssl_certificate":            ComputedString(),
+			"ssl_policy":                 ComputedString(),
 			"cross_zone_load_balancing":  ComputedBool(),
 		},
 	}
@@ -29,6 +31,9 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 		panic("expand LoadBalancerAccessSpec failure, in is nil")
 	}
 	return kops.LoadBalancerAccessSpec{
+		Class: func(in interface{}) kops.LoadBalancerClass {
+			return kops.LoadBalancerClass(ExpandString(in))
+		}(in["class"]),
 		Type: func(in interface{}) kops.LoadBalancerType {
 			return kops.LoadBalancerType(ExpandString(in))
 		}(in["type"]),
@@ -79,6 +84,22 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 		SSLCertificate: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ssl_certificate"]),
+		SSLPolicy: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["ssl_policy"]),
 		CrossZoneLoadBalancing: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -99,6 +120,9 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 }
 
 func FlattenDataSourceLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec, out map[string]interface{}) {
+	out["class"] = func(in kops.LoadBalancerClass) interface{} {
+		return FlattenString(string(in))
+	}(in.Class)
 	out["type"] = func(in kops.LoadBalancerType) interface{} {
 		return FlattenString(string(in))
 	}(in.Type)
@@ -137,6 +161,16 @@ func FlattenDataSourceLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec,
 	out["ssl_certificate"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.SSLCertificate)
+	out["ssl_policy"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.SSLPolicy)
 	out["cross_zone_load_balancing"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

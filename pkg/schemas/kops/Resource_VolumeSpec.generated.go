@@ -17,6 +17,8 @@ func ResourceVolumeSpec() *schema.Resource {
 			"device":                RequiredString(),
 			"encrypted":             OptionalBool(),
 			"iops":                  OptionalInt(),
+			"throughput":            OptionalInt(),
+			"key":                   OptionalString(),
 			"size":                  OptionalInt(),
 			"type":                  OptionalString(),
 		},
@@ -79,6 +81,38 @@ func ExpandResourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["iops"]),
+		Throughput: func(in interface{}) *int64 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int64 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int64) *int64 {
+					return &in
+				}(int64(ExpandInt(in)))
+			}(in)
+		}(in["throughput"]),
+		Key: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["key"]),
 		Size: func(in interface{}) int64 {
 			return int64(ExpandInt(in))
 		}(in["size"]),
@@ -122,6 +156,26 @@ func FlattenResourceVolumeSpecInto(in kops.VolumeSpec, out map[string]interface{
 			}(*in)
 		}(in)
 	}(in.Iops)
+	out["throughput"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.Throughput)
+	out["key"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Key)
 	out["size"] = func(in int64) interface{} {
 		return FlattenInt(int(in))
 	}(in.Size)

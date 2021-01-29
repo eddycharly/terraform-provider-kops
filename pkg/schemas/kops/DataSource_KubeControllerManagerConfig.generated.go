@@ -38,26 +38,31 @@ func DataSourceKubeControllerManagerConfig() *schema.Resource {
 			"use_service_account_credentials":           ComputedBool(),
 			"horizontal_pod_autoscaler_sync_period":     ComputedDuration(),
 			"horizontal_pod_autoscaler_downscale_delay": ComputedDuration(),
-			"horizontal_pod_autoscaler_downscale_stabilization": ComputedDuration(),
-			"horizontal_pod_autoscaler_upscale_delay":           ComputedDuration(),
-			"horizontal_pod_autoscaler_tolerance":               ComputedQuantity(),
-			"horizontal_pod_autoscaler_use_rest_clients":        ComputedBool(),
-			"experimental_cluster_signing_duration":             ComputedDuration(),
-			"feature_gates":                                     ComputedMap(String()),
-			"tls_cipher_suites":                                 ComputedList(String()),
-			"tls_min_version":                                   ComputedString(),
-			"min_resync_period":                                 ComputedString(),
-			"kube_api_qps":                                      ComputedQuantity(),
-			"kube_api_burst":                                    ComputedInt(),
-			"concurrent_deployment_syncs":                       ComputedInt(),
-			"concurrent_endpoint_syncs":                         ComputedInt(),
-			"concurrent_namespace_syncs":                        ComputedInt(),
-			"concurrent_replicaset_syncs":                       ComputedInt(),
-			"concurrent_service_syncs":                          ComputedInt(),
-			"concurrent_resource_quota_syncs":                   ComputedInt(),
-			"concurrent_serviceaccount_token_syncs":             ComputedInt(),
-			"concurrent_rc_syncs":                               ComputedInt(),
-			"enable_profiling":                                  ComputedBool(),
+			"horizontal_pod_autoscaler_downscale_stabilization":   ComputedDuration(),
+			"horizontal_pod_autoscaler_upscale_delay":             ComputedDuration(),
+			"horizontal_pod_autoscaler_initial_readiness_delay":   ComputedDuration(),
+			"horizontal_pod_autoscaler_cpu_initialization_period": ComputedDuration(),
+			"horizontal_pod_autoscaler_tolerance":                 ComputedQuantity(),
+			"horizontal_pod_autoscaler_use_rest_clients":          ComputedBool(),
+			"experimental_cluster_signing_duration":               ComputedDuration(),
+			"feature_gates":                                       ComputedMap(String()),
+			"tls_cipher_suites":                                   ComputedList(String()),
+			"tls_min_version":                                     ComputedString(),
+			"min_resync_period":                                   ComputedString(),
+			"kube_api_qps":                                        ComputedQuantity(),
+			"kube_api_burst":                                      ComputedInt(),
+			"concurrent_deployment_syncs":                         ComputedInt(),
+			"concurrent_endpoint_syncs":                           ComputedInt(),
+			"concurrent_namespace_syncs":                          ComputedInt(),
+			"concurrent_replicaset_syncs":                         ComputedInt(),
+			"concurrent_service_syncs":                            ComputedInt(),
+			"concurrent_resource_quota_syncs":                     ComputedInt(),
+			"concurrent_serviceaccount_token_syncs":               ComputedInt(),
+			"concurrent_rc_syncs":                                 ComputedInt(),
+			"authentication_kubeconfig":                           ComputedString(),
+			"authorization_kubeconfig":                            ComputedString(),
+			"authorization_always_allow_paths":                    ComputedList(String()),
+			"enable_profiling":                                    ComputedBool(),
 		},
 	}
 }
@@ -358,6 +363,38 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_upscale_delay"]),
+		HorizontalPodAutoscalerInitialReadinessDelay: func(in interface{}) *v1.Duration {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *v1.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in v1.Duration) *v1.Duration {
+					return &in
+				}(ExpandDuration(in))
+			}(in)
+		}(in["horizontal_pod_autoscaler_initial_readiness_delay"]),
+		HorizontalPodAutoscalerCPUInitializationPeriod: func(in interface{}) *v1.Duration {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *v1.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in v1.Duration) *v1.Duration {
+					return &in
+				}(ExpandDuration(in))
+			}(in)
+		}(in["horizontal_pod_autoscaler_cpu_initialization_period"]),
 		HorizontalPodAutoscalerTolerance: func(in interface{}) *resource.Quantity {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -593,6 +630,21 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_rc_syncs"]),
+		AuthenticationKubeconfig: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["authentication_kubeconfig"]),
+		AuthorizationKubeconfig: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["authorization_kubeconfig"]),
+		AuthorizationAlwaysAllowPaths: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["authorization_always_allow_paths"]),
 		EnableProfiling: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -808,6 +860,26 @@ func FlattenDataSourceKubeControllerManagerConfigInto(in kops.KubeControllerMana
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerUpscaleDelay)
+	out["horizontal_pod_autoscaler_initial_readiness_delay"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerInitialReadinessDelay)
+	out["horizontal_pod_autoscaler_cpu_initialization_period"] = func(in *v1.Duration) interface{} {
+		return func(in *v1.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in v1.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.HorizontalPodAutoscalerCPUInitializationPeriod)
 	out["horizontal_pod_autoscaler_tolerance"] = func(in *resource.Quantity) interface{} {
 		return func(in *resource.Quantity) interface{} {
 			if in == nil {
@@ -965,6 +1037,21 @@ func FlattenDataSourceKubeControllerManagerConfigInto(in kops.KubeControllerMana
 			}(*in)
 		}(in)
 	}(in.ConcurrentRcSyncs)
+	out["authentication_kubeconfig"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuthenticationKubeconfig)
+	out["authorization_kubeconfig"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuthorizationKubeconfig)
+	out["authorization_always_allow_paths"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AuthorizationAlwaysAllowPaths)
 	out["enable_profiling"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

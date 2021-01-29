@@ -13,13 +13,14 @@ var _ = Schema
 func DataSourceEtcdMemberSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":             ComputedString(),
-			"instance_group":   ComputedString(),
-			"volume_type":      ComputedString(),
-			"volume_iops":      ComputedInt(),
-			"volume_size":      ComputedInt(),
-			"kms_key_id":       ComputedString(),
-			"encrypted_volume": ComputedBool(),
+			"name":              ComputedString(),
+			"instance_group":    ComputedString(),
+			"volume_type":       ComputedString(),
+			"volume_iops":       ComputedInt(),
+			"volume_throughput": ComputedInt(),
+			"volume_size":       ComputedInt(),
+			"kms_key_id":        ComputedString(),
+			"encrypted_volume":  ComputedBool(),
 		},
 	}
 }
@@ -80,6 +81,22 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["volume_iops"]),
+		VolumeThroughput: func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["volume_throughput"]),
 		VolumeSize: func(in interface{}) *int32 {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -165,6 +182,16 @@ func FlattenDataSourceEtcdMemberSpecInto(in kops.EtcdMemberSpec, out map[string]
 			}(*in)
 		}(in)
 	}(in.VolumeIops)
+	out["volume_throughput"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.VolumeThroughput)
 	out["volume_size"] = func(in *int32) interface{} {
 		return func(in *int32) interface{} {
 			if in == nil {

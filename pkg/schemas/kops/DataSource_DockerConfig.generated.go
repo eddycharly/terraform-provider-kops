@@ -18,6 +18,7 @@ func DataSourceDockerConfig() *schema.Resource {
 			"bridge_ip":             ComputedString(),
 			"data_root":             ComputedString(),
 			"default_ulimit":        ComputedList(String()),
+			"default_runtime":       ComputedString(),
 			"exec_opt":              ComputedList(String()),
 			"exec_root":             ComputedString(),
 			"experimental":          ComputedBool(),
@@ -33,7 +34,10 @@ func DataSourceDockerConfig() *schema.Resource {
 			"log_opt":               ComputedList(String()),
 			"metrics_address":       ComputedString(),
 			"mtu":                   ComputedInt(),
+			"packages":              ComputedStruct(DataSourcePackagesConfig()),
 			"registry_mirrors":      ComputedList(String()),
+			"runtimes":              ComputedList(String()),
+			"selinux_enabled":       ComputedBool(),
 			"skip_install":          ComputedBool(),
 			"storage":               ComputedString(),
 			"storage_opts":          ComputedList(String()),
@@ -114,6 +118,22 @@ func ExpandDataSourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["default_ulimit"]),
+		DefaultRuntime: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["default_runtime"]),
 		ExecOpt: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				var out []string
@@ -313,6 +333,24 @@ func ExpandDataSourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["mtu"]),
+		Packages: func(in interface{}) *kops.PackagesConfig {
+			return func(in interface{}) *kops.PackagesConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.PackagesConfig) *kops.PackagesConfig {
+					return &in
+				}(func(in interface{}) kops.PackagesConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.PackagesConfig{}
+					}
+					return (ExpandDataSourcePackagesConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["packages"]),
 		RegistryMirrors: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				var out []string
@@ -322,6 +360,31 @@ func ExpandDataSourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["registry_mirrors"]),
+		Runtimes: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["runtimes"]),
+		SelinuxEnabled: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["selinux_enabled"]),
 		SkipInstall: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["skip_install"]),
@@ -421,6 +484,16 @@ func FlattenDataSourceDockerConfigInto(in kops.DockerConfig, out map[string]inte
 			return out
 		}(in)
 	}(in.DefaultUlimit)
+	out["default_runtime"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.DefaultRuntime)
 	out["exec_opt"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -560,6 +633,18 @@ func FlattenDataSourceDockerConfigInto(in kops.DockerConfig, out map[string]inte
 			}(*in)
 		}(in)
 	}(in.MTU)
+	out["packages"] = func(in *kops.PackagesConfig) interface{} {
+		return func(in *kops.PackagesConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.PackagesConfig) interface{} {
+				return func(in kops.PackagesConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourcePackagesConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Packages)
 	out["registry_mirrors"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -569,6 +654,25 @@ func FlattenDataSourceDockerConfigInto(in kops.DockerConfig, out map[string]inte
 			return out
 		}(in)
 	}(in.RegistryMirrors)
+	out["runtimes"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Runtimes)
+	out["selinux_enabled"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.SelinuxEnabled)
 	out["skip_install"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.SkipInstall)
