@@ -10,23 +10,23 @@ import (
 
 var _ = Schema
 
-func DataSourceOpenstackBlockStorageConfig() *schema.Resource {
+func ResourcePackagesConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"version":              ComputedString(),
-			"ignore_az":            ComputedBool(),
-			"override_az":          ComputedString(),
-			"create_storage_class": ComputedBool(),
+			"hash_amd_64": OptionalString(),
+			"hash_arm_64": OptionalString(),
+			"url_amd_64":  OptionalString(),
+			"url_arm_64":  OptionalString(),
 		},
 	}
 }
 
-func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.OpenstackBlockStorageConfig {
+func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig {
 	if in == nil {
-		panic("expand OpenstackBlockStorageConfig failure, in is nil")
+		panic("expand PackagesConfig failure, in is nil")
 	}
-	return kops.OpenstackBlockStorageConfig{
-		Version: func(in interface{}) *string {
+	return kops.PackagesConfig{
+		HashAmd64: func(in interface{}) *string {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -41,24 +41,8 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-		}(in["version"]),
-		IgnoreAZ: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["ignore_az"]),
-		OverrideAZ: func(in interface{}) *string {
+		}(in["hash_amd_64"]),
+		HashArm64: func(in interface{}) *string {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -73,28 +57,44 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-		}(in["override_az"]),
-		CreateStorageClass: func(in interface{}) *bool {
+		}(in["hash_arm_64"]),
+		UrlAmd64: func(in interface{}) *string {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *bool {
+			return func(in interface{}) *string {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in bool) *bool {
+				return func(in string) *string {
 					return &in
-				}(bool(ExpandBool(in)))
+				}(string(ExpandString(in)))
 			}(in)
-		}(in["create_storage_class"]),
+		}(in["url_amd_64"]),
+		UrlArm64: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["url_arm_64"]),
 	}
 }
 
-func FlattenDataSourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorageConfig, out map[string]interface{}) {
-	out["version"] = func(in *string) interface{} {
+func FlattenResourcePackagesConfigInto(in kops.PackagesConfig, out map[string]interface{}) {
+	out["hash_amd_64"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
 				return nil
@@ -103,18 +103,8 @@ func FlattenDataSourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStor
 				return FlattenString(string(in))
 			}(*in)
 		}(in)
-	}(in.Version)
-	out["ignore_az"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
-		}(in)
-	}(in.IgnoreAZ)
-	out["override_az"] = func(in *string) interface{} {
+	}(in.HashAmd64)
+	out["hash_arm_64"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
 				return nil
@@ -123,21 +113,31 @@ func FlattenDataSourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStor
 				return FlattenString(string(in))
 			}(*in)
 		}(in)
-	}(in.OverrideAZ)
-	out["create_storage_class"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	}(in.HashArm64)
+	out["url_amd_64"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
+			return func(in string) interface{} {
+				return FlattenString(string(in))
 			}(*in)
 		}(in)
-	}(in.CreateStorageClass)
+	}(in.UrlAmd64)
+	out["url_arm_64"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.UrlArm64)
 }
 
-func FlattenDataSourceOpenstackBlockStorageConfig(in kops.OpenstackBlockStorageConfig) map[string]interface{} {
+func FlattenResourcePackagesConfig(in kops.PackagesConfig) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourceOpenstackBlockStorageConfigInto(in, out)
+	FlattenResourcePackagesConfigInto(in, out)
 	return out
 }

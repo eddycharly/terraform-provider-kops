@@ -43,25 +43,15 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 		Provider: func(in interface{}) kops.EtcdProviderType {
 			return kops.EtcdProviderType(ExpandString(in))
 		}(in["provider"]),
-		Members: func(in interface{}) []*kops.EtcdMemberSpec {
-			return func(in interface{}) []*kops.EtcdMemberSpec {
-				var out []*kops.EtcdMemberSpec
+		Members: func(in interface{}) []kops.EtcdMemberSpec {
+			return func(in interface{}) []kops.EtcdMemberSpec {
+				var out []kops.EtcdMemberSpec
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) *kops.EtcdMemberSpec {
+					out = append(out, func(in interface{}) kops.EtcdMemberSpec {
 						if in == nil {
-							return nil
+							return kops.EtcdMemberSpec{}
 						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in kops.EtcdMemberSpec) *kops.EtcdMemberSpec {
-							return &in
-						}(func(in interface{}) kops.EtcdMemberSpec {
-							if in == nil {
-								return kops.EtcdMemberSpec{}
-							}
-							return (ExpandDataSourceEtcdMemberSpec(in.(map[string]interface{})))
-						}(in))
+						return (ExpandDataSourceEtcdMemberSpec(in.(map[string]interface{})))
 					}(in))
 				}
 				return out
@@ -189,19 +179,12 @@ func FlattenDataSourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[strin
 	out["provider"] = func(in kops.EtcdProviderType) interface{} {
 		return FlattenString(string(in))
 	}(in.Provider)
-	out["member"] = func(in []*kops.EtcdMemberSpec) interface{} {
-		return func(in []*kops.EtcdMemberSpec) []interface{} {
+	out["member"] = func(in []kops.EtcdMemberSpec) interface{} {
+		return func(in []kops.EtcdMemberSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in *kops.EtcdMemberSpec) interface{} {
-					if in == nil {
-						return nil
-					}
-					return func(in kops.EtcdMemberSpec) interface{} {
-						return func(in kops.EtcdMemberSpec) interface{} {
-							return FlattenDataSourceEtcdMemberSpec(in)
-						}(in)
-					}(*in)
+				out = append(out, func(in kops.EtcdMemberSpec) interface{} {
+					return FlattenDataSourceEtcdMemberSpec(in)
 				}(in))
 			}
 			return out

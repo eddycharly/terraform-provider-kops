@@ -87,7 +87,7 @@ func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName 
 		ValidateTickDuration:    30 * time.Second,
 		ValidateSuccessDuration: 10 * time.Second,
 	}
-	err = d.AdjustNeedUpdate(groups, kc, list)
+	err = d.AdjustNeedUpdate(groups, list)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +184,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		ValidateTickDuration:    30 * time.Second,
 		ValidateSuccessDuration: 10 * time.Second,
 	}
-	err = d.AdjustNeedUpdate(groups, kc, list)
+	err = d.AdjustNeedUpdate(groups, list)
 	if err != nil {
 		return err
 	}
@@ -206,5 +206,5 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		return fmt.Errorf("cannot create cluster validator: %v", err)
 	}
 	d.ClusterValidator = clusterValidator
-	return d.RollingUpdate(context.Background(), groups, kc, list)
+	return d.RollingUpdate(groups, list)
 }

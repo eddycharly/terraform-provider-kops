@@ -34,23 +34,13 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 		Authorizer: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["authorizer"]),
-		Features: func(in interface{}) *[]string {
-			return func(in interface{}) *[]string {
-				if in == nil {
-					return nil
+		Features: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
 				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in []string) *[]string {
-					return &in
-				}(func(in interface{}) []string {
-					var out []string
-					for _, in := range in.([]interface{}) {
-						out = append(out, string(ExpandString(in)))
-					}
-					return out
-				}(in))
+				return out
 			}(in)
 		}(in["features"]),
 		Image: func(in interface{}) string {
@@ -117,20 +107,13 @@ func FlattenDataSourceNodeAuthorizerSpecInto(in kops.NodeAuthorizerSpec, out map
 	out["authorizer"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Authorizer)
-	out["features"] = func(in *[]string) interface{} {
-		return func(in *[]string) interface{} {
-			if in == nil {
-				return nil
+	out["features"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
 			}
-			return func(in []string) interface{} {
-				return func(in []string) []interface{} {
-					var out []interface{}
-					for _, in := range in {
-						out = append(out, FlattenString(string(in)))
-					}
-					return out
-				}(in)
-			}(*in)
+			return out
 		}(in)
 	}(in.Features)
 	out["image"] = func(in string) interface{} {

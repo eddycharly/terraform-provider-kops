@@ -13,13 +13,15 @@ var _ = Schema
 func ResourceContainerdConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"address":         OptionalString(),
-			"config_override": OptionalString(),
-			"log_level":       OptionalString(),
-			"root":            OptionalString(),
-			"skip_install":    OptionalBool(),
-			"state":           OptionalString(),
-			"version":         OptionalString(),
+			"address":          OptionalString(),
+			"config_override":  OptionalString(),
+			"log_level":        OptionalString(),
+			"packages":         OptionalStruct(ResourcePackagesConfig()),
+			"registry_mirrors": OptionalMap(List(String())),
+			"root":             OptionalString(),
+			"skip_install":     OptionalBool(),
+			"state":            OptionalString(),
+			"version":          OptionalString(),
 		},
 	}
 }
@@ -77,6 +79,42 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["log_level"]),
+		Packages: func(in interface{}) *kops.PackagesConfig {
+			return func(in interface{}) *kops.PackagesConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.PackagesConfig) *kops.PackagesConfig {
+					return &in
+				}(func(in interface{}) kops.PackagesConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.PackagesConfig{}
+					}
+					return (ExpandResourcePackagesConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["packages"]),
+		RegistryMirrors: func(in interface{}) map[string][]string {
+			return func(in interface{}) map[string][]string {
+				if in == nil {
+					return nil
+				}
+				out := map[string][]string{}
+				for key, in := range in.(map[string]interface{}) {
+					out[key] = func(in interface{}) []string {
+						var out []string
+						for _, in := range in.([]interface{}) {
+							out = append(out, string(ExpandString(in)))
+						}
+						return out
+					}(in)
+				}
+				return out
+			}(in)
+		}(in["registry_mirrors"]),
 		Root: func(in interface{}) *string {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -162,6 +200,36 @@ func FlattenResourceContainerdConfigInto(in kops.ContainerdConfig, out map[strin
 			}(*in)
 		}(in)
 	}(in.LogLevel)
+	out["packages"] = func(in *kops.PackagesConfig) interface{} {
+		return func(in *kops.PackagesConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.PackagesConfig) interface{} {
+				return func(in kops.PackagesConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourcePackagesConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Packages)
+	out["registry_mirrors"] = func(in map[string][]string) interface{} {
+		return func(in map[string][]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = func(in []string) []interface{} {
+					var out []interface{}
+					for _, in := range in {
+						out = append(out, FlattenString(string(in)))
+					}
+					return out
+				}(in)
+			}
+			return out
+		}(in)
+	}(in.RegistryMirrors)
 	out["root"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {

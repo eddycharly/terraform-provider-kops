@@ -3,7 +3,6 @@ package utils
 import (
 	"context"
 
-	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/commands"
 	"k8s.io/kops/pkg/kubeconfig"
@@ -22,7 +21,7 @@ func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string) (*kube
 	if err != nil {
 		return nil, err
 	}
-	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, clientcmd.NewDefaultPathOptions())
+	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, 0, "", false, "", false)
 	if err != nil {
 		return nil, err
 	}
