@@ -61,5 +61,5 @@ require (
 	k8s.io/apimachinery v0.20.2
 	k8s.io/client-go v1.5.1
 	k8s.io/klog v1.0.0
-	k8s.io/kops v1.18.2
+	k8s.io/kops v1.18.3
 )
