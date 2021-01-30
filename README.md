@@ -7,7 +7,7 @@
 into terraform in a fully managed way, enabling idempotency through direct
 integration with the kOps api:
 - No `local_exec`
-- No yaml templating,
+- No yaml templating
 - No CLI invocations
 
 ... just **pure go code**.
@@ -25,18 +25,18 @@ that we can help troubleshooting if necessary and update the docs.
 ## How does it work
 
 The provider declares resources to declare the state of the cluster:
-- [kops_cluster](./docs/resources/cluster.md) defines the desired state of a cluster
-- [kops_instance_group](./docs/resources/instance_group.md) defines the desired state of a cluster instance group
+- [kops_cluster](/docs/resources/cluster.md) defines the desired state of a cluster
+- [kops_instance_group](/docs/resources/instance_group.md) defines the desired state of a cluster instance group
 
 The provider also declares data sources to fetch the state of the cluster and
 use it in your terraform code:
-- [kops_cluster](./docs/data-sources/cluster.md) fetches the current state of a cluster
-- [kops_instance_group](./docs/data-sources/instance_group.md) fetches the current state of a cluster instance group
-- [kops_cluster_status](./docs/data-sources/cluster_status.md) fetches the current status of a cluster
-- [kops_kube_config](./docs/data-sources/kube_config.md) fetches the kube config infos of a cluster
+- [kops_cluster](/docs/data-sources/cluster.md) fetches the current state of a cluster
+- [kops_instance_group](/docs/data-sources/instance_group.md) fetches the current state of a cluster instance group
+- [kops_cluster_status](/docs/data-sources/cluster_status.md) fetches the current status of a cluster
+- [kops_kube_config](/docs/data-sources/kube_config.md) fetches the kube config infos of a cluster
 
 Finally, a special resource takes care of the cluster lifecyle:
-- [kops_cluster_updater](./docs/resources/cluster_updater.md) manages cluster rolling updates
+- [kops_cluster_updater](/docs/resources/cluster_updater.md) manages cluster rolling updates
 
 ## Why use it
 
@@ -62,7 +62,7 @@ kOps manually.
 
 ## Docs
 
-The full documentation is available in the [docs](./docs/index.md) folder or
+The full documentation is available in the [docs](/docs/index.md) folder or
 on the [terraform registry](https://registry.terraform.io/providers/eddycharly/kops/latest/docs)
 provider page.
 
@@ -75,7 +75,7 @@ terraform {
   required_providers {
     kops = {
       source  = "eddycharly/kops"
-      version = "0.1.0-alpha.27"
+      version = "0.1.0-alpha.28"
     }
   }
 }
