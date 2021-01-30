@@ -21,10 +21,19 @@ that we can help troubleshooting if necessary and update the docs.
 
 ## How does it work
 
-The provider declares resources that hold or manage the cluster state:
-- `kops_cluster` defines the cluster state
-- `kops_instance_group` defines the state of the instance groups of a given cluster
-- `kops_cluster_updater` manages cluster rolling updates
+The provider declares resources to declare the state of the cluster:
+- [kops_cluster](./resources/cluster.md) defines the desired state of a cluster
+- [kops_instance_group](./resources/instance_group.md) defines the desired state of a cluster instance group
+
+The provider also declares data sources to fetch the state of the cluster and
+use it in your terraform code:
+- [kops_cluster](./data-sources/cluster.md) fetches the current state of a cluster
+- [kops_instance_group](./data-sources/instance_group.md) fetches the current state of a cluster instance group
+- [kops_cluster_status](./data-sources/cluster_status.md) fetches the current status of a cluster
+- [kops_kube_config](./data-sources/kube_config.md) fetches the kube config infos of a cluster
+
+Finally, a special resource takes care of the cluster lifecyle:
+- [kops_cluster_updater](./resources/cluster_updater.md) manages cluster rolling updates
 
 ## Why use it
 
