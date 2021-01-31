@@ -1071,8 +1071,6 @@ func main() {
 		),
 		generate(config.Aws{}),
 		generate(config.AwsAssumeRole{}),
-		generate(config.RollingUpdate{}),
-		generate(config.Validate{}),
 	)
 	dataSourcesMap := build(
 		"DataSource",

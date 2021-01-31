@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	v1 "k8s.io/api/core/v1"
@@ -22,12 +21,25 @@ import (
 type ClusterUpdater struct {
 	// The target cluster name
 	ClusterName string
+	// MasterInterval is the amount of time to wait after stopping a master instance
+	MasterInterval *metav1.Duration
+	// NodeInterval is the amount of time to wait after stopping a non-master instance
+	NodeInterval *metav1.Duration
+	// BastionInterval is the amount of time to wait after stopping a bastion instance
+	BastionInterval *metav1.Duration
+	// FailOnDrainError will fail when a drain error occurs
+	FailOnDrainError bool
+	// FailOnValidate will fail when a validation error occurs
+	FailOnValidate bool
+	// PostDrainDelay is the duration we wait after draining each node
+	PostDrainDelay *metav1.Duration
+	// ValidationTimeout is the maximum time to wait for the cluster to validate, once we start validation
+	ValidationTimeout *metav1.Duration
+	// ValidateCount is the amount of time that a cluster needs to be validated after single node update
+	ValidateCount *int
 }
 
-func (u *ClusterUpdater) Apply(clientset simple.Clientset, options config.RollingUpdate) error {
-	if options.Skip {
-		return nil
-	}
+func (u *ClusterUpdater) Apply(clientset simple.Clientset) error {
 	kc, err := clientset.GetCluster(context.Background(), u.ClusterName)
 	if err != nil {
 		return err
@@ -75,23 +87,23 @@ func (u *ClusterUpdater) Apply(clientset simple.Clientset, options config.Rollin
 	PostDrainDelay := 5 * time.Second
 	ValidationTimeout := 15 * time.Minute
 	ValidateCount := 2
-	if options.MasterInterval != nil {
-		MasterInterval = options.MasterInterval.Duration
+	if u.MasterInterval != nil {
+		MasterInterval = u.MasterInterval.Duration
 	}
-	if options.NodeInterval != nil {
-		NodeInterval = options.NodeInterval.Duration
+	if u.NodeInterval != nil {
+		NodeInterval = u.NodeInterval.Duration
 	}
-	if options.BastionInterval != nil {
-		BastionInterval = options.BastionInterval.Duration
+	if u.BastionInterval != nil {
+		BastionInterval = u.BastionInterval.Duration
 	}
-	if options.PostDrainDelay != nil {
-		PostDrainDelay = options.PostDrainDelay.Duration
+	if u.PostDrainDelay != nil {
+		PostDrainDelay = u.PostDrainDelay.Duration
 	}
-	if options.ValidationTimeout != nil {
-		ValidationTimeout = options.ValidationTimeout.Duration
+	if u.ValidationTimeout != nil {
+		ValidationTimeout = u.ValidationTimeout.Duration
 	}
-	if options.ValidateCount != nil {
-		ValidateCount = *options.ValidateCount
+	if u.ValidateCount != nil {
+		ValidateCount = *u.ValidateCount
 	}
 	d := &instancegroups.RollingUpdateCluster{
 		MasterInterval:          MasterInterval,
@@ -101,8 +113,8 @@ func (u *ClusterUpdater) Apply(clientset simple.Clientset, options config.Rollin
 		Force:                   false,
 		Cloud:                   cloud,
 		K8sClient:               k8sClient,
-		FailOnDrainError:        options.FailOnDrainError,
-		FailOnValidate:          options.FailOnValidate,
+		FailOnDrainError:        u.FailOnDrainError,
+		FailOnValidate:          u.FailOnValidate,
 		CloudOnly:               false,
 		ClusterName:             kc.Name,
 		PostDrainDelay:          PostDrainDelay,
