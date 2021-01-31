@@ -18,7 +18,7 @@ func ClusterUpdater() *schema.Resource {
 
 func ClusterUpdaterCreate(d *schema.ResourceData, m interface{}) error {
 	updater := resourcesschema.ExpandResourceClusterUpdater(d.Get("").(map[string]interface{}))
-	if err := updater.Apply(config.Clientset(m), config.RollingUpdateOptions(m)); err != nil {
+	if err := updater.Apply(config.Clientset(m)); err != nil {
 		return err
 	}
 	return ClusterUpdaterRead(d, m)
@@ -26,7 +26,7 @@ func ClusterUpdaterCreate(d *schema.ResourceData, m interface{}) error {
 
 func ClusterUpdaterUpdate(d *schema.ResourceData, m interface{}) error {
 	updater := resourcesschema.ExpandResourceClusterUpdater(d.Get("").(map[string]interface{}))
-	if err := updater.Apply(config.Clientset(m), config.RollingUpdateOptions(m)); err != nil {
+	if err := updater.Apply(config.Clientset(m)); err != nil {
 		return err
 	}
 	return ClusterUpdaterRead(d, m)

@@ -24,9 +24,7 @@ Trailing slash will be trimmed.`
 )
 
 type options struct {
-	clientset            simple.Clientset
-	rollingUpdateOptions config.RollingUpdate
-	validateOptions      config.Validate
+	clientset simple.Clientset
 }
 
 func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
@@ -43,22 +41,12 @@ func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
 		return nil, field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError)
 	}
 	return &options{
-		clientset:            vfsclientset.NewVFSClientset(basePath),
-		rollingUpdateOptions: providerConfig.RollingUpdate,
-		validateOptions:      providerConfig.Validate,
+		clientset: vfsclientset.NewVFSClientset(basePath),
 	}, nil
 }
 
 func Clientset(in interface{}) simple.Clientset {
 	return in.(*options).clientset
-}
-
-func RollingUpdateOptions(in interface{}) config.RollingUpdate {
-	return in.(*options).rollingUpdateOptions
-}
-
-func ValidateOptions(in interface{}) config.Validate {
-	return in.(*options).validateOptions
 }
 
 func initCredentials(config *config.Aws) error {

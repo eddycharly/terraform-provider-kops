@@ -3,10 +3,8 @@ package utils
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -81,55 +79,6 @@ func IsClusterValid(name string, clientset simple.Clientset) (bool, error) {
 			return false, fmt.Errorf("Validation failures")
 		}
 		return true, nil
-	}
-}
-
-func ValidateCluster(name string, clientset simple.Clientset, options config.Validate) error {
-	if options.Skip {
-		return nil
-	}
-	if validator, err := makeValidator(name, clientset); err != nil {
-		return err
-	} else {
-		timeout := time.Now()
-		if options.Timeout != nil {
-			timeout = timeout.Add(options.Timeout.Duration)
-		} else {
-			timeout = timeout.Add(15 * time.Minute)
-		}
-		pollInterval := 10 * time.Second
-		if options.PollInterval != nil {
-			pollInterval = options.PollInterval.Duration
-		}
-		consecutive := 0
-		for {
-			if time.Now().After(timeout) {
-				return fmt.Errorf("wait time exceeded during validation")
-			}
-			result, err := validator.Validate()
-			if err != nil {
-				consecutive = 0
-				log.Printf("(will retry): unexpected error during validation: %v\n", err)
-				time.Sleep(pollInterval)
-				continue
-			}
-			if len(result.Failures) == 0 {
-				consecutive++
-				if consecutive < 0 {
-					log.Printf("(will retry): cluster passed validation %d consecutive times\n", consecutive)
-					time.Sleep(pollInterval)
-					continue
-				} else {
-					return nil
-				}
-			} else {
-				if consecutive == 0 {
-					log.Println("(will retry): cluster not yet healthy")
-					time.Sleep(pollInterval)
-					continue
-				}
-			}
-		}
 	}
 }
 
