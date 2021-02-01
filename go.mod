@@ -55,11 +55,11 @@ require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/aws/aws-sdk-go v1.37.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.4.2
-	golang.org/x/tools v0.0.0-20201121010211-780cb80bd7fb
+	golang.org/x/tools v0.1.0
 	google.golang.org/grpc/examples v0.0.0-20201121004645-9da74c039bbf // indirect
 	k8s.io/api v0.20.2
 	k8s.io/apimachinery v0.20.2
 	k8s.io/client-go v1.5.1
 	k8s.io/klog v1.0.0
-	k8s.io/kops v1.18.3
+	k8s.io/kops v1.19.0
 )
