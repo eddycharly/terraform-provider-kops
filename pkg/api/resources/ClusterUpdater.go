@@ -39,7 +39,23 @@ type ClusterUpdater struct {
 	ValidateCount *int
 }
 
+func applyCluster(name string, clientset simple.Clientset) error {
+	kc, err := clientset.GetCluster(context.Background(), name)
+	if err != nil {
+		return err
+	}
+	apply := &cloudup.ApplyClusterCmd{
+		Cluster:    kc,
+		Clientset:  clientset,
+		TargetName: cloudup.TargetDirect,
+	}
+	return apply.Run(context.Background())
+}
+
 func (u *ClusterUpdater) Apply(clientset simple.Clientset) error {
+	if err := applyCluster(u.ClusterName, clientset); err != nil {
+		return err
+	}
 	kc, err := clientset.GetCluster(context.Background(), u.ClusterName)
 	if err != nil {
 		return err

@@ -57,7 +57,11 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 }
 
 func CreateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc, err := clientset.CreateCluster(context.Background(), makeKopsCluster(name, spec))
+	kc := makeKopsCluster(name, spec)
+	if err := cloudup.PerformAssignments(kc); err != nil {
+		return nil, err
+	}
+	kc, err := clientset.CreateCluster(context.Background(), kc)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +86,11 @@ func CreateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset si
 }
 
 func UpdateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc, err := clientset.UpdateCluster(context.Background(), makeKopsCluster(name, spec), nil)
+	kc := makeKopsCluster(name, spec)
+	if err := cloudup.PerformAssignments(kc); err != nil {
+		return nil, err
+	}
+	kc, err := clientset.UpdateCluster(context.Background(), kc, nil)
 	if err != nil {
 		return nil, err
 	}
