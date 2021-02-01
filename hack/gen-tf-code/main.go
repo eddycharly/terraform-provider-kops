@@ -1188,5 +1188,5 @@ func main() {
 	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterHeader, "")
 	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
 	// config
-	buildDoc(config.Provider{}, "docs/provider-config/", configMap, "Config", parser, genericHeader, "")
+	buildDoc(config.Provider{}, "docs/guides/", configMap, "Config", parser, configProviderHeader, "")
 }

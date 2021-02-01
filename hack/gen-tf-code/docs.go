@@ -27,4 +27,5 @@ var (
 	dataClusterStatusHeader      = readFile("hack/gen-tf-code/data-cluster-status-header.md")
 	dataInstanceGroupHeader      = readFile("hack/gen-tf-code/data-instance-group-header.md")
 	dataKubeConfigHeader         = readFile("hack/gen-tf-code/data-kube-config-header.md")
+	configProviderHeader         = readFile("hack/gen-tf-code/config-provider-header.md")
 )
