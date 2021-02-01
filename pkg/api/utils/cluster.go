@@ -67,6 +67,16 @@ func ClusterExists(name string, clientset simple.Clientset) (bool, error) {
 	return true, nil
 }
 
+func ClusterApply(cluster *kops.Cluster, clientset simple.Clientset, instanceGroups ...*kops.InstanceGroup) error {
+	apply := &cloudup.ApplyClusterCmd{
+		Cluster:        cluster,
+		InstanceGroups: instanceGroups,
+		Clientset:      clientset,
+		TargetName:     cloudup.TargetDirect,
+	}
+	return apply.Run(context.Background())
+}
+
 func IsClusterValid(name string, clientset simple.Clientset) (bool, error) {
 	if validator, err := makeValidator(name, clientset); err != nil {
 		return false, err

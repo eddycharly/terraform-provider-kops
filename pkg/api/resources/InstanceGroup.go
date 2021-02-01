@@ -3,6 +3,7 @@ package resources
 import (
 	"context"
 
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
@@ -55,6 +56,10 @@ func CreateInstanceGroup(clusterName, name string, spec kops.InstanceGroupSpec, 
 	if err != nil {
 		return nil, err
 	}
+	if err := utils.ClusterApply(cluster, clientset, instanceGroup); err != nil {
+		return nil, err
+
+	}
 	return makeInstanceGroup(clusterName, instanceGroup), nil
 }
 
@@ -66,6 +71,10 @@ func UpdateInstanceGroup(clusterName, name string, spec kops.InstanceGroupSpec, 
 	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Update(context.Background(), makeKopsInstanceGroup(name, spec), metav1.UpdateOptions{})
 	if err != nil {
 		return nil, err
+	}
+	if err := utils.ClusterApply(cluster, clientset, instanceGroup); err != nil {
+		return nil, err
+
 	}
 	return makeInstanceGroup(clusterName, instanceGroup), nil
 }
