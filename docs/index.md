@@ -7,7 +7,7 @@ integration with the kOps api:
 - No yaml templating
 - No CLI invocations
 
-... just **pure go code**.
+... just **pure go code.**
 
 Currently using kOps `v1.18.3` and compatible with terraform `0.12` and higher.
 
@@ -18,22 +18,6 @@ be created separately and given to the provider through cluster attribute
 !> The provider has been tested only with AWS and calico networking.
 If you use it with another cloud or networking provider, please let us know so
 that we can help troubleshooting if necessary and update the docs.
-
-## How does it work
-
-The provider declares resources to declare the state of the cluster:
-- [kops_cluster](/docs/resources/cluster.md) defines the desired state of a cluster
-- [kops_instance_group](/docs/resources/instance_group.md) defines the desired state of a cluster instance group
-
-The provider also declares data sources to fetch the state of the cluster and
-use it in your terraform code:
-- [kops_cluster](/docs/data-sources/cluster) fetches the current state of a cluster
-- [kops_instance_group](/docs/data-sources/instance_group) fetches the current state of a cluster instance group
-- [kops_cluster_status](/docs/data-sources/cluster_status) fetches the current status of a cluster
-- [kops_kube_config](/docs/data-sources/kube_config) fetches the kube config infos of a cluster
-
-Finally, a special resource takes care of the cluster lifecyle:
-- [kops_cluster_updater](/docs/resources/cluster_updater) manages cluster rolling updates
 
 ## Why use it
 
@@ -55,6 +39,25 @@ terraform configuration for a kOps cluster, it is still necessary to run
 `kops rolling-update cluster` to recycle instance groups when the change.
 With this provider, this is all taken care of and you should never need to run
 kOps manually.
+
+## How does it work
+
+The provider declares resources to declare the state of the cluster:
+- [kops_cluster](/docs/resources/cluster.md) defines the desired state of a cluster
+- [kops_instance_group](/docs/resources/instance_group.md) defines the desired state of a cluster instance group
+
+The provider also declares data sources to fetch the state of the cluster and
+use it in your terraform code:
+- [kops_cluster](/docs/data-sources/cluster) fetches the current state of a cluster
+- [kops_instance_group](/docs/data-sources/instance_group) fetches the current state of a cluster instance group
+- [kops_cluster_status](/docs/data-sources/cluster_status) fetches the current status of a cluster
+- [kops_kube_config](/docs/data-sources/kube_config) fetches the kube config infos of a cluster
+
+Finally, a special resource takes care of the cluster lifecyle:
+- [kops_cluster_updater](/docs/resources/cluster_updater) manages cluster rolling updates
+
+[Provider configuration](/docs/guides/provider) holds cloud provider
+authentication settings, currently only AWS is supported.
 
 ## Example usage
 
