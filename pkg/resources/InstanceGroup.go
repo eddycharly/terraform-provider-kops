@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	resourcesschema "github.com/eddycharly/terraform-provider-kops/pkg/schemas/resources"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -60,7 +61,7 @@ func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 
 func InstanceGroupDelete(d *schema.ResourceData, m interface{}) error {
 	instanceGroup := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
-	if err := resources.DeleteInstanceGroup(instanceGroup.ClusterName, instanceGroup.Name, config.Clientset(m)); err != nil {
+	if err := utils.InstanceGroupDelete(config.Clientset(m), instanceGroup.ClusterName, instanceGroup.Name); err != nil {
 		return err
 	}
 	return nil

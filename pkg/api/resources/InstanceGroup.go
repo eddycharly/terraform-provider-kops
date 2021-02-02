@@ -69,14 +69,3 @@ func UpdateInstanceGroup(clusterName, name string, spec kops.InstanceGroupSpec, 
 	}
 	return makeInstanceGroup(clusterName, instanceGroup), nil
 }
-
-func DeleteInstanceGroup(clusterName, name string, clientset simple.Clientset) error {
-	cluster, err := clientset.GetCluster(context.Background(), clusterName)
-	if err != nil {
-		return err
-	}
-	if err := clientset.InstanceGroupsFor(cluster).Delete(context.Background(), name, metav1.DeleteOptions{}); err != nil {
-		return err
-	}
-	return nil
-}
