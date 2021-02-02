@@ -10,24 +10,14 @@ func ClusterUpdater() *schema.Resource {
 	return &schema.Resource{
 		Create: ClusterUpdaterCreate,
 		Read:   ClusterUpdaterRead,
-		Update: ClusterUpdaterUpdate,
-		Delete: ClusterUpdaterDelete,
+		Delete: schema.RemoveFromState,
 		Schema: resourcesschema.ResourceClusterUpdater().Schema,
 	}
 }
 
 func ClusterUpdaterCreate(d *schema.ResourceData, m interface{}) error {
 	updater := resourcesschema.ExpandResourceClusterUpdater(d.Get("").(map[string]interface{}))
-	if err := updater.Apply(config.Clientset(m)); err != nil {
-		return err
-	}
-	d.SetId(updater.ClusterName)
-	return nil
-}
-
-func ClusterUpdaterUpdate(d *schema.ResourceData, m interface{}) error {
-	updater := resourcesschema.ExpandResourceClusterUpdater(d.Get("").(map[string]interface{}))
-	if err := updater.Apply(config.Clientset(m)); err != nil {
+	if err := updater.UpdateCluster(config.Clientset(m)); err != nil {
 		return err
 	}
 	d.SetId(updater.ClusterName)
@@ -36,9 +26,5 @@ func ClusterUpdaterUpdate(d *schema.ResourceData, m interface{}) error {
 
 func ClusterUpdaterRead(d *schema.ResourceData, m interface{}) error {
 	d.SetId("")
-	return nil
-}
-
-func ClusterUpdaterDelete(d *schema.ResourceData, m interface{}) error {
 	return nil
 }

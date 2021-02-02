@@ -11,10 +11,12 @@ var _ = Schema
 func DataSourceClusterStatus() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name": RequiredString(),
-			"exists":       ComputedBool(),
-			"is_valid":     ComputedBool(),
-			"needs_update": ComputedBool(),
+			"cluster_name":    RequiredString(),
+			"apply":           RequiredBool(),
+			"exists":          ComputedBool(),
+			"is_valid":        ComputedBool(),
+			"needs_update":    ComputedBool(),
+			"instance_groups": ComputedList(String()),
 		},
 	}
 }
@@ -27,6 +29,9 @@ func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.Cluste
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
+		Apply: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["apply"]),
 		Exists: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["exists"]),
@@ -36,6 +41,15 @@ func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.Cluste
 		NeedsUpdate: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["needs_update"]),
+		InstanceGroups: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["instance_groups"]),
 	}
 }
 
@@ -43,6 +57,9 @@ func FlattenDataSourceClusterStatusInto(in datasources.ClusterStatus, out map[st
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
+	out["apply"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Apply)
 	out["exists"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Exists)
@@ -52,6 +69,15 @@ func FlattenDataSourceClusterStatusInto(in datasources.ClusterStatus, out map[st
 	out["needs_update"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.NeedsUpdate)
+	out["instance_groups"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.InstanceGroups)
 }
 
 func FlattenDataSourceClusterStatus(in datasources.ClusterStatus) map[string]interface{} {

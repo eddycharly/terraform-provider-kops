@@ -26,20 +26,19 @@ type Config struct {
 	ClientKey string
 }
 
-func GetConfig(clientset simple.Clientset, clusterName string) (*Config, error) {
+func (s *Config) GetConfig(clientset simple.Clientset, clusterName string) error {
 	conf, err := utils.GetKubeConfigBuilder(clientset, clusterName)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &Config{
-		Server:          conf.Server,
-		Context:         conf.Context,
-		Namespace:       conf.Namespace,
-		KubeBearerToken: conf.KubeBearerToken,
-		KubeUser:        conf.KubeUser,
-		KubePassword:    conf.KubePassword,
-		CaCert:          string(conf.CACert),
-		ClientCert:      string(conf.ClientCert),
-		ClientKey:       string(conf.ClientKey),
-	}, nil
+	s.Server = conf.Server
+	s.Context = conf.Context
+	s.Namespace = conf.Namespace
+	s.KubeBearerToken = conf.KubeBearerToken
+	s.KubeUser = conf.KubeUser
+	s.KubePassword = conf.KubePassword
+	s.CaCert = string(conf.CACert)
+	s.ClientCert = string(conf.ClientCert)
+	s.ClientKey = string(conf.ClientKey)
+	return nil
 }

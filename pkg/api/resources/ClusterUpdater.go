@@ -15,7 +15,7 @@ type ClusterUpdater struct {
 	Validate ValidateOptions
 }
 
-func (u *ClusterUpdater) Apply(clientset simple.Clientset) error {
+func (u *ClusterUpdater) UpdateCluster(clientset simple.Clientset) error {
 	if err := utils.ClusterApply(clientset, u.ClusterName); err != nil {
 		return err
 	}

@@ -35,6 +35,71 @@ type RollingUpdateOptions struct {
 	ValidateCount *int
 }
 
+func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName string) ([]string, error) {
+	kc, err := clientset.GetCluster(context.Background(), clusterName)
+	if err != nil {
+		return nil, err
+	}
+	var k8sClient kubernetes.Interface
+	var nodes []v1.Node
+	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName)
+	if err != nil {
+		return nil, err
+	}
+	config, err := configBuilder.BuildRestConfig()
+	if err != nil {
+		return nil, err
+	}
+	k8sClient, err = kubernetes.NewForConfig(config)
+	if err != nil {
+		return nil, fmt.Errorf("cannot build kube client for %q: %v", kc.Name, err)
+	}
+	nodeList, err := k8sClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	if nodeList != nil {
+		nodes = nodeList.Items
+	}
+	list, err := clientset.InstanceGroupsFor(kc).List(context.Background(), metav1.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var instanceGroups []*kops.InstanceGroup
+	for i := range list.Items {
+		instanceGroups = append(instanceGroups, &list.Items[i])
+	}
+	cloud, err := cloudup.BuildCloud(kc)
+	if err != nil {
+		return nil, err
+	}
+	groups, err := cloud.GetCloudGroups(kc, instanceGroups, false, nodes)
+	if err != nil {
+		return nil, err
+	}
+	d := &instancegroups.RollingUpdateCluster{
+		Interactive:             false,
+		Force:                   false,
+		Cloud:                   cloud,
+		K8sClient:               k8sClient,
+		CloudOnly:               false,
+		ClusterName:             kc.Name,
+		ValidateTickDuration:    30 * time.Second,
+		ValidateSuccessDuration: 10 * time.Second,
+	}
+	err = d.AdjustNeedUpdate(groups, kc, list)
+	if err != nil {
+		return nil, err
+	}
+	var needUpdate []string
+	for _, group := range groups {
+		if len(group.NeedUpdate) != 0 {
+			needUpdate = append(needUpdate, group.InstanceGroup.Name)
+		}
+	}
+	return needUpdate, nil
+}
+
 func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, options RollingUpdateOptions) error {
 	kc, err := clientset.GetCluster(context.Background(), clusterName)
 	if err != nil {

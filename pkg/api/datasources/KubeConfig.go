@@ -12,13 +12,9 @@ type KubeConfig struct {
 	kube.Config
 }
 
-func GetConfig(clientset simple.Clientset, clusterName string) (*KubeConfig, error) {
-	config, err := kube.GetConfig(clientset, clusterName)
-	if err != nil {
-		return nil, err
+func (s *KubeConfig) GetKubeConfig(clientset simple.Clientset) error {
+	if err := s.Config.GetConfig(clientset, s.ClusterName); err != nil {
+		return err
 	}
-	return &KubeConfig{
-		ClusterName: clusterName,
-		Config:      *config,
-	}, nil
+	return nil
 }
