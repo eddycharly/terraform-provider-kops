@@ -13,8 +13,8 @@ data "kops_cluster" "cluster" {
 ## Argument Reference
 
 The following arguments are supported:
-- `name` - (Required) - String - The cluster name.
-- `admin_ssh_key` - (Computed) - String - The cluster admin ssh key.
+- `name` - (Required) - String - Name defines the cluster name.
+- `admin_ssh_key` - (Computed) - String - AdminSshKey defines the cluster admin ssh key.
 - `channel` - (Computed) - String - The Channel we are following.
 - `addons` - (Computed) - List([addon_spec](#addon_spec)) - Additional addons that should be installed on the cluster.
 - `config_base` - (Computed) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different than the location where the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).

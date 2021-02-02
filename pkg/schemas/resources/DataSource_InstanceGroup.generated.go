@@ -13,7 +13,7 @@ var _ = Schema
 func DataSourceInstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name":                      ComputedString(),
+			"cluster_name":                      RequiredString(),
 			"name":                              RequiredString(),
 			"role":                              ComputedString(),
 			"image":                             ComputedString(),

@@ -14,8 +14,8 @@ data "kops_instance_group" "ig-0" {
 ## Argument Reference
 
 The following arguments are supported:
-- `cluster_name` - (Computed) - String - The cluster name the instance group belongs to.
-- `name` - (Required) - String - Instance group name.
+- `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
+- `name` - (Required) - String - Name defines the instance group name.
 - `role` - (Computed) - String - Type determines the role of instances in this group: masters or nodes.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.

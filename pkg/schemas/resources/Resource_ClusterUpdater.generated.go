@@ -11,10 +11,11 @@ var _ = Schema
 func ResourceClusterUpdater() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name":   ForceNew(RequiredString()),
-			"keepers":        ForceNew(OptionalList(String())),
-			"rolling_update": ForceNew(OptionalStruct(ResourceRollingUpdateOptions())),
-			"validate":       ForceNew(OptionalStruct(ResourceValidateOptions())),
+			"revision":       ComputedInt(),
+			"cluster_name":   RequiredString(),
+			"keepers":        OptionalMap(String()),
+			"rolling_update": OptionalStruct(ResourceRollingUpdateOptions()),
+			"validate":       OptionalStruct(ResourceValidateOptions()),
 		},
 	}
 }
@@ -24,14 +25,20 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 		panic("expand ClusterUpdater failure, in is nil")
 	}
 	return resources.ClusterUpdater{
+		Revision: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["revision"]),
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		Keepers: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
+		Keepers: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				out := map[string]string{}
+				for key, in := range in.(map[string]interface{}) {
+					out[key] = string(ExpandString(in))
 				}
 				return out
 			}(in)
@@ -56,14 +63,20 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 }
 
 func FlattenResourceClusterUpdaterInto(in resources.ClusterUpdater, out map[string]interface{}) {
+	out["revision"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Revision)
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
-	out["keepers"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
+	out["keepers"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
 			}
 			return out
 		}(in)

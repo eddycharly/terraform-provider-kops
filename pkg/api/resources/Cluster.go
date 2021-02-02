@@ -15,9 +15,11 @@ import (
 
 // Cluster defines the configuration for a cluster
 type Cluster struct {
-	// The cluster name
+	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
+	Revision int
+	// Name defines the cluster name
 	Name string
-	// The cluster admin ssh key
+	// AdminSshKey defines the cluster admin ssh key
 	AdminSshKey string
 	kops.ClusterSpec
 }

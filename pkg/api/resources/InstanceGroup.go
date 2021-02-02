@@ -8,11 +8,13 @@ import (
 	"k8s.io/kops/pkg/client/simple"
 )
 
-// InstanceGroup represents a group of instances (either nodes or masters) with the same configuration
+// InstanceGroup represents a group of instances (either bastions, nodes or masters) with the same configuration
 type InstanceGroup struct {
-	// The cluster name the instance group belongs to
+	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
+	Revision int
+	// ClusterName defines the cluster name the instance group belongs to
 	ClusterName string
-	// Instance group name
+	// Name defines the instance group name
 	Name string
 	kops.InstanceGroupSpec
 }

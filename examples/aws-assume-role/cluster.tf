@@ -117,6 +117,13 @@ resource "kops_instance_group" "master-2" {
 resource "kops_cluster_updater" "updater" {
   cluster_name = kops_cluster.cluster.name
 
+  keepers = {
+    cluster  = kops_cluster.cluster.revision,
+    master-0 = kops_instance_group.master-0.revision,
+    master-1 = kops_instance_group.master-1.revision,
+    master-2 = kops_instance_group.master-2.revision
+  }
+
   rolling_update {
     skip                = false
     fail_on_drain_error = true
@@ -127,14 +134,6 @@ resource "kops_cluster_updater" "updater" {
   validate {
     skip = false
   }
-  
-  # ensures rolling update happens after the cluster and instance groups are up to date
-  depends_on   = [
-    kops_cluster.cluster,
-    kops_instance_group.master-0,
-    kops_instance_group.master-1,
-    kops_instance_group.master-2
-  ]
 }
 
 data "kops_kube_config" "kube_config" {

@@ -48,8 +48,9 @@ resource "kops_instance_group" "master-2" {
 ## Argument Reference
 
 The following arguments are supported:
-- `cluster_name` - (Required) - (Force new) - String - The cluster name the instance group belongs to.
-- `name` - (Required) - (Force new) - String - Instance group name.
+- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `cluster_name` - (Required) - (Force new) - String - ClusterName defines the cluster name the instance group belongs to.
+- `name` - (Required) - (Force new) - String - Name defines the instance group name.
 - `role` - (Required) - String - Type determines the role of instances in this group: masters or nodes.
 - `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
