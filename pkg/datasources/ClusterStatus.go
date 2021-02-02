@@ -1,7 +1,6 @@
 package datasources
 
 import (
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	datasourcesschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/datasources"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -15,12 +14,12 @@ func ClusterStatus() *schema.Resource {
 }
 
 func ClusterStatusRead(d *schema.ResourceData, m interface{}) error {
-	clusterName := d.Get("cluster_name").(string)
-	clusterStatus, err := datasources.GetClusterStatus(config.Clientset(m), clusterName)
+	in := datasourcesschemas.ExpandDataSourceClusterStatus(d.Get("").(map[string]interface{}))
+	err := in.GetClusterStatus(config.Clientset(m))
 	if err != nil {
 		return err
 	}
-	for k, v := range datasourcesschemas.FlattenDataSourceClusterStatus(*clusterStatus) {
+	for k, v := range datasourcesschemas.FlattenDataSourceClusterStatus(in) {
 		if err := d.Set(k, v); err != nil {
 			return err
 		}

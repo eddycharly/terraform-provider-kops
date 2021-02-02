@@ -79,8 +79,8 @@ resource "kops_cluster_updater" "updater" {
 
 The following arguments are supported:
 - `cluster_name` - (Required) - (Force new) - String - ClusterName is the target cluster name.
-- `rolling_update` - (Optional) - [rolling_update_options](#rolling_update_options) - RollingUpdate holds cluster rolling update options.
-- `validate` - (Optional) - [validate_options](#validate_options) - Validate holds cluster validation options.
+- `rolling_update` - (Optional) - (Force new) - [rolling_update_options](#rolling_update_options) - RollingUpdate holds cluster rolling update options.
+- `validate` - (Optional) - (Force new) - [validate_options](#validate_options) - Validate holds cluster validation options.
 
 ## Nested resources
 

@@ -7,32 +7,42 @@ import (
 
 // ClusterStatus reports status of a cluster
 type ClusterStatus struct {
-	// The target cluster name
+	// ClusterName defines the target cluster name
 	ClusterName string
-	// Tells if the cluster exists
+	// Apply updates the cluster before computing its status
+	Apply bool
+	// Exists indicates if the cluster exists
 	Exists bool
-	// Tells if the cluster is valid
+	// IsValid indicates if the cluster is valid
 	IsValid bool
-	// Tells if the cluster needs a rolling update
+	// NeedsUpdate indicates if the cluster needs a rolling update
 	NeedsUpdate bool
+	// InstanceGroups contains the name of instance groups to be updated
+	InstanceGroups []string
 }
 
-func GetClusterStatus(clientset simple.Clientset, clusterName string) (*ClusterStatus, error) {
-	if exists, err := utils.ClusterExists(clientset, clusterName); err != nil {
-		return nil, err
-	} else {
-		isValid := false
-		needsUpdate := true
-		if exists {
-			isValid, _ = utils.IsClusterValid(clusterName, clientset)
-			needsUpdate, _ = utils.NeedsUpdate(clusterName, clientset)
+func (s *ClusterStatus) GetClusterStatus(clientset simple.Clientset) error {
+	if s.Apply {
+		if err := utils.ClusterApply(clientset, s.ClusterName); err != nil {
+			return err
 		}
-		return &ClusterStatus{
-				ClusterName: clusterName,
-				Exists:      exists,
-				IsValid:     isValid,
-				NeedsUpdate: needsUpdate,
-			},
-			nil
+	}
+	if exists, err := utils.ClusterExists(clientset, s.ClusterName); err != nil {
+		return err
+	} else {
+		if exists {
+			if isValid, err := utils.ClusterIsValid(clientset, s.ClusterName); err != nil {
+				return err
+			} else {
+				s.IsValid = isValid
+			}
+			if needsUpdate, err := utils.ClusterInstanceGroupsNeedingUpdate(clientset, s.ClusterName); err != nil {
+				return err
+			} else {
+				s.NeedsUpdate = len(needsUpdate) != 0
+				s.InstanceGroups = needsUpdate
+			}
+		}
+		return nil
 	}
 }
