@@ -16,6 +16,7 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	"golang.org/x/tools/go/packages"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/kops/pkg/apis/kops"
@@ -238,6 +239,7 @@ var mappings = map[string]string{
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources": "datasources",
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube":        "kube",
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources":   "resources",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils":       "utils",
 	"k8s.io/kops/pkg/apis/kops":                                         "kops",
 }
 
@@ -929,6 +931,10 @@ func main() {
 		parser,
 		generate(resources.ClusterUpdater{},
 			required("ClusterName"),
+		),
+		generate(resources.RollingUpdateOptions{}),
+		generate(utils.RollingUpdateOptions{},
+			noSchema(),
 		),
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey"),

@@ -47,11 +47,15 @@ resource "kops_instance_group" "master-2" {
 
 resource "kops_cluster_updater" "updater" {
   cluster_name        = kops_cluster.cluster.name
-  fail_on_drain_error = true
-  fail_on_validate    = true
-  validate_count      = 1
 
-  // ...
+  rolling_update {
+    skip                = false
+    fail_on_drain_error = true
+    fail_on_validate    = true
+    validate_count      = 1
+
+    // ...
+  }
 
   # ensures rolling update happens after the cluster and instance groups are up to date
   depends_on   = [

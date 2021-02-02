@@ -12,6 +12,7 @@ clean:
 	@rm -rf ./pkg/schemas/kops
 	@rm -rf ./pkg/schemas/kube
 	@rm -rf ./pkg/schemas/resources
+	@rm -rf ./pkg/schemas/utils
 	@rm -rf ./docs/data-sources/*.md
 	@rm -rf ./docs/provider-config/*.md
 	@rm -rf ./docs/resources/*.md

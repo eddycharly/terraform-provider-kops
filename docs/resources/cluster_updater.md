@@ -49,11 +49,15 @@ resource "kops_instance_group" "master-2" {
 
 resource "kops_cluster_updater" "updater" {
   cluster_name        = kops_cluster.cluster.name
-  fail_on_drain_error = true
-  fail_on_validate    = true
-  validate_count      = 1
 
-  // ...
+  rolling_update {
+    skip                = false
+    fail_on_drain_error = true
+    fail_on_validate    = true
+    validate_count      = 1
+
+    // ...
+  }
 
   # ensures rolling update happens after the cluster and instance groups are up to date
   depends_on   = [
@@ -68,7 +72,18 @@ resource "kops_cluster_updater" "updater" {
 ## Argument Reference
 
 The following arguments are supported:
-- `cluster_name` - (Required) - String - The target cluster name.
+- `cluster_name` - (Required) - String - ClusterName is the target cluster name.
+- `rolling_update` - (Optional) - [rolling_update_options](#rolling_update_options) - RollingUpdate holds rolling update options to be used when performing a rolling update.
+
+## Nested resources
+
+### rolling_update_options
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `skip` - (Optional) - Bool - Skip allows skipping rolling update entirely.
 - `master_interval` - (Optional) - Duration - MasterInterval is the amount of time to wait after stopping a master instance.
 - `node_interval` - (Optional) - Duration - NodeInterval is the amount of time to wait after stopping a non-master instance.
 - `bastion_interval` - (Optional) - Duration - BastionInterval is the amount of time to wait after stopping a bastion instance.
@@ -77,7 +92,6 @@ The following arguments are supported:
 - `post_drain_delay` - (Optional) - Duration - PostDrainDelay is the duration we wait after draining each node.
 - `validation_timeout` - (Optional) - Duration - ValidationTimeout is the maximum time to wait for the cluster to validate, once we start validation.
 - `validate_count` - (Optional) - Int - ValidateCount is the amount of time that a cluster needs to be validated after single node update.
-
 
 
 
