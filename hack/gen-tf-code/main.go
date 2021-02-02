@@ -39,6 +39,7 @@ type options struct {
 	required     sets.String
 	computed     sets.String
 	computedOnly sets.String
+	forceNew     sets.String
 	sensitive    sets.String
 	suppressDiff sets.String
 }
@@ -51,6 +52,7 @@ func newOptions() *options {
 		required:     sets.NewString(),
 		computed:     sets.NewString(),
 		computedOnly: sets.NewString(),
+		forceNew:     sets.NewString(),
 		sensitive:    sets.NewString(),
 		suppressDiff: sets.NewString(),
 	}
@@ -95,6 +97,12 @@ func computed(computed ...string) func(o *options) {
 func computedOnly(computedOnly ...string) func(o *options) {
 	return func(o *options) {
 		o.computedOnly.Insert(computedOnly...)
+	}
+}
+
+func forceNew(forceNew ...string) func(o *options) {
+	return func(o *options) {
+		o.forceNew.Insert(forceNew...)
 	}
 }
 
@@ -306,6 +314,9 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"isSensitive": func(in _field) bool {
 			return optionsMap[in.Owner].sensitive.Has(in.Name)
 		},
+		"forceNew": func(in _field) bool {
+			return optionsMap[in.Owner].forceNew.Has(in.Name)
+		},
 		"suppressDiff": func(in _field) bool {
 			return optionsMap[in.Owner].suppressDiff.Has(in.Name)
 		},
@@ -381,6 +392,8 @@ The following arguments are supported:
 - {{ fieldName . | snakecase | code }}
 {{- if isOptional . }} - (Optional){{ end }}
 {{- if isRequired . }} - (Required){{ end }}
+{{- if forceNew . }} - (Force new){{ end }}
+{{- if isSensitive . }} - (Sensitive){{ end }}
 {{- if isComputed . }} - (Computed){{ end }} - {{ template "type" .Type }}{{ if (attributeComment .) }} - {{ attributeComment . }}{{ end }}
 {{- end }}
 {{- end }}
@@ -406,6 +419,8 @@ The following arguments are supported:
 - {{ fieldName . | snakecase | code }}
 {{- if isOptional . }} - (Optional){{ end }}
 {{- if isRequired . }} - (Required){{ end }}
+{{- if forceNew . }} - (Force new){{ end }}
+{{- if isSensitive . }} - (Sensitive){{ end }}
 {{- if isComputed . }} - (Computed){{ end }} - {{ template "type" .Type }}{{ if (attributeComment .) }} - {{ attributeComment . }}{{ end }}
 {{- end -}}
 {{- end }}
@@ -504,9 +519,11 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			{{- range (fields . true) }}
 			{{- if not (isExcluded .) }}
 			{{ fieldName . | snakecase | quote }}:
+			{{- $forceNew := forceNew . -}}
 			{{- $sensitive := isSensitive . -}}
 			{{- $suppressDiff := suppressDiff . -}}
 			{{- if $suppressDiff -}}SuppressDiff({{- end -}}
+			{{- if $forceNew -}}ForceNew({{- end -}}
 			{{- if $sensitive -}}Sensitive({{- end -}}
 			{{- if isRequired . -}}
 			Required
@@ -521,6 +538,7 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			{{- end -}}
 			{{ template "schema" .Type }}
 			{{- if $suppressDiff -}}){{- end -}}
+			{{- if $forceNew -}}){{- end -}}
 			{{- if $sensitive -}}){{- end -}}
 			,
 			{{- end -}}
@@ -768,7 +786,8 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	verifyFields(t, o.required.List()...)
 	verifyFields(t, o.computed.List()...)
 	verifyFields(t, o.computedOnly.List()...)
-	verifyFields(t, o.sensitive.List()...)
+	verifyFields(t, o.computedOnly.List()...)
+	verifyFields(t, o.forceNew.List()...)
 	verifyFields(t, o.suppressDiff.List()...)
 	for k := range o.rename {
 		verifyFields(t, k)
@@ -931,6 +950,7 @@ func main() {
 		parser,
 		generate(resources.ClusterUpdater{},
 			required("ClusterName"),
+			forceNew("ClusterName"),
 		),
 		generate(resources.RollingUpdateOptions{}),
 		generate(utils.RollingUpdateOptions{},
@@ -943,6 +963,7 @@ func main() {
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey"),
 			sensitive("AdminSshKey"),
+			forceNew("Name"),
 		),
 		generate(kops.ClusterSpec{},
 			noSchema(),
@@ -991,6 +1012,7 @@ func main() {
 		generate(kops.NodeAuthorizerSpec{}),
 		generate(resources.InstanceGroup{},
 			required("ClusterName", "Name"),
+			forceNew("ClusterName", "Name"),
 		),
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),

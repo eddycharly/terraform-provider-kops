@@ -13,7 +13,7 @@ var _ = Schema
 func ResourceCluster() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":                              RequiredString(),
+			"name":                              ForceNew(RequiredString()),
 			"admin_ssh_key":                     Sensitive(RequiredString()),
 			"channel":                           OptionalString(),
 			"addons":                            OptionalList(kopsschemas.ResourceAddonSpec()),
