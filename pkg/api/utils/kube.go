@@ -9,8 +9,8 @@ import (
 	"k8s.io/kops/pkg/kubeconfig"
 )
 
-func GetKubeConfigBuilder(name string, clientset simple.Clientset) (*kubeconfig.KubeconfigBuilder, error) {
-	cluster, err := clientset.GetCluster(context.Background(), name)
+func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string) (*kubeconfig.KubeconfigBuilder, error) {
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
 	if err != nil {
 		return nil, err
 	}

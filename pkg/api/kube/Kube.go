@@ -26,8 +26,8 @@ type Config struct {
 	ClientKey string
 }
 
-func GetConfig(name string, clientset simple.Clientset) (*Config, error) {
-	conf, err := utils.GetKubeConfigBuilder(name, clientset)
+func GetConfig(clientset simple.Clientset, clusterName string) (*Config, error) {
+	conf, err := utils.GetKubeConfigBuilder(clientset, clusterName)
 	if err != nil {
 		return nil, err
 	}

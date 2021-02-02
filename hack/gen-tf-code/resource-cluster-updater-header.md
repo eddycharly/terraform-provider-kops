@@ -57,6 +57,12 @@ resource "kops_cluster_updater" "updater" {
     // ...
   }
 
+  validate {
+    skip = false
+
+    // ...
+  }
+
   # ensures rolling update happens after the cluster and instance groups are up to date
   depends_on   = [
     kops_cluster.cluster,

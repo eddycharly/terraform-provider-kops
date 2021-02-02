@@ -16,7 +16,7 @@ func ClusterStatus() *schema.Resource {
 
 func ClusterStatusRead(d *schema.ResourceData, m interface{}) error {
 	clusterName := d.Get("cluster_name").(string)
-	clusterStatus, err := datasources.GetClusterStatus(clusterName, config.Clientset(m))
+	clusterStatus, err := datasources.GetClusterStatus(config.Clientset(m), clusterName)
 	if err != nil {
 		return err
 	}

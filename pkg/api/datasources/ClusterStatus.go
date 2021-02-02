@@ -17,18 +17,18 @@ type ClusterStatus struct {
 	NeedsUpdate bool
 }
 
-func GetClusterStatus(name string, clientset simple.Clientset) (*ClusterStatus, error) {
-	if exists, err := utils.ClusterExists(name, clientset); err != nil {
+func GetClusterStatus(clientset simple.Clientset, clusterName string) (*ClusterStatus, error) {
+	if exists, err := utils.ClusterExists(clientset, clusterName); err != nil {
 		return nil, err
 	} else {
 		isValid := false
 		needsUpdate := true
 		if exists {
-			isValid, _ = utils.IsClusterValid(name, clientset)
-			needsUpdate, _ = utils.NeedsUpdate(name, clientset)
+			isValid, _ = utils.IsClusterValid(clusterName, clientset)
+			needsUpdate, _ = utils.NeedsUpdate(clusterName, clientset)
 		}
 		return &ClusterStatus{
-				ClusterName: name,
+				ClusterName: clusterName,
 				Exists:      exists,
 				IsValid:     isValid,
 				NeedsUpdate: needsUpdate,
