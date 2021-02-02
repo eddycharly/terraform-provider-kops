@@ -9,6 +9,8 @@ import (
 type ClusterUpdater struct {
 	// ClusterName is the target cluster name
 	ClusterName string
+	// Keepers contains arbitrary strings used to update the resource when one changes
+	Keepers []string
 	// RollingUpdate holds cluster rolling update options
 	RollingUpdate RollingUpdateOptions
 	// Validate holds cluster validation options

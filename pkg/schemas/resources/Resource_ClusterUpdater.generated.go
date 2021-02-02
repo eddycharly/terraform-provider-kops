@@ -12,6 +12,7 @@ func ResourceClusterUpdater() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":   ForceNew(RequiredString()),
+			"keepers":        ForceNew(OptionalList(String())),
 			"rolling_update": ForceNew(OptionalStruct(ResourceRollingUpdateOptions())),
 			"validate":       ForceNew(OptionalStruct(ResourceValidateOptions())),
 		},
@@ -26,6 +27,15 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
+		Keepers: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["keepers"]),
 		RollingUpdate: func(in interface{}) resources.RollingUpdateOptions {
 			return func(in interface{}) resources.RollingUpdateOptions {
 				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
@@ -49,6 +59,15 @@ func FlattenResourceClusterUpdaterInto(in resources.ClusterUpdater, out map[stri
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
+	out["keepers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Keepers)
 	out["rolling_update"] = func(in resources.RollingUpdateOptions) interface{} {
 		return func(in resources.RollingUpdateOptions) []map[string]interface{} {
 			return []map[string]interface{}{FlattenResourceRollingUpdateOptions(in)}

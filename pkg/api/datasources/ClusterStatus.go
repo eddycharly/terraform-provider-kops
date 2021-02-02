@@ -9,8 +9,6 @@ import (
 type ClusterStatus struct {
 	// ClusterName defines the target cluster name
 	ClusterName string
-	// Apply updates the cluster before computing its status
-	Apply bool
 	// Exists indicates if the cluster exists
 	Exists bool
 	// IsValid indicates if the cluster is valid
@@ -22,11 +20,6 @@ type ClusterStatus struct {
 }
 
 func (s *ClusterStatus) GetClusterStatus(clientset simple.Clientset) error {
-	if s.Apply {
-		if err := utils.ClusterApply(clientset, s.ClusterName); err != nil {
-			return err
-		}
-	}
 	if exists, err := utils.ClusterExists(clientset, s.ClusterName); err != nil {
 		return err
 	} else {

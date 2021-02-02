@@ -3,6 +3,7 @@ package resources
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
@@ -28,7 +29,7 @@ func InstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 	if instanceGroup, err := resources.CreateInstanceGroup(instanceGroup.ClusterName, instanceGroup.Name, instanceGroup.InstanceGroupSpec, config.Clientset(m)); err != nil {
 		return err
 	} else {
-		d.SetId(instanceGroup.ClusterName + "/" + instanceGroup.Name)
+		d.SetId(fmt.Sprintf("%s-%s-%d", instanceGroup.ClusterName, instanceGroup.Name, time.Now().UnixNano()))
 	}
 	return InstanceGroupRead(d, m)
 }
@@ -38,11 +39,13 @@ func InstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 	if _, err := resources.UpdateInstanceGroup(instanceGroup.ClusterName, instanceGroup.Name, instanceGroup.InstanceGroupSpec, config.Clientset(m)); err != nil {
 		return err
 	}
+	d.SetId(fmt.Sprintf("%s-%s-%d", instanceGroup.ClusterName, instanceGroup.Name, time.Now().UnixNano()))
 	return InstanceGroupRead(d, m)
 }
 
 func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
-	if instanceGroup, err := resources.GetInstanceGroup(d.Get("cluster_name").(string), d.Get("name").(string), config.Clientset(m)); err != nil {
+	instanceGroup := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
+	if instanceGroup, err := resources.GetInstanceGroup(instanceGroup.ClusterName, instanceGroup.Name, config.Clientset(m)); err != nil {
 		return err
 	} else {
 		flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
@@ -51,18 +54,14 @@ func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 				return err
 			}
 		}
-		d.SetId(instanceGroup.ClusterName + "/" + instanceGroup.Name)
 	}
 	return nil
 }
 
 func InstanceGroupDelete(d *schema.ResourceData, m interface{}) error {
-	if parts := strings.Split(d.Id(), "/"); len(parts) != 2 {
-		return fmt.Errorf("Unexpected id format: %s. Please use 'cluster name/instance group name' format.", d.Id())
-	} else {
-		if err := resources.DeleteInstanceGroup(parts[0], parts[1], config.Clientset(m)); err != nil {
-			return err
-		}
+	instanceGroup := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
+	if err := resources.DeleteInstanceGroup(instanceGroup.ClusterName, instanceGroup.Name, config.Clientset(m)); err != nil {
+		return err
 	}
 	return nil
 }
@@ -80,7 +79,7 @@ func InstanceGroupImport(d *schema.ResourceData, m interface{}) ([]*schema.Resou
 					return []*schema.ResourceData{}, err
 				}
 			}
-			d.SetId(instanceGroup.ClusterName + "/" + instanceGroup.Name)
+			d.SetId(fmt.Sprintf("%s-%s-%d", instanceGroup.ClusterName, instanceGroup.Name, time.Now().UnixNano()))
 		}
 	}
 	return []*schema.ResourceData{d}, nil

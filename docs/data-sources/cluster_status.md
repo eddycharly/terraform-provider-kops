@@ -19,7 +19,6 @@ output "needs_update {
 
 The following arguments are supported:
 - `cluster_name` - (Required) - String - ClusterName defines the target cluster name.
-- `apply` - (Required) - Bool - Apply updates the cluster before computing its status.
 - `exists` - (Computed) - Bool - Exists indicates if the cluster exists.
 - `is_valid` - (Computed) - Bool - IsValid indicates if the cluster is valid.
 - `needs_update` - (Computed) - Bool - NeedsUpdate indicates if the cluster needs a rolling update.
