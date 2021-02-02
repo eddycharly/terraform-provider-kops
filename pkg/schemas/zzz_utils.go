@@ -47,6 +47,11 @@ func Sensitive(s *schema.Schema) *schema.Schema {
 	return s
 }
 
+func ForceNew(s *schema.Schema) *schema.Schema {
+	s.ForceNew = true
+	return s
+}
+
 func SuppressDiff(s *schema.Schema) *schema.Schema {
 	s.DiffSuppressFunc = func(_, _, _ string, _ *schema.ResourceData) bool {
 		return true

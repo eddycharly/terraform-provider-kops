@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceClusterUpdater() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name":   RequiredString(),
+			"cluster_name":   ForceNew(RequiredString()),
 			"rolling_update": OptionalStruct(ResourceRollingUpdateOptions()),
 			"validate":       OptionalStruct(ResourceValidateOptions()),
 		},

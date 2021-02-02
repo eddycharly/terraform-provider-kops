@@ -13,8 +13,8 @@ var _ = Schema
 func ResourceInstanceGroup() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name":                      RequiredString(),
-			"name":                              RequiredString(),
+			"cluster_name":                      ForceNew(RequiredString()),
+			"name":                              ForceNew(RequiredString()),
 			"role":                              RequiredString(),
 			"image":                             OptionalComputedString(),
 			"min_size":                          RequiredInt(),
