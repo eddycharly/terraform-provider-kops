@@ -12,7 +12,6 @@ func DataSourceClusterStatus() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":    RequiredString(),
-			"apply":           RequiredBool(),
 			"exists":          ComputedBool(),
 			"is_valid":        ComputedBool(),
 			"needs_update":    ComputedBool(),
@@ -29,9 +28,6 @@ func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.Cluste
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		Apply: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["apply"]),
 		Exists: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["exists"]),
@@ -57,9 +53,6 @@ func FlattenDataSourceClusterStatusInto(in datasources.ClusterStatus, out map[st
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
-	out["apply"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Apply)
 	out["exists"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Exists)
