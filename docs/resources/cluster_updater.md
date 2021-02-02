@@ -59,6 +59,12 @@ resource "kops_cluster_updater" "updater" {
     // ...
   }
 
+  validate {
+    skip = false
+
+    // ...
+  }
+
   # ensures rolling update happens after the cluster and instance groups are up to date
   depends_on   = [
     kops_cluster.cluster,
@@ -73,7 +79,8 @@ resource "kops_cluster_updater" "updater" {
 
 The following arguments are supported:
 - `cluster_name` - (Required) - String - ClusterName is the target cluster name.
-- `rolling_update` - (Optional) - [rolling_update_options](#rolling_update_options) - RollingUpdate holds rolling update options to be used when performing a rolling update.
+- `rolling_update` - (Optional) - [rolling_update_options](#rolling_update_options) - RollingUpdate holds cluster rolling update options.
+- `validate` - (Optional) - [validate_options](#validate_options) - Validate holds cluster validation options.
 
 ## Nested resources
 
@@ -83,7 +90,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `skip` - (Optional) - Bool - Skip allows skipping rolling update entirely.
+- `skip` - (Optional) - Bool - Skip allows skipping cluster rolling update.
 - `master_interval` - (Optional) - Duration - MasterInterval is the amount of time to wait after stopping a master instance.
 - `node_interval` - (Optional) - Duration - NodeInterval is the amount of time to wait after stopping a non-master instance.
 - `bastion_interval` - (Optional) - Duration - BastionInterval is the amount of time to wait after stopping a bastion instance.
@@ -92,6 +99,16 @@ The following arguments are supported:
 - `post_drain_delay` - (Optional) - Duration - PostDrainDelay is the duration we wait after draining each node.
 - `validation_timeout` - (Optional) - Duration - ValidationTimeout is the maximum time to wait for the cluster to validate, once we start validation.
 - `validate_count` - (Optional) - Int - ValidateCount is the amount of time that a cluster needs to be validated after single node update.
+
+### validate_options
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `skip` - (Optional) - Bool - Skip allows skipping cluster validation.
+- `timeout` - (Optional) - Duration - Timeout defines the maximum time to wait until the cluster becomes valid.
+- `poll_interval` - (Optional) - Duration - PollInterval defines the interval between validation attempts.
 
 
 

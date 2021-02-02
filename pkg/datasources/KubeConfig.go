@@ -16,7 +16,7 @@ func KubeConfig() *schema.Resource {
 
 func KubeConfigRead(d *schema.ResourceData, m interface{}) error {
 	clusterName := d.Get("cluster_name").(string)
-	kubeConfig, err := datasources.GetConfig(clusterName, config.Clientset(m))
+	kubeConfig, err := datasources.GetConfig(config.Clientset(m), clusterName)
 	if err != nil {
 		return err
 	}

@@ -9,8 +9,10 @@ import (
 type ClusterUpdater struct {
 	// ClusterName is the target cluster name
 	ClusterName string
-	// RollingUpdate holds rolling update options to be used when performing a rolling update
+	// RollingUpdate holds cluster rolling update options
 	RollingUpdate RollingUpdateOptions
+	// Validate holds cluster validation options
+	Validate ValidateOptions
 }
 
 func (u *ClusterUpdater) Apply(clientset simple.Clientset) error {
@@ -19,6 +21,11 @@ func (u *ClusterUpdater) Apply(clientset simple.Clientset) error {
 	}
 	if !u.RollingUpdate.Skip {
 		if err := utils.ClusterRollingUpdate(clientset, u.ClusterName, u.RollingUpdate.RollingUpdateOptions); err != nil {
+			return err
+		}
+	}
+	if !u.Validate.Skip {
+		if err := utils.ClusterValidate(clientset, u.ClusterName, u.Validate.ValidateOptions); err != nil {
 			return err
 		}
 	}

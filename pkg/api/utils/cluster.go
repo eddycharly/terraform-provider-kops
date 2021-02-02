@@ -7,7 +7,6 @@ import (
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kops/pkg/apis/kops"
@@ -37,7 +36,7 @@ func makeValidator(name string, clientset simple.Clientset) (kopsValidation.Clus
 	if len(instanceGroups) == 0 {
 		return nil, fmt.Errorf("no InstanceGroup objects found")
 	}
-	configBuilder, err := GetKubeConfigBuilder(name, clientset)
+	configBuilder, err := GetKubeConfigBuilder(clientset, name)
 	if err != nil {
 		return nil, err
 	}
@@ -54,17 +53,6 @@ func makeValidator(name string, clientset simple.Clientset) (kopsValidation.Clus
 		return nil, fmt.Errorf("unexpected error creating validatior: %v", err)
 	}
 	return validator, nil
-}
-
-func ClusterExists(name string, clientset simple.Clientset) (bool, error) {
-	_, err := clientset.GetCluster(context.Background(), name)
-	if err != nil {
-		if errors.IsNotFound(err) {
-			return false, nil
-		}
-		return false, err
-	}
-	return true, nil
 }
 
 func IsClusterValid(name string, clientset simple.Clientset) (bool, error) {
@@ -89,7 +77,7 @@ func NeedsUpdate(name string, clientset simple.Clientset) (bool, error) {
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-	configBuilder, err := GetKubeConfigBuilder(name, clientset)
+	configBuilder, err := GetKubeConfigBuilder(clientset, name)
 	if err != nil {
 		return false, err
 	}

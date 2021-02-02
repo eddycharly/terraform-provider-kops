@@ -13,6 +13,7 @@ func ResourceClusterUpdater() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"cluster_name":   RequiredString(),
 			"rolling_update": OptionalStruct(ResourceRollingUpdateOptions()),
+			"validate":       OptionalStruct(ResourceValidateOptions()),
 		},
 	}
 }
@@ -33,6 +34,14 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 				return (ExpandResourceRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
 			}(in)
 		}(in["rolling_update"]),
+		Validate: func(in interface{}) resources.ValidateOptions {
+			return func(in interface{}) resources.ValidateOptions {
+				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+					return resources.ValidateOptions{}
+				}
+				return (ExpandResourceValidateOptions(in.([]interface{})[0].(map[string]interface{})))
+			}(in)
+		}(in["validate"]),
 	}
 }
 
@@ -45,6 +54,11 @@ func FlattenResourceClusterUpdaterInto(in resources.ClusterUpdater, out map[stri
 			return []map[string]interface{}{FlattenResourceRollingUpdateOptions(in)}
 		}(in)
 	}(in.RollingUpdate)
+	out["validate"] = func(in resources.ValidateOptions) interface{} {
+		return func(in resources.ValidateOptions) []map[string]interface{} {
+			return []map[string]interface{}{FlattenResourceValidateOptions(in)}
+		}(in)
+	}(in.Validate)
 }
 
 func FlattenResourceClusterUpdater(in resources.ClusterUpdater) map[string]interface{} {
