@@ -54,7 +54,7 @@ use it in your terraform code:
 - [kops_kube_config](/docs/data-sources/kube_config) fetches the kube config infos of a cluster
 
 Finally, a special resource takes care of the cluster lifecyle:
-- [kops_cluster_updater](/docs/resources/cluster_updater) manages cluster rolling updates
+- [kops_cluster_updater](/docs/resources/cluster_updater) manages cluster updates and/or rolling updates
 
 [Provider configuration](/docs/guides/provider) holds cloud provider
 authentication settings, currently only AWS is supported.
