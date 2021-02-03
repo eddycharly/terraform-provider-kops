@@ -13,6 +13,7 @@ var _ = Schema
 func ResourceCluster() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"revision":                          ComputedInt(),
 			"name":                              ForceNew(RequiredString()),
 			"admin_ssh_key":                     Sensitive(RequiredString()),
 			"channel":                           OptionalString(),
@@ -84,6 +85,9 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		panic("expand Cluster failure, in is nil")
 	}
 	return resources.Cluster{
+		Revision: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["revision"]),
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
@@ -97,6 +101,9 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 }
 
 func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}) {
+	out["revision"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Revision)
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)

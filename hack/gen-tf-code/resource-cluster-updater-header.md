@@ -1,7 +1,10 @@
-Performs a cluster rolling update (if needed).
+This resource applies the cluster state on the target cloud provider and performs a rolling update.
 
-~> This resource is designed to permanently recreate.
-The cluster will be rolled out only when necessary.
+The rolling update and cluster validation can be disabled and/or configured through resource attributes.
+
+~> This resource will trigger based on the `keepers` map attribute.
+Thats is, if something changes in the attribute, the resource update handler will fire and an apply/rolling update/validate cycle will run.
+A good candidate for `keepers` is to use the `revision` coming from `kops_cluster` and `kops_instance_group` resources.
 
 ## Example usage
 
@@ -47,6 +50,14 @@ resource "kops_instance_group" "master-2" {
 
 resource "kops_cluster_updater" "updater" {
   cluster_name        = kops_cluster.cluster.name
+
+  keepers = {
+    cluster  = kops_cluster.cluster.revision,
+    master-0 = kops_instance_group.master-0.revision,
+    master-1 = kops_instance_group.master-1.revision,
+    master-2 = kops_instance_group.master-2.revision
+    // ...
+  }
 
   rolling_update {
     skip                = false

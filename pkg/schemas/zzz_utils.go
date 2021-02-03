@@ -1,6 +1,7 @@
 package schemas
 
 import (
+	"context"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -8,6 +9,16 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
+
+// Diff
+
+func CustomizeDiffRevision(_ context.Context, d *schema.ResourceDiff, m interface{}) error {
+	// If anything changes, increment the revision
+	if len(d.GetChangedKeysPrefix("")) > 0 {
+		d.SetNew("revision", d.Get("revision").(int)+1)
+	}
+	return nil
+}
 
 // Tools
 
@@ -151,6 +162,16 @@ func ComputedStruct(elem *schema.Resource) *schema.Schema {
 
 func OptionalComputedStruct(elem *schema.Resource) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, true, true, 1)
+}
+
+// Set
+
+func RequiredSetList(elem interface{}) *schema.Schema {
+	return Schema(schema.TypeSet, elem, true, false, false, 0)
+}
+
+func OptionalSetList(elem interface{}) *schema.Schema {
+	return Schema(schema.TypeSet, elem, false, true, false, 0)
 }
 
 // List

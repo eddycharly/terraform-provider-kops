@@ -1,32 +1,28 @@
 package resources
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
+	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	resourcesschema "github.com/eddycharly/terraform-provider-kops/pkg/schemas/resources"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func ClusterUpdater() *schema.Resource {
 	return &schema.Resource{
-		Create: ClusterUpdaterCreate,
-		Read:   ClusterUpdaterRead,
-		Delete: schema.RemoveFromState,
-		Schema: resourcesschema.ResourceClusterUpdater().Schema,
+		Create:        ClusterUpdaterCreateOrUpdate,
+		Read:          schema.Noop,
+		Update:        ClusterUpdaterCreateOrUpdate,
+		Delete:        schema.RemoveFromState,
+		CustomizeDiff: schemas.CustomizeDiffRevision,
+		Schema:        resourcesschema.ResourceClusterUpdater().Schema,
 	}
 }
 
-func ClusterUpdaterCreate(d *schema.ResourceData, m interface{}) error {
+func ClusterUpdaterCreateOrUpdate(d *schema.ResourceData, m interface{}) error {
 	in := resourcesschema.ExpandResourceClusterUpdater(d.Get("").(map[string]interface{}))
 	if err := in.UpdateCluster(config.Clientset(m)); err != nil {
 		return err
 	}
-	d.SetId(fmt.Sprintf("%s-%d", in.ClusterName, time.Now().UnixNano()))
-	return nil
-}
-
-func ClusterUpdaterRead(d *schema.ResourceData, m interface{}) error {
+	d.SetId(in.ClusterName)
 	return nil
 }
