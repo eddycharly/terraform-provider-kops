@@ -1,6 +1,8 @@
 package resources
 
 import (
+	"context"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
@@ -15,8 +17,10 @@ func Cluster() *schema.Resource {
 		Update:        ClusterUpdate,
 		Delete:        ClusterDelete,
 		CustomizeDiff: schemas.CustomizeDiffRevision,
-		Importer:      &schema.ResourceImporter{StateContext: schema.ImportStatePassthroughContext},
 		Schema:        resourcesschema.ResourceCluster().Schema,
+		Importer: &schema.ResourceImporter{
+			StateContext: ClusterImport,
+		},
 	}
 }
 
@@ -63,4 +67,20 @@ func ClusterDelete(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func ClusterImport(_ context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+	if cluster, err := resources.GetCluster(d.Id(), config.Clientset(m)); err != nil {
+		return []*schema.ResourceData{}, err
+	} else {
+		flattened := resourcesschema.FlattenResourceCluster(*cluster)
+		for key, value := range flattened {
+			if key != "revision" {
+				if err := d.Set(key, value); err != nil {
+					return []*schema.ResourceData{}, err
+				}
+			}
+		}
+		return []*schema.ResourceData{d}, nil
+	}
 }
