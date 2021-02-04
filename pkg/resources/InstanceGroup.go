@@ -10,51 +10,52 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	resourcesschema "github.com/eddycharly/terraform-provider-kops/pkg/schemas/resources"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func InstanceGroup() *schema.Resource {
 	return &schema.Resource{
-		Create:        InstanceGroupCreate,
-		Read:          InstanceGroupRead,
-		Update:        InstanceGroupUpdate,
-		Delete:        InstanceGroupDelete,
+		CreateContext: InstanceGroupCreate,
+		ReadContext:   InstanceGroupRead,
+		UpdateContext: InstanceGroupUpdate,
+		DeleteContext: InstanceGroupDelete,
 		CustomizeDiff: schemas.CustomizeDiffRevision,
 		Importer:      &schema.ResourceImporter{StateContext: InstanceGroupImport},
 		Schema:        resourcesschema.ResourceInstanceGroup().Schema,
 	}
 }
 
-func InstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupCreate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
 	if instanceGroup, err := resources.CreateInstanceGroup(in.ClusterName, in.Name, in.InstanceGroupSpec, config.Clientset(m)); err != nil {
-		return err
+		return diag.FromErr(err)
 	} else {
 		d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))
-		return InstanceGroupRead(d, m)
+		return InstanceGroupRead(c, d, m)
 	}
 }
 
-func InstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupUpdate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
 	if instanceGroup, err := resources.UpdateInstanceGroup(in.ClusterName, in.Name, in.InstanceGroupSpec, config.Clientset(m)); err != nil {
-		return err
+		return diag.FromErr(err)
 	} else {
 		d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))
-		return InstanceGroupRead(d, m)
+		return InstanceGroupRead(c, d, m)
 	}
 }
 
-func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupRead(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
 	if instanceGroup, err := resources.GetInstanceGroup(in.ClusterName, in.Name, config.Clientset(m)); err != nil {
-		return err
+		return diag.FromErr(err)
 	} else {
 		flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
 		for key, value := range flattened {
 			if key != "revision" {
 				if err := d.Set(key, value); err != nil {
-					return err
+					return diag.FromErr(err)
 				}
 			}
 		}
@@ -62,10 +63,10 @@ func InstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func InstanceGroupDelete(d *schema.ResourceData, m interface{}) error {
+func InstanceGroupDelete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
 	if err := utils.InstanceGroupDelete(config.Clientset(m), in.ClusterName, in.Name); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	return nil
 }
