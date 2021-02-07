@@ -1,28 +1,35 @@
 package resources
 
 import (
+	"context"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	resourcesschema "github.com/eddycharly/terraform-provider-kops/pkg/schemas/resources"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func ClusterUpdater() *schema.Resource {
 	return &schema.Resource{
-		Create:        ClusterUpdaterCreateOrUpdate,
-		Read:          schema.Noop,
-		Update:        ClusterUpdaterCreateOrUpdate,
-		Delete:        schema.RemoveFromState,
+		CreateContext: ClusterUpdaterCreateOrUpdate,
+		ReadContext:   schema.NoopContext,
+		UpdateContext: ClusterUpdaterCreateOrUpdate,
+		DeleteContext: ClusterUpdaterDelete,
 		CustomizeDiff: schemas.CustomizeDiffRevision,
 		Schema:        resourcesschema.ResourceClusterUpdater().Schema,
 	}
 }
 
-func ClusterUpdaterCreateOrUpdate(d *schema.ResourceData, m interface{}) error {
+func ClusterUpdaterCreateOrUpdate(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceClusterUpdater(d.Get("").(map[string]interface{}))
 	if err := in.UpdateCluster(config.Clientset(m)); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(in.ClusterName)
 	return nil
+}
+
+func ClusterUpdaterDelete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	return diag.FromErr(schema.RemoveFromState(d, m))
 }

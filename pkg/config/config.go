@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"context"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	configschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/config"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/kops/pkg/client/simple"
@@ -27,18 +28,18 @@ type options struct {
 	clientset simple.Clientset
 }
 
-func ConfigureProvider(d *schema.ResourceData) (interface{}, error) {
+func ConfigureProvider(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	providerConfig := configschemas.ExpandConfigProvider(d.Get("").(map[string]interface{}))
 	err := initCredentials(providerConfig.Aws)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	basePath, err := vfs.Context.BuildVfsPath(providerConfig.StateStore)
 	if err != nil {
-		return nil, fmt.Errorf("error building path for %q: %v", providerConfig.StateStore, err)
+		return nil, diag.Errorf("error building path for %q: %v", providerConfig.StateStore, err)
 	}
 	if !vfs.IsClusterReadable(basePath) {
-		return nil, field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError)
+		return nil, diag.FromErr(field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError))
 	}
 	return &options{
 		clientset: vfsclientset.NewVFSClientset(basePath),
