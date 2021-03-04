@@ -59,7 +59,7 @@ require (
 	google.golang.org/grpc/examples v0.0.0-20201121004645-9da74c039bbf // indirect
 	k8s.io/api v0.20.4
 	k8s.io/apimachinery v0.20.4
-	k8s.io/client-go v1.5.1
+	k8s.io/client-go v1.5.2
 	k8s.io/klog v1.0.0
 	k8s.io/kops v1.18.3
 )
