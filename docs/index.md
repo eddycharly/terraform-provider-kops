@@ -9,7 +9,7 @@ integration with the kOps api:
 
 ... just **pure go code.**
 
-Currently using kOps `v1.18.3` and compatible with terraform `0.12` and higher.
+Currently using kOps `v1.19.2` and compatible with terraform `0.12` and higher.
 
 ~> For now, provisioning the network is not supported. The network must
 be created separately and given to the provider through cluster attribute
