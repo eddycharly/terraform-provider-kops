@@ -167,6 +167,9 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		ValidateCount = *options.ValidateCount
 	}
 	d := &instancegroups.RollingUpdateCluster{
+		Ctx:                     context.TODO(),
+		Cluster:                 kc,
+		Clientset:               clientset,
 		MasterInterval:          MasterInterval,
 		NodeInterval:            NodeInterval,
 		BastionInterval:         BastionInterval,
