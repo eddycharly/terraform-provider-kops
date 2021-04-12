@@ -14,7 +14,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/client/simple/vfsclientset"
-	"k8s.io/kops/pkg/featureflag"
 	"k8s.io/kops/util/pkg/vfs"
 )
 
@@ -42,7 +41,6 @@ func ConfigureProvider(_ context.Context, d *schema.ResourceData) (interface{}, 
 	if !vfs.IsClusterReadable(basePath) {
 		return nil, diag.FromErr(field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError))
 	}
-	featureflag.LegacyIAM = featureflag.New("LegacyIAM", featureflag.Bool(true))
 	return &options{
 		clientset: vfsclientset.NewVFSClientset(basePath),
 	}, nil

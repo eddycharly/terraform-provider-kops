@@ -12,7 +12,12 @@ func ClusterApply(clientset simple.Clientset, clusterName string) error {
 	if err != nil {
 		return err
 	}
+	cloud, err := cloudup.BuildCloud(kc)
+	if err != nil {
+		return err
+	}
 	apply := &cloudup.ApplyClusterCmd{
+		Cloud:      cloud,
 		Cluster:    kc,
 		Clientset:  clientset,
 		TargetName: cloudup.TargetDirect,
