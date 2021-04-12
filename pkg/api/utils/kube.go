@@ -21,7 +21,7 @@ func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string) (*kube
 	if err != nil {
 		return nil, err
 	}
-	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, 0, "", false, "", false)
+	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, kubeconfig.DefaultKubecfgAdminLifetime, "", false, "", false)
 	if err != nil {
 		return nil, err
 	}
