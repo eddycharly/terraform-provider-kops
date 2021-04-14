@@ -960,6 +960,7 @@ func main() {
 		generate(utils.ValidateOptions{},
 			noSchema(),
 		),
+		generate(resources.ApplyOptions{}),
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey"),
 			computedOnly("Revision"),
