@@ -13,6 +13,8 @@ type ClusterUpdater struct {
 	ClusterName string
 	// Keepers contains arbitrary strings used to update the resource when one changes
 	Keepers map[string]string
+	// Apply holds cluster apply options
+	Apply ApplyOptions
 	// RollingUpdate holds cluster rolling update options
 	RollingUpdate RollingUpdateOptions
 	// Validate holds cluster validation options
@@ -20,16 +22,18 @@ type ClusterUpdater struct {
 }
 
 func (u *ClusterUpdater) UpdateCluster(clientset simple.Clientset) error {
-	if err := utils.ClusterApply(clientset, u.ClusterName); err != nil {
-		return err
-	}
-	if !u.RollingUpdate.Skip {
-		if err := utils.ClusterRollingUpdate(clientset, u.ClusterName, u.RollingUpdate.RollingUpdateOptions); err != nil {
+	if !u.Apply.Skip {
+		if err := utils.ClusterApply(clientset, u.ClusterName); err != nil {
 			return err
 		}
 	}
 	if !u.Validate.Skip {
 		if err := utils.ClusterValidate(clientset, u.ClusterName, u.Validate.ValidateOptions); err != nil {
+			return err
+		}
+	}
+	if !u.RollingUpdate.Skip {
+		if err := utils.ClusterRollingUpdate(clientset, u.ClusterName, u.RollingUpdate.RollingUpdateOptions); err != nil {
 			return err
 		}
 	}

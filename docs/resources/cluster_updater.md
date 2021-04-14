@@ -92,10 +92,19 @@ The following arguments are supported:
 - `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
 - `cluster_name` - (Required) - String - ClusterName is the target cluster name.
 - `keepers` - (Optional) - Map(String) - Keepers contains arbitrary strings used to update the resource when one changes.
+- `apply` - (Optional) - [apply_options](#apply_options) - Apply holds cluster apply options.
 - `rolling_update` - (Optional) - [rolling_update_options](#rolling_update_options) - RollingUpdate holds cluster rolling update options.
 - `validate` - (Optional) - [validate_options](#validate_options) - Validate holds cluster validation options.
 
 ## Nested resources
+
+### apply_options
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `skip` - (Optional) - Bool - Skip allows skipping cluster apply.
 
 ### rolling_update_options
 
