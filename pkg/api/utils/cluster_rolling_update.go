@@ -42,7 +42,7 @@ func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName 
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName)
+	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName, nil, false)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName)
+	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName, nil, false)
 	if err != nil {
 		return err
 	}

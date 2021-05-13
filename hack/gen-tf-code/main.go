@@ -1117,7 +1117,7 @@ func main() {
 		"DataSource",
 		parser,
 		generate(datasources.KubeConfig{},
-			required("ClusterName"),
+			required("ClusterName", "Admin", "Internal"),
 		),
 		generate(datasources.ClusterStatus{},
 			required("ClusterName"),
