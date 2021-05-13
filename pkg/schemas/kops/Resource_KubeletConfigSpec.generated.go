@@ -15,7 +15,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"api_servers":                            OptionalString(),
-			"anonymous_auth":                         RequiredBool(),
+			"anonymous_auth":                         OptionalBool(),
 			"authorization_mode":                     OptionalString(),
 			"bootstrap_kubeconfig":                   OptionalString(),
 			"client_ca_file":                         OptionalString(),
@@ -110,6 +110,9 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 			return string(ExpandString(in))
 		}(in["api_servers"]),
 		AnonymousAuth: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil

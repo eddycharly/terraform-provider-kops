@@ -178,7 +178,7 @@ KubeletConfigSpec defines the kubelet configuration.
 The following arguments are supported:
 
 - `api_servers` - (Optional) - String - APIServers is not used for clusters version 1.6 and later - flag removed.
-- `anonymous_auth` - (Required) - Bool - AnonymousAuth permits you to control auth to the kubelet api.
+- `anonymous_auth` - (Optional) - Bool - AnonymousAuth permits you to control auth to the kubelet api.
 - `authorization_mode` - (Optional) - String - AuthorizationMode is the authorization mode the kubelet is running in.
 - `bootstrap_kubeconfig` - (Optional) - String - BootstrapKubeconfig is the path to a kubeconfig file that will be used to get client certificate for kubelet.
 - `client_ca_file` - (Optional) - String - ClientCAFile is the path to a CA certificate.
