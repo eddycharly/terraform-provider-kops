@@ -23,7 +23,7 @@ type ClusterUpdater struct {
 
 func (u *ClusterUpdater) UpdateCluster(clientset simple.Clientset) error {
 	if !u.Apply.Skip {
-		if err := utils.ClusterApply(clientset, u.ClusterName); err != nil {
+		if err := utils.ClusterApply(clientset, u.ClusterName, u.Apply.AllowKopsDowngrade); err != nil {
 			return err
 		}
 	}

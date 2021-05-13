@@ -105,6 +105,7 @@ The following arguments are supported:
 The following arguments are supported:
 
 - `skip` - (Optional) - Bool - Skip allows skipping cluster apply.
+- `allow_kops_downgrade` - (Optional) - Bool - AllowKopsDowngrade permits applying with a kops version older than what was last used to apply to the cluster.
 
 ### rolling_update_options
 

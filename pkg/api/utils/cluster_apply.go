@@ -7,7 +7,7 @@ import (
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
-func ClusterApply(clientset simple.Clientset, clusterName string) error {
+func ClusterApply(clientset simple.Clientset, clusterName string, allowKopsDowngrade bool) error {
 	kc, err := clientset.GetCluster(context.Background(), clusterName)
 	if err != nil {
 		return err
@@ -17,10 +17,11 @@ func ClusterApply(clientset simple.Clientset, clusterName string) error {
 		return err
 	}
 	apply := &cloudup.ApplyClusterCmd{
-		Cloud:      cloud,
-		Cluster:    kc,
-		Clientset:  clientset,
-		TargetName: cloudup.TargetDirect,
+		Cloud:              cloud,
+		Cluster:            kc,
+		Clientset:          clientset,
+		TargetName:         cloudup.TargetDirect,
+		AllowKopsDowngrade: allowKopsDowngrade,
 	}
 	return apply.Run(context.Background())
 }

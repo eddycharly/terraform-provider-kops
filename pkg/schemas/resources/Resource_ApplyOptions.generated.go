@@ -11,7 +11,8 @@ var _ = Schema
 func ResourceApplyOptions() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"skip": OptionalBool(),
+			"skip":                 OptionalBool(),
+			"allow_kops_downgrade": OptionalBool(),
 		},
 	}
 }
@@ -24,6 +25,9 @@ func ExpandResourceApplyOptions(in map[string]interface{}) resources.ApplyOption
 		Skip: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["skip"]),
+		AllowKopsDowngrade: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["allow_kops_downgrade"]),
 	}
 }
 
@@ -31,6 +35,9 @@ func FlattenResourceApplyOptionsInto(in resources.ApplyOptions, out map[string]i
 	out["skip"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Skip)
+	out["allow_kops_downgrade"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.AllowKopsDowngrade)
 }
 
 func FlattenResourceApplyOptions(in resources.ApplyOptions) map[string]interface{} {
