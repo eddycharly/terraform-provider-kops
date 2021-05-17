@@ -78,7 +78,7 @@ terraform {
   required_providers {
     kops = {
       source  = "eddycharly/kops"
-      version = "1.19.0-alpha.4"
+      version = "1.19.0-alpha.7"
     }
   }
 }
