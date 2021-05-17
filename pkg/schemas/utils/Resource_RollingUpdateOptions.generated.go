@@ -117,6 +117,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(int(ExpandInt(in)))
 			}(in)
 		}(in["validate_count"]),
+		CloudOnly: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["cloud_only"]),
 	}
 }
 
@@ -187,6 +190,9 @@ func FlattenResourceRollingUpdateOptionsInto(in utils.RollingUpdateOptions, out 
 			}(*in)
 		}(in)
 	}(in.ValidateCount)
+	out["cloud_only"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.CloudOnly)
 }
 
 func FlattenResourceRollingUpdateOptions(in utils.RollingUpdateOptions) map[string]interface{} {

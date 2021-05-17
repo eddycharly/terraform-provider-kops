@@ -33,6 +33,8 @@ type RollingUpdateOptions struct {
 	ValidationTimeout *metav1.Duration
 	// ValidateCount is the amount of time that a cluster needs to be validated after single node update
 	ValidateCount *int
+	// CloudOnly perform rolling update without confirming progress with k8s
+	CloudOnly bool
 }
 
 func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName string) ([]string, error) {
@@ -179,7 +181,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		K8sClient:               k8sClient,
 		FailOnDrainError:        options.FailOnDrainError,
 		FailOnValidate:          options.FailOnValidate,
-		CloudOnly:               false,
+		CloudOnly:               options.CloudOnly,
 		ClusterName:             kc.Name,
 		PostDrainDelay:          PostDrainDelay,
 		ValidationTimeout:       ValidationTimeout,
