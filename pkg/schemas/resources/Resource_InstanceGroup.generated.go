@@ -20,6 +20,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"image":                             OptionalComputedString(),
 			"min_size":                          RequiredInt(),
 			"max_size":                          RequiredInt(),
+			"autoscale":                         OptionalBool(),
 			"machine_type":                      RequiredString(),
 			"root_volume_size":                  OptionalInt(),
 			"root_volume_type":                  OptionalString(),
@@ -36,6 +37,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"hooks":                             OptionalList(kopsschemas.ResourceHookSpec()),
 			"max_price":                         OptionalString(),
 			"spot_duration_in_minutes":          OptionalInt(),
+			"cpu_credits":                       OptionalString(),
 			"associate_public_ip":               OptionalBool(),
 			"additional_security_groups":        OptionalList(String()),
 			"cloud_labels":                      OptionalMap(String()),
@@ -57,6 +59,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"instance_interruption_behavior":    OptionalString(),
 			"compress_user_data":                OptionalBool(),
 			"instance_metadata":                 OptionalStruct(kopsschemas.ResourceInstanceMetadataOptions()),
+			"update_policy":                     OptionalString(),
 		},
 	}
 }

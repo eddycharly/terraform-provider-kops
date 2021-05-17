@@ -18,7 +18,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"agent_labels":                      OptionalList(String()),
 			"agent_prometheus_port":             OptionalInt(),
 			"allow_localhost":                   OptionalString(),
-			"auto_ipv_6node_routes":             OptionalBool(),
+			"auto_ipv6_node_routes":             OptionalBool(),
 			"bpf_root":                          OptionalString(),
 			"container_runtime":                 OptionalList(String()),
 			"container_runtime_endpoint":        OptionalMap(String()),
@@ -26,23 +26,23 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"debug_verbose":                     OptionalList(String()),
 			"device":                            OptionalString(),
 			"disable_conntrack":                 OptionalBool(),
-			"disable_ipv_4":                     OptionalBool(),
-			"disable_k8s_services":              OptionalBool(),
+			"disable_ipv4":                      OptionalBool(),
+			"disable_k_8s_services":             OptionalBool(),
 			"enable_policy":                     OptionalString(),
 			"enable_tracing":                    OptionalBool(),
 			"enable_prometheus_metrics":         OptionalBool(),
 			"enable_encryption":                 OptionalBool(),
 			"envoy_log":                         OptionalString(),
-			"ipv_4cluster_cidr_mask_size":       OptionalInt(),
-			"ipv_4node":                         OptionalString(),
-			"ipv_4range":                        OptionalString(),
-			"ipv_4service_range":                OptionalString(),
-			"ipv_6cluster_alloc_cidr":           OptionalString(),
-			"ipv_6node":                         OptionalString(),
-			"ipv_6range":                        OptionalString(),
-			"ipv_6service_range":                OptionalString(),
-			"k8s_api_server":                    OptionalString(),
-			"k8s_kubeconfig_path":               OptionalString(),
+			"ipv4_cluster_cidr_mask_size":       OptionalInt(),
+			"ipv4_node":                         OptionalString(),
+			"ipv4_range":                        OptionalString(),
+			"ipv4_service_range":                OptionalString(),
+			"ipv6_cluster_alloc_cidr":           OptionalString(),
+			"ipv6_node":                         OptionalString(),
+			"ipv6_range":                        OptionalString(),
+			"ipv6_service_range":                OptionalString(),
+			"k_8s_api_server":                   OptionalString(),
+			"k_8s_kubeconfig_path":              OptionalString(),
 			"keep_bpf_templates":                OptionalBool(),
 			"keep_config":                       OptionalBool(),
 			"label_prefix_file":                 OptionalString(),
@@ -55,7 +55,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"logstash_agent":                    OptionalString(),
 			"logstash_probe_timer":              OptionalInt(),
 			"disable_masquerade":                OptionalBool(),
-			"nat_46range":                       OptionalString(),
+			"nat46_range":                       OptionalString(),
 			"pprof":                             OptionalBool(),
 			"prefilter_device":                  OptionalString(),
 			"prometheus_serve_addr":             OptionalString(),
@@ -65,8 +65,8 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"state_dir":                         OptionalString(),
 			"trace_payload_len":                 OptionalInt(),
 			"tunnel":                            OptionalString(),
-			"enable_ipv_6":                      OptionalBool(),
-			"enable_ipv_4":                      OptionalBool(),
+			"enable_ipv6":                       OptionalBool(),
+			"enable_ipv4":                       OptionalBool(),
 			"monitor_aggregation":               OptionalString(),
 			"bpfct_global_tcp_max":              OptionalInt(),
 			"bpfct_global_any_max":              OptionalInt(),
@@ -79,6 +79,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"ipam":                              OptionalString(),
 			"ip_tables_rules_noinstall":         OptionalBool(),
 			"auto_direct_node_routes":           OptionalBool(),
+			"enable_host_reachable_services":    OptionalBool(),
 			"enable_node_port":                  OptionalBool(),
 			"etcd_managed":                      OptionalBool(),
 			"enable_remote_node_identity":       OptionalBool(),
@@ -120,7 +121,7 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["allow_localhost"]),
 		AutoIpv6NodeRoutes: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["auto_ipv_6node_routes"]),
+		}(in["auto_ipv6_node_routes"]),
 		BPFRoot: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bpf_root"]),
@@ -165,10 +166,10 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["disable_conntrack"]),
 		DisableIpv4: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["disable_ipv_4"]),
+		}(in["disable_ipv4"]),
 		DisableK8sServices: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["disable_k8s_services"]),
+		}(in["disable_k_8s_services"]),
 		EnablePolicy: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["enable_policy"]),
@@ -186,34 +187,34 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["envoy_log"]),
 		Ipv4ClusterCIDRMaskSize: func(in interface{}) int {
 			return int(ExpandInt(in))
-		}(in["ipv_4cluster_cidr_mask_size"]),
+		}(in["ipv4_cluster_cidr_mask_size"]),
 		Ipv4Node: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_4node"]),
+		}(in["ipv4_node"]),
 		Ipv4Range: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_4range"]),
+		}(in["ipv4_range"]),
 		Ipv4ServiceRange: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_4service_range"]),
+		}(in["ipv4_service_range"]),
 		Ipv6ClusterAllocCidr: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_6cluster_alloc_cidr"]),
+		}(in["ipv6_cluster_alloc_cidr"]),
 		Ipv6Node: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_6node"]),
+		}(in["ipv6_node"]),
 		Ipv6Range: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_6range"]),
+		}(in["ipv6_range"]),
 		Ipv6ServiceRange: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_6service_range"]),
+		}(in["ipv6_service_range"]),
 		K8sAPIServer: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["k8s_api_server"]),
+		}(in["k_8s_api_server"]),
 		K8sKubeconfigPath: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["k8s_kubeconfig_path"]),
+		}(in["k_8s_kubeconfig_path"]),
 		KeepBPFTemplates: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["keep_bpf_templates"]),
@@ -273,7 +274,7 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["disable_masquerade"]),
 		Nat46Range: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["nat_46range"]),
+		}(in["nat46_range"]),
 		Pprof: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["pprof"]),
@@ -303,10 +304,10 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["tunnel"]),
 		EnableIpv6: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["enable_ipv_6"]),
+		}(in["enable_ipv6"]),
 		EnableIpv4: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["enable_ipv_4"]),
+		}(in["enable_ipv4"]),
 		MonitorAggregation: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["monitor_aggregation"]),
@@ -343,6 +344,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		AutoDirectNodeRoutes: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["auto_direct_node_routes"]),
+		EnableHostReachableServices: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["enable_host_reachable_services"]),
 		EnableNodePort: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_node_port"]),
@@ -423,7 +427,7 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["allow_localhost"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.AllowLocalhost)
-	out["auto_ipv_6node_routes"] = func(in bool) interface{} {
+	out["auto_ipv6_node_routes"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.AutoIpv6NodeRoutes)
 	out["bpf_root"] = func(in string) interface{} {
@@ -468,10 +472,10 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["disable_conntrack"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableConntrack)
-	out["disable_ipv_4"] = func(in bool) interface{} {
+	out["disable_ipv4"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableIpv4)
-	out["disable_k8s_services"] = func(in bool) interface{} {
+	out["disable_k_8s_services"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableK8sServices)
 	out["enable_policy"] = func(in string) interface{} {
@@ -489,34 +493,34 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["envoy_log"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EnvoyLog)
-	out["ipv_4cluster_cidr_mask_size"] = func(in int) interface{} {
+	out["ipv4_cluster_cidr_mask_size"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Ipv4ClusterCIDRMaskSize)
-	out["ipv_4node"] = func(in string) interface{} {
+	out["ipv4_node"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv4Node)
-	out["ipv_4range"] = func(in string) interface{} {
+	out["ipv4_range"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv4Range)
-	out["ipv_4service_range"] = func(in string) interface{} {
+	out["ipv4_service_range"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv4ServiceRange)
-	out["ipv_6cluster_alloc_cidr"] = func(in string) interface{} {
+	out["ipv6_cluster_alloc_cidr"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv6ClusterAllocCidr)
-	out["ipv_6node"] = func(in string) interface{} {
+	out["ipv6_node"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv6Node)
-	out["ipv_6range"] = func(in string) interface{} {
+	out["ipv6_range"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv6Range)
-	out["ipv_6service_range"] = func(in string) interface{} {
+	out["ipv6_service_range"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Ipv6ServiceRange)
-	out["k8s_api_server"] = func(in string) interface{} {
+	out["k_8s_api_server"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.K8sAPIServer)
-	out["k8s_kubeconfig_path"] = func(in string) interface{} {
+	out["k_8s_kubeconfig_path"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.K8sKubeconfigPath)
 	out["keep_bpf_templates"] = func(in bool) interface{} {
@@ -576,7 +580,7 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["disable_masquerade"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableMasquerade)
-	out["nat_46range"] = func(in string) interface{} {
+	out["nat46_range"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Nat46Range)
 	out["pprof"] = func(in bool) interface{} {
@@ -606,10 +610,10 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["tunnel"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Tunnel)
-	out["enable_ipv_6"] = func(in bool) interface{} {
+	out["enable_ipv6"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnableIpv6)
-	out["enable_ipv_4"] = func(in bool) interface{} {
+	out["enable_ipv4"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnableIpv4)
 	out["monitor_aggregation"] = func(in string) interface{} {
@@ -648,6 +652,9 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["auto_direct_node_routes"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.AutoDirectNodeRoutes)
+	out["enable_host_reachable_services"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableHostReachableServices)
 	out["enable_node_port"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnableNodePort)

@@ -44,7 +44,7 @@ The following arguments are supported:
 - `ssh_key_name` - (Computed) - String - SSHKeyName specifies a preexisting SSH key to use.
 - `kubernetes_api_access` - (Computed) - List(String) - KubernetesAPIAccess is a list of the CIDRs that can access the Kubernetes API endpoint (master HTTPS).
 - `isolate_masters` - (Computed) - Bool - IsolateMasters determines whether we should lock down masters so that they are not on the pod network.<br />true is the kube-up behaviour, but it is very surprising: it means that daemonsets only work on the master<br />if they have hostNetwork=true.<br />false is now the default, and it will:<br /> * give the master a normal PodCIDR<br /> * run kube-proxy on the master<br /> * enable debugging handlers on the master, so kubectl logs works.
-- `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />Valid values:<br />  'external' do not apply updates automatically - they are applied manually or by an external system<br />  missing: default policy (currently OS security upgrades that do not require a reboot).
+- `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
 - `external_policies` - (Computed) - Map(List(String)) - ExternalPolicies allows the insertion of pre-existing managed policies on IG Roles.
 - `additional_policies` - (Computed) - Map(String) - Additional policies to add for roles.
 - `file_assets` - (Computed) - List([file_asset_spec](#file_asset_spec)) - A collection of files assets for deployed cluster wide.
@@ -61,8 +61,11 @@ The following arguments are supported:
 - `master_kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec)
 - `cloud_config` - (Computed) - [cloud_configuration](#cloud_configuration)
 - `external_dns` - (Computed) - [external_dns_config](#external_dns_config)
-- `node_termination_handler` - (Computed) - [node_termination_handler_config](#node_termination_handler_config) - NodeTerminationHandlerConfig determines the cluster autoscaler configuration.
-- `metrics_server` - (Computed) - [metrics_server_config](#metrics_server_config) - MetricsServerConfig determines the metrics server configuration.
+- `ntp` - (Computed) - [ntp_config](#ntp_config)
+- `node_termination_handler` - (Computed) - [node_termination_handler_config](#node_termination_handler_config) - NodeTerminationHandler determines the cluster autoscaler configuration.
+- `metrics_server` - (Computed) - [metrics_server_config](#metrics_server_config) - MetricsServer determines the metrics server configuration.
+- `cert_manager` - (Computed) - [cert_manager_config](#cert_manager_config) - CertManager determines the metrics server configuration.
+- `aws_load_balancer_controller` - (Computed) - [aws_load_balancer_controller_config](#aws_load_balancer_controller_config) - AWSLoadbalancerControllerConfig determines the AWS LB controller configuration.
 - `networking` - (Computed) - [networking_spec](#networking_spec) - Networking configuration.
 - `api` - (Computed) - [access_spec](#access_spec) - API field controls how the API is exposed outside the cluster.
 - `authentication` - (Computed) - [authentication_spec](#authentication_spec) - Authentication field controls how the cluster is configured for authentication.
@@ -175,7 +178,7 @@ The following arguments are supported:
 - `path` - (Computed) - String - Path is the location this file should reside.
 - `roles` - (Computed) - List(String) - Roles is a list of roles the file asset should be applied, defaults to all.
 - `content` - (Computed) - String - Content is the contents of the file.
-- `is_base_64` - (Computed) - Bool - IsBase64 indicates the contents is base64 encoded.
+- `is_base64` - (Computed) - Bool - IsBase64 indicates the contents is base64 encoded.
 
 ### etcd_cluster_spec
 
@@ -186,11 +189,11 @@ EtcdClusterSpec is the etcd cluster specification.
 The following arguments are supported:
 
 - `name` - (Computed) - String - Name is the name of the etcd cluster (main, events etc).
-- `provider` - (Computed) - String - Provider is the provider used to run etcd: standalone, manager.<br />We default to manager for kubernetes 1.11 or if the manager is configured; otherwise standalone.
+- `provider` - (Computed) - String - Provider is the provider used to run etcd: Manager, Legacy.<br />Defaults to Manager.
 - `member` - (Computed) - List([etcd_member_spec](#etcd_member_spec)) - Members stores the configurations for each member of the cluster (including the data volume).
 - `enable_etcd_tls` - (Computed) - Bool - EnableEtcdTLS indicates the etcd service should use TLS between peers and clients.
 - `enable_tls_auth` - (Computed) - Bool - EnableTLSAuth indicates client and peer TLS auth should be enforced.
-- `version` - (Computed) - String - Version is the version of etcd to run i.e. 2.1.2, 3.0.17 etcd.
+- `version` - (Computed) - String - Version is the version of etcd to run.
 - `leader_election_timeout` - (Computed) - Duration - LeaderElectionTimeout is the time (in milliseconds) for an etcd leader election timeout.
 - `heartbeat_interval` - (Computed) - Duration - HeartbeatInterval is the time (in milliseconds) for an etcd heartbeat interval.
 - `image` - (Computed) - String - Image is the etcd docker image to use. Setting this will ignore the Version specified.
@@ -237,6 +240,7 @@ The following arguments are supported:
 
 - `image` - (Computed) - String - Image is the etcd manager image to use.
 - `env` - (Computed) - List([env_var](#env_var)) - Env allows users to pass in env variables to the etcd-manager container.<br />Variables starting with ETCD_ will be further passed down to the etcd process.<br />This allows etcd setting to be overwriten. No config validation is done.<br />A list of etcd config ENV vars can be found at https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/configuration.md.
+- `discovery_poll_interval` - (Computed) - String - DiscoveryPollInterval which is used for discovering other cluster members. The default is 60 seconds.
 - `log_level` - (Computed) - Int - LogLevel allows the klog library verbose log level to be set for etcd-manager. The default is 6.<br />https://github.com/google/glog#verbose-logging.
 
 ### env_var
@@ -274,10 +278,10 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `hash_amd_64` - (Computed) - String - HashAmd64 overrides the hash for the AMD64 package.
-- `hash_arm_64` - (Computed) - String - HashArm64 overrides the hash for the ARM64 package.
-- `url_amd_64` - (Computed) - String - UrlAmd64 overrides the URL for the AMD64 package.
-- `url_arm_64` - (Computed) - String - UrlArm64 overrides the URL for the ARM64 package.
+- `hash_amd64` - (Computed) - String - HashAmd64 overrides the hash for the AMD64 package.
+- `hash_arm64` - (Computed) - String - HashArm64 overrides the hash for the ARM64 package.
+- `url_amd64` - (Computed) - String - UrlAmd64 overrides the URL for the AMD64 package.
+- `url_arm64` - (Computed) - String - UrlArm64 overrides the URL for the ARM64 package.
 
 ### docker_config
 
@@ -329,6 +333,7 @@ The following arguments are supported:
 - `cache_max_size` - (Computed) - Int - CacheMaxSize is the maximum entries to keep in dnsmasq.
 - `cache_max_concurrent` - (Computed) - Int - CacheMaxConcurrent is the maximum number of concurrent queries for dnsmasq.
 - `core_dns_image` - (Computed) - String - CoreDNSImage is used to override the default image used for CoreDNS.
+- `cpa_image` - (Computed) - String - CPAImage is used to override the default image used for Cluster Proportional Autoscaler.
 - `domain` - (Computed) - String - Domain is the dns domain.
 - `external_core_file` - (Computed) - String - ExternalCoreFile is used to provide a complete CoreDNS CoreFile by the user - ignores other provided flags which modify the CoreFile.
 - `image` - (Computed) - String - Image is the name of the docker image to run - @deprecated as this is now in the addon.
@@ -352,6 +357,7 @@ The following arguments are supported:
 
 - `enabled` - (Computed) - Bool - Enabled activates the node-local-dns addon.
 - `local_ip` - (Computed) - String - Local listen IP address. It can be any IP in the 169.254.20.0/16 space or any other IP address that can be guaranteed to not collide with any existing IP.
+- `forward_to_kube_dns` - (Computed) - Bool - If enabled, nodelocal dns will use kubedns as a default upstream.
 - `memory_request` - (Computed) - Quantity - MemoryRequest specifies the memory requests of each node-local-dns container in the daemonset. Default 5Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest specifies the cpu requests of each node-local-dns container in the daemonset. Default 25m.
 
@@ -444,7 +450,7 @@ The following arguments are supported:
 - `feature_gates` - (Computed) - Map(String) - FeatureGates is set of key=value pairs that describe feature gates for alpha/experimental features.
 - `max_requests_inflight` - (Computed) - Int - MaxRequestsInflight The maximum number of non-mutating requests in flight at a given time.
 - `max_mutating_requests_inflight` - (Computed) - Int - MaxMutatingRequestsInflight The maximum number of mutating requests in flight at a given time. Defaults to 200.
-- `http_2max_streams_per_connection` - (Computed) - Int - HTTP2MaxStreamsPerConnection sets the limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
+- `http2_max_streams_per_connection` - (Computed) - Int - HTTP2MaxStreamsPerConnection sets the limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
 - `etcd_quorum_read` - (Computed) - Bool - EtcdQuorumRead configures the etcd-quorum-read flag, which forces consistent reads from etcd.
 - `request_timeout` - (Computed) - Duration - RequestTimeout configures the duration a handler must keep a request open before timing it out. (default 1m0s).
 - `min_request_timeout` - (Computed) - Int - MinRequestTimeout configures the minimum number of seconds a handler must keep a request open before timing it out.<br />Currently only honored by the watch request handler.
@@ -520,6 +526,7 @@ The following arguments are supported:
 - `authentication_kubeconfig` - (Computed) - String - AuthenticationKubeconfig is the path to an Authentication Kubeconfig.
 - `authorization_kubeconfig` - (Computed) - String - AuthorizationKubeconfig is the path to an Authorization Kubeconfig.
 - `authorization_always_allow_paths` - (Computed) - List(String) - AuthorizationAlwaysAllowPaths is the list of HTTP paths to skip during authorization.
+- `external_cloud_volume_plugin` - (Computed) - String - ExternalCloudVolumePlugin is a fallback mechanism that allows a legacy, in-tree cloudprovider to be used for volume plugins<br />even when an external cloud controller manager is being used.  This can be used instead of installing CSI.  The value should<br />be the same as is used for the --cloud-provider flag, i.e. "aws".
 - `enable_profiling` - (Computed) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
 
 ### leader_election_configuration
@@ -646,11 +653,11 @@ The following arguments are supported:
 - `read_only_port` - (Computed) - Int - ReadOnlyPort is the port used by the kubelet api for read-only access (default 10255).
 - `system_cgroups` - (Computed) - String - SystemCgroups is absolute name of cgroups in which to place<br />all non-kernel processes that are not already in a container. Empty<br />for no container. Rolling back the flag requires a reboot.
 - `cgroup_root` - (Computed) - String - cgroupRoot is the root cgroup to use for pods. This is handled by the container runtime on a best effort basis.
-- `configure_cbr_00` - (Computed) - Bool - configureCBR0 enables the kubelet to configure cbr0 based on Node.Spec.PodCIDR.
+- `configure_cbr0` - (Computed) - Bool - configureCBR0 enables the kubelet to configure cbr0 based on Node.Spec.PodCIDR.
 - `hairpin_mode` - (Computed) - String - How should the kubelet configure the container bridge for hairpin packets.<br />Setting this flag allows endpoints in a Service to loadbalance back to<br />themselves if they should try to access their own Service. Values:<br />  "promiscuous-bridge": make the container bridge promiscuous.<br />  "hairpin-veth":       set the hairpin flag on container veth interfaces.<br />  "none":               do nothing.<br />Setting --configure-cbr0 to false implies that to achieve hairpin NAT<br />one must set --hairpin-mode=veth-flag, because bridge assumes the<br />existence of a container bridge named cbr0.
 - `babysit_daemons` - (Computed) - Bool - The node has babysitter process monitoring docker and kubelet. Removed as of 1.7.
 - `max_pods` - (Computed) - Int - MaxPods is the number of pods that can run on this Kubelet.
-- `nvidia_gp_uss` - (Computed) - Int - NvidiaGPUs is the number of NVIDIA GPU devices on this node.
+- `nvidia_gp_us` - (Computed) - Int - NvidiaGPUs is the number of NVIDIA GPU devices on this node.
 - `pod_cidr` - (Computed) - String - PodCIDR is the CIDR to use for pod IP addresses, only used in standalone mode.<br />In cluster mode, this is obtained from the master.
 - `resolver_config` - (Computed) - String - ResolverConfig is the resolver configuration file used as the basis for the container DNS resolution configuration."), [].
 - `reconcile_cidr` - (Computed) - Bool - ReconcileCIDR is Reconcile node CIDR with the CIDR specified by the<br />API server. No-op if register-node or configure-cbr0 is false.
@@ -699,6 +706,8 @@ The following arguments are supported:
 - `housekeeping_interval` - (Computed) - Duration - HousekeepingInterval allows to specify interval between container housekeepings.
 - `event_qps` - (Computed) - Int - EventQPS if > 0, limit event creations per second to this value.  If 0, unlimited.
 - `event_burst` - (Computed) - Int - EventBurst temporarily allows event records to burst to this number, while still not exceeding EventQPS. Only used if EventQPS > 0.
+- `container_log_max_size` - (Computed) - String - ContainerLogMaxSize is the maximum size (e.g. 10Mi) of container log file before it is rotated.
+- `container_log_max_files` - (Computed) - Int - ContainerLogMaxFiles is the maximum number of container log files that can be present for a container. The number must be >= 2.
 - `enable_cadvisor_json_endpoints` - (Computed) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 
 ### cloud_configuration
@@ -709,6 +718,7 @@ CloudConfiguration defines the cloud provider configuration.
 
 The following arguments are supported:
 
+- `manage_storage_classes` - (Computed) - Bool - ManageStorageClasses specifies whether kOps should create and maintain a set of<br />StorageClasses, one of which it nominates as the default class for the cluster.
 - `multizone` - (Computed) - Bool - GCE cloud-config options.
 - `node_tags` - (Computed) - String
 - `node_instance_prefix` - (Computed) - String
@@ -725,6 +735,8 @@ The following arguments are supported:
 - `spotinst_product` - (Computed) - String - Spotinst cloud-config specs.
 - `spotinst_orientation` - (Computed) - String
 - `openstack` - (Computed) - [openstack_configuration](#openstack_configuration) - Openstack cloud-config options.
+- `azure` - (Computed) - [azure_configuration](#azure_configuration) - Azure cloud-config options.
+- `awsebscsi_driver` - (Computed) - [awsebscsi_driver](#awsebscsi_driver) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 
 ### openstack_configuration
 
@@ -739,6 +751,7 @@ The following arguments are supported:
 - `router` - (Computed) - [openstack_router](#openstack_router)
 - `block_storage` - (Computed) - [openstack_block_storage_config](#openstack_block_storage_config)
 - `insecure_skip_verify` - (Computed) - Bool
+- `network` - (Computed) - [openstack_network](#openstack_network)
 
 ### openstack_loadbalancer_config
 
@@ -780,6 +793,7 @@ The following arguments are supported:
 - `external_network` - (Computed) - String
 - `dns_servers` - (Computed) - String
 - `external_subnet` - (Computed) - String
+- `availability_zone_hints` - (Computed) - List(String)
 
 ### openstack_block_storage_config
 
@@ -791,6 +805,44 @@ The following arguments are supported:
 - `ignore_az` - (Computed) - Bool
 - `override_az` - (Computed) - String
 - `create_storage_class` - (Computed) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
+- `cs_iplugin_image` - (Computed) - String
+- `csi_topology_support` - (Computed) - Bool
+
+### openstack_network
+
+OpenstackNetwork defines the config for a network.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `availability_zone_hints` - (Computed) - List(String)
+
+### azure_configuration
+
+AzureConfiguration defines Azure specific cluster configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `subscription_id` - (Computed) - String - SubscriptionID specifies the subscription used for the cluster installation.
+- `tenant_id` - (Computed) - String - TenantID is the ID of the tenant that the cluster is deployed in.
+- `resource_group_name` - (Computed) - String - ResourceGroupName specifies the name of the resource group<br />where the cluster is built.<br />If this is empty, kops will create a new resource group<br />whose name is same as the cluster name. If this is not<br />empty, kops will not create a new resource group, and<br />it will just reuse the existing resource group of the name.<br />This follows the model that kops takes for AWS VPC.
+- `route_table_name` - (Computed) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
+- `admin_user` - (Computed) - String - AdminUser specifies the admin user of VMs.
+
+### awsebscsi_driver
+
+AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the AWS EBS CSI driver<br />Default: false.
+- `version` - (Computed) - String - Version is the container image tag used.<br />Default: The latest stable release which is compatible with your Kubernetes version.
+- `volume_attach_limit` - (Computed) - Int - VolumeAttachLimit is the maximum number of volumes attachable per node.<br />If specified, the limit applies to all nodes.<br />If not specified, the value is approximated from the instance type.<br />Default: -.
 
 ### external_dns_config
 
@@ -803,6 +855,16 @@ The following arguments are supported:
 - `disable` - (Computed) - Bool - Disable indicates we do not wish to run the dns-controller addon.
 - `watch_ingress` - (Computed) - Bool - WatchIngress indicates you want the dns-controller to watch and create dns entries for ingress resources.
 - `watch_namespace` - (Computed) - String - WatchNamespace is namespace to watch, defaults to all (use to control whom can creates dns entries).
+
+### ntp_config
+
+NTPConfig is the configuration for NTP.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `managed` - (Computed) - Bool - Managed controls if the NTP configuration is managed by kOps.<br />The NTP configuration task is skipped if this is set to false.
 
 ### node_termination_handler_config
 
@@ -827,6 +889,30 @@ The following arguments are supported:
 
 - `enabled` - (Computed) - Bool - Enabled enables the metrics server.<br />Default: false.
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
+- `insecure` - (Computed) - Bool - Insecure determines if API server will validate metrics server TLS cert.<br />Default: true.
+
+### cert_manager_config
+
+CertManagerConfig determines the cert manager configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the cert manager.<br />Default: false.
+- `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
+- `default_issuer` - (Computed) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
+
+### aws_load_balancer_controller_config
+
+AWSLoadBalancerControllerConfig determines the AWS LB controller configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the loadbalancer controller.<br />Default: false.
+- `version` - (Computed) - String - Version is the container image tag used.
 
 ### networking_spec
 
@@ -945,8 +1031,8 @@ The following arguments are supported:
 - `cross_subnet` - (Computed) - Bool - CrossSubnet enables Calico's cross-subnet mode when set to true.
 - `encapsulation_mode` - (Computed) - String - EncapsulationMode specifies the network packet encapsulation protocol for Calico to use,<br />employing such encapsulation at the necessary scope per the related CrossSubnet field. In<br />"ipip" mode, Calico will use IP-in-IP encapsulation as needed. In "vxlan" mode, Calico will<br />encapsulate packets as needed using the VXLAN scheme.<br />Options: ipip (default) or vxlan.
 - `ip_ip_mode` - (Computed) - String - IPIPMode is the encapsulation mode to use for the default Calico IPv4 pool created at start<br />up, determining when to use IP-in-IP encapsulation, conveyed to the "calico-node" daemon<br />container via the CALICO_IPV4POOL_IPIP environment variable.
-- `ipv_4auto_detection_method` - (Computed) - String - IPv4AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
-- `ipv_6auto_detection_method` - (Computed) - String - IPv6AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
+- `ipv4_auto_detection_method` - (Computed) - String - IPv4AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
+- `ipv6_auto_detection_method` - (Computed) - String - IPv6AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
 - `iptables_backend` - (Computed) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
 - `log_severity_screen` - (Computed) - String - LogSeverityScreen lets us set the desired log level. (Default: info).
 - `mtu` - (Computed) - Int - MTU to be set in the cni-network-config for calico.
@@ -954,7 +1040,7 @@ The following arguments are supported:
 - `prometheus_metrics_port` - (Computed) - Int - PrometheusMetricsPort is the TCP port that the experimental Prometheus<br />metrics server should bind to (default: 9091).
 - `prometheus_go_metrics_enabled` - (Computed) - Bool - PrometheusGoMetricsEnabled enables Prometheus Go runtime metrics collection.
 - `prometheus_process_metrics_enabled` - (Computed) - Bool - PrometheusProcessMetricsEnabled enables Prometheus process metrics collection.
-- `major_version` - (Computed) - String - MajorVersion is the version of Calico to use.
+- `major_version` - (Computed) - String - MajorVersion is deprecated as of kOps 1.20 and has no effect.
 - `typha_prometheus_metrics_enabled` - (Computed) - Bool - TyphaPrometheusMetricsEnabled enables Prometheus metrics collection from Typha<br />(default: false).
 - `typha_prometheus_metrics_port` - (Computed) - Int - TyphaPrometheusMetricsPort is the TCP port the typha Prometheus metrics server<br />should bind to (default: 9093).
 - `typha_replicas` - (Computed) - Int - TyphaReplicas is the number of replicas of Typha to deploy.
@@ -1026,7 +1112,7 @@ The following arguments are supported:
 - `agent_labels` - (Computed) - List(String) - AgentLabels is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `agent_prometheus_port` - (Computed) - Int - AgentPrometheusPort is the port to listen to for Prometheus metrics.<br />Defaults to 9090.
 - `allow_localhost` - (Computed) - String - AllowLocalhost is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `auto_ipv_6node_routes` - (Computed) - Bool - AutoIpv6NodeRoutes is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `auto_ipv6_node_routes` - (Computed) - Bool - AutoIpv6NodeRoutes is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `bpf_root` - (Computed) - String - BPFRoot is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `container_runtime` - (Computed) - List(String) - ContainerRuntime is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `container_runtime_endpoint` - (Computed) - Map(String) - ContainerRuntimeEndpoint is not implemented and may be removed in the future.<br />Setting this has no effect.
@@ -1034,23 +1120,23 @@ The following arguments are supported:
 - `debug_verbose` - (Computed) - List(String) - DebugVerbose is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `device` - (Computed) - String - Device is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `disable_conntrack` - (Computed) - Bool - DisableConntrack is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `disable_ipv_4` - (Computed) - Bool - DisableIpv4 is deprecated: Use EnableIpv4 instead.<br />Setting this flag has no effect.
-- `disable_k8s_services` - (Computed) - Bool - DisableK8sServices is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `disable_ipv4` - (Computed) - Bool - DisableIpv4 is deprecated: Use EnableIpv4 instead.<br />Setting this flag has no effect.
+- `disable_k_8s_services` - (Computed) - Bool - DisableK8sServices is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `enable_policy` - (Computed) - String - EnablePolicy specifies the policy enforcement mode.<br />"default": Follows Kubernetes policy enforcement.<br />"always": Cilium restricts all traffic if no policy is in place.<br />"never": Cilium allows all traffic regardless of policies in place.<br />If unspecified, "default" policy mode will be used.
 - `enable_tracing` - (Computed) - Bool - EnableTracing is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the Cilium "/metrics" endpoint for both the agent and the operator.
 - `enable_encryption` - (Computed) - Bool - EnableEncryption enables Cilium Encryption.<br />Default: false.
 - `envoy_log` - (Computed) - String - EnvoyLog is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_4cluster_cidr_mask_size` - (Computed) - Int - Ipv4ClusterCIDRMaskSize is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_4node` - (Computed) - String - Ipv4Node is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_4range` - (Computed) - String - Ipv4Range is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_4service_range` - (Computed) - String - Ipv4ServiceRange is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_6cluster_alloc_cidr` - (Computed) - String - Ipv6ClusterAllocCidr is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_6node` - (Computed) - String - Ipv6Node is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_6range` - (Computed) - String - Ipv6Range is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `ipv_6service_range` - (Computed) - String - Ipv6ServiceRange is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `k8s_api_server` - (Computed) - String - K8sAPIServer is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `k8s_kubeconfig_path` - (Computed) - String - K8sKubeconfigPath is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv4_cluster_cidr_mask_size` - (Computed) - Int - Ipv4ClusterCIDRMaskSize is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv4_node` - (Computed) - String - Ipv4Node is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv4_range` - (Computed) - String - Ipv4Range is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv4_service_range` - (Computed) - String - Ipv4ServiceRange is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv6_cluster_alloc_cidr` - (Computed) - String - Ipv6ClusterAllocCidr is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv6_node` - (Computed) - String - Ipv6Node is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv6_range` - (Computed) - String - Ipv6Range is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `ipv6_service_range` - (Computed) - String - Ipv6ServiceRange is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `k_8s_api_server` - (Computed) - String - K8sAPIServer is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `k_8s_kubeconfig_path` - (Computed) - String - K8sKubeconfigPath is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `keep_bpf_templates` - (Computed) - Bool - KeepBPFTemplates is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `keep_config` - (Computed) - Bool - KeepConfig is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `label_prefix_file` - (Computed) - String - LabelPrefixFile is not implemented and may be removed in the future.<br />Setting this has currently no effect.
@@ -1063,7 +1149,7 @@ The following arguments are supported:
 - `logstash_agent` - (Computed) - String - LogstashAgent is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `logstash_probe_timer` - (Computed) - Int - LogstashProbeTimer is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `disable_masquerade` - (Computed) - Bool - DisableMasquerade disables masquerading traffic to external destinations behind the node IP.
-- `nat_46range` - (Computed) - String - Nat6Range is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `nat46_range` - (Computed) - String - Nat6Range is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `pprof` - (Computed) - Bool - Pprof is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `prefilter_device` - (Computed) - String - PrefilterDevice is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `prometheus_serve_addr` - (Computed) - String - PrometheusServeAddr is deprecated. Use EnablePrometheusMetrics and AgentPrometheusPort instead.<br />Setting this has no effect.
@@ -1073,8 +1159,8 @@ The following arguments are supported:
 - `state_dir` - (Computed) - String - StateDir is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `trace_payload_len` - (Computed) - Int - TracePayloadLen is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `tunnel` - (Computed) - String - Tunnel specifies the Cilium tunnelling mode. Possible values are "vxlan", "geneve", or "disabled".<br />Default: vxlan.
-- `enable_ipv_6` - (Computed) - Bool - EnableIpv6 is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `enable_ipv_4` - (Computed) - Bool - EnableIpv4 is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `enable_ipv6` - (Computed) - Bool - EnableIpv6 is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `enable_ipv4` - (Computed) - Bool - EnableIpv4 is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `monitor_aggregation` - (Computed) - String - MonitorAggregation sets the level of packet monitoring. Possible values are "low", "medium", or "maximum".<br />Default: medium.
 - `bpfct_global_tcp_max` - (Computed) - Int - BPFCTGlobalTCPMax is the maximum number of entries in the TCP CT table.<br />Default: 524288.
 - `bpfct_global_any_max` - (Computed) - Int - BPFCTGlobalAnyMax is the maximum number of entries in the non-TCP CT table.<br />Default: 262144.
@@ -1087,6 +1173,7 @@ The following arguments are supported:
 - `ipam` - (Computed) - String - Ipam specifies the IP address allocation mode to use.<br />Possible values are "crd" and "eni".<br />"eni" will use AWS native networking for pods. Eni requires masquerade to be set to false.<br />"crd" will use CRDs for controlling IP address management.<br />"hostscope" will use hostscope IPAM mode.<br />"kubernetes" will use addersing based on node pod CIDR.<br />Empty value will use hostscope for cilum <= 1.7 and "kubernetes" otherwise.
 - `ip_tables_rules_noinstall` - (Computed) - Bool - IPTablesRulesNoinstall disables installing the base IPTables rules used for masquerading and kube-proxy.<br />Default: false.
 - `auto_direct_node_routes` - (Computed) - Bool - AutoDirectNodeRoutes adds automatic L2 routing between nodes.<br />Default: false.
+- `enable_host_reachable_services` - (Computed) - Bool - EnableHostReachableServices configures Cilium to enable services to be<br />reached from the host namespace in addition to pod namespaces.<br />https://docs.cilium.io/en/v1.9/gettingstarted/host-services/<br />Default: false.
 - `enable_node_port` - (Computed) - Bool - EnableNodePort replaces kube-proxy with Cilium's BPF implementation.<br />Requires spec.kubeProxy.enabled be set to false.<br />Default: false.
 - `etcd_managed` - (Computed) - Bool - EtcdManagd installs an additional etcd cluster that is used for Cilium state change.<br />The cluster is operated by cilium-etcd-operator.<br />Default: false.
 - `enable_remote_node_identity` - (Computed) - Bool - EnableRemoteNodeIdentity enables the remote-node-identity added in Cilium 1.7.0.<br />Default: true.
@@ -1158,6 +1245,19 @@ The following arguments are supported:
 - `ssl_certificate` - (Computed) - String - SSLCertificate allows you to specify the ACM cert to be used the LB.
 - `ssl_policy` - (Computed) - String - SSLPolicy allows you to overwrite the LB listener's Security Policy.
 - `cross_zone_load_balancing` - (Computed) - Bool - CrossZoneLoadBalancing allows you to enable the cross zone load balancing.
+- `subnets` - (Computed) - List([load_balancer_subnet_spec](#load_balancer_subnet_spec)) - Subnets allows you to specify the subnets that must be used for the load balancer.
+
+### load_balancer_subnet_spec
+
+LoadBalancerSubnetSpec provides configuration for subnets used for a load balancer.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `name` - (Computed) - String - Name specifies the name of the cluster subnet.
+- `private_ipv4_address` - (Computed) - String - PrivateIPv4Address specifies the private IPv4 address to use for a NLB.
+- `allocation_id` - (Computed) - String - AllocationID specifies the Elastic IP Allocation ID for use by a NLB.
 
 ### authentication_spec
 
@@ -1311,7 +1411,10 @@ The following arguments are supported:
 - `skip_nodes_with_system_pods` - (Computed) - Bool - SkipNodesWithSystemPods makes cluster autoscaler skip scale-down of nodes with non-DaemonSet pods in the kube-system namespace.<br />Default: true.
 - `skip_nodes_with_local_storage` - (Computed) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
 - `new_pod_scale_up_delay` - (Computed) - String - NewPodScaleUpDelay causes cluster autoscaler to ignore unschedulable pods until they are a certain "age", regardless of the scan-interval<br />Default: 0s.
+- `scale_down_delay_after_add` - (Computed) - String - ScaleDownDelayAfterAdd determines the time after scale up that scale down evaluation resumes<br />Default: 10m0s.
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
+- `memory_request` - (Computed) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
+- `cpu_request` - (Computed) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
 
 
 

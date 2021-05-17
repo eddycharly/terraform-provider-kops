@@ -19,6 +19,7 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"image":                             ComputedString(),
 			"min_size":                          ComputedInt(),
 			"max_size":                          ComputedInt(),
+			"autoscale":                         ComputedBool(),
 			"machine_type":                      ComputedString(),
 			"root_volume_size":                  ComputedInt(),
 			"root_volume_type":                  ComputedString(),
@@ -35,6 +36,7 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"hooks":                             ComputedList(kopsschemas.DataSourceHookSpec()),
 			"max_price":                         ComputedString(),
 			"spot_duration_in_minutes":          ComputedInt(),
+			"cpu_credits":                       ComputedString(),
 			"associate_public_ip":               ComputedBool(),
 			"additional_security_groups":        ComputedList(String()),
 			"cloud_labels":                      ComputedMap(String()),
@@ -56,6 +58,7 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"instance_interruption_behavior":    ComputedString(),
 			"compress_user_data":                ComputedBool(),
 			"instance_metadata":                 ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
+			"update_policy":                     ComputedString(),
 		},
 	}
 }

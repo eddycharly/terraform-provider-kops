@@ -16,10 +16,11 @@ data "kops_instance_group" "ig-0" {
 The following arguments are supported:
 - `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
 - `name` - (Required) - String - Name defines the instance group name.
-- `role` - (Computed) - String - Type determines the role of instances in this group: masters or nodes.
+- `role` - (Computed) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Computed) - Int - MaxSize is the maximum size of the pool.
+- `autoscale` - (Computed) - Bool - Autoscale determines if autoscaling will be enabled for this instance group if cluster autoscaler is enabled.
 - `machine_type` - (Computed) - String - MachineType is the instance class.
 - `root_volume_size` - (Computed) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
 - `root_volume_type` - (Computed) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
@@ -29,25 +30,26 @@ The following arguments are supported:
 - `root_volume_delete_on_termination` - (Computed) - Bool - RootVolumeDeleteOnTermination configures root volume retention policy upon instance termination.<br />The root volume is deleted by default. Cluster deletion does not remove retained root volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
 - `root_volume_encryption` - (Computed) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
 - `root_volume_encryption_key` - (Computed) - String - RootVolumeEncryptionKey provides the key identifier for root volume encryption.
-- `volumes` - (Computed) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this InstanceGroup.
+- `volumes` - (Computed) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this instance group.
 - `volume_mounts` - (Computed) - List([volume_mount_spec](#volume_mount_spec)) - VolumeMounts a collection of volume mounts.
 - `subnets` - (Computed) - List(String) - Subnets is the names of the Subnets (as specified in the Cluster) where machines in this instance group should be placed.
 - `zones` - (Computed) - List(String) - Zones is the names of the Zones where machines in this instance group should be placed<br />This is needed for regional subnets (e.g. GCE), to restrict placement to particular zones.
-- `hooks` - (Computed) - List([hook_spec](#hook_spec)) - Hooks is a list of hooks for this instanceGroup, note: these can override the cluster wide ones if required.
+- `hooks` - (Computed) - List([hook_spec](#hook_spec)) - Hooks is a list of hooks for this instance group, note: these can override the cluster wide ones if required.
 - `max_price` - (Computed) - String - MaxPrice indicates this is a spot-pricing group, with the specified value as our max-price bid.
 - `spot_duration_in_minutes` - (Computed) - Int - SpotDurationInMinutes reserves a spot block for the period specified.
+- `cpu_credits` - (Computed) - String - CPUCredits is the credit option for CPU Usage on burstable instance types (AWS only).
 - `associate_public_ip` - (Computed) - Bool - AssociatePublicIP is true if we want instances to have a public IP.
 - `additional_security_groups` - (Computed) - List(String) - AdditionalSecurityGroups attaches additional security groups (e.g. i-123456).
 - `cloud_labels` - (Computed) - Map(String) - CloudLabels indicates the labels for instances in this group, at the AWS level.
-- `node_labels` - (Computed) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this group.
+- `node_labels` - (Computed) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this instance group.
 - `file_assets` - (Computed) - List([file_asset_spec](#file_asset_spec)) - FileAssets is a collection of file assets for this instance group.
-- `tenancy` - (Computed) - String - Describes the tenancy of the instance group. Can be either default or dedicated. Currently only applies to AWS.
+- `tenancy` - (Computed) - String - Describes the tenancy of this instance group. Can be either default or dedicated. Currently only applies to AWS.
 - `kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet overrides kubelet config from the ClusterSpec.
-- `taints` - (Computed) - List(String) - Taints indicates the kubernetes taints for nodes in this group.
+- `taints` - (Computed) - List(String) - Taints indicates the kubernetes taints for nodes in this instance group.
 - `mixed_instances_policy` - (Computed) - [mixed_instances_policy_spec](#mixed_instances_policy_spec) - MixedInstancesPolicy defined a optional backing of an AWS ASG by a EC2 Fleet (AWS Only).
 - `additional_user_data` - (Computed) - List([user_data](#user_data)) - AdditionalUserData is any additional user-data to be passed to the host.
 - `suspend_processes` - (Computed) - List(String) - SuspendProcesses disables the listed Scaling Policies.
-- `external_load_balancers` - (Computed) - List([load_balancer](#load_balancer)) - ExternalLoadBalancers define loadbalancers that should be attached to the instancegroup.
+- `external_load_balancers` - (Computed) - List([load_balancer](#load_balancer)) - ExternalLoadBalancers define loadbalancers that should be attached to this instance group.
 - `detailed_instance_monitoring` - (Computed) - Bool - DetailedInstanceMonitoring defines if detailed-monitoring is enabled (AWS only).
 - `iam` - (Computed) - [iam_profile_spec](#iam_profile_spec) - IAMProfileSpec defines the identity of the cloud group IAM profile (AWS only).
 - `security_group_override` - (Computed) - String - SecurityGroupOverride overrides the default security group created by Kops for this IG (AWS only).
@@ -57,6 +59,7 @@ The following arguments are supported:
 - `instance_interruption_behavior` - (Computed) - String - InstanceInterruptionBehavior defines if a spot instance should be terminated, hibernated,<br />or stopped after interruption.
 - `compress_user_data` - (Computed) - Bool - CompressUserData compresses parts of the user data to save space.
 - `instance_metadata` - (Computed) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
+- `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
 
 ## Nested resources
 
@@ -132,7 +135,7 @@ The following arguments are supported:
 - `path` - (Computed) - String - Path is the location this file should reside.
 - `roles` - (Computed) - List(String) - Roles is a list of roles the file asset should be applied, defaults to all.
 - `content` - (Computed) - String - Content is the contents of the file.
-- `is_base_64` - (Computed) - Bool - IsBase64 indicates the contents is base64 encoded.
+- `is_base64` - (Computed) - Bool - IsBase64 indicates the contents is base64 encoded.
 
 ### kubelet_config_spec
 
@@ -171,11 +174,11 @@ The following arguments are supported:
 - `read_only_port` - (Computed) - Int - ReadOnlyPort is the port used by the kubelet api for read-only access (default 10255).
 - `system_cgroups` - (Computed) - String - SystemCgroups is absolute name of cgroups in which to place<br />all non-kernel processes that are not already in a container. Empty<br />for no container. Rolling back the flag requires a reboot.
 - `cgroup_root` - (Computed) - String - cgroupRoot is the root cgroup to use for pods. This is handled by the container runtime on a best effort basis.
-- `configure_cbr_00` - (Computed) - Bool - configureCBR0 enables the kubelet to configure cbr0 based on Node.Spec.PodCIDR.
+- `configure_cbr0` - (Computed) - Bool - configureCBR0 enables the kubelet to configure cbr0 based on Node.Spec.PodCIDR.
 - `hairpin_mode` - (Computed) - String - How should the kubelet configure the container bridge for hairpin packets.<br />Setting this flag allows endpoints in a Service to loadbalance back to<br />themselves if they should try to access their own Service. Values:<br />  "promiscuous-bridge": make the container bridge promiscuous.<br />  "hairpin-veth":       set the hairpin flag on container veth interfaces.<br />  "none":               do nothing.<br />Setting --configure-cbr0 to false implies that to achieve hairpin NAT<br />one must set --hairpin-mode=veth-flag, because bridge assumes the<br />existence of a container bridge named cbr0.
 - `babysit_daemons` - (Computed) - Bool - The node has babysitter process monitoring docker and kubelet. Removed as of 1.7.
 - `max_pods` - (Computed) - Int - MaxPods is the number of pods that can run on this Kubelet.
-- `nvidia_gp_uss` - (Computed) - Int - NvidiaGPUs is the number of NVIDIA GPU devices on this node.
+- `nvidia_gp_us` - (Computed) - Int - NvidiaGPUs is the number of NVIDIA GPU devices on this node.
 - `pod_cidr` - (Computed) - String - PodCIDR is the CIDR to use for pod IP addresses, only used in standalone mode.<br />In cluster mode, this is obtained from the master.
 - `resolver_config` - (Computed) - String - ResolverConfig is the resolver configuration file used as the basis for the container DNS resolution configuration."), [].
 - `reconcile_cidr` - (Computed) - Bool - ReconcileCIDR is Reconcile node CIDR with the CIDR specified by the<br />API server. No-op if register-node or configure-cbr0 is false.
@@ -224,6 +227,8 @@ The following arguments are supported:
 - `housekeeping_interval` - (Computed) - Duration - HousekeepingInterval allows to specify interval between container housekeepings.
 - `event_qps` - (Computed) - Int - EventQPS if > 0, limit event creations per second to this value.  If 0, unlimited.
 - `event_burst` - (Computed) - Int - EventBurst temporarily allows event records to burst to this number, while still not exceeding EventQPS. Only used if EventQPS > 0.
+- `container_log_max_size` - (Computed) - String - ContainerLogMaxSize is the maximum size (e.g. 10Mi) of container log file before it is rotated.
+- `container_log_max_files` - (Computed) - Int - ContainerLogMaxFiles is the maximum number of container log files that can be present for a container. The number must be >= 2.
 - `enable_cadvisor_json_endpoints` - (Computed) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 
 ### mixed_instances_policy_spec
@@ -255,7 +260,7 @@ The following arguments are supported:
 
 ### load_balancer
 
-LoadBalancers defines a load balancer.
+LoadBalancer defines a load balancer.
 
 #### Argument Reference
 
@@ -286,14 +291,14 @@ The following arguments are supported:
 
 ### instance_metadata_options
 
-InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
+InstanceMetadataOptions defines the EC2 instance metadata service options (AWS Only).
 
 #### Argument Reference
 
 The following arguments are supported:
 
 - `http_put_response_hop_limit` - (Computed) - Int - HTTPPutResponseHopLimit is the desired HTTP PUT response hop limit for instance metadata requests.<br />The larger the number, the further instance metadata requests can travel. The default value is 1.
-- `http_tokens` - (Computed) - String - HTTPTokens is the state of token usage for the instance metadata requests.<br />If the parameter is not specified in the request, the default state is "optional".
+- `http_tokens` - (Computed) - String - HTTPTokens is the state of token usage for the instance metadata requests.<br />If the parameter is not specified in the request, the default state is "required".
 
 
 

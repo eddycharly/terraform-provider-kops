@@ -16,7 +16,7 @@ func DataSourceDNSControllerGossipConfig() *schema.Resource {
 			"protocol":  ComputedString(),
 			"listen":    ComputedString(),
 			"secret":    ComputedString(),
-			"secondary": ComputedStruct(DataSourceDNSControllerGossipConfig()),
+			"secondary": ComputedStruct(DataSourceDNSControllerGossipConfigSecondary()),
 			"seed":      ComputedString(),
 		},
 	}
@@ -75,21 +75,21 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["secret"]),
-		Secondary: func(in interface{}) *kops.DNSControllerGossipConfig {
-			return func(in interface{}) *kops.DNSControllerGossipConfig {
+		Secondary: func(in interface{}) *kops.DNSControllerGossipConfigSecondary {
+			return func(in interface{}) *kops.DNSControllerGossipConfigSecondary {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in kops.DNSControllerGossipConfig) *kops.DNSControllerGossipConfig {
+				return func(in kops.DNSControllerGossipConfigSecondary) *kops.DNSControllerGossipConfigSecondary {
 					return &in
-				}(func(in interface{}) kops.DNSControllerGossipConfig {
+				}(func(in interface{}) kops.DNSControllerGossipConfigSecondary {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.DNSControllerGossipConfig{}
+						return kops.DNSControllerGossipConfigSecondary{}
 					}
-					return (ExpandDataSourceDNSControllerGossipConfig(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceDNSControllerGossipConfigSecondary(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["secondary"]),
@@ -143,14 +143,14 @@ func FlattenDataSourceDNSControllerGossipConfigInto(in kops.DNSControllerGossipC
 			}(*in)
 		}(in)
 	}(in.Secret)
-	out["secondary"] = func(in *kops.DNSControllerGossipConfig) interface{} {
-		return func(in *kops.DNSControllerGossipConfig) interface{} {
+	out["secondary"] = func(in *kops.DNSControllerGossipConfigSecondary) interface{} {
+		return func(in *kops.DNSControllerGossipConfigSecondary) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.DNSControllerGossipConfig) interface{} {
-				return func(in kops.DNSControllerGossipConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceDNSControllerGossipConfig(in)}
+			return func(in kops.DNSControllerGossipConfigSecondary) interface{} {
+				return func(in kops.DNSControllerGossipConfigSecondary) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceDNSControllerGossipConfigSecondary(in)}
 				}(in)
 			}(*in)
 		}(in)

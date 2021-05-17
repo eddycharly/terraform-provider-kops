@@ -11,11 +11,11 @@ var _ = Schema
 func DataSourceFileAssetSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":       ComputedString(),
-			"path":       ComputedString(),
-			"roles":      ComputedList(String()),
-			"content":    ComputedString(),
-			"is_base_64": ComputedBool(),
+			"name":      ComputedString(),
+			"path":      ComputedString(),
+			"roles":     ComputedList(String()),
+			"content":   ComputedString(),
+			"is_base64": ComputedBool(),
 		},
 	}
 }
@@ -45,7 +45,7 @@ func ExpandDataSourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec
 		}(in["content"]),
 		IsBase64: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["is_base_64"]),
+		}(in["is_base64"]),
 	}
 }
 
@@ -68,7 +68,7 @@ func FlattenDataSourceFileAssetSpecInto(in kops.FileAssetSpec, out map[string]in
 	out["content"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Content)
-	out["is_base_64"] = func(in bool) interface{} {
+	out["is_base64"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.IsBase64)
 }

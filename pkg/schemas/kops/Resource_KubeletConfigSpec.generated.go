@@ -43,11 +43,11 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"read_only_port":                         OptionalInt(),
 			"system_cgroups":                         OptionalString(),
 			"cgroup_root":                            OptionalString(),
-			"configure_cbr_00":                       OptionalBool(),
+			"configure_cbr0":                         OptionalBool(),
 			"hairpin_mode":                           OptionalString(),
 			"babysit_daemons":                        OptionalBool(),
 			"max_pods":                               OptionalInt(),
-			"nvidia_gp_uss":                          OptionalInt(),
+			"nvidia_gp_us":                           OptionalInt(),
 			"pod_cidr":                               OptionalString(),
 			"resolver_config":                        OptionalString(),
 			"reconcile_cidr":                         OptionalBool(),
@@ -96,6 +96,8 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"housekeeping_interval":                  OptionalDuration(),
 			"event_qps":                              OptionalInt(),
 			"event_burst":                            OptionalInt(),
+			"container_log_max_size":                 OptionalString(),
+			"container_log_max_files":                OptionalInt(),
 			"enable_cadvisor_json_endpoints":         OptionalBool(),
 		},
 	}
@@ -331,7 +333,7 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-		}(in["configure_cbr_00"]),
+		}(in["configure_cbr0"]),
 		HairpinMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["hairpin_mode"]),
@@ -369,7 +371,7 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 		}(in["max_pods"]),
 		NvidiaGPUs: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
-		}(in["nvidia_gp_uss"]),
+		}(in["nvidia_gp_us"]),
 		PodCIDR: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["pod_cidr"]),
@@ -919,6 +921,25 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["event_burst"]),
+		ContainerLogMaxSize: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["container_log_max_size"]),
+		ContainerLogMaxFiles: func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["container_log_max_files"]),
 		EnableCadvisorJsonEndpoints: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -1095,7 +1116,7 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 	out["cgroup_root"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CgroupRoot)
-	out["configure_cbr_00"] = func(in *bool) interface{} {
+	out["configure_cbr0"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
 				return nil
@@ -1128,7 +1149,7 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.MaxPods)
-	out["nvidia_gp_uss"] = func(in int32) interface{} {
+	out["nvidia_gp_us"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.NvidiaGPUs)
 	out["pod_cidr"] = func(in string) interface{} {
@@ -1518,6 +1539,19 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.EventBurst)
+	out["container_log_max_size"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ContainerLogMaxSize)
+	out["container_log_max_files"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.ContainerLogMaxFiles)
 	out["enable_cadvisor_json_endpoints"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

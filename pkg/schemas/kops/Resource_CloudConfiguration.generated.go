@@ -13,6 +13,7 @@ var _ = Schema
 func ResourceCloudConfiguration() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"manage_storage_classes":         OptionalBool(),
 			"multizone":                      OptionalBool(),
 			"node_tags":                      OptionalString(),
 			"node_instance_prefix":           OptionalString(),
@@ -29,6 +30,8 @@ func ResourceCloudConfiguration() *schema.Resource {
 			"spotinst_product":               OptionalString(),
 			"spotinst_orientation":           OptionalString(),
 			"openstack":                      OptionalStruct(ResourceOpenstackConfiguration()),
+			"azure":                          OptionalStruct(ResourceAzureConfiguration()),
+			"awsebscsi_driver":               OptionalStruct(ResourceAWSEBSCSIDriver()),
 		},
 	}
 }
@@ -38,6 +41,22 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 		panic("expand CloudConfiguration failure, in is nil")
 	}
 	return kops.CloudConfiguration{
+		ManageStorageClasses: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["manage_storage_classes"]),
 		Multizone: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -283,10 +302,56 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 				}(in))
 			}(in)
 		}(in["openstack"]),
+		Azure: func(in interface{}) *kops.AzureConfiguration {
+			return func(in interface{}) *kops.AzureConfiguration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.AzureConfiguration) *kops.AzureConfiguration {
+					return &in
+				}(func(in interface{}) kops.AzureConfiguration {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.AzureConfiguration{}
+					}
+					return (ExpandResourceAzureConfiguration(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["azure"]),
+		AWSEBSCSIDriver: func(in interface{}) *kops.AWSEBSCSIDriver {
+			return func(in interface{}) *kops.AWSEBSCSIDriver {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.AWSEBSCSIDriver) *kops.AWSEBSCSIDriver {
+					return &in
+				}(func(in interface{}) kops.AWSEBSCSIDriver {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.AWSEBSCSIDriver{}
+					}
+					return (ExpandResourceAWSEBSCSIDriver(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["awsebscsi_driver"]),
 	}
 }
 
 func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[string]interface{}) {
+	out["manage_storage_classes"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.ManageStorageClasses)
 	out["multizone"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -442,6 +507,30 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 			}(*in)
 		}(in)
 	}(in.Openstack)
+	out["azure"] = func(in *kops.AzureConfiguration) interface{} {
+		return func(in *kops.AzureConfiguration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AzureConfiguration) interface{} {
+				return func(in kops.AzureConfiguration) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceAzureConfiguration(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Azure)
+	out["awsebscsi_driver"] = func(in *kops.AWSEBSCSIDriver) interface{} {
+		return func(in *kops.AWSEBSCSIDriver) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AWSEBSCSIDriver) interface{} {
+				return func(in kops.AWSEBSCSIDriver) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceAWSEBSCSIDriver(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AWSEBSCSIDriver)
 }
 
 func FlattenResourceCloudConfiguration(in kops.CloudConfiguration) map[string]interface{} {

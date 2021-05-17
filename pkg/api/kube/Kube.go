@@ -14,8 +14,6 @@ type Config struct {
 	Context string
 	// Kubernetes namespace
 	Namespace string
-	// Kubernetes bearer token
-	KubeBearerToken string
 	// Kubernetes user
 	KubeUser string
 	// Kubernetes password
@@ -36,7 +34,6 @@ func (s *Config) GetConfig(clientset simple.Clientset, clusterName string, admin
 	s.Server = conf.Server
 	s.Context = conf.Context
 	s.Namespace = conf.Namespace
-	s.KubeBearerToken = conf.KubeBearerToken
 	s.KubeUser = conf.KubeUser
 	s.KubePassword = conf.KubePassword
 	s.CaCert = string(conf.CACert)

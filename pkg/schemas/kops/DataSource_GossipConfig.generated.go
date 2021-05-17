@@ -16,7 +16,7 @@ func DataSourceGossipConfig() *schema.Resource {
 			"protocol":  ComputedString(),
 			"listen":    ComputedString(),
 			"secret":    ComputedString(),
-			"secondary": ComputedStruct(DataSourceGossipConfig()),
+			"secondary": ComputedStruct(DataSourceGossipConfigSecondary()),
 		},
 	}
 }
@@ -74,21 +74,21 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["secret"]),
-		Secondary: func(in interface{}) *kops.GossipConfig {
-			return func(in interface{}) *kops.GossipConfig {
+		Secondary: func(in interface{}) *kops.GossipConfigSecondary {
+			return func(in interface{}) *kops.GossipConfigSecondary {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in kops.GossipConfig) *kops.GossipConfig {
+				return func(in kops.GossipConfigSecondary) *kops.GossipConfigSecondary {
 					return &in
-				}(func(in interface{}) kops.GossipConfig {
+				}(func(in interface{}) kops.GossipConfigSecondary {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.GossipConfig{}
+						return kops.GossipConfigSecondary{}
 					}
-					return (ExpandDataSourceGossipConfig(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceGossipConfigSecondary(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["secondary"]),
@@ -126,14 +126,14 @@ func FlattenDataSourceGossipConfigInto(in kops.GossipConfig, out map[string]inte
 			}(*in)
 		}(in)
 	}(in.Secret)
-	out["secondary"] = func(in *kops.GossipConfig) interface{} {
-		return func(in *kops.GossipConfig) interface{} {
+	out["secondary"] = func(in *kops.GossipConfigSecondary) interface{} {
+		return func(in *kops.GossipConfigSecondary) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.GossipConfig) interface{} {
-				return func(in kops.GossipConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceGossipConfig(in)}
+			return func(in kops.GossipConfigSecondary) interface{} {
+				return func(in kops.GossipConfigSecondary) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceGossipConfigSecondary(in)}
 				}(in)
 			}(*in)
 		}(in)

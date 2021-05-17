@@ -51,10 +51,11 @@ The following arguments are supported:
 - `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
 - `cluster_name` - (Required) - (Force new) - String - ClusterName defines the cluster name the instance group belongs to.
 - `name` - (Required) - (Force new) - String - Name defines the instance group name.
-- `role` - (Required) - String - Type determines the role of instances in this group: masters or nodes.
+- `role` - (Required) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Required) - Int - MaxSize is the maximum size of the pool.
+- `autoscale` - (Optional) - Bool - Autoscale determines if autoscaling will be enabled for this instance group if cluster autoscaler is enabled.
 - `machine_type` - (Required) - String - MachineType is the instance class.
 - `root_volume_size` - (Optional) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
 - `root_volume_type` - (Optional) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
@@ -64,25 +65,26 @@ The following arguments are supported:
 - `root_volume_delete_on_termination` - (Optional) - Bool - RootVolumeDeleteOnTermination configures root volume retention policy upon instance termination.<br />The root volume is deleted by default. Cluster deletion does not remove retained root volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
 - `root_volume_encryption` - (Optional) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
 - `root_volume_encryption_key` - (Optional) - String - RootVolumeEncryptionKey provides the key identifier for root volume encryption.
-- `volumes` - (Optional) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this InstanceGroup.
+- `volumes` - (Optional) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this instance group.
 - `volume_mounts` - (Optional) - List([volume_mount_spec](#volume_mount_spec)) - VolumeMounts a collection of volume mounts.
 - `subnets` - (Required) - List(String) - Subnets is the names of the Subnets (as specified in the Cluster) where machines in this instance group should be placed.
 - `zones` - (Optional) - List(String) - Zones is the names of the Zones where machines in this instance group should be placed<br />This is needed for regional subnets (e.g. GCE), to restrict placement to particular zones.
-- `hooks` - (Optional) - List([hook_spec](#hook_spec)) - Hooks is a list of hooks for this instanceGroup, note: these can override the cluster wide ones if required.
+- `hooks` - (Optional) - List([hook_spec](#hook_spec)) - Hooks is a list of hooks for this instance group, note: these can override the cluster wide ones if required.
 - `max_price` - (Optional) - String - MaxPrice indicates this is a spot-pricing group, with the specified value as our max-price bid.
 - `spot_duration_in_minutes` - (Optional) - Int - SpotDurationInMinutes reserves a spot block for the period specified.
+- `cpu_credits` - (Optional) - String - CPUCredits is the credit option for CPU Usage on burstable instance types (AWS only).
 - `associate_public_ip` - (Optional) - Bool - AssociatePublicIP is true if we want instances to have a public IP.
 - `additional_security_groups` - (Optional) - List(String) - AdditionalSecurityGroups attaches additional security groups (e.g. i-123456).
 - `cloud_labels` - (Optional) - Map(String) - CloudLabels indicates the labels for instances in this group, at the AWS level.
-- `node_labels` - (Optional) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this group.
+- `node_labels` - (Optional) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this instance group.
 - `file_assets` - (Optional) - List([file_asset_spec](#file_asset_spec)) - FileAssets is a collection of file assets for this instance group.
-- `tenancy` - (Optional) - String - Describes the tenancy of the instance group. Can be either default or dedicated. Currently only applies to AWS.
+- `tenancy` - (Optional) - String - Describes the tenancy of this instance group. Can be either default or dedicated. Currently only applies to AWS.
 - `kubelet` - (Optional) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet overrides kubelet config from the ClusterSpec.
-- `taints` - (Optional) - List(String) - Taints indicates the kubernetes taints for nodes in this group.
+- `taints` - (Optional) - List(String) - Taints indicates the kubernetes taints for nodes in this instance group.
 - `mixed_instances_policy` - (Optional) - [mixed_instances_policy_spec](#mixed_instances_policy_spec) - MixedInstancesPolicy defined a optional backing of an AWS ASG by a EC2 Fleet (AWS Only).
 - `additional_user_data` - (Optional) - List([user_data](#user_data)) - AdditionalUserData is any additional user-data to be passed to the host.
 - `suspend_processes` - (Optional) - List(String) - SuspendProcesses disables the listed Scaling Policies.
-- `external_load_balancers` - (Optional) - List([load_balancer](#load_balancer)) - ExternalLoadBalancers define loadbalancers that should be attached to the instancegroup.
+- `external_load_balancers` - (Optional) - List([load_balancer](#load_balancer)) - ExternalLoadBalancers define loadbalancers that should be attached to this instance group.
 - `detailed_instance_monitoring` - (Optional) - Bool - DetailedInstanceMonitoring defines if detailed-monitoring is enabled (AWS only).
 - `iam` - (Optional) - [iam_profile_spec](#iam_profile_spec) - IAMProfileSpec defines the identity of the cloud group IAM profile (AWS only).
 - `security_group_override` - (Optional) - String - SecurityGroupOverride overrides the default security group created by Kops for this IG (AWS only).
@@ -92,6 +94,7 @@ The following arguments are supported:
 - `instance_interruption_behavior` - (Optional) - String - InstanceInterruptionBehavior defines if a spot instance should be terminated, hibernated,<br />or stopped after interruption.
 - `compress_user_data` - (Optional) - Bool - CompressUserData compresses parts of the user data to save space.
 - `instance_metadata` - (Optional) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
+- `update_policy` - (Optional) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
 
 ## Nested resources
 
@@ -167,7 +170,7 @@ The following arguments are supported:
 - `path` - (Required) - String - Path is the location this file should reside.
 - `roles` - (Optional) - List(String) - Roles is a list of roles the file asset should be applied, defaults to all.
 - `content` - (Required) - String - Content is the contents of the file.
-- `is_base_64` - (Optional) - Bool - IsBase64 indicates the contents is base64 encoded.
+- `is_base64` - (Optional) - Bool - IsBase64 indicates the contents is base64 encoded.
 
 ### kubelet_config_spec
 
@@ -206,11 +209,11 @@ The following arguments are supported:
 - `read_only_port` - (Optional) - Int - ReadOnlyPort is the port used by the kubelet api for read-only access (default 10255).
 - `system_cgroups` - (Optional) - String - SystemCgroups is absolute name of cgroups in which to place<br />all non-kernel processes that are not already in a container. Empty<br />for no container. Rolling back the flag requires a reboot.
 - `cgroup_root` - (Optional) - String - cgroupRoot is the root cgroup to use for pods. This is handled by the container runtime on a best effort basis.
-- `configure_cbr_00` - (Optional) - Bool - configureCBR0 enables the kubelet to configure cbr0 based on Node.Spec.PodCIDR.
+- `configure_cbr0` - (Optional) - Bool - configureCBR0 enables the kubelet to configure cbr0 based on Node.Spec.PodCIDR.
 - `hairpin_mode` - (Optional) - String - How should the kubelet configure the container bridge for hairpin packets.<br />Setting this flag allows endpoints in a Service to loadbalance back to<br />themselves if they should try to access their own Service. Values:<br />  "promiscuous-bridge": make the container bridge promiscuous.<br />  "hairpin-veth":       set the hairpin flag on container veth interfaces.<br />  "none":               do nothing.<br />Setting --configure-cbr0 to false implies that to achieve hairpin NAT<br />one must set --hairpin-mode=veth-flag, because bridge assumes the<br />existence of a container bridge named cbr0.
 - `babysit_daemons` - (Optional) - Bool - The node has babysitter process monitoring docker and kubelet. Removed as of 1.7.
 - `max_pods` - (Optional) - Int - MaxPods is the number of pods that can run on this Kubelet.
-- `nvidia_gp_uss` - (Optional) - Int - NvidiaGPUs is the number of NVIDIA GPU devices on this node.
+- `nvidia_gp_us` - (Optional) - Int - NvidiaGPUs is the number of NVIDIA GPU devices on this node.
 - `pod_cidr` - (Optional) - String - PodCIDR is the CIDR to use for pod IP addresses, only used in standalone mode.<br />In cluster mode, this is obtained from the master.
 - `resolver_config` - (Optional) - String - ResolverConfig is the resolver configuration file used as the basis for the container DNS resolution configuration."), [].
 - `reconcile_cidr` - (Optional) - Bool - ReconcileCIDR is Reconcile node CIDR with the CIDR specified by the<br />API server. No-op if register-node or configure-cbr0 is false.
@@ -259,6 +262,8 @@ The following arguments are supported:
 - `housekeeping_interval` - (Optional) - Duration - HousekeepingInterval allows to specify interval between container housekeepings.
 - `event_qps` - (Optional) - Int - EventQPS if > 0, limit event creations per second to this value.  If 0, unlimited.
 - `event_burst` - (Optional) - Int - EventBurst temporarily allows event records to burst to this number, while still not exceeding EventQPS. Only used if EventQPS > 0.
+- `container_log_max_size` - (Optional) - String - ContainerLogMaxSize is the maximum size (e.g. 10Mi) of container log file before it is rotated.
+- `container_log_max_files` - (Optional) - Int - ContainerLogMaxFiles is the maximum number of container log files that can be present for a container. The number must be >= 2.
 - `enable_cadvisor_json_endpoints` - (Optional) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 
 ### mixed_instances_policy_spec
@@ -290,7 +295,7 @@ The following arguments are supported:
 
 ### load_balancer
 
-LoadBalancers defines a load balancer.
+LoadBalancer defines a load balancer.
 
 #### Argument Reference
 
@@ -321,14 +326,14 @@ The following arguments are supported:
 
 ### instance_metadata_options
 
-InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
+InstanceMetadataOptions defines the EC2 instance metadata service options (AWS Only).
 
 #### Argument Reference
 
 The following arguments are supported:
 
 - `http_put_response_hop_limit` - (Optional) - Int - HTTPPutResponseHopLimit is the desired HTTP PUT response hop limit for instance metadata requests.<br />The larger the number, the further instance metadata requests can travel. The default value is 1.
-- `http_tokens` - (Optional) - String - HTTPTokens is the state of token usage for the instance metadata requests.<br />If the parameter is not specified in the request, the default state is "optional".
+- `http_tokens` - (Optional) - String - HTTPTokens is the state of token usage for the instance metadata requests.<br />If the parameter is not specified in the request, the default state is "required".
 
 
 ## Import

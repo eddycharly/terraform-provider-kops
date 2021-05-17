@@ -955,7 +955,6 @@ func main() {
 			required("ClusterName"),
 			computedOnly("Revision"),
 		),
-		generate(resources.RollingUpdateOptions{}),
 		generate(utils.RollingUpdateOptions{},
 			noSchema(),
 		),
@@ -1106,6 +1105,17 @@ func main() {
 			required("Name", "Path", "Content"),
 		),
 		generate(kops.RollingUpdate{}),
+		// 1.20
+		generate(resources.RollingUpdateOptions{}),
+		generate(kops.AzureConfiguration{}),
+		generate(kops.AWSEBSCSIDriver{}),
+		generate(kops.NTPConfig{}),
+		generate(kops.CertManagerConfig{}),
+		generate(kops.AWSLoadBalancerControllerConfig{}),
+		generate(kops.GossipConfigSecondary{}),
+		generate(kops.LoadBalancerSubnetSpec{}),
+		generate(kops.DNSControllerGossipConfigSecondary{}),
+		generate(kops.OpenstackNetwork{}),
 	)
 	configMap := build(
 		"Config",
@@ -1226,6 +1236,16 @@ func main() {
 		generate(kops.IAMProfileSpec{}),
 		generate(kops.RollingUpdate{}),
 		generate(kops.ExecContainerAction{}),
+		// 1.20
+		generate(kops.AzureConfiguration{}),
+		generate(kops.AWSEBSCSIDriver{}),
+		generate(kops.NTPConfig{}),
+		generate(kops.CertManagerConfig{}),
+		generate(kops.AWSLoadBalancerControllerConfig{}),
+		generate(kops.GossipConfigSecondary{}),
+		generate(kops.LoadBalancerSubnetSpec{}),
+		generate(kops.DNSControllerGossipConfigSecondary{}),
+		generate(kops.OpenstackNetwork{}),
 	)
 	log.Println("generating docs...")
 	// resources
@@ -1239,4 +1259,7 @@ func main() {
 	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
 	// config
 	buildDoc(config.Provider{}, "docs/guides/", configMap, "Config", parser, configProviderHeader, "")
+	log.Println(resourcesMap)
+	log.Println(configMap)
+	log.Println(dataSourcesMap)
 }
