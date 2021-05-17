@@ -42,7 +42,7 @@ func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName 
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName)
+	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName, nil, false)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName 
 		ValidateTickDuration:    30 * time.Second,
 		ValidateSuccessDuration: 10 * time.Second,
 	}
-	err = d.AdjustNeedUpdate(groups, kc, list)
+	err = d.AdjustNeedUpdate(groups, list)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 	}
 	var k8sClient kubernetes.Interface
 	var nodes []v1.Node
-	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName)
+	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName, nil, false)
 	if err != nil {
 		return err
 	}
@@ -167,6 +167,9 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		ValidateCount = *options.ValidateCount
 	}
 	d := &instancegroups.RollingUpdateCluster{
+		Ctx:                     context.TODO(),
+		Cluster:                 kc,
+		Clientset:               clientset,
 		MasterInterval:          MasterInterval,
 		NodeInterval:            NodeInterval,
 		BastionInterval:         BastionInterval,
@@ -184,7 +187,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		ValidateTickDuration:    30 * time.Second,
 		ValidateSuccessDuration: 10 * time.Second,
 	}
-	err = d.AdjustNeedUpdate(groups, kc, list)
+	err = d.AdjustNeedUpdate(groups, list)
 	if err != nil {
 		return err
 	}
@@ -206,5 +209,5 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		return fmt.Errorf("cannot create cluster validator: %v", err)
 	}
 	d.ClusterValidator = clusterValidator
-	return d.RollingUpdate(context.Background(), groups, kc, list)
+	return d.RollingUpdate(groups, list)
 }

@@ -12,7 +12,7 @@ integration with the kOps api:
 
 ... just **pure go code.**
 
-Currently using kOps `v1.18.3` and compatible with terraform `0.12` and higher.
+Currently using kOps `v1.19.3` and compatible with terraform `0.12` and higher.
 
 **NOTES**
 - For now, provisioning the network is not supported. The network must
@@ -78,7 +78,7 @@ terraform {
   required_providers {
     kops = {
       source  = "eddycharly/kops"
-      version = "1.18.0-beta.2"
+      version = "1.19.0-alpha.4"
     }
   }
 }

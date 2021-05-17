@@ -14,16 +14,19 @@ var _ = Schema
 func ResourceKubeSchedulerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"master":                 OptionalString(),
-			"log_level":              OptionalInt(),
-			"image":                  OptionalString(),
-			"leader_election":        OptionalStruct(ResourceLeaderElectionConfiguration()),
-			"use_policy_config_map":  OptionalBool(),
-			"feature_gates":          OptionalMap(String()),
-			"max_persistent_volumes": OptionalInt(),
-			"qps":                    OptionalQuantity(),
-			"burst":                  OptionalInt(),
-			"enable_profiling":       OptionalBool(),
+			"master":                           OptionalString(),
+			"log_level":                        OptionalInt(),
+			"image":                            OptionalString(),
+			"leader_election":                  OptionalStruct(ResourceLeaderElectionConfiguration()),
+			"use_policy_config_map":            OptionalBool(),
+			"feature_gates":                    OptionalMap(String()),
+			"max_persistent_volumes":           OptionalInt(),
+			"qps":                              OptionalQuantity(),
+			"burst":                            OptionalInt(),
+			"authentication_kubeconfig":        OptionalString(),
+			"authorization_kubeconfig":         OptionalString(),
+			"authorization_always_allow_paths": OptionalList(String()),
+			"enable_profiling":                 OptionalBool(),
 		},
 	}
 }
@@ -123,6 +126,21 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 		Burst: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["burst"]),
+		AuthenticationKubeconfig: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["authentication_kubeconfig"]),
+		AuthorizationKubeconfig: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["authorization_kubeconfig"]),
+		AuthorizationAlwaysAllowPaths: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["authorization_always_allow_paths"]),
 		EnableProfiling: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -209,6 +227,21 @@ func FlattenResourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out map
 	out["burst"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.Burst)
+	out["authentication_kubeconfig"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuthenticationKubeconfig)
+	out["authorization_kubeconfig"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AuthorizationKubeconfig)
+	out["authorization_always_allow_paths"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AuthorizationAlwaysAllowPaths)
 	out["enable_profiling"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

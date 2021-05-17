@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"reflect"
+
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -29,6 +31,7 @@ func DataSourceCiliumNetworkingSpec() *schema.Resource {
 			"enable_policy":                     ComputedString(),
 			"enable_tracing":                    ComputedBool(),
 			"enable_prometheus_metrics":         ComputedBool(),
+			"enable_encryption":                 ComputedBool(),
 			"envoy_log":                         ComputedString(),
 			"ipv_4cluster_cidr_mask_size":       ComputedInt(),
 			"ipv_4node":                         ComputedString(),
@@ -79,6 +82,7 @@ func DataSourceCiliumNetworkingSpec() *schema.Resource {
 			"enable_node_port":                  ComputedBool(),
 			"etcd_managed":                      ComputedBool(),
 			"enable_remote_node_identity":       ComputedBool(),
+			"hubble":                            ComputedStruct(DataSourceHubbleSpec()),
 			"remove_cbr_bridge":                 ComputedBool(),
 			"restart_pods":                      ComputedBool(),
 			"reconfigure_kubelet":               ComputedBool(),
@@ -174,6 +178,9 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 		EnablePrometheusMetrics: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_prometheus_metrics"]),
+		EnableEncryption: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["enable_encryption"]),
 		EnvoyLog: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["envoy_log"]),
@@ -342,9 +349,40 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 		EtcdManaged: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["etcd_managed"]),
-		EnableRemoteNodeIdentity: func(in interface{}) bool {
-			return bool(ExpandBool(in))
+		EnableRemoteNodeIdentity: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
 		}(in["enable_remote_node_identity"]),
+		Hubble: func(in interface{}) *kops.HubbleSpec {
+			return func(in interface{}) *kops.HubbleSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.HubbleSpec) *kops.HubbleSpec {
+					return &in
+				}(func(in interface{}) kops.HubbleSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.HubbleSpec{}
+					}
+					return (ExpandDataSourceHubbleSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["hubble"]),
 		RemoveCbrBridge: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["remove_cbr_bridge"]),
@@ -445,6 +483,9 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 	out["enable_prometheus_metrics"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnablePrometheusMetrics)
+	out["enable_encryption"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableEncryption)
 	out["envoy_log"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EnvoyLog)
@@ -613,9 +654,28 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 	out["etcd_managed"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EtcdManaged)
-	out["enable_remote_node_identity"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
+	out["enable_remote_node_identity"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
 	}(in.EnableRemoteNodeIdentity)
+	out["hubble"] = func(in *kops.HubbleSpec) interface{} {
+		return func(in *kops.HubbleSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.HubbleSpec) interface{} {
+				return func(in kops.HubbleSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceHubbleSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Hubble)
 	out["remove_cbr_bridge"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.RemoveCbrBridge)

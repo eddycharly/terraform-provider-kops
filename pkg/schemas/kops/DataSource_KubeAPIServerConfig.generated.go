@@ -107,9 +107,15 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"service_account_jwksuri":                      ComputedString(),
 			"api_audiences":                                ComputedList(String()),
 			"cpu_request":                                  ComputedString(),
+			"cpu_limit":                                    ComputedString(),
+			"memory_request":                               ComputedString(),
+			"memory_limit":                                 ComputedString(),
 			"event_ttl":                                    ComputedDuration(),
 			"audit_dynamic_configuration":                  ComputedBool(),
 			"enable_profiling":                             ComputedBool(),
+			"cors_allowed_origins":                         ComputedList(String()),
+			"default_not_ready_toleration_seconds":         ComputedInt(),
+			"default_unreachable_toleration_seconds":       ComputedInt(),
 		},
 	}
 }
@@ -1075,6 +1081,15 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 		CPURequest: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cpu_request"]),
+		CPULimit: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cpu_limit"]),
+		MemoryRequest: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["memory_request"]),
+		MemoryLimit: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["memory_limit"]),
 		EventTTL: func(in interface{}) *v1.Duration {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -1123,6 +1138,47 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_profiling"]),
+		CorsAllowedOrigins: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["cors_allowed_origins"]),
+		DefaultNotReadyTolerationSeconds: func(in interface{}) *int64 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int64 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int64) *int64 {
+					return &in
+				}(int64(ExpandInt(in)))
+			}(in)
+		}(in["default_not_ready_toleration_seconds"]),
+		DefaultUnreachableTolerationSeconds: func(in interface{}) *int64 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int64 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int64) *int64 {
+					return &in
+				}(int64(ExpandInt(in)))
+			}(in)
+		}(in["default_unreachable_toleration_seconds"]),
 	}
 }
 
@@ -1819,6 +1875,15 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 	out["cpu_request"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CPURequest)
+	out["cpu_limit"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CPULimit)
+	out["memory_request"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MemoryRequest)
+	out["memory_limit"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MemoryLimit)
 	out["event_ttl"] = func(in *v1.Duration) interface{} {
 		return func(in *v1.Duration) interface{} {
 			if in == nil {
@@ -1849,6 +1914,35 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 			}(*in)
 		}(in)
 	}(in.EnableProfiling)
+	out["cors_allowed_origins"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.CorsAllowedOrigins)
+	out["default_not_ready_toleration_seconds"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.DefaultNotReadyTolerationSeconds)
+	out["default_unreachable_toleration_seconds"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.DefaultUnreachableTolerationSeconds)
 }
 
 func FlattenDataSourceKubeAPIServerConfig(in kops.KubeAPIServerConfig) map[string]interface{} {

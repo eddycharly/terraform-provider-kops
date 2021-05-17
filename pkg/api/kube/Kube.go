@@ -1,6 +1,8 @@
 package kube
 
 import (
+	"time"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	"k8s.io/kops/pkg/client/simple"
 )
@@ -26,8 +28,8 @@ type Config struct {
 	ClientKey string
 }
 
-func (s *Config) GetConfig(clientset simple.Clientset, clusterName string) error {
-	conf, err := utils.GetKubeConfigBuilder(clientset, clusterName)
+func (s *Config) GetConfig(clientset simple.Clientset, clusterName string, admin *time.Duration, internal bool) error {
+	conf, err := utils.GetKubeConfigBuilder(clientset, clusterName, admin, internal)
 	if err != nil {
 		return err
 	}

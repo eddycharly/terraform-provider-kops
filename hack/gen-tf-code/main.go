@@ -303,7 +303,10 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 			return optionsMap[in.Owner].required.Has(in.Name)
 		},
 		"isOptional": func(in _field) bool {
-			return !dataSource && (!optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name))
+			if dataSource {
+				return optionsMap[in.Owner].computed.Has(in.Name)
+			}
+			return !optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name)
 		},
 		"isComputed": func(in _field) bool {
 			if optionsMap[in.Owner].required.Has(in.Name) {
@@ -960,6 +963,7 @@ func main() {
 		generate(utils.ValidateOptions{},
 			noSchema(),
 		),
+		generate(resources.ApplyOptions{}),
 		generate(resources.Cluster{},
 			required("Name", "AdminSshKey"),
 			computedOnly("Revision"),
@@ -974,6 +978,10 @@ func main() {
 			required("CloudProvider", "Subnets", "NetworkID", "Topology", "EtcdClusters", "Networking"),
 			computed("MasterPublicName", "MasterInternalName", "ConfigBase", "NetworkCIDR", "NonMasqueradeCIDR", "IAM"),
 		),
+		generate(kops.InstanceMetadataOptions{}),
+		generate(kops.NodeTerminationHandlerConfig{}),
+		generate(kops.MetricsServerConfig{}),
+		generate(kops.ClusterAutoscalerConfig{}),
 		generate(kops.AddonSpec{},
 			required("Manifest"),
 		),
@@ -984,6 +992,7 @@ func main() {
 			required("Host", "Port"),
 		),
 		generate(kops.ContainerdConfig{}),
+		generate(kops.PackagesConfig{}),
 		generate(kops.DockerConfig{}),
 		generate(kops.KubeDNSConfig{}),
 		generate(kops.KubeAPIServerConfig{}),
@@ -1070,6 +1079,7 @@ func main() {
 		generate(kops.RomanaNetworkingSpec{}),
 		generate(kops.AmazonVPCNetworkingSpec{}),
 		generate(kops.CiliumNetworkingSpec{}),
+		generate(kops.HubbleSpec{}),
 		generate(kops.LyftVPCNetworkingSpec{}),
 		generate(kops.GCENetworkingSpec{}),
 		generate(kops.VolumeSpec{},
@@ -1111,6 +1121,7 @@ func main() {
 		parser,
 		generate(datasources.KubeConfig{},
 			required("ClusterName"),
+			computed("Admin", "Internal"),
 		),
 		generate(datasources.ClusterStatus{},
 			required("ClusterName"),
@@ -1128,6 +1139,10 @@ func main() {
 			rename("Subnets", "Subnet"),
 			rename("EtcdClusters", "EtcdCluster"),
 		),
+		generate(kops.InstanceMetadataOptions{}),
+		generate(kops.NodeTerminationHandlerConfig{}),
+		generate(kops.MetricsServerConfig{}),
+		generate(kops.ClusterAutoscalerConfig{}),
 		generate(kops.AddonSpec{}),
 		generate(kops.GossipConfig{}),
 		generate(kops.ClusterSubnetSpec{}),
@@ -1138,6 +1153,7 @@ func main() {
 			rename("Members", "Member"),
 		),
 		generate(kops.ContainerdConfig{}),
+		generate(kops.PackagesConfig{}),
 		generate(kops.DockerConfig{}),
 		generate(kops.KubeDNSConfig{}),
 		generate(kops.KubeAPIServerConfig{}),
@@ -1181,6 +1197,7 @@ func main() {
 		generate(kops.RomanaNetworkingSpec{}),
 		generate(kops.AmazonVPCNetworkingSpec{}),
 		generate(kops.CiliumNetworkingSpec{}),
+		generate(kops.HubbleSpec{}),
 		generate(kops.LyftVPCNetworkingSpec{}),
 		generate(kops.GCENetworkingSpec{}),
 		generate(kops.NodeAuthorizerSpec{}),

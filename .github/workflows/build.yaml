@@ -22,12 +22,12 @@ jobs:
           TERRAFORM_VERSION=0.13.4
           curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
           unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          sudo mv terraform /usr/bin
+          sudo mv terraform /usr/local/bin
           rm *
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.13
+          go-version: 1.14
       - name: Checkout code
         uses: actions/checkout@v2
       - uses: actions/cache@v2.1.5

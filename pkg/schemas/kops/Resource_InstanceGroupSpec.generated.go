@@ -97,6 +97,22 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["root_volume_iops"]),
+		RootVolumeThroughput: func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["root_volume_throughput"]),
 		RootVolumeOptimization: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -145,49 +161,45 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["root_volume_encryption"]),
-		Volumes: func(in interface{}) []*kops.VolumeSpec {
-			return func(in interface{}) []*kops.VolumeSpec {
-				var out []*kops.VolumeSpec
+		RootVolumeEncryptionKey: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["root_volume_encryption_key"]),
+		Volumes: func(in interface{}) []kops.VolumeSpec {
+			return func(in interface{}) []kops.VolumeSpec {
+				var out []kops.VolumeSpec
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) *kops.VolumeSpec {
+					out = append(out, func(in interface{}) kops.VolumeSpec {
 						if in == nil {
-							return nil
+							return kops.VolumeSpec{}
 						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in kops.VolumeSpec) *kops.VolumeSpec {
-							return &in
-						}(func(in interface{}) kops.VolumeSpec {
-							if in == nil {
-								return kops.VolumeSpec{}
-							}
-							return (ExpandResourceVolumeSpec(in.(map[string]interface{})))
-						}(in))
+						return (ExpandResourceVolumeSpec(in.(map[string]interface{})))
 					}(in))
 				}
 				return out
 			}(in)
 		}(in["volumes"]),
-		VolumeMounts: func(in interface{}) []*kops.VolumeMountSpec {
-			return func(in interface{}) []*kops.VolumeMountSpec {
-				var out []*kops.VolumeMountSpec
+		VolumeMounts: func(in interface{}) []kops.VolumeMountSpec {
+			return func(in interface{}) []kops.VolumeMountSpec {
+				var out []kops.VolumeMountSpec
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) *kops.VolumeMountSpec {
+					out = append(out, func(in interface{}) kops.VolumeMountSpec {
 						if in == nil {
-							return nil
+							return kops.VolumeMountSpec{}
 						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in kops.VolumeMountSpec) *kops.VolumeMountSpec {
-							return &in
-						}(func(in interface{}) kops.VolumeMountSpec {
-							if in == nil {
-								return kops.VolumeMountSpec{}
-							}
-							return (ExpandResourceVolumeMountSpec(in.(map[string]interface{})))
-						}(in))
+						return (ExpandResourceVolumeMountSpec(in.(map[string]interface{})))
 					}(in))
 				}
 				return out
@@ -514,6 +526,40 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["instance_interruption_behavior"]),
+		CompressUserData: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["compress_user_data"]),
+		InstanceMetadata: func(in interface{}) *kops.InstanceMetadataOptions {
+			return func(in interface{}) *kops.InstanceMetadataOptions {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.InstanceMetadataOptions) *kops.InstanceMetadataOptions {
+					return &in
+				}(func(in interface{}) kops.InstanceMetadataOptions {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.InstanceMetadataOptions{}
+					}
+					return (ExpandResourceInstanceMetadataOptions(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["instance_metadata"]),
 	}
 }
 
@@ -577,6 +623,16 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.RootVolumeIops)
+	out["root_volume_throughput"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.RootVolumeThroughput)
 	out["root_volume_optimization"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -607,37 +663,33 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.RootVolumeEncryption)
-	out["volumes"] = func(in []*kops.VolumeSpec) interface{} {
-		return func(in []*kops.VolumeSpec) []interface{} {
+	out["root_volume_encryption_key"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.RootVolumeEncryptionKey)
+	out["volumes"] = func(in []kops.VolumeSpec) interface{} {
+		return func(in []kops.VolumeSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in *kops.VolumeSpec) interface{} {
-					if in == nil {
-						return nil
-					}
-					return func(in kops.VolumeSpec) interface{} {
-						return func(in kops.VolumeSpec) interface{} {
-							return FlattenResourceVolumeSpec(in)
-						}(in)
-					}(*in)
+				out = append(out, func(in kops.VolumeSpec) interface{} {
+					return FlattenResourceVolumeSpec(in)
 				}(in))
 			}
 			return out
 		}(in)
 	}(in.Volumes)
-	out["volume_mounts"] = func(in []*kops.VolumeMountSpec) interface{} {
-		return func(in []*kops.VolumeMountSpec) []interface{} {
+	out["volume_mounts"] = func(in []kops.VolumeMountSpec) interface{} {
+		return func(in []kops.VolumeMountSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in *kops.VolumeMountSpec) interface{} {
-					if in == nil {
-						return nil
-					}
-					return func(in kops.VolumeMountSpec) interface{} {
-						return func(in kops.VolumeMountSpec) interface{} {
-							return FlattenResourceVolumeMountSpec(in)
-						}(in)
-					}(*in)
+				out = append(out, func(in kops.VolumeMountSpec) interface{} {
+					return FlattenResourceVolumeMountSpec(in)
 				}(in))
 			}
 			return out
@@ -886,6 +938,28 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.InstanceInterruptionBehavior)
+	out["compress_user_data"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.CompressUserData)
+	out["instance_metadata"] = func(in *kops.InstanceMetadataOptions) interface{} {
+		return func(in *kops.InstanceMetadataOptions) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.InstanceMetadataOptions) interface{} {
+				return func(in kops.InstanceMetadataOptions) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceInstanceMetadataOptions(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.InstanceMetadata)
 }
 
 func FlattenResourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {

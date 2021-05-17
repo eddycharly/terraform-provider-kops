@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"reflect"
+
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -11,8 +13,9 @@ var _ = Schema
 func DataSourceEtcdManagerSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"image": ComputedString(),
-			"env":   ComputedList(DataSourceEnvVar()),
+			"image":     ComputedString(),
+			"env":       ComputedList(DataSourceEnvVar()),
+			"log_level": ComputedInt(),
 		},
 	}
 }
@@ -39,6 +42,22 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 				return out
 			}(in)
 		}(in["env"]),
+		LogLevel: func(in interface{}) *int32 {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["log_level"]),
 	}
 }
 
@@ -57,6 +76,16 @@ func FlattenDataSourceEtcdManagerSpecInto(in kops.EtcdManagerSpec, out map[strin
 			return out
 		}(in)
 	}(in.Env)
+	out["log_level"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.LogLevel)
 }
 
 func FlattenDataSourceEtcdManagerSpec(in kops.EtcdManagerSpec) map[string]interface{} {

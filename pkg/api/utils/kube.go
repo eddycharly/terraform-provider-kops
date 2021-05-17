@@ -2,14 +2,14 @@ package utils
 
 import (
 	"context"
+	"time"
 
-	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/commands"
 	"k8s.io/kops/pkg/kubeconfig"
 )
 
-func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string) (*kubeconfig.KubeconfigBuilder, error) {
+func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string, admin *time.Duration, internal bool) (*kubeconfig.KubeconfigBuilder, error) {
 	cluster, err := clientset.GetCluster(context.Background(), clusterName)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,11 @@ func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string) (*kube
 	if err != nil {
 		return nil, err
 	}
-	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, clientcmd.NewDefaultPathOptions())
+	duration := kubeconfig.DefaultKubecfgAdminLifetime
+	if admin != nil {
+		duration = *admin
+	}
+	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, duration, "", internal, "", false)
 	if err != nil {
 		return nil, err
 	}

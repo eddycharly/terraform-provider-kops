@@ -61,6 +61,8 @@ func DataSourceCluster() *schema.Resource {
 			"master_kubelet":                    ComputedStruct(kopsschemas.DataSourceKubeletConfigSpec()),
 			"cloud_config":                      ComputedStruct(kopsschemas.DataSourceCloudConfiguration()),
 			"external_dns":                      ComputedStruct(kopsschemas.DataSourceExternalDNSConfig()),
+			"node_termination_handler":          ComputedStruct(kopsschemas.DataSourceNodeTerminationHandlerConfig()),
+			"metrics_server":                    ComputedStruct(kopsschemas.DataSourceMetricsServerConfig()),
 			"networking":                        ComputedStruct(kopsschemas.DataSourceNetworkingSpec()),
 			"api":                               ComputedStruct(kopsschemas.DataSourceAccessSpec()),
 			"authentication":                    ComputedStruct(kopsschemas.DataSourceAuthenticationSpec()),
@@ -75,6 +77,7 @@ func DataSourceCluster() *schema.Resource {
 			"use_host_certificates":             ComputedBool(),
 			"sysctl_parameters":                 ComputedList(String()),
 			"rolling_update":                    ComputedStruct(kopsschemas.DataSourceRollingUpdate()),
+			"cluster_autoscaler":                ComputedStruct(kopsschemas.DataSourceClusterAutoscalerConfig()),
 		},
 	}
 }

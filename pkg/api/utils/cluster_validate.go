@@ -42,7 +42,7 @@ func makeValidator(clientset simple.Clientset, clusterName string) (kopsValidati
 	if len(instanceGroups) == 0 {
 		return nil, fmt.Errorf("no InstanceGroup objects found")
 	}
-	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName)
+	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName, nil, false)
 	if err != nil {
 		return nil, err
 	}

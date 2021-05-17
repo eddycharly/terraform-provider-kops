@@ -23,10 +23,12 @@ The following arguments are supported:
 - `machine_type` - (Computed) - String - MachineType is the instance class.
 - `root_volume_size` - (Computed) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
 - `root_volume_type` - (Computed) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
-- `root_volume_iops` - (Computed) - Int - If volume type is io1, then we need to specify the number of Iops.
+- `root_volume_iops` - (Computed) - Int - RootVolumeIops is the provisioned IOPS when the volume type is io1, io2 or gp3 (AWS only).
+- `root_volume_throughput` - (Computed) - Int - RootVolumeThroughput is the volume throughput in MBps when the volume type is gp3 (AWS only).
 - `root_volume_optimization` - (Computed) - Bool - RootVolumeOptimization enables EBS optimization for an instance.
 - `root_volume_delete_on_termination` - (Computed) - Bool - RootVolumeDeleteOnTermination configures root volume retention policy upon instance termination.<br />The root volume is deleted by default. Cluster deletion does not remove retained root volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
 - `root_volume_encryption` - (Computed) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
+- `root_volume_encryption_key` - (Computed) - String - RootVolumeEncryptionKey provides the key identifier for root volume encryption.
 - `volumes` - (Computed) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this InstanceGroup.
 - `volume_mounts` - (Computed) - List([volume_mount_spec](#volume_mount_spec)) - VolumeMounts a collection of volume mounts.
 - `subnets` - (Computed) - List(String) - Subnets is the names of the Subnets (as specified in the Cluster) where machines in this instance group should be placed.
@@ -53,6 +55,8 @@ The following arguments are supported:
 - `sysctl_parameters` - (Computed) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Computed) - [rolling_update](#rolling_update) - RollingUpdate defines the rolling-update behavior.
 - `instance_interruption_behavior` - (Computed) - String - InstanceInterruptionBehavior defines if a spot instance should be terminated, hibernated,<br />or stopped after interruption.
+- `compress_user_data` - (Computed) - Bool - CompressUserData compresses parts of the user data to save space.
+- `instance_metadata` - (Computed) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 
 ## Nested resources
 
@@ -67,7 +71,9 @@ The following arguments are supported:
 - `delete_on_termination` - (Computed) - Bool - DeleteOnTermination configures volume retention policy upon instance termination.<br />The volume is deleted by default. Cluster deletion does not remove retained volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
 - `device` - (Computed) - String - Device is an optional device name of the block device.
 - `encrypted` - (Computed) - Bool - Encrypted indicates you want to encrypt the volume.
-- `iops` - (Computed) - Int - Iops is the provision iops for this iops (think io1 in aws).
+- `iops` - (Computed) - Int - Iops is the provisioned IOPS for the volume when the volume type is io1, io2 or gp3 (AWS only).
+- `throughput` - (Computed) - Int - Throughput is the volume throughput in MBps when the volume type is gp3 (AWS only).
+- `key` - (Computed) - String - Key is the encryption key identifier for the volume.
 - `size` - (Computed) - Int - Size is the size of the volume in GB.
 - `type` - (Computed) - String - Type is the type of volume to create and is cloud specific.
 
@@ -215,6 +221,10 @@ The following arguments are supported:
 - `rotate_certificates` - (Computed) - Bool - rotateCertificates enables client certificate rotation.
 - `protect_kernel_defaults` - (Computed) - Bool - Default kubelet behaviour for kernel tuning. If set, kubelet errors if any of kernel tunables is different than kubelet defaults.<br />(DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag.
 - `cgroup_driver` - (Computed) - String - CgroupDriver allows the explicit setting of the kubelet cgroup driver. If omitted, defaults to cgroupfs.
+- `housekeeping_interval` - (Computed) - Duration - HousekeepingInterval allows to specify interval between container housekeepings.
+- `event_qps` - (Computed) - Int - EventQPS if > 0, limit event creations per second to this value.  If 0, unlimited.
+- `event_burst` - (Computed) - Int - EventBurst temporarily allows event records to burst to this number, while still not exceeding EventQPS. Only used if EventQPS > 0.
+- `enable_cadvisor_json_endpoints` - (Computed) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 
 ### mixed_instances_policy_spec
 
@@ -273,6 +283,17 @@ The following arguments are supported:
 - `drain_and_terminate` - (Computed) - Bool - DrainAndTerminate enables draining and terminating nodes during rolling updates.<br />Defaults to true.
 - `max_unavailable` - (Computed) - IntOrString - MaxUnavailable is the maximum number of nodes that can be unavailable during the update.<br />The value can be an absolute number (for example 5) or a percentage of desired<br />nodes (for example 10%).<br />The absolute number is calculated from a percentage by rounding down.<br />Defaults to 1 if MaxSurge is 0, otherwise defaults to 0.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />down to 70% of desired nodes immediately when the rolling update<br />starts. Once new nodes are ready, more old nodes can be drained,<br />ensuring that the total number of nodes available at all times<br />during the update is at least 70% of desired nodes.<br />+optional.
 - `max_surge` - (Computed) - IntOrString - MaxSurge is the maximum number of extra nodes that can be created<br />during the update.<br />The value can be an absolute number (for example 5) or a percentage of<br />desired machines (for example 10%).<br />The absolute number is calculated from a percentage by rounding up.<br />Has no effect on instance groups with role "Master".<br />Defaults to 1 on AWS, 0 otherwise.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />up immediately when the rolling update starts, such that the total<br />number of old and new nodes do not exceed 130% of desired<br />nodes.<br />+optional.
+
+### instance_metadata_options
+
+InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `http_put_response_hop_limit` - (Computed) - Int - HTTPPutResponseHopLimit is the desired HTTP PUT response hop limit for instance metadata requests.<br />The larger the number, the further instance metadata requests can travel. The default value is 1.
+- `http_tokens` - (Computed) - String - HTTPTokens is the state of token usage for the instance metadata requests.<br />If the parameter is not specified in the request, the default state is "optional".
 
 
 

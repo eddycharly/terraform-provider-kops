@@ -23,9 +23,11 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"root_volume_size":                  ComputedInt(),
 			"root_volume_type":                  ComputedString(),
 			"root_volume_iops":                  ComputedInt(),
+			"root_volume_throughput":            ComputedInt(),
 			"root_volume_optimization":          ComputedBool(),
 			"root_volume_delete_on_termination": ComputedBool(),
 			"root_volume_encryption":            ComputedBool(),
+			"root_volume_encryption_key":        ComputedString(),
 			"volumes":                           ComputedList(kopsschemas.DataSourceVolumeSpec()),
 			"volume_mounts":                     ComputedList(kopsschemas.DataSourceVolumeMountSpec()),
 			"subnets":                           ComputedList(String()),
@@ -52,6 +54,8 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"sysctl_parameters":                 ComputedList(String()),
 			"rolling_update":                    ComputedStruct(kopsschemas.DataSourceRollingUpdate()),
 			"instance_interruption_behavior":    ComputedString(),
+			"compress_user_data":                ComputedBool(),
+			"instance_metadata":                 ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
 		},
 	}
 }

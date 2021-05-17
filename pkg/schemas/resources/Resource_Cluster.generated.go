@@ -62,6 +62,8 @@ func ResourceCluster() *schema.Resource {
 			"master_kubelet":                    OptionalStruct(kopsschemas.ResourceKubeletConfigSpec()),
 			"cloud_config":                      OptionalStruct(kopsschemas.ResourceCloudConfiguration()),
 			"external_dns":                      OptionalStruct(kopsschemas.ResourceExternalDNSConfig()),
+			"node_termination_handler":          OptionalStruct(kopsschemas.ResourceNodeTerminationHandlerConfig()),
+			"metrics_server":                    OptionalStruct(kopsschemas.ResourceMetricsServerConfig()),
 			"networking":                        RequiredStruct(kopsschemas.ResourceNetworkingSpec()),
 			"api":                               OptionalStruct(kopsschemas.ResourceAccessSpec()),
 			"authentication":                    OptionalStruct(kopsschemas.ResourceAuthenticationSpec()),
@@ -76,6 +78,7 @@ func ResourceCluster() *schema.Resource {
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(kopsschemas.ResourceRollingUpdate()),
+			"cluster_autoscaler":                OptionalStruct(kopsschemas.ResourceClusterAutoscalerConfig()),
 		},
 	}
 }

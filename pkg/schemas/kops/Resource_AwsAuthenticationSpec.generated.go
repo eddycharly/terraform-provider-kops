@@ -15,6 +15,8 @@ func ResourceAwsAuthenticationSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":          OptionalString(),
+			"backend_mode":   OptionalString(),
+			"cluster_id":     OptionalString(),
 			"memory_request": OptionalQuantity(),
 			"cpu_request":    OptionalQuantity(),
 			"memory_limit":   OptionalQuantity(),
@@ -31,6 +33,12 @@ func ExpandResourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuth
 		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
+		BackendMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["backend_mode"]),
+		ClusterID: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cluster_id"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -102,6 +110,12 @@ func FlattenResourceAwsAuthenticationSpecInto(in kops.AwsAuthenticationSpec, out
 	out["image"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Image)
+	out["backend_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BackendMode)
+	out["cluster_id"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterID)
 	out["memory_request"] = func(in *resource.Quantity) interface{} {
 		return func(in *resource.Quantity) interface{} {
 			if in == nil {

@@ -61,6 +61,8 @@ The following arguments are supported:
 - `master_kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec)
 - `cloud_config` - (Computed) - [cloud_configuration](#cloud_configuration)
 - `external_dns` - (Computed) - [external_dns_config](#external_dns_config)
+- `node_termination_handler` - (Computed) - [node_termination_handler_config](#node_termination_handler_config) - NodeTerminationHandlerConfig determines the cluster autoscaler configuration.
+- `metrics_server` - (Computed) - [metrics_server_config](#metrics_server_config) - MetricsServerConfig determines the metrics server configuration.
 - `networking` - (Computed) - [networking_spec](#networking_spec) - Networking configuration.
 - `api` - (Computed) - [access_spec](#access_spec) - API field controls how the API is exposed outside the cluster.
 - `authentication` - (Computed) - [authentication_spec](#authentication_spec) - Authentication field controls how the cluster is configured for authentication.
@@ -75,6 +77,7 @@ The following arguments are supported:
 - `use_host_certificates` - (Computed) - Bool - UseHostCertificates will mount /etc/ssl/certs to inside needed containers.<br />This is needed if some APIs do have self-signed certs.
 - `sysctl_parameters` - (Computed) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Computed) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.
+- `cluster_autoscaler` - (Computed) - [cluster_autoscaler_config](#cluster_autoscaler_config) - ClusterAutoscaler defines the cluster autoscaler configuration.
 
 ## Nested resources
 
@@ -208,6 +211,7 @@ The following arguments are supported:
 - `instance_group` - (Computed) - String - InstanceGroup is the instanceGroup this volume is associated.
 - `volume_type` - (Computed) - String - VolumeType is the underlying cloud storage class.
 - `volume_iops` - (Computed) - Int - If volume type is io1, then we need to specify the number of Iops.
+- `volume_throughput` - (Computed) - Int - Parameter for disks that support provisioned throughput.
 - `volume_size` - (Computed) - Int - VolumeSize is the underlying cloud volume size.
 - `kms_key_id` - (Computed) - String - KmsKeyId is a AWS KMS ID used to encrypt the volume.
 - `encrypted_volume` - (Computed) - Bool - EncryptedVolume indicates you want to encrypt the volume.
@@ -233,6 +237,7 @@ The following arguments are supported:
 
 - `image` - (Computed) - String - Image is the etcd manager image to use.
 - `env` - (Computed) - List([env_var](#env_var)) - Env allows users to pass in env variables to the etcd-manager container.<br />Variables starting with ETCD_ will be further passed down to the etcd process.<br />This allows etcd setting to be overwriten. No config validation is done.<br />A list of etcd config ENV vars can be found at https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/configuration.md.
+- `log_level` - (Computed) - Int - LogLevel allows the klog library verbose log level to be set for etcd-manager. The default is 6.<br />https://github.com/google/glog#verbose-logging.
 
 ### env_var
 
@@ -254,12 +259,25 @@ ContainerdConfig is the configuration for containerd.
 The following arguments are supported:
 
 - `address` - (Computed) - String - Address of containerd's GRPC server (default "/run/containerd/containerd.sock").
-- `config_override` - (Computed) - String - Complete containerd config file provided by the user.
-- `log_level` - (Computed) - String - Logging level [trace, debug, info, warn, error, fatal, panic] (default "info").
-- `root` - (Computed) - String - Directory for persistent data (default "/var/lib/containerd").
-- `skip_install` - (Computed) - Bool - Prevents kops from installing and modifying containerd in any way (default "false").
-- `state` - (Computed) - String - Directory for execution state files (default "/run/containerd").
-- `version` - (Computed) - String - Consumed by nodeup and used to pick the containerd version.
+- `config_override` - (Computed) - String - ConfigOverride is the complete containerd config file provided by the user.
+- `log_level` - (Computed) - String - LogLevel controls the logging details [trace, debug, info, warn, error, fatal, panic] (default "info").
+- `packages` - (Computed) - [packages_config](#packages_config) - Packages overrides the URL and hash for the packages.
+- `registry_mirrors` - (Computed) - Map(List(String)) - RegistryMirrors is list of image registries.
+- `root` - (Computed) - String - Root directory for persistent data (default "/var/lib/containerd").
+- `skip_install` - (Computed) - Bool - SkipInstall prevents kOps from installing and modifying containerd in any way (default "false").
+- `state` - (Computed) - String - State directory for execution state files (default "/run/containerd").
+- `version` - (Computed) - String - Version used to pick the containerd package.
+
+### packages_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `hash_amd_64` - (Computed) - String - HashAmd64 overrides the hash for the AMD64 package.
+- `hash_arm_64` - (Computed) - String - HashArm64 overrides the hash for the ARM64 package.
+- `url_amd_64` - (Computed) - String - UrlAmd64 overrides the URL for the AMD64 package.
+- `url_arm_64` - (Computed) - String - UrlArm64 overrides the URL for the ARM64 package.
 
 ### docker_config
 
@@ -274,6 +292,7 @@ The following arguments are supported:
 - `bridge_ip` - (Computed) - String - BridgeIP is a specific IP address and netmask for the docker0 bridge, using standard CIDR notation.
 - `data_root` - (Computed) - String - DataRoot is the root directory of persistent docker state (default "/var/lib/docker").
 - `default_ulimit` - (Computed) - List(String) - DefaultUlimit is the ulimits for containers.
+- `default_runtime` - (Computed) - String - DefaultRuntime is the default OCI runtime for containers (default "runc").
 - `exec_opt` - (Computed) - List(String) - ExecOpt is a series of options passed to the runtime.
 - `exec_root` - (Computed) - String - ExecRoot is the root directory for execution state files (default "/var/run/docker").
 - `experimental` - (Computed) - Bool - Experimental features permits enabling new features such as dockerd metrics.
@@ -289,7 +308,10 @@ The following arguments are supported:
 - `log_opt` - (Computed) - List(String) - Logopt is a series of options given to the log driver options for containers.
 - `metrics_address` - (Computed) - String - Metrics address is the endpoint to serve with Prometheus format metrics.
 - `mtu` - (Computed) - Int - MTU is the containers network MTU.
+- `packages` - (Computed) - [packages_config](#packages_config) - Packages overrides the URL and hash for the packages.
 - `registry_mirrors` - (Computed) - List(String) - RegistryMirrors is a referred list of docker registry mirror.
+- `runtimes` - (Computed) - List(String) - Runtimes registers an additional OCI compatible runtime (default []).
+- `selinux_enabled` - (Computed) - Bool - SelinuxEnabled enables SELinux support.
 - `skip_install` - (Computed) - Bool - SkipInstall when set to true will prevent kops from installing and modifying Docker in any way.
 - `storage` - (Computed) - String - Storage is the docker storage driver to use.
 - `storage_opts` - (Computed) - List(String) - StorageOpts is a series of options passed to the storage driver.
@@ -433,9 +455,15 @@ The following arguments are supported:
 - `service_account_jwksuri` - (Computed) - String - ServiceAccountJWKSURI overrides the path for the jwks document; this is useful when we are republishing the service account discovery information elsewhere.
 - `api_audiences` - (Computed) - List(String) - Identifiers of the API. The service account token authenticator will validate that<br />tokens used against the API are bound to at least one of these audiences. If the<br />--service-account-issuer flag is configured and this flag is not, this field<br />defaults to a single element list containing the issuer URL.
 - `cpu_request` - (Computed) - String - CPURequest, cpu request compute resource for api server. Defaults to "150m".
+- `cpu_limit` - (Computed) - String - CPULimit, cpu limit compute resource for api server e.g. "500m".
+- `memory_request` - (Computed) - String - MemoryRequest, memory request compute resource for api server e.g. "30Mi".
+- `memory_limit` - (Computed) - String - MemoryLimit, memory limit compute resource for api server e.g. "30Mi".
 - `event_ttl` - (Computed) - Duration - Amount of time to retain Kubernetes events.
 - `audit_dynamic_configuration` - (Computed) - Bool - AuditDynamicConfiguration enables dynamic audit configuration via AuditSinks.
 - `enable_profiling` - (Computed) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
+- `cors_allowed_origins` - (Computed) - List(String) - CorsAllowedOrigins is a list of origins for CORS. An allowed origin can be a regular<br />expression to support subdomain matching. If this list is empty CORS will not be enabled.
+- `default_not_ready_toleration_seconds` - (Computed) - Int - DefaultNotReadyTolerationSeconds indicates the tolerationSeconds of the toleration for notReady:NoExecute that is added by default to every pod that does not already have such a toleration.
+- `default_unreachable_toleration_seconds` - (Computed) - Int - DefaultUnreachableTolerationSeconds indicates the tolerationSeconds of the toleration for unreachable:NoExecute that is added by default to every pod that does not already have such a toleration.
 
 ### kube_controller_manager_config
 
@@ -447,7 +475,7 @@ The following arguments are supported:
 
 - `master` - (Computed) - String - Master is the url for the kube api master.
 - `log_level` - (Computed) - Int - LogLevel is the defined logLevel.
-- `service_account_private_key_file` - (Computed) - String - ServiceAccountPrivateKeyFile the location for a certificate for service account signing.
+- `service_account_private_key_file` - (Computed) - String - ServiceAccountPrivateKeyFile is the location of the private key for service account token signing.
 - `image` - (Computed) - String - Image is the docker image to use.
 - `cloud_provider` - (Computed) - String - CloudProvider is the provider for cloud services.
 - `cluster_name` - (Computed) - String - ClusterName is the instance prefix for the cluster.
@@ -470,6 +498,8 @@ The following arguments are supported:
 - `horizontal_pod_autoscaler_downscale_delay` - (Computed) - Duration - HorizontalPodAutoscalerDownscaleDelay is a duration that specifies<br />how long the autoscaler has to wait before another downscale<br />operation can be performed after the current one has completed.
 - `horizontal_pod_autoscaler_downscale_stabilization` - (Computed) - Duration - HorizontalPodAutoscalerDownscaleStabilization is the period for which<br />autoscaler will look backwards and not scale down below any<br />recommendation it made during that period.
 - `horizontal_pod_autoscaler_upscale_delay` - (Computed) - Duration - HorizontalPodAutoscalerUpscaleDelay is a duration that specifies how<br />long the autoscaler has to wait before another upscale operation can<br />be performed after the current one has completed.
+- `horizontal_pod_autoscaler_initial_readiness_delay` - (Computed) - Duration - HorizontalPodAutoscalerInitialReadinessDelay is the period after pod start<br />during which readiness changes will be treated as initial readiness. (default 30s).
+- `horizontal_pod_autoscaler_cpu_initialization_period` - (Computed) - Duration - HorizontalPodAutoscalerCPUInitializationPeriod is the period after pod start<br />when CPU samples might be skipped. (default 5m).
 - `horizontal_pod_autoscaler_tolerance` - (Computed) - Quantity - HorizontalPodAutoscalerTolerance is the minimum change (from 1.0) in the<br />desired-to-actual metrics ratio for the horizontal pod autoscaler to<br />consider scaling.
 - `horizontal_pod_autoscaler_use_rest_clients` - (Computed) - Bool - HorizontalPodAutoscalerUseRestClients determines if the new-style clients<br />should be used if support for custom metrics is enabled.
 - `experimental_cluster_signing_duration` - (Computed) - Duration - ExperimentalClusterSigningDuration is the duration that determines<br />the length of duration that the signed certificates will be given. (default 8760h0m0s).
@@ -487,6 +517,9 @@ The following arguments are supported:
 - `concurrent_resource_quota_syncs` - (Computed) - Int - The number of resourcequota objects that are allowed to sync concurrently.
 - `concurrent_serviceaccount_token_syncs` - (Computed) - Int - The number of serviceaccount objects that are allowed to sync concurrently to create tokens.
 - `concurrent_rc_syncs` - (Computed) - Int - The number of replicationcontroller objects that are allowed to sync concurrently.
+- `authentication_kubeconfig` - (Computed) - String - AuthenticationKubeconfig is the path to an Authentication Kubeconfig.
+- `authorization_kubeconfig` - (Computed) - String - AuthorizationKubeconfig is the path to an Authorization Kubeconfig.
+- `authorization_always_allow_paths` - (Computed) - List(String) - AuthorizationAlwaysAllowPaths is the list of HTTP paths to skip during authorization.
 - `enable_profiling` - (Computed) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
 
 ### leader_election_configuration
@@ -542,6 +575,9 @@ The following arguments are supported:
 - `max_persistent_volumes` - (Computed) - Int - MaxPersistentVolumes changes the maximum number of persistent volumes the scheduler will scheduler onto the same<br />node. Only takes into affect if value is positive. This corresponds to the KUBE_MAX_PD_VOLS environment variable,<br />which has been supported as far back as Kubernetes 1.7. The default depends on the version and the cloud provider<br />as outlined: https://kubernetes.io/docs/concepts/storage/storage-limits/.
 - `qps` - (Computed) - Quantity - Qps sets the maximum qps to send to apiserver after the burst quota is exhausted.
 - `burst` - (Computed) - Int - Burst sets the maximum qps to send to apiserver after the burst quota is exhausted.
+- `authentication_kubeconfig` - (Computed) - String - AuthenticationKubeconfig is the path to an Authentication Kubeconfig.
+- `authorization_kubeconfig` - (Computed) - String - AuthorizationKubeconfig is the path to an Authorization Kubeconfig.
+- `authorization_always_allow_paths` - (Computed) - List(String) - AuthorizationAlwaysAllowPaths is the list of HTTP paths to skip during authorization.
 - `enable_profiling` - (Computed) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
 
 ### kube_proxy_config
@@ -660,6 +696,10 @@ The following arguments are supported:
 - `rotate_certificates` - (Computed) - Bool - rotateCertificates enables client certificate rotation.
 - `protect_kernel_defaults` - (Computed) - Bool - Default kubelet behaviour for kernel tuning. If set, kubelet errors if any of kernel tunables is different than kubelet defaults.<br />(DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag.
 - `cgroup_driver` - (Computed) - String - CgroupDriver allows the explicit setting of the kubelet cgroup driver. If omitted, defaults to cgroupfs.
+- `housekeeping_interval` - (Computed) - Duration - HousekeepingInterval allows to specify interval between container housekeepings.
+- `event_qps` - (Computed) - Int - EventQPS if > 0, limit event creations per second to this value.  If 0, unlimited.
+- `event_burst` - (Computed) - Int - EventBurst temporarily allows event records to burst to this number, while still not exceeding EventQPS. Only used if EventQPS > 0.
+- `enable_cadvisor_json_endpoints` - (Computed) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 
 ### cloud_configuration
 
@@ -750,6 +790,7 @@ The following arguments are supported:
 - `version` - (Computed) - String
 - `ignore_az` - (Computed) - Bool
 - `override_az` - (Computed) - String
+- `create_storage_class` - (Computed) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
 
 ### external_dns_config
 
@@ -762,6 +803,30 @@ The following arguments are supported:
 - `disable` - (Computed) - Bool - Disable indicates we do not wish to run the dns-controller addon.
 - `watch_ingress` - (Computed) - Bool - WatchIngress indicates you want the dns-controller to watch and create dns entries for ingress resources.
 - `watch_namespace` - (Computed) - String - WatchNamespace is namespace to watch, defaults to all (use to control whom can creates dns entries).
+
+### node_termination_handler_config
+
+NodeTerminationHandlerConfig determines the node termination handler configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the node termination handler.<br />Default: true.
+- `enable_spot_interruption_draining` - (Computed) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Default: true.
+- `enable_scheduled_event_draining` - (Computed) - Bool - EnableScheduledEventDraining makes node termination handler drain nodes before the maintenance window starts for an EC2 instance scheduled event.<br />Default: false.
+- `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
+
+### metrics_server_config
+
+MetricsServerConfig determines the metrics server configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the metrics server.<br />Default: false.
+- `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 
 ### networking_spec
 
@@ -857,7 +922,7 @@ FlannelNetworkingSpec declares that we want Flannel networking.
 The following arguments are supported:
 
 - `backend` - (Computed) - String - Backend is the backend overlay type we want to use (vxlan or udp).
-- `disable_tx_checksum_offloading` - (Computed) - Bool - DisableTxChecksumOffloading creates a systemd unit that disables the Tx checksum offloading for "flannel.1",<br />required in Kubernetes < 1.18.6 to avoid traffic being discarded because of "bad checksum" errors.
+- `disable_tx_checksum_offloading` - (Computed) - Bool - DisableTxChecksumOffloading is deprecated as of kops 1.19 and has no effect.
 - `iptables_resync_seconds` - (Computed) - Int - IptablesResyncSeconds sets resync period for iptables rules, in seconds.
 
 ### calico_networking_spec
@@ -868,8 +933,21 @@ CalicoNetworkingSpec declares that we want Calico networking.
 
 The following arguments are supported:
 
+- `registry` - (Computed) - String - Version overrides the Calico container image registry.
+- `version` - (Computed) - String - Version overrides the Calico container image tag.
+- `aws_src_dst_check` - (Computed) - String - AWSSrcDstCheck enables/disables ENI source/destination checks (AWS only)<br />Options: DoNothing (default), Enable, or Disable.
+- `bpf_enabled` - (Computed) - Bool - BPFEnabled enables the eBPF dataplane mode.
+- `bpf_external_service_mode` - (Computed) - String - BPFExternalServiceMode controls how traffic from outside the cluster to NodePorts and ClusterIPs is handled.<br />In Tunnel mode, packet is tunneled from the ingress host to the host with the backing pod and back again.<br />In DSR mode, traffic is tunneled to the host with the backing pod and then returned directly;<br />this requires a network that allows direct return.<br />Default: Tunnel (other options: DSR).
+- `bpf_kube_proxy_iptables_cleanup_enabled` - (Computed) - Bool - BPFKubeProxyIptablesCleanupEnabled controls whether Felix will clean up the iptables rules<br />created by the Kubernetes kube-proxy; should only be enabled if kube-proxy is not running.
+- `bpf_log_level` - (Computed) - String - BPFLogLevel controls the log level used by the BPF programs. The logs are emitted<br />to the BPF trace pipe, accessible with the command tc exec BPF debug.<br />Default: Off (other options: Info, Debug).
+- `chain_insert_mode` - (Computed) - String - ChainInsertMode controls whether Felix inserts rules to the top of iptables chains, or<br />appends to the bottom. Leaving the default option is safest to prevent accidentally<br />breaking connectivity. Default: 'insert' (other options: 'append').
 - `cpu_request` - (Computed) - Quantity - CPURequest CPU request of Calico container. Default: 100m.
 - `cross_subnet` - (Computed) - Bool - CrossSubnet enables Calico's cross-subnet mode when set to true.
+- `encapsulation_mode` - (Computed) - String - EncapsulationMode specifies the network packet encapsulation protocol for Calico to use,<br />employing such encapsulation at the necessary scope per the related CrossSubnet field. In<br />"ipip" mode, Calico will use IP-in-IP encapsulation as needed. In "vxlan" mode, Calico will<br />encapsulate packets as needed using the VXLAN scheme.<br />Options: ipip (default) or vxlan.
+- `ip_ip_mode` - (Computed) - String - IPIPMode is the encapsulation mode to use for the default Calico IPv4 pool created at start<br />up, determining when to use IP-in-IP encapsulation, conveyed to the "calico-node" daemon<br />container via the CALICO_IPV4POOL_IPIP environment variable.
+- `ipv_4auto_detection_method` - (Computed) - String - IPv4AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
+- `ipv_6auto_detection_method` - (Computed) - String - IPv6AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
+- `iptables_backend` - (Computed) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
 - `log_severity_screen` - (Computed) - String - LogSeverityScreen lets us set the desired log level. (Default: info).
 - `mtu` - (Computed) - Int - MTU to be set in the cni-network-config for calico.
 - `prometheus_metrics_enabled` - (Computed) - Bool - PrometheusMetricsEnabled can be set to enable the experimental Prometheus<br />metrics server (default: false).
@@ -877,8 +955,6 @@ The following arguments are supported:
 - `prometheus_go_metrics_enabled` - (Computed) - Bool - PrometheusGoMetricsEnabled enables Prometheus Go runtime metrics collection.
 - `prometheus_process_metrics_enabled` - (Computed) - Bool - PrometheusProcessMetricsEnabled enables Prometheus process metrics collection.
 - `major_version` - (Computed) - String - MajorVersion is the version of Calico to use.
-- `iptables_backend` - (Computed) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
-- `ip_ip_mode` - (Computed) - String - IPIPMode is mode for CALICO_IPV4POOL_IPIP.
 - `typha_prometheus_metrics_enabled` - (Computed) - Bool - TyphaPrometheusMetricsEnabled enables Prometheus metrics collection from Typha<br />(default: false).
 - `typha_prometheus_metrics_port` - (Computed) - Int - TyphaPrometheusMetricsPort is the TCP port the typha Prometheus metrics server<br />should bind to (default: 9093).
 - `typha_replicas` - (Computed) - Int - TyphaReplicas is the number of replicas of Typha to deploy.
@@ -896,7 +972,7 @@ The following arguments are supported:
 - `cpu_request` - (Computed) - Quantity - CPURequest CPU request of Canal container. Default: 100m.
 - `default_endpoint_to_host_action` - (Computed) - String - DefaultEndpointToHostAction allows users to configure the default behaviour<br />for traffic between pod to host after calico rules have been processed.<br />Default: ACCEPT (other options: DROP, RETURN).
 - `disable_flannel_forward_rules` - (Computed) - Bool - DisableFlannelForwardRules configures Flannel to NOT add the<br />default ACCEPT traffic rules to the iptables FORWARD chain.
-- `disable_tx_checksum_offloading` - (Computed) - Bool - DisableTxChecksumOffloading creates a systemd unit that disables the Tx checksum offloading for "flannel.1",<br />required in Kubernetes < 1.18.6 to avoid traffic being discarded because of "bad checksum" errors.
+- `disable_tx_checksum_offloading` - (Computed) - Bool - DisableTxChecksumOffloading is deprecated as of kops 1.19 and has no effect.
 - `iptables_backend` - (Computed) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
 - `log_severity_sys` - (Computed) - String - LogSeveritySys the severity to set for logs which are sent to syslog<br />Default: INFO (other options: DEBUG, WARNING, ERROR, CRITICAL, NONE).
 - `mtu` - (Computed) - Int - MTU to be set in the cni-network-config (default: 1500).
@@ -917,7 +993,7 @@ This resource has no attributes.
 
 ### romana_networking_spec
 
-RomanaNetworkingSpec declares that we want Romana networking.
+RomanaNetworkingSpec declares that we want Romana networking<br />Romana is deprecated as of kops 1.18 and removed as of kops 1.19.
 
 #### Argument Reference
 
@@ -963,6 +1039,7 @@ The following arguments are supported:
 - `enable_policy` - (Computed) - String - EnablePolicy specifies the policy enforcement mode.<br />"default": Follows Kubernetes policy enforcement.<br />"always": Cilium restricts all traffic if no policy is in place.<br />"never": Cilium allows all traffic regardless of policies in place.<br />If unspecified, "default" policy mode will be used.
 - `enable_tracing` - (Computed) - Bool - EnableTracing is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the Cilium "/metrics" endpoint for both the agent and the operator.
+- `enable_encryption` - (Computed) - Bool - EnableEncryption enables Cilium Encryption.<br />Default: false.
 - `envoy_log` - (Computed) - String - EnvoyLog is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `ipv_4cluster_cidr_mask_size` - (Computed) - Int - Ipv4ClusterCIDRMaskSize is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `ipv_4node` - (Computed) - String - Ipv4Node is not implemented and may be removed in the future.<br />Setting this has no effect.
@@ -995,9 +1072,9 @@ The following arguments are supported:
 - `socket_path` - (Computed) - String - SocketPath is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `state_dir` - (Computed) - String - StateDir is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `trace_payload_len` - (Computed) - Int - TracePayloadLen is not implemented and may be removed in the future.<br />Setting this has no effect.
-- `tunnel` - (Computed) - String - Tunnel specifies the Cilium tunelling mode. Possible values are "vxlan", "geneve", or "disabled".<br />Default: vxlan.
-- `enable_ipv_6` - (Computed) - Bool - EnableIpv6 enables cluster IPv6 traffic. If both EnableIpv6 and EnableIpv4 are set to false<br />then IPv4 will be enabled.<br />Default: false.
-- `enable_ipv_4` - (Computed) - Bool - EnableIpv4 enables cluster IPv4 traffic. If both EnableIpv6 and EnableIpv4 are set to false<br />then IPv4 will be enabled.<br />Default: false.
+- `tunnel` - (Computed) - String - Tunnel specifies the Cilium tunnelling mode. Possible values are "vxlan", "geneve", or "disabled".<br />Default: vxlan.
+- `enable_ipv_6` - (Computed) - Bool - EnableIpv6 is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `enable_ipv_4` - (Computed) - Bool - EnableIpv4 is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `monitor_aggregation` - (Computed) - String - MonitorAggregation sets the level of packet monitoring. Possible values are "low", "medium", or "maximum".<br />Default: medium.
 - `bpfct_global_tcp_max` - (Computed) - Int - BPFCTGlobalTCPMax is the maximum number of entries in the TCP CT table.<br />Default: 524288.
 - `bpfct_global_any_max` - (Computed) - Int - BPFCTGlobalAnyMax is the maximum number of entries in the non-TCP CT table.<br />Default: 262144.
@@ -1007,17 +1084,29 @@ The following arguments are supported:
 - `to_fqdns_dns_reject_response_code` - (Computed) - String - ToFqdnsDNSRejectResponseCode sets the DNS response code for rejecting DNS requests.<br />Possible values are "nameError" or "refused".<br />Default: refused.
 - `to_fqdns_enable_poller` - (Computed) - Bool - ToFqdnsEnablePoller replaces the DNS proxy-based implementation of FQDN policies<br />with the less powerful legacy implementation.<br />Default: false.
 - `container_runtime_labels` - (Computed) - String - ContainerRuntimeLabels enables fetching of container-runtime labels from the specified container runtime and associating them with endpoints.<br />Supported values are: "none", "containerd", "crio", "docker", "auto"<br />As of Cilium 1.7.0, Cilium no longer fetches information from the<br />container runtime and this field is ignored.<br />Default: none.
-- `ipam` - (Computed) - String - Ipam specifies the IP address allocation mode to use.<br />Possible values are "crd" and "eni".<br />"eni" will use AWS native networking for pods. Eni requires masquerade to be set to false.<br />"crd" will use CRDs for controlling IP address management.<br />Empty value will use host-scope address management.
+- `ipam` - (Computed) - String - Ipam specifies the IP address allocation mode to use.<br />Possible values are "crd" and "eni".<br />"eni" will use AWS native networking for pods. Eni requires masquerade to be set to false.<br />"crd" will use CRDs for controlling IP address management.<br />"hostscope" will use hostscope IPAM mode.<br />"kubernetes" will use addersing based on node pod CIDR.<br />Empty value will use hostscope for cilum <= 1.7 and "kubernetes" otherwise.
 - `ip_tables_rules_noinstall` - (Computed) - Bool - IPTablesRulesNoinstall disables installing the base IPTables rules used for masquerading and kube-proxy.<br />Default: false.
 - `auto_direct_node_routes` - (Computed) - Bool - AutoDirectNodeRoutes adds automatic L2 routing between nodes.<br />Default: false.
 - `enable_node_port` - (Computed) - Bool - EnableNodePort replaces kube-proxy with Cilium's BPF implementation.<br />Requires spec.kubeProxy.enabled be set to false.<br />Default: false.
 - `etcd_managed` - (Computed) - Bool - EtcdManagd installs an additional etcd cluster that is used for Cilium state change.<br />The cluster is operated by cilium-etcd-operator.<br />Default: false.
-- `enable_remote_node_identity` - (Computed) - Bool - EnableRemoteNodeIdentity enables the remote-node-identity added in Cilium 1.7.0.<br />Default: false.
+- `enable_remote_node_identity` - (Computed) - Bool - EnableRemoteNodeIdentity enables the remote-node-identity added in Cilium 1.7.0.<br />Default: true.
+- `hubble` - (Computed) - [hubble_spec](#hubble_spec) - Hubble configures the Hubble service on the Cilium agent.
 - `remove_cbr_bridge` - (Computed) - Bool - RemoveCbrBridge is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `restart_pods` - (Computed) - Bool - RestartPods is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `reconfigure_kubelet` - (Computed) - Bool - ReconfigureKubelet is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `node_init_bootstrap_file` - (Computed) - String - NodeInitBootstrapFile is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `cni_bin_path` - (Computed) - String - CniBinPath is not implemented and may be removed in the future.<br />Setting this has no effect.
+
+### hubble_spec
+
+HubbleSpec configures the Hubble service on the Cilium agent.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled decides if Hubble is enabled on the agent or not.
+- `metrics` - (Computed) - List(String) - Metrics is a list of metrics to collect. If empty or null, metrics are disabled.<br />See https://docs.cilium.io/en/stable/configuration/metrics/#hubble-exported-metrics.
 
 ### lyft_vpc_networking_spec
 
@@ -1060,12 +1149,14 @@ LoadBalancerAccessSpec provides configuration details related to API LoadBalance
 
 The following arguments are supported:
 
+- `class` - (Computed) - String - LoadBalancerClass specifies the class of load balancer to create: Classic, Network.
 - `type` - (Computed) - String - Type of load balancer to create may Public or Internal.
 - `idle_timeout_seconds` - (Computed) - Int - IdleTimeoutSeconds sets the timeout of the api loadbalancer.
 - `security_group_override` - (Computed) - String - SecurityGroupOverride overrides the default Kops created SG for the load balancer.
 - `additional_security_groups` - (Computed) - List(String) - AdditionalSecurityGroups attaches additional security groups (e.g. sg-123456).
 - `use_for_internal_api` - (Computed) - Bool - UseForInternalApi indicates whether the LB should be used by the kubelet.
 - `ssl_certificate` - (Computed) - String - SSLCertificate allows you to specify the ACM cert to be used the LB.
+- `ssl_policy` - (Computed) - String - SSLPolicy allows you to overwrite the LB listener's Security Policy.
 - `cross_zone_load_balancing` - (Computed) - Bool - CrossZoneLoadBalancing allows you to enable the cross zone load balancing.
 
 ### authentication_spec
@@ -1089,6 +1180,8 @@ This resource has no attributes.
 The following arguments are supported:
 
 - `image` - (Computed) - String - Image is the AWS IAM Authenticator docker image to use.
+- `backend_mode` - (Computed) - String - BackendMode is the AWS IAM Authenticator backend to use. Default MountedFile.
+- `cluster_id` - (Computed) - String - ClusterID identifies the cluster performing authentication to prevent certain replay attacks. Default master public DNS name.
 - `memory_request` - (Computed) - Quantity - MemoryRequest memory request of AWS IAM Authenticator container. Default 20Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest CPU request of AWS IAM Authenticator container. Default 10m.
 - `memory_limit` - (Computed) - Quantity - MemoryLimit memory limit of AWS IAM Authenticator container. Default 20Mi.
@@ -1189,8 +1282,9 @@ IAMSpec adds control over the IAM security policies applied to resources.
 
 The following arguments are supported:
 
-- `legacy` - (Computed) - Bool
+- `legacy` - (Computed) - Bool - TODO: remove Legacy in next APIVersion.
 - `allow_container_registry` - (Computed) - Bool
+- `permissions_boundary` - (Computed) - String
 
 ### rolling_update
 
@@ -1201,6 +1295,23 @@ The following arguments are supported:
 - `drain_and_terminate` - (Computed) - Bool - DrainAndTerminate enables draining and terminating nodes during rolling updates.<br />Defaults to true.
 - `max_unavailable` - (Computed) - IntOrString - MaxUnavailable is the maximum number of nodes that can be unavailable during the update.<br />The value can be an absolute number (for example 5) or a percentage of desired<br />nodes (for example 10%).<br />The absolute number is calculated from a percentage by rounding down.<br />Defaults to 1 if MaxSurge is 0, otherwise defaults to 0.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />down to 70% of desired nodes immediately when the rolling update<br />starts. Once new nodes are ready, more old nodes can be drained,<br />ensuring that the total number of nodes available at all times<br />during the update is at least 70% of desired nodes.<br />+optional.
 - `max_surge` - (Computed) - IntOrString - MaxSurge is the maximum number of extra nodes that can be created<br />during the update.<br />The value can be an absolute number (for example 5) or a percentage of<br />desired machines (for example 10%).<br />The absolute number is calculated from a percentage by rounding up.<br />Has no effect on instance groups with role "Master".<br />Defaults to 1 on AWS, 0 otherwise.<br />Example: when this is set to 30%, the InstanceGroup can be scaled<br />up immediately when the rolling update starts, such that the total<br />number of old and new nodes do not exceed 130% of desired<br />nodes.<br />+optional.
+
+### cluster_autoscaler_config
+
+ClusterAutoscalerConfig determines the cluster autoscaler configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the cluster autoscaler.<br />Default: false.
+- `expander` - (Computed) - String - Expander determines the strategy for which instance group gets expanded.<br />Supported values: least-waste, most-pods, random.<br />Default: least-waste.
+- `balance_similar_node_groups` - (Computed) - Bool - BalanceSimilarNodeGroups makes cluster autoscaler treat similar node groups as one.<br />Default: false.
+- `scale_down_utilization_threshold` - (Computed) - String - ScaleDownUtilizationThreshold determines the utilization threshold for node scale-down.<br />Default: 0.5.
+- `skip_nodes_with_system_pods` - (Computed) - Bool - SkipNodesWithSystemPods makes cluster autoscaler skip scale-down of nodes with non-DaemonSet pods in the kube-system namespace.<br />Default: true.
+- `skip_nodes_with_local_storage` - (Computed) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
+- `new_pod_scale_up_delay` - (Computed) - String - NewPodScaleUpDelay causes cluster autoscaler to ignore unschedulable pods until they are a certain "age", regardless of the scan-interval<br />Default: 0s.
+- `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 
 
 
