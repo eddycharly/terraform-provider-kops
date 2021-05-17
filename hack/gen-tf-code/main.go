@@ -303,7 +303,10 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 			return optionsMap[in.Owner].required.Has(in.Name)
 		},
 		"isOptional": func(in _field) bool {
-			return !dataSource && (!optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name))
+			if dataSource {
+				return optionsMap[in.Owner].computed.Has(in.Name)
+			}
+			return !optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name)
 		},
 		"isComputed": func(in _field) bool {
 			if optionsMap[in.Owner].required.Has(in.Name) {
@@ -1117,7 +1120,8 @@ func main() {
 		"DataSource",
 		parser,
 		generate(datasources.KubeConfig{},
-			required("ClusterName", "Admin", "Internal"),
+			required("ClusterName"),
+			computed("Admin", "Internal"),
 		),
 		generate(datasources.ClusterStatus{},
 			required("ClusterName"),

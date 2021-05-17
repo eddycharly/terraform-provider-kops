@@ -1,6 +1,7 @@
 package schemas
 
 import (
+	"reflect"
 	"time"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
@@ -16,8 +17,8 @@ func DataSourceKubeConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":      RequiredString(),
-			"admin":             RequiredInt(),
-			"internal":          RequiredBool(),
+			"admin":             OptionalComputedInt(),
+			"internal":          OptionalComputedBool(),
 			"server":            ComputedString(),
 			"context":           ComputedString(),
 			"namespace":         ComputedString(),
@@ -40,6 +41,9 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
 		Admin: func(in interface{}) *time.Duration {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
 			return func(in interface{}) *time.Duration {
 				if in == nil {
 					return nil

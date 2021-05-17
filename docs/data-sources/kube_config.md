@@ -25,8 +25,8 @@ provider "kubectl" {
 
 The following arguments are supported:
 - `cluster_name` - (Required) - String - The cluster name.
-- `admin` - (Required) - Int - Admin is the cluster admin user credential lifetime.
-- `internal` - (Required) - Bool - Internal use the cluster's internal DNS name.
+- `admin` - (Optional) - (Computed) - Int - Admin is the cluster admin user credential lifetime.
+- `internal` - (Optional) - (Computed) - Bool - Internal use the cluster's internal DNS name.
 - `server` - (Computed) - String - Kubernetes server url.
 - `context` - (Computed) - String - Kubernetes context.
 - `namespace` - (Computed) - String - Kubernetes namespace.
