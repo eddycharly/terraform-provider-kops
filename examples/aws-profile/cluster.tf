@@ -138,7 +138,5 @@ resource "kops_cluster_updater" "updater" {
 
 data "kops_kube_config" "kube_config" {
   cluster_name = kops_cluster.cluster.name
-  internal     = false
-  admin        = 7200
   depends_on   = [kops_cluster_updater.updater]
 }
