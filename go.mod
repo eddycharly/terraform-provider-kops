@@ -53,7 +53,7 @@ replace github.com/gophercloud/gophercloud => github.com/gophercloud/gophercloud
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/aws/aws-sdk-go v1.38.41
+	github.com/aws/aws-sdk-go v1.38.44
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.5.0
 	golang.org/x/tools v0.1.0
 	google.golang.org/grpc/examples v0.0.0-20201121004645-9da74c039bbf // indirect
