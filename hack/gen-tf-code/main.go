@@ -1259,7 +1259,4 @@ func main() {
 	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
 	// config
 	buildDoc(config.Provider{}, "docs/guides/", configMap, "Config", parser, configProviderHeader, "")
-	log.Println(resourcesMap)
-	log.Println(configMap)
-	log.Println(dataSourcesMap)
 }

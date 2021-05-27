@@ -31,13 +31,13 @@ replace (
 
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
-	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
-	github.com/aws/aws-sdk-go v1.37.0
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.5.0
+	github.com/Masterminds/sprig v2.22.0+incompatible
+	github.com/aws/aws-sdk-go v1.38.50
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
+	golang.org/x/tools v0.1.2
 	k8s.io/api v0.20.4
 	k8s.io/apimachinery v0.20.4
 	k8s.io/client-go v0.20.4
 	k8s.io/klog v1.0.0
-	k8s.io/klog/v2 v2.4.0
 	k8s.io/kops v1.20.1
 )
