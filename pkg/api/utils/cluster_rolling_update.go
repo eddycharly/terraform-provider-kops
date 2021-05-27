@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -13,6 +12,7 @@ import (
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/cloudinstances"
 	"k8s.io/kops/pkg/instancegroups"
+	"k8s.io/kops/pkg/validation"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
@@ -206,7 +206,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 	if !needUpdate {
 		return nil
 	}
-	clusterValidator, err := validation.NewClusterValidator(kc, cloud, list, config, k8sClient)
+	clusterValidator, err := validation.NewClusterValidator(kc, cloud, list, config.Host, k8sClient)
 	if err != nil {
 		return fmt.Errorf("cannot create cluster validator: %v", err)
 	}

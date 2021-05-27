@@ -6,11 +6,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/pkg/validation"
 	kopsValidation "k8s.io/kops/pkg/validation"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
@@ -54,7 +54,7 @@ func makeValidator(clientset simple.Clientset, clusterName string) (kopsValidati
 	if err != nil {
 		return nil, fmt.Errorf("cannot build kubernetes api client for %q: %v", kc.Name, err)
 	}
-	validator, err := validation.NewClusterValidator(kc, cloud, list, config, k8sClient)
+	validator, err := validation.NewClusterValidator(kc, cloud, list, config.Host, k8sClient)
 	if err != nil {
 		return nil, fmt.Errorf("unexpected error creating validatior: %v", err)
 	}
