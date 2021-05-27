@@ -129,7 +129,7 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 	if err != nil {
 		return err
 	}
-	allResources, err := ops.ListResources(cloud, kc.Name, "")
+	allResources, err := ops.ListResources(cloud, kc, "")
 	if err != nil {
 		return err
 	}

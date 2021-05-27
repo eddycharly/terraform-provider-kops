@@ -30,7 +30,6 @@ The following arguments are supported:
 - `server` - (Computed) - String - Kubernetes server url.
 - `context` - (Computed) - String - Kubernetes context.
 - `namespace` - (Computed) - String - Kubernetes namespace.
-- `kube_bearer_token` - (Sensitive) - (Computed) - String - Kubernetes bearer token.
 - `kube_user` - (Computed) - String - Kubernetes user.
 - `kube_password` - (Sensitive) - (Computed) - String - Kubernetes password.
 - `ca_cert` - (Sensitive) - (Computed) - String - Kubernetes cluster certificate.

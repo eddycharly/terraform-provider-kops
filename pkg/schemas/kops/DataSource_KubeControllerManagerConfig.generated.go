@@ -62,6 +62,7 @@ func DataSourceKubeControllerManagerConfig() *schema.Resource {
 			"authentication_kubeconfig":                           ComputedString(),
 			"authorization_kubeconfig":                            ComputedString(),
 			"authorization_always_allow_paths":                    ComputedList(String()),
+			"external_cloud_volume_plugin":                        ComputedString(),
 			"enable_profiling":                                    ComputedBool(),
 		},
 	}
@@ -645,6 +646,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 				return out
 			}(in)
 		}(in["authorization_always_allow_paths"]),
+		ExternalCloudVolumePlugin: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["external_cloud_volume_plugin"]),
 		EnableProfiling: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -1052,6 +1056,9 @@ func FlattenDataSourceKubeControllerManagerConfigInto(in kops.KubeControllerMana
 			return out
 		}(in)
 	}(in.AuthorizationAlwaysAllowPaths)
+	out["external_cloud_volume_plugin"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ExternalCloudVolumePlugin)
 	out["enable_profiling"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

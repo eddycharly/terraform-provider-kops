@@ -59,8 +59,11 @@ func DataSourceClusterSpec() *schema.Resource {
 			"master_kubelet":                    ComputedStruct(DataSourceKubeletConfigSpec()),
 			"cloud_config":                      ComputedStruct(DataSourceCloudConfiguration()),
 			"external_dns":                      ComputedStruct(DataSourceExternalDNSConfig()),
+			"ntp":                               ComputedStruct(DataSourceNTPConfig()),
 			"node_termination_handler":          ComputedStruct(DataSourceNodeTerminationHandlerConfig()),
 			"metrics_server":                    ComputedStruct(DataSourceMetricsServerConfig()),
+			"cert_manager":                      ComputedStruct(DataSourceCertManagerConfig()),
+			"aws_load_balancer_controller":      ComputedStruct(DataSourceAWSLoadBalancerControllerConfig()),
 			"networking":                        ComputedStruct(DataSourceNetworkingSpec()),
 			"api":                               ComputedStruct(DataSourceAccessSpec()),
 			"authentication":                    ComputedStruct(DataSourceAuthenticationSpec()),
@@ -590,6 +593,24 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["external_dns"]),
+		NTP: func(in interface{}) *kops.NTPConfig {
+			return func(in interface{}) *kops.NTPConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.NTPConfig) *kops.NTPConfig {
+					return &in
+				}(func(in interface{}) kops.NTPConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.NTPConfig{}
+					}
+					return (ExpandDataSourceNTPConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["ntp"]),
 		NodeTerminationHandler: func(in interface{}) *kops.NodeTerminationHandlerConfig {
 			return func(in interface{}) *kops.NodeTerminationHandlerConfig {
 				if in == nil {
@@ -626,6 +647,42 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["metrics_server"]),
+		CertManager: func(in interface{}) *kops.CertManagerConfig {
+			return func(in interface{}) *kops.CertManagerConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.CertManagerConfig) *kops.CertManagerConfig {
+					return &in
+				}(func(in interface{}) kops.CertManagerConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.CertManagerConfig{}
+					}
+					return (ExpandDataSourceCertManagerConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["cert_manager"]),
+		AWSLoadBalancerController: func(in interface{}) *kops.AWSLoadBalancerControllerConfig {
+			return func(in interface{}) *kops.AWSLoadBalancerControllerConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.AWSLoadBalancerControllerConfig) *kops.AWSLoadBalancerControllerConfig {
+					return &in
+				}(func(in interface{}) kops.AWSLoadBalancerControllerConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.AWSLoadBalancerControllerConfig{}
+					}
+					return (ExpandDataSourceAWSLoadBalancerControllerConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["aws_load_balancer_controller"]),
 		Networking: func(in interface{}) *kops.NetworkingSpec {
 			return func(in interface{}) *kops.NetworkingSpec {
 				if in == nil {
@@ -1247,6 +1304,18 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.ExternalDNS)
+	out["ntp"] = func(in *kops.NTPConfig) interface{} {
+		return func(in *kops.NTPConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NTPConfig) interface{} {
+				return func(in kops.NTPConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceNTPConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.NTP)
 	out["node_termination_handler"] = func(in *kops.NodeTerminationHandlerConfig) interface{} {
 		return func(in *kops.NodeTerminationHandlerConfig) interface{} {
 			if in == nil {
@@ -1271,6 +1340,30 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.MetricsServer)
+	out["cert_manager"] = func(in *kops.CertManagerConfig) interface{} {
+		return func(in *kops.CertManagerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.CertManagerConfig) interface{} {
+				return func(in kops.CertManagerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceCertManagerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.CertManager)
+	out["aws_load_balancer_controller"] = func(in *kops.AWSLoadBalancerControllerConfig) interface{} {
+		return func(in *kops.AWSLoadBalancerControllerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AWSLoadBalancerControllerConfig) interface{} {
+				return func(in kops.AWSLoadBalancerControllerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceAWSLoadBalancerControllerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AWSLoadBalancerController)
 	out["networking"] = func(in *kops.NetworkingSpec) interface{} {
 		return func(in *kops.NetworkingSpec) interface{} {
 			if in == nil {

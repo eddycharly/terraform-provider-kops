@@ -16,18 +16,17 @@ var _ = Schema
 func DataSourceKubeConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name":      RequiredString(),
-			"admin":             OptionalComputedInt(),
-			"internal":          OptionalComputedBool(),
-			"server":            ComputedString(),
-			"context":           ComputedString(),
-			"namespace":         ComputedString(),
-			"kube_bearer_token": Sensitive(ComputedString()),
-			"kube_user":         ComputedString(),
-			"kube_password":     Sensitive(ComputedString()),
-			"ca_cert":           Sensitive(ComputedString()),
-			"client_cert":       Sensitive(ComputedString()),
-			"client_key":        Sensitive(ComputedString()),
+			"cluster_name":  RequiredString(),
+			"admin":         OptionalComputedInt(),
+			"internal":      OptionalComputedBool(),
+			"server":        ComputedString(),
+			"context":       ComputedString(),
+			"namespace":     ComputedString(),
+			"kube_user":     ComputedString(),
+			"kube_password": Sensitive(ComputedString()),
+			"ca_cert":       Sensitive(ComputedString()),
+			"client_cert":   Sensitive(ComputedString()),
+			"client_key":    Sensitive(ComputedString()),
 		},
 	}
 }

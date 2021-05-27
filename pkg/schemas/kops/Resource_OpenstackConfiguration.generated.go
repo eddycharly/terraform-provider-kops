@@ -18,6 +18,7 @@ func ResourceOpenstackConfiguration() *schema.Resource {
 			"router":               OptionalStruct(ResourceOpenstackRouter()),
 			"block_storage":        OptionalStruct(ResourceOpenstackBlockStorageConfig()),
 			"insecure_skip_verify": OptionalBool(),
+			"network":              OptionalStruct(ResourceOpenstackNetwork()),
 		},
 	}
 }
@@ -115,6 +116,24 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["insecure_skip_verify"]),
+		Network: func(in interface{}) *kops.OpenstackNetwork {
+			return func(in interface{}) *kops.OpenstackNetwork {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.OpenstackNetwork) *kops.OpenstackNetwork {
+					return &in
+				}(func(in interface{}) kops.OpenstackNetwork {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.OpenstackNetwork{}
+					}
+					return (ExpandResourceOpenstackNetwork(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["network"]),
 	}
 }
 
@@ -177,6 +196,18 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}(*in)
 		}(in)
 	}(in.InsecureSkipVerify)
+	out["network"] = func(in *kops.OpenstackNetwork) interface{} {
+		return func(in *kops.OpenstackNetwork) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackNetwork) interface{} {
+				return func(in kops.OpenstackNetwork) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceOpenstackNetwork(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Network)
 }
 
 func FlattenResourceOpenstackConfiguration(in kops.OpenstackConfiguration) map[string]interface{} {

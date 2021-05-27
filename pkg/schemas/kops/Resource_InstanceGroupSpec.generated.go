@@ -46,6 +46,22 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["max_size"]),
+		Autoscale: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["autoscale"]),
 		MachineType: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["machine_type"]),
@@ -269,6 +285,22 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["spot_duration_in_minutes"]),
+		CPUCredits: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["cpu_credits"]),
 		AssociatePublicIP: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -560,6 +592,22 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(in))
 			}(in)
 		}(in["instance_metadata"]),
+		UpdatePolicy: func(in interface{}) *string {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["update_policy"]),
 	}
 }
 
@@ -590,6 +638,16 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.MaxSize)
+	out["autoscale"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.Autoscale)
 	out["machine_type"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MachineType)
@@ -744,6 +802,16 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.SpotDurationInMinutes)
+	out["cpu_credits"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.CPUCredits)
 	out["associate_public_ip"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -960,6 +1028,16 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.InstanceMetadata)
+	out["update_policy"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.UpdatePolicy)
 }
 
 func FlattenResourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {

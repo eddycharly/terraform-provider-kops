@@ -22,6 +22,7 @@ func DataSourceLoadBalancerAccessSpec() *schema.Resource {
 			"ssl_certificate":            ComputedString(),
 			"ssl_policy":                 ComputedString(),
 			"cross_zone_load_balancing":  ComputedBool(),
+			"subnets":                    ComputedList(DataSourceLoadBalancerSubnetSpec()),
 		},
 	}
 }
@@ -116,6 +117,20 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["cross_zone_load_balancing"]),
+		Subnets: func(in interface{}) []kops.LoadBalancerSubnetSpec {
+			return func(in interface{}) []kops.LoadBalancerSubnetSpec {
+				var out []kops.LoadBalancerSubnetSpec
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) kops.LoadBalancerSubnetSpec {
+						if in == nil {
+							return kops.LoadBalancerSubnetSpec{}
+						}
+						return (ExpandDataSourceLoadBalancerSubnetSpec(in.(map[string]interface{})))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["subnets"]),
 	}
 }
 
@@ -181,6 +196,17 @@ func FlattenDataSourceLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec,
 			}(*in)
 		}(in)
 	}(in.CrossZoneLoadBalancing)
+	out["subnets"] = func(in []kops.LoadBalancerSubnetSpec) interface{} {
+		return func(in []kops.LoadBalancerSubnetSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.LoadBalancerSubnetSpec) interface{} {
+					return FlattenDataSourceLoadBalancerSubnetSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Subnets)
 }
 
 func FlattenDataSourceLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]interface{} {

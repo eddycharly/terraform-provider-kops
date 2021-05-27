@@ -26,8 +26,8 @@ func DataSourceCalicoNetworkingSpec() *schema.Resource {
 			"cross_subnet":                       ComputedBool(),
 			"encapsulation_mode":                 ComputedString(),
 			"ip_ip_mode":                         ComputedString(),
-			"ipv_4auto_detection_method":         ComputedString(),
-			"ipv_6auto_detection_method":         ComputedString(),
+			"ipv4_auto_detection_method":         ComputedString(),
+			"ipv6_auto_detection_method":         ComputedString(),
 			"iptables_backend":                   ComputedString(),
 			"log_severity_screen":                ComputedString(),
 			"mtu":                                ComputedInt(),
@@ -100,10 +100,10 @@ func ExpandDataSourceCalicoNetworkingSpec(in map[string]interface{}) kops.Calico
 		}(in["ip_ip_mode"]),
 		IPv4AutoDetectionMethod: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_4auto_detection_method"]),
+		}(in["ipv4_auto_detection_method"]),
 		IPv6AutoDetectionMethod: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ipv_6auto_detection_method"]),
+		}(in["ipv6_auto_detection_method"]),
 		IptablesBackend: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["iptables_backend"]),
@@ -200,10 +200,10 @@ func FlattenDataSourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out
 	out["ip_ip_mode"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IPIPMode)
-	out["ipv_4auto_detection_method"] = func(in string) interface{} {
+	out["ipv4_auto_detection_method"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IPv4AutoDetectionMethod)
-	out["ipv_6auto_detection_method"] = func(in string) interface{} {
+	out["ipv6_auto_detection_method"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IPv6AutoDetectionMethod)
 	out["iptables_backend"] = func(in string) interface{} {

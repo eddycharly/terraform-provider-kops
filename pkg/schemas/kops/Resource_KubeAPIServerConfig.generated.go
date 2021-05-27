@@ -96,7 +96,7 @@ func ResourceKubeAPIServerConfig() *schema.Resource {
 			"feature_gates":                                OptionalMap(String()),
 			"max_requests_inflight":                        OptionalInt(),
 			"max_mutating_requests_inflight":               OptionalInt(),
-			"http_2max_streams_per_connection":             OptionalInt(),
+			"http2_max_streams_per_connection":             OptionalInt(),
 			"etcd_quorum_read":                             OptionalBool(),
 			"request_timeout":                              OptionalDuration(),
 			"min_request_timeout":                          OptionalInt(),
@@ -960,7 +960,7 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 					return &in
 				}(int32(ExpandInt(in)))
 			}(in)
-		}(in["http_2max_streams_per_connection"]),
+		}(in["http2_max_streams_per_connection"]),
 		EtcdQuorumRead: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -1781,7 +1781,7 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 	out["max_mutating_requests_inflight"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.MaxMutatingRequestsInflight)
-	out["http_2max_streams_per_connection"] = func(in *int32) interface{} {
+	out["http2_max_streams_per_connection"] = func(in *int32) interface{} {
 		return func(in *int32) interface{} {
 			if in == nil {
 				return nil

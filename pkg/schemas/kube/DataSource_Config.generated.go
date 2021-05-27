@@ -21,9 +21,6 @@ func ExpandDataSourceConfig(in map[string]interface{}) kube.Config {
 		Namespace: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["namespace"]),
-		KubeBearerToken: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["kube_bearer_token"]),
 		KubeUser: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["kube_user"]),
@@ -52,9 +49,6 @@ func FlattenDataSourceConfigInto(in kube.Config, out map[string]interface{}) {
 	out["namespace"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Namespace)
-	out["kube_bearer_token"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.KubeBearerToken)
 	out["kube_user"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.KubeUser)

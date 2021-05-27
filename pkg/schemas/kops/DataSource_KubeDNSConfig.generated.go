@@ -17,6 +17,7 @@ func DataSourceKubeDNSConfig() *schema.Resource {
 			"cache_max_size":       ComputedInt(),
 			"cache_max_concurrent": ComputedInt(),
 			"core_dns_image":       ComputedString(),
+			"cpa_image":            ComputedString(),
 			"domain":               ComputedString(),
 			"external_core_file":   ComputedString(),
 			"image":                ComputedString(),
@@ -47,6 +48,9 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 		CoreDNSImage: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["core_dns_image"]),
+		CPAImage: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cpa_image"]),
 		Domain: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["domain"]),
@@ -171,6 +175,9 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 	out["core_dns_image"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CoreDNSImage)
+	out["cpa_image"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.CPAImage)
 	out["domain"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Domain)

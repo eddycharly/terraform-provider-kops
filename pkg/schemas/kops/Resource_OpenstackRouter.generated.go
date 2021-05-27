@@ -13,9 +13,10 @@ var _ = Schema
 func ResourceOpenstackRouter() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"external_network": OptionalString(),
-			"dns_servers":      OptionalString(),
-			"external_subnet":  OptionalString(),
+			"external_network":        OptionalString(),
+			"dns_servers":             OptionalString(),
+			"external_subnet":         OptionalString(),
+			"availability_zone_hints": OptionalList(String()),
 		},
 	}
 }
@@ -73,6 +74,25 @@ func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRout
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["external_subnet"]),
+		AvailabilityZoneHints: func(in interface{}) []*string {
+			return func(in interface{}) []*string {
+				var out []*string
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) *string {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in string) *string {
+							return &in
+						}(string(ExpandString(in)))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["availability_zone_hints"]),
 	}
 }
 
@@ -107,6 +127,22 @@ func FlattenResourceOpenstackRouterInto(in kops.OpenstackRouter, out map[string]
 			}(*in)
 		}(in)
 	}(in.ExternalSubnet)
+	out["availability_zone_hints"] = func(in []*string) interface{} {
+		return func(in []*string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in *string) interface{} {
+					if in == nil {
+						return nil
+					}
+					return func(in string) interface{} {
+						return FlattenString(string(in))
+					}(*in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.AvailabilityZoneHints)
 }
 
 func FlattenResourceOpenstackRouter(in kops.OpenstackRouter) map[string]interface{} {

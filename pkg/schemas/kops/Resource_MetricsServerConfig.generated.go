@@ -13,8 +13,9 @@ var _ = Schema
 func ResourceMetricsServerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": OptionalBool(),
-			"image":   OptionalString(),
+			"enabled":  OptionalBool(),
+			"image":    OptionalString(),
+			"insecure": OptionalBool(),
 		},
 	}
 }
@@ -56,6 +57,22 @@ func ExpandResourceMetricsServerConfig(in map[string]interface{}) kops.MetricsSe
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
+		Insecure: func(in interface{}) *bool {
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["insecure"]),
 	}
 }
 
@@ -80,6 +97,16 @@ func FlattenResourceMetricsServerConfigInto(in kops.MetricsServerConfig, out map
 			}(*in)
 		}(in)
 	}(in.Image)
+	out["insecure"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.Insecure)
 }
 
 func FlattenResourceMetricsServerConfig(in kops.MetricsServerConfig) map[string]interface{} {

@@ -165,6 +165,7 @@ func getFields(t reflect.Type, flatten bool) []_field {
 }
 
 func fieldName(in string) string {
+	in = strings.ReplaceAll(in, "CSI", "Csi")
 	in = strings.ReplaceAll(in, "CIDR", "Cidr")
 	in = strings.ReplaceAll(in, "DNS", "Dns")
 	in = strings.ReplaceAll(in, "IP", "Ip")
@@ -955,7 +956,6 @@ func main() {
 			required("ClusterName"),
 			computedOnly("Revision"),
 		),
-		generate(resources.RollingUpdateOptions{}),
 		generate(utils.RollingUpdateOptions{},
 			noSchema(),
 		),
@@ -1106,6 +1106,17 @@ func main() {
 			required("Name", "Path", "Content"),
 		),
 		generate(kops.RollingUpdate{}),
+		// 1.20
+		generate(resources.RollingUpdateOptions{}),
+		generate(kops.AzureConfiguration{}),
+		generate(kops.AWSEBSCSIDriver{}),
+		generate(kops.NTPConfig{}),
+		generate(kops.CertManagerConfig{}),
+		generate(kops.AWSLoadBalancerControllerConfig{}),
+		generate(kops.GossipConfigSecondary{}),
+		generate(kops.LoadBalancerSubnetSpec{}),
+		generate(kops.DNSControllerGossipConfigSecondary{}),
+		generate(kops.OpenstackNetwork{}),
 	)
 	configMap := build(
 		"Config",
@@ -1226,6 +1237,16 @@ func main() {
 		generate(kops.IAMProfileSpec{}),
 		generate(kops.RollingUpdate{}),
 		generate(kops.ExecContainerAction{}),
+		// 1.20
+		generate(kops.AzureConfiguration{}),
+		generate(kops.AWSEBSCSIDriver{}),
+		generate(kops.NTPConfig{}),
+		generate(kops.CertManagerConfig{}),
+		generate(kops.AWSLoadBalancerControllerConfig{}),
+		generate(kops.GossipConfigSecondary{}),
+		generate(kops.LoadBalancerSubnetSpec{}),
+		generate(kops.DNSControllerGossipConfigSecondary{}),
+		generate(kops.OpenstackNetwork{}),
 	)
 	log.Println("generating docs...")
 	// resources
