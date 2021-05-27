@@ -816,7 +816,7 @@ The following arguments are supported:
 - `spotinst_orientation` - (Optional) - String
 - `openstack` - (Optional) - [openstack_configuration](#openstack_configuration) - Openstack cloud-config options.
 - `azure` - (Optional) - [azure_configuration](#azure_configuration) - Azure cloud-config options.
-- `awsebscsi_driver` - (Optional) - [awsebscsi_driver](#awsebscsi_driver) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
+- `awsebs_csi_driver` - (Optional) - [awsebs_csi_driver](#awsebs_csi_driver) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 
 ### openstack_configuration
 
@@ -885,7 +885,7 @@ The following arguments are supported:
 - `ignore_az` - (Optional) - Bool
 - `override_az` - (Optional) - String
 - `create_storage_class` - (Optional) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
-- `cs_iplugin_image` - (Optional) - String
+- `csi_plugin_image` - (Optional) - String
 - `csi_topology_support` - (Optional) - Bool
 
 ### openstack_network
@@ -912,7 +912,7 @@ The following arguments are supported:
 - `route_table_name` - (Optional) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
 - `admin_user` - (Optional) - String - AdminUser specifies the admin user of VMs.
 
-### awsebscsi_driver
+### awsebs_csi_driver
 
 AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 

@@ -17,7 +17,7 @@ func ResourceOpenstackBlockStorageConfig() *schema.Resource {
 			"ignore_az":            OptionalBool(),
 			"override_az":          OptionalString(),
 			"create_storage_class": OptionalBool(),
-			"cs_iplugin_image":     OptionalString(),
+			"csi_plugin_image":     OptionalString(),
 			"csi_topology_support": OptionalBool(),
 		},
 	}
@@ -94,7 +94,7 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 		}(in["create_storage_class"]),
 		CSIPluginImage: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["cs_iplugin_image"]),
+		}(in["csi_plugin_image"]),
 		CSITopologySupport: func(in interface{}) *bool {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
@@ -155,7 +155,7 @@ func FlattenResourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorag
 			}(*in)
 		}(in)
 	}(in.CreateStorageClass)
-	out["cs_iplugin_image"] = func(in string) interface{} {
+	out["csi_plugin_image"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CSIPluginImage)
 	out["csi_topology_support"] = func(in *bool) interface{} {

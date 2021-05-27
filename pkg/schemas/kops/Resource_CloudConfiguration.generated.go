@@ -31,7 +31,7 @@ func ResourceCloudConfiguration() *schema.Resource {
 			"spotinst_orientation":           OptionalString(),
 			"openstack":                      OptionalStruct(ResourceOpenstackConfiguration()),
 			"azure":                          OptionalStruct(ResourceAzureConfiguration()),
-			"awsebscsi_driver":               OptionalStruct(ResourceAWSEBSCSIDriver()),
+			"awsebs_csi_driver":              OptionalStruct(ResourceAWSEBSCSIDriver()),
 		},
 	}
 }
@@ -337,7 +337,7 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 					return (ExpandResourceAWSEBSCSIDriver(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
-		}(in["awsebscsi_driver"]),
+		}(in["awsebs_csi_driver"]),
 	}
 }
 
@@ -519,7 +519,7 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 			}(*in)
 		}(in)
 	}(in.Azure)
-	out["awsebscsi_driver"] = func(in *kops.AWSEBSCSIDriver) interface{} {
+	out["awsebs_csi_driver"] = func(in *kops.AWSEBSCSIDriver) interface{} {
 		return func(in *kops.AWSEBSCSIDriver) interface{} {
 			if in == nil {
 				return nil

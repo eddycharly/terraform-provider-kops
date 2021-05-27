@@ -165,6 +165,7 @@ func getFields(t reflect.Type, flatten bool) []_field {
 }
 
 func fieldName(in string) string {
+	in = strings.ReplaceAll(in, "CSI", "Csi")
 	in = strings.ReplaceAll(in, "CIDR", "Cidr")
 	in = strings.ReplaceAll(in, "DNS", "Dns")
 	in = strings.ReplaceAll(in, "IP", "Ip")
