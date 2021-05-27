@@ -51,15 +51,16 @@ replace github.com/gophercloud/gophercloud => github.com/gophercloud/gophercloud
 // replace golang.org/x/sys => golang.org/x/sys v0.0.0-20200826173525-f9321e4c35a6
 
 require (
-	github.com/Masterminds/goutils v1.1.0 // indirect
+	github.com/Masterminds/semver v1.3.1 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/aws/aws-sdk-go v1.38.49
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.5.0
 	golang.org/x/tools v0.1.1
-	google.golang.org/grpc/examples v0.0.0-20201121004645-9da74c039bbf // indirect
+	google.golang.org/genproto v0.0.0-20200806141610-86f49bd18e98 // indirect
 	k8s.io/api v0.20.4
 	k8s.io/apimachinery v0.21.0
 	k8s.io/client-go v1.5.2
+	k8s.io/cloud-provider-openstack v1.19.3 // indirect
 	k8s.io/klog v1.0.0
-	k8s.io/kops v1.19.3
+	k8s.io/kops v1.20.1
 )
