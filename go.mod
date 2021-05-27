@@ -4,7 +4,6 @@ go 1.14
 
 // Version kubernetes-1.20.4 => tag v0.20.4
 // This should match hack/go.mod
-replace k8s.io/code-generator => k8s.io/code-generator v0.20.4
 
 replace (
 	k8s.io/api => k8s.io/api v0.20.4
@@ -15,6 +14,7 @@ replace (
 	k8s.io/client-go => k8s.io/client-go v0.20.4
 	k8s.io/cloud-provider => k8s.io/cloud-provider v0.20.4
 	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.20.4
+	k8s.io/code-generator => k8s.io/code-generator v0.20.4
 	k8s.io/component-base => k8s.io/component-base v0.20.4
 	k8s.io/cri-api => k8s.io/cri-api v0.20.4
 	k8s.io/csi-translation-lib => k8s.io/csi-translation-lib v0.20.4
@@ -30,7 +30,6 @@ replace (
 )
 
 require (
-	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/aws/aws-sdk-go v1.38.50
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
@@ -38,6 +37,5 @@ require (
 	k8s.io/api v0.20.4
 	k8s.io/apimachinery v0.20.4
 	k8s.io/client-go v0.20.4
-	k8s.io/klog v1.0.0
 	k8s.io/kops v1.20.1
 )
