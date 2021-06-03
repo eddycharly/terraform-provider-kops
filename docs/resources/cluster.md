@@ -816,7 +816,7 @@ The following arguments are supported:
 - `spotinst_orientation` - (Optional) - String
 - `openstack` - (Optional) - [openstack_configuration](#openstack_configuration) - Openstack cloud-config options.
 - `azure` - (Optional) - [azure_configuration](#azure_configuration) - Azure cloud-config options.
-- `awsebs_csi_driver` - (Optional) - [awsebs_csi_driver](#awsebs_csi_driver) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
+- `aws_ebs_csi_driver` - (Optional) - [aws_ebs_csi_driver](#aws_ebs_csi_driver) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 
 ### openstack_configuration
 
@@ -912,7 +912,7 @@ The following arguments are supported:
 - `route_table_name` - (Optional) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
 - `admin_user` - (Optional) - String - AdminUser specifies the admin user of VMs.
 
-### awsebs_csi_driver
+### aws_ebs_csi_driver
 
 AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 
