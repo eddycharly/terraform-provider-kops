@@ -276,8 +276,8 @@ The following arguments are supported:
 
 - `instances` - (Optional) - List(String) - Instances is a list of instance types which we are willing to run in the EC2 fleet.
 - `on_demand_allocation_strategy` - (Optional) - String - OnDemandAllocationStrategy indicates how to allocate instance types to fulfill On-Demand capacity.
-- `on_demand_base` - (Optional) - Int - OnDemandBase is the minimum amount of the Auto Scaling group's capacity that must be<br />fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.
-- `on_demand_above_base` - (Optional) - Int - OnDemandAboveBase controls the percentages of On-Demand Instances and Spot Instances for your<br />additional capacity beyond OnDemandBase. The range is 0–100. The default value is 100. If you<br />leave this parameter set to 100, the percentages are 100% for On-Demand Instances and 0% for<br />Spot Instances.
+- `on_demand_base` - (Required) - Int - OnDemandBase is the minimum amount of the Auto Scaling group's capacity that must be<br />fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.
+- `on_demand_above_base` - (Required) - Int - OnDemandAboveBase controls the percentages of On-Demand Instances and Spot Instances for your<br />additional capacity beyond OnDemandBase. The range is 0–100. The default value is 100. If you<br />leave this parameter set to 100, the percentages are 100% for On-Demand Instances and 0% for<br />Spot Instances.
 - `spot_allocation_strategy` - (Optional) - String - SpotAllocationStrategy diversifies your Spot capacity across multiple instance types to<br />find the best pricing. Higher Spot availability may result from a larger number of<br />instance types to choose from.
 - `spot_instance_pools` - (Optional) - Int - SpotInstancePools is the number of Spot pools to use to allocate your Spot capacity (defaults to 2)<br />pools are determined from the different instance types in the Overrides array of LaunchTemplate.
 
