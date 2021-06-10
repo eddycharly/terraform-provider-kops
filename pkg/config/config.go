@@ -50,12 +50,25 @@ func Clientset(in interface{}) simple.Clientset {
 	return in.(*options).clientset
 }
 
+func setEnvVarSimple(name, value string) {
+	if value != "" {
+		os.Setenv(name, value)
+	}
+}
+
 func initCredentials(config *config.Aws) error {
 	if config == nil {
 		return nil
 	}
-	if config.Region != "" {
-		os.Setenv("AWS_DEFAULT_REGION", config.Region)
+	setEnvVarSimple("AWS_DEFAULT_REGION", config.Region)
+	setEnvVarSimple("AWS_ACCESS_KEY_ID", config.AccessKey)
+	setEnvVarSimple("AWS_SECRET_ACCESS_KEY", config.SecretKey)
+	setEnvVarSimple("S3_ENDPOINT", config.S3Endpoint)
+	setEnvVarSimple("S3_REGION", config.S3Region)
+	setEnvVarSimple("S3_ACCESS_KEY_ID", config.S3AccessKey)
+	setEnvVarSimple("S3_SECRET_ACCESS_KEY", config.S3SecretKey)
+	if config.SkipRegionCheck {
+		os.Setenv("SKIP_REGION_CHECK", "1")
 	}
 	if config.Profile != "" {
 		os.Setenv("AWS_SDK_LOAD_CONFIG", "1")

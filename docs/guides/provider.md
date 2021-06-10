@@ -55,9 +55,16 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `profile` - (Optional) - String
-- `region` - (Optional) - String
-- `assume_role` - (Optional) - [aws_assume_role](#aws_assume_role)
+- `profile` - (Optional) - String - Profile defines the AWS profile to load when calling aws services.
+- `region` - (Optional) - String - Region defines the AWS region.
+- `access_key` - (Optional) - String - Region defines the AWS access key.
+- `secret_key` - (Optional) - String - Region defines the AWS secret key.
+- `assume_role` - (Optional) - [aws_assume_role](#aws_assume_role) - AssumeRole defines the AWS IAM role to be assumed.
+- `s3_endpoint` - (Optional) - String - S3Endpoint defines S3 compatible endpoint.
+- `s3_region` - (Optional) - String - S3Region defines S3 compatible endpoint region.
+- `s3_access_key` - (Optional) - String - S3AccessKey defines S3 compatible endpoint access key.
+- `s3_secret_key` - (Optional) - String - S3SecretKey defines S3 compatible endpoint secret key.
+- `skip_region_check` - (Optional) - Bool - SkipRegionCheck skips validating region check.
 
 ### aws_assume_role
 
@@ -65,7 +72,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `role_arn` - (Optional) - String
+- `role_arn` - (Optional) - String - RoleArn defines the arn of the AWS IAM role to assume.
 
 
 
