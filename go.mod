@@ -35,7 +35,7 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
 	golang.org/x/tools v0.1.3
 	k8s.io/api v0.20.4
-	k8s.io/apimachinery v0.20.4
+	k8s.io/apimachinery v0.21.1
 	k8s.io/client-go v0.20.4
 	k8s.io/klog v1.0.0
 	k8s.io/kops v1.20.1
