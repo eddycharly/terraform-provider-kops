@@ -46,6 +46,7 @@ provider "kops" {
 The following arguments are supported:
 - `state_store` - (Required) - String - StateStore defines the state store used by kops.
 - `aws` - (Optional) - [aws](#aws) - Aws contains the aws configuration options.
+- `openstack` - (Optional) - [openstack](#openstack) - OpenStack contains the openstack configuration options.
 
 ## Nested resources
 
@@ -73,6 +74,27 @@ The following arguments are supported:
 The following arguments are supported:
 
 - `role_arn` - (Optional) - String - RoleArn defines the arn of the AWS IAM role to assume.
+
+### openstack
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `tenant_id` - (Optional) - String
+- `tenant_name` - (Optional) - String
+- `project_id` - (Optional) - String
+- `project_name` - (Optional) - String
+- `project_domain_id` - (Optional) - String
+- `project_domain_name` - (Optional) - String
+- `domain_id` - (Optional) - String
+- `domain_name` - (Optional) - String
+- `username` - (Optional) - String
+- `password` - (Optional) - String
+- `auth_url` - (Optional) - String
+- `region_name` - (Optional) - String
+- `application_credential_id` - (Optional) - String
+- `application_credential_secret` - (Optional) - String
 
 
 

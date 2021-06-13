@@ -13,6 +13,7 @@ func ConfigProvider() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"state_store": RequiredString(),
 			"aws":         OptionalStruct(ConfigAws()),
+			"openstack":   OptionalStruct(ConfigOpenstack()),
 		},
 	}
 }
@@ -43,6 +44,24 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				}(in))
 			}(in)
 		}(in["aws"]),
+		Openstack: func(in interface{}) *config.Openstack {
+			return func(in interface{}) *config.Openstack {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in config.Openstack) *config.Openstack {
+					return &in
+				}(func(in interface{}) config.Openstack {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return config.Openstack{}
+					}
+					return (ExpandConfigOpenstack(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["openstack"]),
 	}
 }
 
@@ -62,6 +81,18 @@ func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
 			}(*in)
 		}(in)
 	}(in.Aws)
+	out["openstack"] = func(in *config.Openstack) interface{} {
+		return func(in *config.Openstack) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in config.Openstack) interface{} {
+				return func(in config.Openstack) []map[string]interface{} {
+					return []map[string]interface{}{FlattenConfigOpenstack(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Openstack)
 }
 
 func FlattenConfigProvider(in config.Provider) map[string]interface{} {

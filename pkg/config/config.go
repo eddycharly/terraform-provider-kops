@@ -30,8 +30,10 @@ type options struct {
 
 func ConfigureProvider(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	providerConfig := configschemas.ExpandConfigProvider(d.Get("").(map[string]interface{}))
-	err := initCredentials(providerConfig.Aws)
-	if err != nil {
+	if err := initAwsCredentials(providerConfig.Aws); err != nil {
+		return nil, diag.FromErr(err)
+	}
+	if err := initOpenstackCredentials(providerConfig.Openstack); err != nil {
 		return nil, diag.FromErr(err)
 	}
 	basePath, err := vfs.Context.BuildVfsPath(providerConfig.StateStore)
@@ -56,7 +58,7 @@ func setEnvVarSimple(name, value string) {
 	}
 }
 
-func initCredentials(config *config.Aws) error {
+func initAwsCredentials(config *config.Aws) error {
 	if config == nil {
 		return nil
 	}
@@ -88,5 +90,26 @@ func initCredentials(config *config.Aws) error {
 		os.Setenv("AWS_SECRET_ACCESS_KEY", *result.Credentials.SecretAccessKey)
 		os.Setenv("AWS_SESSION_TOKEN", *result.Credentials.SessionToken)
 	}
+	return nil
+}
+
+func initOpenstackCredentials(config *config.Openstack) error {
+	if config == nil {
+		return nil
+	}
+	setEnvVarSimple("OS_TENANT_ID", config.TenantId)
+	setEnvVarSimple("OS_TENANT_NAME", config.TenantName)
+	setEnvVarSimple("OS_PROJECT_ID", config.ProjectId)
+	setEnvVarSimple("OS_PROJECT_NAME", config.ProjectName)
+	setEnvVarSimple("OS_PROJECT_DOMAIN_NAME", config.ProjectDomainName)
+	setEnvVarSimple("OS_PROJECT_DOMAIN_ID", config.ProjectDomainId)
+	setEnvVarSimple("OS_DOMAIN_NAME", config.DomainName)
+	setEnvVarSimple("OS_DOMAIN_ID", config.DomainId)
+	setEnvVarSimple("OS_USERNAME", config.Username)
+	setEnvVarSimple("OS_PASSWORD", config.Password)
+	setEnvVarSimple("OS_AUTH_URL", config.AuthUrl)
+	setEnvVarSimple("OS_REGION_NAME", config.RegionName)
+	setEnvVarSimple("OS_APPLICATION_CREDENTIAL_ID", config.ApplicationCredentialId)
+	setEnvVarSimple("OS_APPLICATION_CREDENTIAL_SECRET", config.ApplicationCredentialSecret)
 	return nil
 }

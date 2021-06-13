@@ -1129,6 +1129,7 @@ func main() {
 		),
 		generate(config.Aws{}),
 		generate(config.AwsAssumeRole{}),
+		generate(config.Openstack{}),
 	)
 	dataSourcesMap := build(
 		"DataSource",
