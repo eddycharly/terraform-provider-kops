@@ -1258,8 +1258,9 @@ func main() {
 	log.Println("generating docs...")
 	// resources
 	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
-	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
 	buildDoc(resources.ClusterUpdater{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterUpdaterHeader, "")
+	buildDoc(resources.DockerConfig{}, "docs/resources/", resourcesMap, "Resource", parser, genericHeader, "")
+	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
 	// data sources
 	buildDoc(datasources.ClusterStatus{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterStatusHeader, "")
 	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataKubeConfigHeader, "")
