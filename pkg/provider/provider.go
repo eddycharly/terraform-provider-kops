@@ -20,6 +20,7 @@ func NewProvider() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"kops_cluster":         resources.Cluster(),
 			"kops_cluster_updater": resources.ClusterUpdater(),
+			"kops_dockerconfig":    resources.DockerConfig(),
 			"kops_instance_group":  resources.InstanceGroup(),
 		},
 		ConfigureContextFunc: config.ConfigureProvider,

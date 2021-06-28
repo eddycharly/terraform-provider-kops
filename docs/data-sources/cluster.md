@@ -900,6 +900,7 @@ CertManagerConfig determines the cert manager configuration.
 The following arguments are supported:
 
 - `enabled` - (Computed) - Bool - Enabled enables the cert manager.<br />Default: false.
+- `managed` - (Computed) - Bool - Managed controls if cert-manager is manged and deployed by kOps.<br />The deployment of cert-manager is skipped if this is set to false.
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `default_issuer` - (Computed) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
 
@@ -1097,6 +1098,7 @@ AmazonVPCNetworkingSpec declares that we want Amazon VPC CNI networking.
 The following arguments are supported:
 
 - `image_name` - (Computed) - String - The container image name to use.
+- `init_image_name` - (Computed) - String - The init container image name to use.
 - `env` - (Computed) - List([env_var](#env_var)) - Env is a list of environment variables to set in the container.
 
 ### cilium_networking_spec
