@@ -1133,6 +1133,7 @@ func main() {
 		generate(config.Aws{}),
 		generate(config.AwsAssumeRole{}),
 		generate(config.Openstack{}),
+		generate(config.Klog{}),
 	)
 	dataSourcesMap := build(
 		"DataSource",

@@ -47,6 +47,7 @@ The following arguments are supported:
 - `state_store` - (Required) - String - StateStore defines the state store used by kops.
 - `aws` - (Optional) - [aws](#aws) - Aws contains the aws configuration options.
 - `openstack` - (Optional) - [openstack](#openstack) - OpenStack contains the openstack configuration options.
+- `klog` - (Optional) - [klog](#klog) - Klog contains the klog configuration options.
 
 ## Nested resources
 
@@ -95,6 +96,14 @@ The following arguments are supported:
 - `region_name` - (Optional) - String
 - `application_credential_id` - (Optional) - String
 - `application_credential_secret` - (Optional) - String
+
+### klog
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `v` - (Optional) - Int - V defines the verbosity of klog.
 
 
 

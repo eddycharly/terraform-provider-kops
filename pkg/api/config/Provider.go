@@ -7,4 +7,6 @@ type Provider struct {
 	Aws *Aws
 	// OpenStack contains the openstack configuration options
 	Openstack *Openstack
+	// Klog contains the klog configuration options
+	Klog *Klog
 }

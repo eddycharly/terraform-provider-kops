@@ -2,7 +2,9 @@ package config
 
 import (
 	"context"
+	"flag"
 	"os"
+	"strconv"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
+	"k8s.io/klog"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/client/simple/vfsclientset"
 	"k8s.io/kops/util/pkg/vfs"
@@ -30,6 +33,9 @@ type options struct {
 
 func ConfigureProvider(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	providerConfig := configschemas.ExpandConfigProvider(d.Get("").(map[string]interface{}))
+	if err := initKlog(providerConfig.Klog); err != nil {
+		return nil, diag.FromErr(err)
+	}
 	if err := initAwsCredentials(providerConfig.Aws); err != nil {
 		return nil, diag.FromErr(err)
 	}
@@ -56,6 +62,18 @@ func setEnvVarSimple(name, value string) {
 	if value != "" {
 		os.Setenv(name, value)
 	}
+}
+
+func initKlog(config *config.Klog) error {
+	if config == nil {
+		return nil
+	}
+	flags := flag.NewFlagSet("klog", flag.ExitOnError)
+	if config.V != nil {
+		flags.Set("v", strconv.Itoa(*config.V))
+	}
+	klog.InitFlags(flags)
+	return nil
 }
 
 func initAwsCredentials(config *config.Aws) error {
