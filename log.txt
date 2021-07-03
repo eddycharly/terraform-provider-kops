@@ -1,0 +1,1652 @@
+2021/07/03 15:08:27 [INFO] Terraform version: 0.13.4  
+2021/07/03 15:08:27 [INFO] Go runtime version: go1.14.7
+2021/07/03 15:08:27 [INFO] CLI args: []string{"/usr/local/bin/terraform", "plan", "./examples/basic"}
+2021/07/03 15:08:27 [DEBUG] Attempting to open CLI config file: /Users/charlesedouardbreteche/.terraformrc
+2021/07/03 15:08:27 [DEBUG] File doesn't exist, but doesn't need to. Ignoring.
+2021/07/03 15:08:27 [DEBUG] checking for credentials in "/Users/charlesedouardbreteche/.terraform.d/plugins"
+2021/07/03 15:08:27 [DEBUG] ignoring non-existing provider search directory terraform.d/plugins
+2021/07/03 15:08:27 [DEBUG] will search for provider plugins in /Users/charlesedouardbreteche/.terraform.d/plugins
+2021/07/03 15:08:27 [TRACE] getproviders.SearchLocalDirectory: /Users/charlesedouardbreteche/.terraform.d/plugins is a symlink to /Users/charlesedouardbreteche/.terraform.d/plugins
+2021/07/03 15:08:27 [TRACE] getproviders.SearchLocalDirectory: found github/eddycharly/kops v0.0.1 for darwin_amd64 at /Users/charlesedouardbreteche/.terraform.d/plugins/github/eddycharly/kops/0.0.1/darwin_amd64
+2021/07/03 15:08:27 [TRACE] getproviders.SearchLocalDirectory: found github/eddycharly/kops v0.0.1 for linux_amd64 at /Users/charlesedouardbreteche/.terraform.d/plugins/github/eddycharly/kops/0.0.1/linux_amd64
+2021/07/03 15:08:27 [DEBUG] ignoring non-existing provider search directory /Users/charlesedouardbreteche/Library/Application Support/io.terraform/plugins
+2021/07/03 15:08:27 [DEBUG] ignoring non-existing provider search directory /Library/Application Support/io.terraform/plugins
+2021/07/03 15:08:27 [INFO] CLI command args: []string{"plan", "./examples/basic"}
+2021/07/03 15:08:27 [TRACE] Meta.Backend: no config given or present on disk, so returning nil config
+2021/07/03 15:08:27 [TRACE] Meta.Backend: backend has not previously been initialized in this working directory
+2021/07/03 15:08:27 [DEBUG] New state was assigned lineage "1565e87e-cd07-f10e-d807-cdaf57e47b5b"
+2021/07/03 15:08:27 [TRACE] Meta.Backend: using default local state only (no backend configuration, and no existing initialized backend)
+2021/07/03 15:08:27 [TRACE] Meta.Backend: instantiated backend of type <nil>
+2021/07/03 15:08:27 [TRACE] providercache.fillMetaCache: scanning directory .terraform/plugins
+2021/07/03 15:08:27 [TRACE] getproviders.SearchLocalDirectory: .terraform/plugins is a symlink to .terraform/plugins
+2021/07/03 15:08:27 [TRACE] getproviders.SearchLocalDirectory: found github/eddycharly/kops v0.0.1 for darwin_amd64 at .terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64
+2021/07/03 15:08:27 [TRACE] getproviders.SearchLocalDirectory: found registry.terraform.io/hashicorp/helm v2.1.2 for darwin_amd64 at .terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64
+2021/07/03 15:08:27 [TRACE] providercache.fillMetaCache: including .terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64 as a candidate package for github/eddycharly/kops 0.0.1
+2021/07/03 15:08:27 [TRACE] providercache.fillMetaCache: including .terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64 as a candidate package for registry.terraform.io/hashicorp/helm 2.1.2
+2021/07/03 15:08:27 [TRACE] providercache.fillMetaCache: using cached result from previous scan of .terraform/plugins
+2021/07/03 15:08:27 [DEBUG] checking for provisioner in "."
+2021/07/03 15:08:27 [DEBUG] checking for provisioner in "/usr/local/bin"
+2021/07/03 15:08:27 [DEBUG] checking for provisioner in "/Users/charlesedouardbreteche/.terraform.d/plugins"
+2021/07/03 15:08:27 [INFO] Failed to read plugin lock file .terraform/plugins/darwin_amd64/lock.json: open .terraform/plugins/darwin_amd64/lock.json: no such file or directory
+2021/07/03 15:08:27 [TRACE] Meta.Backend: backend <nil> does not support operations, so wrapping it in a local backend
+2021/07/03 15:08:27 [INFO] backend/local: starting Plan operation
+2021/07/03 15:08:27 [TRACE] backend/local: requesting state manager for workspace "default"
+2021/07/03 15:08:27 [TRACE] backend/local: state manager for workspace "default" will:
+ - read initial snapshot from terraform.tfstate
+ - write new snapshots to terraform.tfstate
+ - create any backup at terraform.tfstate.backup
+2021/07/03 15:08:27 [TRACE] backend/local: requesting state lock for workspace "default"
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: preparing to manage state snapshots at terraform.tfstate
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: no previously-stored snapshot exists
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: locking terraform.tfstate using fcntl flock
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: writing lock metadata to .terraform.tfstate.lock.info
+2021/07/03 15:08:27 [TRACE] backend/local: reading remote state for workspace "default"
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: reading latest snapshot from terraform.tfstate
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: snapshot file has nil snapshot, but that's okay
+2021/07/03 15:08:27 [TRACE] statemgr.Filesystem: read nil snapshot
+2021/07/03 15:08:27 [TRACE] backend/local: retrieving local state snapshot for workspace "default"
+2021/07/03 15:08:27 [TRACE] backend/local: building context for current working directory
+2021/07/03 15:08:27 [TRACE] terraform.NewContext: starting
+2021/07/03 15:08:27 [TRACE] terraform.NewContext: loading provider schemas
+2021/07/03 15:08:27 [TRACE] LoadSchemas: retrieving schema for provider type "github/eddycharly/kops"
+2021-07-03T15:08:27.767+0200 [INFO]  plugin: configuring client automatic mTLS
+2021-07-03T15:08:27.798+0200 [DEBUG] plugin: starting plugin: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops args=[.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops]
+2021-07-03T15:08:27.805+0200 [DEBUG] plugin: plugin started: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58769
+2021-07-03T15:08:27.806+0200 [DEBUG] plugin: waiting for RPC address: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops
+2021-07-03T15:08:27.861+0200 [INFO]  plugin.terraform-provider-kops: configuring server automatic mTLS: timestamp=2021-07-03T15:08:27.860+0200
+2021-07-03T15:08:27.893+0200 [DEBUG] plugin.terraform-provider-kops: plugin address: address=/var/folders/5_/g0vts0fj6sn6t4cnqrhxtz9w0000gp/T/plugin778086172 network=unix timestamp=2021-07-03T15:08:27.893+0200
+2021-07-03T15:08:27.893+0200 [DEBUG] plugin: using plugin: version=5
+2021/07/03 15:08:27 [TRACE] GRPCProvider: GetSchema
+2021-07-03T15:08:27.955+0200 [TRACE] plugin.stdio: waiting for stdio data
+2021/07/03 15:08:27 [TRACE] GRPCProvider: Close
+2021-07-03T15:08:27.971+0200 [WARN]  plugin.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = transport is closing"
+2021-07-03T15:08:27.974+0200 [DEBUG] plugin: plugin process exited: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58769
+2021-07-03T15:08:27.974+0200 [DEBUG] plugin: plugin exited
+2021/07/03 15:08:27 [TRACE] LoadSchemas: retrieving schema for provider type "registry.terraform.io/hashicorp/helm"
+2021-07-03T15:08:27.974+0200 [INFO]  plugin: configuring client automatic mTLS
+2021-07-03T15:08:28.004+0200 [DEBUG] plugin: starting plugin: path=.terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64/terraform-provider-helm_v2.1.2_x5 args=[.terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64/terraform-provider-helm_v2.1.2_x5]
+2021-07-03T15:08:28.008+0200 [DEBUG] plugin: plugin started: path=.terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64/terraform-provider-helm_v2.1.2_x5 pid=58770
+2021-07-03T15:08:28.008+0200 [DEBUG] plugin: waiting for RPC address: path=.terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64/terraform-provider-helm_v2.1.2_x5
+2021-07-03T15:08:28.058+0200 [INFO]  plugin.terraform-provider-helm_v2.1.2_x5: configuring server automatic mTLS: timestamp=2021-07-03T15:08:28.057+0200
+2021-07-03T15:08:28.099+0200 [DEBUG] plugin.terraform-provider-helm_v2.1.2_x5: plugin address: address=/var/folders/5_/g0vts0fj6sn6t4cnqrhxtz9w0000gp/T/plugin820869609 network=unix timestamp=2021-07-03T15:08:28.099+0200
+2021-07-03T15:08:28.099+0200 [DEBUG] plugin: using plugin: version=5
+2021/07/03 15:08:28 [TRACE] GRPCProvider: GetSchema
+2021-07-03T15:08:28.147+0200 [TRACE] plugin.stdio: waiting for stdio data
+2021/07/03 15:08:28 [TRACE] GRPCProvider: Close
+2021-07-03T15:08:28.149+0200 [WARN]  plugin.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = transport is closing"
+2021-07-03T15:08:28.151+0200 [DEBUG] plugin: plugin process exited: path=.terraform/plugins/registry.terraform.io/hashicorp/helm/2.1.2/darwin_amd64/terraform-provider-helm_v2.1.2_x5 pid=58770
+2021-07-03T15:08:28.151+0200 [DEBUG] plugin: plugin exited
+2021/07/03 15:08:28 [TRACE] terraform.NewContext: complete
+2021/07/03 15:08:28 [TRACE] backend/local: finished building terraform.Context
+2021/07/03 15:08:28 [TRACE] backend/local: requesting interactive input, if necessary
+2021/07/03 15:08:28 [TRACE] Context.Input: Prompting for provider arguments
+2021/07/03 15:08:28 [TRACE] Context.Input: Provider provider.kops declared at examples/basic/provider.tf:10,1-16
+2021/07/03 15:08:28 [TRACE] Context.Input: Provider provider.helm declared at examples/basic/provider.tf:14,1-16
+2021/07/03 15:08:28 [TRACE] Context.Input: Input for provider.helm: map[string]cty.Value{}
+2021/07/03 15:08:28 [TRACE] Context.Input: Input for provider.kops: map[string]cty.Value{}
+2021/07/03 15:08:28 [TRACE] backend/local: running validation operation
+2021/07/03 15:08:28 [INFO] terraform: building graph: GraphTypeValidate
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ConfigTransformer
+2021/07/03 15:08:28 [TRACE] ConfigTransformer: Starting for path: 
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ConfigTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.LocalTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.LocalTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OutputTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OutputTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.StateTransformer
+2021/07/03 15:08:28 [TRACE] StateTransformer: state is empty, so nothing to do
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.StateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanOutputTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanOutputTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachResourceConfigTransformer
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_cluster.cluster" (*terraform.NodeValidatableResource) config from examples/basic/cluster.tf:1,1-34
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "data.kops_kube_config.kube_config" (*terraform.NodeValidatableResource) config from hcl.Range{Filename:"examples/basic/cluster.tf", Start:hcl.Pos{Line:142, Column:1, Byte:2817}, End:hcl.Pos{Line:142, Column:38, Byte:2854}}
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_instance_group.master-0" (*terraform.NodeValidatableResource) config from examples/basic/cluster.tf:87,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_instance_group.master-1" (*terraform.NodeValidatableResource) config from examples/basic/cluster.tf:98,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_instance_group.master-2" (*terraform.NodeValidatableResource) config from examples/basic/cluster.tf:109,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_cluster_updater.updater" (*terraform.NodeValidatableResource) config from examples/basic/cluster.tf:120,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachResourceConfigTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootVariableTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootVariableTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.MissingProvisionerTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.MissingProvisionerTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ProvisionerTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ProvisionerTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ModuleVariableTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ModuleVariableTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.graphTransformerMulti
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ProviderConfigTransformer
+2021/07/03 15:08:28 [TRACE] ProviderConfigTransformer: attaching to "provider[\"registry.terraform.io/hashicorp/helm\"]" provider configuration from examples/basic/provider.tf:14,1-16
+2021/07/03 15:08:28 [TRACE] ProviderConfigTransformer: attaching to "provider[\"github/eddycharly/kops\"]" provider configuration from examples/basic/provider.tf:10,1-16
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ProviderConfigTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["registry.terraform.io/hashicorp/helm"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.MissingProviderTransformer
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.MissingProviderTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ProviderTransformer
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_cluster_updater.updater
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_cluster_updater.updater" (*terraform.NodeValidatableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_cluster.cluster
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_cluster.cluster" (*terraform.NodeValidatableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "data.kops_kube_config.kube_config" (*terraform.NodeValidatableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_instance_group.master-0
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_instance_group.master-0" (*terraform.NodeValidatableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_instance_group.master-1
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_instance_group.master-1" (*terraform.NodeValidatableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_instance_group.master-2
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_instance_group.master-2" (*terraform.NodeValidatableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ProviderTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["registry.terraform.io/hashicorp/helm"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.PruneProviderTransformer
+2021/07/03 15:08:28 [DEBUG] pruning unused provider["registry.terraform.io/hashicorp/helm"]
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.PruneProviderTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ParentProviderTransformer
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ParentProviderTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.graphTransformerMulti with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RemovedModuleTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RemovedModuleTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachSchemaTransformer
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching provider config schema to provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachSchemaTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ModuleExpansionTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ModuleExpansionTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-0" references: [kops_cluster.cluster kops_cluster.cluster]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-1" references: [kops_cluster.cluster kops_cluster.cluster]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-2" references: [kops_cluster.cluster kops_cluster.cluster]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_cluster_updater.updater" references: [kops_cluster.cluster kops_cluster.cluster kops_instance_group.master-0 kops_instance_group.master-1 kops_instance_group.master-2]
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "path.module"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_cluster.cluster" references: []
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "data.kops_kube_config.kube_config" references: [kops_cluster_updater.updater kops_cluster.cluster]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "provider[\"github/eddycharly/kops\"]" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.attachDataResourceDependenciesTransformer
+2021/07/03 15:08:28 [TRACE] attachDataDependenciesTransformer: data.kops_kube_config.kube_config depends on [kops_cluster_updater.updater kops_instance_group.master-2 kops_cluster.cluster kops_instance_group.master-1 kops_instance_group.master-0]
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.attachDataResourceDependenciesTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ForcedCBDTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ForcedCBDTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CountBoundaryTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CountBoundaryTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseProviderTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseProviderTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseProvisionerTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseProvisionerTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseRootModuleTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseRootModuleTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  root - *terraform.nodeCloseModule
+    meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TransitiveReductionTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TransitiveReductionTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+    kops_cluster_updater.updater - *terraform.NodeValidatableResource
+  kops_cluster.cluster - *terraform.NodeValidatableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater - *terraform.NodeValidatableResource
+    kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_instance_group.master-2 - *terraform.NodeValidatableResource
+  kops_instance_group.master-0 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+  kops_instance_group.master-1 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+  kops_instance_group.master-2 - *terraform.NodeValidatableResource
+    kops_cluster.cluster - *terraform.NodeValidatableResource
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config - *terraform.NodeValidatableResource
+  root - *terraform.nodeCloseModule
+    meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+  ------
+2021/07/03 15:08:28 [DEBUG] Starting graph walk: walkValidate
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "provider[\"github/eddycharly/kops\"]"
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": starting visit (*terraform.NodeApplyableProvider)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalInitProvider
+2021-07-03T15:08:28.155+0200 [INFO]  plugin: configuring client automatic mTLS
+2021-07-03T15:08:28.178+0200 [DEBUG] plugin: starting plugin: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops args=[.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops]
+2021-07-03T15:08:28.182+0200 [DEBUG] plugin: plugin started: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58771
+2021-07-03T15:08:28.182+0200 [DEBUG] plugin: waiting for RPC address: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops
+2021-07-03T15:08:28.241+0200 [INFO]  plugin.terraform-provider-kops: configuring server automatic mTLS: timestamp=2021-07-03T15:08:28.241+0200
+2021-07-03T15:08:28.273+0200 [DEBUG] plugin.terraform-provider-kops: plugin address: network=unix address=/var/folders/5_/g0vts0fj6sn6t4cnqrhxtz9w0000gp/T/plugin780472214 timestamp=2021-07-03T15:08:28.273+0200
+2021-07-03T15:08:28.273+0200 [DEBUG] plugin: using plugin: version=5
+2021-07-03T15:08:28.337+0200 [TRACE] plugin.stdio: waiting for stdio data
+2021/07/03 15:08:28 [TRACE] BuiltinEvalContext: Initialized "provider[\"github/eddycharly/kops\"]" provider for provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalOpFilter
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateProvider
+2021/07/03 15:08:28 [TRACE] buildProviderConfig for provider["github/eddycharly/kops"]: using explicit config only
+2021/07/03 15:08:28 [TRACE] GRPCProvider: GetSchema
+2021/07/03 15:08:28 [TRACE] GRPCProvider: PrepareProviderConfig
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster.cluster"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": starting visit (*terraform.NodeValidatableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateResource
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-0"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": starting visit (*terraform.NodeValidatableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-2"
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": starting visit (*terraform.NodeValidatableResource)
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-1"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": starting visit (*terraform.NodeValidatableResource)
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateResource
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateResource
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateResource
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": visit complete
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": starting visit (*terraform.NodeValidatableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateResource
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": starting visit (*terraform.NodeValidatableResource)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateResource
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateDataSourceConfig
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "meta.count-boundary (EachMode fixup)"
+2021/07/03 15:08:28 [TRACE] vertex "meta.count-boundary (EachMode fixup)": starting visit (*terraform.NodeCountBoundary)
+2021/07/03 15:08:28 [TRACE] vertex "meta.count-boundary (EachMode fixup)": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: meta.count-boundary (EachMode fixup)
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCountFixZeroOneBoundaryGlobal
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "provider[\"github/eddycharly/kops\"] (close)"
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: meta.count-boundary (EachMode fixup)
+2021/07/03 15:08:28 [TRACE] vertex "meta.count-boundary (EachMode fixup)": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": starting visit (*terraform.graphNodeCloseProvider)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: provider["github/eddycharly/kops"] (close)
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCloseProvider
+2021/07/03 15:08:28 [TRACE] GRPCProvider: Close
+2021-07-03T15:08:28.381+0200 [WARN]  plugin.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = transport is closing"
+2021-07-03T15:08:28.384+0200 [DEBUG] plugin: plugin process exited: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58771
+2021-07-03T15:08:28.384+0200 [DEBUG] plugin: plugin exited
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: provider["github/eddycharly/kops"] (close)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "root"
+2021/07/03 15:08:28 [TRACE] vertex "root": starting visit (*terraform.nodeCloseModule)
+2021/07/03 15:08:28 [TRACE] vertex "root": evaluating
+2021/07/03 15:08:28 [TRACE] [walkValidate] Entering eval tree: root
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] [walkValidate] Exiting eval tree: root
+2021/07/03 15:08:28 [TRACE] vertex "root": visit complete
+2021/07/03 15:08:28 [INFO] backend/local: plan calling Refresh
+2021/07/03 15:08:28 [INFO] terraform: building graph: GraphTypeRefresh
+2021/07/03 15:08:28 [TRACE] No managed resources in state during refresh; skipping managed resource transformer
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ConfigTransformer
+2021/07/03 15:08:28 [TRACE] ConfigTransformer: Starting for path: 
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ConfigTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.StateTransformer
+2021/07/03 15:08:28 [TRACE] StateTransformer: state is empty, so nothing to do
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.StateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachResourceConfigTransformer
+[0m[1mRefreshing Terraform state in-memory prior to plan...[0m
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "data.kops_kube_config.kube_config (expand)" (*terraform.nodeExpandRefreshableDataResource) config from hcl.Range{Filename:"examples/basic/cluster.tf", Start:hcl.Pos{Line:142, Column:1, Byte:2817}, End:hcl.Pos{Line:142, Column:38, Byte:2854}}
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to data.kops_kube_config.kube_config (expand)
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachResourceConfigTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootVariableTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootVariableTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.LocalTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.LocalTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OutputTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OutputTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ModuleVariableTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ModuleVariableTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.graphTransformerMulti
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ProviderConfigTransformer
+The refreshed state will be used to calculate this plan, but will not be
+2021/07/03 15:08:28 [TRACE] ProviderConfigTransformer: attaching to "provider[\"github/eddycharly/kops\"]" provider configuration from examples/basic/provider.tf:10,1-16
+2021/07/03 15:08:28 [TRACE] ProviderConfigTransformer: attaching to "provider[\"registry.terraform.io/hashicorp/helm\"]" provider configuration from examples/basic/provider.tf:14,1-16
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ProviderConfigTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["registry.terraform.io/hashicorp/helm"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.MissingProviderTransformer
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.MissingProviderTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ProviderTransformer
+persisted to local or remote state storage.
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving data.kops_kube_config.kube_config (expand)
+[0m
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "data.kops_kube_config.kube_config (expand)" (*terraform.nodeExpandRefreshableDataResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ProviderTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["registry.terraform.io/hashicorp/helm"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.PruneProviderTransformer
+2021/07/03 15:08:28 [DEBUG] pruning unused provider["registry.terraform.io/hashicorp/helm"]
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.PruneProviderTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ParentProviderTransformer
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ParentProviderTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.graphTransformerMulti with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachSchemaTransformer
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to data.kops_kube_config.kube_config (expand)
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching provider config schema to provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachSchemaTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ModuleExpansionTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ModuleExpansionTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "data.kops_kube_config.kube_config (expand)" references: []
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "provider[\"github/eddycharly/kops\"]" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachDependenciesTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachDependenciesTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.attachDataResourceDependenciesTransformer
+2021/07/03 15:08:28 [TRACE] attachDataDependenciesTransformer: data.kops_kube_config.kube_config depends on []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.attachDataResourceDependenciesTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseProviderTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseProviderTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseRootModuleTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseRootModuleTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  root - *terraform.nodeCloseModule
+    provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TransitiveReductionTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TransitiveReductionTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandRefreshableDataResource
+  root - *terraform.nodeCloseModule
+    provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+  ------
+2021/07/03 15:08:28 [DEBUG] Starting graph walk: walkRefresh
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "provider[\"github/eddycharly/kops\"]"
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": starting visit (*terraform.NodeApplyableProvider)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": evaluating
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Entering eval tree: provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalInitProvider
+2021-07-03T15:08:28.385+0200 [INFO]  plugin: configuring client automatic mTLS
+2021-07-03T15:08:28.419+0200 [DEBUG] plugin: starting plugin: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops args=[.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops]
+2021-07-03T15:08:28.427+0200 [DEBUG] plugin: plugin started: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58772
+2021-07-03T15:08:28.427+0200 [DEBUG] plugin: waiting for RPC address: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops
+2021-07-03T15:08:28.482+0200 [INFO]  plugin.terraform-provider-kops: configuring server automatic mTLS: timestamp=2021-07-03T15:08:28.482+0200
+2021-07-03T15:08:28.515+0200 [DEBUG] plugin: using plugin: version=5
+2021-07-03T15:08:28.515+0200 [DEBUG] plugin.terraform-provider-kops: plugin address: address=/var/folders/5_/g0vts0fj6sn6t4cnqrhxtz9w0000gp/T/plugin132353339 network=unix timestamp=2021-07-03T15:08:28.515+0200
+2021/07/03 15:08:28 [TRACE] BuiltinEvalContext: Initialized "provider[\"github/eddycharly/kops\"]" provider for provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021-07-03T15:08:28.590+0200 [TRACE] plugin.stdio: waiting for stdio data
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalOpFilter
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalOpFilter
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalConfigProvider
+2021/07/03 15:08:28 [TRACE] buildProviderConfig for provider["github/eddycharly/kops"]: using explicit config only
+2021/07/03 15:08:28 [TRACE] GRPCProvider: GetSchema
+2021/07/03 15:08:28 [TRACE] GRPCProvider: Configure
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Exiting eval tree: provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config (expand)"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": starting visit (*terraform.nodeExpandRefreshableDataResource)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": starting visit (*terraform.NodeRefreshableDataResource)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding data.kops_kube_config.kube_config as *terraform.NodeRefreshableDataResourceInstance
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodeRefreshableDataResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [DEBUG] Resource state not found for node "data.kops_kube_config.kube_config", instance data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "data.kops_kube_config.kube_config" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": starting visit (*terraform.NodeRefreshableDataResourceInstance)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": evaluating
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Entering eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.evalReadDataRefresh
+2021/07/03 15:08:28 [TRACE] evalReadDataRefresh: data.kops_kube_config.kube_config configuration not fully known yet, so deferring to apply phase
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalIf
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Read change for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: removing state object for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Exiting eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "provider[\"github/eddycharly/kops\"] (close)"
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": starting visit (*terraform.graphNodeCloseProvider)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": evaluating
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Entering eval tree: provider["github/eddycharly/kops"] (close)
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCloseProvider
+2021/07/03 15:08:28 [TRACE] GRPCProvider: Close
+2021-07-03T15:08:28.608+0200 [WARN]  plugin.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = transport is closing"
+2021-07-03T15:08:28.611+0200 [DEBUG] plugin: plugin process exited: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58772
+2021-07-03T15:08:28.611+0200 [DEBUG] plugin: plugin exited
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Exiting eval tree: provider["github/eddycharly/kops"] (close)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "root"
+2021/07/03 15:08:28 [TRACE] vertex "root": starting visit (*terraform.nodeCloseModule)
+2021/07/03 15:08:28 [TRACE] vertex "root": evaluating
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Entering eval tree: root
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] [walkRefresh] Exiting eval tree: root
+2021/07/03 15:08:28 [TRACE] vertex "root": visit complete
+
+2021/07/03 15:08:28 [INFO] backend/local: plan calling Plan
+2021/07/03 15:08:28 [INFO] terraform: building graph: GraphTypePlan
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ConfigTransformer
+2021/07/03 15:08:28 [TRACE] ConfigTransformer: Starting for path: 
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ConfigTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.LocalTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.LocalTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OutputTransformer
+------------------------------------------------------------------------
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OutputTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.StateTransformer
+2021/07/03 15:08:28 [TRACE] StateTransformer: state is empty, so nothing to do
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.StateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanOutputTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanOutputTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachResourceConfigTransformer
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_cluster_updater.updater (expand)" (*terraform.nodeExpandPlannableResource) config from examples/basic/cluster.tf:120,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_cluster_updater.updater (expand)
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_cluster.cluster (expand)" (*terraform.nodeExpandPlannableResource) config from examples/basic/cluster.tf:1,1-34
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_cluster.cluster (expand)
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_instance_group.master-0 (expand)" (*terraform.nodeExpandPlannableResource) config from examples/basic/cluster.tf:87,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_instance_group.master-0 (expand)
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_instance_group.master-1 (expand)" (*terraform.nodeExpandPlannableResource) config from examples/basic/cluster.tf:98,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_instance_group.master-1 (expand)
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "kops_instance_group.master-2 (expand)" (*terraform.nodeExpandPlannableResource) config from examples/basic/cluster.tf:109,1-42
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to kops_instance_group.master-2 (expand)
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching to "data.kops_kube_config.kube_config (expand)" (*terraform.nodeExpandPlannableResource) config from hcl.Range{Filename:"examples/basic/cluster.tf", Start:hcl.Pos{Line:142, Column:1, Byte:2817}, End:hcl.Pos{Line:142, Column:38, Byte:2854}}
+2021/07/03 15:08:28 [TRACE] AttachResourceConfigTransformer: attaching provider meta configs to data.kops_kube_config.kube_config (expand)
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachResourceConfigTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootVariableTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootVariableTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.MissingProvisionerTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.MissingProvisionerTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ProvisionerTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ProvisionerTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ModuleVariableTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ModuleVariableTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.graphTransformerMulti
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ProviderConfigTransformer
+2021/07/03 15:08:28 [TRACE] ProviderConfigTransformer: attaching to "provider[\"github/eddycharly/kops\"]" provider configuration from examples/basic/provider.tf:10,1-16
+2021/07/03 15:08:28 [TRACE] ProviderConfigTransformer: attaching to "provider[\"registry.terraform.io/hashicorp/helm\"]" provider configuration from examples/basic/provider.tf:14,1-16
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ProviderConfigTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["registry.terraform.io/hashicorp/helm"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.MissingProviderTransformer
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.MissingProviderTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ProviderTransformer
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_instance_group.master-1 (expand)
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_instance_group.master-1 (expand)" (*terraform.nodeExpandPlannableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_instance_group.master-2 (expand)
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_instance_group.master-2 (expand)" (*terraform.nodeExpandPlannableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving data.kops_kube_config.kube_config (expand)
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "data.kops_kube_config.kube_config (expand)" (*terraform.nodeExpandPlannableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_cluster_updater.updater (expand)
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_cluster_updater.updater (expand)" (*terraform.nodeExpandPlannableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_cluster.cluster (expand)
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_cluster.cluster (expand)" (*terraform.nodeExpandPlannableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] ProviderTransformer: exact match for provider["github/eddycharly/kops"] serving kops_instance_group.master-0 (expand)
+2021/07/03 15:08:28 [DEBUG] ProviderTransformer: "kops_instance_group.master-0 (expand)" (*terraform.nodeExpandPlannableResource) needs provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ProviderTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["registry.terraform.io/hashicorp/helm"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.PruneProviderTransformer
+2021/07/03 15:08:28 [DEBUG] pruning unused provider["registry.terraform.io/hashicorp/helm"]
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.PruneProviderTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Executing graph transform *terraform.ParentProviderTransformer
+2021/07/03 15:08:28 [TRACE] (graphTransformerMulti) Completed graph transform *terraform.ParentProviderTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.graphTransformerMulti with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RemovedModuleTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RemovedModuleTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachSchemaTransformer
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching provider config schema to provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_cluster_updater.updater (expand)
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_cluster.cluster (expand)
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_instance_group.master-0 (expand)
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_instance_group.master-1 (expand)
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to kops_instance_group.master-2 (expand)
+2021/07/03 15:08:28 [TRACE] AttachSchemaTransformer: attaching resource schema to data.kops_kube_config.kube_config (expand)
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachSchemaTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ModuleExpansionTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ModuleExpansionTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "data.kops_kube_config.kube_config (expand)" references: [kops_cluster_updater.updater (expand) kops_cluster.cluster (expand)]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "provider[\"github/eddycharly/kops\"]" references: []
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_cluster_updater.updater (expand)" references: [kops_cluster.cluster (expand) kops_cluster.cluster (expand) kops_instance_group.master-0 (expand) kops_instance_group.master-1 (expand) kops_instance_group.master-2 (expand)]
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "path.module"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_cluster.cluster (expand)" references: []
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-0 (expand)" references: [kops_cluster.cluster (expand) kops_cluster.cluster (expand)]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-1 (expand)" references: [kops_cluster.cluster (expand) kops_cluster.cluster (expand)]
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-2 (expand)" references: [kops_cluster.cluster (expand) kops_cluster.cluster (expand)]
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.attachDataResourceDependenciesTransformer
+2021/07/03 15:08:28 [TRACE] attachDataDependenciesTransformer: data.kops_kube_config.kube_config depends on [kops_cluster_updater.updater kops_instance_group.master-1 kops_instance_group.master-0 kops_instance_group.master-2 kops_cluster.cluster]
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.attachDataResourceDependenciesTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ForcedCBDTransformer
+2021/07/03 15:08:28 [TRACE] ForcedCBDTransformer: "kops_instance_group.master-0 (expand)" (*terraform.nodeExpandPlannableResource) has no CBD descendent, so skipping
+2021/07/03 15:08:28 [TRACE] ForcedCBDTransformer: "kops_instance_group.master-1 (expand)" (*terraform.nodeExpandPlannableResource) has no CBD descendent, so skipping
+2021/07/03 15:08:28 [TRACE] ForcedCBDTransformer: "kops_instance_group.master-2 (expand)" (*terraform.nodeExpandPlannableResource) has no CBD descendent, so skipping
+2021/07/03 15:08:28 [TRACE] ForcedCBDTransformer: "data.kops_kube_config.kube_config (expand)" (*terraform.nodeExpandPlannableResource) has no CBD descendent, so skipping
+2021/07/03 15:08:28 [TRACE] ForcedCBDTransformer: "kops_cluster_updater.updater (expand)" (*terraform.nodeExpandPlannableResource) has no CBD descendent, so skipping
+2021/07/03 15:08:28 [TRACE] ForcedCBDTransformer: "kops_cluster.cluster (expand)" (*terraform.nodeExpandPlannableResource) has no CBD descendent, so skipping
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ForcedCBDTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CountBoundaryTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CountBoundaryTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseProviderTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseProviderTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseProvisionerTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseProvisionerTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.CloseRootModuleTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.CloseRootModuleTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  root - *terraform.nodeCloseModule
+    meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TransitiveReductionTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TransitiveReductionTransformer with new graph:
+  data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+  kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+    provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  kops_cluster_updater.updater (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-0 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-1 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+  kops_instance_group.master-2 (expand) - *terraform.nodeExpandPlannableResource
+    kops_cluster.cluster (expand) - *terraform.nodeExpandPlannableResource
+  meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+  provider["github/eddycharly/kops"] - *terraform.NodeApplyableProvider
+  provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+    data.kops_kube_config.kube_config (expand) - *terraform.nodeExpandPlannableResource
+  root - *terraform.nodeCloseModule
+    meta.count-boundary (EachMode fixup) - *terraform.NodeCountBoundary
+    provider["github/eddycharly/kops"] (close) - *terraform.graphNodeCloseProvider
+  ------
+2021/07/03 15:08:28 [DEBUG] Starting graph walk: walkPlan
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "provider[\"github/eddycharly/kops\"]"
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": starting visit (*terraform.NodeApplyableProvider)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalInitProvider
+2021-07-03T15:08:28.616+0200 [INFO]  plugin: configuring client automatic mTLS
+2021-07-03T15:08:28.646+0200 [DEBUG] plugin: starting plugin: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops args=[.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops]
+2021-07-03T15:08:28.654+0200 [DEBUG] plugin: plugin started: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58773
+2021-07-03T15:08:28.654+0200 [DEBUG] plugin: waiting for RPC address: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops
+2021-07-03T15:08:28.706+0200 [INFO]  plugin.terraform-provider-kops: configuring server automatic mTLS: timestamp=2021-07-03T15:08:28.706+0200
+2021-07-03T15:08:28.737+0200 [DEBUG] plugin.terraform-provider-kops: plugin address: address=/var/folders/5_/g0vts0fj6sn6t4cnqrhxtz9w0000gp/T/plugin125050736 network=unix timestamp=2021-07-03T15:08:28.737+0200
+2021-07-03T15:08:28.737+0200 [DEBUG] plugin: using plugin: version=5
+2021/07/03 15:08:28 [TRACE] BuiltinEvalContext: Initialized "provider[\"github/eddycharly/kops\"]" provider for provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalOpFilter
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalOpFilter
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalConfigProvider
+2021/07/03 15:08:28 [TRACE] buildProviderConfig for provider["github/eddycharly/kops"]: using explicit config only
+2021/07/03 15:08:28 [TRACE] GRPCProvider: GetSchema
+2021-07-03T15:08:28.785+0200 [TRACE] plugin.stdio: waiting for stdio data
+2021/07/03 15:08:28 [TRACE] GRPCProvider: Configure
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: provider["github/eddycharly/kops"]
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"]": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster.cluster (expand)"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster (expand)": starting visit (*terraform.nodeExpandPlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster.cluster"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": starting visit (*terraform.NodePlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteResourceState
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding kops_cluster.cluster as *terraform.NodePlannableResourceInstance
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  kops_cluster.cluster - *terraform.NodePlannableResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [DEBUG] Resource instance state not found for node "kops_cluster.cluster", instance kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "path.module"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_cluster.cluster" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster.cluster"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": starting visit (*terraform.NodePlannableResourceInstance)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateSelfRef
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalDiff
+2021/07/03 15:08:28 [TRACE] Re-validating config for "kops_cluster.cluster"
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] GRPCProvider: PlanResourceChange
+2021/07/03 15:08:28 [WARN] Provider "github/eddycharly/kops" produced an invalid plan for kops_cluster.cluster, but we are tolerating it because it is using the legacy plugin SDK.
+    The following problems may be the cause of any confusing errors from downstream operations:
+      - .iam: attribute representing nested block must not be unknown itself; set nested attribute values to unknown instead
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCheckPreventDestroy
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: writing current state object for kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Create change for kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_cluster.cluster
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster.cluster (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-2 (expand)"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2 (expand)": starting visit (*terraform.nodeExpandPlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2 (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2 (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-0 (expand)"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0 (expand)": starting visit (*terraform.nodeExpandPlannableResource)
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-1 (expand)"
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-2"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1 (expand)": starting visit (*terraform.nodeExpandPlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1 (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0 (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1 (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0 (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-1"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": starting visit (*terraform.NodePlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": starting visit (*terraform.NodePlannableResource)
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-0"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": evaluating
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": starting visit (*terraform.NodePlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": evaluating
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteResourceState
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteResourceState
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteResourceState
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding kops_instance_group.master-1 as *terraform.NodePlannableResourceInstance
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  kops_instance_group.master-1 - *terraform.NodePlannableResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [DEBUG] Resource instance state not found for node "kops_instance_group.master-1", instance kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "kops_cluster.cluster"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-1" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-1"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": starting visit (*terraform.NodePlannableResourceInstance)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding kops_instance_group.master-0 as *terraform.NodePlannableResourceInstance
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  kops_instance_group.master-0 - *terraform.NodePlannableResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [DEBUG] Resource instance state not found for node "kops_instance_group.master-0", instance kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "kops_cluster.cluster"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-0" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateSelfRef
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-0"
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": starting visit (*terraform.NodePlannableResourceInstance)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding kops_instance_group.master-2 as *terraform.NodePlannableResourceInstance
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  kops_instance_group.master-2 - *terraform.NodePlannableResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [DEBUG] Resource instance state not found for node "kops_instance_group.master-2", instance kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalDiff
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "kops_cluster.cluster"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_instance_group.master-2" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_instance_group.master-2"
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": starting visit (*terraform.NodePlannableResourceInstance)
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateSelfRef
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateSelfRef
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalDiff
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalDiff
+2021/07/03 15:08:28 [TRACE] Re-validating config for "kops_instance_group.master-1"
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] Re-validating config for "kops_instance_group.master-0"
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] Re-validating config for "kops_instance_group.master-2"
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] GRPCProvider: PlanResourceChange
+2021/07/03 15:08:28 [TRACE] GRPCProvider: PlanResourceChange
+2021/07/03 15:08:28 [TRACE] GRPCProvider: PlanResourceChange
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCheckPreventDestroy
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: writing current state object for kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCheckPreventDestroy
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: writing current state object for kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCheckPreventDestroy
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: writing current state object for kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Create change for kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_instance_group.master-0
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": visit complete
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Create change for kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_instance_group.master-1
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0 (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-0 (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1 (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-1 (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Create change for kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_instance_group.master-2
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2 (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_instance_group.master-2 (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster_updater.updater (expand)"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater (expand)": starting visit (*terraform.nodeExpandPlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": starting visit (*terraform.NodePlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteResourceState
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding kops_cluster_updater.updater as *terraform.NodePlannableResourceInstance
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  kops_cluster_updater.updater - *terraform.NodePlannableResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [DEBUG] Resource instance state not found for node "kops_cluster_updater.updater", instance kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "kops_cluster_updater.updater" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": starting visit (*terraform.NodePlannableResourceInstance)
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateSelfRef
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalDiff
+2021/07/03 15:08:28 [TRACE] Re-validating config for "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [TRACE] GRPCProvider: ValidateResourceTypeConfig
+2021/07/03 15:08:28 [TRACE] GRPCProvider: PlanResourceChange
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCheckPreventDestroy
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: writing current state object for kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Create change for kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: kops_cluster_updater.updater
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "kops_cluster_updater.updater (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config (expand)"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": starting visit (*terraform.nodeExpandPlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": starting visit (*terraform.NodePlannableResource)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteResourceState
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": expanding dynamic subgraph
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ResourceCountTransformer
+2021/07/03 15:08:28 [TRACE] ResourceCountTransformer: adding data.kops_kube_config.kube_config as *terraform.NodePlannableResourceInstance
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ResourceCountTransformer with new graph:
+  data.kops_kube_config.kube_config - *terraform.NodePlannableResourceInstance
+  ------
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.OrphanResourceInstanceCountTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.OrphanResourceInstanceCountTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.AttachStateTransformer
+2021/07/03 15:08:28 [DEBUG] Resource instance state not found for node "data.kops_kube_config.kube_config", instance data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.AttachStateTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.TargetsTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.TargetsTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.ReferenceTransformer
+2021/07/03 15:08:28 [WARN] ReferenceTransformer: reference not found: "kops_cluster_updater.updater"
+2021/07/03 15:08:28 [DEBUG] ReferenceTransformer: "data.kops_kube_config.kube_config" references: []
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.ReferenceTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] Executing graph transform *terraform.RootTransformer
+2021/07/03 15:08:28 [TRACE] Completed graph transform *terraform.RootTransformer (no changes)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": entering dynamic subgraph
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "data.kops_kube_config.kube_config"
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": starting visit (*terraform.NodePlannableResourceInstance)
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalGetProvider
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalReadState
+2021/07/03 15:08:28 [TRACE] EvalReadState: reading state for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] EvalReadState: no state present for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalValidateSelfRef
+2021/07/03 15:08:28 [TRACE] eval: *terraform.evalReadDataPlan
+2021/07/03 15:08:28 [TRACE] evalReadDataPlan: data.kops_kube_config.kube_config configuration is fully known, but we're forcing a read plan to be created
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteState
+2021/07/03 15:08:28 [TRACE] EvalWriteState: writing current state object for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalWriteDiff
+2021/07/03 15:08:28 [TRACE] EvalWriteDiff: recorded Read change for data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: data.kops_kube_config.kube_config
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config": visit complete
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": dynamic subgraph completed successfully
+2021/07/03 15:08:28 [TRACE] vertex "data.kops_kube_config.kube_config (expand)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "meta.count-boundary (EachMode fixup)"
+2021/07/03 15:08:28 [TRACE] vertex "meta.count-boundary (EachMode fixup)": starting visit (*terraform.NodeCountBoundary)
+2021/07/03 15:08:28 [TRACE] vertex "meta.count-boundary (EachMode fixup)": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: meta.count-boundary (EachMode fixup)
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCountFixZeroOneBoundaryGlobal
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "provider[\"github/eddycharly/kops\"] (close)"
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": starting visit (*terraform.graphNodeCloseProvider)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: meta.count-boundary (EachMode fixup)
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: provider["github/eddycharly/kops"] (close)
+2021/07/03 15:08:28 [TRACE] vertex "meta.count-boundary (EachMode fixup)": visit complete
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalCloseProvider
+2021/07/03 15:08:28 [TRACE] GRPCProvider: Close
+2021-07-03T15:08:28.864+0200 [WARN]  plugin.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = transport is closing"
+2021-07-03T15:08:28.866+0200 [DEBUG] plugin: plugin process exited: path=.terraform/plugins/github/eddycharly/kops/0.0.1/darwin_amd64/terraform-provider-kops pid=58773
+2021-07-03T15:08:28.866+0200 [DEBUG] plugin: plugin exited
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: provider["github/eddycharly/kops"] (close)
+2021/07/03 15:08:28 [TRACE] vertex "provider[\"github/eddycharly/kops\"] (close)": visit complete
+2021/07/03 15:08:28 [TRACE] dag/walk: visiting "root"
+2021/07/03 15:08:28 [TRACE] vertex "root": starting visit (*terraform.nodeCloseModule)
+2021/07/03 15:08:28 [TRACE] vertex "root": evaluating
+2021/07/03 15:08:28 [TRACE] [walkPlan] Entering eval tree: root
+2021/07/03 15:08:28 [TRACE] eval: *terraform.EvalSequence
+2021/07/03 15:08:28 [TRACE] eval: terraform.EvalNoop
+2021/07/03 15:08:28 [TRACE] [walkPlan] Exiting eval tree: root
+2021/07/03 15:08:28 [TRACE] vertex "root": visit complete
+2021/07/03 15:08:28 [INFO] backend/local: plan operation completed
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  [32m+[0m create
+ [36m<=[0m read (data resources)
+[0m
+Terraform will perform the following actions:
+
+[1m  # data.kops_kube_config.kube_config[0m will be read during apply
+  # (config refers to values not yet known)[0m[0m
+[0m [36m<=[0m[0m data "kops_kube_config" "kube_config"  {
+      [32m+[0m [0m[1m[0madmin[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mca_cert[0m[0m       = (sensitive value)
+      [32m+[0m [0m[1m[0mclient_cert[0m[0m   = (sensitive value)
+      [32m+[0m [0m[1m[0mclient_key[0m[0m    = (sensitive value)
+      [32m+[0m [0m[1m[0mcluster_name[0m[0m  = "cluster.example.com"
+      [32m+[0m [0m[1m[0mcontext[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0minternal[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mkube_password[0m[0m = (sensitive value)
+      [32m+[0m [0m[1m[0mkube_user[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0mnamespace[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0mserver[0m[0m        = (known after apply)
+    }
+
+[1m  # kops_cluster.cluster[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "kops_cluster" "cluster" {
+      [32m+[0m [0m[1m[0madmin_ssh_key[0m[0m        = (sensitive value)
+      [32m+[0m [0m[1m[0mcloud_provider[0m[0m       = "aws"
+      [32m+[0m [0m[1m[0mconfig_base[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mdns_zone[0m[0m             = "example.com"
+      [32m+[0m [0m[1m[0mid[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mkubernetes_version[0m[0m   = "stable"
+      [32m+[0m [0m[1m[0mmaster_internal_name[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mmaster_public_name[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m                 = "cluster.example.com"
+      [32m+[0m [0m[1m[0mnetwork_cidr[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mnetwork_id[0m[0m           = "net-0"
+      [32m+[0m [0m[1m[0mnon_masquerade_cidr[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mrevision[0m[0m             = 1
+
+      [32m+[0m [0metcd_cluster {
+          [32m+[0m [0m[1m[0mname[0m[0m = "main"
+
+          [32m+[0m [0mmember {
+              [32m+[0m [0m[1m[0minstance_group[0m[0m = "master-0"
+              [32m+[0m [0m[1m[0mname[0m[0m           = "master-0"
+            }
+          [32m+[0m [0mmember {
+              [32m+[0m [0m[1m[0minstance_group[0m[0m = "master-1"
+              [32m+[0m [0m[1m[0mname[0m[0m           = "master-1"
+            }
+          [32m+[0m [0mmember {
+              [32m+[0m [0m[1m[0minstance_group[0m[0m = "master-2"
+              [32m+[0m [0m[1m[0mname[0m[0m           = "master-2"
+            }
+        }
+2021/07/03 15:08:28 [TRACE] statemgr.Filesystem: removing lock metadata file .terraform.tfstate.lock.info
+      [32m+[0m [0metcd_cluster {
+          [32m+[0m [0m[1m[0mname[0m[0m = "events"
+
+          [32m+[0m [0mmember {
+2021/07/03 15:08:28 [TRACE] statemgr.Filesystem: unlocking terraform.tfstate using fcntl flock
+              [32m+[0m [0m[1m[0minstance_group[0m[0m = "master-0"
+              [32m+[0m [0m[1m[0mname[0m[0m           = "master-0"
+            }
+          [32m+[0m [0mmember {
+              [32m+[0m [0m[1m[0minstance_group[0m[0m = "master-1"
+              [32m+[0m [0m[1m[0mname[0m[0m           = "master-1"
+            }
+          [32m+[0m [0mmember {
+              [32m+[0m [0m[1m[0minstance_group[0m[0m = "master-2"
+              [32m+[0m [0m[1m[0mname[0m[0m           = "master-2"
+            }
+        }
+
+      [32m+[0m [0miam {
+          [32m+[0m [0m[1m[0mallow_container_registry[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mlegacy[0m[0m                   = (known after apply)
+          [32m+[0m [0m[1m[0mpermissions_boundary[0m[0m     = (known after apply)
+        }
+
+      [32m+[0m [0mkubelet {}
+
+      [32m+[0m [0mnetworking {
+
+          [32m+[0m [0mcalico {}
+        }
+
+      [32m+[0m [0msubnet {
+          [32m+[0m [0m[1m[0mcidr[0m[0m        = (known after apply)
+          [32m+[0m [0m[1m[0mname[0m[0m        = "private-0"
+          [32m+[0m [0m[1m[0mprovider_id[0m[0m = "subnet-0"
+          [32m+[0m [0m[1m[0mtype[0m[0m        = "Private"
+          [32m+[0m [0m[1m[0mzone[0m[0m        = "zone-0"
+        }
+      [32m+[0m [0msubnet {
+          [32m+[0m [0m[1m[0mcidr[0m[0m        = (known after apply)
+          [32m+[0m [0m[1m[0mname[0m[0m        = "private-1"
+          [32m+[0m [0m[1m[0mprovider_id[0m[0m = "subnet-1"
+          [32m+[0m [0m[1m[0mtype[0m[0m        = "Private"
+          [32m+[0m [0m[1m[0mzone[0m[0m        = "zone-1"
+        }
+      [32m+[0m [0msubnet {
+          [32m+[0m [0m[1m[0mcidr[0m[0m        = (known after apply)
+          [32m+[0m [0m[1m[0mname[0m[0m        = "private-2"
+          [32m+[0m [0m[1m[0mprovider_id[0m[0m = "subnet-2"
+          [32m+[0m [0m[1m[0mtype[0m[0m        = "Private"
+          [32m+[0m [0m[1m[0mzone[0m[0m        = "zone-2"
+        }
+
+      [32m+[0m [0mtopology {
+          [32m+[0m [0m[1m[0mmasters[0m[0m = "private"
+          [32m+[0m [0m[1m[0mnodes[0m[0m   = "private"
+
+          [32m+[0m [0mdns {
+              [32m+[0m [0m[1m[0mtype[0m[0m = "Private"
+            }
+        }
+    }
+
+[1m  # kops_cluster_updater.updater[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "kops_cluster_updater" "updater" {
+      [32m+[0m [0m[1m[0mcluster_name[0m[0m = "cluster.example.com"
+      [32m+[0m [0m[1m[0mid[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mkeepers[0m[0m      = {
+          [32m+[0m [0m"cluster"  = "1"
+          [32m+[0m [0m"master-0" = "1"
+          [32m+[0m [0m"master-1" = "1"
+          [32m+[0m [0m"master-2" = "1"
+        }
+      [32m+[0m [0m[1m[0mrevision[0m[0m     = 1
+
+      [32m+[0m [0mrolling_update {
+          [32m+[0m [0m[1m[0mfail_on_drain_error[0m[0m = true
+          [32m+[0m [0m[1m[0mfail_on_validate[0m[0m    = true
+          [32m+[0m [0m[1m[0mskip[0m[0m                = false
+          [32m+[0m [0m[1m[0mvalidate_count[0m[0m      = 1
+        }
+
+      [32m+[0m [0mvalidate {
+          [32m+[0m [0m[1m[0mskip[0m[0m = false
+        }
+    }
+
+[1m  # kops_instance_group.master-0[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "kops_instance_group" "master-0" {
+      [32m+[0m [0m[1m[0mcluster_name[0m[0m = "cluster.example.com"
+      [32m+[0m [0m[1m[0mid[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mimage[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mmachine_type[0m[0m = "t3.medium"
+      [32m+[0m [0m[1m[0mmax_size[0m[0m     = 1
+      [32m+[0m [0m[1m[0mmin_size[0m[0m     = 1
+      [32m+[0m [0m[1m[0mname[0m[0m         = "master-0"
+      [32m+[0m [0m[1m[0mrevision[0m[0m     = 1
+      [32m+[0m [0m[1m[0mrole[0m[0m         = "Master"
+      [32m+[0m [0m[1m[0msubnets[0m[0m      = [
+          [32m+[0m [0m"private-0",
+        ]
+    }
+
+[1m  # kops_instance_group.master-1[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "kops_instance_group" "master-1" {
+      [32m+[0m [0m[1m[0mcluster_name[0m[0m = "cluster.example.com"
+      [32m+[0m [0m[1m[0mid[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mimage[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mmachine_type[0m[0m = "t3.medium"
+      [32m+[0m [0m[1m[0mmax_size[0m[0m     = 1
+      [32m+[0m [0m[1m[0mmin_size[0m[0m     = 1
+      [32m+[0m [0m[1m[0mname[0m[0m         = "master-1"
+      [32m+[0m [0m[1m[0mrevision[0m[0m     = 1
+      [32m+[0m [0m[1m[0mrole[0m[0m         = "Master"
+      [32m+[0m [0m[1m[0msubnets[0m[0m      = [
+          [32m+[0m [0m"private-1",
+        ]
+    }
+
+[1m  # kops_instance_group.master-2[0m will be created[0m[0m
+[0m  [32m+[0m[0m resource "kops_instance_group" "master-2" {
+      [32m+[0m [0m[1m[0mcluster_name[0m[0m = "cluster.example.com"
+      [32m+[0m [0m[1m[0mid[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mimage[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mmachine_type[0m[0m = "t3.medium"
+      [32m+[0m [0m[1m[0mmax_size[0m[0m     = 1
+      [32m+[0m [0m[1m[0mmin_size[0m[0m     = 1
+      [32m+[0m [0m[1m[0mname[0m[0m         = "master-2"
+      [32m+[0m [0m[1m[0mrevision[0m[0m     = 1
+      [32m+[0m [0m[1m[0mrole[0m[0m         = "Master"
+      [32m+[0m [0m[1m[0msubnets[0m[0m      = [
+          [32m+[0m [0m"private-2",
+        ]
+    }
+
+[0m[1mPlan:[0m 5 to add, 0 to change, 0 to destroy.[0m
+
+------------------------------------------------------------------------
+
+Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+can't guarantee that exactly these actions will be performed if
+"terraform apply" is subsequently run.
+

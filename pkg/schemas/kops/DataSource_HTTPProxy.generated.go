@@ -11,8 +11,8 @@ var _ = Schema
 func DataSourceHTTPProxy() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"host": ComputedString(),
-			"port": ComputedInt(),
+			"host": Computed(String()),
+			"port": Computed(Int()),
 		},
 	}
 }
@@ -21,27 +21,12 @@ func ExpandDataSourceHTTPProxy(in map[string]interface{}) kops.HTTPProxy {
 	if in == nil {
 		panic("expand HTTPProxy failure, in is nil")
 	}
-	return kops.HTTPProxy{
-		Host: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["host"]),
-		Port: func(in interface{}) int {
-			return int(ExpandInt(in))
-		}(in["port"]),
+	out := kops.HTTPProxy{}
+	if in, ok := in["host"]; ok && in != nil {
+		out.Host = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenDataSourceHTTPProxyInto(in kops.HTTPProxy, out map[string]interface{}) {
-	out["host"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Host)
-	out["port"] = func(in int) interface{} {
-		return FlattenInt(int(in))
-	}(in.Port)
-}
-
-func FlattenDataSourceHTTPProxy(in kops.HTTPProxy) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceHTTPProxyInto(in, out)
+	if in, ok := in["port"]; ok && in != nil {
+		out.Port = func(in interface{}) int { return int(in.(int)) }(in)
+	}
 	return out
 }

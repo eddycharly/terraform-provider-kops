@@ -18,14 +18,6 @@ func ExpandResourceDNSAccessSpec(in map[string]interface{}) kops.DNSAccessSpec {
 	if in == nil {
 		panic("expand DNSAccessSpec failure, in is nil")
 	}
-	return kops.DNSAccessSpec{}
-}
-
-func FlattenResourceDNSAccessSpecInto(in kops.DNSAccessSpec, out map[string]interface{}) {
-}
-
-func FlattenResourceDNSAccessSpec(in kops.DNSAccessSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceDNSAccessSpecInto(in, out)
+	out := kops.DNSAccessSpec{}
 	return out
 }

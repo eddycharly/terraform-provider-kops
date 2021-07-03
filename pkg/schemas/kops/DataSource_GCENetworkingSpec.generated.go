@@ -18,14 +18,6 @@ func ExpandDataSourceGCENetworkingSpec(in map[string]interface{}) kops.GCENetwor
 	if in == nil {
 		panic("expand GCENetworkingSpec failure, in is nil")
 	}
-	return kops.GCENetworkingSpec{}
-}
-
-func FlattenDataSourceGCENetworkingSpecInto(in kops.GCENetworkingSpec, out map[string]interface{}) {
-}
-
-func FlattenDataSourceGCENetworkingSpec(in kops.GCENetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceGCENetworkingSpecInto(in, out)
+	out := kops.GCENetworkingSpec{}
 	return out
 }

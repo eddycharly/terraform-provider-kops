@@ -11,11 +11,11 @@ var _ = Schema
 func ResourceVolumeMountSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"device":         RequiredString(),
-			"filesystem":     RequiredString(),
-			"format_options": OptionalList(String()),
-			"mount_options":  OptionalList(String()),
-			"path":           RequiredString(),
+			"device":         Required(String()),
+			"filesystem":     Required(String()),
+			"format_options": Optional(List(String())),
+			"mount_options":  Optional(List(String())),
+			"path":           Required(String()),
 		},
 	}
 }
@@ -24,69 +24,33 @@ func ExpandResourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSp
 	if in == nil {
 		panic("expand VolumeMountSpec failure, in is nil")
 	}
-	return kops.VolumeMountSpec{
-		Device: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["device"]),
-		Filesystem: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["filesystem"]),
-		FormatOptions: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["format_options"]),
-		MountOptions: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["mount_options"]),
-		Path: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["path"]),
+	out := kops.VolumeMountSpec{}
+	if in, ok := in["device"]; ok && in != nil {
+		out.Device = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenResourceVolumeMountSpecInto(in kops.VolumeMountSpec, out map[string]interface{}) {
-	out["device"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Device)
-	out["filesystem"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Filesystem)
-	out["format_options"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
+	if in, ok := in["filesystem"]; ok && in != nil {
+		out.Filesystem = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["format_options"]; ok && in != nil {
+		out.FormatOptions = func(in interface{}) []string {
+			var out []string
+			for _, in := range in.([]interface{}) {
+				out = append(out, func(in interface{}) string { return string(in.(string)) }(in))
 			}
 			return out
 		}(in)
-	}(in.FormatOptions)
-	out["mount_options"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
+	}
+	if in, ok := in["mount_options"]; ok && in != nil {
+		out.MountOptions = func(in interface{}) []string {
+			var out []string
+			for _, in := range in.([]interface{}) {
+				out = append(out, func(in interface{}) string { return string(in.(string)) }(in))
 			}
 			return out
 		}(in)
-	}(in.MountOptions)
-	out["path"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Path)
-}
-
-func FlattenResourceVolumeMountSpec(in kops.VolumeMountSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceVolumeMountSpecInto(in, out)
+	}
+	if in, ok := in["path"]; ok && in != nil {
+		out.Path = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceBastionLoadBalancerSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"additional_security_groups": RequiredList(String()),
+			"additional_security_groups": Required(List(String())),
 		},
 	}
 }
@@ -20,33 +20,15 @@ func ExpandResourceBastionLoadBalancerSpec(in map[string]interface{}) kops.Basti
 	if in == nil {
 		panic("expand BastionLoadBalancerSpec failure, in is nil")
 	}
-	return kops.BastionLoadBalancerSpec{
-		AdditionalSecurityGroups: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["additional_security_groups"]),
-	}
-}
-
-func FlattenResourceBastionLoadBalancerSpecInto(in kops.BastionLoadBalancerSpec, out map[string]interface{}) {
-	out["additional_security_groups"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
+	out := kops.BastionLoadBalancerSpec{}
+	if in, ok := in["additional_security_groups"]; ok && in != nil {
+		out.AdditionalSecurityGroups = func(in interface{}) []string {
+			var out []string
+			for _, in := range in.([]interface{}) {
+				out = append(out, func(in interface{}) string { return string(in.(string)) }(in))
 			}
 			return out
 		}(in)
-	}(in.AdditionalSecurityGroups)
-}
-
-func FlattenResourceBastionLoadBalancerSpec(in kops.BastionLoadBalancerSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceBastionLoadBalancerSpecInto(in, out)
+	}
 	return out
 }

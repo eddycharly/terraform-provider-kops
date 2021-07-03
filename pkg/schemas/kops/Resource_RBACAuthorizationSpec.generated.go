@@ -18,14 +18,6 @@ func ExpandResourceRBACAuthorizationSpec(in map[string]interface{}) kops.RBACAut
 	if in == nil {
 		panic("expand RBACAuthorizationSpec failure, in is nil")
 	}
-	return kops.RBACAuthorizationSpec{}
-}
-
-func FlattenResourceRBACAuthorizationSpecInto(in kops.RBACAuthorizationSpec, out map[string]interface{}) {
-}
-
-func FlattenResourceRBACAuthorizationSpec(in kops.RBACAuthorizationSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceRBACAuthorizationSpecInto(in, out)
+	out := kops.RBACAuthorizationSpec{}
 	return out
 }

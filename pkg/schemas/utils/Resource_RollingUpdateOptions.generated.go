@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,189 +12,63 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 	if in == nil {
 		panic("expand RollingUpdateOptions failure, in is nil")
 	}
-	return utils.RollingUpdateOptions{
-		MasterInterval: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+	out := utils.RollingUpdateOptions{}
+	if in, ok := in["master_interval"]; ok && in != nil {
+		out.MasterInterval = func(in interface{}) *v1.Duration {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["master_interval"]),
-		NodeInterval: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["node_interval"]),
-		BastionInterval: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["bastion_interval"]),
-		FailOnDrainError: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["fail_on_drain_error"]),
-		FailOnValidate: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["fail_on_validate"]),
-		PostDrainDelay: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["post_drain_delay"]),
-		ValidationTimeout: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["validation_timeout"]),
-		ValidateCount: func(in interface{}) *int {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int) *int {
-					return &in
-				}(int(ExpandInt(in)))
-			}(in)
-		}(in["validate_count"]),
-		CloudOnly: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["cloud_only"]),
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+		}(in)
 	}
-}
-
-func FlattenResourceRollingUpdateOptionsInto(in utils.RollingUpdateOptions, out map[string]interface{}) {
-	out["master_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	if in, ok := in["node_interval"]; ok && in != nil {
+		out.NodeInterval = func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.MasterInterval)
-	out["node_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	}
+	if in, ok := in["bastion_interval"]; ok && in != nil {
+		out.BastionInterval = func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.NodeInterval)
-	out["bastion_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	}
+	if in, ok := in["fail_on_drain_error"]; ok && in != nil {
+		out.FailOnDrainError = func(in interface{}) bool { return in.(bool) }(in)
+	}
+	if in, ok := in["fail_on_validate"]; ok && in != nil {
+		out.FailOnValidate = func(in interface{}) bool { return in.(bool) }(in)
+	}
+	if in, ok := in["post_drain_delay"]; ok && in != nil {
+		out.PostDrainDelay = func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.BastionInterval)
-	out["fail_on_drain_error"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.FailOnDrainError)
-	out["fail_on_validate"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.FailOnValidate)
-	out["post_drain_delay"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	}
+	if in, ok := in["validation_timeout"]; ok && in != nil {
+		out.ValidationTimeout = func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.PostDrainDelay)
-	out["validation_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	}
+	if in, ok := in["validate_count"]; ok && in != nil {
+		out.ValidateCount = func(in interface{}) *int {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.ValidationTimeout)
-	out["validate_count"] = func(in *int) interface{} {
-		return func(in *int) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in int) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
-		}(in)
-	}(in.ValidateCount)
-	out["cloud_only"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.CloudOnly)
-}
-
-func FlattenResourceRollingUpdateOptions(in utils.RollingUpdateOptions) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceRollingUpdateOptionsInto(in, out)
+	}
+	if in, ok := in["cloud_only"]; ok && in != nil {
+		out.CloudOnly = func(in interface{}) bool { return in.(bool) }(in)
+	}
 	return out
 }

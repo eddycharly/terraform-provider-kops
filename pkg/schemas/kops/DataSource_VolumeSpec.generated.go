@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -13,14 +11,14 @@ var _ = Schema
 func DataSourceVolumeSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"delete_on_termination": ComputedBool(),
-			"device":                ComputedString(),
-			"encrypted":             ComputedBool(),
-			"iops":                  ComputedInt(),
-			"throughput":            ComputedInt(),
-			"key":                   ComputedString(),
-			"size":                  ComputedInt(),
-			"type":                  ComputedString(),
+			"delete_on_termination": Computed(Ptr(Bool())),
+			"device":                Computed(String()),
+			"encrypted":             Computed(Ptr(Bool())),
+			"iops":                  Computed(Ptr(Int())),
+			"throughput":            Computed(Ptr(Int())),
+			"key":                   Computed(Ptr(String())),
+			"size":                  Computed(Int()),
+			"type":                  Computed(String()),
 		},
 	}
 }
@@ -29,163 +27,55 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 	if in == nil {
 		panic("expand VolumeSpec failure, in is nil")
 	}
-	return kops.VolumeSpec{
-		DeleteOnTermination: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+	out := kops.VolumeSpec{}
+	if in, ok := in["delete_on_termination"]; ok && in != nil {
+		out.DeleteOnTermination = func(in interface{}) *bool {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["delete_on_termination"]),
-		Device: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["device"]),
-		Encrypted: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["encrypted"]),
-		Iops: func(in interface{}) *int64 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int64 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int64) *int64 {
-					return &in
-				}(int64(ExpandInt(in)))
-			}(in)
-		}(in["iops"]),
-		Throughput: func(in interface{}) *int64 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int64 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int64) *int64 {
-					return &in
-				}(int64(ExpandInt(in)))
-			}(in)
-		}(in["throughput"]),
-		Key: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["key"]),
-		Size: func(in interface{}) int64 {
-			return int64(ExpandInt(in))
-		}(in["size"]),
-		Type: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["type"]),
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+		}(in)
 	}
-}
-
-func FlattenDataSourceVolumeSpecInto(in kops.VolumeSpec, out map[string]interface{}) {
-	out["delete_on_termination"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	if in, ok := in["device"]; ok && in != nil {
+		out.Device = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["encrypted"]; ok && in != nil {
+		out.Encrypted = func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.DeleteOnTermination)
-	out["device"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Device)
-	out["encrypted"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	}
+	if in, ok := in["iops"]; ok && in != nil {
+		out.Iops = func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in int64) *int64 { return &in }(func(in interface{}) int64 { return int64(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.Encrypted)
-	out["iops"] = func(in *int64) interface{} {
-		return func(in *int64) interface{} {
+	}
+	if in, ok := in["throughput"]; ok && in != nil {
+		out.Throughput = func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
-			return func(in int64) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in int64) *int64 { return &in }(func(in interface{}) int64 { return int64(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.Iops)
-	out["throughput"] = func(in *int64) interface{} {
-		return func(in *int64) interface{} {
+	}
+	if in, ok := in["key"]; ok && in != nil {
+		out.Key = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in int64) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.Throughput)
-	out["key"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.Key)
-	out["size"] = func(in int64) interface{} {
-		return FlattenInt(int(in))
-	}(in.Size)
-	out["type"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Type)
-}
-
-func FlattenDataSourceVolumeSpec(in kops.VolumeSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceVolumeSpecInto(in, out)
+	}
+	if in, ok := in["size"]; ok && in != nil {
+		out.Size = func(in interface{}) int64 { return int64(in.(int)) }(in)
+	}
+	if in, ok := in["type"]; ok && in != nil {
+		out.Type = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

@@ -79,6 +79,13 @@ resource "kops_cluster" "cluster" {
       instance_group = "master-2"
     }
   }
+
+  kubelet{
+    anonymous_auth {
+      value = true
+    }
+    authorization_mode= "dummy"
+  }
 }
 
 resource "kops_instance_group" "master-0" {
@@ -114,29 +121,29 @@ resource "kops_instance_group" "master-2" {
   depends_on   = [kops_cluster.cluster]
 }
 
-resource "kops_cluster_updater" "updater" {
-  cluster_name = kops_cluster.cluster.name
+# resource "kops_cluster_updater" "updater" {
+#   cluster_name = kops_cluster.cluster.name
 
-  keepers = {
-    cluster  = kops_cluster.cluster.revision,
-    master-0 = kops_instance_group.master-0.revision,
-    master-1 = kops_instance_group.master-1.revision,
-    master-2 = kops_instance_group.master-2.revision
-  }
+#   keepers = {
+#     cluster  = kops_cluster.cluster.revision,
+#     master-0 = kops_instance_group.master-0.revision,
+#     master-1 = kops_instance_group.master-1.revision,
+#     master-2 = kops_instance_group.master-2.revision
+#   }
 
-  rolling_update {
-    skip                = false
-    fail_on_drain_error = true
-    fail_on_validate    = true
-    validate_count      = 1
-  }
+#   rolling_update {
+#     skip                = false
+#     fail_on_drain_error = true
+#     fail_on_validate    = true
+#     validate_count      = 1
+#   }
 
-  validate {
-    skip = false
-  }
-}
+#   validate {
+#     skip = false
+#   }
+# }
 
-data "kops_kube_config" "kube_config" {
-  cluster_name = kops_cluster.cluster.name
-  depends_on   = [kops_cluster_updater.updater]
-}
+# data "kops_kube_config" "kube_config" {
+#   cluster_name = kops_cluster.cluster.name
+#   depends_on   = [kops_cluster_updater.updater]
+# }

@@ -18,14 +18,6 @@ func ExpandResourceExternalNetworkingSpec(in map[string]interface{}) kops.Extern
 	if in == nil {
 		panic("expand ExternalNetworkingSpec failure, in is nil")
 	}
-	return kops.ExternalNetworkingSpec{}
-}
-
-func FlattenResourceExternalNetworkingSpecInto(in kops.ExternalNetworkingSpec, out map[string]interface{}) {
-}
-
-func FlattenResourceExternalNetworkingSpec(in kops.ExternalNetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceExternalNetworkingSpecInto(in, out)
+	out := kops.ExternalNetworkingSpec{}
 	return out
 }

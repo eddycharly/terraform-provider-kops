@@ -11,7 +11,7 @@ var _ = Schema
 func ConfigAwsAssumeRole() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"role_arn": OptionalString(),
+			"role_arn": Optional(String()),
 		},
 	}
 }
@@ -20,21 +20,9 @@ func ExpandConfigAwsAssumeRole(in map[string]interface{}) config.AwsAssumeRole {
 	if in == nil {
 		panic("expand AwsAssumeRole failure, in is nil")
 	}
-	return config.AwsAssumeRole{
-		RoleArn: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["role_arn"]),
+	out := config.AwsAssumeRole{}
+	if in, ok := in["role_arn"]; ok && in != nil {
+		out.RoleArn = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenConfigAwsAssumeRoleInto(in config.AwsAssumeRole, out map[string]interface{}) {
-	out["role_arn"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.RoleArn)
-}
-
-func FlattenConfigAwsAssumeRole(in config.AwsAssumeRole) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenConfigAwsAssumeRoleInto(in, out)
 	return out
 }

@@ -18,14 +18,6 @@ func ExpandDataSourceAlwaysAllowAuthorizationSpec(in map[string]interface{}) kop
 	if in == nil {
 		panic("expand AlwaysAllowAuthorizationSpec failure, in is nil")
 	}
-	return kops.AlwaysAllowAuthorizationSpec{}
-}
-
-func FlattenDataSourceAlwaysAllowAuthorizationSpecInto(in kops.AlwaysAllowAuthorizationSpec, out map[string]interface{}) {
-}
-
-func FlattenDataSourceAlwaysAllowAuthorizationSpec(in kops.AlwaysAllowAuthorizationSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceAlwaysAllowAuthorizationSpecInto(in, out)
+	out := kops.AlwaysAllowAuthorizationSpec{}
 	return out
 }

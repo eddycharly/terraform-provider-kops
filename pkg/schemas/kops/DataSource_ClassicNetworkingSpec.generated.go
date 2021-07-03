@@ -18,14 +18,6 @@ func ExpandDataSourceClassicNetworkingSpec(in map[string]interface{}) kops.Class
 	if in == nil {
 		panic("expand ClassicNetworkingSpec failure, in is nil")
 	}
-	return kops.ClassicNetworkingSpec{}
-}
-
-func FlattenDataSourceClassicNetworkingSpecInto(in kops.ClassicNetworkingSpec, out map[string]interface{}) {
-}
-
-func FlattenDataSourceClassicNetworkingSpec(in kops.ClassicNetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceClassicNetworkingSpecInto(in, out)
+	out := kops.ClassicNetworkingSpec{}
 	return out
 }

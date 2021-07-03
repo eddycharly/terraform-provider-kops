@@ -11,8 +11,8 @@ var _ = Schema
 func ResourceRomanaNetworkingSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"daemon_service_ip": OptionalString(),
-			"etcd_service_ip":   OptionalString(),
+			"daemon_service_ip": Optional(String()),
+			"etcd_service_ip":   Optional(String()),
 		},
 	}
 }
@@ -21,27 +21,12 @@ func ExpandResourceRomanaNetworkingSpec(in map[string]interface{}) kops.RomanaNe
 	if in == nil {
 		panic("expand RomanaNetworkingSpec failure, in is nil")
 	}
-	return kops.RomanaNetworkingSpec{
-		DaemonServiceIP: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["daemon_service_ip"]),
-		EtcdServiceIP: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["etcd_service_ip"]),
+	out := kops.RomanaNetworkingSpec{}
+	if in, ok := in["daemon_service_ip"]; ok && in != nil {
+		out.DaemonServiceIP = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenResourceRomanaNetworkingSpecInto(in kops.RomanaNetworkingSpec, out map[string]interface{}) {
-	out["daemon_service_ip"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.DaemonServiceIP)
-	out["etcd_service_ip"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.EtcdServiceIP)
-}
-
-func FlattenResourceRomanaNetworkingSpec(in kops.RomanaNetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceRomanaNetworkingSpecInto(in, out)
+	if in, ok := in["etcd_service_ip"]; ok && in != nil {
+		out.EtcdServiceIP = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

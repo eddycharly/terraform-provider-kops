@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -13,14 +11,14 @@ var _ = Schema
 func ResourceEtcdMemberSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":              RequiredString(),
-			"instance_group":    RequiredString(),
-			"volume_type":       OptionalString(),
-			"volume_iops":       OptionalInt(),
-			"volume_throughput": OptionalInt(),
-			"volume_size":       OptionalInt(),
-			"kms_key_id":        OptionalString(),
-			"encrypted_volume":  OptionalBool(),
+			"name":              Required(String()),
+			"instance_group":    Required(Ptr(String())),
+			"volume_type":       Optional(Ptr(String())),
+			"volume_iops":       Optional(Ptr(Int())),
+			"volume_throughput": Optional(Ptr(Int())),
+			"volume_size":       Optional(Ptr(Int())),
+			"kms_key_id":        Optional(Ptr(String())),
+			"encrypted_volume":  Optional(Ptr(Bool())),
 		},
 	}
 }
@@ -29,200 +27,65 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 	if in == nil {
 		panic("expand EtcdMemberSpec failure, in is nil")
 	}
-	return kops.EtcdMemberSpec{
-		Name: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["name"]),
-		InstanceGroup: func(in interface{}) *string {
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["instance_group"]),
-		VolumeType: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["volume_type"]),
-		VolumeIops: func(in interface{}) *int32 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int32 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int32) *int32 {
-					return &in
-				}(int32(ExpandInt(in)))
-			}(in)
-		}(in["volume_iops"]),
-		VolumeThroughput: func(in interface{}) *int32 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int32 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int32) *int32 {
-					return &in
-				}(int32(ExpandInt(in)))
-			}(in)
-		}(in["volume_throughput"]),
-		VolumeSize: func(in interface{}) *int32 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int32 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int32) *int32 {
-					return &in
-				}(int32(ExpandInt(in)))
-			}(in)
-		}(in["volume_size"]),
-		KmsKeyId: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["kms_key_id"]),
-		EncryptedVolume: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["encrypted_volume"]),
+	out := kops.EtcdMemberSpec{}
+	if in, ok := in["name"]; ok && in != nil {
+		out.Name = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenResourceEtcdMemberSpecInto(in kops.EtcdMemberSpec, out map[string]interface{}) {
-	out["name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Name)
-	out["instance_group"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	if in, ok := in["instance_group"]; ok && in != nil {
+		out.InstanceGroup = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.InstanceGroup)
-	out["volume_type"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	}
+	if in, ok := in["volume_type"]; ok && in != nil {
+		out.VolumeType = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.VolumeType)
-	out["volume_iops"] = func(in *int32) interface{} {
-		return func(in *int32) interface{} {
+	}
+	if in, ok := in["volume_iops"]; ok && in != nil {
+		out.VolumeIops = func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
-			return func(in int32) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.VolumeIops)
-	out["volume_throughput"] = func(in *int32) interface{} {
-		return func(in *int32) interface{} {
+	}
+	if in, ok := in["volume_throughput"]; ok && in != nil {
+		out.VolumeThroughput = func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
-			return func(in int32) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.VolumeThroughput)
-	out["volume_size"] = func(in *int32) interface{} {
-		return func(in *int32) interface{} {
+	}
+	if in, ok := in["volume_size"]; ok && in != nil {
+		out.VolumeSize = func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
-			return func(in int32) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.VolumeSize)
-	out["kms_key_id"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	}
+	if in, ok := in["kms_key_id"]; ok && in != nil {
+		out.KmsKeyId = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.KmsKeyId)
-	out["encrypted_volume"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	}
+	if in, ok := in["encrypted_volume"]; ok && in != nil {
+		out.EncryptedVolume = func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.EncryptedVolume)
-}
-
-func FlattenResourceEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceEtcdMemberSpecInto(in, out)
+	}
 	return out
 }

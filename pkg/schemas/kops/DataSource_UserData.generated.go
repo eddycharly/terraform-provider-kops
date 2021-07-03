@@ -11,9 +11,9 @@ var _ = Schema
 func DataSourceUserData() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":    ComputedString(),
-			"type":    ComputedString(),
-			"content": ComputedString(),
+			"name":    Computed(String()),
+			"type":    Computed(String()),
+			"content": Computed(String()),
 		},
 	}
 }
@@ -22,33 +22,15 @@ func ExpandDataSourceUserData(in map[string]interface{}) kops.UserData {
 	if in == nil {
 		panic("expand UserData failure, in is nil")
 	}
-	return kops.UserData{
-		Name: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["name"]),
-		Type: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["type"]),
-		Content: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["content"]),
+	out := kops.UserData{}
+	if in, ok := in["name"]; ok && in != nil {
+		out.Name = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenDataSourceUserDataInto(in kops.UserData, out map[string]interface{}) {
-	out["name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Name)
-	out["type"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Type)
-	out["content"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Content)
-}
-
-func FlattenDataSourceUserData(in kops.UserData) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceUserDataInto(in, out)
+	if in, ok := in["type"]; ok && in != nil {
+		out.Type = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["content"]; ok && in != nil {
+		out.Content = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

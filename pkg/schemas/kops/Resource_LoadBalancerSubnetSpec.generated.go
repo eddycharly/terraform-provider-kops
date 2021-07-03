@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -13,9 +11,9 @@ var _ = Schema
 func ResourceLoadBalancerSubnetSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":                 OptionalString(),
-			"private_ipv4_address": OptionalString(),
-			"allocation_id":        OptionalString(),
+			"name":                 Optional(String()),
+			"private_ipv4_address": Optional(Ptr(String())),
+			"allocation_id":        Optional(Ptr(String())),
 		},
 	}
 }
@@ -24,73 +22,25 @@ func ExpandResourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.LoadBa
 	if in == nil {
 		panic("expand LoadBalancerSubnetSpec failure, in is nil")
 	}
-	return kops.LoadBalancerSubnetSpec{
-		Name: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["name"]),
-		PrivateIPv4Address: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["private_ipv4_address"]),
-		AllocationID: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["allocation_id"]),
+	out := kops.LoadBalancerSubnetSpec{}
+	if in, ok := in["name"]; ok && in != nil {
+		out.Name = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenResourceLoadBalancerSubnetSpecInto(in kops.LoadBalancerSubnetSpec, out map[string]interface{}) {
-	out["name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Name)
-	out["private_ipv4_address"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	if in, ok := in["private_ipv4_address"]; ok && in != nil {
+		out.PrivateIPv4Address = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.PrivateIPv4Address)
-	out["allocation_id"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	}
+	if in, ok := in["allocation_id"]; ok && in != nil {
+		out.AllocationID = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.AllocationID)
-}
-
-func FlattenResourceLoadBalancerSubnetSpec(in kops.LoadBalancerSubnetSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceLoadBalancerSubnetSpecInto(in, out)
+	}
 	return out
 }

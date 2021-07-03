@@ -36,7 +36,7 @@ fmt:
 	@go fmt ./pkg/...
 
 .PHONY: install
-install: all
+install: fmt build
 	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64/terraform-provider-kops
 
@@ -47,7 +47,7 @@ examples: example-basic example-aws-profile example-aws-assume-role example-bast
 example-basic: install
 	@terraform init ./examples/basic
 	@terraform validate ./examples/basic
-	@terraform plan ./examples/basic
+	@terraform apply ./examples/basic
 
 .PHONY: example-aws-profile
 example-aws-profile: install

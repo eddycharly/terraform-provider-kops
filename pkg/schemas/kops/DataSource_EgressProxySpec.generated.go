@@ -11,8 +11,8 @@ var _ = Schema
 func DataSourceEgressProxySpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"http_proxy":     ComputedStruct(DataSourceHTTPProxy()),
-			"proxy_excludes": ComputedString(),
+			"http_proxy":     Computed(Struct(DataSourceHTTPProxy())),
+			"proxy_excludes": Computed(String()),
 		},
 	}
 }
@@ -21,34 +21,17 @@ func ExpandDataSourceEgressProxySpec(in map[string]interface{}) kops.EgressProxy
 	if in == nil {
 		panic("expand EgressProxySpec failure, in is nil")
 	}
-	return kops.EgressProxySpec{
-		HTTPProxy: func(in interface{}) kops.HTTPProxy {
-			return func(in interface{}) kops.HTTPProxy {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return kops.HTTPProxy{}
-				}
-				return (ExpandDataSourceHTTPProxy(in.([]interface{})[0].(map[string]interface{})))
-			}(in)
-		}(in["http_proxy"]),
-		ProxyExcludes: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["proxy_excludes"]),
-	}
-}
-
-func FlattenDataSourceEgressProxySpecInto(in kops.EgressProxySpec, out map[string]interface{}) {
-	out["http_proxy"] = func(in kops.HTTPProxy) interface{} {
-		return func(in kops.HTTPProxy) []map[string]interface{} {
-			return []map[string]interface{}{FlattenDataSourceHTTPProxy(in)}
+	out := kops.EgressProxySpec{}
+	if in, ok := in["http_proxy"]; ok && in != nil {
+		out.HTTPProxy = func(in interface{}) kops.HTTPProxy {
+			if in == nil {
+				return kops.HTTPProxy{}
+			}
+			return ExpandDataSourceHTTPProxy(in.(map[string]interface{}))
 		}(in)
-	}(in.HTTPProxy)
-	out["proxy_excludes"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ProxyExcludes)
-}
-
-func FlattenDataSourceEgressProxySpec(in kops.EgressProxySpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceEgressProxySpecInto(in, out)
+	}
+	if in, ok := in["proxy_excludes"]; ok && in != nil {
+		out.ProxyExcludes = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

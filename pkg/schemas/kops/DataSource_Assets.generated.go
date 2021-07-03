@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -13,9 +11,9 @@ var _ = Schema
 func DataSourceAssets() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"container_registry": ComputedString(),
-			"file_repository":    ComputedString(),
-			"container_proxy":    ComputedString(),
+			"container_registry": Computed(Ptr(String())),
+			"file_repository":    Computed(Ptr(String())),
+			"container_proxy":    Computed(Ptr(String())),
 		},
 	}
 }
@@ -24,93 +22,30 @@ func ExpandDataSourceAssets(in map[string]interface{}) kops.Assets {
 	if in == nil {
 		panic("expand Assets failure, in is nil")
 	}
-	return kops.Assets{
-		ContainerRegistry: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+	out := kops.Assets{}
+	if in, ok := in["container_registry"]; ok && in != nil {
+		out.ContainerRegistry = func(in interface{}) *string {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["container_registry"]),
-		FileRepository: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["file_repository"]),
-		ContainerProxy: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["container_proxy"]),
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+		}(in)
 	}
-}
-
-func FlattenDataSourceAssetsInto(in kops.Assets, out map[string]interface{}) {
-	out["container_registry"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	if in, ok := in["file_repository"]; ok && in != nil {
+		out.FileRepository = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.ContainerRegistry)
-	out["file_repository"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	}
+	if in, ok := in["container_proxy"]; ok && in != nil {
+		out.ContainerProxy = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.FileRepository)
-	out["container_proxy"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.ContainerProxy)
-}
-
-func FlattenDataSourceAssets(in kops.Assets) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceAssetsInto(in, out)
+	}
 	return out
 }

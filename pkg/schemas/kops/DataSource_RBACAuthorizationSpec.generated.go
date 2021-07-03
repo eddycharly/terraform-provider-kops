@@ -18,14 +18,6 @@ func ExpandDataSourceRBACAuthorizationSpec(in map[string]interface{}) kops.RBACA
 	if in == nil {
 		panic("expand RBACAuthorizationSpec failure, in is nil")
 	}
-	return kops.RBACAuthorizationSpec{}
-}
-
-func FlattenDataSourceRBACAuthorizationSpecInto(in kops.RBACAuthorizationSpec, out map[string]interface{}) {
-}
-
-func FlattenDataSourceRBACAuthorizationSpec(in kops.RBACAuthorizationSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceRBACAuthorizationSpecInto(in, out)
+	out := kops.RBACAuthorizationSpec{}
 	return out
 }

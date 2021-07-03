@@ -2,6 +2,7 @@ package resources
 
 import (
 	"context"
+	"log"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/config"
@@ -54,6 +55,7 @@ func ClusterRead(_ context.Context, d *schema.ResourceData, m interface{}) diag.
 		for key, value := range flattened {
 			if key != "revision" {
 				if err := d.Set(key, value); err != nil {
+					log.Printf("READ %v -> %v", key, value)
 					return diag.FromErr(err)
 				}
 			}

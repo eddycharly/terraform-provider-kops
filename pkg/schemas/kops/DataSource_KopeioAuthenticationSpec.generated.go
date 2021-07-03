@@ -18,14 +18,6 @@ func ExpandDataSourceKopeioAuthenticationSpec(in map[string]interface{}) kops.Ko
 	if in == nil {
 		panic("expand KopeioAuthenticationSpec failure, in is nil")
 	}
-	return kops.KopeioAuthenticationSpec{}
-}
-
-func FlattenDataSourceKopeioAuthenticationSpecInto(in kops.KopeioAuthenticationSpec, out map[string]interface{}) {
-}
-
-func FlattenDataSourceKopeioAuthenticationSpec(in kops.KopeioAuthenticationSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceKopeioAuthenticationSpecInto(in, out)
+	out := kops.KopeioAuthenticationSpec{}
 	return out
 }

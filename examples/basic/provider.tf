@@ -8,7 +8,10 @@ terraform {
 }
 
 provider "kops" {
-  state_store = "s3://cluster.example.com"
+  state_store = "file://./store"
+  aws {
+    region = "eu-west-3"
+  }
 }
 
 provider "helm" {

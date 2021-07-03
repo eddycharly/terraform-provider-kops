@@ -11,11 +11,11 @@ var _ = Schema
 func DataSourceAzureConfiguration() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"subscription_id":     ComputedString(),
-			"tenant_id":           ComputedString(),
-			"resource_group_name": ComputedString(),
-			"route_table_name":    ComputedString(),
-			"admin_user":          ComputedString(),
+			"subscription_id":     Computed(String()),
+			"tenant_id":           Computed(String()),
+			"resource_group_name": Computed(String()),
+			"route_table_name":    Computed(String()),
+			"admin_user":          Computed(String()),
 		},
 	}
 }
@@ -24,45 +24,21 @@ func ExpandDataSourceAzureConfiguration(in map[string]interface{}) kops.AzureCon
 	if in == nil {
 		panic("expand AzureConfiguration failure, in is nil")
 	}
-	return kops.AzureConfiguration{
-		SubscriptionID: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["subscription_id"]),
-		TenantID: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["tenant_id"]),
-		ResourceGroupName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["resource_group_name"]),
-		RouteTableName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["route_table_name"]),
-		AdminUser: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["admin_user"]),
+	out := kops.AzureConfiguration{}
+	if in, ok := in["subscription_id"]; ok && in != nil {
+		out.SubscriptionID = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenDataSourceAzureConfigurationInto(in kops.AzureConfiguration, out map[string]interface{}) {
-	out["subscription_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.SubscriptionID)
-	out["tenant_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.TenantID)
-	out["resource_group_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ResourceGroupName)
-	out["route_table_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.RouteTableName)
-	out["admin_user"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.AdminUser)
-}
-
-func FlattenDataSourceAzureConfiguration(in kops.AzureConfiguration) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceAzureConfigurationInto(in, out)
+	if in, ok := in["tenant_id"]; ok && in != nil {
+		out.TenantID = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["resource_group_name"]; ok && in != nil {
+		out.ResourceGroupName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["route_table_name"]; ok && in != nil {
+		out.RouteTableName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["admin_user"]; ok && in != nil {
+		out.AdminUser = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

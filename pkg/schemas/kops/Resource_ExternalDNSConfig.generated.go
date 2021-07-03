@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -13,9 +11,9 @@ var _ = Schema
 func ResourceExternalDNSConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"disable":         OptionalBool(),
-			"watch_ingress":   OptionalBool(),
-			"watch_namespace": OptionalString(),
+			"disable":         Optional(Bool()),
+			"watch_ingress":   Optional(Ptr(Bool())),
+			"watch_namespace": Optional(String()),
 		},
 	}
 }
@@ -24,53 +22,20 @@ func ExpandResourceExternalDNSConfig(in map[string]interface{}) kops.ExternalDNS
 	if in == nil {
 		panic("expand ExternalDNSConfig failure, in is nil")
 	}
-	return kops.ExternalDNSConfig{
-		Disable: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable"]),
-		WatchIngress: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["watch_ingress"]),
-		WatchNamespace: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["watch_namespace"]),
+	out := kops.ExternalDNSConfig{}
+	if in, ok := in["disable"]; ok && in != nil {
+		out.Disable = func(in interface{}) bool { return in.(bool) }(in)
 	}
-}
-
-func FlattenResourceExternalDNSConfigInto(in kops.ExternalDNSConfig, out map[string]interface{}) {
-	out["disable"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Disable)
-	out["watch_ingress"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	if in, ok := in["watch_ingress"]; ok && in != nil {
+		out.WatchIngress = func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.WatchIngress)
-	out["watch_namespace"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.WatchNamespace)
-}
-
-func FlattenResourceExternalDNSConfig(in kops.ExternalDNSConfig) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceExternalDNSConfigInto(in, out)
+	}
+	if in, ok := in["watch_namespace"]; ok && in != nil {
+		out.WatchNamespace = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

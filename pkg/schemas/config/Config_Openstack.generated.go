@@ -11,20 +11,20 @@ var _ = Schema
 func ConfigOpenstack() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"tenant_id":                     OptionalString(),
-			"tenant_name":                   OptionalString(),
-			"project_id":                    OptionalString(),
-			"project_name":                  OptionalString(),
-			"project_domain_id":             OptionalString(),
-			"project_domain_name":           OptionalString(),
-			"domain_id":                     OptionalString(),
-			"domain_name":                   OptionalString(),
-			"username":                      OptionalString(),
-			"password":                      OptionalString(),
-			"auth_url":                      OptionalString(),
-			"region_name":                   OptionalString(),
-			"application_credential_id":     OptionalString(),
-			"application_credential_secret": OptionalString(),
+			"tenant_id":                     Optional(String()),
+			"tenant_name":                   Optional(String()),
+			"project_id":                    Optional(String()),
+			"project_name":                  Optional(String()),
+			"project_domain_id":             Optional(String()),
+			"project_domain_name":           Optional(String()),
+			"domain_id":                     Optional(String()),
+			"domain_name":                   Optional(String()),
+			"username":                      Optional(String()),
+			"password":                      Optional(String()),
+			"auth_url":                      Optional(String()),
+			"region_name":                   Optional(String()),
+			"application_credential_id":     Optional(String()),
+			"application_credential_secret": Optional(String()),
 		},
 	}
 }
@@ -33,99 +33,48 @@ func ExpandConfigOpenstack(in map[string]interface{}) config.Openstack {
 	if in == nil {
 		panic("expand Openstack failure, in is nil")
 	}
-	return config.Openstack{
-		TenantId: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["tenant_id"]),
-		TenantName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["tenant_name"]),
-		ProjectId: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["project_id"]),
-		ProjectName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["project_name"]),
-		ProjectDomainId: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["project_domain_id"]),
-		ProjectDomainName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["project_domain_name"]),
-		DomainId: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["domain_id"]),
-		DomainName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["domain_name"]),
-		Username: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["username"]),
-		Password: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["password"]),
-		AuthUrl: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["auth_url"]),
-		RegionName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["region_name"]),
-		ApplicationCredentialId: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["application_credential_id"]),
-		ApplicationCredentialSecret: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["application_credential_secret"]),
+	out := config.Openstack{}
+	if in, ok := in["tenant_id"]; ok && in != nil {
+		out.TenantId = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenConfigOpenstackInto(in config.Openstack, out map[string]interface{}) {
-	out["tenant_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.TenantId)
-	out["tenant_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.TenantName)
-	out["project_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ProjectId)
-	out["project_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ProjectName)
-	out["project_domain_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ProjectDomainId)
-	out["project_domain_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ProjectDomainName)
-	out["domain_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.DomainId)
-	out["domain_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.DomainName)
-	out["username"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Username)
-	out["password"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Password)
-	out["auth_url"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.AuthUrl)
-	out["region_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.RegionName)
-	out["application_credential_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ApplicationCredentialId)
-	out["application_credential_secret"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ApplicationCredentialSecret)
-}
-
-func FlattenConfigOpenstack(in config.Openstack) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenConfigOpenstackInto(in, out)
+	if in, ok := in["tenant_name"]; ok && in != nil {
+		out.TenantName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["project_id"]; ok && in != nil {
+		out.ProjectId = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["project_name"]; ok && in != nil {
+		out.ProjectName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["project_domain_id"]; ok && in != nil {
+		out.ProjectDomainId = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["project_domain_name"]; ok && in != nil {
+		out.ProjectDomainName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["domain_id"]; ok && in != nil {
+		out.DomainId = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["domain_name"]; ok && in != nil {
+		out.DomainName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["username"]; ok && in != nil {
+		out.Username = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["password"]; ok && in != nil {
+		out.Password = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["auth_url"]; ok && in != nil {
+		out.AuthUrl = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["region_name"]; ok && in != nil {
+		out.RegionName = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["application_credential_id"]; ok && in != nil {
+		out.ApplicationCredentialId = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["application_credential_secret"]; ok && in != nil {
+		out.ApplicationCredentialSecret = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

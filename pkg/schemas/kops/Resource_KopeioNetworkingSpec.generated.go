@@ -18,14 +18,6 @@ func ExpandResourceKopeioNetworkingSpec(in map[string]interface{}) kops.KopeioNe
 	if in == nil {
 		panic("expand KopeioNetworkingSpec failure, in is nil")
 	}
-	return kops.KopeioNetworkingSpec{}
-}
-
-func FlattenResourceKopeioNetworkingSpecInto(in kops.KopeioNetworkingSpec, out map[string]interface{}) {
-}
-
-func FlattenResourceKopeioNetworkingSpec(in kops.KopeioNetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceKopeioNetworkingSpecInto(in, out)
+	out := kops.KopeioNetworkingSpec{}
 	return out
 }

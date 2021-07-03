@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -14,20 +12,20 @@ var _ = Schema
 func ResourceWeaveNetworkingSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"mtu":                OptionalInt(),
-			"conn_limit":         OptionalInt(),
-			"no_masq_local":      OptionalInt(),
-			"memory_request":     OptionalQuantity(),
-			"cpu_request":        OptionalQuantity(),
-			"memory_limit":       OptionalQuantity(),
-			"cpu_limit":          OptionalQuantity(),
-			"net_extra_args":     OptionalString(),
-			"npc_memory_request": OptionalQuantity(),
-			"npccpu_request":     OptionalQuantity(),
-			"npc_memory_limit":   OptionalQuantity(),
-			"npccpu_limit":       OptionalQuantity(),
-			"npc_extra_args":     OptionalString(),
-			"version":            OptionalString(),
+			"mtu":                Optional(Ptr(Int())),
+			"conn_limit":         Optional(Ptr(Int())),
+			"no_masq_local":      Optional(Ptr(Int())),
+			"memory_request":     Optional(Ptr(Quantity())),
+			"cpu_request":        Optional(Ptr(Quantity())),
+			"memory_limit":       Optional(Ptr(Quantity())),
+			"cpu_limit":          Optional(Ptr(Quantity())),
+			"net_extra_args":     Optional(String()),
+			"npc_memory_request": Optional(Ptr(Quantity())),
+			"npccpu_request":     Optional(Ptr(Quantity())),
+			"npc_memory_limit":   Optional(Ptr(Quantity())),
+			"npccpu_limit":       Optional(Ptr(Quantity())),
+			"npc_extra_args":     Optional(String()),
+			"version":            Optional(String()),
 		},
 	}
 }
@@ -36,319 +34,103 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 	if in == nil {
 		panic("expand WeaveNetworkingSpec failure, in is nil")
 	}
-	return kops.WeaveNetworkingSpec{
-		MTU: func(in interface{}) *int32 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+	out := kops.WeaveNetworkingSpec{}
+	if in, ok := in["mtu"]; ok && in != nil {
+		out.MTU = func(in interface{}) *int32 {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *int32 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int32) *int32 {
-					return &in
-				}(int32(ExpandInt(in)))
-			}(in)
-		}(in["mtu"]),
-		ConnLimit: func(in interface{}) *int32 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int32 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int32) *int32 {
-					return &in
-				}(int32(ExpandInt(in)))
-			}(in)
-		}(in["conn_limit"]),
-		NoMasqLocal: func(in interface{}) *int32 {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *int32 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int32) *int32 {
-					return &in
-				}(int32(ExpandInt(in)))
-			}(in)
-		}(in["no_masq_local"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["cpu_request"]),
-		MemoryLimit: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["memory_limit"]),
-		CPULimit: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["cpu_limit"]),
-		NetExtraArgs: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["net_extra_args"]),
-		NPCMemoryRequest: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["npc_memory_request"]),
-		NPCCPURequest: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["npccpu_request"]),
-		NPCMemoryLimit: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["npc_memory_limit"]),
-		NPCCPULimit: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["npccpu_limit"]),
-		NPCExtraArgs: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["npc_extra_args"]),
-		Version: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["version"]),
+			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
+		}(in)
 	}
-}
-
-func FlattenResourceWeaveNetworkingSpecInto(in kops.WeaveNetworkingSpec, out map[string]interface{}) {
-	out["mtu"] = func(in *int32) interface{} {
-		return func(in *int32) interface{} {
+	if in, ok := in["conn_limit"]; ok && in != nil {
+		out.ConnLimit = func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
-			return func(in int32) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.MTU)
-	out["conn_limit"] = func(in *int32) interface{} {
-		return func(in *int32) interface{} {
+	}
+	if in, ok := in["no_masq_local"]; ok && in != nil {
+		out.NoMasqLocal = func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
-			return func(in int32) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.ConnLimit)
-	out["no_masq_local"] = func(in *int32) interface{} {
-		return func(in *int32) interface{} {
+	}
+	if in, ok := in["memory_request"]; ok && in != nil {
+		out.MemoryRequest = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in int32) interface{} {
-				return FlattenInt(int(in))
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.NoMasqLocal)
-	out["memory_request"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["cpu_request"]; ok && in != nil {
+		out.CPURequest = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.MemoryRequest)
-	out["cpu_request"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["memory_limit"]; ok && in != nil {
+		out.MemoryLimit = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.CPURequest)
-	out["memory_limit"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["cpu_limit"]; ok && in != nil {
+		out.CPULimit = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.MemoryLimit)
-	out["cpu_limit"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["net_extra_args"]; ok && in != nil {
+		out.NetExtraArgs = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["npc_memory_request"]; ok && in != nil {
+		out.NPCMemoryRequest = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.CPULimit)
-	out["net_extra_args"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.NetExtraArgs)
-	out["npc_memory_request"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["npccpu_request"]; ok && in != nil {
+		out.NPCCPURequest = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.NPCMemoryRequest)
-	out["npccpu_request"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["npc_memory_limit"]; ok && in != nil {
+		out.NPCMemoryLimit = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.NPCCPURequest)
-	out["npc_memory_limit"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["npccpu_limit"]; ok && in != nil {
+		out.NPCCPULimit = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.NPCMemoryLimit)
-	out["npccpu_limit"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
-		}(in)
-	}(in.NPCCPULimit)
-	out["npc_extra_args"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.NPCExtraArgs)
-	out["version"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Version)
-}
-
-func FlattenResourceWeaveNetworkingSpec(in kops.WeaveNetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceWeaveNetworkingSpecInto(in, out)
+	}
+	if in, ok := in["npc_extra_args"]; ok && in != nil {
+		out.NPCExtraArgs = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["version"]; ok && in != nil {
+		out.Version = func(in interface{}) string { return string(in.(string)) }(in)
+	}
 	return out
 }

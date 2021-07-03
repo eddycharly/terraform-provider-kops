@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -14,9 +12,9 @@ var _ = Schema
 func DataSourceRollingUpdate() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"drain_and_terminate": ComputedBool(),
-			"max_unavailable":     ComputedIntOrString(),
-			"max_surge":           ComputedIntOrString(),
+			"drain_and_terminate": Computed(Ptr(Bool())),
+			"max_unavailable":     Computed(Ptr(IntOrString())),
+			"max_surge":           Computed(Ptr(IntOrString())),
 		},
 	}
 }
@@ -25,93 +23,30 @@ func ExpandDataSourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate
 	if in == nil {
 		panic("expand RollingUpdate failure, in is nil")
 	}
-	return kops.RollingUpdate{
-		DrainAndTerminate: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+	out := kops.RollingUpdate{}
+	if in, ok := in["drain_and_terminate"]; ok && in != nil {
+		out.DrainAndTerminate = func(in interface{}) *bool {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["drain_and_terminate"]),
-		MaxUnavailable: func(in interface{}) *intstr.IntOrString {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *intstr.IntOrString {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in intstr.IntOrString) *intstr.IntOrString {
-					return &in
-				}(ExpandIntOrString(in))
-			}(in)
-		}(in["max_unavailable"]),
-		MaxSurge: func(in interface{}) *intstr.IntOrString {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *intstr.IntOrString {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in intstr.IntOrString) *intstr.IntOrString {
-					return &in
-				}(ExpandIntOrString(in))
-			}(in)
-		}(in["max_surge"]),
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+		}(in)
 	}
-}
-
-func FlattenDataSourceRollingUpdateInto(in kops.RollingUpdate, out map[string]interface{}) {
-	out["drain_and_terminate"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	if in, ok := in["max_unavailable"]; ok && in != nil {
+		out.MaxUnavailable = func(in interface{}) *intstr.IntOrString {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in intstr.IntOrString) *intstr.IntOrString { return &in }(func(in interface{}) intstr.IntOrString { return ExpandIntOrString(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.DrainAndTerminate)
-	out["max_unavailable"] = func(in *intstr.IntOrString) interface{} {
-		return func(in *intstr.IntOrString) interface{} {
+	}
+	if in, ok := in["max_surge"]; ok && in != nil {
+		out.MaxSurge = func(in interface{}) *intstr.IntOrString {
 			if in == nil {
 				return nil
 			}
-			return func(in intstr.IntOrString) interface{} {
-				return FlattenIntOrString(in)
-			}(*in)
+			return func(in intstr.IntOrString) *intstr.IntOrString { return &in }(func(in interface{}) intstr.IntOrString { return ExpandIntOrString(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.MaxUnavailable)
-	out["max_surge"] = func(in *intstr.IntOrString) interface{} {
-		return func(in *intstr.IntOrString) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in intstr.IntOrString) interface{} {
-				return FlattenIntOrString(in)
-			}(*in)
-		}(in)
-	}(in.MaxSurge)
-}
-
-func FlattenDataSourceRollingUpdate(in kops.RollingUpdate) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceRollingUpdateInto(in, out)
+	}
 	return out
 }

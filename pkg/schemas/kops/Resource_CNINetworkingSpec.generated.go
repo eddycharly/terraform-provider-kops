@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceCNINetworkingSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"uses_secondary_ip": OptionalBool(),
+			"uses_secondary_ip": Optional(Bool()),
 		},
 	}
 }
@@ -20,21 +20,9 @@ func ExpandResourceCNINetworkingSpec(in map[string]interface{}) kops.CNINetworki
 	if in == nil {
 		panic("expand CNINetworkingSpec failure, in is nil")
 	}
-	return kops.CNINetworkingSpec{
-		UsesSecondaryIP: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["uses_secondary_ip"]),
+	out := kops.CNINetworkingSpec{}
+	if in, ok := in["uses_secondary_ip"]; ok && in != nil {
+		out.UsesSecondaryIP = func(in interface{}) bool { return in.(bool) }(in)
 	}
-}
-
-func FlattenResourceCNINetworkingSpecInto(in kops.CNINetworkingSpec, out map[string]interface{}) {
-	out["uses_secondary_ip"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.UsesSecondaryIP)
-}
-
-func FlattenResourceCNINetworkingSpec(in kops.CNINetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceCNINetworkingSpecInto(in, out)
 	return out
 }

@@ -11,7 +11,7 @@ var _ = Schema
 func DataSourceNodeAuthorizationSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"node_authorizer": ComputedStruct(DataSourceNodeAuthorizerSpec()),
+			"node_authorizer": Computed(Ptr(Struct(DataSourceNodeAuthorizerSpec()))),
 		},
 	}
 }
@@ -20,45 +20,19 @@ func ExpandDataSourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeA
 	if in == nil {
 		panic("expand NodeAuthorizationSpec failure, in is nil")
 	}
-	return kops.NodeAuthorizationSpec{
-		NodeAuthorizer: func(in interface{}) *kops.NodeAuthorizerSpec {
-			return func(in interface{}) *kops.NodeAuthorizerSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec {
-					return &in
-				}(func(in interface{}) kops.NodeAuthorizerSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.NodeAuthorizerSpec{}
-					}
-					return (ExpandDataSourceNodeAuthorizerSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["node_authorizer"]),
-	}
-}
-
-func FlattenDataSourceNodeAuthorizationSpecInto(in kops.NodeAuthorizationSpec, out map[string]interface{}) {
-	out["node_authorizer"] = func(in *kops.NodeAuthorizerSpec) interface{} {
-		return func(in *kops.NodeAuthorizerSpec) interface{} {
+	out := kops.NodeAuthorizationSpec{}
+	if in, ok := in["node_authorizer"]; ok && in != nil {
+		out.NodeAuthorizer = func(in interface{}) *kops.NodeAuthorizerSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.NodeAuthorizerSpec) interface{} {
-				return func(in kops.NodeAuthorizerSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceNodeAuthorizerSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec { return &in }(func(in interface{}) kops.NodeAuthorizerSpec {
+				if in == nil {
+					return kops.NodeAuthorizerSpec{}
+				}
+				return ExpandDataSourceNodeAuthorizerSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.NodeAuthorizer)
-}
-
-func FlattenDataSourceNodeAuthorizationSpec(in kops.NodeAuthorizationSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceNodeAuthorizationSpecInto(in, out)
+	}
 	return out
 }

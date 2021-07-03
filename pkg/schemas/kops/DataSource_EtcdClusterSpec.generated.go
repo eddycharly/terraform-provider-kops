@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -15,19 +13,19 @@ var _ = Schema
 func DataSourceEtcdClusterSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":                    ComputedString(),
-			"provider":                ComputedString(),
-			"member":                  ComputedList(DataSourceEtcdMemberSpec()),
-			"enable_etcd_tls":         ComputedBool(),
-			"enable_tls_auth":         ComputedBool(),
-			"version":                 ComputedString(),
-			"leader_election_timeout": ComputedDuration(),
-			"heartbeat_interval":      ComputedDuration(),
-			"image":                   ComputedString(),
-			"backups":                 ComputedStruct(DataSourceEtcdBackupSpec()),
-			"manager":                 ComputedStruct(DataSourceEtcdManagerSpec()),
-			"memory_request":          ComputedQuantity(),
-			"cpu_request":             ComputedQuantity(),
+			"name":                    Computed(String()),
+			"provider":                Computed(String()),
+			"member":                  Computed(List(Struct(DataSourceEtcdMemberSpec()))),
+			"enable_etcd_tls":         Computed(Bool()),
+			"enable_tls_auth":         Computed(Bool()),
+			"version":                 Computed(String()),
+			"leader_election_timeout": Computed(Ptr(Duration())),
+			"heartbeat_interval":      Computed(Ptr(Duration())),
+			"image":                   Computed(String()),
+			"backups":                 Computed(Ptr(Struct(DataSourceEtcdBackupSpec()))),
+			"manager":                 Computed(Ptr(Struct(DataSourceEtcdManagerSpec()))),
+			"memory_request":          Computed(Ptr(Quantity())),
+			"cpu_request":             Computed(Ptr(Quantity())),
 		},
 	}
 }
@@ -36,240 +34,96 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 	if in == nil {
 		panic("expand EtcdClusterSpec failure, in is nil")
 	}
-	return kops.EtcdClusterSpec{
-		Name: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["name"]),
-		Provider: func(in interface{}) kops.EtcdProviderType {
-			return kops.EtcdProviderType(ExpandString(in))
-		}(in["provider"]),
-		Members: func(in interface{}) []kops.EtcdMemberSpec {
-			return func(in interface{}) []kops.EtcdMemberSpec {
-				var out []kops.EtcdMemberSpec
-				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) kops.EtcdMemberSpec {
-						if in == nil {
-							return kops.EtcdMemberSpec{}
-						}
-						return (ExpandDataSourceEtcdMemberSpec(in.(map[string]interface{})))
-					}(in))
-				}
-				return out
-			}(in)
-		}(in["member"]),
-		EnableEtcdTLS: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_etcd_tls"]),
-		EnableTLSAuth: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_tls_auth"]),
-		Version: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["version"]),
-		LeaderElectionTimeout: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["leader_election_timeout"]),
-		HeartbeatInterval: func(in interface{}) *v1.Duration {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *v1.Duration {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in v1.Duration) *v1.Duration {
-					return &in
-				}(ExpandDuration(in))
-			}(in)
-		}(in["heartbeat_interval"]),
-		Image: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["image"]),
-		Backups: func(in interface{}) *kops.EtcdBackupSpec {
-			return func(in interface{}) *kops.EtcdBackupSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec {
-					return &in
-				}(func(in interface{}) kops.EtcdBackupSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.EtcdBackupSpec{}
-					}
-					return (ExpandDataSourceEtcdBackupSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["backups"]),
-		Manager: func(in interface{}) *kops.EtcdManagerSpec {
-			return func(in interface{}) *kops.EtcdManagerSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec {
-					return &in
-				}(func(in interface{}) kops.EtcdManagerSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.EtcdManagerSpec{}
-					}
-					return (ExpandDataSourceEtcdManagerSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["manager"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *resource.Quantity {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in resource.Quantity) *resource.Quantity {
-					return &in
-				}(ExpandQuantity(in))
-			}(in)
-		}(in["cpu_request"]),
+	out := kops.EtcdClusterSpec{}
+	if in, ok := in["name"]; ok && in != nil {
+		out.Name = func(in interface{}) string { return string(in.(string)) }(in)
 	}
-}
-
-func FlattenDataSourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[string]interface{}) {
-	out["name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Name)
-	out["provider"] = func(in kops.EtcdProviderType) interface{} {
-		return FlattenString(string(in))
-	}(in.Provider)
-	out["member"] = func(in []kops.EtcdMemberSpec) interface{} {
-		return func(in []kops.EtcdMemberSpec) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, func(in kops.EtcdMemberSpec) interface{} {
-					return FlattenDataSourceEtcdMemberSpec(in)
+	if in, ok := in["provider"]; ok && in != nil {
+		out.Provider = func(in interface{}) kops.EtcdProviderType { return kops.EtcdProviderType(in.(string)) }(in)
+	}
+	if in, ok := in["member"]; ok && in != nil {
+		out.Members = func(in interface{}) []kops.EtcdMemberSpec {
+			var out []kops.EtcdMemberSpec
+			for _, in := range in.([]interface{}) {
+				out = append(out, func(in interface{}) kops.EtcdMemberSpec {
+					if in == nil {
+						return kops.EtcdMemberSpec{}
+					}
+					return ExpandDataSourceEtcdMemberSpec(in.(map[string]interface{}))
 				}(in))
 			}
 			return out
 		}(in)
-	}(in.Members)
-	out["enable_etcd_tls"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableEtcdTLS)
-	out["enable_tls_auth"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableTLSAuth)
-	out["version"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Version)
-	out["leader_election_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	}
+	if in, ok := in["enable_etcd_tls"]; ok && in != nil {
+		out.EnableEtcdTLS = func(in interface{}) bool { return in.(bool) }(in)
+	}
+	if in, ok := in["enable_tls_auth"]; ok && in != nil {
+		out.EnableTLSAuth = func(in interface{}) bool { return in.(bool) }(in)
+	}
+	if in, ok := in["version"]; ok && in != nil {
+		out.Version = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["leader_election_timeout"]; ok && in != nil {
+		out.LeaderElectionTimeout = func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.LeaderElectionTimeout)
-	out["heartbeat_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	}
+	if in, ok := in["heartbeat_interval"]; ok && in != nil {
+		out.HeartbeatInterval = func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
-				return FlattenDuration(in)
-			}(*in)
+			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.HeartbeatInterval)
-	out["image"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Image)
-	out["backups"] = func(in *kops.EtcdBackupSpec) interface{} {
-		return func(in *kops.EtcdBackupSpec) interface{} {
+	}
+	if in, ok := in["image"]; ok && in != nil {
+		out.Image = func(in interface{}) string { return string(in.(string)) }(in)
+	}
+	if in, ok := in["backups"]; ok && in != nil {
+		out.Backups = func(in interface{}) *kops.EtcdBackupSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.EtcdBackupSpec) interface{} {
-				return func(in kops.EtcdBackupSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceEtcdBackupSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec { return &in }(func(in interface{}) kops.EtcdBackupSpec {
+				if in == nil {
+					return kops.EtcdBackupSpec{}
+				}
+				return ExpandDataSourceEtcdBackupSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Backups)
-	out["manager"] = func(in *kops.EtcdManagerSpec) interface{} {
-		return func(in *kops.EtcdManagerSpec) interface{} {
+	}
+	if in, ok := in["manager"]; ok && in != nil {
+		out.Manager = func(in interface{}) *kops.EtcdManagerSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.EtcdManagerSpec) interface{} {
-				return func(in kops.EtcdManagerSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceEtcdManagerSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec { return &in }(func(in interface{}) kops.EtcdManagerSpec {
+				if in == nil {
+					return kops.EtcdManagerSpec{}
+				}
+				return ExpandDataSourceEtcdManagerSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Manager)
-	out["memory_request"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["memory_request"]; ok && in != nil {
+		out.MemoryRequest = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.MemoryRequest)
-	out["cpu_request"] = func(in *resource.Quantity) interface{} {
-		return func(in *resource.Quantity) interface{} {
+	}
+	if in, ok := in["cpu_request"]; ok && in != nil {
+		out.CPURequest = func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) interface{} {
-				return FlattenQuantity(in)
-			}(*in)
+			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.CPURequest)
-}
-
-func FlattenDataSourceEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceEtcdClusterSpecInto(in, out)
+	}
 	return out
 }

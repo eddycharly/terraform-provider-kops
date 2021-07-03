@@ -2,7 +2,6 @@ package schemas
 
 import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	utilsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/utils"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -13,16 +12,16 @@ var _ = Schema
 func ResourceRollingUpdateOptions() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"skip":                OptionalBool(),
-			"master_interval":     OptionalDuration(),
-			"node_interval":       OptionalDuration(),
-			"bastion_interval":    OptionalDuration(),
-			"fail_on_drain_error": OptionalBool(),
-			"fail_on_validate":    OptionalBool(),
-			"post_drain_delay":    OptionalDuration(),
-			"validation_timeout":  OptionalDuration(),
-			"validate_count":      OptionalInt(),
-			"cloud_only":          OptionalBool(),
+			"skip":                Optional(Bool()),
+			"master_interval":     Optional(Ptr(Duration())),
+			"node_interval":       Optional(Ptr(Duration())),
+			"bastion_interval":    Optional(Ptr(Duration())),
+			"fail_on_drain_error": Optional(Bool()),
+			"fail_on_validate":    Optional(Bool()),
+			"post_drain_delay":    Optional(Ptr(Duration())),
+			"validation_timeout":  Optional(Ptr(Duration())),
+			"validate_count":      Optional(Ptr(Int())),
+			"cloud_only":          Optional(Bool()),
 		},
 	}
 }
@@ -31,25 +30,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) resources.Rol
 	if in == nil {
 		panic("expand RollingUpdateOptions failure, in is nil")
 	}
-	return resources.RollingUpdateOptions{
-		Skip: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["skip"]),
-		RollingUpdateOptions: func(in interface{}) utils.RollingUpdateOptions {
-			return utilsschemas.ExpandResourceRollingUpdateOptions(in.(map[string]interface{}))
-		}(in),
+	out := resources.RollingUpdateOptions{}
+	if in, ok := in["skip"]; ok && in != nil {
+		out.Skip = func(in interface{}) bool { return in.(bool) }(in)
 	}
-}
-
-func FlattenResourceRollingUpdateOptionsInto(in resources.RollingUpdateOptions, out map[string]interface{}) {
-	out["skip"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Skip)
-	utilsschemas.FlattenResourceRollingUpdateOptionsInto(in.RollingUpdateOptions, out)
-}
-
-func FlattenResourceRollingUpdateOptions(in resources.RollingUpdateOptions) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceRollingUpdateOptionsInto(in, out)
+	out.RollingUpdateOptions = utilsschemas.ExpandResourceRollingUpdateOptions(in)
 	return out
 }

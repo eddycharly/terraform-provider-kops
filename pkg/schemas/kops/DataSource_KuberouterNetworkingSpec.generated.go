@@ -18,14 +18,6 @@ func ExpandDataSourceKuberouterNetworkingSpec(in map[string]interface{}) kops.Ku
 	if in == nil {
 		panic("expand KuberouterNetworkingSpec failure, in is nil")
 	}
-	return kops.KuberouterNetworkingSpec{}
-}
-
-func FlattenDataSourceKuberouterNetworkingSpecInto(in kops.KuberouterNetworkingSpec, out map[string]interface{}) {
-}
-
-func FlattenDataSourceKuberouterNetworkingSpec(in kops.KuberouterNetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenDataSourceKuberouterNetworkingSpecInto(in, out)
+	out := kops.KuberouterNetworkingSpec{}
 	return out
 }

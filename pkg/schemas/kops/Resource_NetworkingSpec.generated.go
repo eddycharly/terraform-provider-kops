@@ -11,21 +11,21 @@ var _ = Schema
 func ResourceNetworkingSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"classic":    OptionalStruct(ResourceClassicNetworkingSpec()),
-			"kubenet":    OptionalStruct(ResourceKubenetNetworkingSpec()),
-			"external":   OptionalStruct(ResourceExternalNetworkingSpec()),
-			"cni":        OptionalStruct(ResourceCNINetworkingSpec()),
-			"kopeio":     OptionalStruct(ResourceKopeioNetworkingSpec()),
-			"weave":      OptionalStruct(ResourceWeaveNetworkingSpec()),
-			"flannel":    OptionalStruct(ResourceFlannelNetworkingSpec()),
-			"calico":     OptionalStruct(ResourceCalicoNetworkingSpec()),
-			"canal":      OptionalStruct(ResourceCanalNetworkingSpec()),
-			"kuberouter": OptionalStruct(ResourceKuberouterNetworkingSpec()),
-			"romana":     OptionalStruct(ResourceRomanaNetworkingSpec()),
-			"amazon_vpc": OptionalStruct(ResourceAmazonVPCNetworkingSpec()),
-			"cilium":     OptionalStruct(ResourceCiliumNetworkingSpec()),
-			"lyft_vpc":   OptionalStruct(ResourceLyftVPCNetworkingSpec()),
-			"gce":        OptionalStruct(ResourceGCENetworkingSpec()),
+			"classic":    Optional(Ptr(Struct(ResourceClassicNetworkingSpec()))),
+			"kubenet":    Optional(Ptr(Struct(ResourceKubenetNetworkingSpec()))),
+			"external":   Optional(Ptr(Struct(ResourceExternalNetworkingSpec()))),
+			"cni":        Optional(Ptr(Struct(ResourceCNINetworkingSpec()))),
+			"kopeio":     Optional(Ptr(Struct(ResourceKopeioNetworkingSpec()))),
+			"weave":      Optional(Ptr(Struct(ResourceWeaveNetworkingSpec()))),
+			"flannel":    Optional(Ptr(Struct(ResourceFlannelNetworkingSpec()))),
+			"calico":     Optional(Ptr(Struct(ResourceCalicoNetworkingSpec()))),
+			"canal":      Optional(Ptr(Struct(ResourceCanalNetworkingSpec()))),
+			"kuberouter": Optional(Ptr(Struct(ResourceKuberouterNetworkingSpec()))),
+			"romana":     Optional(Ptr(Struct(ResourceRomanaNetworkingSpec()))),
+			"amazon_vpc": Optional(Ptr(Struct(ResourceAmazonVPCNetworkingSpec()))),
+			"cilium":     Optional(Ptr(Struct(ResourceCiliumNetworkingSpec()))),
+			"lyft_vpc":   Optional(Ptr(Struct(ResourceLyftVPCNetworkingSpec()))),
+			"gce":        Optional(Ptr(Struct(ResourceGCENetworkingSpec()))),
 		},
 	}
 }
@@ -34,465 +34,201 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 	if in == nil {
 		panic("expand NetworkingSpec failure, in is nil")
 	}
-	return kops.NetworkingSpec{
-		Classic: func(in interface{}) *kops.ClassicNetworkingSpec {
-			return func(in interface{}) *kops.ClassicNetworkingSpec {
+	out := kops.NetworkingSpec{}
+	if in, ok := in["classic"]; ok && in != nil {
+		out.Classic = func(in interface{}) *kops.ClassicNetworkingSpec {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ClassicNetworkingSpec) *kops.ClassicNetworkingSpec { return &in }(func(in interface{}) kops.ClassicNetworkingSpec {
 				if in == nil {
-					return nil
+					return kops.ClassicNetworkingSpec{}
 				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.ClassicNetworkingSpec) *kops.ClassicNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.ClassicNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.ClassicNetworkingSpec{}
-					}
-					return (ExpandResourceClassicNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["classic"]),
-		Kubenet: func(in interface{}) *kops.KubenetNetworkingSpec {
-			return func(in interface{}) *kops.KubenetNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.KubenetNetworkingSpec) *kops.KubenetNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.KubenetNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.KubenetNetworkingSpec{}
-					}
-					return (ExpandResourceKubenetNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["kubenet"]),
-		External: func(in interface{}) *kops.ExternalNetworkingSpec {
-			return func(in interface{}) *kops.ExternalNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.ExternalNetworkingSpec) *kops.ExternalNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.ExternalNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.ExternalNetworkingSpec{}
-					}
-					return (ExpandResourceExternalNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["external"]),
-		CNI: func(in interface{}) *kops.CNINetworkingSpec {
-			return func(in interface{}) *kops.CNINetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.CNINetworkingSpec) *kops.CNINetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.CNINetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.CNINetworkingSpec{}
-					}
-					return (ExpandResourceCNINetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["cni"]),
-		Kopeio: func(in interface{}) *kops.KopeioNetworkingSpec {
-			return func(in interface{}) *kops.KopeioNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.KopeioNetworkingSpec) *kops.KopeioNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.KopeioNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.KopeioNetworkingSpec{}
-					}
-					return (ExpandResourceKopeioNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["kopeio"]),
-		Weave: func(in interface{}) *kops.WeaveNetworkingSpec {
-			return func(in interface{}) *kops.WeaveNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.WeaveNetworkingSpec) *kops.WeaveNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.WeaveNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.WeaveNetworkingSpec{}
-					}
-					return (ExpandResourceWeaveNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["weave"]),
-		Flannel: func(in interface{}) *kops.FlannelNetworkingSpec {
-			return func(in interface{}) *kops.FlannelNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.FlannelNetworkingSpec) *kops.FlannelNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.FlannelNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.FlannelNetworkingSpec{}
-					}
-					return (ExpandResourceFlannelNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["flannel"]),
-		Calico: func(in interface{}) *kops.CalicoNetworkingSpec {
-			return func(in interface{}) *kops.CalicoNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.CalicoNetworkingSpec) *kops.CalicoNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.CalicoNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.CalicoNetworkingSpec{}
-					}
-					return (ExpandResourceCalicoNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["calico"]),
-		Canal: func(in interface{}) *kops.CanalNetworkingSpec {
-			return func(in interface{}) *kops.CanalNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.CanalNetworkingSpec) *kops.CanalNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.CanalNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.CanalNetworkingSpec{}
-					}
-					return (ExpandResourceCanalNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["canal"]),
-		Kuberouter: func(in interface{}) *kops.KuberouterNetworkingSpec {
-			return func(in interface{}) *kops.KuberouterNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.KuberouterNetworkingSpec) *kops.KuberouterNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.KuberouterNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.KuberouterNetworkingSpec{}
-					}
-					return (ExpandResourceKuberouterNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["kuberouter"]),
-		Romana: func(in interface{}) *kops.RomanaNetworkingSpec {
-			return func(in interface{}) *kops.RomanaNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.RomanaNetworkingSpec) *kops.RomanaNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.RomanaNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.RomanaNetworkingSpec{}
-					}
-					return (ExpandResourceRomanaNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["romana"]),
-		AmazonVPC: func(in interface{}) *kops.AmazonVPCNetworkingSpec {
-			return func(in interface{}) *kops.AmazonVPCNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.AmazonVPCNetworkingSpec) *kops.AmazonVPCNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.AmazonVPCNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AmazonVPCNetworkingSpec{}
-					}
-					return (ExpandResourceAmazonVPCNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["amazon_vpc"]),
-		Cilium: func(in interface{}) *kops.CiliumNetworkingSpec {
-			return func(in interface{}) *kops.CiliumNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.CiliumNetworkingSpec) *kops.CiliumNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.CiliumNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.CiliumNetworkingSpec{}
-					}
-					return (ExpandResourceCiliumNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["cilium"]),
-		LyftVPC: func(in interface{}) *kops.LyftVPCNetworkingSpec {
-			return func(in interface{}) *kops.LyftVPCNetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.LyftVPCNetworkingSpec) *kops.LyftVPCNetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.LyftVPCNetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.LyftVPCNetworkingSpec{}
-					}
-					return (ExpandResourceLyftVPCNetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["lyft_vpc"]),
-		GCE: func(in interface{}) *kops.GCENetworkingSpec {
-			return func(in interface{}) *kops.GCENetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.GCENetworkingSpec) *kops.GCENetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.GCENetworkingSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.GCENetworkingSpec{}
-					}
-					return (ExpandResourceGCENetworkingSpec(in.([]interface{})[0].(map[string]interface{})))
-				}(in))
-			}(in)
-		}(in["gce"]),
+				return ExpandResourceClassicNetworkingSpec(in.(map[string]interface{}))
+			}(in))
+		}(in)
 	}
-}
-
-func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]interface{}) {
-	out["classic"] = func(in *kops.ClassicNetworkingSpec) interface{} {
-		return func(in *kops.ClassicNetworkingSpec) interface{} {
+	if in, ok := in["kubenet"]; ok && in != nil {
+		out.Kubenet = func(in interface{}) *kops.KubenetNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.ClassicNetworkingSpec) interface{} {
-				return func(in kops.ClassicNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceClassicNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.KubenetNetworkingSpec) *kops.KubenetNetworkingSpec { return &in }(func(in interface{}) kops.KubenetNetworkingSpec {
+				if in == nil {
+					return kops.KubenetNetworkingSpec{}
+				}
+				return ExpandResourceKubenetNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Classic)
-	out["kubenet"] = func(in *kops.KubenetNetworkingSpec) interface{} {
-		return func(in *kops.KubenetNetworkingSpec) interface{} {
+	}
+	if in, ok := in["external"]; ok && in != nil {
+		out.External = func(in interface{}) *kops.ExternalNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubenetNetworkingSpec) interface{} {
-				return func(in kops.KubenetNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKubenetNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.ExternalNetworkingSpec) *kops.ExternalNetworkingSpec { return &in }(func(in interface{}) kops.ExternalNetworkingSpec {
+				if in == nil {
+					return kops.ExternalNetworkingSpec{}
+				}
+				return ExpandResourceExternalNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Kubenet)
-	out["external"] = func(in *kops.ExternalNetworkingSpec) interface{} {
-		return func(in *kops.ExternalNetworkingSpec) interface{} {
+	}
+	if in, ok := in["cni"]; ok && in != nil {
+		out.CNI = func(in interface{}) *kops.CNINetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.ExternalNetworkingSpec) interface{} {
-				return func(in kops.ExternalNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceExternalNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.CNINetworkingSpec) *kops.CNINetworkingSpec { return &in }(func(in interface{}) kops.CNINetworkingSpec {
+				if in == nil {
+					return kops.CNINetworkingSpec{}
+				}
+				return ExpandResourceCNINetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.External)
-	out["cni"] = func(in *kops.CNINetworkingSpec) interface{} {
-		return func(in *kops.CNINetworkingSpec) interface{} {
+	}
+	if in, ok := in["kopeio"]; ok && in != nil {
+		out.Kopeio = func(in interface{}) *kops.KopeioNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CNINetworkingSpec) interface{} {
-				return func(in kops.CNINetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCNINetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.KopeioNetworkingSpec) *kops.KopeioNetworkingSpec { return &in }(func(in interface{}) kops.KopeioNetworkingSpec {
+				if in == nil {
+					return kops.KopeioNetworkingSpec{}
+				}
+				return ExpandResourceKopeioNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.CNI)
-	out["kopeio"] = func(in *kops.KopeioNetworkingSpec) interface{} {
-		return func(in *kops.KopeioNetworkingSpec) interface{} {
+	}
+	if in, ok := in["weave"]; ok && in != nil {
+		out.Weave = func(in interface{}) *kops.WeaveNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KopeioNetworkingSpec) interface{} {
-				return func(in kops.KopeioNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKopeioNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.WeaveNetworkingSpec) *kops.WeaveNetworkingSpec { return &in }(func(in interface{}) kops.WeaveNetworkingSpec {
+				if in == nil {
+					return kops.WeaveNetworkingSpec{}
+				}
+				return ExpandResourceWeaveNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Kopeio)
-	out["weave"] = func(in *kops.WeaveNetworkingSpec) interface{} {
-		return func(in *kops.WeaveNetworkingSpec) interface{} {
+	}
+	if in, ok := in["flannel"]; ok && in != nil {
+		out.Flannel = func(in interface{}) *kops.FlannelNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.WeaveNetworkingSpec) interface{} {
-				return func(in kops.WeaveNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceWeaveNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.FlannelNetworkingSpec) *kops.FlannelNetworkingSpec { return &in }(func(in interface{}) kops.FlannelNetworkingSpec {
+				if in == nil {
+					return kops.FlannelNetworkingSpec{}
+				}
+				return ExpandResourceFlannelNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Weave)
-	out["flannel"] = func(in *kops.FlannelNetworkingSpec) interface{} {
-		return func(in *kops.FlannelNetworkingSpec) interface{} {
+	}
+	if in, ok := in["calico"]; ok && in != nil {
+		out.Calico = func(in interface{}) *kops.CalicoNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.FlannelNetworkingSpec) interface{} {
-				return func(in kops.FlannelNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceFlannelNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.CalicoNetworkingSpec) *kops.CalicoNetworkingSpec { return &in }(func(in interface{}) kops.CalicoNetworkingSpec {
+				if in == nil {
+					return kops.CalicoNetworkingSpec{}
+				}
+				return ExpandResourceCalicoNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Flannel)
-	out["calico"] = func(in *kops.CalicoNetworkingSpec) interface{} {
-		return func(in *kops.CalicoNetworkingSpec) interface{} {
+	}
+	if in, ok := in["canal"]; ok && in != nil {
+		out.Canal = func(in interface{}) *kops.CanalNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CalicoNetworkingSpec) interface{} {
-				return func(in kops.CalicoNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCalicoNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.CanalNetworkingSpec) *kops.CanalNetworkingSpec { return &in }(func(in interface{}) kops.CanalNetworkingSpec {
+				if in == nil {
+					return kops.CanalNetworkingSpec{}
+				}
+				return ExpandResourceCanalNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Calico)
-	out["canal"] = func(in *kops.CanalNetworkingSpec) interface{} {
-		return func(in *kops.CanalNetworkingSpec) interface{} {
+	}
+	if in, ok := in["kuberouter"]; ok && in != nil {
+		out.Kuberouter = func(in interface{}) *kops.KuberouterNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CanalNetworkingSpec) interface{} {
-				return func(in kops.CanalNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCanalNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.KuberouterNetworkingSpec) *kops.KuberouterNetworkingSpec { return &in }(func(in interface{}) kops.KuberouterNetworkingSpec {
+				if in == nil {
+					return kops.KuberouterNetworkingSpec{}
+				}
+				return ExpandResourceKuberouterNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Canal)
-	out["kuberouter"] = func(in *kops.KuberouterNetworkingSpec) interface{} {
-		return func(in *kops.KuberouterNetworkingSpec) interface{} {
+	}
+	if in, ok := in["romana"]; ok && in != nil {
+		out.Romana = func(in interface{}) *kops.RomanaNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KuberouterNetworkingSpec) interface{} {
-				return func(in kops.KuberouterNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKuberouterNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.RomanaNetworkingSpec) *kops.RomanaNetworkingSpec { return &in }(func(in interface{}) kops.RomanaNetworkingSpec {
+				if in == nil {
+					return kops.RomanaNetworkingSpec{}
+				}
+				return ExpandResourceRomanaNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Kuberouter)
-	out["romana"] = func(in *kops.RomanaNetworkingSpec) interface{} {
-		return func(in *kops.RomanaNetworkingSpec) interface{} {
+	}
+	if in, ok := in["amazon_vpc"]; ok && in != nil {
+		out.AmazonVPC = func(in interface{}) *kops.AmazonVPCNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.RomanaNetworkingSpec) interface{} {
-				return func(in kops.RomanaNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceRomanaNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.AmazonVPCNetworkingSpec) *kops.AmazonVPCNetworkingSpec { return &in }(func(in interface{}) kops.AmazonVPCNetworkingSpec {
+				if in == nil {
+					return kops.AmazonVPCNetworkingSpec{}
+				}
+				return ExpandResourceAmazonVPCNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Romana)
-	out["amazon_vpc"] = func(in *kops.AmazonVPCNetworkingSpec) interface{} {
-		return func(in *kops.AmazonVPCNetworkingSpec) interface{} {
+	}
+	if in, ok := in["cilium"]; ok && in != nil {
+		out.Cilium = func(in interface{}) *kops.CiliumNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AmazonVPCNetworkingSpec) interface{} {
-				return func(in kops.AmazonVPCNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceAmazonVPCNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.CiliumNetworkingSpec) *kops.CiliumNetworkingSpec { return &in }(func(in interface{}) kops.CiliumNetworkingSpec {
+				if in == nil {
+					return kops.CiliumNetworkingSpec{}
+				}
+				return ExpandResourceCiliumNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.AmazonVPC)
-	out["cilium"] = func(in *kops.CiliumNetworkingSpec) interface{} {
-		return func(in *kops.CiliumNetworkingSpec) interface{} {
+	}
+	if in, ok := in["lyft_vpc"]; ok && in != nil {
+		out.LyftVPC = func(in interface{}) *kops.LyftVPCNetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CiliumNetworkingSpec) interface{} {
-				return func(in kops.CiliumNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCiliumNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.LyftVPCNetworkingSpec) *kops.LyftVPCNetworkingSpec { return &in }(func(in interface{}) kops.LyftVPCNetworkingSpec {
+				if in == nil {
+					return kops.LyftVPCNetworkingSpec{}
+				}
+				return ExpandResourceLyftVPCNetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.Cilium)
-	out["lyft_vpc"] = func(in *kops.LyftVPCNetworkingSpec) interface{} {
-		return func(in *kops.LyftVPCNetworkingSpec) interface{} {
+	}
+	if in, ok := in["gce"]; ok && in != nil {
+		out.GCE = func(in interface{}) *kops.GCENetworkingSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.LyftVPCNetworkingSpec) interface{} {
-				return func(in kops.LyftVPCNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceLyftVPCNetworkingSpec(in)}
-				}(in)
-			}(*in)
+			return func(in kops.GCENetworkingSpec) *kops.GCENetworkingSpec { return &in }(func(in interface{}) kops.GCENetworkingSpec {
+				if in == nil {
+					return kops.GCENetworkingSpec{}
+				}
+				return ExpandResourceGCENetworkingSpec(in.(map[string]interface{}))
+			}(in))
 		}(in)
-	}(in.LyftVPC)
-	out["gce"] = func(in *kops.GCENetworkingSpec) interface{} {
-		return func(in *kops.GCENetworkingSpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.GCENetworkingSpec) interface{} {
-				return func(in kops.GCENetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceGCENetworkingSpec(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.GCE)
-}
-
-func FlattenResourceNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceNetworkingSpecInto(in, out)
+	}
 	return out
 }

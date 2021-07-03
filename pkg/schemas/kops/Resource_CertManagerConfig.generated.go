@@ -1,8 +1,6 @@
 package schemas
 
 import (
-	"reflect"
-
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -13,10 +11,10 @@ var _ = Schema
 func ResourceCertManagerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":        OptionalBool(),
-			"managed":        OptionalBool(),
-			"image":          OptionalString(),
-			"default_issuer": OptionalString(),
+			"enabled":        Optional(Ptr(Bool())),
+			"managed":        Optional(Ptr(Bool())),
+			"image":          Optional(Ptr(String())),
+			"default_issuer": Optional(Ptr(String())),
 		},
 	}
 }
@@ -25,119 +23,38 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 	if in == nil {
 		panic("expand CertManagerConfig failure, in is nil")
 	}
-	return kops.CertManagerConfig{
-		Enabled: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+	out := kops.CertManagerConfig{}
+	if in, ok := in["enabled"]; ok && in != nil {
+		out.Enabled = func(in interface{}) *bool {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["enabled"]),
-		Managed: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["managed"]),
-		Image: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["image"]),
-		DefaultIssuer: func(in interface{}) *string {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["default_issuer"]),
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+		}(in)
 	}
-}
-
-func FlattenResourceCertManagerConfigInto(in kops.CertManagerConfig, out map[string]interface{}) {
-	out["enabled"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	if in, ok := in["managed"]; ok && in != nil {
+		out.Managed = func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.Enabled)
-	out["managed"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	}
+	if in, ok := in["image"]; ok && in != nil {
+		out.Image = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.Managed)
-	out["image"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	}
+	if in, ok := in["default_issuer"]; ok && in != nil {
+		out.DefaultIssuer = func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
+			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
-	}(in.Image)
-	out["default_issuer"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.DefaultIssuer)
-}
-
-func FlattenResourceCertManagerConfig(in kops.CertManagerConfig) map[string]interface{} {
-	out := map[string]interface{}{}
-	FlattenResourceCertManagerConfigInto(in, out)
+	}
 	return out
 }
