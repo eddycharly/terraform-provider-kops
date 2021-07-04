@@ -48,3 +48,23 @@ func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.Cluste
 	}
 	return out
 }
+
+func FlattenDataSourceClusterStatusInto(in datasources.ClusterStatus, out map[string]interface{}) {
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["exists"] = func(in bool) interface{} { return in }(in.Exists)
+	out["is_valid"] = func(in bool) interface{} { return in }(in.IsValid)
+	out["needs_update"] = func(in bool) interface{} { return in }(in.NeedsUpdate)
+	out["instance_groups"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.InstanceGroups)
+}
+
+func FlattenDataSourceClusterStatus(in datasources.ClusterStatus) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceClusterStatusInto(in, out)
+	return out
+}

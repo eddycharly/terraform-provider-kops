@@ -11,12 +11,12 @@ var _ = Schema
 func DataSourceOpenstackBlockStorageConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"version":              Computed(Ptr(String())),
-			"ignore_az":            Computed(Ptr(Bool())),
-			"override_az":          Computed(Ptr(String())),
-			"create_storage_class": Computed(Ptr(Bool())),
+			"version":              Computed(Nullable(String())),
+			"ignore_az":            Computed(Nullable(Bool())),
+			"override_az":          Computed(Nullable(String())),
+			"create_storage_class": Computed(Nullable(Bool())),
 			"csi_plugin_image":     Computed(String()),
-			"csi_topology_support": Computed(Ptr(Bool())),
+			"csi_topology_support": Computed(Nullable(Bool())),
 		},
 	}
 }
@@ -69,5 +69,45 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorageConfig, out map[string]interface{}) {
+	out["version"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Version)
+	out["ignore_az"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.IgnoreAZ)
+	out["override_az"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OverrideAZ)
+	out["create_storage_class"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.CreateStorageClass)
+	out["csi_plugin_image"] = func(in string) interface{} { return string(in) }(in.CSIPluginImage)
+	out["csi_topology_support"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.CSITopologySupport)
+}
+
+func FlattenDataSourceOpenstackBlockStorageConfig(in kops.OpenstackBlockStorageConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceOpenstackBlockStorageConfigInto(in, out)
 	return out
 }

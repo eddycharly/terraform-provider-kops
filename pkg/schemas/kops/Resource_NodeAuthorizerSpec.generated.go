@@ -17,9 +17,9 @@ func ResourceNodeAuthorizerSpec() *schema.Resource {
 			"image":      Optional(String()),
 			"node_url":   Optional(String()),
 			"port":       Optional(Int()),
-			"interval":   Optional(Ptr(Duration())),
-			"timeout":    Optional(Ptr(Duration())),
-			"token_ttl":  Optional(Ptr(Duration())),
+			"interval":   Optional(Nullable(Duration())),
+			"timeout":    Optional(Nullable(Duration())),
+			"token_ttl":  Optional(Nullable(Duration())),
 		},
 	}
 }
@@ -74,5 +74,43 @@ func ExpandResourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthor
 			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceNodeAuthorizerSpecInto(in kops.NodeAuthorizerSpec, out map[string]interface{}) {
+	out["authorizer"] = func(in string) interface{} { return string(in) }(in.Authorizer)
+	out["features"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Features)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["node_url"] = func(in string) interface{} { return string(in) }(in.NodeURL)
+	out["port"] = func(in int) interface{} { return int(in) }(in.Port)
+	out["interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.Interval)
+	out["timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.Timeout)
+	out["token_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.TokenTTL)
+}
+
+func FlattenResourceNodeAuthorizerSpec(in kops.NodeAuthorizerSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceNodeAuthorizerSpecInto(in, out)
 	return out
 }

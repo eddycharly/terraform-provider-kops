@@ -11,9 +11,9 @@ var _ = Schema
 func DataSourceOpenstackMonitor() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"delay":       Computed(Ptr(String())),
-			"timeout":     Computed(Ptr(String())),
-			"max_retries": Computed(Ptr(Int())),
+			"delay":       Computed(Nullable(String())),
+			"timeout":     Computed(Nullable(String())),
+			"max_retries": Computed(Nullable(Int())),
 		},
 	}
 }
@@ -47,5 +47,32 @@ func ExpandDataSourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackM
 			return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceOpenstackMonitorInto(in kops.OpenstackMonitor, out map[string]interface{}) {
+	out["delay"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Delay)
+	out["timeout"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Timeout)
+	out["max_retries"] = func(in *int) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int) interface{} { return int(in) }(*in)}
+	}(in.MaxRetries)
+}
+
+func FlattenDataSourceOpenstackMonitor(in kops.OpenstackMonitor) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceOpenstackMonitorInto(in, out)
 	return out
 }

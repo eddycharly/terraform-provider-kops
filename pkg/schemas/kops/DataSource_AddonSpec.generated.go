@@ -26,3 +26,13 @@ func ExpandDataSourceAddonSpec(in map[string]interface{}) kops.AddonSpec {
 	}
 	return out
 }
+
+func FlattenDataSourceAddonSpecInto(in kops.AddonSpec, out map[string]interface{}) {
+	out["manifest"] = func(in string) interface{} { return string(in) }(in.Manifest)
+}
+
+func FlattenDataSourceAddonSpec(in kops.AddonSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceAddonSpecInto(in, out)
+	return out
+}

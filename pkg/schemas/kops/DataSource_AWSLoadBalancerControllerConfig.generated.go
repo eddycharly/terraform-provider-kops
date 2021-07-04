@@ -11,8 +11,8 @@ var _ = Schema
 func DataSourceAWSLoadBalancerControllerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": Computed(Ptr(Bool())),
-			"version": Computed(Ptr(String())),
+			"enabled": Computed(Nullable(Bool())),
+			"version": Computed(Nullable(String())),
 		},
 	}
 }
@@ -38,5 +38,26 @@ func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) 
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceAWSLoadBalancerControllerConfigInto(in kops.AWSLoadBalancerControllerConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["version"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Version)
+}
+
+func FlattenDataSourceAWSLoadBalancerControllerConfig(in kops.AWSLoadBalancerControllerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceAWSLoadBalancerControllerConfigInto(in, out)
 	return out
 }

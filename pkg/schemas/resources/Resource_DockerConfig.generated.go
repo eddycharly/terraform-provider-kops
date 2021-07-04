@@ -30,3 +30,14 @@ func ExpandResourceDockerConfig(in map[string]interface{}) resources.DockerConfi
 	}
 	return out
 }
+
+func FlattenResourceDockerConfigInto(in resources.DockerConfig, out map[string]interface{}) {
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["docker_config"] = func(in string) interface{} { return string(in) }(in.DockerConfig)
+}
+
+func FlattenResourceDockerConfig(in resources.DockerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceDockerConfigInto(in, out)
+	return out
+}

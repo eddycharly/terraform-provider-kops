@@ -15,7 +15,7 @@ func DataSourceKubeConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":  Required(String()),
-			"admin":         Optional(Computed(Ptr(Int()))),
+			"admin":         Optional(Computed(Nullable(Int()))),
 			"internal":      Optional(Computed(Bool())),
 			"server":        Computed(String()),
 			"context":       Computed(String()),
@@ -49,5 +49,23 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 		out.Internal = func(in interface{}) bool { return in.(bool) }(in)
 	}
 	out.Config = kubeschemas.ExpandDataSourceConfig(in)
+	return out
+}
+
+func FlattenDataSourceKubeConfigInto(in datasources.KubeConfig, out map[string]interface{}) {
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["admin"] = func(in *time.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in time.Duration) interface{} { return int(in) }(*in)}
+	}(in.Admin)
+	out["internal"] = func(in bool) interface{} { return in }(in.Internal)
+	kubeschemas.FlattenDataSourceConfigInto(in.Config, out)
+}
+
+func FlattenDataSourceKubeConfig(in datasources.KubeConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceKubeConfigInto(in, out)
 	return out
 }

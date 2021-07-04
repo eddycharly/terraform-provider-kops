@@ -24,10 +24,10 @@ func ResourceKubeDNSConfig() *schema.Resource {
 			"server_ip":            Optional(String()),
 			"stub_domains":         Optional(Map(List(String()))),
 			"upstream_nameservers": Optional(List(String())),
-			"memory_request":       Optional(Ptr(Quantity())),
-			"cpu_request":          Optional(Ptr(Quantity())),
-			"memory_limit":         Optional(Ptr(Quantity())),
-			"node_local_dns":       Optional(Ptr(Struct(ResourceNodeLocalDNSConfig()))),
+			"memory_request":       Optional(Nullable(Quantity())),
+			"cpu_request":          Optional(Nullable(Quantity())),
+			"memory_limit":         Optional(Nullable(Quantity())),
+			"node_local_dns":       Optional(Struct(ResourceNodeLocalDNSConfig())),
 		},
 	}
 }
@@ -131,5 +131,71 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]interface{}) {
+	out["cache_max_size"] = func(in int) interface{} { return int(in) }(in.CacheMaxSize)
+	out["cache_max_concurrent"] = func(in int) interface{} { return int(in) }(in.CacheMaxConcurrent)
+	out["core_dns_image"] = func(in string) interface{} { return string(in) }(in.CoreDNSImage)
+	out["cpa_image"] = func(in string) interface{} { return string(in) }(in.CPAImage)
+	out["domain"] = func(in string) interface{} { return string(in) }(in.Domain)
+	out["external_core_file"] = func(in string) interface{} { return string(in) }(in.ExternalCoreFile)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["replicas"] = func(in int) interface{} { return int(in) }(in.Replicas)
+	out["provider"] = func(in string) interface{} { return string(in) }(in.Provider)
+	out["server_ip"] = func(in string) interface{} { return string(in) }(in.ServerIP)
+	out["stub_domains"] = func(in map[string][]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in []string) interface{} {
+				var out []interface{}
+				for _, in := range in {
+					out = append(out, func(in string) interface{} { return string(in) }(in))
+				}
+				return out
+			}(in)
+		}
+		return out
+	}(in.StubDomains)
+	out["upstream_nameservers"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.UpstreamNameservers)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPURequest)
+	out["memory_limit"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryLimit)
+	out["node_local_dns"] = func(in *kops.NodeLocalDNSConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NodeLocalDNSConfig) interface{} { return FlattenResourceNodeLocalDNSConfig(in) }(*in)
+	}(in.NodeLocalDNS)
+}
+
+func FlattenResourceKubeDNSConfig(in kops.KubeDNSConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceKubeDNSConfigInto(in, out)
 	return out
 }

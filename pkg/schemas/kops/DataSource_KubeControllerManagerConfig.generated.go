@@ -20,48 +20,48 @@ func DataSourceKubeControllerManagerConfig() *schema.Resource {
 			"cloud_provider":                            Computed(String()),
 			"cluster_name":                              Computed(String()),
 			"cluster_cidr":                              Computed(String()),
-			"allocate_node_cidrs":                       Computed(Ptr(Bool())),
-			"node_cidr_mask_size":                       Computed(Ptr(Int())),
-			"configure_cloud_routes":                    Computed(Ptr(Bool())),
+			"allocate_node_cidrs":                       Computed(Nullable(Bool())),
+			"node_cidr_mask_size":                       Computed(Nullable(Int())),
+			"configure_cloud_routes":                    Computed(Nullable(Bool())),
 			"controllers":                               Computed(List(String())),
-			"cidr_allocator_type":                       Computed(Ptr(String())),
+			"cidr_allocator_type":                       Computed(Nullable(String())),
 			"root_ca_file":                              Computed(String()),
-			"leader_election":                           Computed(Ptr(Struct(DataSourceLeaderElectionConfiguration()))),
-			"attach_detach_reconcile_sync_period":       Computed(Ptr(Duration())),
-			"disable_attach_detach_reconcile_sync":      Computed(Ptr(Bool())),
-			"terminated_pod_gc_threshold":               Computed(Ptr(Int())),
-			"node_monitor_period":                       Computed(Ptr(Duration())),
-			"node_monitor_grace_period":                 Computed(Ptr(Duration())),
-			"pod_eviction_timeout":                      Computed(Ptr(Duration())),
-			"use_service_account_credentials":           Computed(Ptr(Bool())),
-			"horizontal_pod_autoscaler_sync_period":     Computed(Ptr(Duration())),
-			"horizontal_pod_autoscaler_downscale_delay": Computed(Ptr(Duration())),
-			"horizontal_pod_autoscaler_downscale_stabilization":   Computed(Ptr(Duration())),
-			"horizontal_pod_autoscaler_upscale_delay":             Computed(Ptr(Duration())),
-			"horizontal_pod_autoscaler_initial_readiness_delay":   Computed(Ptr(Duration())),
-			"horizontal_pod_autoscaler_cpu_initialization_period": Computed(Ptr(Duration())),
-			"horizontal_pod_autoscaler_tolerance":                 Computed(Ptr(Quantity())),
-			"horizontal_pod_autoscaler_use_rest_clients":          Computed(Ptr(Bool())),
-			"experimental_cluster_signing_duration":               Computed(Ptr(Duration())),
+			"leader_election":                           Computed(Struct(DataSourceLeaderElectionConfiguration())),
+			"attach_detach_reconcile_sync_period":       Computed(Nullable(Duration())),
+			"disable_attach_detach_reconcile_sync":      Computed(Nullable(Bool())),
+			"terminated_pod_gc_threshold":               Computed(Nullable(Int())),
+			"node_monitor_period":                       Computed(Nullable(Duration())),
+			"node_monitor_grace_period":                 Computed(Nullable(Duration())),
+			"pod_eviction_timeout":                      Computed(Nullable(Duration())),
+			"use_service_account_credentials":           Computed(Nullable(Bool())),
+			"horizontal_pod_autoscaler_sync_period":     Computed(Nullable(Duration())),
+			"horizontal_pod_autoscaler_downscale_delay": Computed(Nullable(Duration())),
+			"horizontal_pod_autoscaler_downscale_stabilization":   Computed(Nullable(Duration())),
+			"horizontal_pod_autoscaler_upscale_delay":             Computed(Nullable(Duration())),
+			"horizontal_pod_autoscaler_initial_readiness_delay":   Computed(Nullable(Duration())),
+			"horizontal_pod_autoscaler_cpu_initialization_period": Computed(Nullable(Duration())),
+			"horizontal_pod_autoscaler_tolerance":                 Computed(Nullable(Quantity())),
+			"horizontal_pod_autoscaler_use_rest_clients":          Computed(Nullable(Bool())),
+			"experimental_cluster_signing_duration":               Computed(Nullable(Duration())),
 			"feature_gates":                                       Computed(Map(String())),
 			"tls_cipher_suites":                                   Computed(List(String())),
 			"tls_min_version":                                     Computed(String()),
 			"min_resync_period":                                   Computed(String()),
-			"kube_api_qps":                                        Computed(Ptr(Quantity())),
-			"kube_api_burst":                                      Computed(Ptr(Int())),
-			"concurrent_deployment_syncs":                         Computed(Ptr(Int())),
-			"concurrent_endpoint_syncs":                           Computed(Ptr(Int())),
-			"concurrent_namespace_syncs":                          Computed(Ptr(Int())),
-			"concurrent_replicaset_syncs":                         Computed(Ptr(Int())),
-			"concurrent_service_syncs":                            Computed(Ptr(Int())),
-			"concurrent_resource_quota_syncs":                     Computed(Ptr(Int())),
-			"concurrent_serviceaccount_token_syncs":               Computed(Ptr(Int())),
-			"concurrent_rc_syncs":                                 Computed(Ptr(Int())),
+			"kube_api_qps":                                        Computed(Nullable(Quantity())),
+			"kube_api_burst":                                      Computed(Nullable(Int())),
+			"concurrent_deployment_syncs":                         Computed(Nullable(Int())),
+			"concurrent_endpoint_syncs":                           Computed(Nullable(Int())),
+			"concurrent_namespace_syncs":                          Computed(Nullable(Int())),
+			"concurrent_replicaset_syncs":                         Computed(Nullable(Int())),
+			"concurrent_service_syncs":                            Computed(Nullable(Int())),
+			"concurrent_resource_quota_syncs":                     Computed(Nullable(Int())),
+			"concurrent_serviceaccount_token_syncs":               Computed(Nullable(Int())),
+			"concurrent_rc_syncs":                                 Computed(Nullable(Int())),
 			"authentication_kubeconfig":                           Computed(String()),
 			"authorization_kubeconfig":                            Computed(String()),
 			"authorization_always_allow_paths":                    Computed(List(String())),
 			"external_cloud_volume_plugin":                        Computed(String()),
-			"enable_profiling":                                    Computed(Ptr(Bool())),
+			"enable_profiling":                                    Computed(Nullable(Bool())),
 		},
 	}
 }
@@ -410,5 +410,252 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceKubeControllerManagerConfigInto(in kops.KubeControllerManagerConfig, out map[string]interface{}) {
+	out["master"] = func(in string) interface{} { return string(in) }(in.Master)
+	out["log_level"] = func(in int32) interface{} { return int(in) }(in.LogLevel)
+	out["service_account_private_key_file"] = func(in string) interface{} { return string(in) }(in.ServiceAccountPrivateKeyFile)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["cloud_provider"] = func(in string) interface{} { return string(in) }(in.CloudProvider)
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["cluster_cidr"] = func(in string) interface{} { return string(in) }(in.ClusterCIDR)
+	out["allocate_node_cidrs"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AllocateNodeCIDRs)
+	out["node_cidr_mask_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.NodeCIDRMaskSize)
+	out["configure_cloud_routes"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ConfigureCloudRoutes)
+	out["controllers"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Controllers)
+	out["cidr_allocator_type"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.CIDRAllocatorType)
+	out["root_ca_file"] = func(in string) interface{} { return string(in) }(in.RootCAFile)
+	out["leader_election"] = func(in *kops.LeaderElectionConfiguration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.LeaderElectionConfiguration) interface{} {
+			return FlattenDataSourceLeaderElectionConfiguration(in)
+		}(*in)
+	}(in.LeaderElection)
+	out["attach_detach_reconcile_sync_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AttachDetachReconcileSyncPeriod)
+	out["disable_attach_detach_reconcile_sync"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DisableAttachDetachReconcileSync)
+	out["terminated_pod_gc_threshold"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.TerminatedPodGCThreshold)
+	out["node_monitor_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.NodeMonitorPeriod)
+	out["node_monitor_grace_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.NodeMonitorGracePeriod)
+	out["pod_eviction_timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.PodEvictionTimeout)
+	out["use_service_account_credentials"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.UseServiceAccountCredentials)
+	out["horizontal_pod_autoscaler_sync_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HorizontalPodAutoscalerSyncPeriod)
+	out["horizontal_pod_autoscaler_downscale_delay"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HorizontalPodAutoscalerDownscaleDelay)
+	out["horizontal_pod_autoscaler_downscale_stabilization"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HorizontalPodAutoscalerDownscaleStabilization)
+	out["horizontal_pod_autoscaler_upscale_delay"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HorizontalPodAutoscalerUpscaleDelay)
+	out["horizontal_pod_autoscaler_initial_readiness_delay"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HorizontalPodAutoscalerInitialReadinessDelay)
+	out["horizontal_pod_autoscaler_cpu_initialization_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HorizontalPodAutoscalerCPUInitializationPeriod)
+	out["horizontal_pod_autoscaler_tolerance"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.HorizontalPodAutoscalerTolerance)
+	out["horizontal_pod_autoscaler_use_rest_clients"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.HorizontalPodAutoscalerUseRestClients)
+	out["experimental_cluster_signing_duration"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.ExperimentalClusterSigningDuration)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.FeatureGates)
+	out["tls_cipher_suites"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.TLSCipherSuites)
+	out["tls_min_version"] = func(in string) interface{} { return string(in) }(in.TLSMinVersion)
+	out["min_resync_period"] = func(in string) interface{} { return string(in) }(in.MinResyncPeriod)
+	out["kube_api_qps"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.KubeAPIQPS)
+	out["kube_api_burst"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.KubeAPIBurst)
+	out["concurrent_deployment_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentDeploymentSyncs)
+	out["concurrent_endpoint_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentEndpointSyncs)
+	out["concurrent_namespace_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentNamespaceSyncs)
+	out["concurrent_replicaset_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentReplicasetSyncs)
+	out["concurrent_service_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentServiceSyncs)
+	out["concurrent_resource_quota_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentResourceQuotaSyncs)
+	out["concurrent_serviceaccount_token_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentServiceaccountTokenSyncs)
+	out["concurrent_rc_syncs"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConcurrentRcSyncs)
+	out["authentication_kubeconfig"] = func(in string) interface{} { return string(in) }(in.AuthenticationKubeconfig)
+	out["authorization_kubeconfig"] = func(in string) interface{} { return string(in) }(in.AuthorizationKubeconfig)
+	out["authorization_always_allow_paths"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AuthorizationAlwaysAllowPaths)
+	out["external_cloud_volume_plugin"] = func(in string) interface{} { return string(in) }(in.ExternalCloudVolumePlugin)
+	out["enable_profiling"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableProfiling)
+}
+
+func FlattenDataSourceKubeControllerManagerConfig(in kops.KubeControllerManagerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceKubeControllerManagerConfigInto(in, out)
 	return out
 }

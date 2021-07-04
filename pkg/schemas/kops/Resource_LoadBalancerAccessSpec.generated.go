@@ -13,14 +13,14 @@ func ResourceLoadBalancerAccessSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"class":                      Optional(String()),
 			"type":                       Required(String()),
-			"idle_timeout_seconds":       Optional(Ptr(Int())),
-			"security_group_override":    Optional(Ptr(String())),
+			"idle_timeout_seconds":       Optional(Nullable(Int())),
+			"security_group_override":    Optional(Nullable(String())),
 			"additional_security_groups": Optional(List(String())),
 			"use_for_internal_api":       Optional(Bool()),
 			"ssl_certificate":            Optional(String()),
-			"ssl_policy":                 Optional(Ptr(String())),
-			"cross_zone_load_balancing":  Optional(Ptr(Bool())),
-			"subnets":                    Optional(List(Struct(ResourceLoadBalancerSubnetSpec()))),
+			"ssl_policy":                 Optional(Nullable(String())),
+			"cross_zone_load_balancing":  Optional(Nullable(Bool())),
+			"subnets":                    Optional(List(ResourceLoadBalancerSubnetSpec())),
 		},
 	}
 }
@@ -97,5 +97,56 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec, out map[string]interface{}) {
+	out["class"] = func(in kops.LoadBalancerClass) interface{} { return string(in) }(in.Class)
+	out["type"] = func(in kops.LoadBalancerType) interface{} { return string(in) }(in.Type)
+	out["idle_timeout_seconds"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.IdleTimeoutSeconds)
+	out["security_group_override"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SecurityGroupOverride)
+	out["additional_security_groups"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AdditionalSecurityGroups)
+	out["use_for_internal_api"] = func(in bool) interface{} { return in }(in.UseForInternalApi)
+	out["ssl_certificate"] = func(in string) interface{} { return string(in) }(in.SSLCertificate)
+	out["ssl_policy"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SSLPolicy)
+	out["cross_zone_load_balancing"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.CrossZoneLoadBalancing)
+	out["subnets"] = func(in []kops.LoadBalancerSubnetSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.LoadBalancerSubnetSpec) interface{} { return FlattenResourceLoadBalancerSubnetSpec(in) }(in))
+		}
+		return out
+	}(in.Subnets)
+}
+
+func FlattenResourceLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceLoadBalancerAccessSpecInto(in, out)
 	return out
 }

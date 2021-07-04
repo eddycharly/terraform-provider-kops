@@ -11,9 +11,9 @@ var _ = Schema
 func ResourceAssets() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"container_registry": Optional(Ptr(String())),
-			"file_repository":    Optional(Ptr(String())),
-			"container_proxy":    Optional(Ptr(String())),
+			"container_registry": Optional(Nullable(String())),
+			"file_repository":    Optional(Nullable(String())),
+			"container_proxy":    Optional(Nullable(String())),
 		},
 	}
 }
@@ -47,5 +47,32 @@ func ExpandResourceAssets(in map[string]interface{}) kops.Assets {
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceAssetsInto(in kops.Assets, out map[string]interface{}) {
+	out["container_registry"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ContainerRegistry)
+	out["file_repository"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.FileRepository)
+	out["container_proxy"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ContainerProxy)
+}
+
+func FlattenResourceAssets(in kops.Assets) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAssetsInto(in, out)
 	return out
 }

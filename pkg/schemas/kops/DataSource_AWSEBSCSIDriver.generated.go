@@ -11,9 +11,9 @@ var _ = Schema
 func DataSourceAWSEBSCSIDriver() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":             Computed(Ptr(Bool())),
-			"version":             Computed(Ptr(String())),
-			"volume_attach_limit": Computed(Ptr(Int())),
+			"enabled":             Computed(Nullable(Bool())),
+			"version":             Computed(Nullable(String())),
+			"volume_attach_limit": Computed(Nullable(Int())),
 		},
 	}
 }
@@ -47,5 +47,32 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 			return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceAWSEBSCSIDriverInto(in kops.AWSEBSCSIDriver, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["version"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Version)
+	out["volume_attach_limit"] = func(in *int) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int) interface{} { return int(in) }(*in)}
+	}(in.VolumeAttachLimit)
+}
+
+func FlattenDataSourceAWSEBSCSIDriver(in kops.AWSEBSCSIDriver) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceAWSEBSCSIDriverInto(in, out)
 	return out
 }

@@ -11,12 +11,12 @@ var _ = Schema
 func DataSourceVolumeSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"delete_on_termination": Computed(Ptr(Bool())),
+			"delete_on_termination": Computed(Nullable(Bool())),
 			"device":                Computed(String()),
-			"encrypted":             Computed(Ptr(Bool())),
-			"iops":                  Computed(Ptr(Int())),
-			"throughput":            Computed(Ptr(Int())),
-			"key":                   Computed(Ptr(String())),
+			"encrypted":             Computed(Nullable(Bool())),
+			"iops":                  Computed(Nullable(Int())),
+			"throughput":            Computed(Nullable(Int())),
+			"key":                   Computed(Nullable(String())),
 			"size":                  Computed(Int()),
 			"type":                  Computed(String()),
 		},
@@ -77,5 +77,47 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 	if in, ok := in["type"]; ok && in != nil {
 		out.Type = func(in interface{}) string { return string(in.(string)) }(in)
 	}
+	return out
+}
+
+func FlattenDataSourceVolumeSpecInto(in kops.VolumeSpec, out map[string]interface{}) {
+	out["delete_on_termination"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DeleteOnTermination)
+	out["device"] = func(in string) interface{} { return string(in) }(in.Device)
+	out["encrypted"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Encrypted)
+	out["iops"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.Iops)
+	out["throughput"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.Throughput)
+	out["key"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Key)
+	out["size"] = func(in int64) interface{} { return int(in) }(in.Size)
+	out["type"] = func(in string) interface{} { return string(in) }(in.Type)
+}
+
+func FlattenDataSourceVolumeSpec(in kops.VolumeSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceVolumeSpecInto(in, out)
 	return out
 }

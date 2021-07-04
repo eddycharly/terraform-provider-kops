@@ -30,3 +30,14 @@ func ExpandResourceHTTPProxy(in map[string]interface{}) kops.HTTPProxy {
 	}
 	return out
 }
+
+func FlattenResourceHTTPProxyInto(in kops.HTTPProxy, out map[string]interface{}) {
+	out["host"] = func(in string) interface{} { return string(in) }(in.Host)
+	out["port"] = func(in int) interface{} { return int(in) }(in.Port)
+}
+
+func FlattenResourceHTTPProxy(in kops.HTTPProxy) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceHTTPProxyInto(in, out)
+	return out
+}

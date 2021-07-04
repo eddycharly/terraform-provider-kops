@@ -72,3 +72,51 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 	}
 	return out
 }
+
+func FlattenResourceRollingUpdateOptionsInto(in utils.RollingUpdateOptions, out map[string]interface{}) {
+	out["master_interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.MasterInterval)
+	out["node_interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.NodeInterval)
+	out["bastion_interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.BastionInterval)
+	out["fail_on_drain_error"] = func(in bool) interface{} { return in }(in.FailOnDrainError)
+	out["fail_on_validate"] = func(in bool) interface{} { return in }(in.FailOnValidate)
+	out["post_drain_delay"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.PostDrainDelay)
+	out["validation_timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.ValidationTimeout)
+	out["validate_count"] = func(in *int) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int) interface{} { return int(in) }(*in)}
+	}(in.ValidateCount)
+	out["cloud_only"] = func(in bool) interface{} { return in }(in.CloudOnly)
+}
+
+func FlattenResourceRollingUpdateOptions(in utils.RollingUpdateOptions) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceRollingUpdateOptionsInto(in, out)
+	return out
+}

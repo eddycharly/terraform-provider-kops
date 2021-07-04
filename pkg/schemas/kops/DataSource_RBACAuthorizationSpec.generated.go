@@ -21,3 +21,12 @@ func ExpandDataSourceRBACAuthorizationSpec(in map[string]interface{}) kops.RBACA
 	out := kops.RBACAuthorizationSpec{}
 	return out
 }
+
+func FlattenDataSourceRBACAuthorizationSpecInto(in kops.RBACAuthorizationSpec, out map[string]interface{}) {
+}
+
+func FlattenDataSourceRBACAuthorizationSpec(in kops.RBACAuthorizationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceRBACAuthorizationSpecInto(in, out)
+	return out
+}

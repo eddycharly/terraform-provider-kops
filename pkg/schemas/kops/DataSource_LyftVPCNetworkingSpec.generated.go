@@ -35,3 +35,22 @@ func ExpandDataSourceLyftVPCNetworkingSpec(in map[string]interface{}) kops.LyftV
 	}
 	return out
 }
+
+func FlattenDataSourceLyftVPCNetworkingSpecInto(in kops.LyftVPCNetworkingSpec, out map[string]interface{}) {
+	out["subnet_tags"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.SubnetTags)
+}
+
+func FlattenDataSourceLyftVPCNetworkingSpec(in kops.LyftVPCNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceLyftVPCNetworkingSpecInto(in, out)
+	return out
+}

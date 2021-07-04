@@ -48,3 +48,23 @@ func ExpandDataSourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec
 	}
 	return out
 }
+
+func FlattenDataSourceFileAssetSpecInto(in kops.FileAssetSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["path"] = func(in string) interface{} { return string(in) }(in.Path)
+	out["roles"] = func(in []kops.InstanceGroupRole) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.InstanceGroupRole) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Roles)
+	out["content"] = func(in string) interface{} { return string(in) }(in.Content)
+	out["is_base64"] = func(in bool) interface{} { return in }(in.IsBase64)
+}
+
+func FlattenDataSourceFileAssetSpec(in kops.FileAssetSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceFileAssetSpecInto(in, out)
+	return out
+}

@@ -15,10 +15,10 @@ func DataSourceAwsAuthenticationSpec() *schema.Resource {
 			"image":          Computed(String()),
 			"backend_mode":   Computed(String()),
 			"cluster_id":     Computed(String()),
-			"memory_request": Computed(Ptr(Quantity())),
-			"cpu_request":    Computed(Ptr(Quantity())),
-			"memory_limit":   Computed(Ptr(Quantity())),
-			"cpu_limit":      Computed(Ptr(Quantity())),
+			"memory_request": Computed(Nullable(Quantity())),
+			"cpu_request":    Computed(Nullable(Quantity())),
+			"memory_limit":   Computed(Nullable(Quantity())),
+			"cpu_limit":      Computed(Nullable(Quantity())),
 		},
 	}
 }
@@ -69,5 +69,41 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceAwsAuthenticationSpecInto(in kops.AwsAuthenticationSpec, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["backend_mode"] = func(in string) interface{} { return string(in) }(in.BackendMode)
+	out["cluster_id"] = func(in string) interface{} { return string(in) }(in.ClusterID)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPURequest)
+	out["memory_limit"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryLimit)
+	out["cpu_limit"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPULimit)
+}
+
+func FlattenDataSourceAwsAuthenticationSpec(in kops.AwsAuthenticationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceAwsAuthenticationSpecInto(in, out)
 	return out
 }

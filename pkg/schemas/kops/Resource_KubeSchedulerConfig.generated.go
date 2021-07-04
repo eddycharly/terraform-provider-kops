@@ -15,16 +15,16 @@ func ResourceKubeSchedulerConfig() *schema.Resource {
 			"master":                           Optional(String()),
 			"log_level":                        Optional(Int()),
 			"image":                            Optional(String()),
-			"leader_election":                  Optional(Ptr(Struct(ResourceLeaderElectionConfiguration()))),
-			"use_policy_config_map":            Optional(Ptr(Bool())),
+			"leader_election":                  Optional(Struct(ResourceLeaderElectionConfiguration())),
+			"use_policy_config_map":            Optional(Nullable(Bool())),
 			"feature_gates":                    Optional(Map(String())),
-			"max_persistent_volumes":           Optional(Ptr(Int())),
-			"qps":                              Optional(Ptr(Quantity())),
+			"max_persistent_volumes":           Optional(Nullable(Int())),
+			"qps":                              Optional(Nullable(Quantity())),
 			"burst":                            Optional(Int()),
 			"authentication_kubeconfig":        Optional(String()),
 			"authorization_kubeconfig":         Optional(String()),
 			"authorization_always_allow_paths": Optional(List(String())),
-			"enable_profiling":                 Optional(Ptr(Bool())),
+			"enable_profiling":                 Optional(Nullable(Bool())),
 		},
 	}
 }
@@ -118,5 +118,69 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out map[string]interface{}) {
+	out["master"] = func(in string) interface{} { return string(in) }(in.Master)
+	out["log_level"] = func(in int32) interface{} { return int(in) }(in.LogLevel)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["leader_election"] = func(in *kops.LeaderElectionConfiguration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.LeaderElectionConfiguration) interface{} {
+			return FlattenResourceLeaderElectionConfiguration(in)
+		}(*in)
+	}(in.LeaderElection)
+	out["use_policy_config_map"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.UsePolicyConfigMap)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.FeatureGates)
+	out["max_persistent_volumes"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MaxPersistentVolumes)
+	out["qps"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.Qps)
+	out["burst"] = func(in int32) interface{} { return int(in) }(in.Burst)
+	out["authentication_kubeconfig"] = func(in string) interface{} { return string(in) }(in.AuthenticationKubeconfig)
+	out["authorization_kubeconfig"] = func(in string) interface{} { return string(in) }(in.AuthorizationKubeconfig)
+	out["authorization_always_allow_paths"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AuthorizationAlwaysAllowPaths)
+	out["enable_profiling"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableProfiling)
+}
+
+func FlattenResourceKubeSchedulerConfig(in kops.KubeSchedulerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceKubeSchedulerConfigInto(in, out)
 	return out
 }

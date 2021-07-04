@@ -78,3 +78,26 @@ func ExpandConfigOpenstack(in map[string]interface{}) config.Openstack {
 	}
 	return out
 }
+
+func FlattenConfigOpenstackInto(in config.Openstack, out map[string]interface{}) {
+	out["tenant_id"] = func(in string) interface{} { return string(in) }(in.TenantId)
+	out["tenant_name"] = func(in string) interface{} { return string(in) }(in.TenantName)
+	out["project_id"] = func(in string) interface{} { return string(in) }(in.ProjectId)
+	out["project_name"] = func(in string) interface{} { return string(in) }(in.ProjectName)
+	out["project_domain_id"] = func(in string) interface{} { return string(in) }(in.ProjectDomainId)
+	out["project_domain_name"] = func(in string) interface{} { return string(in) }(in.ProjectDomainName)
+	out["domain_id"] = func(in string) interface{} { return string(in) }(in.DomainId)
+	out["domain_name"] = func(in string) interface{} { return string(in) }(in.DomainName)
+	out["username"] = func(in string) interface{} { return string(in) }(in.Username)
+	out["password"] = func(in string) interface{} { return string(in) }(in.Password)
+	out["auth_url"] = func(in string) interface{} { return string(in) }(in.AuthUrl)
+	out["region_name"] = func(in string) interface{} { return string(in) }(in.RegionName)
+	out["application_credential_id"] = func(in string) interface{} { return string(in) }(in.ApplicationCredentialId)
+	out["application_credential_secret"] = func(in string) interface{} { return string(in) }(in.ApplicationCredentialSecret)
+}
+
+func FlattenConfigOpenstack(in config.Openstack) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenConfigOpenstackInto(in, out)
+	return out
+}

@@ -12,11 +12,11 @@ var _ = Schema
 func DataSourceNodeLocalDNSConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":             Computed(Ptr(Bool())),
+			"enabled":             Computed(Nullable(Bool())),
 			"local_ip":            Computed(String()),
-			"forward_to_kube_dns": Computed(Ptr(Bool())),
-			"memory_request":      Computed(Ptr(Quantity())),
-			"cpu_request":         Computed(Ptr(Quantity())),
+			"forward_to_kube_dns": Computed(Nullable(Bool())),
+			"memory_request":      Computed(Nullable(Quantity())),
+			"cpu_request":         Computed(Nullable(Quantity())),
 		},
 	}
 }
@@ -61,5 +61,39 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["local_ip"] = func(in string) interface{} { return string(in) }(in.LocalIP)
+	out["forward_to_kube_dns"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ForwardToKubeDNS)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPURequest)
+}
+
+func FlattenDataSourceNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceNodeLocalDNSConfigInto(in, out)
 	return out
 }

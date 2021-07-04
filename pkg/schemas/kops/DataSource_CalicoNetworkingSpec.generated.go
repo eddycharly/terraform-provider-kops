@@ -20,7 +20,7 @@ func DataSourceCalicoNetworkingSpec() *schema.Resource {
 			"bpf_kube_proxy_iptables_cleanup_enabled": Computed(Bool()),
 			"bpf_log_level":                      Computed(String()),
 			"chain_insert_mode":                  Computed(String()),
-			"cpu_request":                        Computed(Ptr(Quantity())),
+			"cpu_request":                        Computed(Nullable(Quantity())),
 			"cross_subnet":                       Computed(Bool()),
 			"encapsulation_mode":                 Computed(String()),
 			"ip_ip_mode":                         Computed(String()),
@@ -28,7 +28,7 @@ func DataSourceCalicoNetworkingSpec() *schema.Resource {
 			"ipv6_auto_detection_method":         Computed(String()),
 			"iptables_backend":                   Computed(String()),
 			"log_severity_screen":                Computed(String()),
-			"mtu":                                Computed(Ptr(Int())),
+			"mtu":                                Computed(Nullable(Int())),
 			"prometheus_metrics_enabled":         Computed(Bool()),
 			"prometheus_metrics_port":            Computed(Int()),
 			"prometheus_go_metrics_enabled":      Computed(Bool()),
@@ -135,5 +135,50 @@ func ExpandDataSourceCalicoNetworkingSpec(in map[string]interface{}) kops.Calico
 	if in, ok := in["wireguard_enabled"]; ok && in != nil {
 		out.WireguardEnabled = func(in interface{}) bool { return in.(bool) }(in)
 	}
+	return out
+}
+
+func FlattenDataSourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out map[string]interface{}) {
+	out["registry"] = func(in string) interface{} { return string(in) }(in.Registry)
+	out["version"] = func(in string) interface{} { return string(in) }(in.Version)
+	out["aws_src_dst_check"] = func(in string) interface{} { return string(in) }(in.AWSSrcDstCheck)
+	out["bpf_enabled"] = func(in bool) interface{} { return in }(in.BPFEnabled)
+	out["bpf_external_service_mode"] = func(in string) interface{} { return string(in) }(in.BPFExternalServiceMode)
+	out["bpf_kube_proxy_iptables_cleanup_enabled"] = func(in bool) interface{} { return in }(in.BPFKubeProxyIptablesCleanupEnabled)
+	out["bpf_log_level"] = func(in string) interface{} { return string(in) }(in.BPFLogLevel)
+	out["chain_insert_mode"] = func(in string) interface{} { return string(in) }(in.ChainInsertMode)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPURequest)
+	out["cross_subnet"] = func(in bool) interface{} { return in }(in.CrossSubnet)
+	out["encapsulation_mode"] = func(in string) interface{} { return string(in) }(in.EncapsulationMode)
+	out["ip_ip_mode"] = func(in string) interface{} { return string(in) }(in.IPIPMode)
+	out["ipv4_auto_detection_method"] = func(in string) interface{} { return string(in) }(in.IPv4AutoDetectionMethod)
+	out["ipv6_auto_detection_method"] = func(in string) interface{} { return string(in) }(in.IPv6AutoDetectionMethod)
+	out["iptables_backend"] = func(in string) interface{} { return string(in) }(in.IptablesBackend)
+	out["log_severity_screen"] = func(in string) interface{} { return string(in) }(in.LogSeverityScreen)
+	out["mtu"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MTU)
+	out["prometheus_metrics_enabled"] = func(in bool) interface{} { return in }(in.PrometheusMetricsEnabled)
+	out["prometheus_metrics_port"] = func(in int32) interface{} { return int(in) }(in.PrometheusMetricsPort)
+	out["prometheus_go_metrics_enabled"] = func(in bool) interface{} { return in }(in.PrometheusGoMetricsEnabled)
+	out["prometheus_process_metrics_enabled"] = func(in bool) interface{} { return in }(in.PrometheusProcessMetricsEnabled)
+	out["major_version"] = func(in string) interface{} { return string(in) }(in.MajorVersion)
+	out["typha_prometheus_metrics_enabled"] = func(in bool) interface{} { return in }(in.TyphaPrometheusMetricsEnabled)
+	out["typha_prometheus_metrics_port"] = func(in int32) interface{} { return int(in) }(in.TyphaPrometheusMetricsPort)
+	out["typha_replicas"] = func(in int32) interface{} { return int(in) }(in.TyphaReplicas)
+	out["wireguard_enabled"] = func(in bool) interface{} { return in }(in.WireguardEnabled)
+}
+
+func FlattenDataSourceCalicoNetworkingSpec(in kops.CalicoNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceCalicoNetworkingSpecInto(in, out)
 	return out
 }

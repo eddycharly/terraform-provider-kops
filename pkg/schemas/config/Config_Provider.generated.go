@@ -12,9 +12,9 @@ func ConfigProvider() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"state_store": Required(String()),
-			"aws":         Optional(Ptr(Struct(ConfigAws()))),
-			"openstack":   Optional(Ptr(Struct(ConfigOpenstack()))),
-			"klog":        Optional(Ptr(Struct(ConfigKlog()))),
+			"aws":         Optional(Struct(ConfigAws())),
+			"openstack":   Optional(Struct(ConfigOpenstack())),
+			"klog":        Optional(Struct(ConfigKlog())),
 		},
 	}
 }
@@ -66,5 +66,33 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
+	out["state_store"] = func(in string) interface{} { return string(in) }(in.StateStore)
+	out["aws"] = func(in *config.Aws) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in config.Aws) interface{} { return FlattenConfigAws(in) }(*in)
+	}(in.Aws)
+	out["openstack"] = func(in *config.Openstack) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in config.Openstack) interface{} { return FlattenConfigOpenstack(in) }(*in)
+	}(in.Openstack)
+	out["klog"] = func(in *config.Klog) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in config.Klog) interface{} { return FlattenConfigKlog(in) }(*in)
+	}(in.Klog)
+}
+
+func FlattenConfigProvider(in config.Provider) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenConfigProviderInto(in, out)
 	return out
 }

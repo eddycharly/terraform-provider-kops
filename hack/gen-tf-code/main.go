@@ -523,23 +523,155 @@ import (
 
 var _ = Schema
 
-{{- define "schema" -}}
-{{- if isPtr . -}}
-Ptr({{- template "schema" .Elem }})
-{{- else if isList . -}}
-List({{ template "schema" .Elem }})
-{{- else if isMap . -}}
-Map({{ template "schema" .Elem }})
-{{- else if isDuration . -}}
+{{- define "schemaBool" -}}
+Bool()
+{{- end -}}
+
+{{- define "schemaInt" -}}
+Int()
+{{- end -}}
+
+{{- define "schemaString" -}}
+String()
+{{- end -}}
+
+{{- define "schemaFloat" -}}
+Float()
+{{- end -}}
+
+{{- define "schemaDuration" -}}
 Duration()
-{{- else if isQuantity . -}}
+{{- end -}}
+
+{{- define "schemaQuantity" -}}
 Quantity()
-{{- else if isIntOrString . -}}
+{{- end -}}
+
+{{- define "schemaIntOrString" -}}
 IntOrString()
-{{- else if isStruct . -}}
+{{- end -}}
+
+{{- define "schemaPtr" -}}
+{{- if isBool .Elem -}}
+	Nullable({{ template "schemaBool" .Elem }})
+{{- else if isInt .Elem -}}
+	Nullable({{ template "schemaInt" .Elem }})
+{{- else if isFloat .Elem -}}
+	Nullable({{ template "schemaFloat" .Elem }})
+{{- else if isString .Elem -}}
+	Nullable({{ template "schemaString" .Elem }})
+{{- else if isDuration .Elem -}}
+	Nullable({{ template "schemaDuration" .Elem }})
+{{- else if isQuantity .Elem -}}
+	Nullable({{ template "schemaQuantity" .Elem }})
+{{- else if isIntOrString .Elem -}}
+	Nullable({{ template "schemaIntOrString" .Elem }})
+{{- else if isStruct .Elem -}}
+	{{ template "schemaStruct" .Elem }}
+{{- else if isMap .Elem -}}
+	{{ template "schemaMap" .Elem }}
+{{- end -}}
+{{- end -}}
+
+{{- define "schemaStruct" -}}
 Struct({{ mapping . }}{{ scope }}{{ .Name }}())
-{{- else -}}
-{{- schemaType . -}}()
+{{- end -}}
+
+{{- define "schemaListElemStruct" -}}
+{{ mapping . }}{{ scope }}{{ .Name }}()
+{{- end -}}
+
+{{- define "schemaListElemPtr" -}}
+{{- if isBool .Elem -}}
+	{{ template "schemaBool" .Elem }}
+{{- else if isInt .Elem -}}
+	{{ template "schemaInt" .Elem }}
+{{- else if isFloat .Elem -}}
+	{{ template "schemaFloat" .Elem }}
+{{- else if isString .Elem -}}
+	{{ template "schemaString" .Elem }}
+{{- else if isDuration .Elem -}}
+	{{ template "schemaDuration" .Elem }}
+{{- else if isQuantity .Elem -}}
+	{{ template "schemaQuantity" .Elem }}
+{{- else if isIntOrString .Elem -}}
+	{{ template "schemaIntOrString" .Elem }}
+{{- end -}}
+{{- end -}}
+
+{{- define "schemaListElem" -}}
+{{- if isBool . -}}
+	{{ template "schemaBool" . }}
+{{- else if isInt . -}}
+	{{ template "schemaInt" . }}
+{{- else if isFloat . -}}
+	{{ template "schemaFloat" . }}
+{{- else if isString . -}}
+	{{ template "schemaString" . }}
+{{- else if isDuration . -}}
+	{{ template "schemaDuration" . }}
+{{- else if isQuantity . -}}
+	{{ template "schemaQuantity" . }}
+{{- else if isIntOrString . -}}
+	{{ template "schemaIntOrString" . }}
+{{- else if isStruct . -}}
+	{{ template "schemaListElemStruct" . }}
+{{- else if isPtr . -}}
+	{{ template "schemaListElemPtr" . }}
+{{- end -}}
+{{- end -}}
+
+{{- define "schemaList" -}}
+List({{ template "schemaListElem" .Elem }})
+{{- end -}}
+
+{{- define "schemaMapElem" -}}
+{{- if isBool . -}}
+	{{ template "schemaBool" . }}
+{{- else if isInt . -}}
+	{{ template "schemaInt" . }}
+{{- else if isFloat . -}}
+	{{ template "schemaFloat" . }}
+{{- else if isString . -}}
+	{{ template "schemaString" . }}
+{{- else if isDuration . -}}
+	{{ template "schemaDuration" . }}
+{{- else if isQuantity . -}}
+	{{ template "schemaQuantity" . }}
+{{- else if isIntOrString . -}}
+	{{ template "schemaIntOrString" . }}
+{{- else if isList . -}}
+	{{ template "schemaList" . }}
+{{- end -}}
+{{- end -}}
+
+{{- define "schemaMap" -}}
+Map({{ template "schemaMapElem" .Elem }})
+{{- end -}}
+
+{{- define "schema" -}}
+{{- if isBool . -}}
+	{{ template "schemaBool" . }}
+{{- else if isInt . -}}
+	{{ template "schemaInt" . }}
+{{- else if isFloat . -}}
+	{{ template "schemaFloat" . }}
+{{- else if isString . -}}
+	{{ template "schemaString" . }}
+{{- else if isDuration . -}}
+	{{ template "schemaDuration" . }}
+{{- else if isQuantity . -}}
+	{{ template "schemaQuantity" . }}
+{{- else if isIntOrString . -}}
+	{{ template "schemaIntOrString" . }}
+{{- else if isPtr . -}}
+	{{ template "schemaPtr" . }}
+{{- else if isStruct . -}}
+	{{ template "schemaStruct" . }}
+{{- else if isList . -}}
+	{{ template "schemaList" . }}
+{{- else if isMap . -}}
+	{{ template "schemaMap" . }}
 {{- end -}}
 {{- end }}
 
@@ -607,23 +739,23 @@ func(in interface{}) {{ .String }} {
 	}
 	return func(in {{ .Elem.String }}) {{ .String }} { return &in }(
 	{{- if isBool .Elem -}}
-	{{ template "expandBool" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandBool" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isInt .Elem -}}
-	{{ template "expandInt" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandInt" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isFloat .Elem -}}
-	{{ template "expandFloat" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandFloat" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isString .Elem -}}
-	{{ template "expandString" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandString" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isDuration .Elem -}}
-	{{ template "expandDuration" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandDuration" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isQuantity .Elem -}}
-	{{ template "expandQuantity" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandQuantity" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isIntOrString .Elem -}}
-	{{ template "expandIntOrString" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandIntOrString" .Elem }}(in.(map[string]interface{})["value"])
 	{{- else if isStruct .Elem -}}
-	{{ template "expandStruct" .Elem }}(in)
+		{{ template "expandStruct" .Elem }}(in)
 	{{- else if isMap .Elem -}}
-	{{ template "expandMap" .Elem }}(in)
+		{{ template "expandMap" .Elem }}(in)
 	{{- end -}}
 	)
 }
@@ -663,27 +795,27 @@ func (in interface{}) {{ .String }} {
 
 {{- define "expander" -}}
 {{- if isBool . -}}
-{{ template "expandBool" . }}
+	{{ template "expandBool" . }}
 {{- else if isInt . -}}
-{{ template "expandInt" . }}
+	{{ template "expandInt" . }}
 {{- else if isFloat . -}}
-{{ template "expandFloat" . }}
+	{{ template "expandFloat" . }}
 {{- else if isString . -}}
-{{ template "expandString" . }}
+	{{ template "expandString" . }}
 {{- else if isDuration . -}}
-{{ template "expandDuration" . }}
+	{{ template "expandDuration" . }}
 {{- else if isQuantity . -}}
-{{ template "expandQuantity" . }}
+	{{ template "expandQuantity" . }}
 {{- else if isIntOrString . -}}
-{{ template "expandIntOrString" . }}
+	{{ template "expandIntOrString" . }}
 {{- else if isPtr . -}}
-{{ template "expandPtr" . }}
+	{{ template "expandPtr" . }}
 {{- else if isStruct . -}}
-{{ template "expandStruct" . }}
+	{{ template "expandStruct" . }}
 {{- else if isList . -}}
-{{ template "expandList" . }}
+	{{ template "expandList" . }}
 {{- else if isMap . -}}
-{{ template "expandMap" . }}
+	{{ template "expandMap" . }}
 {{- end -}}
 {{- end -}}
 
@@ -703,6 +835,132 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	{{- end }}
 	{{ end -}}
 	{{- end -}}
+	return out
+}
+
+{{ define "flattenBool" -}}
+func(in bool) interface{} { return in }
+{{- end -}}
+
+{{- define "flattenString" -}}
+func(in {{ .String }}) interface{} { return string(in) }
+{{- end -}}
+
+{{- define "flattenInt" -}}
+func(in {{ .String }}) interface{} { return int(in) }
+{{- end -}}
+
+{{- define "flattenFloat" -}}
+func(in {{ .String }}) interface{} { return float(in) }
+{{- end -}}
+
+{{- define "flattenQuantity" -}}
+func(in {{ .String }}) interface{} { return FlattenQuantity(in) }
+{{- end -}}
+
+{{- define "flattenDuration" -}}
+func(in {{ .String }}) interface{} { return FlattenDuration(in) }
+{{- end -}}
+
+{{- define "flattenIntOrString" -}}
+func(in {{ .String }}) interface{} { return FlattenIntOrString(in) }
+{{- end -}}
+
+{{- define "flattenPtr" -}}
+func(in {{ .String }}) interface{} {
+	if in == nil {
+		return nil
+	}
+	return {{ if isBool .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenBool" .Elem }}(*in) }
+	{{- else if isInt .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenInt" .Elem }}(*in) }
+	{{- else if isFloat .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenFloat" .Elem }}(*in) }
+	{{- else if isString .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenString" .Elem }}(*in) }
+	{{- else if isDuration .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenDuration" .Elem }}(*in) }
+	{{- else if isQuantity .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenQuantity" .Elem }}(*in) }
+	{{- else if isIntOrString .Elem -}}
+		map[string]interface{}{ "value": {{ template "flattenIntOrString" .Elem }}(*in) }
+	{{- else if isStruct .Elem -}}
+		{{ template "flattenStruct" .Elem }}(*in)
+	{{- else if isMap .Elem -}}
+		{{ template "flattenMap" .Elem }}(*in)
+	{{- end -}}
+}
+{{- end -}}
+
+{{- define "flattenList" -}}
+func (in {{ .String }}) interface{} {
+	var out []interface{}
+	for _, in := range in {
+		out = append(out, {{ template "flattener" .Elem }}(in))
+	}
+	return out
+}
+{{- end -}}
+
+{{- define "flattenMap" -}}
+func (in map[string]{{ .Elem.String }}) interface{} {
+	if in == nil {
+		return nil
+	}
+	out := map[string]interface{}{}
+	for key, in := range in {
+		out[key] = {{ template "flattener" .Elem }}(in)
+	}
+	return out
+}
+{{- end -}}
+
+{{- define "flattenStruct" -}}
+func (in {{ .String }}) interface{} { return {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
+{{- end -}}
+
+{{- define "flattener" -}}
+{{- if isBool . -}}
+	{{ template "flattenBool" . }}
+{{- else if isInt . -}}
+	{{ template "flattenInt" . }}
+{{- else if isFloat . -}}
+	{{ template "flattenFloat" . }}
+{{- else if isString . -}}
+	{{ template "flattenString" . }}
+{{- else if isDuration . -}}
+	{{ template "flattenDuration" . }}
+{{- else if isQuantity . -}}
+	{{ template "flattenQuantity" . }}
+{{- else if isIntOrString . -}}
+	{{ template "flattenIntOrString" . }}
+{{- else if isPtr . -}}
+ 	{{ template "flattenPtr" . }}
+{{- else if isStruct . -}}
+ 	{{ template "flattenStruct" . }}
+{{- else if isList . -}}
+ 	{{ template "flattenList" . }}
+{{- else if isMap . -}}
+ 	{{ template "flattenMap" . }}
+{{- end -}}
+{{- end }}
+
+func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
+	{{- range (fields . false) }}
+	{{- if not (isExcluded .) }}
+	{{ if .Anonymous -}}
+	{{ mapping .Type }}Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
+	{{- else -}}
+	out[{{ fieldName . | snakecase | quote }}] = {{ template "flattener" .Type }}(in.{{ .Name }})
+	{{- end }}
+	{{- end }}
+	{{- end }}
+}
+
+func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
+	out := map[string]interface{}{}
+	Flatten{{ scope }}{{ .Name }}Into(in, out)
 	return out
 }
 `

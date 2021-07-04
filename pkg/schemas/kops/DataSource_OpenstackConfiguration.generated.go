@@ -11,12 +11,12 @@ var _ = Schema
 func DataSourceOpenstackConfiguration() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"loadbalancer":         Computed(Ptr(Struct(DataSourceOpenstackLoadbalancerConfig()))),
-			"monitor":              Computed(Ptr(Struct(DataSourceOpenstackMonitor()))),
-			"router":               Computed(Ptr(Struct(DataSourceOpenstackRouter()))),
-			"block_storage":        Computed(Ptr(Struct(DataSourceOpenstackBlockStorageConfig()))),
-			"insecure_skip_verify": Computed(Ptr(Bool())),
-			"network":              Computed(Ptr(Struct(DataSourceOpenstackNetwork()))),
+			"loadbalancer":         Computed(Struct(DataSourceOpenstackLoadbalancerConfig())),
+			"monitor":              Computed(Struct(DataSourceOpenstackMonitor())),
+			"router":               Computed(Struct(DataSourceOpenstackRouter())),
+			"block_storage":        Computed(Struct(DataSourceOpenstackBlockStorageConfig())),
+			"insecure_skip_verify": Computed(Nullable(Bool())),
+			"network":              Computed(Struct(DataSourceOpenstackNetwork())),
 		},
 	}
 }
@@ -99,5 +99,54 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, out map[string]interface{}) {
+	out["loadbalancer"] = func(in *kops.OpenstackLoadbalancerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.OpenstackLoadbalancerConfig) interface{} {
+			return FlattenDataSourceOpenstackLoadbalancerConfig(in)
+		}(*in)
+	}(in.Loadbalancer)
+	out["monitor"] = func(in *kops.OpenstackMonitor) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.OpenstackMonitor) interface{} { return FlattenDataSourceOpenstackMonitor(in) }(*in)
+	}(in.Monitor)
+	out["router"] = func(in *kops.OpenstackRouter) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.OpenstackRouter) interface{} { return FlattenDataSourceOpenstackRouter(in) }(*in)
+	}(in.Router)
+	out["block_storage"] = func(in *kops.OpenstackBlockStorageConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.OpenstackBlockStorageConfig) interface{} {
+			return FlattenDataSourceOpenstackBlockStorageConfig(in)
+		}(*in)
+	}(in.BlockStorage)
+	out["insecure_skip_verify"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.InsecureSkipVerify)
+	out["network"] = func(in *kops.OpenstackNetwork) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.OpenstackNetwork) interface{} { return FlattenDataSourceOpenstackNetwork(in) }(*in)
+	}(in.Network)
+}
+
+func FlattenDataSourceOpenstackConfiguration(in kops.OpenstackConfiguration) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceOpenstackConfigurationInto(in, out)
 	return out
 }

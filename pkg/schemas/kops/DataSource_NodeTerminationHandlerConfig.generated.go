@@ -11,10 +11,10 @@ var _ = Schema
 func DataSourceNodeTerminationHandlerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":                           Computed(Ptr(Bool())),
-			"enable_spot_interruption_draining": Computed(Ptr(Bool())),
-			"enable_scheduled_event_draining":   Computed(Ptr(Bool())),
-			"enable_prometheus_metrics":         Computed(Ptr(Bool())),
+			"enabled":                           Computed(Nullable(Bool())),
+			"enable_spot_interruption_draining": Computed(Nullable(Bool())),
+			"enable_scheduled_event_draining":   Computed(Nullable(Bool())),
+			"enable_prometheus_metrics":         Computed(Nullable(Bool())),
 		},
 	}
 }
@@ -56,5 +56,38 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHandlerConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["enable_spot_interruption_draining"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableSpotInterruptionDraining)
+	out["enable_scheduled_event_draining"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableScheduledEventDraining)
+	out["enable_prometheus_metrics"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnablePrometheusMetrics)
+}
+
+func FlattenDataSourceNodeTerminationHandlerConfig(in kops.NodeTerminationHandlerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceNodeTerminationHandlerConfigInto(in, out)
 	return out
 }

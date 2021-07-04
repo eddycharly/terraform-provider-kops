@@ -21,3 +21,12 @@ func ExpandResourceGCENetworkingSpec(in map[string]interface{}) kops.GCENetworki
 	out := kops.GCENetworkingSpec{}
 	return out
 }
+
+func FlattenResourceGCENetworkingSpecInto(in kops.GCENetworkingSpec, out map[string]interface{}) {
+}
+
+func FlattenResourceGCENetworkingSpec(in kops.GCENetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceGCENetworkingSpecInto(in, out)
+	return out
+}

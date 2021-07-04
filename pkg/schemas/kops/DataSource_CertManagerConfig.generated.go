@@ -11,10 +11,10 @@ var _ = Schema
 func DataSourceCertManagerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":        Computed(Ptr(Bool())),
-			"managed":        Computed(Ptr(Bool())),
-			"image":          Computed(Ptr(String())),
-			"default_issuer": Computed(Ptr(String())),
+			"enabled":        Computed(Nullable(Bool())),
+			"managed":        Computed(Nullable(Bool())),
+			"image":          Computed(Nullable(String())),
+			"default_issuer": Computed(Nullable(String())),
 		},
 	}
 }
@@ -56,5 +56,38 @@ func ExpandDataSourceCertManagerConfig(in map[string]interface{}) kops.CertManag
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceCertManagerConfigInto(in kops.CertManagerConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["managed"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Managed)
+	out["image"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Image)
+	out["default_issuer"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.DefaultIssuer)
+}
+
+func FlattenDataSourceCertManagerConfig(in kops.CertManagerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceCertManagerConfigInto(in, out)
 	return out
 }

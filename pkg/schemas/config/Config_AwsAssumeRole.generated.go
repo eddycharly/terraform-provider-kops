@@ -26,3 +26,13 @@ func ExpandConfigAwsAssumeRole(in map[string]interface{}) config.AwsAssumeRole {
 	}
 	return out
 }
+
+func FlattenConfigAwsAssumeRoleInto(in config.AwsAssumeRole, out map[string]interface{}) {
+	out["role_arn"] = func(in string) interface{} { return string(in) }(in.RoleArn)
+}
+
+func FlattenConfigAwsAssumeRole(in config.AwsAssumeRole) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenConfigAwsAssumeRoleInto(in, out)
+	return out
+}

@@ -21,3 +21,12 @@ func ExpandResourceClassicNetworkingSpec(in map[string]interface{}) kops.Classic
 	out := kops.ClassicNetworkingSpec{}
 	return out
 }
+
+func FlattenResourceClassicNetworkingSpecInto(in kops.ClassicNetworkingSpec, out map[string]interface{}) {
+}
+
+func FlattenResourceClassicNetworkingSpec(in kops.ClassicNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceClassicNetworkingSpecInto(in, out)
+	return out
+}

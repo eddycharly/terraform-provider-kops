@@ -11,8 +11,8 @@ var _ = Schema
 func DataSourceAuthorizationSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"always_allow": Computed(Ptr(Struct(DataSourceAlwaysAllowAuthorizationSpec()))),
-			"rbac":         Computed(Ptr(Struct(DataSourceRBACAuthorizationSpec()))),
+			"always_allow": Computed(Struct(DataSourceAlwaysAllowAuthorizationSpec())),
+			"rbac":         Computed(Struct(DataSourceRBACAuthorizationSpec())),
 		},
 	}
 }
@@ -48,5 +48,28 @@ func ExpandDataSourceAuthorizationSpec(in map[string]interface{}) kops.Authoriza
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceAuthorizationSpecInto(in kops.AuthorizationSpec, out map[string]interface{}) {
+	out["always_allow"] = func(in *kops.AlwaysAllowAuthorizationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AlwaysAllowAuthorizationSpec) interface{} {
+			return FlattenDataSourceAlwaysAllowAuthorizationSpec(in)
+		}(*in)
+	}(in.AlwaysAllow)
+	out["rbac"] = func(in *kops.RBACAuthorizationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.RBACAuthorizationSpec) interface{} { return FlattenDataSourceRBACAuthorizationSpec(in) }(*in)
+	}(in.RBAC)
+}
+
+func FlattenDataSourceAuthorizationSpec(in kops.AuthorizationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceAuthorizationSpecInto(in, out)
 	return out
 }

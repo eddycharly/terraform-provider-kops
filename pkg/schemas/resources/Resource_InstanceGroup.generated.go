@@ -17,48 +17,48 @@ func ResourceInstanceGroup() *schema.Resource {
 			"name":                              ForceNew(Required(String())),
 			"role":                              Required(String()),
 			"image":                             Optional(Computed(String())),
-			"min_size":                          Required(Ptr(Int())),
-			"max_size":                          Required(Ptr(Int())),
-			"autoscale":                         Optional(Ptr(Bool())),
+			"min_size":                          Required(Nullable(Int())),
+			"max_size":                          Required(Nullable(Int())),
+			"autoscale":                         Optional(Nullable(Bool())),
 			"machine_type":                      Required(String()),
-			"root_volume_size":                  Optional(Ptr(Int())),
-			"root_volume_type":                  Optional(Ptr(String())),
-			"root_volume_iops":                  Optional(Ptr(Int())),
-			"root_volume_throughput":            Optional(Ptr(Int())),
-			"root_volume_optimization":          Optional(Ptr(Bool())),
-			"root_volume_delete_on_termination": Optional(Ptr(Bool())),
-			"root_volume_encryption":            Optional(Ptr(Bool())),
-			"root_volume_encryption_key":        Optional(Ptr(String())),
-			"volumes":                           Optional(List(Struct(kopsschemas.ResourceVolumeSpec()))),
-			"volume_mounts":                     Optional(List(Struct(kopsschemas.ResourceVolumeMountSpec()))),
+			"root_volume_size":                  Optional(Nullable(Int())),
+			"root_volume_type":                  Optional(Nullable(String())),
+			"root_volume_iops":                  Optional(Nullable(Int())),
+			"root_volume_throughput":            Optional(Nullable(Int())),
+			"root_volume_optimization":          Optional(Nullable(Bool())),
+			"root_volume_delete_on_termination": Optional(Nullable(Bool())),
+			"root_volume_encryption":            Optional(Nullable(Bool())),
+			"root_volume_encryption_key":        Optional(Nullable(String())),
+			"volumes":                           Optional(List(kopsschemas.ResourceVolumeSpec())),
+			"volume_mounts":                     Optional(List(kopsschemas.ResourceVolumeMountSpec())),
 			"subnets":                           Required(List(String())),
 			"zones":                             Optional(List(String())),
-			"hooks":                             Optional(List(Struct(kopsschemas.ResourceHookSpec()))),
-			"max_price":                         Optional(Ptr(String())),
-			"spot_duration_in_minutes":          Optional(Ptr(Int())),
-			"cpu_credits":                       Optional(Ptr(String())),
-			"associate_public_ip":               Optional(Ptr(Bool())),
+			"hooks":                             Optional(List(kopsschemas.ResourceHookSpec())),
+			"max_price":                         Optional(Nullable(String())),
+			"spot_duration_in_minutes":          Optional(Nullable(Int())),
+			"cpu_credits":                       Optional(Nullable(String())),
+			"associate_public_ip":               Optional(Nullable(Bool())),
 			"additional_security_groups":        Optional(List(String())),
 			"cloud_labels":                      Optional(Map(String())),
 			"node_labels":                       Optional(Map(String())),
-			"file_assets":                       Optional(List(Struct(kopsschemas.ResourceFileAssetSpec()))),
+			"file_assets":                       Optional(List(kopsschemas.ResourceFileAssetSpec())),
 			"tenancy":                           Optional(String()),
-			"kubelet":                           Optional(Ptr(Struct(kopsschemas.ResourceKubeletConfigSpec()))),
+			"kubelet":                           Optional(Struct(kopsschemas.ResourceKubeletConfigSpec())),
 			"taints":                            Optional(List(String())),
-			"mixed_instances_policy":            Optional(Ptr(Struct(kopsschemas.ResourceMixedInstancesPolicySpec()))),
-			"additional_user_data":              Optional(List(Struct(kopsschemas.ResourceUserData()))),
+			"mixed_instances_policy":            Optional(Struct(kopsschemas.ResourceMixedInstancesPolicySpec())),
+			"additional_user_data":              Optional(List(kopsschemas.ResourceUserData())),
 			"suspend_processes":                 Optional(List(String())),
-			"external_load_balancers":           Optional(List(Struct(kopsschemas.ResourceLoadBalancer()))),
-			"detailed_instance_monitoring":      Optional(Ptr(Bool())),
-			"iam":                               Optional(Ptr(Struct(kopsschemas.ResourceIAMProfileSpec()))),
-			"security_group_override":           Optional(Ptr(String())),
-			"instance_protection":               Optional(Ptr(Bool())),
+			"external_load_balancers":           Optional(List(kopsschemas.ResourceLoadBalancer())),
+			"detailed_instance_monitoring":      Optional(Nullable(Bool())),
+			"iam":                               Optional(Struct(kopsschemas.ResourceIAMProfileSpec())),
+			"security_group_override":           Optional(Nullable(String())),
+			"instance_protection":               Optional(Nullable(Bool())),
 			"sysctl_parameters":                 Optional(List(String())),
-			"rolling_update":                    Optional(Ptr(Struct(kopsschemas.ResourceRollingUpdate()))),
-			"instance_interruption_behavior":    Optional(Ptr(String())),
-			"compress_user_data":                Optional(Ptr(Bool())),
-			"instance_metadata":                 Optional(Ptr(Struct(kopsschemas.ResourceInstanceMetadataOptions()))),
-			"update_policy":                     Optional(Ptr(String())),
+			"rolling_update":                    Optional(Struct(kopsschemas.ResourceRollingUpdate())),
+			"instance_interruption_behavior":    Optional(Nullable(String())),
+			"compress_user_data":                Optional(Nullable(Bool())),
+			"instance_metadata":                 Optional(Struct(kopsschemas.ResourceInstanceMetadataOptions())),
+			"update_policy":                     Optional(Nullable(String())),
 		},
 	}
 }
@@ -78,5 +78,18 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		out.Name = func(in interface{}) string { return string(in.(string)) }(in)
 	}
 	out.InstanceGroupSpec = kopsschemas.ExpandResourceInstanceGroupSpec(in)
+	return out
+}
+
+func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
+	out["revision"] = func(in int) interface{} { return int(in) }(in.Revision)
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	kopsschemas.FlattenResourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
+}
+
+func FlattenResourceInstanceGroup(in resources.InstanceGroup) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceInstanceGroupInto(in, out)
 	return out
 }

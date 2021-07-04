@@ -80,8 +80,8 @@ func DataSourceCiliumNetworkingSpec() *schema.Resource {
 			"enable_host_reachable_services":    Computed(Bool()),
 			"enable_node_port":                  Computed(Bool()),
 			"etcd_managed":                      Computed(Bool()),
-			"enable_remote_node_identity":       Computed(Ptr(Bool())),
-			"hubble":                            Computed(Ptr(Struct(DataSourceHubbleSpec()))),
+			"enable_remote_node_identity":       Computed(Nullable(Bool())),
+			"hubble":                            Computed(Struct(DataSourceHubbleSpec())),
 			"remove_cbr_bridge":                 Computed(Bool()),
 			"restart_pods":                      Computed(Bool()),
 			"reconfigure_kubelet":               Computed(Bool()),
@@ -387,5 +387,148 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 	if in, ok := in["cni_bin_path"]; ok && in != nil {
 		out.CniBinPath = func(in interface{}) string { return string(in.(string)) }(in)
 	}
+	return out
+}
+
+func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out map[string]interface{}) {
+	out["version"] = func(in string) interface{} { return string(in) }(in.Version)
+	out["access_log"] = func(in string) interface{} { return string(in) }(in.AccessLog)
+	out["agent_labels"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AgentLabels)
+	out["agent_prometheus_port"] = func(in int) interface{} { return int(in) }(in.AgentPrometheusPort)
+	out["allow_localhost"] = func(in string) interface{} { return string(in) }(in.AllowLocalhost)
+	out["auto_ipv6_node_routes"] = func(in bool) interface{} { return in }(in.AutoIpv6NodeRoutes)
+	out["bpf_root"] = func(in string) interface{} { return string(in) }(in.BPFRoot)
+	out["container_runtime"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.ContainerRuntime)
+	out["container_runtime_endpoint"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.ContainerRuntimeEndpoint)
+	out["debug"] = func(in bool) interface{} { return in }(in.Debug)
+	out["debug_verbose"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.DebugVerbose)
+	out["device"] = func(in string) interface{} { return string(in) }(in.Device)
+	out["disable_conntrack"] = func(in bool) interface{} { return in }(in.DisableConntrack)
+	out["disable_ipv4"] = func(in bool) interface{} { return in }(in.DisableIpv4)
+	out["disable_k_8s_services"] = func(in bool) interface{} { return in }(in.DisableK8sServices)
+	out["enable_policy"] = func(in string) interface{} { return string(in) }(in.EnablePolicy)
+	out["enable_tracing"] = func(in bool) interface{} { return in }(in.EnableTracing)
+	out["enable_prometheus_metrics"] = func(in bool) interface{} { return in }(in.EnablePrometheusMetrics)
+	out["enable_encryption"] = func(in bool) interface{} { return in }(in.EnableEncryption)
+	out["envoy_log"] = func(in string) interface{} { return string(in) }(in.EnvoyLog)
+	out["ipv4_cluster_cidr_mask_size"] = func(in int) interface{} { return int(in) }(in.Ipv4ClusterCIDRMaskSize)
+	out["ipv4_node"] = func(in string) interface{} { return string(in) }(in.Ipv4Node)
+	out["ipv4_range"] = func(in string) interface{} { return string(in) }(in.Ipv4Range)
+	out["ipv4_service_range"] = func(in string) interface{} { return string(in) }(in.Ipv4ServiceRange)
+	out["ipv6_cluster_alloc_cidr"] = func(in string) interface{} { return string(in) }(in.Ipv6ClusterAllocCidr)
+	out["ipv6_node"] = func(in string) interface{} { return string(in) }(in.Ipv6Node)
+	out["ipv6_range"] = func(in string) interface{} { return string(in) }(in.Ipv6Range)
+	out["ipv6_service_range"] = func(in string) interface{} { return string(in) }(in.Ipv6ServiceRange)
+	out["k_8s_api_server"] = func(in string) interface{} { return string(in) }(in.K8sAPIServer)
+	out["k_8s_kubeconfig_path"] = func(in string) interface{} { return string(in) }(in.K8sKubeconfigPath)
+	out["keep_bpf_templates"] = func(in bool) interface{} { return in }(in.KeepBPFTemplates)
+	out["keep_config"] = func(in bool) interface{} { return in }(in.KeepConfig)
+	out["label_prefix_file"] = func(in string) interface{} { return string(in) }(in.LabelPrefixFile)
+	out["labels"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Labels)
+	out["lb"] = func(in string) interface{} { return string(in) }(in.LB)
+	out["lib_dir"] = func(in string) interface{} { return string(in) }(in.LibDir)
+	out["log_drivers"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.LogDrivers)
+	out["log_opt"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.LogOpt)
+	out["logstash"] = func(in bool) interface{} { return in }(in.Logstash)
+	out["logstash_agent"] = func(in string) interface{} { return string(in) }(in.LogstashAgent)
+	out["logstash_probe_timer"] = func(in uint32) interface{} { return int(in) }(in.LogstashProbeTimer)
+	out["disable_masquerade"] = func(in bool) interface{} { return in }(in.DisableMasquerade)
+	out["nat46_range"] = func(in string) interface{} { return string(in) }(in.Nat46Range)
+	out["pprof"] = func(in bool) interface{} { return in }(in.Pprof)
+	out["prefilter_device"] = func(in string) interface{} { return string(in) }(in.PrefilterDevice)
+	out["prometheus_serve_addr"] = func(in string) interface{} { return string(in) }(in.PrometheusServeAddr)
+	out["restore"] = func(in bool) interface{} { return in }(in.Restore)
+	out["single_cluster_route"] = func(in bool) interface{} { return in }(in.SingleClusterRoute)
+	out["socket_path"] = func(in string) interface{} { return string(in) }(in.SocketPath)
+	out["state_dir"] = func(in string) interface{} { return string(in) }(in.StateDir)
+	out["trace_payload_len"] = func(in int) interface{} { return int(in) }(in.TracePayloadLen)
+	out["tunnel"] = func(in string) interface{} { return string(in) }(in.Tunnel)
+	out["enable_ipv6"] = func(in bool) interface{} { return in }(in.EnableIpv6)
+	out["enable_ipv4"] = func(in bool) interface{} { return in }(in.EnableIpv4)
+	out["monitor_aggregation"] = func(in string) interface{} { return string(in) }(in.MonitorAggregation)
+	out["bpfct_global_tcp_max"] = func(in int) interface{} { return int(in) }(in.BPFCTGlobalTCPMax)
+	out["bpfct_global_any_max"] = func(in int) interface{} { return int(in) }(in.BPFCTGlobalAnyMax)
+	out["preallocate_bpf_maps"] = func(in bool) interface{} { return in }(in.PreallocateBPFMaps)
+	out["sidecar_istio_proxy_image"] = func(in string) interface{} { return string(in) }(in.SidecarIstioProxyImage)
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["to_fqdns_dns_reject_response_code"] = func(in string) interface{} { return string(in) }(in.ToFqdnsDNSRejectResponseCode)
+	out["to_fqdns_enable_poller"] = func(in bool) interface{} { return in }(in.ToFqdnsEnablePoller)
+	out["container_runtime_labels"] = func(in string) interface{} { return string(in) }(in.ContainerRuntimeLabels)
+	out["ipam"] = func(in string) interface{} { return string(in) }(in.Ipam)
+	out["ip_tables_rules_noinstall"] = func(in bool) interface{} { return in }(in.IPTablesRulesNoinstall)
+	out["auto_direct_node_routes"] = func(in bool) interface{} { return in }(in.AutoDirectNodeRoutes)
+	out["enable_host_reachable_services"] = func(in bool) interface{} { return in }(in.EnableHostReachableServices)
+	out["enable_node_port"] = func(in bool) interface{} { return in }(in.EnableNodePort)
+	out["etcd_managed"] = func(in bool) interface{} { return in }(in.EtcdManaged)
+	out["enable_remote_node_identity"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableRemoteNodeIdentity)
+	out["hubble"] = func(in *kops.HubbleSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.HubbleSpec) interface{} { return FlattenDataSourceHubbleSpec(in) }(*in)
+	}(in.Hubble)
+	out["remove_cbr_bridge"] = func(in bool) interface{} { return in }(in.RemoveCbrBridge)
+	out["restart_pods"] = func(in bool) interface{} { return in }(in.RestartPods)
+	out["reconfigure_kubelet"] = func(in bool) interface{} { return in }(in.ReconfigureKubelet)
+	out["node_init_bootstrap_file"] = func(in string) interface{} { return string(in) }(in.NodeInitBootstrapFile)
+	out["cni_bin_path"] = func(in string) interface{} { return string(in) }(in.CniBinPath)
+}
+
+func FlattenDataSourceCiliumNetworkingSpec(in kops.CiliumNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceCiliumNetworkingSpecInto(in, out)
 	return out
 }

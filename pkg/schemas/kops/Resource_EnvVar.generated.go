@@ -30,3 +30,14 @@ func ExpandResourceEnvVar(in map[string]interface{}) kops.EnvVar {
 	}
 	return out
 }
+
+func FlattenResourceEnvVarInto(in kops.EnvVar, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["value"] = func(in string) interface{} { return string(in) }(in.Value)
+}
+
+func FlattenResourceEnvVar(in kops.EnvVar) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceEnvVarInto(in, out)
+	return out
+}

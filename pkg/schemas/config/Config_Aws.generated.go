@@ -15,7 +15,7 @@ func ConfigAws() *schema.Resource {
 			"region":            Optional(String()),
 			"access_key":        Optional(String()),
 			"secret_key":        Optional(String()),
-			"assume_role":       Optional(Ptr(Struct(ConfigAwsAssumeRole()))),
+			"assume_role":       Optional(Struct(ConfigAwsAssumeRole())),
 			"s3_endpoint":       Optional(String()),
 			"s3_region":         Optional(String()),
 			"s3_access_key":     Optional(String()),
@@ -70,5 +70,29 @@ func ExpandConfigAws(in map[string]interface{}) config.Aws {
 	if in, ok := in["skip_region_check"]; ok && in != nil {
 		out.SkipRegionCheck = func(in interface{}) bool { return in.(bool) }(in)
 	}
+	return out
+}
+
+func FlattenConfigAwsInto(in config.Aws, out map[string]interface{}) {
+	out["profile"] = func(in string) interface{} { return string(in) }(in.Profile)
+	out["region"] = func(in string) interface{} { return string(in) }(in.Region)
+	out["access_key"] = func(in string) interface{} { return string(in) }(in.AccessKey)
+	out["secret_key"] = func(in string) interface{} { return string(in) }(in.SecretKey)
+	out["assume_role"] = func(in *config.AwsAssumeRole) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in config.AwsAssumeRole) interface{} { return FlattenConfigAwsAssumeRole(in) }(*in)
+	}(in.AssumeRole)
+	out["s3_endpoint"] = func(in string) interface{} { return string(in) }(in.S3Endpoint)
+	out["s3_region"] = func(in string) interface{} { return string(in) }(in.S3Region)
+	out["s3_access_key"] = func(in string) interface{} { return string(in) }(in.S3AccessKey)
+	out["s3_secret_key"] = func(in string) interface{} { return string(in) }(in.S3SecretKey)
+	out["skip_region_check"] = func(in bool) interface{} { return in }(in.SkipRegionCheck)
+}
+
+func FlattenConfigAws(in config.Aws) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenConfigAwsInto(in, out)
 	return out
 }

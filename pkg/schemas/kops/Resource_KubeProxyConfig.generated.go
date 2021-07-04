@@ -22,16 +22,16 @@ func ResourceKubeProxyConfig() *schema.Resource {
 			"hostname_override":      Optional(String()),
 			"bind_address":           Optional(String()),
 			"master":                 Optional(String()),
-			"metrics_bind_address":   Optional(Ptr(String())),
-			"enabled":                Optional(Ptr(Bool())),
+			"metrics_bind_address":   Optional(Nullable(String())),
+			"enabled":                Optional(Nullable(Bool())),
 			"proxy_mode":             Optional(String()),
 			"ip_vs_exclude_cidr_s":   Optional(List(String())),
-			"ip_vs_min_sync_period":  Optional(Ptr(Duration())),
-			"ip_vs_scheduler":        Optional(Ptr(String())),
-			"ip_vs_sync_period":      Optional(Ptr(Duration())),
+			"ip_vs_min_sync_period":  Optional(Nullable(Duration())),
+			"ip_vs_scheduler":        Optional(Nullable(String())),
+			"ip_vs_sync_period":      Optional(Nullable(Duration())),
 			"feature_gates":          Optional(Map(String())),
-			"conntrack_max_per_core": Optional(Ptr(Int())),
-			"conntrack_min":          Optional(Ptr(Int())),
+			"conntrack_max_per_core": Optional(Nullable(Int())),
+			"conntrack_min":          Optional(Nullable(Int())),
 		},
 	}
 }
@@ -151,5 +151,84 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceKubeProxyConfigInto(in kops.KubeProxyConfig, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["cpu_request"] = func(in string) interface{} { return string(in) }(in.CPURequest)
+	out["cpu_limit"] = func(in string) interface{} { return string(in) }(in.CPULimit)
+	out["memory_request"] = func(in string) interface{} { return string(in) }(in.MemoryRequest)
+	out["memory_limit"] = func(in string) interface{} { return string(in) }(in.MemoryLimit)
+	out["log_level"] = func(in int32) interface{} { return int(in) }(in.LogLevel)
+	out["cluster_cidr"] = func(in string) interface{} { return string(in) }(in.ClusterCIDR)
+	out["hostname_override"] = func(in string) interface{} { return string(in) }(in.HostnameOverride)
+	out["bind_address"] = func(in string) interface{} { return string(in) }(in.BindAddress)
+	out["master"] = func(in string) interface{} { return string(in) }(in.Master)
+	out["metrics_bind_address"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.MetricsBindAddress)
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["proxy_mode"] = func(in string) interface{} { return string(in) }(in.ProxyMode)
+	out["ip_vs_exclude_cidr_s"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.IPVSExcludeCIDRS)
+	out["ip_vs_min_sync_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.IPVSMinSyncPeriod)
+	out["ip_vs_scheduler"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.IPVSScheduler)
+	out["ip_vs_sync_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.IPVSSyncPeriod)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.FeatureGates)
+	out["conntrack_max_per_core"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConntrackMaxPerCore)
+	out["conntrack_min"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ConntrackMin)
+}
+
+func FlattenResourceKubeProxyConfig(in kops.KubeProxyConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceKubeProxyConfigInto(in, out)
 	return out
 }

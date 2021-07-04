@@ -11,7 +11,7 @@ var _ = Schema
 func DataSourceOpenstackNetwork() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"availability_zone_hints": Computed(List(Ptr(String()))),
+			"availability_zone_hints": Computed(List(String())),
 		},
 	}
 }
@@ -35,5 +35,26 @@ func ExpandDataSourceOpenstackNetwork(in map[string]interface{}) kops.OpenstackN
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceOpenstackNetworkInto(in kops.OpenstackNetwork, out map[string]interface{}) {
+	out["availability_zone_hints"] = func(in []*string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in *string) interface{} {
+				if in == nil {
+					return nil
+				}
+				return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+			}(in))
+		}
+		return out
+	}(in.AvailabilityZoneHints)
+}
+
+func FlattenDataSourceOpenstackNetwork(in kops.OpenstackNetwork) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceOpenstackNetworkInto(in, out)
 	return out
 }

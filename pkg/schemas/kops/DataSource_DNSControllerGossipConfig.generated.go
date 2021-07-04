@@ -11,11 +11,11 @@ var _ = Schema
 func DataSourceDNSControllerGossipConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"protocol":  Computed(Ptr(String())),
-			"listen":    Computed(Ptr(String())),
-			"secret":    Computed(Ptr(String())),
-			"secondary": Computed(Ptr(Struct(DataSourceDNSControllerGossipConfigSecondary()))),
-			"seed":      Computed(Ptr(String())),
+			"protocol":  Computed(Nullable(String())),
+			"listen":    Computed(Nullable(String())),
+			"secret":    Computed(Nullable(String())),
+			"secondary": Computed(Struct(DataSourceDNSControllerGossipConfigSecondary())),
+			"seed":      Computed(Nullable(String())),
 		},
 	}
 }
@@ -70,5 +70,46 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceDNSControllerGossipConfigInto(in kops.DNSControllerGossipConfig, out map[string]interface{}) {
+	out["protocol"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Protocol)
+	out["listen"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Listen)
+	out["secret"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Secret)
+	out["secondary"] = func(in *kops.DNSControllerGossipConfigSecondary) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.DNSControllerGossipConfigSecondary) interface{} {
+			return FlattenDataSourceDNSControllerGossipConfigSecondary(in)
+		}(*in)
+	}(in.Secondary)
+	out["seed"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Seed)
+}
+
+func FlattenDataSourceDNSControllerGossipConfig(in kops.DNSControllerGossipConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceDNSControllerGossipConfigInto(in, out)
 	return out
 }

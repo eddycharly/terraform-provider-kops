@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceNodeAuthorizationSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"node_authorizer": Optional(Ptr(Struct(ResourceNodeAuthorizerSpec()))),
+			"node_authorizer": Optional(Struct(ResourceNodeAuthorizerSpec())),
 		},
 	}
 }
@@ -34,5 +34,20 @@ func ExpandResourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAut
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceNodeAuthorizationSpecInto(in kops.NodeAuthorizationSpec, out map[string]interface{}) {
+	out["node_authorizer"] = func(in *kops.NodeAuthorizerSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NodeAuthorizerSpec) interface{} { return FlattenResourceNodeAuthorizerSpec(in) }(*in)
+	}(in.NodeAuthorizer)
+}
+
+func FlattenResourceNodeAuthorizationSpec(in kops.NodeAuthorizationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceNodeAuthorizationSpecInto(in, out)
 	return out
 }

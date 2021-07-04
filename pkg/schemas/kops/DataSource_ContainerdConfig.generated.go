@@ -11,15 +11,15 @@ var _ = Schema
 func DataSourceContainerdConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"address":          Computed(Ptr(String())),
-			"config_override":  Computed(Ptr(String())),
-			"log_level":        Computed(Ptr(String())),
-			"packages":         Computed(Ptr(Struct(DataSourcePackagesConfig()))),
+			"address":          Computed(Nullable(String())),
+			"config_override":  Computed(Nullable(String())),
+			"log_level":        Computed(Nullable(String())),
+			"packages":         Computed(Struct(DataSourcePackagesConfig())),
 			"registry_mirrors": Computed(Map(List(String()))),
-			"root":             Computed(Ptr(String())),
+			"root":             Computed(Nullable(String())),
 			"skip_install":     Computed(Bool()),
-			"state":            Computed(Ptr(String())),
-			"version":          Computed(Ptr(String())),
+			"state":            Computed(Nullable(String())),
+			"version":          Computed(Nullable(String())),
 		},
 	}
 }
@@ -111,5 +111,73 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceContainerdConfigInto(in kops.ContainerdConfig, out map[string]interface{}) {
+	out["address"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Address)
+	out["config_override"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ConfigOverride)
+	out["log_level"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.LogLevel)
+	out["packages"] = func(in *kops.PackagesConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.PackagesConfig) interface{} { return FlattenDataSourcePackagesConfig(in) }(*in)
+	}(in.Packages)
+	out["registry_mirrors"] = func(in map[string][]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in []string) interface{} {
+				var out []interface{}
+				for _, in := range in {
+					out = append(out, func(in string) interface{} { return string(in) }(in))
+				}
+				return out
+			}(in)
+		}
+		return out
+	}(in.RegistryMirrors)
+	out["root"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Root)
+	out["skip_install"] = func(in bool) interface{} { return in }(in.SkipInstall)
+	out["state"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.State)
+	out["version"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Version)
+}
+
+func FlattenDataSourceContainerdConfig(in kops.ContainerdConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceContainerdConfigInto(in, out)
 	return out
 }

@@ -47,7 +47,7 @@ examples: example-basic example-aws-profile example-aws-assume-role example-bast
 example-basic: install
 	@terraform init ./examples/basic
 	@terraform validate ./examples/basic
-	@terraform apply ./examples/basic
+	@terraform plan ./examples/basic
 
 .PHONY: example-aws-profile
 example-aws-profile: install

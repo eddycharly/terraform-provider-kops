@@ -12,8 +12,8 @@ func DataSourceLoadBalancerSubnetSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":                 Computed(String()),
-			"private_ipv4_address": Computed(Ptr(String())),
-			"allocation_id":        Computed(Ptr(String())),
+			"private_ipv4_address": Computed(Nullable(String())),
+			"allocation_id":        Computed(Nullable(String())),
 		},
 	}
 }
@@ -42,5 +42,27 @@ func ExpandDataSourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.Load
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceLoadBalancerSubnetSpecInto(in kops.LoadBalancerSubnetSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["private_ipv4_address"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.PrivateIPv4Address)
+	out["allocation_id"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AllocationID)
+}
+
+func FlattenDataSourceLoadBalancerSubnetSpec(in kops.LoadBalancerSubnetSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceLoadBalancerSubnetSpecInto(in, out)
 	return out
 }

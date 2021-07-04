@@ -31,3 +31,24 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 	}
 	return out
 }
+
+func FlattenResourceValidateOptionsInto(in utils.ValidateOptions, out map[string]interface{}) {
+	out["timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.Timeout)
+	out["poll_interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.PollInterval)
+}
+
+func FlattenResourceValidateOptions(in utils.ValidateOptions) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceValidateOptionsInto(in, out)
+	return out
+}

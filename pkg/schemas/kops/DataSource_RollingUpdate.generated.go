@@ -12,9 +12,9 @@ var _ = Schema
 func DataSourceRollingUpdate() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"drain_and_terminate": Computed(Ptr(Bool())),
-			"max_unavailable":     Computed(Ptr(IntOrString())),
-			"max_surge":           Computed(Ptr(IntOrString())),
+			"drain_and_terminate": Computed(Nullable(Bool())),
+			"max_unavailable":     Computed(Nullable(IntOrString())),
+			"max_surge":           Computed(Nullable(IntOrString())),
 		},
 	}
 }
@@ -48,5 +48,32 @@ func ExpandDataSourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate
 			return func(in intstr.IntOrString) *intstr.IntOrString { return &in }(func(in interface{}) intstr.IntOrString { return ExpandIntOrString(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceRollingUpdateInto(in kops.RollingUpdate, out map[string]interface{}) {
+	out["drain_and_terminate"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DrainAndTerminate)
+	out["max_unavailable"] = func(in *intstr.IntOrString) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in intstr.IntOrString) interface{} { return FlattenIntOrString(in) }(*in)}
+	}(in.MaxUnavailable)
+	out["max_surge"] = func(in *intstr.IntOrString) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in intstr.IntOrString) interface{} { return FlattenIntOrString(in) }(*in)}
+	}(in.MaxSurge)
+}
+
+func FlattenDataSourceRollingUpdate(in kops.RollingUpdate) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceRollingUpdateInto(in, out)
 	return out
 }

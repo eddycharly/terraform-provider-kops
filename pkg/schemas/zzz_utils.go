@@ -18,6 +18,7 @@ func Required(in *schema.Schema) *schema.Schema {
 
 func Computed(in *schema.Schema) *schema.Schema {
 	in.Computed = true
+	in.MaxItems = 0
 	return in
 }
 
@@ -38,38 +39,22 @@ func SuppressDiff(in *schema.Schema) *schema.Schema {
 	return in
 }
 
-func Ptr(in *schema.Schema) *schema.Schema {
-	if in.Type == schema.TypeList {
-		return in
-	}
-	return Struct(Value(in))
-}
-
-func ExpandPtr(in interface{}) interface{} {
-	if in == nil {
-		return nil
-	}
-	return &in
-}
-
 func Struct(in *schema.Resource) *schema.Schema {
-	return Schema(schema.TypeList, in, true, false, false, 1)
-}
-
-func ExpandStruct(in interface{}) interface{} {
-	return in
+	return Schema(schema.TypeList, in, false, false, false, 1)
 }
 
 func List(elem interface{}) *schema.Schema {
 	return Schema(schema.TypeList, elem, false, false, false, 0)
 }
 
-func Value(in *schema.Schema) *schema.Resource {
-	return &schema.Resource{
-		Schema: map[string]*schema.Schema{
-			"value": in,
+func Nullable(in *schema.Schema) *schema.Schema {
+	return Struct(
+		&schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"value": in,
+			},
 		},
-	}
+	)
 }
 
 func Quantity() *schema.Schema {
@@ -85,15 +70,11 @@ func IntOrString() *schema.Schema {
 }
 
 func Map(elem *schema.Schema) *schema.Schema {
-	return Schema(schema.TypeMap, elem, true, false, false, 0)
+	return Schema(schema.TypeMap, elem, false, false, false, 0)
 }
 
 func String() *schema.Schema {
 	return Simple(schema.TypeString, false, false, false)
-}
-
-func ExpandString(in interface{}) string {
-	return in.(string)
 }
 
 func FlattenString(in string) interface{} {
@@ -104,10 +85,6 @@ func Bool() *schema.Schema {
 	return Simple(schema.TypeBool, false, false, false)
 }
 
-func ExpandBool(in interface{}) bool {
-	return in.(bool)
-}
-
 func FlattenBool(in bool) interface{} {
 	return in
 }
@@ -116,20 +93,12 @@ func Int() *schema.Schema {
 	return Simple(schema.TypeInt, false, false, false)
 }
 
-func ExpandInt(in interface{}) int {
-	return in.(int)
-}
-
 func FlattenInt(in int) interface{} {
 	return in
 }
 
 func Float() *schema.Schema {
 	return Simple(schema.TypeFloat, false, false, false)
-}
-
-func ExpandFloat(in interface{}) float64 {
-	return in.(float64)
 }
 
 func FlattenFloat(in float64) interface{} {

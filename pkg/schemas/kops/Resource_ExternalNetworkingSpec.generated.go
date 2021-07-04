@@ -21,3 +21,12 @@ func ExpandResourceExternalNetworkingSpec(in map[string]interface{}) kops.Extern
 	out := kops.ExternalNetworkingSpec{}
 	return out
 }
+
+func FlattenResourceExternalNetworkingSpecInto(in kops.ExternalNetworkingSpec, out map[string]interface{}) {
+}
+
+func FlattenResourceExternalNetworkingSpec(in kops.ExternalNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceExternalNetworkingSpecInto(in, out)
+	return out
+}

@@ -11,7 +11,7 @@ var _ = Schema
 func DataSourceNodeAuthorizationSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"node_authorizer": Computed(Ptr(Struct(DataSourceNodeAuthorizerSpec()))),
+			"node_authorizer": Computed(Struct(DataSourceNodeAuthorizerSpec())),
 		},
 	}
 }
@@ -34,5 +34,20 @@ func ExpandDataSourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeA
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceNodeAuthorizationSpecInto(in kops.NodeAuthorizationSpec, out map[string]interface{}) {
+	out["node_authorizer"] = func(in *kops.NodeAuthorizerSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NodeAuthorizerSpec) interface{} { return FlattenDataSourceNodeAuthorizerSpec(in) }(*in)
+	}(in.NodeAuthorizer)
+}
+
+func FlattenDataSourceNodeAuthorizationSpec(in kops.NodeAuthorizationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceNodeAuthorizationSpecInto(in, out)
 	return out
 }

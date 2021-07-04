@@ -421,3 +421,278 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 	}
 	return out
 }
+
+func FlattenDataSourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[string]interface{}) {
+	out["role"] = func(in kops.InstanceGroupRole) interface{} { return string(in) }(in.Role)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["min_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MinSize)
+	out["max_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MaxSize)
+	out["autoscale"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Autoscale)
+	out["machine_type"] = func(in string) interface{} { return string(in) }(in.MachineType)
+	out["root_volume_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.RootVolumeSize)
+	out["root_volume_type"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.RootVolumeType)
+	out["root_volume_iops"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.RootVolumeIops)
+	out["root_volume_throughput"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.RootVolumeThroughput)
+	out["root_volume_optimization"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RootVolumeOptimization)
+	out["root_volume_delete_on_termination"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RootVolumeDeleteOnTermination)
+	out["root_volume_encryption"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RootVolumeEncryption)
+	out["root_volume_encryption_key"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.RootVolumeEncryptionKey)
+	out["volumes"] = func(in []kops.VolumeSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.VolumeSpec) interface{} { return FlattenDataSourceVolumeSpec(in) }(in))
+		}
+		return out
+	}(in.Volumes)
+	out["volume_mounts"] = func(in []kops.VolumeMountSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.VolumeMountSpec) interface{} { return FlattenDataSourceVolumeMountSpec(in) }(in))
+		}
+		return out
+	}(in.VolumeMounts)
+	out["subnets"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Subnets)
+	out["zones"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Zones)
+	out["hooks"] = func(in []kops.HookSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.HookSpec) interface{} { return FlattenDataSourceHookSpec(in) }(in))
+		}
+		return out
+	}(in.Hooks)
+	out["max_price"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.MaxPrice)
+	out["spot_duration_in_minutes"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.SpotDurationInMinutes)
+	out["cpu_credits"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.CPUCredits)
+	out["associate_public_ip"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AssociatePublicIP)
+	out["additional_security_groups"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AdditionalSecurityGroups)
+	out["cloud_labels"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.CloudLabels)
+	out["node_labels"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.NodeLabels)
+	out["file_assets"] = func(in []kops.FileAssetSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.FileAssetSpec) interface{} { return FlattenDataSourceFileAssetSpec(in) }(in))
+		}
+		return out
+	}(in.FileAssets)
+	out["tenancy"] = func(in string) interface{} { return string(in) }(in.Tenancy)
+	out["kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeletConfigSpec) interface{} { return FlattenDataSourceKubeletConfigSpec(in) }(*in)
+	}(in.Kubelet)
+	out["taints"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Taints)
+	out["mixed_instances_policy"] = func(in *kops.MixedInstancesPolicySpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.MixedInstancesPolicySpec) interface{} {
+			return FlattenDataSourceMixedInstancesPolicySpec(in)
+		}(*in)
+	}(in.MixedInstancesPolicy)
+	out["additional_user_data"] = func(in []kops.UserData) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.UserData) interface{} { return FlattenDataSourceUserData(in) }(in))
+		}
+		return out
+	}(in.AdditionalUserData)
+	out["suspend_processes"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.SuspendProcesses)
+	out["external_load_balancers"] = func(in []kops.LoadBalancer) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.LoadBalancer) interface{} { return FlattenDataSourceLoadBalancer(in) }(in))
+		}
+		return out
+	}(in.ExternalLoadBalancers)
+	out["detailed_instance_monitoring"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DetailedInstanceMonitoring)
+	out["iam"] = func(in *kops.IAMProfileSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.IAMProfileSpec) interface{} { return FlattenDataSourceIAMProfileSpec(in) }(*in)
+	}(in.IAM)
+	out["security_group_override"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SecurityGroupOverride)
+	out["instance_protection"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.InstanceProtection)
+	out["sysctl_parameters"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.SysctlParameters)
+	out["rolling_update"] = func(in *kops.RollingUpdate) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.RollingUpdate) interface{} { return FlattenDataSourceRollingUpdate(in) }(*in)
+	}(in.RollingUpdate)
+	out["instance_interruption_behavior"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.InstanceInterruptionBehavior)
+	out["compress_user_data"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.CompressUserData)
+	out["instance_metadata"] = func(in *kops.InstanceMetadataOptions) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.InstanceMetadataOptions) interface{} { return FlattenDataSourceInstanceMetadataOptions(in) }(*in)
+	}(in.InstanceMetadata)
+	out["update_policy"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.UpdatePolicy)
+}
+
+func FlattenDataSourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceInstanceGroupSpecInto(in, out)
+	return out
+}

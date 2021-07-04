@@ -54,3 +54,20 @@ func ExpandDataSourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSu
 	}
 	return out
 }
+
+func FlattenDataSourceClusterSubnetSpecInto(in kops.ClusterSubnetSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["cidr"] = func(in string) interface{} { return string(in) }(in.CIDR)
+	out["zone"] = func(in string) interface{} { return string(in) }(in.Zone)
+	out["region"] = func(in string) interface{} { return string(in) }(in.Region)
+	out["provider_id"] = func(in string) interface{} { return string(in) }(in.ProviderID)
+	out["egress"] = func(in string) interface{} { return string(in) }(in.Egress)
+	out["type"] = func(in kops.SubnetType) interface{} { return string(in) }(in.Type)
+	out["public_ip"] = func(in string) interface{} { return string(in) }(in.PublicIP)
+}
+
+func FlattenDataSourceClusterSubnetSpec(in kops.ClusterSubnetSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceClusterSubnetSpecInto(in, out)
+	return out
+}

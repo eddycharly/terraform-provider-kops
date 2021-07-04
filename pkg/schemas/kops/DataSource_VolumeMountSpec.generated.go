@@ -54,3 +54,29 @@ func ExpandDataSourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMount
 	}
 	return out
 }
+
+func FlattenDataSourceVolumeMountSpecInto(in kops.VolumeMountSpec, out map[string]interface{}) {
+	out["device"] = func(in string) interface{} { return string(in) }(in.Device)
+	out["filesystem"] = func(in string) interface{} { return string(in) }(in.Filesystem)
+	out["format_options"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.FormatOptions)
+	out["mount_options"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.MountOptions)
+	out["path"] = func(in string) interface{} { return string(in) }(in.Path)
+}
+
+func FlattenDataSourceVolumeMountSpec(in kops.VolumeMountSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceVolumeMountSpecInto(in, out)
+	return out
+}

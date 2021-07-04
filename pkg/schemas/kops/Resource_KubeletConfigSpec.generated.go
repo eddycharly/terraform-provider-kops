@@ -13,7 +13,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"api_servers":                            Optional(String()),
-			"anonymous_auth":                         Optional(Ptr(Bool())),
+			"anonymous_auth":                         Optional(Nullable(Bool())),
 			"authorization_mode":                     Optional(String()),
 			"bootstrap_kubeconfig":                   Optional(String()),
 			"client_ca_file":                         Optional(String()),
@@ -22,46 +22,46 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"tls_cipher_suites":                      Optional(List(String())),
 			"tls_min_version":                        Optional(String()),
 			"kubeconfig_path":                        Optional(String()),
-			"require_kubeconfig":                     Optional(Ptr(Bool())),
-			"log_level":                              Optional(Ptr(Int())),
+			"require_kubeconfig":                     Optional(Nullable(Bool())),
+			"log_level":                              Optional(Nullable(Int())),
 			"pod_manifest_path":                      Optional(String()),
 			"hostname_override":                      Optional(String()),
 			"pod_infra_container_image":              Optional(String()),
-			"seccomp_profile_root":                   Optional(Ptr(String())),
-			"allow_privileged":                       Optional(Ptr(Bool())),
-			"enable_debugging_handlers":              Optional(Ptr(Bool())),
-			"register_node":                          Optional(Ptr(Bool())),
-			"node_status_update_frequency":           Optional(Ptr(Duration())),
+			"seccomp_profile_root":                   Optional(Nullable(String())),
+			"allow_privileged":                       Optional(Nullable(Bool())),
+			"enable_debugging_handlers":              Optional(Nullable(Bool())),
+			"register_node":                          Optional(Nullable(Bool())),
+			"node_status_update_frequency":           Optional(Nullable(Duration())),
 			"cluster_domain":                         Optional(String()),
 			"cluster_dns":                            Optional(String()),
 			"network_plugin_name":                    Optional(String()),
 			"cloud_provider":                         Optional(String()),
 			"kubelet_cgroups":                        Optional(String()),
 			"runtime_cgroups":                        Optional(String()),
-			"read_only_port":                         Optional(Ptr(Int())),
+			"read_only_port":                         Optional(Nullable(Int())),
 			"system_cgroups":                         Optional(String()),
 			"cgroup_root":                            Optional(String()),
-			"configure_cbr0":                         Optional(Ptr(Bool())),
+			"configure_cbr0":                         Optional(Nullable(Bool())),
 			"hairpin_mode":                           Optional(String()),
-			"babysit_daemons":                        Optional(Ptr(Bool())),
-			"max_pods":                               Optional(Ptr(Int())),
+			"babysit_daemons":                        Optional(Nullable(Bool())),
+			"max_pods":                               Optional(Nullable(Int())),
 			"nvidia_gp_us":                           Optional(Int()),
 			"pod_cidr":                               Optional(String()),
-			"resolver_config":                        Optional(Ptr(String())),
-			"reconcile_cidr":                         Optional(Ptr(Bool())),
-			"register_schedulable":                   Optional(Ptr(Bool())),
-			"serialize_image_pulls":                  Optional(Ptr(Bool())),
+			"resolver_config":                        Optional(Nullable(String())),
+			"reconcile_cidr":                         Optional(Nullable(Bool())),
+			"register_schedulable":                   Optional(Nullable(Bool())),
+			"serialize_image_pulls":                  Optional(Nullable(Bool())),
 			"node_labels":                            Optional(Map(String())),
 			"non_masquerade_cidr":                    Optional(String()),
-			"enable_custom_metrics":                  Optional(Ptr(Bool())),
-			"network_plugin_mtu":                     Optional(Ptr(Int())),
-			"image_gc_high_threshold_percent":        Optional(Ptr(Int())),
-			"image_gc_low_threshold_percent":         Optional(Ptr(Int())),
-			"image_pull_progress_deadline":           Optional(Ptr(Duration())),
-			"eviction_hard":                          Optional(Ptr(String())),
+			"enable_custom_metrics":                  Optional(Nullable(Bool())),
+			"network_plugin_mtu":                     Optional(Nullable(Int())),
+			"image_gc_high_threshold_percent":        Optional(Nullable(Int())),
+			"image_gc_low_threshold_percent":         Optional(Nullable(Int())),
+			"image_pull_progress_deadline":           Optional(Nullable(Duration())),
+			"eviction_hard":                          Optional(Nullable(String())),
 			"eviction_soft":                          Optional(String()),
 			"eviction_soft_grace_period":             Optional(String()),
-			"eviction_pressure_transition_period":    Optional(Ptr(Duration())),
+			"eviction_pressure_transition_period":    Optional(Nullable(Duration())),
 			"eviction_max_pod_grace_period":          Optional(Int()),
 			"eviction_minimum_reclaim":               Optional(String()),
 			"volume_plugin_directory":                Optional(String()),
@@ -72,31 +72,31 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"system_reserved":                        Optional(Map(String())),
 			"system_reserved_cgroup":                 Optional(String()),
 			"enforce_node_allocatable":               Optional(String()),
-			"runtime_request_timeout":                Optional(Ptr(Duration())),
-			"volume_stats_agg_period":                Optional(Ptr(Duration())),
-			"fail_swap_on":                           Optional(Ptr(Bool())),
+			"runtime_request_timeout":                Optional(Nullable(Duration())),
+			"volume_stats_agg_period":                Optional(Nullable(Duration())),
+			"fail_swap_on":                           Optional(Nullable(Bool())),
 			"experimental_allowed_unsafe_sysctls":    Optional(List(String())),
 			"allowed_unsafe_sysctls":                 Optional(List(String())),
-			"streaming_connection_idle_timeout":      Optional(Ptr(Duration())),
-			"docker_disable_shared_pid":              Optional(Ptr(Bool())),
+			"streaming_connection_idle_timeout":      Optional(Nullable(Duration())),
+			"docker_disable_shared_pid":              Optional(Nullable(Bool())),
 			"root_dir":                               Optional(String()),
-			"authentication_token_webhook":           Optional(Ptr(Bool())),
-			"authentication_token_webhook_cache_ttl": Optional(Ptr(Duration())),
-			"cpucfs_quota":                           Optional(Ptr(Bool())),
-			"cpucfs_quota_period":                    Optional(Ptr(Duration())),
+			"authentication_token_webhook":           Optional(Nullable(Bool())),
+			"authentication_token_webhook_cache_ttl": Optional(Nullable(Duration())),
+			"cpucfs_quota":                           Optional(Nullable(Bool())),
+			"cpucfs_quota_period":                    Optional(Nullable(Duration())),
 			"cpu_manager_policy":                     Optional(String()),
-			"registry_pull_qps":                      Optional(Ptr(Int())),
-			"registry_burst":                         Optional(Ptr(Int())),
+			"registry_pull_qps":                      Optional(Nullable(Int())),
+			"registry_burst":                         Optional(Nullable(Int())),
 			"topology_manager_policy":                Optional(String()),
-			"rotate_certificates":                    Optional(Ptr(Bool())),
-			"protect_kernel_defaults":                Optional(Ptr(Bool())),
+			"rotate_certificates":                    Optional(Nullable(Bool())),
+			"protect_kernel_defaults":                Optional(Nullable(Bool())),
 			"cgroup_driver":                          Optional(String()),
-			"housekeeping_interval":                  Optional(Ptr(Duration())),
-			"event_qps":                              Optional(Ptr(Int())),
-			"event_burst":                            Optional(Ptr(Int())),
+			"housekeeping_interval":                  Optional(Nullable(Duration())),
+			"event_qps":                              Optional(Nullable(Int())),
+			"event_burst":                            Optional(Nullable(Int())),
 			"container_log_max_size":                 Optional(String()),
-			"container_log_max_files":                Optional(Ptr(Int())),
-			"enable_cadvisor_json_endpoints":         Optional(Ptr(Bool())),
+			"container_log_max_files":                Optional(Nullable(Int())),
+			"enable_cadvisor_json_endpoints":         Optional(Nullable(Bool())),
 		},
 	}
 }
@@ -626,5 +626,364 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[string]interface{}) {
+	out["api_servers"] = func(in string) interface{} { return string(in) }(in.APIServers)
+	out["anonymous_auth"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AnonymousAuth)
+	out["authorization_mode"] = func(in string) interface{} { return string(in) }(in.AuthorizationMode)
+	out["bootstrap_kubeconfig"] = func(in string) interface{} { return string(in) }(in.BootstrapKubeconfig)
+	out["client_ca_file"] = func(in string) interface{} { return string(in) }(in.ClientCAFile)
+	out["tls_cert_file"] = func(in string) interface{} { return string(in) }(in.TLSCertFile)
+	out["tls_private_key_file"] = func(in string) interface{} { return string(in) }(in.TLSPrivateKeyFile)
+	out["tls_cipher_suites"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.TLSCipherSuites)
+	out["tls_min_version"] = func(in string) interface{} { return string(in) }(in.TLSMinVersion)
+	out["kubeconfig_path"] = func(in string) interface{} { return string(in) }(in.KubeconfigPath)
+	out["require_kubeconfig"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RequireKubeconfig)
+	out["log_level"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.LogLevel)
+	out["pod_manifest_path"] = func(in string) interface{} { return string(in) }(in.PodManifestPath)
+	out["hostname_override"] = func(in string) interface{} { return string(in) }(in.HostnameOverride)
+	out["pod_infra_container_image"] = func(in string) interface{} { return string(in) }(in.PodInfraContainerImage)
+	out["seccomp_profile_root"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SeccompProfileRoot)
+	out["allow_privileged"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AllowPrivileged)
+	out["enable_debugging_handlers"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableDebuggingHandlers)
+	out["register_node"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RegisterNode)
+	out["node_status_update_frequency"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.NodeStatusUpdateFrequency)
+	out["cluster_domain"] = func(in string) interface{} { return string(in) }(in.ClusterDomain)
+	out["cluster_dns"] = func(in string) interface{} { return string(in) }(in.ClusterDNS)
+	out["network_plugin_name"] = func(in string) interface{} { return string(in) }(in.NetworkPluginName)
+	out["cloud_provider"] = func(in string) interface{} { return string(in) }(in.CloudProvider)
+	out["kubelet_cgroups"] = func(in string) interface{} { return string(in) }(in.KubeletCgroups)
+	out["runtime_cgroups"] = func(in string) interface{} { return string(in) }(in.RuntimeCgroups)
+	out["read_only_port"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ReadOnlyPort)
+	out["system_cgroups"] = func(in string) interface{} { return string(in) }(in.SystemCgroups)
+	out["cgroup_root"] = func(in string) interface{} { return string(in) }(in.CgroupRoot)
+	out["configure_cbr0"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ConfigureCBR0)
+	out["hairpin_mode"] = func(in string) interface{} { return string(in) }(in.HairpinMode)
+	out["babysit_daemons"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.BabysitDaemons)
+	out["max_pods"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MaxPods)
+	out["nvidia_gp_us"] = func(in int32) interface{} { return int(in) }(in.NvidiaGPUs)
+	out["pod_cidr"] = func(in string) interface{} { return string(in) }(in.PodCIDR)
+	out["resolver_config"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ResolverConfig)
+	out["reconcile_cidr"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ReconcileCIDR)
+	out["register_schedulable"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RegisterSchedulable)
+	out["serialize_image_pulls"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.SerializeImagePulls)
+	out["node_labels"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.NodeLabels)
+	out["non_masquerade_cidr"] = func(in string) interface{} { return string(in) }(in.NonMasqueradeCIDR)
+	out["enable_custom_metrics"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableCustomMetrics)
+	out["network_plugin_mtu"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.NetworkPluginMTU)
+	out["image_gc_high_threshold_percent"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ImageGCHighThresholdPercent)
+	out["image_gc_low_threshold_percent"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ImageGCLowThresholdPercent)
+	out["image_pull_progress_deadline"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.ImagePullProgressDeadline)
+	out["eviction_hard"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.EvictionHard)
+	out["eviction_soft"] = func(in string) interface{} { return string(in) }(in.EvictionSoft)
+	out["eviction_soft_grace_period"] = func(in string) interface{} { return string(in) }(in.EvictionSoftGracePeriod)
+	out["eviction_pressure_transition_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.EvictionPressureTransitionPeriod)
+	out["eviction_max_pod_grace_period"] = func(in int32) interface{} { return int(in) }(in.EvictionMaxPodGracePeriod)
+	out["eviction_minimum_reclaim"] = func(in string) interface{} { return string(in) }(in.EvictionMinimumReclaim)
+	out["volume_plugin_directory"] = func(in string) interface{} { return string(in) }(in.VolumePluginDirectory)
+	out["taints"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Taints)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.FeatureGates)
+	out["kube_reserved"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.KubeReserved)
+	out["kube_reserved_cgroup"] = func(in string) interface{} { return string(in) }(in.KubeReservedCgroup)
+	out["system_reserved"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.SystemReserved)
+	out["system_reserved_cgroup"] = func(in string) interface{} { return string(in) }(in.SystemReservedCgroup)
+	out["enforce_node_allocatable"] = func(in string) interface{} { return string(in) }(in.EnforceNodeAllocatable)
+	out["runtime_request_timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.RuntimeRequestTimeout)
+	out["volume_stats_agg_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.VolumeStatsAggPeriod)
+	out["fail_swap_on"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.FailSwapOn)
+	out["experimental_allowed_unsafe_sysctls"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.ExperimentalAllowedUnsafeSysctls)
+	out["allowed_unsafe_sysctls"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AllowedUnsafeSysctls)
+	out["streaming_connection_idle_timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.StreamingConnectionIdleTimeout)
+	out["docker_disable_shared_pid"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DockerDisableSharedPID)
+	out["root_dir"] = func(in string) interface{} { return string(in) }(in.RootDir)
+	out["authentication_token_webhook"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AuthenticationTokenWebhook)
+	out["authentication_token_webhook_cache_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AuthenticationTokenWebhookCacheTTL)
+	out["cpucfs_quota"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.CPUCFSQuota)
+	out["cpucfs_quota_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.CPUCFSQuotaPeriod)
+	out["cpu_manager_policy"] = func(in string) interface{} { return string(in) }(in.CpuManagerPolicy)
+	out["registry_pull_qps"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.RegistryPullQPS)
+	out["registry_burst"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.RegistryBurst)
+	out["topology_manager_policy"] = func(in string) interface{} { return string(in) }(in.TopologyManagerPolicy)
+	out["rotate_certificates"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.RotateCertificates)
+	out["protect_kernel_defaults"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ProtectKernelDefaults)
+	out["cgroup_driver"] = func(in string) interface{} { return string(in) }(in.CgroupDriver)
+	out["housekeeping_interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HousekeepingInterval)
+	out["event_qps"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.EventQPS)
+	out["event_burst"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.EventBurst)
+	out["container_log_max_size"] = func(in string) interface{} { return string(in) }(in.ContainerLogMaxSize)
+	out["container_log_max_files"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.ContainerLogMaxFiles)
+	out["enable_cadvisor_json_endpoints"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableCadvisorJsonEndpoints)
+}
+
+func FlattenResourceKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceKubeletConfigSpecInto(in, out)
 	return out
 }

@@ -21,3 +21,12 @@ func ExpandDataSourceKuberouterNetworkingSpec(in map[string]interface{}) kops.Ku
 	out := kops.KuberouterNetworkingSpec{}
 	return out
 }
+
+func FlattenDataSourceKuberouterNetworkingSpecInto(in kops.KuberouterNetworkingSpec, out map[string]interface{}) {
+}
+
+func FlattenDataSourceKuberouterNetworkingSpec(in kops.KuberouterNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceKuberouterNetworkingSpecInto(in, out)
+	return out
+}

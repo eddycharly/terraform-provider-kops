@@ -16,7 +16,7 @@ func ResourceHookSpec() *schema.Resource {
 			"roles":            Optional(List(String())),
 			"requires":         Optional(List(String())),
 			"before":           Optional(List(String())),
-			"exec_container":   Optional(Ptr(Struct(ResourceExecContainerAction()))),
+			"exec_container":   Optional(Struct(ResourceExecContainerAction())),
 			"manifest":         Optional(String()),
 			"use_raw_manifest": Optional(Bool()),
 		},
@@ -80,5 +80,45 @@ func ExpandResourceHookSpec(in map[string]interface{}) kops.HookSpec {
 	if in, ok := in["use_raw_manifest"]; ok && in != nil {
 		out.UseRawManifest = func(in interface{}) bool { return in.(bool) }(in)
 	}
+	return out
+}
+
+func FlattenResourceHookSpecInto(in kops.HookSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["disabled"] = func(in bool) interface{} { return in }(in.Disabled)
+	out["roles"] = func(in []kops.InstanceGroupRole) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.InstanceGroupRole) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Roles)
+	out["requires"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Requires)
+	out["before"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Before)
+	out["exec_container"] = func(in *kops.ExecContainerAction) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.ExecContainerAction) interface{} { return FlattenResourceExecContainerAction(in) }(*in)
+	}(in.ExecContainer)
+	out["manifest"] = func(in string) interface{} { return string(in) }(in.Manifest)
+	out["use_raw_manifest"] = func(in bool) interface{} { return in }(in.UseRawManifest)
+}
+
+func FlattenResourceHookSpec(in kops.HookSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceHookSpecInto(in, out)
 	return out
 }

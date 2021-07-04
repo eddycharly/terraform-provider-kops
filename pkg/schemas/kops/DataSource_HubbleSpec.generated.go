@@ -11,7 +11,7 @@ var _ = Schema
 func DataSourceHubbleSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": Computed(Ptr(Bool())),
+			"enabled": Computed(Nullable(Bool())),
 			"metrics": Computed(List(String())),
 		},
 	}
@@ -39,5 +39,27 @@ func ExpandDataSourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceHubbleSpecInto(in kops.HubbleSpec, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["metrics"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Metrics)
+}
+
+func FlattenDataSourceHubbleSpec(in kops.HubbleSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceHubbleSpecInto(in, out)
 	return out
 }

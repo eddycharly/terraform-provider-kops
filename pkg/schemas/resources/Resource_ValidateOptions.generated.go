@@ -13,8 +13,8 @@ func ResourceValidateOptions() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"skip":          Optional(Bool()),
-			"timeout":       Optional(Ptr(Duration())),
-			"poll_interval": Optional(Ptr(Duration())),
+			"timeout":       Optional(Nullable(Duration())),
+			"poll_interval": Optional(Nullable(Duration())),
 		},
 	}
 }
@@ -28,5 +28,16 @@ func ExpandResourceValidateOptions(in map[string]interface{}) resources.Validate
 		out.Skip = func(in interface{}) bool { return in.(bool) }(in)
 	}
 	out.ValidateOptions = utilsschemas.ExpandResourceValidateOptions(in)
+	return out
+}
+
+func FlattenResourceValidateOptionsInto(in resources.ValidateOptions, out map[string]interface{}) {
+	out["skip"] = func(in bool) interface{} { return in }(in.Skip)
+	utilsschemas.FlattenResourceValidateOptionsInto(in.ValidateOptions, out)
+}
+
+func FlattenResourceValidateOptions(in resources.ValidateOptions) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceValidateOptionsInto(in, out)
 	return out
 }

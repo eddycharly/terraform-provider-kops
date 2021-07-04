@@ -12,13 +12,13 @@ func ResourceEtcdMemberSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":              Required(String()),
-			"instance_group":    Required(Ptr(String())),
-			"volume_type":       Optional(Ptr(String())),
-			"volume_iops":       Optional(Ptr(Int())),
-			"volume_throughput": Optional(Ptr(Int())),
-			"volume_size":       Optional(Ptr(Int())),
-			"kms_key_id":        Optional(Ptr(String())),
-			"encrypted_volume":  Optional(Ptr(Bool())),
+			"instance_group":    Required(Nullable(String())),
+			"volume_type":       Optional(Nullable(String())),
+			"volume_iops":       Optional(Nullable(Int())),
+			"volume_throughput": Optional(Nullable(Int())),
+			"volume_size":       Optional(Nullable(Int())),
+			"kms_key_id":        Optional(Nullable(String())),
+			"encrypted_volume":  Optional(Nullable(Bool())),
 		},
 	}
 }
@@ -87,5 +87,57 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceEtcdMemberSpecInto(in kops.EtcdMemberSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["instance_group"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.InstanceGroup)
+	out["volume_type"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.VolumeType)
+	out["volume_iops"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.VolumeIops)
+	out["volume_throughput"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.VolumeThroughput)
+	out["volume_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.VolumeSize)
+	out["kms_key_id"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.KmsKeyId)
+	out["encrypted_volume"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EncryptedVolume)
+}
+
+func FlattenResourceEtcdMemberSpec(in kops.EtcdMemberSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceEtcdMemberSpecInto(in, out)
 	return out
 }

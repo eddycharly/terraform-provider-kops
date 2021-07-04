@@ -32,3 +32,19 @@ func ExpandResourceBastionLoadBalancerSpec(in map[string]interface{}) kops.Basti
 	}
 	return out
 }
+
+func FlattenResourceBastionLoadBalancerSpecInto(in kops.BastionLoadBalancerSpec, out map[string]interface{}) {
+	out["additional_security_groups"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AdditionalSecurityGroups)
+}
+
+func FlattenResourceBastionLoadBalancerSpec(in kops.BastionLoadBalancerSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceBastionLoadBalancerSpecInto(in, out)
+	return out
+}

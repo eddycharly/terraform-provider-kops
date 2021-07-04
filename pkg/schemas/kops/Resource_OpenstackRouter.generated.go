@@ -11,10 +11,10 @@ var _ = Schema
 func ResourceOpenstackRouter() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"external_network":        Optional(Ptr(String())),
-			"dns_servers":             Optional(Ptr(String())),
-			"external_subnet":         Optional(Ptr(String())),
-			"availability_zone_hints": Optional(List(Ptr(String()))),
+			"external_network":        Optional(Nullable(String())),
+			"dns_servers":             Optional(Nullable(String())),
+			"external_subnet":         Optional(Nullable(String())),
+			"availability_zone_hints": Optional(List(String())),
 		},
 	}
 }
@@ -62,5 +62,44 @@ func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRout
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceOpenstackRouterInto(in kops.OpenstackRouter, out map[string]interface{}) {
+	out["external_network"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ExternalNetwork)
+	out["dns_servers"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.DNSServers)
+	out["external_subnet"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ExternalSubnet)
+	out["availability_zone_hints"] = func(in []*string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in *string) interface{} {
+				if in == nil {
+					return nil
+				}
+				return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+			}(in))
+		}
+		return out
+	}(in.AvailabilityZoneHints)
+}
+
+func FlattenResourceOpenstackRouter(in kops.OpenstackRouter) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceOpenstackRouterInto(in, out)
 	return out
 }

@@ -34,3 +34,15 @@ func ExpandDataSourceUserData(in map[string]interface{}) kops.UserData {
 	}
 	return out
 }
+
+func FlattenDataSourceUserDataInto(in kops.UserData, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["type"] = func(in string) interface{} { return string(in) }(in.Type)
+	out["content"] = func(in string) interface{} { return string(in) }(in.Content)
+}
+
+func FlattenDataSourceUserData(in kops.UserData) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceUserDataInto(in, out)
+	return out
+}

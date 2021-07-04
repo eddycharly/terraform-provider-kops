@@ -21,3 +21,12 @@ func ExpandResourceKubenetNetworkingSpec(in map[string]interface{}) kops.Kubenet
 	out := kops.KubenetNetworkingSpec{}
 	return out
 }
+
+func FlattenResourceKubenetNetworkingSpecInto(in kops.KubenetNetworkingSpec, out map[string]interface{}) {
+}
+
+func FlattenResourceKubenetNetworkingSpec(in kops.KubenetNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceKubenetNetworkingSpecInto(in, out)
+	return out
+}

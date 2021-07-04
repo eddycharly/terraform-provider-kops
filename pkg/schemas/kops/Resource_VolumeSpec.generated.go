@@ -11,12 +11,12 @@ var _ = Schema
 func ResourceVolumeSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"delete_on_termination": Optional(Ptr(Bool())),
+			"delete_on_termination": Optional(Nullable(Bool())),
 			"device":                Required(String()),
-			"encrypted":             Optional(Ptr(Bool())),
-			"iops":                  Optional(Ptr(Int())),
-			"throughput":            Optional(Ptr(Int())),
-			"key":                   Optional(Ptr(String())),
+			"encrypted":             Optional(Nullable(Bool())),
+			"iops":                  Optional(Nullable(Int())),
+			"throughput":            Optional(Nullable(Int())),
+			"key":                   Optional(Nullable(String())),
 			"size":                  Optional(Int()),
 			"type":                  Optional(String()),
 		},
@@ -77,5 +77,47 @@ func ExpandResourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 	if in, ok := in["type"]; ok && in != nil {
 		out.Type = func(in interface{}) string { return string(in.(string)) }(in)
 	}
+	return out
+}
+
+func FlattenResourceVolumeSpecInto(in kops.VolumeSpec, out map[string]interface{}) {
+	out["delete_on_termination"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DeleteOnTermination)
+	out["device"] = func(in string) interface{} { return string(in) }(in.Device)
+	out["encrypted"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Encrypted)
+	out["iops"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.Iops)
+	out["throughput"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.Throughput)
+	out["key"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Key)
+	out["size"] = func(in int64) interface{} { return int(in) }(in.Size)
+	out["type"] = func(in string) interface{} { return string(in) }(in.Type)
+}
+
+func FlattenResourceVolumeSpec(in kops.VolumeSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceVolumeSpecInto(in, out)
 	return out
 }

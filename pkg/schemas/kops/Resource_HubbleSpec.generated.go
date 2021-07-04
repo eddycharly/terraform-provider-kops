@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceHubbleSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": Optional(Ptr(Bool())),
+			"enabled": Optional(Nullable(Bool())),
 			"metrics": Optional(List(String())),
 		},
 	}
@@ -39,5 +39,27 @@ func ExpandResourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceHubbleSpecInto(in kops.HubbleSpec, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["metrics"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Metrics)
+}
+
+func FlattenResourceHubbleSpec(in kops.HubbleSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceHubbleSpecInto(in, out)
 	return out
 }

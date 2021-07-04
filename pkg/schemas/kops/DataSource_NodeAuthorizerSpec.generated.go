@@ -17,9 +17,9 @@ func DataSourceNodeAuthorizerSpec() *schema.Resource {
 			"image":      Computed(String()),
 			"node_url":   Computed(String()),
 			"port":       Computed(Int()),
-			"interval":   Computed(Ptr(Duration())),
-			"timeout":    Computed(Ptr(Duration())),
-			"token_ttl":  Computed(Ptr(Duration())),
+			"interval":   Computed(Nullable(Duration())),
+			"timeout":    Computed(Nullable(Duration())),
+			"token_ttl":  Computed(Nullable(Duration())),
 		},
 	}
 }
@@ -74,5 +74,43 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceNodeAuthorizerSpecInto(in kops.NodeAuthorizerSpec, out map[string]interface{}) {
+	out["authorizer"] = func(in string) interface{} { return string(in) }(in.Authorizer)
+	out["features"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Features)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["node_url"] = func(in string) interface{} { return string(in) }(in.NodeURL)
+	out["port"] = func(in int) interface{} { return int(in) }(in.Port)
+	out["interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.Interval)
+	out["timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.Timeout)
+	out["token_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.TokenTTL)
+}
+
+func FlattenDataSourceNodeAuthorizerSpec(in kops.NodeAuthorizerSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceNodeAuthorizerSpecInto(in, out)
 	return out
 }

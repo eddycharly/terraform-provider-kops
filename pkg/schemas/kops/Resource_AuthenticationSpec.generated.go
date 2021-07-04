@@ -11,8 +11,8 @@ var _ = Schema
 func ResourceAuthenticationSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"kopeio": Optional(Ptr(Struct(ResourceKopeioAuthenticationSpec()))),
-			"aws":    Optional(Ptr(Struct(ResourceAwsAuthenticationSpec()))),
+			"kopeio": Optional(Struct(ResourceKopeioAuthenticationSpec())),
+			"aws":    Optional(Struct(ResourceAwsAuthenticationSpec())),
 		},
 	}
 }
@@ -48,5 +48,26 @@ func ExpandResourceAuthenticationSpec(in map[string]interface{}) kops.Authentica
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceAuthenticationSpecInto(in kops.AuthenticationSpec, out map[string]interface{}) {
+	out["kopeio"] = func(in *kops.KopeioAuthenticationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KopeioAuthenticationSpec) interface{} { return FlattenResourceKopeioAuthenticationSpec(in) }(*in)
+	}(in.Kopeio)
+	out["aws"] = func(in *kops.AwsAuthenticationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AwsAuthenticationSpec) interface{} { return FlattenResourceAwsAuthenticationSpec(in) }(*in)
+	}(in.Aws)
+}
+
+func FlattenResourceAuthenticationSpec(in kops.AuthenticationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAuthenticationSpecInto(in, out)
 	return out
 }

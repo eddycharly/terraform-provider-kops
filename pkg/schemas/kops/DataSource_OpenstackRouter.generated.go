@@ -11,10 +11,10 @@ var _ = Schema
 func DataSourceOpenstackRouter() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"external_network":        Computed(Ptr(String())),
-			"dns_servers":             Computed(Ptr(String())),
-			"external_subnet":         Computed(Ptr(String())),
-			"availability_zone_hints": Computed(List(Ptr(String()))),
+			"external_network":        Computed(Nullable(String())),
+			"dns_servers":             Computed(Nullable(String())),
+			"external_subnet":         Computed(Nullable(String())),
+			"availability_zone_hints": Computed(List(String())),
 		},
 	}
 }
@@ -62,5 +62,44 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceOpenstackRouterInto(in kops.OpenstackRouter, out map[string]interface{}) {
+	out["external_network"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ExternalNetwork)
+	out["dns_servers"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.DNSServers)
+	out["external_subnet"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ExternalSubnet)
+	out["availability_zone_hints"] = func(in []*string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in *string) interface{} {
+				if in == nil {
+					return nil
+				}
+				return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+			}(in))
+		}
+		return out
+	}(in.AvailabilityZoneHints)
+}
+
+func FlattenDataSourceOpenstackRouter(in kops.OpenstackRouter) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceOpenstackRouterInto(in, out)
 	return out
 }

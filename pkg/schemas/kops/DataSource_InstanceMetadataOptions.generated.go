@@ -11,8 +11,8 @@ var _ = Schema
 func DataSourceInstanceMetadataOptions() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"http_put_response_hop_limit": Computed(Ptr(Int())),
-			"http_tokens":                 Computed(Ptr(String())),
+			"http_put_response_hop_limit": Computed(Nullable(Int())),
+			"http_tokens":                 Computed(Nullable(String())),
 		},
 	}
 }
@@ -38,5 +38,26 @@ func ExpandDataSourceInstanceMetadataOptions(in map[string]interface{}) kops.Ins
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceInstanceMetadataOptionsInto(in kops.InstanceMetadataOptions, out map[string]interface{}) {
+	out["http_put_response_hop_limit"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.HTTPPutResponseHopLimit)
+	out["http_tokens"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.HTTPTokens)
+}
+
+func FlattenDataSourceInstanceMetadataOptions(in kops.InstanceMetadataOptions) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceInstanceMetadataOptionsInto(in, out)
 	return out
 }

@@ -11,10 +11,10 @@ var _ = Schema
 func ResourceNodeTerminationHandlerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":                           Optional(Ptr(Bool())),
-			"enable_spot_interruption_draining": Optional(Ptr(Bool())),
-			"enable_scheduled_event_draining":   Optional(Ptr(Bool())),
-			"enable_prometheus_metrics":         Optional(Ptr(Bool())),
+			"enabled":                           Optional(Nullable(Bool())),
+			"enable_spot_interruption_draining": Optional(Nullable(Bool())),
+			"enable_scheduled_event_draining":   Optional(Nullable(Bool())),
+			"enable_prometheus_metrics":         Optional(Nullable(Bool())),
 		},
 	}
 }
@@ -56,5 +56,38 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHandlerConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["enable_spot_interruption_draining"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableSpotInterruptionDraining)
+	out["enable_scheduled_event_draining"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableScheduledEventDraining)
+	out["enable_prometheus_metrics"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnablePrometheusMetrics)
+}
+
+func FlattenResourceNodeTerminationHandlerConfig(in kops.NodeTerminationHandlerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceNodeTerminationHandlerConfigInto(in, out)
 	return out
 }

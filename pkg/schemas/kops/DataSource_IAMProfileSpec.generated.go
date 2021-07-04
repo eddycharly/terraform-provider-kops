@@ -11,7 +11,7 @@ var _ = Schema
 func DataSourceIAMProfileSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"profile": Computed(Ptr(String())),
+			"profile": Computed(Nullable(String())),
 		},
 	}
 }
@@ -29,5 +29,20 @@ func ExpandDataSourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSp
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceIAMProfileSpecInto(in kops.IAMProfileSpec, out map[string]interface{}) {
+	out["profile"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Profile)
+}
+
+func FlattenDataSourceIAMProfileSpec(in kops.IAMProfileSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceIAMProfileSpecInto(in, out)
 	return out
 }

@@ -13,7 +13,7 @@ func ResourceAmazonVPCNetworkingSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"image_name":      Optional(String()),
 			"init_image_name": Optional(String()),
-			"env":             Optional(List(Struct(ResourceEnvVar()))),
+			"env":             Optional(List(ResourceEnvVar())),
 		},
 	}
 }
@@ -43,5 +43,23 @@ func ExpandResourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Amazo
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceAmazonVPCNetworkingSpecInto(in kops.AmazonVPCNetworkingSpec, out map[string]interface{}) {
+	out["image_name"] = func(in string) interface{} { return string(in) }(in.ImageName)
+	out["init_image_name"] = func(in string) interface{} { return string(in) }(in.InitImageName)
+	out["env"] = func(in []kops.EnvVar) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.EnvVar) interface{} { return FlattenResourceEnvVar(in) }(in))
+		}
+		return out
+	}(in.Env)
+}
+
+func FlattenResourceAmazonVPCNetworkingSpec(in kops.AmazonVPCNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAmazonVPCNetworkingSpecInto(in, out)
 	return out
 }

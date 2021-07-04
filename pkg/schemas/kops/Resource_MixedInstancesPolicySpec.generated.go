@@ -12,11 +12,11 @@ func ResourceMixedInstancesPolicySpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"instances":                     Optional(List(String())),
-			"on_demand_allocation_strategy": Optional(Ptr(String())),
-			"on_demand_base":                Required(Ptr(Int())),
-			"on_demand_above_base":          Required(Ptr(Int())),
-			"spot_allocation_strategy":      Optional(Ptr(String())),
-			"spot_instance_pools":           Optional(Ptr(Int())),
+			"on_demand_allocation_strategy": Optional(Nullable(String())),
+			"on_demand_base":                Required(Nullable(Int())),
+			"on_demand_above_base":          Required(Nullable(Int())),
+			"spot_allocation_strategy":      Optional(Nullable(String())),
+			"spot_instance_pools":           Optional(Nullable(Int())),
 		},
 	}
 }
@@ -75,5 +75,51 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			return func(in int64) *int64 { return &in }(func(in interface{}) int64 { return int64(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceMixedInstancesPolicySpecInto(in kops.MixedInstancesPolicySpec, out map[string]interface{}) {
+	out["instances"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Instances)
+	out["on_demand_allocation_strategy"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OnDemandAllocationStrategy)
+	out["on_demand_base"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.OnDemandBase)
+	out["on_demand_above_base"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.OnDemandAboveBase)
+	out["spot_allocation_strategy"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SpotAllocationStrategy)
+	out["spot_instance_pools"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.SpotInstancePools)
+}
+
+func FlattenResourceMixedInstancesPolicySpec(in kops.MixedInstancesPolicySpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceMixedInstancesPolicySpecInto(in, out)
 	return out
 }

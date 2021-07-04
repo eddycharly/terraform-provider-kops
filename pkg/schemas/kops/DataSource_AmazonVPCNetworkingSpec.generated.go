@@ -13,7 +13,7 @@ func DataSourceAmazonVPCNetworkingSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"image_name":      Computed(String()),
 			"init_image_name": Computed(String()),
-			"env":             Computed(List(Struct(DataSourceEnvVar()))),
+			"env":             Computed(List(DataSourceEnvVar())),
 		},
 	}
 }
@@ -43,5 +43,23 @@ func ExpandDataSourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Ama
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceAmazonVPCNetworkingSpecInto(in kops.AmazonVPCNetworkingSpec, out map[string]interface{}) {
+	out["image_name"] = func(in string) interface{} { return string(in) }(in.ImageName)
+	out["init_image_name"] = func(in string) interface{} { return string(in) }(in.InitImageName)
+	out["env"] = func(in []kops.EnvVar) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.EnvVar) interface{} { return FlattenDataSourceEnvVar(in) }(in))
+		}
+		return out
+	}(in.Env)
+}
+
+func FlattenDataSourceAmazonVPCNetworkingSpec(in kops.AmazonVPCNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceAmazonVPCNetworkingSpecInto(in, out)
 	return out
 }

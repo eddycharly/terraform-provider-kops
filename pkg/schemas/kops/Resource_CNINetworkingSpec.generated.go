@@ -26,3 +26,13 @@ func ExpandResourceCNINetworkingSpec(in map[string]interface{}) kops.CNINetworki
 	}
 	return out
 }
+
+func FlattenResourceCNINetworkingSpecInto(in kops.CNINetworkingSpec, out map[string]interface{}) {
+	out["uses_secondary_ip"] = func(in bool) interface{} { return in }(in.UsesSecondaryIP)
+}
+
+func FlattenResourceCNINetworkingSpec(in kops.CNINetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceCNINetworkingSpecInto(in, out)
+	return out
+}

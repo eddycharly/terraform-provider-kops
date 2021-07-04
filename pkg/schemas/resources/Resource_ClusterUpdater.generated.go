@@ -70,3 +70,27 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 	}
 	return out
 }
+
+func FlattenResourceClusterUpdaterInto(in resources.ClusterUpdater, out map[string]interface{}) {
+	out["revision"] = func(in int) interface{} { return int(in) }(in.Revision)
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["keepers"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.Keepers)
+	out["apply"] = func(in resources.ApplyOptions) interface{} { return FlattenResourceApplyOptions(in) }(in.Apply)
+	out["rolling_update"] = func(in resources.RollingUpdateOptions) interface{} { return FlattenResourceRollingUpdateOptions(in) }(in.RollingUpdate)
+	out["validate"] = func(in resources.ValidateOptions) interface{} { return FlattenResourceValidateOptions(in) }(in.Validate)
+}
+
+func FlattenResourceClusterUpdater(in resources.ClusterUpdater) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceClusterUpdaterInto(in, out)
+	return out
+}

@@ -13,7 +13,7 @@ func ResourceIAMSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"legacy":                   Optional(Bool()),
 			"allow_container_registry": Optional(Bool()),
-			"permissions_boundary":     Optional(Ptr(String())),
+			"permissions_boundary":     Optional(Nullable(String())),
 		},
 	}
 }
@@ -37,5 +37,22 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceIAMSpecInto(in kops.IAMSpec, out map[string]interface{}) {
+	out["legacy"] = func(in bool) interface{} { return in }(in.Legacy)
+	out["allow_container_registry"] = func(in bool) interface{} { return in }(in.AllowContainerRegistry)
+	out["permissions_boundary"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.PermissionsBoundary)
+}
+
+func FlattenResourceIAMSpec(in kops.IAMSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceIAMSpecInto(in, out)
 	return out
 }

@@ -11,21 +11,21 @@ var _ = Schema
 func DataSourceNetworkingSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"classic":    Computed(Ptr(Struct(DataSourceClassicNetworkingSpec()))),
-			"kubenet":    Computed(Ptr(Struct(DataSourceKubenetNetworkingSpec()))),
-			"external":   Computed(Ptr(Struct(DataSourceExternalNetworkingSpec()))),
-			"cni":        Computed(Ptr(Struct(DataSourceCNINetworkingSpec()))),
-			"kopeio":     Computed(Ptr(Struct(DataSourceKopeioNetworkingSpec()))),
-			"weave":      Computed(Ptr(Struct(DataSourceWeaveNetworkingSpec()))),
-			"flannel":    Computed(Ptr(Struct(DataSourceFlannelNetworkingSpec()))),
-			"calico":     Computed(Ptr(Struct(DataSourceCalicoNetworkingSpec()))),
-			"canal":      Computed(Ptr(Struct(DataSourceCanalNetworkingSpec()))),
-			"kuberouter": Computed(Ptr(Struct(DataSourceKuberouterNetworkingSpec()))),
-			"romana":     Computed(Ptr(Struct(DataSourceRomanaNetworkingSpec()))),
-			"amazon_vpc": Computed(Ptr(Struct(DataSourceAmazonVPCNetworkingSpec()))),
-			"cilium":     Computed(Ptr(Struct(DataSourceCiliumNetworkingSpec()))),
-			"lyft_vpc":   Computed(Ptr(Struct(DataSourceLyftVPCNetworkingSpec()))),
-			"gce":        Computed(Ptr(Struct(DataSourceGCENetworkingSpec()))),
+			"classic":    Computed(Struct(DataSourceClassicNetworkingSpec())),
+			"kubenet":    Computed(Struct(DataSourceKubenetNetworkingSpec())),
+			"external":   Computed(Struct(DataSourceExternalNetworkingSpec())),
+			"cni":        Computed(Struct(DataSourceCNINetworkingSpec())),
+			"kopeio":     Computed(Struct(DataSourceKopeioNetworkingSpec())),
+			"weave":      Computed(Struct(DataSourceWeaveNetworkingSpec())),
+			"flannel":    Computed(Struct(DataSourceFlannelNetworkingSpec())),
+			"calico":     Computed(Struct(DataSourceCalicoNetworkingSpec())),
+			"canal":      Computed(Struct(DataSourceCanalNetworkingSpec())),
+			"kuberouter": Computed(Struct(DataSourceKuberouterNetworkingSpec())),
+			"romana":     Computed(Struct(DataSourceRomanaNetworkingSpec())),
+			"amazon_vpc": Computed(Struct(DataSourceAmazonVPCNetworkingSpec())),
+			"cilium":     Computed(Struct(DataSourceCiliumNetworkingSpec())),
+			"lyft_vpc":   Computed(Struct(DataSourceLyftVPCNetworkingSpec())),
+			"gce":        Computed(Struct(DataSourceGCENetworkingSpec())),
 		},
 	}
 }
@@ -230,5 +230,106 @@ func ExpandDataSourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSp
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]interface{}) {
+	out["classic"] = func(in *kops.ClassicNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.ClassicNetworkingSpec) interface{} { return FlattenDataSourceClassicNetworkingSpec(in) }(*in)
+	}(in.Classic)
+	out["kubenet"] = func(in *kops.KubenetNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubenetNetworkingSpec) interface{} { return FlattenDataSourceKubenetNetworkingSpec(in) }(*in)
+	}(in.Kubenet)
+	out["external"] = func(in *kops.ExternalNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.ExternalNetworkingSpec) interface{} { return FlattenDataSourceExternalNetworkingSpec(in) }(*in)
+	}(in.External)
+	out["cni"] = func(in *kops.CNINetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CNINetworkingSpec) interface{} { return FlattenDataSourceCNINetworkingSpec(in) }(*in)
+	}(in.CNI)
+	out["kopeio"] = func(in *kops.KopeioNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KopeioNetworkingSpec) interface{} { return FlattenDataSourceKopeioNetworkingSpec(in) }(*in)
+	}(in.Kopeio)
+	out["weave"] = func(in *kops.WeaveNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.WeaveNetworkingSpec) interface{} { return FlattenDataSourceWeaveNetworkingSpec(in) }(*in)
+	}(in.Weave)
+	out["flannel"] = func(in *kops.FlannelNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.FlannelNetworkingSpec) interface{} { return FlattenDataSourceFlannelNetworkingSpec(in) }(*in)
+	}(in.Flannel)
+	out["calico"] = func(in *kops.CalicoNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CalicoNetworkingSpec) interface{} { return FlattenDataSourceCalicoNetworkingSpec(in) }(*in)
+	}(in.Calico)
+	out["canal"] = func(in *kops.CanalNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CanalNetworkingSpec) interface{} { return FlattenDataSourceCanalNetworkingSpec(in) }(*in)
+	}(in.Canal)
+	out["kuberouter"] = func(in *kops.KuberouterNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KuberouterNetworkingSpec) interface{} {
+			return FlattenDataSourceKuberouterNetworkingSpec(in)
+		}(*in)
+	}(in.Kuberouter)
+	out["romana"] = func(in *kops.RomanaNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.RomanaNetworkingSpec) interface{} { return FlattenDataSourceRomanaNetworkingSpec(in) }(*in)
+	}(in.Romana)
+	out["amazon_vpc"] = func(in *kops.AmazonVPCNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AmazonVPCNetworkingSpec) interface{} { return FlattenDataSourceAmazonVPCNetworkingSpec(in) }(*in)
+	}(in.AmazonVPC)
+	out["cilium"] = func(in *kops.CiliumNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CiliumNetworkingSpec) interface{} { return FlattenDataSourceCiliumNetworkingSpec(in) }(*in)
+	}(in.Cilium)
+	out["lyft_vpc"] = func(in *kops.LyftVPCNetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.LyftVPCNetworkingSpec) interface{} { return FlattenDataSourceLyftVPCNetworkingSpec(in) }(*in)
+	}(in.LyftVPC)
+	out["gce"] = func(in *kops.GCENetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.GCENetworkingSpec) interface{} { return FlattenDataSourceGCENetworkingSpec(in) }(*in)
+	}(in.GCE)
+}
+
+func FlattenDataSourceNetworkingSpec(in kops.NetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceNetworkingSpecInto(in, out)
 	return out
 }

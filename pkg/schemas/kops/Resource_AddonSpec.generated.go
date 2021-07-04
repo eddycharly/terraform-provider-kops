@@ -26,3 +26,13 @@ func ExpandResourceAddonSpec(in map[string]interface{}) kops.AddonSpec {
 	}
 	return out
 }
+
+func FlattenResourceAddonSpecInto(in kops.AddonSpec, out map[string]interface{}) {
+	out["manifest"] = func(in string) interface{} { return string(in) }(in.Manifest)
+}
+
+func FlattenResourceAddonSpec(in kops.AddonSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAddonSpecInto(in, out)
+	return out
+}

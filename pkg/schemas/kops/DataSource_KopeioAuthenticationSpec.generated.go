@@ -21,3 +21,12 @@ func ExpandDataSourceKopeioAuthenticationSpec(in map[string]interface{}) kops.Ko
 	out := kops.KopeioAuthenticationSpec{}
 	return out
 }
+
+func FlattenDataSourceKopeioAuthenticationSpecInto(in kops.KopeioAuthenticationSpec, out map[string]interface{}) {
+}
+
+func FlattenDataSourceKopeioAuthenticationSpec(in kops.KopeioAuthenticationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceKopeioAuthenticationSpecInto(in, out)
+	return out
+}

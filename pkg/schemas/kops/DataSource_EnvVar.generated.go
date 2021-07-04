@@ -30,3 +30,14 @@ func ExpandDataSourceEnvVar(in map[string]interface{}) kops.EnvVar {
 	}
 	return out
 }
+
+func FlattenDataSourceEnvVarInto(in kops.EnvVar, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["value"] = func(in string) interface{} { return string(in) }(in.Value)
+}
+
+func FlattenDataSourceEnvVar(in kops.EnvVar) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceEnvVarInto(in, out)
+	return out
+}

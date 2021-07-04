@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceOpenstackNetwork() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"availability_zone_hints": Optional(List(Ptr(String()))),
+			"availability_zone_hints": Optional(List(String())),
 		},
 	}
 }
@@ -35,5 +35,26 @@ func ExpandResourceOpenstackNetwork(in map[string]interface{}) kops.OpenstackNet
 			return out
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceOpenstackNetworkInto(in kops.OpenstackNetwork, out map[string]interface{}) {
+	out["availability_zone_hints"] = func(in []*string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in *string) interface{} {
+				if in == nil {
+					return nil
+				}
+				return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+			}(in))
+		}
+		return out
+	}(in.AvailabilityZoneHints)
+}
+
+func FlattenResourceOpenstackNetwork(in kops.OpenstackNetwork) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceOpenstackNetworkInto(in, out)
 	return out
 }

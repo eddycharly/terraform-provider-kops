@@ -11,9 +11,9 @@ var _ = Schema
 func DataSourceMetricsServerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":  Computed(Ptr(Bool())),
-			"image":    Computed(Ptr(String())),
-			"insecure": Computed(Ptr(Bool())),
+			"enabled":  Computed(Nullable(Bool())),
+			"image":    Computed(Nullable(String())),
+			"insecure": Computed(Nullable(Bool())),
 		},
 	}
 }
@@ -47,5 +47,32 @@ func ExpandDataSourceMetricsServerConfig(in map[string]interface{}) kops.Metrics
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceMetricsServerConfigInto(in kops.MetricsServerConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["image"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Image)
+	out["insecure"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Insecure)
+}
+
+func FlattenDataSourceMetricsServerConfig(in kops.MetricsServerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceMetricsServerConfigInto(in, out)
 	return out
 }

@@ -11,14 +11,14 @@ var _ = Schema
 func ResourceOpenstackLoadbalancerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"method":              Optional(Ptr(String())),
-			"provider":            Optional(Ptr(String())),
-			"use_octavia":         Optional(Ptr(Bool())),
-			"floating_network":    Optional(Ptr(String())),
-			"floating_network_id": Optional(Ptr(String())),
-			"floating_subnet":     Optional(Ptr(String())),
-			"subnet_id":           Optional(Ptr(String())),
-			"manage_sec_groups":   Optional(Ptr(Bool())),
+			"method":              Optional(Nullable(String())),
+			"provider":            Optional(Nullable(String())),
+			"use_octavia":         Optional(Nullable(Bool())),
+			"floating_network":    Optional(Nullable(String())),
+			"floating_network_id": Optional(Nullable(String())),
+			"floating_subnet":     Optional(Nullable(String())),
+			"subnet_id":           Optional(Nullable(String())),
+			"manage_sec_groups":   Optional(Nullable(Bool())),
 		},
 	}
 }
@@ -92,5 +92,62 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceOpenstackLoadbalancerConfigInto(in kops.OpenstackLoadbalancerConfig, out map[string]interface{}) {
+	out["method"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Method)
+	out["provider"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Provider)
+	out["use_octavia"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.UseOctavia)
+	out["floating_network"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.FloatingNetwork)
+	out["floating_network_id"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.FloatingNetworkID)
+	out["floating_subnet"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.FloatingSubnet)
+	out["subnet_id"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SubnetID)
+	out["manage_sec_groups"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ManageSecGroups)
+}
+
+func FlattenResourceOpenstackLoadbalancerConfig(in kops.OpenstackLoadbalancerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceOpenstackLoadbalancerConfigInto(in, out)
 	return out
 }

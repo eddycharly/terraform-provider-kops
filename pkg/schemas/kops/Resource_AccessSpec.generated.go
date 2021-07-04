@@ -11,8 +11,8 @@ var _ = Schema
 func ResourceAccessSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"dns":           Optional(Ptr(Struct(ResourceDNSAccessSpec()))),
-			"load_balancer": Optional(Ptr(Struct(ResourceLoadBalancerAccessSpec()))),
+			"dns":           Optional(Struct(ResourceDNSAccessSpec())),
+			"load_balancer": Optional(Struct(ResourceLoadBalancerAccessSpec())),
 		},
 	}
 }
@@ -48,5 +48,26 @@ func ExpandResourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceAccessSpecInto(in kops.AccessSpec, out map[string]interface{}) {
+	out["dns"] = func(in *kops.DNSAccessSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.DNSAccessSpec) interface{} { return FlattenResourceDNSAccessSpec(in) }(*in)
+	}(in.DNS)
+	out["load_balancer"] = func(in *kops.LoadBalancerAccessSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.LoadBalancerAccessSpec) interface{} { return FlattenResourceLoadBalancerAccessSpec(in) }(*in)
+	}(in.LoadBalancer)
+}
+
+func FlattenResourceAccessSpec(in kops.AccessSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAccessSpecInto(in, out)
 	return out
 }

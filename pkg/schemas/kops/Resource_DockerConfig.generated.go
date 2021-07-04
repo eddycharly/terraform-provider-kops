@@ -12,35 +12,35 @@ func ResourceDockerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"authorization_plugins": Optional(List(String())),
-			"bridge":                Optional(Ptr(String())),
-			"bridge_ip":             Optional(Ptr(String())),
-			"data_root":             Optional(Ptr(String())),
+			"bridge":                Optional(Nullable(String())),
+			"bridge_ip":             Optional(Nullable(String())),
+			"data_root":             Optional(Nullable(String())),
 			"default_ulimit":        Optional(List(String())),
-			"default_runtime":       Optional(Ptr(String())),
+			"default_runtime":       Optional(Nullable(String())),
 			"exec_opt":              Optional(List(String())),
-			"exec_root":             Optional(Ptr(String())),
-			"experimental":          Optional(Ptr(Bool())),
+			"exec_root":             Optional(Nullable(String())),
+			"experimental":          Optional(Nullable(Bool())),
 			"health_check":          Optional(Bool()),
 			"hosts":                 Optional(List(String())),
-			"ip_masq":               Optional(Ptr(Bool())),
-			"ip_tables":             Optional(Ptr(Bool())),
-			"insecure_registry":     Optional(Ptr(String())),
+			"ip_masq":               Optional(Nullable(Bool())),
+			"ip_tables":             Optional(Nullable(Bool())),
+			"insecure_registry":     Optional(Nullable(String())),
 			"insecure_registries":   Optional(List(String())),
-			"live_restore":          Optional(Ptr(Bool())),
-			"log_driver":            Optional(Ptr(String())),
-			"log_level":             Optional(Ptr(String())),
+			"live_restore":          Optional(Nullable(Bool())),
+			"log_driver":            Optional(Nullable(String())),
+			"log_level":             Optional(Nullable(String())),
 			"log_opt":               Optional(List(String())),
-			"metrics_address":       Optional(Ptr(String())),
-			"mtu":                   Optional(Ptr(Int())),
-			"packages":              Optional(Ptr(Struct(ResourcePackagesConfig()))),
+			"metrics_address":       Optional(Nullable(String())),
+			"mtu":                   Optional(Nullable(Int())),
+			"packages":              Optional(Struct(ResourcePackagesConfig())),
 			"registry_mirrors":      Optional(List(String())),
 			"runtimes":              Optional(List(String())),
-			"selinux_enabled":       Optional(Ptr(Bool())),
+			"selinux_enabled":       Optional(Nullable(Bool())),
 			"skip_install":          Optional(Bool()),
-			"storage":               Optional(Ptr(String())),
+			"storage":               Optional(Nullable(String())),
 			"storage_opts":          Optional(List(String())),
 			"user_namespace_remap":  Optional(String()),
-			"version":               Optional(Ptr(String())),
+			"version":               Optional(Nullable(String())),
 		},
 	}
 }
@@ -289,5 +289,188 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceDockerConfigInto(in kops.DockerConfig, out map[string]interface{}) {
+	out["authorization_plugins"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AuthorizationPlugins)
+	out["bridge"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Bridge)
+	out["bridge_ip"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.BridgeIP)
+	out["data_root"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.DataRoot)
+	out["default_ulimit"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.DefaultUlimit)
+	out["default_runtime"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.DefaultRuntime)
+	out["exec_opt"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.ExecOpt)
+	out["exec_root"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ExecRoot)
+	out["experimental"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Experimental)
+	out["health_check"] = func(in bool) interface{} { return in }(in.HealthCheck)
+	out["hosts"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Hosts)
+	out["ip_masq"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.IPMasq)
+	out["ip_tables"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.IPTables)
+	out["insecure_registry"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.InsecureRegistry)
+	out["insecure_registries"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.InsecureRegistries)
+	out["live_restore"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.LiveRestore)
+	out["log_driver"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.LogDriver)
+	out["log_level"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.LogLevel)
+	out["log_opt"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.LogOpt)
+	out["metrics_address"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.MetricsAddress)
+	out["mtu"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MTU)
+	out["packages"] = func(in *kops.PackagesConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.PackagesConfig) interface{} { return FlattenResourcePackagesConfig(in) }(*in)
+	}(in.Packages)
+	out["registry_mirrors"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.RegistryMirrors)
+	out["runtimes"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Runtimes)
+	out["selinux_enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.SelinuxEnabled)
+	out["skip_install"] = func(in bool) interface{} { return in }(in.SkipInstall)
+	out["storage"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Storage)
+	out["storage_opts"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.StorageOpts)
+	out["user_namespace_remap"] = func(in string) interface{} { return string(in) }(in.UserNamespaceRemap)
+	out["version"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Version)
+}
+
+func FlattenResourceDockerConfig(in kops.DockerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceDockerConfigInto(in, out)
 	return out
 }

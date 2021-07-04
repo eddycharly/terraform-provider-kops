@@ -11,10 +11,10 @@ var _ = Schema
 func ResourcePackagesConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"hash_amd64": Optional(Ptr(String())),
-			"hash_arm64": Optional(Ptr(String())),
-			"url_amd64":  Optional(Ptr(String())),
-			"url_arm64":  Optional(Ptr(String())),
+			"hash_amd64": Optional(Nullable(String())),
+			"hash_arm64": Optional(Nullable(String())),
+			"url_amd64":  Optional(Nullable(String())),
+			"url_arm64":  Optional(Nullable(String())),
 		},
 	}
 }
@@ -56,5 +56,38 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourcePackagesConfigInto(in kops.PackagesConfig, out map[string]interface{}) {
+	out["hash_amd64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.HashAmd64)
+	out["hash_arm64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.HashArm64)
+	out["url_amd64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.UrlAmd64)
+	out["url_arm64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.UrlArm64)
+}
+
+func FlattenResourcePackagesConfig(in kops.PackagesConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourcePackagesConfigInto(in, out)
 	return out
 }

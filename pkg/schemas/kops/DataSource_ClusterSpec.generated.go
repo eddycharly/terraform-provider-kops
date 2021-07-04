@@ -12,19 +12,19 @@ func DataSourceClusterSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"channel":                           Computed(String()),
-			"addons":                            Computed(List(Struct(DataSourceAddonSpec()))),
+			"addons":                            Computed(List(DataSourceAddonSpec())),
 			"config_base":                       Computed(String()),
 			"cloud_provider":                    Computed(String()),
 			"container_runtime":                 Computed(String()),
 			"kubernetes_version":                Computed(String()),
-			"subnet":                            Computed(List(Struct(DataSourceClusterSubnetSpec()))),
+			"subnet":                            Computed(List(DataSourceClusterSubnetSpec())),
 			"project":                           Computed(String()),
 			"master_public_name":                Computed(String()),
 			"master_internal_name":              Computed(String()),
 			"network_cidr":                      Computed(String()),
 			"additional_network_cidrs":          Computed(List(String())),
 			"network_id":                        Computed(String()),
-			"topology":                          Computed(Ptr(Struct(DataSourceTopologySpec()))),
+			"topology":                          Computed(Struct(DataSourceTopologySpec())),
 			"secret_store":                      Computed(String()),
 			"key_store":                         Computed(String()),
 			"config_store":                      Computed(String()),
@@ -36,47 +36,47 @@ func DataSourceClusterSpec() *schema.Resource {
 			"non_masquerade_cidr":               Computed(String()),
 			"ssh_access":                        Computed(List(String())),
 			"node_port_access":                  Computed(List(String())),
-			"egress_proxy":                      Computed(Ptr(Struct(DataSourceEgressProxySpec()))),
-			"ssh_key_name":                      Computed(Ptr(String())),
+			"egress_proxy":                      Computed(Struct(DataSourceEgressProxySpec())),
+			"ssh_key_name":                      Computed(Nullable(String())),
 			"kubernetes_api_access":             Computed(List(String())),
-			"isolate_masters":                   Computed(Ptr(Bool())),
-			"update_policy":                     Computed(Ptr(String())),
-			"external_policies":                 Computed(Ptr(Map(List(String())))),
-			"additional_policies":               Computed(Ptr(Map(String()))),
-			"file_assets":                       Computed(List(Struct(DataSourceFileAssetSpec()))),
-			"etcd_cluster":                      Computed(List(Struct(DataSourceEtcdClusterSpec()))),
-			"containerd":                        Computed(Ptr(Struct(DataSourceContainerdConfig()))),
-			"docker":                            Computed(Ptr(Struct(DataSourceDockerConfig()))),
-			"kube_dns":                          Computed(Ptr(Struct(DataSourceKubeDNSConfig()))),
-			"kube_api_server":                   Computed(Ptr(Struct(DataSourceKubeAPIServerConfig()))),
-			"kube_controller_manager":           Computed(Ptr(Struct(DataSourceKubeControllerManagerConfig()))),
-			"external_cloud_controller_manager": Computed(Ptr(Struct(DataSourceCloudControllerManagerConfig()))),
-			"kube_scheduler":                    Computed(Ptr(Struct(DataSourceKubeSchedulerConfig()))),
-			"kube_proxy":                        Computed(Ptr(Struct(DataSourceKubeProxyConfig()))),
-			"kubelet":                           Computed(Ptr(Struct(DataSourceKubeletConfigSpec()))),
-			"master_kubelet":                    Computed(Ptr(Struct(DataSourceKubeletConfigSpec()))),
-			"cloud_config":                      Computed(Ptr(Struct(DataSourceCloudConfiguration()))),
-			"external_dns":                      Computed(Ptr(Struct(DataSourceExternalDNSConfig()))),
-			"ntp":                               Computed(Ptr(Struct(DataSourceNTPConfig()))),
-			"node_termination_handler":          Computed(Ptr(Struct(DataSourceNodeTerminationHandlerConfig()))),
-			"metrics_server":                    Computed(Ptr(Struct(DataSourceMetricsServerConfig()))),
-			"cert_manager":                      Computed(Ptr(Struct(DataSourceCertManagerConfig()))),
-			"aws_load_balancer_controller":      Computed(Ptr(Struct(DataSourceAWSLoadBalancerControllerConfig()))),
-			"networking":                        Computed(Ptr(Struct(DataSourceNetworkingSpec()))),
-			"api":                               Computed(Ptr(Struct(DataSourceAccessSpec()))),
-			"authentication":                    Computed(Ptr(Struct(DataSourceAuthenticationSpec()))),
-			"authorization":                     Computed(Ptr(Struct(DataSourceAuthorizationSpec()))),
-			"node_authorization":                Computed(Ptr(Struct(DataSourceNodeAuthorizationSpec()))),
+			"isolate_masters":                   Computed(Nullable(Bool())),
+			"update_policy":                     Computed(Nullable(String())),
+			"external_policies":                 Computed(Map(List(String()))),
+			"additional_policies":               Computed(Map(String())),
+			"file_assets":                       Computed(List(DataSourceFileAssetSpec())),
+			"etcd_cluster":                      Computed(List(DataSourceEtcdClusterSpec())),
+			"containerd":                        Computed(Struct(DataSourceContainerdConfig())),
+			"docker":                            Computed(Struct(DataSourceDockerConfig())),
+			"kube_dns":                          Computed(Struct(DataSourceKubeDNSConfig())),
+			"kube_api_server":                   Computed(Struct(DataSourceKubeAPIServerConfig())),
+			"kube_controller_manager":           Computed(Struct(DataSourceKubeControllerManagerConfig())),
+			"external_cloud_controller_manager": Computed(Struct(DataSourceCloudControllerManagerConfig())),
+			"kube_scheduler":                    Computed(Struct(DataSourceKubeSchedulerConfig())),
+			"kube_proxy":                        Computed(Struct(DataSourceKubeProxyConfig())),
+			"kubelet":                           Computed(Struct(DataSourceKubeletConfigSpec())),
+			"master_kubelet":                    Computed(Struct(DataSourceKubeletConfigSpec())),
+			"cloud_config":                      Computed(Struct(DataSourceCloudConfiguration())),
+			"external_dns":                      Computed(Struct(DataSourceExternalDNSConfig())),
+			"ntp":                               Computed(Struct(DataSourceNTPConfig())),
+			"node_termination_handler":          Computed(Struct(DataSourceNodeTerminationHandlerConfig())),
+			"metrics_server":                    Computed(Struct(DataSourceMetricsServerConfig())),
+			"cert_manager":                      Computed(Struct(DataSourceCertManagerConfig())),
+			"aws_load_balancer_controller":      Computed(Struct(DataSourceAWSLoadBalancerControllerConfig())),
+			"networking":                        Computed(Struct(DataSourceNetworkingSpec())),
+			"api":                               Computed(Struct(DataSourceAccessSpec())),
+			"authentication":                    Computed(Struct(DataSourceAuthenticationSpec())),
+			"authorization":                     Computed(Struct(DataSourceAuthorizationSpec())),
+			"node_authorization":                Computed(Struct(DataSourceNodeAuthorizationSpec())),
 			"cloud_labels":                      Computed(Map(String())),
-			"hooks":                             Computed(List(Struct(DataSourceHookSpec()))),
-			"assets":                            Computed(Ptr(Struct(DataSourceAssets()))),
-			"iam":                               Computed(Ptr(Struct(DataSourceIAMSpec()))),
-			"encryption_config":                 Computed(Ptr(Bool())),
+			"hooks":                             Computed(List(DataSourceHookSpec())),
+			"assets":                            Computed(Struct(DataSourceAssets())),
+			"iam":                               Computed(Struct(DataSourceIAMSpec())),
+			"encryption_config":                 Computed(Nullable(Bool())),
 			"disable_subnet_tags":               Computed(Bool()),
-			"use_host_certificates":             Computed(Ptr(Bool())),
+			"use_host_certificates":             Computed(Nullable(Bool())),
 			"sysctl_parameters":                 Computed(List(String())),
-			"rolling_update":                    Computed(Ptr(Struct(DataSourceRollingUpdate()))),
-			"cluster_autoscaler":                Computed(Ptr(Struct(DataSourceClusterAutoscalerConfig()))),
+			"rolling_update":                    Computed(Struct(DataSourceRollingUpdate())),
+			"cluster_autoscaler":                Computed(Struct(DataSourceClusterAutoscalerConfig())),
 		},
 	}
 }
@@ -723,5 +723,362 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			}(in))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interface{}) {
+	out["channel"] = func(in string) interface{} { return string(in) }(in.Channel)
+	out["addons"] = func(in []kops.AddonSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.AddonSpec) interface{} { return FlattenDataSourceAddonSpec(in) }(in))
+		}
+		return out
+	}(in.Addons)
+	out["config_base"] = func(in string) interface{} { return string(in) }(in.ConfigBase)
+	out["cloud_provider"] = func(in string) interface{} { return string(in) }(in.CloudProvider)
+	out["container_runtime"] = func(in string) interface{} { return string(in) }(in.ContainerRuntime)
+	out["kubernetes_version"] = func(in string) interface{} { return string(in) }(in.KubernetesVersion)
+	out["subnet"] = func(in []kops.ClusterSubnetSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.ClusterSubnetSpec) interface{} { return FlattenDataSourceClusterSubnetSpec(in) }(in))
+		}
+		return out
+	}(in.Subnets)
+	out["project"] = func(in string) interface{} { return string(in) }(in.Project)
+	out["master_public_name"] = func(in string) interface{} { return string(in) }(in.MasterPublicName)
+	out["master_internal_name"] = func(in string) interface{} { return string(in) }(in.MasterInternalName)
+	out["network_cidr"] = func(in string) interface{} { return string(in) }(in.NetworkCIDR)
+	out["additional_network_cidrs"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AdditionalNetworkCIDRs)
+	out["network_id"] = func(in string) interface{} { return string(in) }(in.NetworkID)
+	out["topology"] = func(in *kops.TopologySpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.TopologySpec) interface{} { return FlattenDataSourceTopologySpec(in) }(*in)
+	}(in.Topology)
+	out["secret_store"] = func(in string) interface{} { return string(in) }(in.SecretStore)
+	out["key_store"] = func(in string) interface{} { return string(in) }(in.KeyStore)
+	out["config_store"] = func(in string) interface{} { return string(in) }(in.ConfigStore)
+	out["dns_zone"] = func(in string) interface{} { return string(in) }(in.DNSZone)
+	out["additional_sans"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AdditionalSANs)
+	out["cluster_dns_domain"] = func(in string) interface{} { return string(in) }(in.ClusterDNSDomain)
+	out["service_cluster_ip_range"] = func(in string) interface{} { return string(in) }(in.ServiceClusterIPRange)
+	out["pod_cidr"] = func(in string) interface{} { return string(in) }(in.PodCIDR)
+	out["non_masquerade_cidr"] = func(in string) interface{} { return string(in) }(in.NonMasqueradeCIDR)
+	out["ssh_access"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.SSHAccess)
+	out["node_port_access"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.NodePortAccess)
+	out["egress_proxy"] = func(in *kops.EgressProxySpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.EgressProxySpec) interface{} { return FlattenDataSourceEgressProxySpec(in) }(*in)
+	}(in.EgressProxy)
+	out["ssh_key_name"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.SSHKeyName)
+	out["kubernetes_api_access"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.KubernetesAPIAccess)
+	out["isolate_masters"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.IsolateMasters)
+	out["update_policy"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.UpdatePolicy)
+	out["external_policies"] = func(in *map[string][]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in map[string][]string) interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = func(in []string) interface{} {
+					var out []interface{}
+					for _, in := range in {
+						out = append(out, func(in string) interface{} { return string(in) }(in))
+					}
+					return out
+				}(in)
+			}
+			return out
+		}(*in)
+	}(in.ExternalPolicies)
+	out["additional_policies"] = func(in *map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in map[string]string) interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = func(in string) interface{} { return string(in) }(in)
+			}
+			return out
+		}(*in)
+	}(in.AdditionalPolicies)
+	out["file_assets"] = func(in []kops.FileAssetSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.FileAssetSpec) interface{} { return FlattenDataSourceFileAssetSpec(in) }(in))
+		}
+		return out
+	}(in.FileAssets)
+	out["etcd_cluster"] = func(in []kops.EtcdClusterSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.EtcdClusterSpec) interface{} { return FlattenDataSourceEtcdClusterSpec(in) }(in))
+		}
+		return out
+	}(in.EtcdClusters)
+	out["containerd"] = func(in *kops.ContainerdConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.ContainerdConfig) interface{} { return FlattenDataSourceContainerdConfig(in) }(*in)
+	}(in.Containerd)
+	out["docker"] = func(in *kops.DockerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.DockerConfig) interface{} { return FlattenDataSourceDockerConfig(in) }(*in)
+	}(in.Docker)
+	out["kube_dns"] = func(in *kops.KubeDNSConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeDNSConfig) interface{} { return FlattenDataSourceKubeDNSConfig(in) }(*in)
+	}(in.KubeDNS)
+	out["kube_api_server"] = func(in *kops.KubeAPIServerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeAPIServerConfig) interface{} { return FlattenDataSourceKubeAPIServerConfig(in) }(*in)
+	}(in.KubeAPIServer)
+	out["kube_controller_manager"] = func(in *kops.KubeControllerManagerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeControllerManagerConfig) interface{} {
+			return FlattenDataSourceKubeControllerManagerConfig(in)
+		}(*in)
+	}(in.KubeControllerManager)
+	out["external_cloud_controller_manager"] = func(in *kops.CloudControllerManagerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CloudControllerManagerConfig) interface{} {
+			return FlattenDataSourceCloudControllerManagerConfig(in)
+		}(*in)
+	}(in.ExternalCloudControllerManager)
+	out["kube_scheduler"] = func(in *kops.KubeSchedulerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeSchedulerConfig) interface{} { return FlattenDataSourceKubeSchedulerConfig(in) }(*in)
+	}(in.KubeScheduler)
+	out["kube_proxy"] = func(in *kops.KubeProxyConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeProxyConfig) interface{} { return FlattenDataSourceKubeProxyConfig(in) }(*in)
+	}(in.KubeProxy)
+	out["kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeletConfigSpec) interface{} { return FlattenDataSourceKubeletConfigSpec(in) }(*in)
+	}(in.Kubelet)
+	out["master_kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.KubeletConfigSpec) interface{} { return FlattenDataSourceKubeletConfigSpec(in) }(*in)
+	}(in.MasterKubelet)
+	out["cloud_config"] = func(in *kops.CloudConfiguration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CloudConfiguration) interface{} { return FlattenDataSourceCloudConfiguration(in) }(*in)
+	}(in.CloudConfig)
+	out["external_dns"] = func(in *kops.ExternalDNSConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.ExternalDNSConfig) interface{} { return FlattenDataSourceExternalDNSConfig(in) }(*in)
+	}(in.ExternalDNS)
+	out["ntp"] = func(in *kops.NTPConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NTPConfig) interface{} { return FlattenDataSourceNTPConfig(in) }(*in)
+	}(in.NTP)
+	out["node_termination_handler"] = func(in *kops.NodeTerminationHandlerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NodeTerminationHandlerConfig) interface{} {
+			return FlattenDataSourceNodeTerminationHandlerConfig(in)
+		}(*in)
+	}(in.NodeTerminationHandler)
+	out["metrics_server"] = func(in *kops.MetricsServerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.MetricsServerConfig) interface{} { return FlattenDataSourceMetricsServerConfig(in) }(*in)
+	}(in.MetricsServer)
+	out["cert_manager"] = func(in *kops.CertManagerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.CertManagerConfig) interface{} { return FlattenDataSourceCertManagerConfig(in) }(*in)
+	}(in.CertManager)
+	out["aws_load_balancer_controller"] = func(in *kops.AWSLoadBalancerControllerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AWSLoadBalancerControllerConfig) interface{} {
+			return FlattenDataSourceAWSLoadBalancerControllerConfig(in)
+		}(*in)
+	}(in.AWSLoadBalancerController)
+	out["networking"] = func(in *kops.NetworkingSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NetworkingSpec) interface{} { return FlattenDataSourceNetworkingSpec(in) }(*in)
+	}(in.Networking)
+	out["api"] = func(in *kops.AccessSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AccessSpec) interface{} { return FlattenDataSourceAccessSpec(in) }(*in)
+	}(in.API)
+	out["authentication"] = func(in *kops.AuthenticationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AuthenticationSpec) interface{} { return FlattenDataSourceAuthenticationSpec(in) }(*in)
+	}(in.Authentication)
+	out["authorization"] = func(in *kops.AuthorizationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.AuthorizationSpec) interface{} { return FlattenDataSourceAuthorizationSpec(in) }(*in)
+	}(in.Authorization)
+	out["node_authorization"] = func(in *kops.NodeAuthorizationSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.NodeAuthorizationSpec) interface{} { return FlattenDataSourceNodeAuthorizationSpec(in) }(*in)
+	}(in.NodeAuthorization)
+	out["cloud_labels"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.CloudLabels)
+	out["hooks"] = func(in []kops.HookSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.HookSpec) interface{} { return FlattenDataSourceHookSpec(in) }(in))
+		}
+		return out
+	}(in.Hooks)
+	out["assets"] = func(in *kops.Assets) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.Assets) interface{} { return FlattenDataSourceAssets(in) }(*in)
+	}(in.Assets)
+	out["iam"] = func(in *kops.IAMSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.IAMSpec) interface{} { return FlattenDataSourceIAMSpec(in) }(*in)
+	}(in.IAM)
+	out["encryption_config"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EncryptionConfig)
+	out["disable_subnet_tags"] = func(in bool) interface{} { return in }(in.DisableSubnetTags)
+	out["use_host_certificates"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.UseHostCertificates)
+	out["sysctl_parameters"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.SysctlParameters)
+	out["rolling_update"] = func(in *kops.RollingUpdate) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.RollingUpdate) interface{} { return FlattenDataSourceRollingUpdate(in) }(*in)
+	}(in.RollingUpdate)
+	out["cluster_autoscaler"] = func(in *kops.ClusterAutoscalerConfig) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.ClusterAutoscalerConfig) interface{} { return FlattenDataSourceClusterAutoscalerConfig(in) }(*in)
+	}(in.ClusterAutoscaler)
+}
+
+func FlattenDataSourceClusterSpec(in kops.ClusterSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceClusterSpecInto(in, out)
 	return out
 }

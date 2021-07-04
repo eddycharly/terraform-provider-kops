@@ -11,9 +11,9 @@ var _ = Schema
 func DataSourceGossipConfigSecondary() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"protocol": Computed(Ptr(String())),
-			"listen":   Computed(Ptr(String())),
-			"secret":   Computed(Ptr(String())),
+			"protocol": Computed(Nullable(String())),
+			"listen":   Computed(Nullable(String())),
+			"secret":   Computed(Nullable(String())),
 		},
 	}
 }
@@ -47,5 +47,32 @@ func ExpandDataSourceGossipConfigSecondary(in map[string]interface{}) kops.Gossi
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceGossipConfigSecondaryInto(in kops.GossipConfigSecondary, out map[string]interface{}) {
+	out["protocol"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Protocol)
+	out["listen"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Listen)
+	out["secret"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.Secret)
+}
+
+func FlattenDataSourceGossipConfigSecondary(in kops.GossipConfigSecondary) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceGossipConfigSecondaryInto(in, out)
 	return out
 }

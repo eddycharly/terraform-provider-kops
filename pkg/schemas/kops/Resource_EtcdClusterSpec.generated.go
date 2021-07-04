@@ -15,17 +15,17 @@ func ResourceEtcdClusterSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name":                    Required(String()),
 			"provider":                Optional(String()),
-			"member":                  Required(List(Struct(ResourceEtcdMemberSpec()))),
+			"member":                  Required(List(ResourceEtcdMemberSpec())),
 			"enable_etcd_tls":         Optional(Bool()),
 			"enable_tls_auth":         Optional(Bool()),
 			"version":                 Optional(String()),
-			"leader_election_timeout": Optional(Ptr(Duration())),
-			"heartbeat_interval":      Optional(Ptr(Duration())),
+			"leader_election_timeout": Optional(Nullable(Duration())),
+			"heartbeat_interval":      Optional(Nullable(Duration())),
 			"image":                   Optional(String()),
-			"backups":                 Optional(Ptr(Struct(ResourceEtcdBackupSpec()))),
-			"manager":                 Optional(Ptr(Struct(ResourceEtcdManagerSpec()))),
-			"memory_request":          Optional(Ptr(Quantity())),
-			"cpu_request":             Optional(Ptr(Quantity())),
+			"backups":                 Optional(Struct(ResourceEtcdBackupSpec())),
+			"manager":                 Optional(Struct(ResourceEtcdManagerSpec())),
+			"memory_request":          Optional(Nullable(Quantity())),
+			"cpu_request":             Optional(Nullable(Quantity())),
 		},
 	}
 }
@@ -125,5 +125,63 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[string]interface{}) {
+	out["name"] = func(in string) interface{} { return string(in) }(in.Name)
+	out["provider"] = func(in kops.EtcdProviderType) interface{} { return string(in) }(in.Provider)
+	out["member"] = func(in []kops.EtcdMemberSpec) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.EtcdMemberSpec) interface{} { return FlattenResourceEtcdMemberSpec(in) }(in))
+		}
+		return out
+	}(in.Members)
+	out["enable_etcd_tls"] = func(in bool) interface{} { return in }(in.EnableEtcdTLS)
+	out["enable_tls_auth"] = func(in bool) interface{} { return in }(in.EnableTLSAuth)
+	out["version"] = func(in string) interface{} { return string(in) }(in.Version)
+	out["leader_election_timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.LeaderElectionTimeout)
+	out["heartbeat_interval"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.HeartbeatInterval)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["backups"] = func(in *kops.EtcdBackupSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.EtcdBackupSpec) interface{} { return FlattenResourceEtcdBackupSpec(in) }(*in)
+	}(in.Backups)
+	out["manager"] = func(in *kops.EtcdManagerSpec) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.EtcdManagerSpec) interface{} { return FlattenResourceEtcdManagerSpec(in) }(*in)
+	}(in.Manager)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPURequest)
+}
+
+func FlattenResourceEtcdClusterSpec(in kops.EtcdClusterSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceEtcdClusterSpecInto(in, out)
 	return out
 }

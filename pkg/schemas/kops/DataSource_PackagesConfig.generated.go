@@ -11,10 +11,10 @@ var _ = Schema
 func DataSourcePackagesConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"hash_amd64": Computed(Ptr(String())),
-			"hash_arm64": Computed(Ptr(String())),
-			"url_amd64":  Computed(Ptr(String())),
-			"url_arm64":  Computed(Ptr(String())),
+			"hash_amd64": Computed(Nullable(String())),
+			"hash_arm64": Computed(Nullable(String())),
+			"url_amd64":  Computed(Nullable(String())),
+			"url_arm64":  Computed(Nullable(String())),
 		},
 	}
 }
@@ -56,5 +56,38 @@ func ExpandDataSourcePackagesConfig(in map[string]interface{}) kops.PackagesConf
 			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourcePackagesConfigInto(in kops.PackagesConfig, out map[string]interface{}) {
+	out["hash_amd64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.HashAmd64)
+	out["hash_arm64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.HashArm64)
+	out["url_amd64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.UrlAmd64)
+	out["url_arm64"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.UrlArm64)
+}
+
+func FlattenDataSourcePackagesConfig(in kops.PackagesConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourcePackagesConfigInto(in, out)
 	return out
 }

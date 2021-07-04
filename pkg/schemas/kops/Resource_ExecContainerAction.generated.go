@@ -49,3 +49,30 @@ func ExpandResourceExecContainerAction(in map[string]interface{}) kops.ExecConta
 	}
 	return out
 }
+
+func FlattenResourceExecContainerActionInto(in kops.ExecContainerAction, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["command"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.Command)
+	out["environment"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.Environment)
+}
+
+func FlattenResourceExecContainerAction(in kops.ExecContainerAction) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceExecContainerActionInto(in, out)
+	return out
+}

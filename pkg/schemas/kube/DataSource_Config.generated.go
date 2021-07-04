@@ -38,3 +38,20 @@ func ExpandDataSourceConfig(in map[string]interface{}) kube.Config {
 	}
 	return out
 }
+
+func FlattenDataSourceConfigInto(in kube.Config, out map[string]interface{}) {
+	out["server"] = func(in string) interface{} { return string(in) }(in.Server)
+	out["context"] = func(in string) interface{} { return string(in) }(in.Context)
+	out["namespace"] = func(in string) interface{} { return string(in) }(in.Namespace)
+	out["kube_user"] = func(in string) interface{} { return string(in) }(in.KubeUser)
+	out["kube_password"] = func(in string) interface{} { return string(in) }(in.KubePassword)
+	out["ca_cert"] = func(in string) interface{} { return string(in) }(in.CaCert)
+	out["client_cert"] = func(in string) interface{} { return string(in) }(in.ClientCert)
+	out["client_key"] = func(in string) interface{} { return string(in) }(in.ClientKey)
+}
+
+func FlattenDataSourceConfig(in kube.Config) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceConfigInto(in, out)
+	return out
+}

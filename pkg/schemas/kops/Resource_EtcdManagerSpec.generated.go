@@ -12,9 +12,9 @@ func ResourceEtcdManagerSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":                   Optional(String()),
-			"env":                     Optional(List(Struct(ResourceEnvVar()))),
-			"discovery_poll_interval": Optional(Ptr(String())),
-			"log_level":               Optional(Ptr(Int())),
+			"env":                     Optional(List(ResourceEnvVar())),
+			"discovery_poll_interval": Optional(Nullable(String())),
+			"log_level":               Optional(Nullable(Int())),
 		},
 	}
 }
@@ -57,5 +57,34 @@ func ExpandResourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSp
 			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceEtcdManagerSpecInto(in kops.EtcdManagerSpec, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["env"] = func(in []kops.EnvVar) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in kops.EnvVar) interface{} { return FlattenResourceEnvVar(in) }(in))
+		}
+		return out
+	}(in.Env)
+	out["discovery_poll_interval"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.DiscoveryPollInterval)
+	out["log_level"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.LogLevel)
+}
+
+func FlattenResourceEtcdManagerSpec(in kops.EtcdManagerSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceEtcdManagerSpecInto(in, out)
 	return out
 }

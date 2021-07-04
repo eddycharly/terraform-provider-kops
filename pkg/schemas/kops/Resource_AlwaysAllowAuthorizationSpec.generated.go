@@ -21,3 +21,12 @@ func ExpandResourceAlwaysAllowAuthorizationSpec(in map[string]interface{}) kops.
 	out := kops.AlwaysAllowAuthorizationSpec{}
 	return out
 }
+
+func FlattenResourceAlwaysAllowAuthorizationSpecInto(in kops.AlwaysAllowAuthorizationSpec, out map[string]interface{}) {
+}
+
+func FlattenResourceAlwaysAllowAuthorizationSpec(in kops.AlwaysAllowAuthorizationSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAlwaysAllowAuthorizationSpecInto(in, out)
+	return out
+}

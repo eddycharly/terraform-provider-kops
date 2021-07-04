@@ -35,3 +35,22 @@ func ExpandResourceLyftVPCNetworkingSpec(in map[string]interface{}) kops.LyftVPC
 	}
 	return out
 }
+
+func FlattenResourceLyftVPCNetworkingSpecInto(in kops.LyftVPCNetworkingSpec, out map[string]interface{}) {
+	out["subnet_tags"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.SubnetTags)
+}
+
+func FlattenResourceLyftVPCNetworkingSpec(in kops.LyftVPCNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceLyftVPCNetworkingSpecInto(in, out)
+	return out
+}

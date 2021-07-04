@@ -42,3 +42,17 @@ func ExpandResourceAzureConfiguration(in map[string]interface{}) kops.AzureConfi
 	}
 	return out
 }
+
+func FlattenResourceAzureConfigurationInto(in kops.AzureConfiguration, out map[string]interface{}) {
+	out["subscription_id"] = func(in string) interface{} { return string(in) }(in.SubscriptionID)
+	out["tenant_id"] = func(in string) interface{} { return string(in) }(in.TenantID)
+	out["resource_group_name"] = func(in string) interface{} { return string(in) }(in.ResourceGroupName)
+	out["route_table_name"] = func(in string) interface{} { return string(in) }(in.RouteTableName)
+	out["admin_user"] = func(in string) interface{} { return string(in) }(in.AdminUser)
+}
+
+func FlattenResourceAzureConfiguration(in kops.AzureConfiguration) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceAzureConfigurationInto(in, out)
+	return out
+}

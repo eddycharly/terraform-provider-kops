@@ -26,3 +26,13 @@ func ExpandResourceDNSSpec(in map[string]interface{}) kops.DNSSpec {
 	}
 	return out
 }
+
+func FlattenResourceDNSSpecInto(in kops.DNSSpec, out map[string]interface{}) {
+	out["type"] = func(in kops.DNSType) interface{} { return string(in) }(in.Type)
+}
+
+func FlattenResourceDNSSpec(in kops.DNSSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceDNSSpecInto(in, out)
+	return out
+}

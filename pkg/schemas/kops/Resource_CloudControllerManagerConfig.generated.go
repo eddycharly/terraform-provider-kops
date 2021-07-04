@@ -17,11 +17,11 @@ func ResourceCloudControllerManagerConfig() *schema.Resource {
 			"cloud_provider":                  Optional(String()),
 			"cluster_name":                    Optional(String()),
 			"cluster_cidr":                    Optional(String()),
-			"allocate_node_cidrs":             Optional(Ptr(Bool())),
-			"configure_cloud_routes":          Optional(Ptr(Bool())),
-			"cidr_allocator_type":             Optional(Ptr(String())),
-			"leader_election":                 Optional(Ptr(Struct(ResourceLeaderElectionConfiguration()))),
-			"use_service_account_credentials": Optional(Ptr(Bool())),
+			"allocate_node_cidrs":             Optional(Nullable(Bool())),
+			"configure_cloud_routes":          Optional(Nullable(Bool())),
+			"cidr_allocator_type":             Optional(Nullable(String())),
+			"leader_election":                 Optional(Struct(ResourceLeaderElectionConfiguration())),
+			"use_service_account_credentials": Optional(Nullable(Bool())),
 		},
 	}
 }
@@ -94,5 +94,52 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceCloudControllerManagerConfigInto(in kops.CloudControllerManagerConfig, out map[string]interface{}) {
+	out["master"] = func(in string) interface{} { return string(in) }(in.Master)
+	out["log_level"] = func(in int32) interface{} { return int(in) }(in.LogLevel)
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["cloud_provider"] = func(in string) interface{} { return string(in) }(in.CloudProvider)
+	out["cluster_name"] = func(in string) interface{} { return string(in) }(in.ClusterName)
+	out["cluster_cidr"] = func(in string) interface{} { return string(in) }(in.ClusterCIDR)
+	out["allocate_node_cidrs"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AllocateNodeCIDRs)
+	out["configure_cloud_routes"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ConfigureCloudRoutes)
+	out["cidr_allocator_type"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.CIDRAllocatorType)
+	out["leader_election"] = func(in *kops.LeaderElectionConfiguration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return func(in kops.LeaderElectionConfiguration) interface{} {
+			return FlattenResourceLeaderElectionConfiguration(in)
+		}(*in)
+	}(in.LeaderElection)
+	out["use_service_account_credentials"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.UseServiceAccountCredentials)
+}
+
+func FlattenResourceCloudControllerManagerConfig(in kops.CloudControllerManagerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceCloudControllerManagerConfigInto(in, out)
 	return out
 }

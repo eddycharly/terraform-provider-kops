@@ -12,11 +12,11 @@ var _ = Schema
 func ResourceNodeLocalDNSConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":             Optional(Ptr(Bool())),
+			"enabled":             Optional(Nullable(Bool())),
 			"local_ip":            Optional(String()),
-			"forward_to_kube_dns": Optional(Ptr(Bool())),
-			"memory_request":      Optional(Ptr(Quantity())),
-			"cpu_request":         Optional(Ptr(Quantity())),
+			"forward_to_kube_dns": Optional(Nullable(Bool())),
+			"memory_request":      Optional(Nullable(Quantity())),
+			"cpu_request":         Optional(Nullable(Quantity())),
 		},
 	}
 }
@@ -61,5 +61,39 @@ func ExpandResourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalD
 			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenResourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map[string]interface{}) {
+	out["enabled"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.Enabled)
+	out["local_ip"] = func(in string) interface{} { return string(in) }(in.LocalIP)
+	out["forward_to_kube_dns"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.ForwardToKubeDNS)
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.MemoryRequest)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.CPURequest)
+}
+
+func FlattenResourceNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceNodeLocalDNSConfigInto(in, out)
 	return out
 }

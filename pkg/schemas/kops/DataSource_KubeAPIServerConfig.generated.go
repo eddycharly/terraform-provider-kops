@@ -14,7 +14,7 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":                                        Computed(String()),
-			"disable_basic_auth":                           Computed(Ptr(Bool())),
+			"disable_basic_auth":                           Computed(Nullable(Bool())),
 			"log_level":                                    Computed(Int()),
 			"cloud_provider":                               Computed(String()),
 			"secure_port":                                  Computed(Int()),
@@ -22,8 +22,8 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"address":                                      Computed(String()),
 			"bind_address":                                 Computed(String()),
 			"insecure_bind_address":                        Computed(String()),
-			"enable_bootstrap_auth_token":                  Computed(Ptr(Bool())),
-			"enable_aggregator_routing":                    Computed(Ptr(Bool())),
+			"enable_bootstrap_auth_token":                  Computed(Nullable(Bool())),
+			"enable_aggregator_routing":                    Computed(Nullable(Bool())),
 			"admission_control":                            Computed(List(String())),
 			"append_admission_plugins":                     Computed(List(String())),
 			"enable_admission_plugins":                     Computed(List(String())),
@@ -43,49 +43,49 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"tls_cipher_suites":                            Computed(List(String())),
 			"tls_min_version":                              Computed(String()),
 			"token_auth_file":                              Computed(String()),
-			"allow_privileged":                             Computed(Ptr(Bool())),
-			"api_server_count":                             Computed(Ptr(Int())),
+			"allow_privileged":                             Computed(Nullable(Bool())),
+			"api_server_count":                             Computed(Nullable(Int())),
 			"runtime_config":                               Computed(Map(String())),
 			"kubelet_client_certificate":                   Computed(String()),
 			"kubelet_certificate_authority":                Computed(String()),
 			"kubelet_client_key":                           Computed(String()),
-			"anonymous_auth":                               Computed(Ptr(Bool())),
+			"anonymous_auth":                               Computed(Nullable(Bool())),
 			"kubelet_preferred_address_types":              Computed(List(String())),
-			"storage_backend":                              Computed(Ptr(String())),
-			"oidc_username_claim":                          Computed(Ptr(String())),
-			"oidc_username_prefix":                         Computed(Ptr(String())),
-			"oidc_groups_claim":                            Computed(Ptr(String())),
-			"oidc_groups_prefix":                           Computed(Ptr(String())),
-			"oidc_issuer_url":                              Computed(Ptr(String())),
-			"oidc_client_id":                               Computed(Ptr(String())),
+			"storage_backend":                              Computed(Nullable(String())),
+			"oidc_username_claim":                          Computed(Nullable(String())),
+			"oidc_username_prefix":                         Computed(Nullable(String())),
+			"oidc_groups_claim":                            Computed(Nullable(String())),
+			"oidc_groups_prefix":                           Computed(Nullable(String())),
+			"oidc_issuer_url":                              Computed(Nullable(String())),
+			"oidc_client_id":                               Computed(Nullable(String())),
 			"oidc_required_claim":                          Computed(List(String())),
-			"oidcca_file":                                  Computed(Ptr(String())),
-			"proxy_client_cert_file":                       Computed(Ptr(String())),
-			"proxy_client_key_file":                        Computed(Ptr(String())),
-			"audit_log_format":                             Computed(Ptr(String())),
-			"audit_log_path":                               Computed(Ptr(String())),
-			"audit_log_max_age":                            Computed(Ptr(Int())),
-			"audit_log_max_backups":                        Computed(Ptr(Int())),
-			"audit_log_max_size":                           Computed(Ptr(Int())),
+			"oidcca_file":                                  Computed(Nullable(String())),
+			"proxy_client_cert_file":                       Computed(Nullable(String())),
+			"proxy_client_key_file":                        Computed(Nullable(String())),
+			"audit_log_format":                             Computed(Nullable(String())),
+			"audit_log_path":                               Computed(Nullable(String())),
+			"audit_log_max_age":                            Computed(Nullable(Int())),
+			"audit_log_max_backups":                        Computed(Nullable(Int())),
+			"audit_log_max_size":                           Computed(Nullable(Int())),
 			"audit_policy_file":                            Computed(String()),
-			"audit_webhook_batch_buffer_size":              Computed(Ptr(Int())),
-			"audit_webhook_batch_max_size":                 Computed(Ptr(Int())),
-			"audit_webhook_batch_max_wait":                 Computed(Ptr(Duration())),
-			"audit_webhook_batch_throttle_burst":           Computed(Ptr(Int())),
-			"audit_webhook_batch_throttle_enable":          Computed(Ptr(Bool())),
-			"audit_webhook_batch_throttle_qps":             Computed(Ptr(Quantity())),
+			"audit_webhook_batch_buffer_size":              Computed(Nullable(Int())),
+			"audit_webhook_batch_max_size":                 Computed(Nullable(Int())),
+			"audit_webhook_batch_max_wait":                 Computed(Nullable(Duration())),
+			"audit_webhook_batch_throttle_burst":           Computed(Nullable(Int())),
+			"audit_webhook_batch_throttle_enable":          Computed(Nullable(Bool())),
+			"audit_webhook_batch_throttle_qps":             Computed(Nullable(Quantity())),
 			"audit_webhook_config_file":                    Computed(String()),
-			"audit_webhook_initial_backoff":                Computed(Ptr(Duration())),
+			"audit_webhook_initial_backoff":                Computed(Nullable(Duration())),
 			"audit_webhook_mode":                           Computed(String()),
-			"authentication_token_webhook_config_file":     Computed(Ptr(String())),
-			"authentication_token_webhook_cache_ttl":       Computed(Ptr(Duration())),
-			"authorization_mode":                           Computed(Ptr(String())),
-			"authorization_webhook_config_file":            Computed(Ptr(String())),
-			"authorization_webhook_cache_authorized_ttl":   Computed(Ptr(Duration())),
-			"authorization_webhook_cache_unauthorized_ttl": Computed(Ptr(Duration())),
-			"authorization_rbac_super_user":                Computed(Ptr(String())),
-			"encryption_provider_config":                   Computed(Ptr(String())),
-			"experimental_encryption_provider_config":      Computed(Ptr(String())),
+			"authentication_token_webhook_config_file":     Computed(Nullable(String())),
+			"authentication_token_webhook_cache_ttl":       Computed(Nullable(Duration())),
+			"authorization_mode":                           Computed(Nullable(String())),
+			"authorization_webhook_config_file":            Computed(Nullable(String())),
+			"authorization_webhook_cache_authorized_ttl":   Computed(Nullable(Duration())),
+			"authorization_webhook_cache_unauthorized_ttl": Computed(Nullable(Duration())),
+			"authorization_rbac_super_user":                Computed(Nullable(String())),
+			"encryption_provider_config":                   Computed(Nullable(String())),
+			"experimental_encryption_provider_config":      Computed(Nullable(String())),
 			"requestheader_username_headers":               Computed(List(String())),
 			"requestheader_group_headers":                  Computed(List(String())),
 			"requestheader_extra_header_prefixes":          Computed(List(String())),
@@ -94,26 +94,26 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"feature_gates":                                Computed(Map(String())),
 			"max_requests_inflight":                        Computed(Int()),
 			"max_mutating_requests_inflight":               Computed(Int()),
-			"http2_max_streams_per_connection":             Computed(Ptr(Int())),
-			"etcd_quorum_read":                             Computed(Ptr(Bool())),
-			"request_timeout":                              Computed(Ptr(Duration())),
-			"min_request_timeout":                          Computed(Ptr(Int())),
+			"http2_max_streams_per_connection":             Computed(Nullable(Int())),
+			"etcd_quorum_read":                             Computed(Nullable(Bool())),
+			"request_timeout":                              Computed(Nullable(Duration())),
+			"min_request_timeout":                          Computed(Nullable(Int())),
 			"target_ram_mb":                                Computed(Int()),
 			"service_account_key_file":                     Computed(List(String())),
-			"service_account_signing_key_file":             Computed(Ptr(String())),
-			"service_account_issuer":                       Computed(Ptr(String())),
-			"service_account_jwksuri":                      Computed(Ptr(String())),
+			"service_account_signing_key_file":             Computed(Nullable(String())),
+			"service_account_issuer":                       Computed(Nullable(String())),
+			"service_account_jwksuri":                      Computed(Nullable(String())),
 			"api_audiences":                                Computed(List(String())),
 			"cpu_request":                                  Computed(String()),
 			"cpu_limit":                                    Computed(String()),
 			"memory_request":                               Computed(String()),
 			"memory_limit":                                 Computed(String()),
-			"event_ttl":                                    Computed(Ptr(Duration())),
-			"audit_dynamic_configuration":                  Computed(Ptr(Bool())),
-			"enable_profiling":                             Computed(Ptr(Bool())),
+			"event_ttl":                                    Computed(Nullable(Duration())),
+			"audit_dynamic_configuration":                  Computed(Nullable(Bool())),
+			"enable_profiling":                             Computed(Nullable(Bool())),
 			"cors_allowed_origins":                         Computed(List(String())),
-			"default_not_ready_toleration_seconds":         Computed(Ptr(Int())),
-			"default_unreachable_toleration_seconds":       Computed(Ptr(Int())),
+			"default_not_ready_toleration_seconds":         Computed(Nullable(Int())),
+			"default_unreachable_toleration_seconds":       Computed(Nullable(Int())),
 		},
 	}
 }
@@ -785,5 +785,474 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 			return func(in int64) *int64 { return &in }(func(in interface{}) int64 { return int64(in.(int)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map[string]interface{}) {
+	out["image"] = func(in string) interface{} { return string(in) }(in.Image)
+	out["disable_basic_auth"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.DisableBasicAuth)
+	out["log_level"] = func(in int32) interface{} { return int(in) }(in.LogLevel)
+	out["cloud_provider"] = func(in string) interface{} { return string(in) }(in.CloudProvider)
+	out["secure_port"] = func(in int32) interface{} { return int(in) }(in.SecurePort)
+	out["insecure_port"] = func(in int32) interface{} { return int(in) }(in.InsecurePort)
+	out["address"] = func(in string) interface{} { return string(in) }(in.Address)
+	out["bind_address"] = func(in string) interface{} { return string(in) }(in.BindAddress)
+	out["insecure_bind_address"] = func(in string) interface{} { return string(in) }(in.InsecureBindAddress)
+	out["enable_bootstrap_auth_token"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableBootstrapAuthToken)
+	out["enable_aggregator_routing"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableAggregatorRouting)
+	out["admission_control"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AdmissionControl)
+	out["append_admission_plugins"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.AppendAdmissionPlugins)
+	out["enable_admission_plugins"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.EnableAdmissionPlugins)
+	out["disable_admission_plugins"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.DisableAdmissionPlugins)
+	out["admission_control_config_file"] = func(in string) interface{} { return string(in) }(in.AdmissionControlConfigFile)
+	out["service_cluster_ip_range"] = func(in string) interface{} { return string(in) }(in.ServiceClusterIPRange)
+	out["service_node_port_range"] = func(in string) interface{} { return string(in) }(in.ServiceNodePortRange)
+	out["etcd_servers"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.EtcdServers)
+	out["etcd_servers_overrides"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.EtcdServersOverrides)
+	out["etcd_ca_file"] = func(in string) interface{} { return string(in) }(in.EtcdCAFile)
+	out["etcd_cert_file"] = func(in string) interface{} { return string(in) }(in.EtcdCertFile)
+	out["etcd_key_file"] = func(in string) interface{} { return string(in) }(in.EtcdKeyFile)
+	out["basic_auth_file"] = func(in string) interface{} { return string(in) }(in.BasicAuthFile)
+	out["client_ca_file"] = func(in string) interface{} { return string(in) }(in.ClientCAFile)
+	out["tls_cert_file"] = func(in string) interface{} { return string(in) }(in.TLSCertFile)
+	out["tls_private_key_file"] = func(in string) interface{} { return string(in) }(in.TLSPrivateKeyFile)
+	out["tls_cipher_suites"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.TLSCipherSuites)
+	out["tls_min_version"] = func(in string) interface{} { return string(in) }(in.TLSMinVersion)
+	out["token_auth_file"] = func(in string) interface{} { return string(in) }(in.TokenAuthFile)
+	out["allow_privileged"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AllowPrivileged)
+	out["api_server_count"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.APIServerCount)
+	out["runtime_config"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.RuntimeConfig)
+	out["kubelet_client_certificate"] = func(in string) interface{} { return string(in) }(in.KubeletClientCertificate)
+	out["kubelet_certificate_authority"] = func(in string) interface{} { return string(in) }(in.KubeletCertificateAuthority)
+	out["kubelet_client_key"] = func(in string) interface{} { return string(in) }(in.KubeletClientKey)
+	out["anonymous_auth"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AnonymousAuth)
+	out["kubelet_preferred_address_types"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.KubeletPreferredAddressTypes)
+	out["storage_backend"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.StorageBackend)
+	out["oidc_username_claim"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCUsernameClaim)
+	out["oidc_username_prefix"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCUsernamePrefix)
+	out["oidc_groups_claim"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCGroupsClaim)
+	out["oidc_groups_prefix"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCGroupsPrefix)
+	out["oidc_issuer_url"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCIssuerURL)
+	out["oidc_client_id"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCClientID)
+	out["oidc_required_claim"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.OIDCRequiredClaim)
+	out["oidcca_file"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.OIDCCAFile)
+	out["proxy_client_cert_file"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ProxyClientCertFile)
+	out["proxy_client_key_file"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ProxyClientKeyFile)
+	out["audit_log_format"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AuditLogFormat)
+	out["audit_log_path"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AuditLogPath)
+	out["audit_log_max_age"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.AuditLogMaxAge)
+	out["audit_log_max_backups"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.AuditLogMaxBackups)
+	out["audit_log_max_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.AuditLogMaxSize)
+	out["audit_policy_file"] = func(in string) interface{} { return string(in) }(in.AuditPolicyFile)
+	out["audit_webhook_batch_buffer_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.AuditWebhookBatchBufferSize)
+	out["audit_webhook_batch_max_size"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.AuditWebhookBatchMaxSize)
+	out["audit_webhook_batch_max_wait"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AuditWebhookBatchMaxWait)
+	out["audit_webhook_batch_throttle_burst"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.AuditWebhookBatchThrottleBurst)
+	out["audit_webhook_batch_throttle_enable"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AuditWebhookBatchThrottleEnable)
+	out["audit_webhook_batch_throttle_qps"] = func(in *resource.Quantity) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in resource.Quantity) interface{} { return FlattenQuantity(in) }(*in)}
+	}(in.AuditWebhookBatchThrottleQps)
+	out["audit_webhook_config_file"] = func(in string) interface{} { return string(in) }(in.AuditWebhookConfigFile)
+	out["audit_webhook_initial_backoff"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AuditWebhookInitialBackoff)
+	out["audit_webhook_mode"] = func(in string) interface{} { return string(in) }(in.AuditWebhookMode)
+	out["authentication_token_webhook_config_file"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AuthenticationTokenWebhookConfigFile)
+	out["authentication_token_webhook_cache_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AuthenticationTokenWebhookCacheTTL)
+	out["authorization_mode"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AuthorizationMode)
+	out["authorization_webhook_config_file"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AuthorizationWebhookConfigFile)
+	out["authorization_webhook_cache_authorized_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AuthorizationWebhookCacheAuthorizedTTL)
+	out["authorization_webhook_cache_unauthorized_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.AuthorizationWebhookCacheUnauthorizedTTL)
+	out["authorization_rbac_super_user"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.AuthorizationRBACSuperUser)
+	out["encryption_provider_config"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.EncryptionProviderConfig)
+	out["experimental_encryption_provider_config"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ExperimentalEncryptionProviderConfig)
+	out["requestheader_username_headers"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.RequestheaderUsernameHeaders)
+	out["requestheader_group_headers"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.RequestheaderGroupHeaders)
+	out["requestheader_extra_header_prefixes"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.RequestheaderExtraHeaderPrefixes)
+	out["requestheader_client_ca_file"] = func(in string) interface{} { return string(in) }(in.RequestheaderClientCAFile)
+	out["requestheader_allowed_names"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.RequestheaderAllowedNames)
+	out["feature_gates"] = func(in map[string]string) interface{} {
+		if in == nil {
+			return nil
+		}
+		out := map[string]interface{}{}
+		for key, in := range in {
+			out[key] = func(in string) interface{} { return string(in) }(in)
+		}
+		return out
+	}(in.FeatureGates)
+	out["max_requests_inflight"] = func(in int32) interface{} { return int(in) }(in.MaxRequestsInflight)
+	out["max_mutating_requests_inflight"] = func(in int32) interface{} { return int(in) }(in.MaxMutatingRequestsInflight)
+	out["http2_max_streams_per_connection"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.HTTP2MaxStreamsPerConnection)
+	out["etcd_quorum_read"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EtcdQuorumRead)
+	out["request_timeout"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.RequestTimeout)
+	out["min_request_timeout"] = func(in *int32) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int32) interface{} { return int(in) }(*in)}
+	}(in.MinRequestTimeout)
+	out["target_ram_mb"] = func(in int32) interface{} { return int(in) }(in.TargetRamMb)
+	out["service_account_key_file"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.ServiceAccountKeyFile)
+	out["service_account_signing_key_file"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ServiceAccountSigningKeyFile)
+	out["service_account_issuer"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ServiceAccountIssuer)
+	out["service_account_jwksuri"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.ServiceAccountJWKSURI)
+	out["api_audiences"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.APIAudiences)
+	out["cpu_request"] = func(in string) interface{} { return string(in) }(in.CPURequest)
+	out["cpu_limit"] = func(in string) interface{} { return string(in) }(in.CPULimit)
+	out["memory_request"] = func(in string) interface{} { return string(in) }(in.MemoryRequest)
+	out["memory_limit"] = func(in string) interface{} { return string(in) }(in.MemoryLimit)
+	out["event_ttl"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.EventTTL)
+	out["audit_dynamic_configuration"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.AuditDynamicConfiguration)
+	out["enable_profiling"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.EnableProfiling)
+	out["cors_allowed_origins"] = func(in []string) interface{} {
+		var out []interface{}
+		for _, in := range in {
+			out = append(out, func(in string) interface{} { return string(in) }(in))
+		}
+		return out
+	}(in.CorsAllowedOrigins)
+	out["default_not_ready_toleration_seconds"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.DefaultNotReadyTolerationSeconds)
+	out["default_unreachable_toleration_seconds"] = func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in int64) interface{} { return int(in) }(*in)}
+	}(in.DefaultUnreachableTolerationSeconds)
+}
+
+func FlattenDataSourceKubeAPIServerConfig(in kops.KubeAPIServerConfig) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceKubeAPIServerConfigInto(in, out)
 	return out
 }

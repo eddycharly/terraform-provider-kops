@@ -30,3 +30,14 @@ func ExpandResourceApplyOptions(in map[string]interface{}) resources.ApplyOption
 	}
 	return out
 }
+
+func FlattenResourceApplyOptionsInto(in resources.ApplyOptions, out map[string]interface{}) {
+	out["skip"] = func(in bool) interface{} { return in }(in.Skip)
+	out["allow_kops_downgrade"] = func(in bool) interface{} { return in }(in.AllowKopsDowngrade)
+}
+
+func FlattenResourceApplyOptions(in resources.ApplyOptions) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceApplyOptionsInto(in, out)
+	return out
+}

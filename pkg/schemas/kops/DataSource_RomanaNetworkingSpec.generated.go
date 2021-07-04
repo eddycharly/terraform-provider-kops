@@ -30,3 +30,14 @@ func ExpandDataSourceRomanaNetworkingSpec(in map[string]interface{}) kops.Romana
 	}
 	return out
 }
+
+func FlattenDataSourceRomanaNetworkingSpecInto(in kops.RomanaNetworkingSpec, out map[string]interface{}) {
+	out["daemon_service_ip"] = func(in string) interface{} { return string(in) }(in.DaemonServiceIP)
+	out["etcd_service_ip"] = func(in string) interface{} { return string(in) }(in.EtcdServiceIP)
+}
+
+func FlattenDataSourceRomanaNetworkingSpec(in kops.RomanaNetworkingSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceRomanaNetworkingSpecInto(in, out)
+	return out
+}

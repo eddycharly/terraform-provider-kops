@@ -12,13 +12,13 @@ var _ = Schema
 func DataSourceLeaderElectionConfiguration() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"leader_elect":                         Computed(Ptr(Bool())),
-			"leader_elect_lease_duration":          Computed(Ptr(Duration())),
-			"leader_elect_renew_deadline_duration": Computed(Ptr(Duration())),
-			"leader_elect_resource_lock":           Computed(Ptr(String())),
-			"leader_elect_resource_name":           Computed(Ptr(String())),
-			"leader_elect_resource_namespace":      Computed(Ptr(String())),
-			"leader_elect_retry_period":            Computed(Ptr(Duration())),
+			"leader_elect":                         Computed(Nullable(Bool())),
+			"leader_elect_lease_duration":          Computed(Nullable(Duration())),
+			"leader_elect_renew_deadline_duration": Computed(Nullable(Duration())),
+			"leader_elect_resource_lock":           Computed(Nullable(String())),
+			"leader_elect_resource_name":           Computed(Nullable(String())),
+			"leader_elect_resource_namespace":      Computed(Nullable(String())),
+			"leader_elect_retry_period":            Computed(Nullable(Duration())),
 		},
 	}
 }
@@ -84,5 +84,56 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
 		}(in)
 	}
+	return out
+}
+
+func FlattenDataSourceLeaderElectionConfigurationInto(in kops.LeaderElectionConfiguration, out map[string]interface{}) {
+	out["leader_elect"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in bool) interface{} { return in }(*in)}
+	}(in.LeaderElect)
+	out["leader_elect_lease_duration"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.LeaderElectLeaseDuration)
+	out["leader_elect_renew_deadline_duration"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.LeaderElectRenewDeadlineDuration)
+	out["leader_elect_resource_lock"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.LeaderElectResourceLock)
+	out["leader_elect_resource_name"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.LeaderElectResourceName)
+	out["leader_elect_resource_namespace"] = func(in *string) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in string) interface{} { return string(in) }(*in)}
+	}(in.LeaderElectResourceNamespace)
+	out["leader_elect_retry_period"] = func(in *v1.Duration) interface{} {
+		if in == nil {
+			return nil
+		}
+		return map[string]interface{}{"value": func(in v1.Duration) interface{} { return FlattenDuration(in) }(*in)}
+	}(in.LeaderElectRetryPeriod)
+}
+
+func FlattenDataSourceLeaderElectionConfiguration(in kops.LeaderElectionConfiguration) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenDataSourceLeaderElectionConfigurationInto(in, out)
 	return out
 }
