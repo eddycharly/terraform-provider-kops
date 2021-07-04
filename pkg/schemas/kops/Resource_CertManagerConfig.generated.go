@@ -29,7 +29,10 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["managed"]; ok && in != nil {
@@ -37,7 +40,10 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["image"]; ok && in != nil {
@@ -45,7 +51,10 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["default_issuer"]; ok && in != nil {
@@ -53,7 +62,10 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

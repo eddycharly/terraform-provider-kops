@@ -42,7 +42,10 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 			if in == nil {
 				return nil
 			}
-			return func(in time.Duration) *time.Duration { return &in }(func(in interface{}) time.Duration { return time.Duration(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in time.Duration) *time.Duration { return &in }(func(in interface{}) time.Duration { return time.Duration(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["internal"]; ok && in != nil {

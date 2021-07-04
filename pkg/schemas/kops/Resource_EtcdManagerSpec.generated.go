@@ -31,12 +31,7 @@ func ExpandResourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSp
 		out.Env = func(in interface{}) []kops.EnvVar {
 			var out []kops.EnvVar
 			for _, in := range in.([]interface{}) {
-				out = append(out, func(in interface{}) kops.EnvVar {
-					if in == nil {
-						return kops.EnvVar{}
-					}
-					return ExpandResourceEnvVar(in.(map[string]interface{}))
-				}(in))
+				out = append(out, func(in interface{}) kops.EnvVar { return ExpandResourceEnvVar(in.(map[string]interface{})) }(in))
 			}
 			return out
 		}(in)
@@ -46,7 +41,10 @@ func ExpandResourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSp
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["log_level"]; ok && in != nil {
@@ -54,7 +52,10 @@ func ExpandResourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSp
 			if in == nil {
 				return nil
 			}
-			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

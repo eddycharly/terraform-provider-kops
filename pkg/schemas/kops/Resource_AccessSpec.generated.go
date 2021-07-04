@@ -27,12 +27,12 @@ func ExpandResourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.DNSAccessSpec) *kops.DNSAccessSpec { return &in }(func(in interface{}) kops.DNSAccessSpec {
-				if in == nil {
-					return kops.DNSAccessSpec{}
-				}
-				return ExpandResourceDNSAccessSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.DNSAccessSpec) *kops.DNSAccessSpec { return &in }(func(in interface{}) kops.DNSAccessSpec {
+					return ExpandResourceDNSAccessSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["load_balancer"]; ok && in != nil {
@@ -40,12 +40,12 @@ func ExpandResourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec { return &in }(func(in interface{}) kops.LoadBalancerAccessSpec {
-				if in == nil {
-					return kops.LoadBalancerAccessSpec{}
-				}
-				return ExpandResourceLoadBalancerAccessSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec { return &in }(func(in interface{}) kops.LoadBalancerAccessSpec {
+					return ExpandResourceLoadBalancerAccessSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

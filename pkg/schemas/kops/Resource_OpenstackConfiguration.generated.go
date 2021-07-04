@@ -31,12 +31,12 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 			if in == nil {
 				return nil
 			}
-			return func(in kops.OpenstackLoadbalancerConfig) *kops.OpenstackLoadbalancerConfig { return &in }(func(in interface{}) kops.OpenstackLoadbalancerConfig {
-				if in == nil {
-					return kops.OpenstackLoadbalancerConfig{}
-				}
-				return ExpandResourceOpenstackLoadbalancerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.OpenstackLoadbalancerConfig) *kops.OpenstackLoadbalancerConfig { return &in }(func(in interface{}) kops.OpenstackLoadbalancerConfig {
+					return ExpandResourceOpenstackLoadbalancerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["monitor"]; ok && in != nil {
@@ -44,12 +44,12 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 			if in == nil {
 				return nil
 			}
-			return func(in kops.OpenstackMonitor) *kops.OpenstackMonitor { return &in }(func(in interface{}) kops.OpenstackMonitor {
-				if in == nil {
-					return kops.OpenstackMonitor{}
-				}
-				return ExpandResourceOpenstackMonitor(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.OpenstackMonitor) *kops.OpenstackMonitor { return &in }(func(in interface{}) kops.OpenstackMonitor {
+					return ExpandResourceOpenstackMonitor(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["router"]; ok && in != nil {
@@ -57,12 +57,12 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 			if in == nil {
 				return nil
 			}
-			return func(in kops.OpenstackRouter) *kops.OpenstackRouter { return &in }(func(in interface{}) kops.OpenstackRouter {
-				if in == nil {
-					return kops.OpenstackRouter{}
-				}
-				return ExpandResourceOpenstackRouter(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.OpenstackRouter) *kops.OpenstackRouter { return &in }(func(in interface{}) kops.OpenstackRouter {
+					return ExpandResourceOpenstackRouter(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["block_storage"]; ok && in != nil {
@@ -70,12 +70,12 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 			if in == nil {
 				return nil
 			}
-			return func(in kops.OpenstackBlockStorageConfig) *kops.OpenstackBlockStorageConfig { return &in }(func(in interface{}) kops.OpenstackBlockStorageConfig {
-				if in == nil {
-					return kops.OpenstackBlockStorageConfig{}
-				}
-				return ExpandResourceOpenstackBlockStorageConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.OpenstackBlockStorageConfig) *kops.OpenstackBlockStorageConfig { return &in }(func(in interface{}) kops.OpenstackBlockStorageConfig {
+					return ExpandResourceOpenstackBlockStorageConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["insecure_skip_verify"]; ok && in != nil {
@@ -83,7 +83,10 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["network"]; ok && in != nil {
@@ -91,12 +94,12 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 			if in == nil {
 				return nil
 			}
-			return func(in kops.OpenstackNetwork) *kops.OpenstackNetwork { return &in }(func(in interface{}) kops.OpenstackNetwork {
-				if in == nil {
-					return kops.OpenstackNetwork{}
-				}
-				return ExpandResourceOpenstackNetwork(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.OpenstackNetwork) *kops.OpenstackNetwork { return &in }(func(in interface{}) kops.OpenstackNetwork {
+					return ExpandResourceOpenstackNetwork(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

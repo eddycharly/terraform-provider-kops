@@ -26,7 +26,10 @@ func ExpandDataSourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSp
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

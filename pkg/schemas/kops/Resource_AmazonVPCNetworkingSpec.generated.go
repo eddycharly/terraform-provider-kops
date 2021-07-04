@@ -33,12 +33,7 @@ func ExpandResourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Amazo
 		out.Env = func(in interface{}) []kops.EnvVar {
 			var out []kops.EnvVar
 			for _, in := range in.([]interface{}) {
-				out = append(out, func(in interface{}) kops.EnvVar {
-					if in == nil {
-						return kops.EnvVar{}
-					}
-					return ExpandResourceEnvVar(in.(map[string]interface{}))
-				}(in))
+				out = append(out, func(in interface{}) kops.EnvVar { return ExpandResourceEnvVar(in.(map[string]interface{})) }(in))
 			}
 			return out
 		}(in)

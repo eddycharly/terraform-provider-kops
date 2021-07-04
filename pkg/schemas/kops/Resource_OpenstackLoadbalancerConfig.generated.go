@@ -33,7 +33,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["provider"]; ok && in != nil {
@@ -41,7 +44,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["use_octavia"]; ok && in != nil {
@@ -49,7 +55,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["floating_network"]; ok && in != nil {
@@ -57,7 +66,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["floating_network_id"]; ok && in != nil {
@@ -65,7 +77,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["floating_subnet"]; ok && in != nil {
@@ -73,7 +88,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["subnet_id"]; ok && in != nil {
@@ -81,7 +99,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["manage_sec_groups"]; ok && in != nil {
@@ -89,7 +110,10 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

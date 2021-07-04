@@ -35,12 +35,10 @@ func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.BastionSpec) *kops.BastionSpec { return &in }(func(in interface{}) kops.BastionSpec {
-				if in == nil {
-					return kops.BastionSpec{}
-				}
-				return ExpandResourceBastionSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.BastionSpec) *kops.BastionSpec { return &in }(func(in interface{}) kops.BastionSpec { return ExpandResourceBastionSpec(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["dns"]; ok && in != nil {
@@ -48,12 +46,10 @@ func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.DNSSpec) *kops.DNSSpec { return &in }(func(in interface{}) kops.DNSSpec {
-				if in == nil {
-					return kops.DNSSpec{}
-				}
-				return ExpandResourceDNSSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.DNSSpec) *kops.DNSSpec { return &in }(func(in interface{}) kops.DNSSpec { return ExpandResourceDNSSpec(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

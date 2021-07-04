@@ -26,7 +26,10 @@ func ExpandResourceNTPConfig(in map[string]interface{}) kops.NTPConfig {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

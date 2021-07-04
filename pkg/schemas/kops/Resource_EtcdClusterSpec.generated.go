@@ -46,9 +46,6 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			var out []kops.EtcdMemberSpec
 			for _, in := range in.([]interface{}) {
 				out = append(out, func(in interface{}) kops.EtcdMemberSpec {
-					if in == nil {
-						return kops.EtcdMemberSpec{}
-					}
 					return ExpandResourceEtcdMemberSpec(in.(map[string]interface{}))
 				}(in))
 			}
@@ -69,7 +66,10 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["heartbeat_interval"]; ok && in != nil {
@@ -77,7 +77,10 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["image"]; ok && in != nil {
@@ -88,12 +91,12 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			if in == nil {
 				return nil
 			}
-			return func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec { return &in }(func(in interface{}) kops.EtcdBackupSpec {
-				if in == nil {
-					return kops.EtcdBackupSpec{}
-				}
-				return ExpandResourceEtcdBackupSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec { return &in }(func(in interface{}) kops.EtcdBackupSpec {
+					return ExpandResourceEtcdBackupSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["manager"]; ok && in != nil {
@@ -101,12 +104,12 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			if in == nil {
 				return nil
 			}
-			return func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec { return &in }(func(in interface{}) kops.EtcdManagerSpec {
-				if in == nil {
-					return kops.EtcdManagerSpec{}
-				}
-				return ExpandResourceEtcdManagerSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec { return &in }(func(in interface{}) kops.EtcdManagerSpec {
+					return ExpandResourceEtcdManagerSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["memory_request"]; ok && in != nil {
@@ -114,7 +117,10 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cpu_request"]; ok && in != nil {
@@ -122,7 +128,10 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

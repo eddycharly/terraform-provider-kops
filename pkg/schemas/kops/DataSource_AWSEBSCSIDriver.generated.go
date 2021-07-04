@@ -28,7 +28,10 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["version"]; ok && in != nil {
@@ -36,7 +39,10 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["volume_attach_limit"]; ok && in != nil {
@@ -44,7 +50,10 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 			if in == nil {
 				return nil
 			}
-			return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

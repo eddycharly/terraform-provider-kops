@@ -44,7 +44,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["multizone"]; ok && in != nil {
@@ -52,7 +55,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["node_tags"]; ok && in != nil {
@@ -60,7 +66,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["node_instance_prefix"]; ok && in != nil {
@@ -68,7 +77,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["gce_service_account"]; ok && in != nil {
@@ -79,7 +91,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["elb_security_group"]; ok && in != nil {
@@ -87,7 +102,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_username"]; ok && in != nil {
@@ -95,7 +113,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_password"]; ok && in != nil {
@@ -103,7 +124,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_server"]; ok && in != nil {
@@ -111,7 +135,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_datacenter"]; ok && in != nil {
@@ -119,7 +146,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_resource_pool"]; ok && in != nil {
@@ -127,7 +157,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_datastore"]; ok && in != nil {
@@ -135,7 +168,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["v_sphere_core_dns_server"]; ok && in != nil {
@@ -143,7 +179,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["spotinst_product"]; ok && in != nil {
@@ -151,7 +190,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["spotinst_orientation"]; ok && in != nil {
@@ -159,7 +201,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["openstack"]; ok && in != nil {
@@ -167,12 +212,12 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in kops.OpenstackConfiguration) *kops.OpenstackConfiguration { return &in }(func(in interface{}) kops.OpenstackConfiguration {
-				if in == nil {
-					return kops.OpenstackConfiguration{}
-				}
-				return ExpandDataSourceOpenstackConfiguration(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.OpenstackConfiguration) *kops.OpenstackConfiguration { return &in }(func(in interface{}) kops.OpenstackConfiguration {
+					return ExpandDataSourceOpenstackConfiguration(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["azure"]; ok && in != nil {
@@ -180,12 +225,12 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AzureConfiguration) *kops.AzureConfiguration { return &in }(func(in interface{}) kops.AzureConfiguration {
-				if in == nil {
-					return kops.AzureConfiguration{}
-				}
-				return ExpandDataSourceAzureConfiguration(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AzureConfiguration) *kops.AzureConfiguration { return &in }(func(in interface{}) kops.AzureConfiguration {
+					return ExpandDataSourceAzureConfiguration(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["aws_ebs_csi_driver"]; ok && in != nil {
@@ -193,12 +238,12 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AWSEBSCSIDriver) *kops.AWSEBSCSIDriver { return &in }(func(in interface{}) kops.AWSEBSCSIDriver {
-				if in == nil {
-					return kops.AWSEBSCSIDriver{}
-				}
-				return ExpandDataSourceAWSEBSCSIDriver(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AWSEBSCSIDriver) *kops.AWSEBSCSIDriver { return &in }(func(in interface{}) kops.AWSEBSCSIDriver {
+					return ExpandDataSourceAWSEBSCSIDriver(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

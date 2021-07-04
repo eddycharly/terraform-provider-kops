@@ -737,35 +737,89 @@ func(in interface{}) {{ .String }} {
 	if in == nil {
 		return nil
 	}
+	if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+		return func(in {{ .Elem.String }}) {{ .String }} { return &in }(
+		{{- if isBool .Elem -}}
+			{{ template "expandBool" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isInt .Elem -}}
+			{{ template "expandInt" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isFloat .Elem -}}
+			{{ template "expandFloat" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isString .Elem -}}
+			{{ template "expandString" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isDuration .Elem -}}
+			{{ template "expandDuration" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isQuantity .Elem -}}
+			{{ template "expandQuantity" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isIntOrString .Elem -}}
+			{{ template "expandIntOrString" .Elem }}(in[0].(map[string]interface{})["value"])
+		{{- else if isStruct .Elem -}}
+			{{ template "expandStruct" .Elem }}(in[0])
+		{{- else if isMap .Elem -}}
+			{{ template "expandMap" .Elem }}(in[0])
+		{{- end -}}
+		)
+	}
+	return nil
+}
+{{- end -}}
+
+{{- define "expandListElemStruct" -}}
+func (in interface{}) {{ .String }} {	return {{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})) }
+{{- end -}}
+
+{{- define "expandListElemPtr" -}}
+func(in interface{}) {{ .String }} {
+	if in == nil {
+		return nil
+	}
 	return func(in {{ .Elem.String }}) {{ .String }} { return &in }(
 	{{- if isBool .Elem -}}
-		{{ template "expandBool" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandBool" .Elem }}(in)
 	{{- else if isInt .Elem -}}
-		{{ template "expandInt" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandInt" .Elem }}(in)
 	{{- else if isFloat .Elem -}}
-		{{ template "expandFloat" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandFloat" .Elem }}(in)
 	{{- else if isString .Elem -}}
-		{{ template "expandString" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandString" .Elem }}(in)
 	{{- else if isDuration .Elem -}}
-		{{ template "expandDuration" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandDuration" .Elem }}(in)
 	{{- else if isQuantity .Elem -}}
-		{{ template "expandQuantity" .Elem }}(in.(map[string]interface{})["value"])
+		{{ template "expandQuantity" .Elem }}(in)
 	{{- else if isIntOrString .Elem -}}
-		{{ template "expandIntOrString" .Elem }}(in.(map[string]interface{})["value"])
-	{{- else if isStruct .Elem -}}
-		{{ template "expandStruct" .Elem }}(in)
-	{{- else if isMap .Elem -}}
-		{{ template "expandMap" .Elem }}(in)
+		{{ template "expandIntOrString" .Elem }}(in)
 	{{- end -}}
 	)
 }
+{{- end -}}
+
+{{- define "expandListElem" -}}
+{{- if isBool . -}}
+	{{ template "expandBool" . }}
+{{- else if isInt . -}}
+	{{ template "expandInt" . }}
+{{- else if isFloat . -}}
+	{{ template "expandFloat" . }}
+{{- else if isString . -}}
+	{{ template "expandString" . }}
+{{- else if isDuration . -}}
+	{{ template "expandDuration" . }}
+{{- else if isQuantity . -}}
+	{{ template "expandQuantity" . }}
+{{- else if isIntOrString . -}}
+	{{ template "expandIntOrString" . }}
+{{- else if isStruct . -}}
+	{{ template "expandListElemStruct" . }}
+{{- else if isPtr . -}}
+	{{ template "expandListElemPtr" . }}
+{{- end -}}
 {{- end -}}
 
 {{- define "expandList" -}}
 func (in interface{}) {{ .String }} {
 	var out {{ .String }}
 	for _, in := range in.([]interface{}) {
-		out = append(out, {{ template "expander" .Elem }}(in))
+		out = append(out, {{ template "expandListElem" .Elem }}(in))
 	}
 	return out
 }
@@ -785,12 +839,7 @@ func (in interface{}) map[string]{{ .Elem.String }} {
 {{- end -}}
 
 {{- define "expandStruct" -}}
-func (in interface{}) {{ .String }} {
-	if in == nil {
-		return {{ .String }}{}
-	}
-	return {{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{}))
-}
+func (in interface{}) {{ .String }} {	return {{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})) }
 {{- end -}}
 
 {{- define "expander" -}}

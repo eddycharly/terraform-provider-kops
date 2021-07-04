@@ -48,12 +48,12 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 			if in == nil {
 				return nil
 			}
-			return func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration { return &in }(func(in interface{}) kops.LeaderElectionConfiguration {
-				if in == nil {
-					return kops.LeaderElectionConfiguration{}
-				}
-				return ExpandDataSourceLeaderElectionConfiguration(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration { return &in }(func(in interface{}) kops.LeaderElectionConfiguration {
+					return ExpandDataSourceLeaderElectionConfiguration(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["use_policy_config_map"]; ok && in != nil {
@@ -61,7 +61,10 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["feature_gates"]; ok && in != nil {
@@ -81,7 +84,10 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 			if in == nil {
 				return nil
 			}
-			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["qps"]; ok && in != nil {
@@ -89,7 +95,10 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["burst"]; ok && in != nil {
@@ -115,7 +124,10 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

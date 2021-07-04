@@ -356,7 +356,10 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["hubble"]; ok && in != nil {
@@ -364,12 +367,10 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 			if in == nil {
 				return nil
 			}
-			return func(in kops.HubbleSpec) *kops.HubbleSpec { return &in }(func(in interface{}) kops.HubbleSpec {
-				if in == nil {
-					return kops.HubbleSpec{}
-				}
-				return ExpandDataSourceHubbleSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.HubbleSpec) *kops.HubbleSpec { return &in }(func(in interface{}) kops.HubbleSpec { return ExpandDataSourceHubbleSpec(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["remove_cbr_bridge"]; ok && in != nil {

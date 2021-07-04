@@ -26,7 +26,10 @@ func ExpandConfigKlog(in map[string]interface{}) config.Klog {
 			if in == nil {
 				return nil
 			}
-			return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

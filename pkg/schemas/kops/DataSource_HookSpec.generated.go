@@ -66,12 +66,12 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.ExecContainerAction) *kops.ExecContainerAction { return &in }(func(in interface{}) kops.ExecContainerAction {
-				if in == nil {
-					return kops.ExecContainerAction{}
-				}
-				return ExpandDataSourceExecContainerAction(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.ExecContainerAction) *kops.ExecContainerAction { return &in }(func(in interface{}) kops.ExecContainerAction {
+					return ExpandDataSourceExecContainerAction(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["manifest"]; ok && in != nil {

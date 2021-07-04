@@ -19,12 +19,7 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		out.Addons = func(in interface{}) []kops.AddonSpec {
 			var out []kops.AddonSpec
 			for _, in := range in.([]interface{}) {
-				out = append(out, func(in interface{}) kops.AddonSpec {
-					if in == nil {
-						return kops.AddonSpec{}
-					}
-					return ExpandResourceAddonSpec(in.(map[string]interface{}))
-				}(in))
+				out = append(out, func(in interface{}) kops.AddonSpec { return ExpandResourceAddonSpec(in.(map[string]interface{})) }(in))
 			}
 			return out
 		}(in)
@@ -46,9 +41,6 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			var out []kops.ClusterSubnetSpec
 			for _, in := range in.([]interface{}) {
 				out = append(out, func(in interface{}) kops.ClusterSubnetSpec {
-					if in == nil {
-						return kops.ClusterSubnetSpec{}
-					}
 					return ExpandResourceClusterSubnetSpec(in.(map[string]interface{}))
 				}(in))
 			}
@@ -84,12 +76,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.TopologySpec) *kops.TopologySpec { return &in }(func(in interface{}) kops.TopologySpec {
-				if in == nil {
-					return kops.TopologySpec{}
-				}
-				return ExpandResourceTopologySpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.TopologySpec) *kops.TopologySpec { return &in }(func(in interface{}) kops.TopologySpec { return ExpandResourceTopologySpec(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["secret_store"]; ok && in != nil {
@@ -148,12 +138,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.EgressProxySpec) *kops.EgressProxySpec { return &in }(func(in interface{}) kops.EgressProxySpec {
-				if in == nil {
-					return kops.EgressProxySpec{}
-				}
-				return ExpandResourceEgressProxySpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.EgressProxySpec) *kops.EgressProxySpec { return &in }(func(in interface{}) kops.EgressProxySpec {
+					return ExpandResourceEgressProxySpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["ssh_key_name"]; ok && in != nil {
@@ -161,7 +151,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kubernetes_api_access"]; ok && in != nil {
@@ -178,7 +171,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["update_policy"]; ok && in != nil {
@@ -186,7 +182,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["external_policies"]; ok && in != nil {
@@ -194,22 +193,25 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in map[string][]string) *map[string][]string { return &in }(func(in interface{}) map[string][]string {
-				if in == nil {
-					return nil
-				}
-				out := map[string][]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = func(in interface{}) []string {
-						var out []string
-						for _, in := range in.([]interface{}) {
-							out = append(out, func(in interface{}) string { return string(in.(string)) }(in))
-						}
-						return out
-					}(in)
-				}
-				return out
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in map[string][]string) *map[string][]string { return &in }(func(in interface{}) map[string][]string {
+					if in == nil {
+						return nil
+					}
+					out := map[string][]string{}
+					for key, in := range in.(map[string]interface{}) {
+						out[key] = func(in interface{}) []string {
+							var out []string
+							for _, in := range in.([]interface{}) {
+								out = append(out, func(in interface{}) string { return string(in.(string)) }(in))
+							}
+							return out
+						}(in)
+					}
+					return out
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["additional_policies"]; ok && in != nil {
@@ -217,16 +219,19 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in map[string]string) *map[string]string { return &in }(func(in interface{}) map[string]string {
-				if in == nil {
-					return nil
-				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = func(in interface{}) string { return string(in.(string)) }(in)
-				}
-				return out
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in map[string]string) *map[string]string { return &in }(func(in interface{}) map[string]string {
+					if in == nil {
+						return nil
+					}
+					out := map[string]string{}
+					for key, in := range in.(map[string]interface{}) {
+						out[key] = func(in interface{}) string { return string(in.(string)) }(in)
+					}
+					return out
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["file_assets"]; ok && in != nil {
@@ -234,9 +239,6 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			var out []kops.FileAssetSpec
 			for _, in := range in.([]interface{}) {
 				out = append(out, func(in interface{}) kops.FileAssetSpec {
-					if in == nil {
-						return kops.FileAssetSpec{}
-					}
 					return ExpandResourceFileAssetSpec(in.(map[string]interface{}))
 				}(in))
 			}
@@ -248,9 +250,6 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			var out []kops.EtcdClusterSpec
 			for _, in := range in.([]interface{}) {
 				out = append(out, func(in interface{}) kops.EtcdClusterSpec {
-					if in == nil {
-						return kops.EtcdClusterSpec{}
-					}
 					return ExpandResourceEtcdClusterSpec(in.(map[string]interface{}))
 				}(in))
 			}
@@ -262,12 +261,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.ContainerdConfig) *kops.ContainerdConfig { return &in }(func(in interface{}) kops.ContainerdConfig {
-				if in == nil {
-					return kops.ContainerdConfig{}
-				}
-				return ExpandResourceContainerdConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.ContainerdConfig) *kops.ContainerdConfig { return &in }(func(in interface{}) kops.ContainerdConfig {
+					return ExpandResourceContainerdConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["docker"]; ok && in != nil {
@@ -275,12 +274,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.DockerConfig) *kops.DockerConfig { return &in }(func(in interface{}) kops.DockerConfig {
-				if in == nil {
-					return kops.DockerConfig{}
-				}
-				return ExpandResourceDockerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.DockerConfig) *kops.DockerConfig { return &in }(func(in interface{}) kops.DockerConfig { return ExpandResourceDockerConfig(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kube_dns"]; ok && in != nil {
@@ -288,12 +285,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeDNSConfig) *kops.KubeDNSConfig { return &in }(func(in interface{}) kops.KubeDNSConfig {
-				if in == nil {
-					return kops.KubeDNSConfig{}
-				}
-				return ExpandResourceKubeDNSConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeDNSConfig) *kops.KubeDNSConfig { return &in }(func(in interface{}) kops.KubeDNSConfig {
+					return ExpandResourceKubeDNSConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kube_api_server"]; ok && in != nil {
@@ -301,12 +298,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeAPIServerConfig) *kops.KubeAPIServerConfig { return &in }(func(in interface{}) kops.KubeAPIServerConfig {
-				if in == nil {
-					return kops.KubeAPIServerConfig{}
-				}
-				return ExpandResourceKubeAPIServerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeAPIServerConfig) *kops.KubeAPIServerConfig { return &in }(func(in interface{}) kops.KubeAPIServerConfig {
+					return ExpandResourceKubeAPIServerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kube_controller_manager"]; ok && in != nil {
@@ -314,12 +311,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeControllerManagerConfig) *kops.KubeControllerManagerConfig { return &in }(func(in interface{}) kops.KubeControllerManagerConfig {
-				if in == nil {
-					return kops.KubeControllerManagerConfig{}
-				}
-				return ExpandResourceKubeControllerManagerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeControllerManagerConfig) *kops.KubeControllerManagerConfig { return &in }(func(in interface{}) kops.KubeControllerManagerConfig {
+					return ExpandResourceKubeControllerManagerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["external_cloud_controller_manager"]; ok && in != nil {
@@ -327,12 +324,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CloudControllerManagerConfig) *kops.CloudControllerManagerConfig { return &in }(func(in interface{}) kops.CloudControllerManagerConfig {
-				if in == nil {
-					return kops.CloudControllerManagerConfig{}
-				}
-				return ExpandResourceCloudControllerManagerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.CloudControllerManagerConfig) *kops.CloudControllerManagerConfig { return &in }(func(in interface{}) kops.CloudControllerManagerConfig {
+					return ExpandResourceCloudControllerManagerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kube_scheduler"]; ok && in != nil {
@@ -340,12 +337,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeSchedulerConfig) *kops.KubeSchedulerConfig { return &in }(func(in interface{}) kops.KubeSchedulerConfig {
-				if in == nil {
-					return kops.KubeSchedulerConfig{}
-				}
-				return ExpandResourceKubeSchedulerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeSchedulerConfig) *kops.KubeSchedulerConfig { return &in }(func(in interface{}) kops.KubeSchedulerConfig {
+					return ExpandResourceKubeSchedulerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kube_proxy"]; ok && in != nil {
@@ -353,12 +350,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeProxyConfig) *kops.KubeProxyConfig { return &in }(func(in interface{}) kops.KubeProxyConfig {
-				if in == nil {
-					return kops.KubeProxyConfig{}
-				}
-				return ExpandResourceKubeProxyConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeProxyConfig) *kops.KubeProxyConfig { return &in }(func(in interface{}) kops.KubeProxyConfig {
+					return ExpandResourceKubeProxyConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["kubelet"]; ok && in != nil {
@@ -366,12 +363,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec { return &in }(func(in interface{}) kops.KubeletConfigSpec {
-				if in == nil {
-					return kops.KubeletConfigSpec{}
-				}
-				return ExpandResourceKubeletConfigSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec { return &in }(func(in interface{}) kops.KubeletConfigSpec {
+					return ExpandResourceKubeletConfigSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["master_kubelet"]; ok && in != nil {
@@ -379,12 +376,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec { return &in }(func(in interface{}) kops.KubeletConfigSpec {
-				if in == nil {
-					return kops.KubeletConfigSpec{}
-				}
-				return ExpandResourceKubeletConfigSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec { return &in }(func(in interface{}) kops.KubeletConfigSpec {
+					return ExpandResourceKubeletConfigSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cloud_config"]; ok && in != nil {
@@ -392,12 +389,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CloudConfiguration) *kops.CloudConfiguration { return &in }(func(in interface{}) kops.CloudConfiguration {
-				if in == nil {
-					return kops.CloudConfiguration{}
-				}
-				return ExpandResourceCloudConfiguration(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.CloudConfiguration) *kops.CloudConfiguration { return &in }(func(in interface{}) kops.CloudConfiguration {
+					return ExpandResourceCloudConfiguration(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["external_dns"]; ok && in != nil {
@@ -405,12 +402,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.ExternalDNSConfig) *kops.ExternalDNSConfig { return &in }(func(in interface{}) kops.ExternalDNSConfig {
-				if in == nil {
-					return kops.ExternalDNSConfig{}
-				}
-				return ExpandResourceExternalDNSConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.ExternalDNSConfig) *kops.ExternalDNSConfig { return &in }(func(in interface{}) kops.ExternalDNSConfig {
+					return ExpandResourceExternalDNSConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["ntp"]; ok && in != nil {
@@ -418,12 +415,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.NTPConfig) *kops.NTPConfig { return &in }(func(in interface{}) kops.NTPConfig {
-				if in == nil {
-					return kops.NTPConfig{}
-				}
-				return ExpandResourceNTPConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.NTPConfig) *kops.NTPConfig { return &in }(func(in interface{}) kops.NTPConfig { return ExpandResourceNTPConfig(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["node_termination_handler"]; ok && in != nil {
@@ -431,12 +426,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.NodeTerminationHandlerConfig) *kops.NodeTerminationHandlerConfig { return &in }(func(in interface{}) kops.NodeTerminationHandlerConfig {
-				if in == nil {
-					return kops.NodeTerminationHandlerConfig{}
-				}
-				return ExpandResourceNodeTerminationHandlerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.NodeTerminationHandlerConfig) *kops.NodeTerminationHandlerConfig { return &in }(func(in interface{}) kops.NodeTerminationHandlerConfig {
+					return ExpandResourceNodeTerminationHandlerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["metrics_server"]; ok && in != nil {
@@ -444,12 +439,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.MetricsServerConfig) *kops.MetricsServerConfig { return &in }(func(in interface{}) kops.MetricsServerConfig {
-				if in == nil {
-					return kops.MetricsServerConfig{}
-				}
-				return ExpandResourceMetricsServerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.MetricsServerConfig) *kops.MetricsServerConfig { return &in }(func(in interface{}) kops.MetricsServerConfig {
+					return ExpandResourceMetricsServerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cert_manager"]; ok && in != nil {
@@ -457,12 +452,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.CertManagerConfig) *kops.CertManagerConfig { return &in }(func(in interface{}) kops.CertManagerConfig {
-				if in == nil {
-					return kops.CertManagerConfig{}
-				}
-				return ExpandResourceCertManagerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.CertManagerConfig) *kops.CertManagerConfig { return &in }(func(in interface{}) kops.CertManagerConfig {
+					return ExpandResourceCertManagerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["aws_load_balancer_controller"]; ok && in != nil {
@@ -470,12 +465,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AWSLoadBalancerControllerConfig) *kops.AWSLoadBalancerControllerConfig { return &in }(func(in interface{}) kops.AWSLoadBalancerControllerConfig {
-				if in == nil {
-					return kops.AWSLoadBalancerControllerConfig{}
-				}
-				return ExpandResourceAWSLoadBalancerControllerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AWSLoadBalancerControllerConfig) *kops.AWSLoadBalancerControllerConfig { return &in }(func(in interface{}) kops.AWSLoadBalancerControllerConfig {
+					return ExpandResourceAWSLoadBalancerControllerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["networking"]; ok && in != nil {
@@ -483,12 +478,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.NetworkingSpec) *kops.NetworkingSpec { return &in }(func(in interface{}) kops.NetworkingSpec {
-				if in == nil {
-					return kops.NetworkingSpec{}
-				}
-				return ExpandResourceNetworkingSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.NetworkingSpec) *kops.NetworkingSpec { return &in }(func(in interface{}) kops.NetworkingSpec {
+					return ExpandResourceNetworkingSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["api"]; ok && in != nil {
@@ -496,12 +491,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AccessSpec) *kops.AccessSpec { return &in }(func(in interface{}) kops.AccessSpec {
-				if in == nil {
-					return kops.AccessSpec{}
-				}
-				return ExpandResourceAccessSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AccessSpec) *kops.AccessSpec { return &in }(func(in interface{}) kops.AccessSpec { return ExpandResourceAccessSpec(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["authentication"]; ok && in != nil {
@@ -509,12 +502,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AuthenticationSpec) *kops.AuthenticationSpec { return &in }(func(in interface{}) kops.AuthenticationSpec {
-				if in == nil {
-					return kops.AuthenticationSpec{}
-				}
-				return ExpandResourceAuthenticationSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AuthenticationSpec) *kops.AuthenticationSpec { return &in }(func(in interface{}) kops.AuthenticationSpec {
+					return ExpandResourceAuthenticationSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["authorization"]; ok && in != nil {
@@ -522,12 +515,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AuthorizationSpec) *kops.AuthorizationSpec { return &in }(func(in interface{}) kops.AuthorizationSpec {
-				if in == nil {
-					return kops.AuthorizationSpec{}
-				}
-				return ExpandResourceAuthorizationSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AuthorizationSpec) *kops.AuthorizationSpec { return &in }(func(in interface{}) kops.AuthorizationSpec {
+					return ExpandResourceAuthorizationSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["node_authorization"]; ok && in != nil {
@@ -535,12 +528,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.NodeAuthorizationSpec) *kops.NodeAuthorizationSpec { return &in }(func(in interface{}) kops.NodeAuthorizationSpec {
-				if in == nil {
-					return kops.NodeAuthorizationSpec{}
-				}
-				return ExpandResourceNodeAuthorizationSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.NodeAuthorizationSpec) *kops.NodeAuthorizationSpec { return &in }(func(in interface{}) kops.NodeAuthorizationSpec {
+					return ExpandResourceNodeAuthorizationSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cloud_labels"]; ok && in != nil {
@@ -559,12 +552,7 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		out.Hooks = func(in interface{}) []kops.HookSpec {
 			var out []kops.HookSpec
 			for _, in := range in.([]interface{}) {
-				out = append(out, func(in interface{}) kops.HookSpec {
-					if in == nil {
-						return kops.HookSpec{}
-					}
-					return ExpandResourceHookSpec(in.(map[string]interface{}))
-				}(in))
+				out = append(out, func(in interface{}) kops.HookSpec { return ExpandResourceHookSpec(in.(map[string]interface{})) }(in))
 			}
 			return out
 		}(in)
@@ -574,12 +562,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.Assets) *kops.Assets { return &in }(func(in interface{}) kops.Assets {
-				if in == nil {
-					return kops.Assets{}
-				}
-				return ExpandResourceAssets(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.Assets) *kops.Assets { return &in }(func(in interface{}) kops.Assets { return ExpandResourceAssets(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["iam"]; ok && in != nil {
@@ -587,12 +573,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.IAMSpec) *kops.IAMSpec { return &in }(func(in interface{}) kops.IAMSpec {
-				if in == nil {
-					return kops.IAMSpec{}
-				}
-				return ExpandResourceIAMSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.IAMSpec) *kops.IAMSpec { return &in }(func(in interface{}) kops.IAMSpec { return ExpandResourceIAMSpec(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["encryption_config"]; ok && in != nil {
@@ -600,7 +584,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["disable_subnet_tags"]; ok && in != nil {
@@ -611,7 +598,10 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in bool) *bool { return &in }(func(in interface{}) bool { return in.(bool) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["sysctl_parameters"]; ok && in != nil {
@@ -628,12 +618,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.RollingUpdate) *kops.RollingUpdate { return &in }(func(in interface{}) kops.RollingUpdate {
-				if in == nil {
-					return kops.RollingUpdate{}
-				}
-				return ExpandResourceRollingUpdate(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.RollingUpdate) *kops.RollingUpdate { return &in }(func(in interface{}) kops.RollingUpdate {
+					return ExpandResourceRollingUpdate(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cluster_autoscaler"]; ok && in != nil {
@@ -641,12 +631,12 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.ClusterAutoscalerConfig) *kops.ClusterAutoscalerConfig { return &in }(func(in interface{}) kops.ClusterAutoscalerConfig {
-				if in == nil {
-					return kops.ClusterAutoscalerConfig{}
-				}
-				return ExpandResourceClusterAutoscalerConfig(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.ClusterAutoscalerConfig) *kops.ClusterAutoscalerConfig { return &in }(func(in interface{}) kops.ClusterAutoscalerConfig {
+					return ExpandResourceClusterAutoscalerConfig(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

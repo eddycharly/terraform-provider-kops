@@ -26,12 +26,12 @@ func ExpandResourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAut
 			if in == nil {
 				return nil
 			}
-			return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec { return &in }(func(in interface{}) kops.NodeAuthorizerSpec {
-				if in == nil {
-					return kops.NodeAuthorizerSpec{}
-				}
-				return ExpandResourceNodeAuthorizerSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec { return &in }(func(in interface{}) kops.NodeAuthorizerSpec {
+					return ExpandResourceNodeAuthorizerSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

@@ -76,7 +76,10 @@ func ExpandDataSourceCalicoNetworkingSpec(in map[string]interface{}) kops.Calico
 			if in == nil {
 				return nil
 			}
-			return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in resource.Quantity) *resource.Quantity { return &in }(func(in interface{}) resource.Quantity { return ExpandQuantity(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cross_subnet"]; ok && in != nil {
@@ -105,7 +108,10 @@ func ExpandDataSourceCalicoNetworkingSpec(in map[string]interface{}) kops.Calico
 			if in == nil {
 				return nil
 			}
-			return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int32) *int32 { return &in }(func(in interface{}) int32 { return int32(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["prometheus_metrics_enabled"]; ok && in != nil {

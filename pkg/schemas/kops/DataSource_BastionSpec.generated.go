@@ -31,7 +31,10 @@ func ExpandDataSourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in int64) *int64 { return &in }(func(in interface{}) int64 { return int64(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int64) *int64 { return &in }(func(in interface{}) int64 { return int64(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["load_balancer"]; ok && in != nil {
@@ -39,12 +42,12 @@ func ExpandDataSourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec { return &in }(func(in interface{}) kops.BastionLoadBalancerSpec {
-				if in == nil {
-					return kops.BastionLoadBalancerSpec{}
-				}
-				return ExpandDataSourceBastionLoadBalancerSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec { return &in }(func(in interface{}) kops.BastionLoadBalancerSpec {
+					return ExpandDataSourceBastionLoadBalancerSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

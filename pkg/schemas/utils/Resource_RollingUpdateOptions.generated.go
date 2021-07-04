@@ -18,7 +18,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["node_interval"]; ok && in != nil {
@@ -26,7 +29,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["bastion_interval"]; ok && in != nil {
@@ -34,7 +40,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["fail_on_drain_error"]; ok && in != nil {
@@ -48,7 +57,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["validation_timeout"]; ok && in != nil {
@@ -56,7 +68,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in v1.Duration) *v1.Duration { return &in }(func(in interface{}) v1.Duration { return ExpandDuration(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["validate_count"]; ok && in != nil {
@@ -64,7 +79,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			if in == nil {
 				return nil
 			}
-			return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in int) *int { return &in }(func(in interface{}) int { return int(in.(int)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["cloud_only"]; ok && in != nil {

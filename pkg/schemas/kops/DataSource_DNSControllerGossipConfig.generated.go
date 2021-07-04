@@ -30,7 +30,10 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["listen"]; ok && in != nil {
@@ -38,7 +41,10 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["secret"]; ok && in != nil {
@@ -46,7 +52,10 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["secondary"]; ok && in != nil {
@@ -54,12 +63,12 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 			if in == nil {
 				return nil
 			}
-			return func(in kops.DNSControllerGossipConfigSecondary) *kops.DNSControllerGossipConfigSecondary { return &in }(func(in interface{}) kops.DNSControllerGossipConfigSecondary {
-				if in == nil {
-					return kops.DNSControllerGossipConfigSecondary{}
-				}
-				return ExpandDataSourceDNSControllerGossipConfigSecondary(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.DNSControllerGossipConfigSecondary) *kops.DNSControllerGossipConfigSecondary { return &in }(func(in interface{}) kops.DNSControllerGossipConfigSecondary {
+					return ExpandDataSourceDNSControllerGossipConfigSecondary(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["seed"]; ok && in != nil {
@@ -67,7 +76,10 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	return out

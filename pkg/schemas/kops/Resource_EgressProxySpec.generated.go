@@ -23,12 +23,7 @@ func ExpandResourceEgressProxySpec(in map[string]interface{}) kops.EgressProxySp
 	}
 	out := kops.EgressProxySpec{}
 	if in, ok := in["http_proxy"]; ok && in != nil {
-		out.HTTPProxy = func(in interface{}) kops.HTTPProxy {
-			if in == nil {
-				return kops.HTTPProxy{}
-			}
-			return ExpandResourceHTTPProxy(in.(map[string]interface{}))
-		}(in)
+		out.HTTPProxy = func(in interface{}) kops.HTTPProxy { return ExpandResourceHTTPProxy(in.(map[string]interface{})) }(in)
 	}
 	if in, ok := in["proxy_excludes"]; ok && in != nil {
 		out.ProxyExcludes = func(in interface{}) string { return string(in.(string)) }(in)

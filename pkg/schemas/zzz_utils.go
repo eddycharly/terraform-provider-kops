@@ -51,7 +51,7 @@ func Nullable(in *schema.Schema) *schema.Schema {
 	return Struct(
 		&schema.Resource{
 			Schema: map[string]*schema.Schema{
-				"value": in,
+				"value": Required(in),
 			},
 		},
 	)

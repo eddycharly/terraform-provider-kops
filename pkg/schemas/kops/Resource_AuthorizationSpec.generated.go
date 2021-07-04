@@ -27,12 +27,12 @@ func ExpandResourceAuthorizationSpec(in map[string]interface{}) kops.Authorizati
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AlwaysAllowAuthorizationSpec) *kops.AlwaysAllowAuthorizationSpec { return &in }(func(in interface{}) kops.AlwaysAllowAuthorizationSpec {
-				if in == nil {
-					return kops.AlwaysAllowAuthorizationSpec{}
-				}
-				return ExpandResourceAlwaysAllowAuthorizationSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.AlwaysAllowAuthorizationSpec) *kops.AlwaysAllowAuthorizationSpec { return &in }(func(in interface{}) kops.AlwaysAllowAuthorizationSpec {
+					return ExpandResourceAlwaysAllowAuthorizationSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["rbac"]; ok && in != nil {
@@ -40,12 +40,12 @@ func ExpandResourceAuthorizationSpec(in map[string]interface{}) kops.Authorizati
 			if in == nil {
 				return nil
 			}
-			return func(in kops.RBACAuthorizationSpec) *kops.RBACAuthorizationSpec { return &in }(func(in interface{}) kops.RBACAuthorizationSpec {
-				if in == nil {
-					return kops.RBACAuthorizationSpec{}
-				}
-				return ExpandResourceRBACAuthorizationSpec(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in kops.RBACAuthorizationSpec) *kops.RBACAuthorizationSpec { return &in }(func(in interface{}) kops.RBACAuthorizationSpec {
+					return ExpandResourceRBACAuthorizationSpec(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

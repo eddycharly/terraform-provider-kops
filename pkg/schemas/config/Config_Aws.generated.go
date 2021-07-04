@@ -47,12 +47,12 @@ func ExpandConfigAws(in map[string]interface{}) config.Aws {
 			if in == nil {
 				return nil
 			}
-			return func(in config.AwsAssumeRole) *config.AwsAssumeRole { return &in }(func(in interface{}) config.AwsAssumeRole {
-				if in == nil {
-					return config.AwsAssumeRole{}
-				}
-				return ExpandConfigAwsAssumeRole(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in config.AwsAssumeRole) *config.AwsAssumeRole { return &in }(func(in interface{}) config.AwsAssumeRole {
+					return ExpandConfigAwsAssumeRole(in.(map[string]interface{}))
+				}(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["s3_endpoint"]; ok && in != nil {

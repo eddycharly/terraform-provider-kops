@@ -29,7 +29,10 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["dns_servers"]; ok && in != nil {
@@ -37,7 +40,10 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["external_subnet"]; ok && in != nil {
@@ -45,7 +51,10 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 			if in == nil {
 				return nil
 			}
-			return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in[0].(map[string]interface{})["value"]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["availability_zone_hints"]; ok && in != nil {
@@ -56,7 +65,7 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 					if in == nil {
 						return nil
 					}
-					return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+					return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in))
 				}(in))
 			}
 			return out

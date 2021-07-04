@@ -46,25 +46,16 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 	}
 	if in, ok := in["apply"]; ok && in != nil {
 		out.Apply = func(in interface{}) resources.ApplyOptions {
-			if in == nil {
-				return resources.ApplyOptions{}
-			}
 			return ExpandResourceApplyOptions(in.(map[string]interface{}))
 		}(in)
 	}
 	if in, ok := in["rolling_update"]; ok && in != nil {
 		out.RollingUpdate = func(in interface{}) resources.RollingUpdateOptions {
-			if in == nil {
-				return resources.RollingUpdateOptions{}
-			}
 			return ExpandResourceRollingUpdateOptions(in.(map[string]interface{}))
 		}(in)
 	}
 	if in, ok := in["validate"]; ok && in != nil {
 		out.Validate = func(in interface{}) resources.ValidateOptions {
-			if in == nil {
-				return resources.ValidateOptions{}
-			}
 			return ExpandResourceValidateOptions(in.(map[string]interface{}))
 		}(in)
 	}

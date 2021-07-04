@@ -32,12 +32,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 			if in == nil {
 				return nil
 			}
-			return func(in config.Aws) *config.Aws { return &in }(func(in interface{}) config.Aws {
-				if in == nil {
-					return config.Aws{}
-				}
-				return ExpandConfigAws(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in config.Aws) *config.Aws { return &in }(func(in interface{}) config.Aws { return ExpandConfigAws(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["openstack"]; ok && in != nil {
@@ -45,12 +43,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 			if in == nil {
 				return nil
 			}
-			return func(in config.Openstack) *config.Openstack { return &in }(func(in interface{}) config.Openstack {
-				if in == nil {
-					return config.Openstack{}
-				}
-				return ExpandConfigOpenstack(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in config.Openstack) *config.Openstack { return &in }(func(in interface{}) config.Openstack { return ExpandConfigOpenstack(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	if in, ok := in["klog"]; ok && in != nil {
@@ -58,12 +54,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 			if in == nil {
 				return nil
 			}
-			return func(in config.Klog) *config.Klog { return &in }(func(in interface{}) config.Klog {
-				if in == nil {
-					return config.Klog{}
-				}
-				return ExpandConfigKlog(in.(map[string]interface{}))
-			}(in))
+			if in, ok := in.([]interface{}); ok && in != nil && len(in) == 1 {
+				return func(in config.Klog) *config.Klog { return &in }(func(in interface{}) config.Klog { return ExpandConfigKlog(in.(map[string]interface{})) }(in[0]))
+			}
+			return nil
 		}(in)
 	}
 	return out

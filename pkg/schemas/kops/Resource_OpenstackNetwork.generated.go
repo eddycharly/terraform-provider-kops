@@ -29,7 +29,7 @@ func ExpandResourceOpenstackNetwork(in map[string]interface{}) kops.OpenstackNet
 					if in == nil {
 						return nil
 					}
-					return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in.(map[string]interface{})["value"]))
+					return func(in string) *string { return &in }(func(in interface{}) string { return string(in.(string)) }(in))
 				}(in))
 			}
 			return out
