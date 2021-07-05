@@ -150,7 +150,7 @@ resource "kops_instance_group" "node-2" {
 }
 
 resource "kops_cluster_updater" "updater" {
-  cluster_name = kops_cluster.cluster.name
+  cluster_name = kops_cluster.cluster.id
 
   keepers = {
     cluster  = kops_cluster.cluster.revision,
