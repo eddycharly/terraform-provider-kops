@@ -46,18 +46,24 @@ resource "kops_cluster" "cluster" {
     name = "main"
 
     member {
-      name           = "master-0"
-      instance_group = "master-0"
+      name = "master-0"
+      instance_group {
+        value = "master-0"
+      }
     }
 
     member {
-      name           = "master-1"
-      instance_group = "master-1"
+      name = "master-1"
+      instance_group {
+        value = "master-1"
+      }
     }
 
     member {
-      name           = "master-2"
-      instance_group = "master-2"
+      name = "master-2"
+      instance_group {
+        value = "master-2"
+      }
     }
   }
 
@@ -65,18 +71,24 @@ resource "kops_cluster" "cluster" {
     name = "events"
 
     member {
-      name           = "master-0"
-      instance_group = "master-0"
+      name = "master-0"
+      instance_group {
+        value = "master-0"
+      }
     }
 
     member {
-      name           = "master-1"
-      instance_group = "master-1"
+      name = "master-1"
+      instance_group {
+        value = "master-1"
+      }
     }
 
     member {
-      name           = "master-2"
-      instance_group = "master-2"
+      name = "master-2"
+      instance_group {
+        value = "master-2"
+      }
     }
   }
 }
@@ -85,8 +97,12 @@ resource "kops_instance_group" "master-0" {
   cluster_name = kops_cluster.cluster.name
   name         = "master-0"
   role         = "Master"
-  min_size     = 1
-  max_size     = 1
+  min_size {
+    value = 1
+  }
+  max_size {
+    value = 1
+  }
   machine_type = "t3.medium"
   subnets      = ["private-0"]
   depends_on   = [kops_cluster.cluster]
@@ -96,8 +112,12 @@ resource "kops_instance_group" "master-1" {
   cluster_name = kops_cluster.cluster.name
   name         = "master-1"
   role         = "Master"
-  min_size     = 1
-  max_size     = 1
+  min_size {
+    value = 1
+  }
+  max_size {
+    value = 1
+  }
   machine_type = "t3.medium"
   subnets      = ["private-1"]
   depends_on   = [kops_cluster.cluster]
@@ -107,8 +127,12 @@ resource "kops_instance_group" "master-2" {
   cluster_name = kops_cluster.cluster.name
   name         = "master-2"
   role         = "Master"
-  min_size     = 1
-  max_size     = 1
+  min_size {
+    value = 1
+  }
+  max_size {
+    value = 1
+  }
   machine_type = "t3.medium"
   subnets      = ["private-2"]
   depends_on   = [kops_cluster.cluster]
@@ -128,7 +152,9 @@ resource "kops_cluster_updater" "updater" {
     skip                = false
     fail_on_drain_error = true
     fail_on_validate    = true
-    validate_count      = 1
+    validate_count {
+      value = 1
+    }
   }
 
   validate {

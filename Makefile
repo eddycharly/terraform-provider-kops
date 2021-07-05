@@ -48,7 +48,6 @@ example-basic: install
 	@terraform init ./examples/basic
 	@terraform validate ./examples/basic
 	@terraform plan ./examples/basic
-	@terraform apply ./examples/basic
 
 .PHONY: example-aws-profile
 example-aws-profile: install
