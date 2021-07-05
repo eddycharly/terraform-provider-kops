@@ -124,6 +124,7 @@ resource "kops_instance_group" "node-0" {
   name         = "node-0"
   role         = "Node"
   min_size     = 1
+  max_size     = 2
   machine_type = local.nodeType
   subnets      = ["private-0"]
 }
@@ -133,6 +134,7 @@ resource "kops_instance_group" "node-1" {
   name         = "node-1"
   role         = "Node"
   min_size     = 1
+  max_size     = 2
   machine_type = local.nodeType
   subnets      = ["private-1"]
 }
@@ -142,6 +144,7 @@ resource "kops_instance_group" "node-2" {
   name         = "node-2"
   role         = "Node"
   min_size     = 1
+  max_size     = 2
   machine_type = local.nodeType
   subnets      = ["private-2"]
 }
