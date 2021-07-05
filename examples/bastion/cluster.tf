@@ -183,12 +183,12 @@ resource "kops_cluster_updater" "updater" {
   cluster_name = kops_cluster.cluster.id
 
   keepers = {
-    cluster   = kops_cluster.cluster.revision,
-    master-0  = kops_instance_group.master-0.revision,
-    master-1  = kops_instance_group.master-1.revision,
+    cluster   = kops_cluster.cluster.revision
+    master-0  = kops_instance_group.master-0.revision
+    master-1  = kops_instance_group.master-1.revision
     master-2  = kops_instance_group.master-2.revision
-    node-0    = kops_instance_group.node-0.revision,
-    node-1    = kops_instance_group.node-1.revision,
+    node-0    = kops_instance_group.node-0.revision
+    node-1    = kops_instance_group.node-1.revision
     node-2    = kops_instance_group.node-2.revision
     bastion-0 = kops_instance_group.bastion-0.revision
     bastion-1 = kops_instance_group.bastion-1.revision

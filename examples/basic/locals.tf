@@ -1,11 +1,9 @@
 locals {
-  masterType            = "t3.medium"
-  nodeType              = "t3.medium"
-  bastionType           = "t3.medium"
-  bastionSecurityGroups = ["sg-0"]
-  clusterName           = "cluster.example.com"
-  dnsZone               = "example.com"
-  vpcId                 = "vpc-id"
+  masterType  = "t3.medium"
+  nodeType    = "t3.medium"
+  clusterName = "cluster.example.com"
+  dnsZone     = "example.com"
+  vpcId       = "vpc-id"
   privateSubnets = [
     {
       subnetId = "private-subnet-0"
