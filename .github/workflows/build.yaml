@@ -19,7 +19,7 @@ jobs:
         run: go get golang.org/x/tools/cmd/goimports
       - name: Install terraform
         run: |
-          TERRAFORM_VERSION=0.13.4
+          TERRAFORM_VERSION=0.13.7
           curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
           unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
           sudo mv terraform /usr/local/bin
