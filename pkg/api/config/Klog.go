@@ -1,6 +1,6 @@
 package config
 
 type Klog struct {
-	// V defines the verbosity of klog
-	V *int
+	// Verbosity defines the verbosity of klog
+	Verbosity *int
 }
