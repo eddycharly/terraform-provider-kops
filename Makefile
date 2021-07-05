@@ -45,29 +45,29 @@ examples: example-basic example-aws-profile example-aws-assume-role example-bast
 
 .PHONY: example-basic
 example-basic: install
-	@terraform init ./examples/basic
-	@terraform validate ./examples/basic
-	@terraform plan ./examples/basic
+	@terraform init 		${TF_ARGS} ./examples/basic
+	@terraform validate ${TF_ARGS} ./examples/basic
+	@terraform plan 		${TF_ARGS} ./examples/basic
 
 .PHONY: example-aws-profile
 example-aws-profile: install
-	@terraform init ./examples/aws-profile
-	@terraform validate ./examples/aws-profile
-	@terraform plan ./examples/aws-profile
+	@terraform init 		${TF_ARGS} ./examples/aws-profile
+	@terraform validate ${TF_ARGS} ./examples/aws-profile
+	@terraform plan 		${TF_ARGS} ./examples/aws-profile
 
 .PHONY: example-aws-assume-role
 example-aws-assume-role: install
-	@terraform init ./examples/aws-assume-role
-	@terraform validate ./examples/aws-assume-role
+	@terraform init 		${TF_ARGS} ./examples/aws-assume-role
+	@terraform validate ${TF_ARGS} ./examples/aws-assume-role
 
 .PHONY: example-bastion
 example-bastion: install
-	@terraform init ./examples/bastion
-	@terraform validate ./examples/bastion
-	@terraform plan ./examples/bastion
+	@terraform init 		${TF_ARGS} ./examples/bastion
+	@terraform validate ${TF_ARGS} ./examples/bastion
+	@terraform plan 		${TF_ARGS} ./examples/bastion
 
 .PHONY: example-klog
 example-klog: install
-	@terraform init ./examples/klog
-	@terraform validate ./examples/klog
-	@terraform plan ./examples/klog
+	@terraform init 		${TF_ARGS} ./examples/klog
+	@terraform validate ${TF_ARGS} ./examples/klog
+	@terraform plan			${TF_ARGS} ./examples/klog

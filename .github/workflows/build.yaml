@@ -62,3 +62,28 @@ jobs:
       - name: Build install and validate against examples
         run: |
           make examples
+  build-tf-0-15:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install goimports
+        run: go get golang.org/x/tools/cmd/goimports
+      - name: Install terraform
+        run: |
+          TERRAFORM_VERSION=0.15.5
+          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+          sudo mv terraform /usr/local/bin
+          rm *
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.6
+        with:
+          path: /home/runner/go/pkg/mod
+          key: go-mod
+      - name: Build install and validate against examples
+        run: |
+          TF_ARGS="-chdir" make examples
