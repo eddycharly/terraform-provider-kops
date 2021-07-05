@@ -1133,7 +1133,7 @@ func main() {
 			required("Device", "Filesystem", "Path"),
 		),
 		generate(kops.MixedInstancesPolicySpec{},
-			required("OnDemandBase", "OnDemandAboveBase"),
+			nullable("OnDemandBase", "OnDemandAboveBase"),
 		),
 		generate(kops.UserData{},
 			required("Name", "Type", "Content"),
