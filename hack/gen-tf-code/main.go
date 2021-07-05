@@ -188,6 +188,7 @@ func fieldName(in string) string {
 	in = strings.ReplaceAll(in, "SSH", "Ssh")
 	in = strings.ReplaceAll(in, "API", "Api")
 	in = strings.ReplaceAll(in, "SAN", "San")
+	in = strings.ReplaceAll(in, "SQS", "Sqs")
 	return in
 }
 
@@ -1032,8 +1033,8 @@ func main() {
 		generate(utils.RollingUpdateOptions{},
 			noSchema(),
 		),
-		generate(resources.DockerConfig{},
-			required("ClusterName", "DockerConfig"),
+		generate(resources.ClusterSecrets{},
+			sensitive("DockerConfig"),
 		),
 		generate(resources.ValidateOptions{}),
 		generate(utils.ValidateOptions{},
@@ -1225,6 +1226,9 @@ func main() {
 		generate(datasources.ClusterStatus{},
 			required("ClusterName"),
 		),
+		generate(resources.ClusterSecrets{},
+			sensitive("DockerConfig"),
+		),
 		generate(kube.Config{},
 			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
@@ -1348,7 +1352,6 @@ func main() {
 	// resources
 	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
 	buildDoc(resources.ClusterUpdater{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterUpdaterHeader, "")
-	buildDoc(resources.DockerConfig{}, "docs/resources/", resourcesMap, "Resource", parser, genericHeader, "")
 	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
 	// data sources
 	buildDoc(datasources.ClusterStatus{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterStatusHeader, "")

@@ -10,13 +10,13 @@ import (
 
 // InstanceGroup represents a group of instances (either bastions, nodes or masters) with the same configuration
 type InstanceGroup struct {
+	kops.InstanceGroupSpec
 	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
 	Revision int
 	// ClusterName defines the cluster name the instance group belongs to
 	ClusterName string
 	// Name defines the instance group name
 	Name string
-	kops.InstanceGroupSpec
 }
 
 func makeInstanceGroup(clusterName string, instanceGroup *kops.InstanceGroup) *InstanceGroup {

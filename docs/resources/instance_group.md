@@ -48,9 +48,6 @@ resource "kops_instance_group" "master-2" {
 ## Argument Reference
 
 The following arguments are supported:
-- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
-- `cluster_name` - (Required) - (Force new) - String - ClusterName defines the cluster name the instance group belongs to.
-- `name` - (Required) - (Force new) - String - Name defines the instance group name.
 - `role` - (Required) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
@@ -95,6 +92,9 @@ The following arguments are supported:
 - `compress_user_data` - (Optional) - Bool - CompressUserData compresses parts of the user data to save space.
 - `instance_metadata` - (Optional) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 - `update_policy` - (Optional) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
+- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `cluster_name` - (Required) - (Force new) - String - ClusterName defines the cluster name the instance group belongs to.
+- `name` - (Required) - (Force new) - String - Name defines the instance group name.
 
 ## Nested resources
 
