@@ -20,6 +20,16 @@ func CustomizeDiffRevision(_ context.Context, d *schema.ResourceDiff, m interfac
 	return nil
 }
 
+func Nullable(in *schema.Schema) *schema.Schema {
+	return OptionalStruct(
+		&schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"value": in,
+			},
+		},
+	)
+}
+
 // Tools
 
 func Schema(t schema.ValueType, elem interface{}, required, optional, computed bool, maxItems int) *schema.Schema {

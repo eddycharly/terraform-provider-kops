@@ -36,6 +36,7 @@ type options struct {
 	exclude      sets.String
 	asSets       sets.String
 	rename       map[string]string
+	nullable     sets.String
 	required     sets.String
 	computed     sets.String
 	computedOnly sets.String
@@ -49,6 +50,7 @@ func newOptions() *options {
 		exclude:      sets.NewString(),
 		asSets:       sets.NewString(),
 		rename:       make(map[string]string),
+		nullable:     sets.NewString(),
 		required:     sets.NewString(),
 		computed:     sets.NewString(),
 		computedOnly: sets.NewString(),
@@ -85,6 +87,12 @@ func rename(old, new string) func(o *options) {
 func required(required ...string) func(o *options) {
 	return func(o *options) {
 		o.required.Insert(required...)
+	}
+}
+
+func nullable(required ...string) func(o *options) {
+	return func(o *options) {
+		o.nullable.Insert(required...)
 	}
 }
 
@@ -310,6 +318,9 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 			}
 			return !optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name)
 		},
+		"isNullable": func(in _field) bool {
+			return optionsMap[in.Owner].nullable.Has(in.Name)
+		},
 		"isComputed": func(in _field) bool {
 			if optionsMap[in.Owner].required.Has(in.Name) {
 				return false
@@ -530,6 +541,9 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			{{- if $suppressDiff -}}SuppressDiff({{- end -}}
 			{{- if $forceNew -}}ForceNew({{- end -}}
 			{{- if $sensitive -}}Sensitive({{- end -}}
+			{{- if isNullable . -}}
+			Nullable(
+			{{- end -}}
 			{{- if isRequired . -}}
 			Required
 			{{- else if isOptional . -}}
@@ -542,6 +556,9 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			Set
 			{{- end -}}
 			{{ template "schema" .Type }}
+			{{- if isNullable . -}}
+			)
+			{{- end -}}
 			{{- if $suppressDiff -}}){{- end -}}
 			{{- if $forceNew -}}){{- end -}}
 			{{- if $sensitive -}}){{- end -}}
@@ -712,7 +729,7 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	{{- if not (isExcluded .) }}
 	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
 		{{- if not .Anonymous -}}
-		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) }}
+		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) (not (isNullable .)) }}
 		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 			return nil
 		}
@@ -722,7 +739,19 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 			return {{ template "expand" .Type }}
 		}(in.(*schema.Set).List())
 		{{- else -}}
+		{{- if isNullable . -}}
+		if in == nil {
+			return nil
+		}
+		if in, ok := in.([]interface{}); ok && len(in) == 1 {
+			return func(in interface{}) {{ .Type.String }} {
+				return {{ template "expand" .Type }}
+			}(in[0].(map[string]interface{})["value"])
+		}
+		return nil
+		{{- else -}}
 		return {{ template "expand" .Type }}
+		{{- end -}}
 		{{- end -}}
 		{{- else -}}
 		return {{ mapping .Type }}Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
@@ -740,7 +769,14 @@ func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interfac
 	{{ mapping .Type }}Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
 	{{- else -}}
 	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
+		{{ if isNullable . -}}
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": {{ template "flatten" .Type }}}}
+		{{- else -}}
 		return {{ template "flatten" .Type }}
+		{{- end }}
 	}(in.{{ .Name }})
 	{{- end }}
 	{{- end }}
@@ -999,12 +1035,16 @@ func main() {
 		generate(kops.PackagesConfig{}),
 		generate(kops.DockerConfig{}),
 		generate(kops.KubeDNSConfig{}),
-		generate(kops.KubeAPIServerConfig{}),
+		generate(kops.KubeAPIServerConfig{},
+			nullable("AnonymousAuth"),
+		),
 		generate(kops.KubeControllerManagerConfig{}),
 		generate(kops.CloudControllerManagerConfig{}),
 		generate(kops.KubeSchedulerConfig{}),
 		generate(kops.KubeProxyConfig{}),
-		generate(kops.KubeletConfigSpec{}),
+		generate(kops.KubeletConfigSpec{},
+			nullable("AnonymousAuth"),
+		),
 		generate(kops.CloudConfiguration{}),
 		generate(kops.ExternalDNSConfig{}),
 		generate(kops.OpenstackConfiguration{}),
