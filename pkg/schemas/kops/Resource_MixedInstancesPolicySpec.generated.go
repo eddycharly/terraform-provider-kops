@@ -15,8 +15,8 @@ func ResourceMixedInstancesPolicySpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"instances":                     OptionalList(String()),
 			"on_demand_allocation_strategy": OptionalString(),
-			"on_demand_base":                RequiredInt(),
-			"on_demand_above_base":          RequiredInt(),
+			"on_demand_base":                Nullable(OptionalInt()),
+			"on_demand_above_base":          Nullable(OptionalInt()),
 			"spot_allocation_strategy":      OptionalString(),
 			"spot_instance_pools":           OptionalInt(),
 		},
@@ -54,30 +54,46 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			}(in)
 		}(in["on_demand_allocation_strategy"]),
 		OnDemandBase: func(in interface{}) *int64 {
-			return func(in interface{}) *int64 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int64) *int64 {
-					return &in
-				}(int64(ExpandInt(in)))
-			}(in)
+			if in == nil {
+				return nil
+			}
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *int64 {
+					return func(in interface{}) *int64 {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in int64) *int64 {
+							return &in
+						}(int64(ExpandInt(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
+			}
+			return nil
 		}(in["on_demand_base"]),
 		OnDemandAboveBase: func(in interface{}) *int64 {
-			return func(in interface{}) *int64 {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in int64) *int64 {
-					return &in
-				}(int64(ExpandInt(in)))
-			}(in)
+			if in == nil {
+				return nil
+			}
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *int64 {
+					return func(in interface{}) *int64 {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in int64) *int64 {
+							return &in
+						}(int64(ExpandInt(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
+			}
+			return nil
 		}(in["on_demand_above_base"]),
 		SpotAllocationStrategy: func(in interface{}) *string {
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
@@ -135,24 +151,30 @@ func FlattenResourceMixedInstancesPolicySpecInto(in kops.MixedInstancesPolicySpe
 		}(in)
 	}(in.OnDemandAllocationStrategy)
 	out["on_demand_base"] = func(in *int64) interface{} {
-		return func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *int64) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in int64) interface{} {
 				return FlattenInt(int(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.OnDemandBase)
 	out["on_demand_above_base"] = func(in *int64) interface{} {
-		return func(in *int64) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *int64) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in int64) interface{} {
 				return FlattenInt(int(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.OnDemandAboveBase)
 	out["spot_allocation_strategy"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
