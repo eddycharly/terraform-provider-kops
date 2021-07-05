@@ -13,9 +13,10 @@ var _ = Schema
 func ResourceIAMSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"legacy":                   OptionalBool(),
-			"allow_container_registry": OptionalBool(),
-			"permissions_boundary":     OptionalString(),
+			"legacy":                               OptionalBool(),
+			"allow_container_registry":             OptionalBool(),
+			"permissions_boundary":                 OptionalString(),
+			"service_account_external_permissions": OptionalList(ResourceServiceAccountExternalPermission()),
 		},
 	}
 
@@ -52,6 +53,23 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["permissions_boundary"]),
+		ServiceAccountExternalPermissions: func(in interface{}) []kops.ServiceAccountExternalPermission {
+			return func(in interface{}) []kops.ServiceAccountExternalPermission {
+				if in == nil {
+					return nil
+				}
+				var out []kops.ServiceAccountExternalPermission
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) kops.ServiceAccountExternalPermission {
+						if in == nil {
+							return kops.ServiceAccountExternalPermission{}
+						}
+						return (ExpandResourceServiceAccountExternalPermission(in.(map[string]interface{})))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["service_account_external_permissions"]),
 	}
 }
 
@@ -72,6 +90,17 @@ func FlattenResourceIAMSpecInto(in kops.IAMSpec, out map[string]interface{}) {
 			}(*in)
 		}(in)
 	}(in.PermissionsBoundary)
+	out["service_account_external_permissions"] = func(in []kops.ServiceAccountExternalPermission) interface{} {
+		return func(in []kops.ServiceAccountExternalPermission) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.ServiceAccountExternalPermission) interface{} {
+					return FlattenResourceServiceAccountExternalPermission(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.ServiceAccountExternalPermissions)
 }
 
 func FlattenResourceIAMSpec(in kops.IAMSpec) map[string]interface{} {

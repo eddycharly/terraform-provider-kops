@@ -59,6 +59,7 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"compress_user_data":                ComputedBool(),
 			"instance_metadata":                 ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
 			"update_policy":                     ComputedString(),
+			"warm_pool":                         ComputedStruct(kopsschemas.DataSourceWarmPoolSpec()),
 			"cluster_name":                      RequiredString(),
 			"name":                              RequiredString(),
 		},

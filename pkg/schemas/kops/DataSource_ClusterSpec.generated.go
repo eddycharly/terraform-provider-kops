@@ -79,6 +79,9 @@ func DataSourceClusterSpec() *schema.Resource {
 			"sysctl_parameters":                 ComputedList(String()),
 			"rolling_update":                    ComputedStruct(DataSourceRollingUpdate()),
 			"cluster_autoscaler":                ComputedStruct(DataSourceClusterAutoscalerConfig()),
+			"warm_pool":                         ComputedStruct(DataSourceWarmPoolSpec()),
+			"service_account_issuer_discovery":  ComputedStruct(DataSourceServiceAccountIssuerDiscoveryConfig()),
+			"snapshot_controller":               ComputedStruct(DataSourceSnapshotControllerConfig()),
 		},
 	}
 
@@ -968,6 +971,60 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["cluster_autoscaler"]),
+		WarmPool: func(in interface{}) *kops.WarmPoolSpec {
+			return func(in interface{}) *kops.WarmPoolSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.WarmPoolSpec) *kops.WarmPoolSpec {
+					return &in
+				}(func(in interface{}) kops.WarmPoolSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.WarmPoolSpec{}
+					}
+					return (ExpandDataSourceWarmPoolSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["warm_pool"]),
+		ServiceAccountIssuerDiscovery: func(in interface{}) *kops.ServiceAccountIssuerDiscoveryConfig {
+			return func(in interface{}) *kops.ServiceAccountIssuerDiscoveryConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.ServiceAccountIssuerDiscoveryConfig) *kops.ServiceAccountIssuerDiscoveryConfig {
+					return &in
+				}(func(in interface{}) kops.ServiceAccountIssuerDiscoveryConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.ServiceAccountIssuerDiscoveryConfig{}
+					}
+					return (ExpandDataSourceServiceAccountIssuerDiscoveryConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["service_account_issuer_discovery"]),
+		SnapshotController: func(in interface{}) *kops.SnapshotControllerConfig {
+			return func(in interface{}) *kops.SnapshotControllerConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.SnapshotControllerConfig) *kops.SnapshotControllerConfig {
+					return &in
+				}(func(in interface{}) kops.SnapshotControllerConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.SnapshotControllerConfig{}
+					}
+					return (ExpandDataSourceSnapshotControllerConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["snapshot_controller"]),
 	}
 }
 
@@ -1580,6 +1637,42 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.ClusterAutoscaler)
+	out["warm_pool"] = func(in *kops.WarmPoolSpec) interface{} {
+		return func(in *kops.WarmPoolSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.WarmPoolSpec) interface{} {
+				return func(in kops.WarmPoolSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceWarmPoolSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.WarmPool)
+	out["service_account_issuer_discovery"] = func(in *kops.ServiceAccountIssuerDiscoveryConfig) interface{} {
+		return func(in *kops.ServiceAccountIssuerDiscoveryConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ServiceAccountIssuerDiscoveryConfig) interface{} {
+				return func(in kops.ServiceAccountIssuerDiscoveryConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceServiceAccountIssuerDiscoveryConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.ServiceAccountIssuerDiscovery)
+	out["snapshot_controller"] = func(in *kops.SnapshotControllerConfig) interface{} {
+		return func(in *kops.SnapshotControllerConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.SnapshotControllerConfig) interface{} {
+				return func(in kops.SnapshotControllerConfig) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceSnapshotControllerConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.SnapshotController)
 }
 
 func FlattenDataSourceClusterSpec(in kops.ClusterSpec) map[string]interface{} {

@@ -59,6 +59,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"compress_user_data":                OptionalBool(),
 			"instance_metadata":                 OptionalStruct(kopsschemas.ResourceInstanceMetadataOptions()),
 			"update_policy":                     OptionalString(),
+			"warm_pool":                         OptionalStruct(kopsschemas.ResourceWarmPoolSpec()),
 			"revision":                          ComputedInt(),
 			"cluster_name":                      ForceNew(RequiredString()),
 			"name":                              ForceNew(RequiredString()),
