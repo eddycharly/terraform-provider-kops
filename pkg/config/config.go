@@ -69,8 +69,8 @@ func initKlog(config *config.Klog) error {
 		return nil
 	}
 	flags := flag.NewFlagSet("klog", flag.ExitOnError)
-	if config.V != nil {
-		flags.Set("v", strconv.Itoa(*config.V))
+	if config.Verbosity != nil {
+		flags.Set("v", strconv.Itoa(*config.Verbosity))
 	}
 	klog.InitFlags(flags)
 	return nil

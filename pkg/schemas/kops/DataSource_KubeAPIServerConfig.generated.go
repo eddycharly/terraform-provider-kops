@@ -51,7 +51,7 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"kubelet_client_certificate":                   ComputedString(),
 			"kubelet_certificate_authority":                ComputedString(),
 			"kubelet_client_key":                           ComputedString(),
-			"anonymous_auth":                               ComputedBool(),
+			"anonymous_auth":                               Nullable(ComputedBool()),
 			"kubelet_preferred_address_types":              ComputedList(String()),
 			"storage_backend":                              ComputedString(),
 			"oidc_username_claim":                          ComputedString(),
@@ -350,20 +350,25 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 			return string(ExpandString(in))
 		}(in["kubelet_client_key"]),
 		AnonymousAuth: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *bool {
+					return func(in interface{}) *bool {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in bool) *bool {
+							return &in
+						}(bool(ExpandBool(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
+			}
+			return nil
 		}(in["anonymous_auth"]),
 		KubeletPreferredAddressTypes: func(in interface{}) []string {
 			return func(in interface{}) []string {
@@ -1378,14 +1383,17 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 		return FlattenString(string(in))
 	}(in.KubeletClientKey)
 	out["anonymous_auth"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *bool) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in bool) interface{} {
 				return FlattenBool(bool(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.AnonymousAuth)
 	out["kubelet_preferred_address_types"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {

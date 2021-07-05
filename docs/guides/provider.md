@@ -103,7 +103,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `v` - (Optional) - Int - V defines the verbosity of klog.
+- `verbosity` - (Optional) - Int - Verbosity defines the verbosity of klog.
 
 
 
