@@ -15,7 +15,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"api_servers":                            OptionalString(),
-			"anonymous_auth":                         OptionalBool(),
+			"anonymous_auth":                         Nullable(OptionalBool()),
 			"authorization_mode":                     OptionalString(),
 			"bootstrap_kubeconfig":                   OptionalString(),
 			"client_ca_file":                         OptionalString(),
@@ -112,20 +112,25 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 			return string(ExpandString(in))
 		}(in["api_servers"]),
 		AnonymousAuth: func(in interface{}) *bool {
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+			if in == nil {
 				return nil
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *bool {
+					return func(in interface{}) *bool {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in bool) *bool {
+							return &in
+						}(bool(ExpandBool(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
+			}
+			return nil
 		}(in["anonymous_auth"]),
 		AuthorizationMode: func(in interface{}) string {
 			return string(ExpandString(in))
@@ -964,14 +969,17 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 		return FlattenString(string(in))
 	}(in.APIServers)
 	out["anonymous_auth"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *bool) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in bool) interface{} {
 				return FlattenBool(bool(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.AnonymousAuth)
 	out["authorization_mode"] = func(in string) interface{} {
 		return FlattenString(string(in))
