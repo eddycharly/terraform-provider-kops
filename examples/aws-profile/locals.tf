@@ -7,11 +7,11 @@ locals {
   privateSubnets = [
     { subnetId = "private-subnet-0", zone = "zone-0" },
     { subnetId = "private-subnet-1", zone = "zone-1" },
-    { subnetId = "private-subnet-1", zone = "zone-2" }
+    { subnetId = "private-subnet-2", zone = "zone-2" }
   ]
   utilitySubnets = [
     { subnetId = "utility-subnet-0", zone = "zone-0" },
     { subnetId = "utility-subnet-1", zone = "zone-1" },
-    { subnetId = "utility-subnet-1", zone = "zone-2" }
+    { subnetId = "utility-subnet-2", zone = "zone-2" }
   ]
 }
