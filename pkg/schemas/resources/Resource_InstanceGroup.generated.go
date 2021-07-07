@@ -15,9 +15,6 @@ var _ = Schema
 func ResourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"revision":                          ComputedInt(),
-			"cluster_name":                      ForceNew(RequiredString()),
-			"name":                              ForceNew(RequiredString()),
 			"role":                              RequiredString(),
 			"image":                             OptionalComputedString(),
 			"min_size":                          RequiredInt(),
@@ -62,6 +59,9 @@ func ResourceInstanceGroup() *schema.Resource {
 			"compress_user_data":                OptionalBool(),
 			"instance_metadata":                 OptionalStruct(kopsschemas.ResourceInstanceMetadataOptions()),
 			"update_policy":                     OptionalString(),
+			"revision":                          ComputedInt(),
+			"cluster_name":                      ForceNew(RequiredString()),
+			"name":                              ForceNew(RequiredString()),
 		},
 	}
 	res.SchemaVersion = 1
@@ -84,6 +84,9 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
+		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
+			return kopsschemas.ExpandResourceInstanceGroupSpec(in.(map[string]interface{}))
+		}(in),
 		Revision: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["revision"]),
@@ -93,13 +96,11 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
-			return kopsschemas.ExpandResourceInstanceGroupSpec(in.(map[string]interface{}))
-		}(in),
 	}
 }
 
 func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
+	kopsschemas.FlattenResourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
 	out["revision"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Revision)
@@ -109,7 +110,6 @@ func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
-	kopsschemas.FlattenResourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
 }
 
 func FlattenResourceInstanceGroup(in resources.InstanceGroup) map[string]interface{} {

@@ -15,20 +15,23 @@ import (
 
 // Cluster defines the configuration for a cluster
 type Cluster struct {
+	kops.ClusterSpec
 	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
 	Revision int
 	// Name defines the cluster name
 	Name string
 	// AdminSshKey defines the cluster admin ssh key
 	AdminSshKey string
-	kops.ClusterSpec
+	// Secrets defines the cluster secret
+	Secrets *ClusterSecrets
 }
 
-func makeCluster(adminSshKey string, cluster *kops.Cluster) *Cluster {
+func makeCluster(adminSshKey string, secrets *ClusterSecrets, cluster *kops.Cluster) *Cluster {
 	return &Cluster{
+		ClusterSpec: cluster.Spec,
 		Name:        cluster.ObjectMeta.Name,
 		AdminSshKey: adminSshKey,
-		ClusterSpec: cluster.Spec,
+		Secrets:     secrets,
 	}
 }
 
@@ -54,11 +57,19 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	cluster := makeCluster(pubKeys[0].Spec.PublicKey, kc)
+	secretStore, err := clientset.SecretStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	secrets, err := GetClusterSecrets(secretStore)
+	if err != nil {
+		return nil, err
+	}
+	cluster := makeCluster(pubKeys[0].Spec.PublicKey, secrets, kc)
 	return cluster, nil
 }
 
-func CreateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
 	kc := makeKopsCluster(name, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
@@ -79,19 +90,25 @@ func CreateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset si
 	if err != nil {
 		return nil, err
 	}
-	pubKey := []byte(adminSshKey)
-	err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, pubKey)
-	if err != nil {
+	if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
 		return nil, fmt.Errorf("error adding SSH public key: %v", err)
+	}
+	secretStore, err := clientset.SecretStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	secrets, err = CreateOrUpdateClusterSecrets(secretStore, secrets)
+	if err != nil {
+		return nil, err
 	}
 	kc, err = clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return nil, err
 	}
-	return makeCluster(adminSshKey, kc), nil
+	return makeCluster(adminSshKey, secrets, kc), nil
 }
 
-func UpdateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+func UpdateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
 	kc := makeKopsCluster(name, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
@@ -108,16 +125,22 @@ func UpdateCluster(name, adminSshKey string, spec kops.ClusterSpec, clientset si
 	if err != nil {
 		return nil, err
 	}
-	pubKey := []byte(adminSshKey)
-	err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, pubKey)
-	if err != nil {
+	if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
 		return nil, fmt.Errorf("error adding SSH public key: %v", err)
+	}
+	secretStore, err := clientset.SecretStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	secrets, err = CreateOrUpdateClusterSecrets(secretStore, secrets)
+	if err != nil {
+		return nil, err
 	}
 	kc, err = clientset.GetCluster(context.Background(), name)
 	if err != nil {
 		return nil, err
 	}
-	return makeCluster(adminSshKey, kc), nil
+	return makeCluster(adminSshKey, secrets, kc), nil
 }
 
 func DeleteCluster(name string, clientset simple.Clientset) error {

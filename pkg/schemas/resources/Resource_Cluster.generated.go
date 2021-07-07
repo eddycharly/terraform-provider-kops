@@ -15,9 +15,6 @@ var _ = Schema
 func ResourceCluster() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"revision":                          ComputedInt(),
-			"name":                              ForceNew(RequiredString()),
-			"admin_ssh_key":                     Sensitive(RequiredString()),
 			"channel":                           OptionalString(),
 			"addons":                            OptionalList(kopsschemas.ResourceAddonSpec()),
 			"config_base":                       OptionalComputedString(),
@@ -84,6 +81,10 @@ func ResourceCluster() *schema.Resource {
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(kopsschemas.ResourceRollingUpdate()),
 			"cluster_autoscaler":                OptionalStruct(kopsschemas.ResourceClusterAutoscalerConfig()),
+			"revision":                          ComputedInt(),
+			"name":                              ForceNew(RequiredString()),
+			"admin_ssh_key":                     Sensitive(RequiredString()),
+			"secrets":                           OptionalStruct(ResourceClusterSecrets()),
 		},
 	}
 	res.SchemaVersion = 1
@@ -106,6 +107,9 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		panic("expand Cluster failure, in is nil")
 	}
 	return resources.Cluster{
+		ClusterSpec: func(in interface{}) kops.ClusterSpec {
+			return kopsschemas.ExpandResourceClusterSpec(in.(map[string]interface{}))
+		}(in),
 		Revision: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["revision"]),
@@ -115,13 +119,29 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		AdminSshKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["admin_ssh_key"]),
-		ClusterSpec: func(in interface{}) kops.ClusterSpec {
-			return kopsschemas.ExpandResourceClusterSpec(in.(map[string]interface{}))
-		}(in),
+		Secrets: func(in interface{}) *resources.ClusterSecrets {
+			return func(in interface{}) *resources.ClusterSecrets {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resources.ClusterSecrets) *resources.ClusterSecrets {
+					return &in
+				}(func(in interface{}) resources.ClusterSecrets {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return resources.ClusterSecrets{}
+					}
+					return (ExpandResourceClusterSecrets(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["secrets"]),
 	}
 }
 
 func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}) {
+	kopsschemas.FlattenResourceClusterSpecInto(in.ClusterSpec, out)
 	out["revision"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Revision)
@@ -131,7 +151,18 @@ func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}
 	out["admin_ssh_key"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.AdminSshKey)
-	kopsschemas.FlattenResourceClusterSpecInto(in.ClusterSpec, out)
+	out["secrets"] = func(in *resources.ClusterSecrets) interface{} {
+		return func(in *resources.ClusterSecrets) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resources.ClusterSecrets) interface{} {
+				return func(in resources.ClusterSecrets) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceClusterSecrets(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Secrets)
 }
 
 func FlattenResourceCluster(in resources.Cluster) map[string]interface{} {

@@ -15,8 +15,6 @@ var _ = Schema
 func DataSourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"cluster_name":                      RequiredString(),
-			"name":                              RequiredString(),
 			"role":                              ComputedString(),
 			"image":                             ComputedString(),
 			"min_size":                          ComputedInt(),
@@ -61,6 +59,8 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"compress_user_data":                ComputedBool(),
 			"instance_metadata":                 ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
 			"update_policy":                     ComputedString(),
+			"cluster_name":                      RequiredString(),
+			"name":                              RequiredString(),
 		},
 	}
 	res.SchemaVersion = 1
@@ -83,26 +83,26 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
+		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
+			return kopsschemas.ExpandDataSourceInstanceGroupSpec(in.(map[string]interface{}))
+		}(in),
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
-			return kopsschemas.ExpandDataSourceInstanceGroupSpec(in.(map[string]interface{}))
-		}(in),
 	}
 }
 
 func FlattenDataSourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
+	kopsschemas.FlattenDataSourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
-	kopsschemas.FlattenDataSourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
 }
 
 func FlattenDataSourceInstanceGroup(in resources.InstanceGroup) map[string]interface{} {

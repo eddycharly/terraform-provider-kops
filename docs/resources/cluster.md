@@ -92,9 +92,6 @@ resource "kops_cluster" "cluster" {
 ## Argument Reference
 
 The following arguments are supported:
-- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
-- `name` - (Required) - (Force new) - String - Name defines the cluster name.
-- `admin_ssh_key` - (Required) - (Sensitive) - String - AdminSshKey defines the cluster admin ssh key.
 - `channel` - (Optional) - String - The Channel we are following.
 - `addons` - (Optional) - List([addon_spec](#addon_spec)) - Additional addons that should be installed on the cluster.
 - `config_base` - (Optional) - (Computed) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different than the location where the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).
@@ -161,6 +158,10 @@ The following arguments are supported:
 - `sysctl_parameters` - (Optional) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Optional) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.
 - `cluster_autoscaler` - (Optional) - [cluster_autoscaler_config](#cluster_autoscaler_config) - ClusterAutoscaler defines the cluster autoscaler configuration.
+- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `name` - (Required) - (Force new) - String - Name defines the cluster name.
+- `admin_ssh_key` - (Required) - (Sensitive) - String - AdminSshKey defines the cluster admin ssh key.
+- `secrets` - (Optional) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.
 
 ## Nested resources
 
@@ -1497,6 +1498,16 @@ The following arguments are supported:
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `memory_request` - (Optional) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
+
+### cluster_secrets
+
+ClusterSecrets defines cluster secrets.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `docker_config` - (Optional) - (Sensitive) - String - DockerConfig holds a valid docker config.<br />After creating a dockerconfig secret, a /root/.docker/config.json file will be added to newly created nodes.<br />This file will be used by Kubernetes to authenticate to container registries and will also work when using containerd as container runtime.
 
 
 ## Import

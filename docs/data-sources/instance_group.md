@@ -14,8 +14,6 @@ data "kops_instance_group" "ig-0" {
 ## Argument Reference
 
 The following arguments are supported:
-- `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
-- `name` - (Required) - String - Name defines the instance group name.
 - `role` - (Computed) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.
@@ -60,6 +58,8 @@ The following arguments are supported:
 - `compress_user_data` - (Computed) - Bool - CompressUserData compresses parts of the user data to save space.
 - `instance_metadata` - (Computed) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 - `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
+- `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
+- `name` - (Required) - String - Name defines the instance group name.
 
 ## Nested resources
 
