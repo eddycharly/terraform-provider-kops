@@ -23,6 +23,7 @@ func ResourceRollingUpdateOptions() *schema.Resource {
 			"validation_timeout":  OptionalDuration(),
 			"validate_count":      OptionalInt(),
 			"cloud_only":          OptionalBool(),
+			"force":               OptionalBool(),
 		},
 	}
 

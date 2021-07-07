@@ -123,6 +123,7 @@ The following arguments are supported:
 - `validation_timeout` - (Optional) - Duration - ValidationTimeout is the maximum time to wait for the cluster to validate, once we start validation.
 - `validate_count` - (Optional) - Int - ValidateCount is the amount of time that a cluster needs to be validated after single node update.
 - `cloud_only` - (Optional) - Bool - CloudOnly perform rolling update without confirming progress with k8s.
+- `force` - (Optional) - Bool - Force forces a rolling update.
 
 ### validate_options
 

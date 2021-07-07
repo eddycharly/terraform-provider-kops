@@ -35,6 +35,8 @@ type RollingUpdateOptions struct {
 	ValidateCount *int
 	// CloudOnly perform rolling update without confirming progress with k8s
 	CloudOnly bool
+	// Force forces a rolling update
+	Force bool
 }
 
 func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName string) ([]string, error) {
@@ -176,7 +178,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 		NodeInterval:            NodeInterval,
 		BastionInterval:         BastionInterval,
 		Interactive:             false,
-		Force:                   false,
+		Force:                   options.Force,
 		Cloud:                   cloud,
 		K8sClient:               k8sClient,
 		FailOnDrainError:        options.FailOnDrainError,
