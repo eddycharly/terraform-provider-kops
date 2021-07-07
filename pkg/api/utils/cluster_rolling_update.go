@@ -205,7 +205,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 			needUpdate = true
 		}
 	}
-	if !needUpdate {
+	if !needUpdate && !options.Force {
 		return nil
 	}
 	clusterValidator, err := validation.NewClusterValidator(kc, cloud, list, config, k8sClient)
