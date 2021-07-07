@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceAzureConfiguration() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"subscription_id":     ComputedString(),
 			"tenant_id":           ComputedString(),
@@ -18,6 +18,8 @@ func DataSourceAzureConfiguration() *schema.Resource {
 			"admin_user":          ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAzureConfiguration(in map[string]interface{}) kops.AzureConfiguration {

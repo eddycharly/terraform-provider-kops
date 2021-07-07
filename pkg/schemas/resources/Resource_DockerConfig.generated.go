@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceDockerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":  RequiredString(),
 			"docker_config": RequiredString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceDockerConfig(in map[string]interface{}) resources.DockerConfig {

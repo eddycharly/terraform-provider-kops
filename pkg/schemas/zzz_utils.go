@@ -229,6 +229,9 @@ func OptionalComputedString() *schema.Schema {
 }
 
 func ExpandString(in interface{}) string {
+	if in == nil {
+		return ""
+	}
 	return in.(string)
 }
 
@@ -259,6 +262,9 @@ func OptionalComputedBool() *schema.Schema {
 }
 
 func ExpandBool(in interface{}) bool {
+	if in == nil {
+		return false
+	}
 	return in.(bool)
 }
 
@@ -289,6 +295,12 @@ func OptionalComputedInt() *schema.Schema {
 }
 
 func ExpandInt(in interface{}) int {
+	if in == nil {
+		return 0
+	}
+	if _, ok := in.(float64); ok {
+		return int(in.(float64))
+	}
 	return in.(int)
 }
 
@@ -319,6 +331,9 @@ func OptionalComputedFloat() *schema.Schema {
 }
 
 func ExpandFloat(in interface{}) float64 {
+	if in == nil {
+		return 0
+	}
 	return in.(float64)
 }
 

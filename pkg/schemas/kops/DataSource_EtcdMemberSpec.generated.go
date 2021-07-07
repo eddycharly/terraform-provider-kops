@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceEtcdMemberSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":              ComputedString(),
 			"instance_group":    ComputedString(),
@@ -23,6 +23,8 @@ func DataSourceEtcdMemberSpec() *schema.Resource {
 			"encrypted_volume":  ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
@@ -34,6 +36,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			return string(ExpandString(in))
 		}(in["name"]),
 		InstanceGroup: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -50,6 +55,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			}(in)
 		}(in["instance_group"]),
 		VolumeType: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -66,6 +74,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			}(in)
 		}(in["volume_type"]),
 		VolumeIops: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -82,6 +93,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			}(in)
 		}(in["volume_iops"]),
 		VolumeThroughput: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -98,6 +112,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			}(in)
 		}(in["volume_throughput"]),
 		VolumeSize: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -114,6 +131,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			}(in)
 		}(in["volume_size"]),
 		KmsKeyId: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -130,6 +150,9 @@ func ExpandDataSourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSp
 			}(in)
 		}(in["kms_key_id"]),
 		EncryptedVolume: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

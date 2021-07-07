@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ConfigProvider() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"state_store": RequiredString(),
 			"aws":         OptionalStruct(ConfigAws()),
@@ -17,6 +17,8 @@ func ConfigProvider() *schema.Resource {
 			"klog":        OptionalStruct(ConfigKlog()),
 		},
 	}
+
+	return res
 }
 
 func ExpandConfigProvider(in map[string]interface{}) config.Provider {

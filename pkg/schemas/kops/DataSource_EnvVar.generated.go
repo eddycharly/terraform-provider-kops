@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func DataSourceEnvVar() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":  ComputedString(),
 			"value": ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceEnvVar(in map[string]interface{}) kops.EnvVar {

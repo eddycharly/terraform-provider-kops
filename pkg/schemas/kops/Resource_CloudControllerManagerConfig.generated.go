@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceCloudControllerManagerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                          OptionalString(),
 			"log_level":                       OptionalInt(),
@@ -26,6 +26,8 @@ func ResourceCloudControllerManagerConfig() *schema.Resource {
 			"use_service_account_credentials": OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.CloudControllerManagerConfig {
@@ -52,6 +54,9 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 			return string(ExpandString(in))
 		}(in["cluster_cidr"]),
 		AllocateNodeCIDRs: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -68,6 +73,9 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 			}(in)
 		}(in["allocate_node_cidrs"]),
 		ConfigureCloudRoutes: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -84,6 +92,9 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 			}(in)
 		}(in["configure_cloud_routes"]),
 		CIDRAllocatorType: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -118,6 +129,9 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 			}(in)
 		}(in["leader_election"]),
 		UseServiceAccountCredentials: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

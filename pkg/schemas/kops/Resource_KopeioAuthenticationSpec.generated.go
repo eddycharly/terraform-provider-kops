@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func ResourceKopeioAuthenticationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandResourceKopeioAuthenticationSpec(in map[string]interface{}) kops.KopeioAuthenticationSpec {

@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceMixedInstancesPolicySpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"instances":                     OptionalList(String()),
 			"on_demand_allocation_strategy": OptionalString(),
@@ -21,6 +21,8 @@ func ResourceMixedInstancesPolicySpec() *schema.Resource {
 			"spot_instance_pools":           OptionalInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.MixedInstancesPolicySpec {
@@ -30,6 +32,9 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 	return kops.MixedInstancesPolicySpec{
 		Instances: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -38,6 +43,9 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			}(in)
 		}(in["instances"]),
 		OnDemandAllocationStrategy: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -96,6 +104,9 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			return nil
 		}(in["on_demand_above_base"]),
 		SpotAllocationStrategy: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -112,6 +123,9 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			}(in)
 		}(in["spot_allocation_strategy"]),
 		SpotInstancePools: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

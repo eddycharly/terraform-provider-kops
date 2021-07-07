@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func ResourceCalicoNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"registry":                  OptionalString(),
 			"version":                   OptionalString(),
@@ -42,6 +42,8 @@ func ResourceCalicoNetworkingSpec() *schema.Resource {
 			"wireguard_enabled":                  OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNetworkingSpec {
@@ -74,6 +76,9 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 			return string(ExpandString(in))
 		}(in["chain_insert_mode"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -111,6 +116,9 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 			return string(ExpandString(in))
 		}(in["log_severity_screen"]),
 		MTU: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

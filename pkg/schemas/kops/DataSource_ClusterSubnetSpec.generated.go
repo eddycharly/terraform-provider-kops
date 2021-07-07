@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceClusterSubnetSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":        ComputedString(),
 			"cidr":        ComputedString(),
@@ -21,6 +21,8 @@ func DataSourceClusterSubnetSpec() *schema.Resource {
 			"public_ip":   ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubnetSpec {

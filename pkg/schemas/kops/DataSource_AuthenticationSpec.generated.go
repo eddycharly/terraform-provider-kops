@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func DataSourceAuthenticationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"kopeio": ComputedStruct(DataSourceKopeioAuthenticationSpec()),
 			"aws":    ComputedStruct(DataSourceAwsAuthenticationSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec {

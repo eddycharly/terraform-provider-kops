@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func ResourceKuberouterNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandResourceKuberouterNetworkingSpec(in map[string]interface{}) kops.KuberouterNetworkingSpec {

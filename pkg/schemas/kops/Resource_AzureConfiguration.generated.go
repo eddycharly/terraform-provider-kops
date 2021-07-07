@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ResourceAzureConfiguration() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"subscription_id":     OptionalString(),
 			"tenant_id":           OptionalString(),
@@ -18,6 +18,8 @@ func ResourceAzureConfiguration() *schema.Resource {
 			"admin_user":          OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceAzureConfiguration(in map[string]interface{}) kops.AzureConfiguration {

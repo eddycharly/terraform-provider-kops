@@ -14,7 +14,7 @@ import (
 var _ = Schema
 
 func DataSourceKubeConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":  RequiredString(),
 			"admin":         OptionalComputedInt(),
@@ -29,6 +29,8 @@ func DataSourceKubeConfig() *schema.Resource {
 			"client_key":    Sensitive(ComputedString()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfig {
@@ -40,6 +42,9 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
 		Admin: func(in interface{}) *time.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

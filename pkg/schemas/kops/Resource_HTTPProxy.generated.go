@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceHTTPProxy() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"host": RequiredString(),
 			"port": RequiredInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceHTTPProxy(in map[string]interface{}) kops.HTTPProxy {

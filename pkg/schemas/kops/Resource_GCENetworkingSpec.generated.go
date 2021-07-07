@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func ResourceGCENetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandResourceGCENetworkingSpec(in map[string]interface{}) kops.GCENetworkingSpec {

@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceEnvVar() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":  RequiredString(),
 			"value": OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceEnvVar(in map[string]interface{}) kops.EnvVar {

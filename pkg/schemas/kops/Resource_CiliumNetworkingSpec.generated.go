@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceCiliumNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"version":                           OptionalString(),
 			"access_log":                        OptionalString(),
@@ -91,6 +91,8 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"cni_bin_path":                      OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNetworkingSpec {
@@ -106,6 +108,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["access_log"]),
 		AgentLabels: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -127,6 +132,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["bpf_root"]),
 		ContainerRuntime: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -151,6 +159,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["debug"]),
 		DebugVerbose: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -226,6 +237,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["label_prefix_file"]),
 		Labels: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -241,6 +255,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["lib_dir"]),
 		LogDrivers: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -354,6 +371,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 			return bool(ExpandBool(in))
 		}(in["etcd_managed"]),
 		EnableRemoteNodeIdentity: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

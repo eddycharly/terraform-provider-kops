@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func DataSourceAssets() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"container_registry": ComputedString(),
 			"file_repository":    ComputedString(),
 			"container_proxy":    ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAssets(in map[string]interface{}) kops.Assets {
@@ -26,6 +28,9 @@ func ExpandDataSourceAssets(in map[string]interface{}) kops.Assets {
 	}
 	return kops.Assets{
 		ContainerRegistry: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -42,6 +47,9 @@ func ExpandDataSourceAssets(in map[string]interface{}) kops.Assets {
 			}(in)
 		}(in["container_registry"]),
 		FileRepository: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -58,6 +66,9 @@ func ExpandDataSourceAssets(in map[string]interface{}) kops.Assets {
 			}(in)
 		}(in["file_repository"]),
 		ContainerProxy: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

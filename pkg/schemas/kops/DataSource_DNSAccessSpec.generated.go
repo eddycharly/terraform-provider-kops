@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func DataSourceDNSAccessSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandDataSourceDNSAccessSpec(in map[string]interface{}) kops.DNSAccessSpec {

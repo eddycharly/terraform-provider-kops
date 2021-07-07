@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func ResourceLeaderElectionConfiguration() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"leader_elect":                         OptionalBool(),
 			"leader_elect_lease_duration":          OptionalDuration(),
@@ -23,6 +23,8 @@ func ResourceLeaderElectionConfiguration() *schema.Resource {
 			"leader_elect_retry_period":            OptionalDuration(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.LeaderElectionConfiguration {
@@ -31,6 +33,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 	}
 	return kops.LeaderElectionConfiguration{
 		LeaderElect: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -47,6 +52,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 			}(in)
 		}(in["leader_elect"]),
 		LeaderElectLeaseDuration: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -63,6 +71,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 			}(in)
 		}(in["leader_elect_lease_duration"]),
 		LeaderElectRenewDeadlineDuration: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -79,6 +90,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 			}(in)
 		}(in["leader_elect_renew_deadline_duration"]),
 		LeaderElectResourceLock: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -95,6 +109,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 			}(in)
 		}(in["leader_elect_resource_lock"]),
 		LeaderElectResourceName: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -111,6 +128,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 			}(in)
 		}(in["leader_elect_resource_name"]),
 		LeaderElectResourceNamespace: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -127,6 +147,9 @@ func ExpandResourceLeaderElectionConfiguration(in map[string]interface{}) kops.L
 			}(in)
 		}(in["leader_elect_resource_namespace"]),
 		LeaderElectRetryPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

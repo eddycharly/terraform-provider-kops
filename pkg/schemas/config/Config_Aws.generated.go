@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ConfigAws() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"profile":           OptionalString(),
 			"region":            OptionalString(),
@@ -23,6 +23,8 @@ func ConfigAws() *schema.Resource {
 			"skip_region_check": OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandConfigAws(in map[string]interface{}) config.Aws {

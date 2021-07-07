@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceOpenstackBlockStorageConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"version":              ComputedString(),
 			"ignore_az":            ComputedBool(),
@@ -21,6 +21,8 @@ func DataSourceOpenstackBlockStorageConfig() *schema.Resource {
 			"csi_topology_support": ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.OpenstackBlockStorageConfig {
@@ -29,6 +31,9 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 	}
 	return kops.OpenstackBlockStorageConfig{
 		Version: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -45,6 +50,9 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["version"]),
 		IgnoreAZ: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -61,6 +69,9 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["ignore_az"]),
 		OverrideAZ: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -77,6 +88,9 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["override_az"]),
 		CreateStorageClass: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -96,6 +110,9 @@ func ExpandDataSourceOpenstackBlockStorageConfig(in map[string]interface{}) kops
 			return string(ExpandString(in))
 		}(in["csi_plugin_image"]),
 		CSITopologySupport: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

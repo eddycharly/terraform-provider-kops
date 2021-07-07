@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceClusterStatus() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":    RequiredString(),
 			"exists":          ComputedBool(),
@@ -18,6 +18,8 @@ func DataSourceClusterStatus() *schema.Resource {
 			"instance_groups": ComputedList(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.ClusterStatus {
@@ -39,6 +41,9 @@ func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.Cluste
 		}(in["needs_update"]),
 		InstanceGroups: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

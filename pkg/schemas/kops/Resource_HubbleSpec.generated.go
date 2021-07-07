@@ -11,12 +11,14 @@ import (
 var _ = Schema
 
 func ResourceHubbleSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled": OptionalBool(),
 			"metrics": OptionalList(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
@@ -25,6 +27,9 @@ func ExpandResourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
 	}
 	return kops.HubbleSpec{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -42,6 +47,9 @@ func ExpandResourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
 		}(in["enabled"]),
 		Metrics: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

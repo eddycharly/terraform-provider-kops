@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceApplyOptions() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"skip":                 OptionalBool(),
 			"allow_kops_downgrade": OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceApplyOptions(in map[string]interface{}) resources.ApplyOptions {

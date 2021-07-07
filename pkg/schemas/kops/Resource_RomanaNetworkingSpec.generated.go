@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceRomanaNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"daemon_service_ip": OptionalString(),
 			"etcd_service_ip":   OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceRomanaNetworkingSpec(in map[string]interface{}) kops.RomanaNetworkingSpec {

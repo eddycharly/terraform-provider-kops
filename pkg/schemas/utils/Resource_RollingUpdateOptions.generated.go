@@ -16,6 +16,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 	}
 	return utils.RollingUpdateOptions{
 		MasterInterval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -32,6 +35,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			}(in)
 		}(in["master_interval"]),
 		NodeInterval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -48,6 +54,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			}(in)
 		}(in["node_interval"]),
 		BastionInterval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -70,6 +79,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			return bool(ExpandBool(in))
 		}(in["fail_on_validate"]),
 		PostDrainDelay: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -86,6 +98,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			}(in)
 		}(in["post_drain_delay"]),
 		ValidationTimeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -102,6 +117,9 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 			}(in)
 		}(in["validation_timeout"]),
 		ValidateCount: func(in interface{}) *int {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

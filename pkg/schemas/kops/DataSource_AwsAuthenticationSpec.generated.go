@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceAwsAuthenticationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":          ComputedString(),
 			"backend_mode":   ComputedString(),
@@ -23,6 +23,8 @@ func DataSourceAwsAuthenticationSpec() *schema.Resource {
 			"cpu_limit":      ComputedQuantity(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticationSpec {
@@ -40,6 +42,9 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 			return string(ExpandString(in))
 		}(in["cluster_id"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -56,6 +61,9 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 			}(in)
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -72,6 +80,9 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 			}(in)
 		}(in["cpu_request"]),
 		MemoryLimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -88,6 +99,9 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 			}(in)
 		}(in["memory_limit"]),
 		CPULimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

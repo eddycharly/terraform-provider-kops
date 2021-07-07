@@ -11,9 +11,12 @@ import (
 )
 
 func InstanceGroup() *schema.Resource {
+	res := resourceschemas.DataSourceInstanceGroup()
 	return &schema.Resource{
-		ReadContext: InstanceGroupRead,
-		Schema:      resourceschemas.DataSourceInstanceGroup().Schema,
+		ReadContext:    InstanceGroupRead,
+		Schema:         res.Schema,
+		SchemaVersion:  res.SchemaVersion,
+		StateUpgraders: res.StateUpgraders,
 	}
 }
 

@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func DataSourceLyftVPCNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"subnet_tags": ComputedMap(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceLyftVPCNetworkingSpec(in map[string]interface{}) kops.LyftVPCNetworkingSpec {

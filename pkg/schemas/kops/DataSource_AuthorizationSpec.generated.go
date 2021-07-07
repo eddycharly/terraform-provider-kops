@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func DataSourceAuthorizationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"always_allow": ComputedStruct(DataSourceAlwaysAllowAuthorizationSpec()),
 			"rbac":         ComputedStruct(DataSourceRBACAuthorizationSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {

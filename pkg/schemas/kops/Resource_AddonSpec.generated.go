@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ResourceAddonSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"manifest": RequiredString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceAddonSpec(in map[string]interface{}) kops.AddonSpec {

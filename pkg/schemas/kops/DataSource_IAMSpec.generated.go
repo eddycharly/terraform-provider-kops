@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func DataSourceIAMSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"legacy":                   ComputedBool(),
 			"allow_container_registry": ComputedBool(),
 			"permissions_boundary":     ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
@@ -32,6 +34,9 @@ func ExpandDataSourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 			return bool(ExpandBool(in))
 		}(in["allow_container_registry"]),
 		PermissionsBoundary: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

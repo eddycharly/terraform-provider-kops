@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceClusterSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"channel":                           ComputedString(),
 			"addons":                            ComputedList(DataSourceAddonSpec()),
@@ -81,6 +81,8 @@ func DataSourceClusterSpec() *schema.Resource {
 			"cluster_autoscaler":                ComputedStruct(DataSourceClusterAutoscalerConfig()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
@@ -93,6 +95,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["channel"]),
 		Addons: func(in interface{}) []kops.AddonSpec {
 			return func(in interface{}) []kops.AddonSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.AddonSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.AddonSpec {
@@ -119,6 +124,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["kubernetes_version"]),
 		Subnets: func(in interface{}) []kops.ClusterSubnetSpec {
 			return func(in interface{}) []kops.ClusterSubnetSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.ClusterSubnetSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.ClusterSubnetSpec {
@@ -145,6 +153,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["network_cidr"]),
 		AdditionalNetworkCIDRs: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -187,6 +198,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["dns_zone"]),
 		AdditionalSANs: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -208,6 +222,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["non_masquerade_cidr"]),
 		SSHAccess: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -217,6 +234,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["ssh_access"]),
 		NodePortAccess: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -243,6 +263,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			}(in)
 		}(in["egress_proxy"]),
 		SSHKeyName: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -260,6 +283,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["ssh_key_name"]),
 		KubernetesAPIAccess: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -268,6 +294,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			}(in)
 		}(in["kubernetes_api_access"]),
 		IsolateMasters: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -284,6 +313,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			}(in)
 		}(in["isolate_masters"]),
 		UpdatePolicy: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -316,6 +348,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 					out := map[string][]string{}
 					for key, in := range in.(map[string]interface{}) {
 						out[key] = func(in interface{}) []string {
+							if in == nil {
+								return nil
+							}
 							var out []string
 							for _, in := range in.([]interface{}) {
 								out = append(out, string(ExpandString(in)))
@@ -351,6 +386,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["additional_policies"]),
 		FileAssets: func(in interface{}) []kops.FileAssetSpec {
 			return func(in interface{}) []kops.FileAssetSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.FileAssetSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.FileAssetSpec {
@@ -365,6 +403,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["file_assets"]),
 		EtcdClusters: func(in interface{}) []kops.EtcdClusterSpec {
 			return func(in interface{}) []kops.EtcdClusterSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.EtcdClusterSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.EtcdClusterSpec {
@@ -787,6 +828,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["cloud_labels"]),
 		Hooks: func(in interface{}) []kops.HookSpec {
 			return func(in interface{}) []kops.HookSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.HookSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.HookSpec {
@@ -836,6 +880,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			}(in)
 		}(in["iam"]),
 		EncryptionConfig: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -855,6 +902,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 			return bool(ExpandBool(in))
 		}(in["disable_subnet_tags"]),
 		UseHostCertificates: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -872,6 +922,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		}(in["use_host_certificates"]),
 		SysctlParameters: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

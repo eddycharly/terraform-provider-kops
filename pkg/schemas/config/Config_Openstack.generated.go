@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ConfigOpenstack() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"tenant_id":                     OptionalString(),
 			"tenant_name":                   OptionalString(),
@@ -27,6 +27,8 @@ func ConfigOpenstack() *schema.Resource {
 			"application_credential_secret": OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandConfigOpenstack(in map[string]interface{}) config.Openstack {

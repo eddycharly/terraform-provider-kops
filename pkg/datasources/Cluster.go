@@ -11,9 +11,12 @@ import (
 )
 
 func Cluster() *schema.Resource {
+	res := resourceschemas.DataSourceCluster()
 	return &schema.Resource{
-		ReadContext: ClusterRead,
-		Schema:      resourceschemas.DataSourceCluster().Schema,
+		ReadContext:    ClusterRead,
+		Schema:         res.Schema,
+		SchemaVersion:  res.SchemaVersion,
+		StateUpgraders: res.StateUpgraders,
 	}
 }
 

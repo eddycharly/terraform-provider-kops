@@ -21,6 +21,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			return string(ExpandString(in))
 		}(in["image"]),
 		MinSize: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -37,6 +40,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["min_size"]),
 		MaxSize: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -53,6 +59,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["max_size"]),
 		Autoscale: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -72,6 +81,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			return string(ExpandString(in))
 		}(in["machine_type"]),
 		RootVolumeSize: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -88,6 +100,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_size"]),
 		RootVolumeType: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -104,6 +119,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_type"]),
 		RootVolumeIops: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -120,6 +138,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_iops"]),
 		RootVolumeThroughput: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -136,6 +157,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_throughput"]),
 		RootVolumeOptimization: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -152,6 +176,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_optimization"]),
 		RootVolumeDeleteOnTermination: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -168,6 +195,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_delete_on_termination"]),
 		RootVolumeEncryption: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -184,6 +214,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["root_volume_encryption"]),
 		RootVolumeEncryptionKey: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -201,6 +234,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["root_volume_encryption_key"]),
 		Volumes: func(in interface{}) []kops.VolumeSpec {
 			return func(in interface{}) []kops.VolumeSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.VolumeSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.VolumeSpec {
@@ -215,6 +251,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["volumes"]),
 		VolumeMounts: func(in interface{}) []kops.VolumeMountSpec {
 			return func(in interface{}) []kops.VolumeMountSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.VolumeMountSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.VolumeMountSpec {
@@ -229,6 +268,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["volume_mounts"]),
 		Subnets: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -238,6 +280,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["subnets"]),
 		Zones: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -247,6 +292,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["zones"]),
 		Hooks: func(in interface{}) []kops.HookSpec {
 			return func(in interface{}) []kops.HookSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.HookSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.HookSpec {
@@ -260,6 +308,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["hooks"]),
 		MaxPrice: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -276,6 +327,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["max_price"]),
 		SpotDurationInMinutes: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -292,6 +346,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["spot_duration_in_minutes"]),
 		CPUCredits: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -308,6 +365,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["cpu_credits"]),
 		AssociatePublicIP: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -325,6 +385,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["associate_public_ip"]),
 		AdditionalSecurityGroups: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -358,6 +421,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["node_labels"]),
 		FileAssets: func(in interface{}) []kops.FileAssetSpec {
 			return func(in interface{}) []kops.FileAssetSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.FileAssetSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.FileAssetSpec {
@@ -393,6 +459,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["kubelet"]),
 		Taints: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -420,6 +489,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["mixed_instances_policy"]),
 		AdditionalUserData: func(in interface{}) []kops.UserData {
 			return func(in interface{}) []kops.UserData {
+				if in == nil {
+					return nil
+				}
 				var out []kops.UserData
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.UserData {
@@ -434,6 +506,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["additional_user_data"]),
 		SuspendProcesses: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -443,6 +518,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["suspend_processes"]),
 		ExternalLoadBalancers: func(in interface{}) []kops.LoadBalancer {
 			return func(in interface{}) []kops.LoadBalancer {
+				if in == nil {
+					return nil
+				}
 				var out []kops.LoadBalancer
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.LoadBalancer {
@@ -456,6 +534,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["external_load_balancers"]),
 		DetailedInstanceMonitoring: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -490,6 +571,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["iam"]),
 		SecurityGroupOverride: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -506,6 +590,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["security_group_override"]),
 		InstanceProtection: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -523,6 +610,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 		}(in["instance_protection"]),
 		SysctlParameters: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -549,6 +639,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["rolling_update"]),
 		InstanceInterruptionBehavior: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -565,6 +658,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["instance_interruption_behavior"]),
 		CompressUserData: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -599,6 +695,9 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 			}(in)
 		}(in["instance_metadata"]),
 		UpdatePolicy: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

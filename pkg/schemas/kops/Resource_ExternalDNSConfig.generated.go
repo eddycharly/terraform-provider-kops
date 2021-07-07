@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func ResourceExternalDNSConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"disable":         OptionalBool(),
 			"watch_ingress":   OptionalBool(),
 			"watch_namespace": OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceExternalDNSConfig(in map[string]interface{}) kops.ExternalDNSConfig {
@@ -29,6 +31,9 @@ func ExpandResourceExternalDNSConfig(in map[string]interface{}) kops.ExternalDNS
 			return bool(ExpandBool(in))
 		}(in["disable"]),
 		WatchIngress: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

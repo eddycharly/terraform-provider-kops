@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceTopologySpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"masters": ComputedString(),
 			"nodes":   ComputedString(),
@@ -17,6 +17,8 @@ func DataSourceTopologySpec() *schema.Resource {
 			"dns":     ComputedStruct(DataSourceDNSSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceTopologySpec(in map[string]interface{}) kops.TopologySpec {

@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ConfigKlog() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"verbosity": Nullable(OptionalInt()),
 		},
 	}
+
+	return res
 }
 
 func ExpandConfigKlog(in map[string]interface{}) config.Klog {

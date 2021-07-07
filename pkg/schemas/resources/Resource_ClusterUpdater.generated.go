@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ResourceClusterUpdater() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"revision":       ComputedInt(),
 			"cluster_name":   RequiredString(),
@@ -19,6 +19,8 @@ func ResourceClusterUpdater() *schema.Resource {
 			"validate":       OptionalStruct(ResourceValidateOptions()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUpdater {

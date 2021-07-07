@@ -11,12 +11,14 @@ import (
 var _ = Schema
 
 func ResourceLoadBalancer() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"load_balancer_name": OptionalString(),
 			"target_group_arn":   OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
@@ -25,6 +27,9 @@ func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 	}
 	return kops.LoadBalancer{
 		LoadBalancerName: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -41,6 +46,9 @@ func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 			}(in)
 		}(in["load_balancer_name"]),
 		TargetGroupARN: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

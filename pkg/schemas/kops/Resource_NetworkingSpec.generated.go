@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ResourceNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"classic":    OptionalStruct(ResourceClassicNetworkingSpec()),
 			"kubenet":    OptionalStruct(ResourceKubenetNetworkingSpec()),
@@ -28,6 +28,8 @@ func ResourceNetworkingSpec() *schema.Resource {
 			"gce":        OptionalStruct(ResourceGCENetworkingSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec {

@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func DataSourceOpenstackNetwork() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"availability_zone_hints": ComputedList(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceOpenstackNetwork(in map[string]interface{}) kops.OpenstackNetwork {
@@ -23,6 +25,9 @@ func ExpandDataSourceOpenstackNetwork(in map[string]interface{}) kops.OpenstackN
 	return kops.OpenstackNetwork{
 		AvailabilityZoneHints: func(in interface{}) []*string {
 			return func(in interface{}) []*string {
+				if in == nil {
+					return nil
+				}
 				var out []*string
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) *string {

@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func DataSourceKubenetNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandDataSourceKubenetNetworkingSpec(in map[string]interface{}) kops.KubenetNetworkingSpec {

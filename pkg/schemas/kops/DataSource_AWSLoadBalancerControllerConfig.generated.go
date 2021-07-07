@@ -11,12 +11,14 @@ import (
 var _ = Schema
 
 func DataSourceAWSLoadBalancerControllerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled": ComputedBool(),
 			"version": ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) kops.AWSLoadBalancerControllerConfig {
@@ -25,6 +27,9 @@ func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) 
 	}
 	return kops.AWSLoadBalancerControllerConfig{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -41,6 +46,9 @@ func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) 
 			}(in)
 		}(in["enabled"]),
 		Version: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

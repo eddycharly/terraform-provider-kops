@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ResourceBastionLoadBalancerSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"additional_security_groups": RequiredList(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceBastionLoadBalancerSpec(in map[string]interface{}) kops.BastionLoadBalancerSpec {
@@ -23,6 +25,9 @@ func ExpandResourceBastionLoadBalancerSpec(in map[string]interface{}) kops.Basti
 	return kops.BastionLoadBalancerSpec{
 		AdditionalSecurityGroups: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

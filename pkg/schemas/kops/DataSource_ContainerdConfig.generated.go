@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceContainerdConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"address":          ComputedString(),
 			"config_override":  ComputedString(),
@@ -24,6 +24,8 @@ func DataSourceContainerdConfig() *schema.Resource {
 			"version":          ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.ContainerdConfig {
@@ -32,6 +34,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 	}
 	return kops.ContainerdConfig{
 		Address: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -48,6 +53,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 			}(in)
 		}(in["address"]),
 		ConfigOverride: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -64,6 +72,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 			}(in)
 		}(in["config_override"]),
 		LogLevel: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -105,6 +116,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 				out := map[string][]string{}
 				for key, in := range in.(map[string]interface{}) {
 					out[key] = func(in interface{}) []string {
+						if in == nil {
+							return nil
+						}
 						var out []string
 						for _, in := range in.([]interface{}) {
 							out = append(out, string(ExpandString(in)))
@@ -116,6 +130,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 			}(in)
 		}(in["registry_mirrors"]),
 		Root: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -135,6 +152,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 			return bool(ExpandBool(in))
 		}(in["skip_install"]),
 		State: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -151,6 +171,9 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 			}(in)
 		}(in["state"]),
 		Version: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

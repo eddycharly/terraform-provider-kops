@@ -9,13 +9,15 @@ import (
 var _ = Schema
 
 func ResourceUserData() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":    RequiredString(),
 			"type":    RequiredString(),
 			"content": RequiredString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceUserData(in map[string]interface{}) kops.UserData {

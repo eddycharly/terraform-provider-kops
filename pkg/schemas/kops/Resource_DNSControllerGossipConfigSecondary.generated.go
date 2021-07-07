@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceDNSControllerGossipConfigSecondary() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"protocol": OptionalString(),
 			"listen":   OptionalString(),
@@ -19,6 +19,8 @@ func ResourceDNSControllerGossipConfigSecondary() *schema.Resource {
 			"seed":     OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{}) kops.DNSControllerGossipConfigSecondary {
@@ -27,6 +29,9 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 	}
 	return kops.DNSControllerGossipConfigSecondary{
 		Protocol: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 			}(in)
 		}(in["protocol"]),
 		Listen: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 			}(in)
 		}(in["listen"]),
 		Secret: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -75,6 +86,9 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 			}(in)
 		}(in["secret"]),
 		Seed: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

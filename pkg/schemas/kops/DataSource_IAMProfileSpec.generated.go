@@ -11,11 +11,13 @@ import (
 var _ = Schema
 
 func DataSourceIAMProfileSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"profile": ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSpec {
@@ -24,6 +26,9 @@ func ExpandDataSourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSp
 	}
 	return kops.IAMProfileSpec{
 		Profile: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

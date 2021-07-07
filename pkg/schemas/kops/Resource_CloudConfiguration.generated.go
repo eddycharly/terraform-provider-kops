@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceCloudConfiguration() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"manage_storage_classes":         OptionalBool(),
 			"multizone":                      OptionalBool(),
@@ -34,6 +34,8 @@ func ResourceCloudConfiguration() *schema.Resource {
 			"aws_ebs_csi_driver":             OptionalStruct(ResourceAWSEBSCSIDriver()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfiguration {
@@ -42,6 +44,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 	}
 	return kops.CloudConfiguration{
 		ManageStorageClasses: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -58,6 +63,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["manage_storage_classes"]),
 		Multizone: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -74,6 +82,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["multizone"]),
 		NodeTags: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -90,6 +101,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["node_tags"]),
 		NodeInstancePrefix: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -109,6 +123,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			return string(ExpandString(in))
 		}(in["gce_service_account"]),
 		DisableSecurityGroupIngress: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -125,6 +142,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["disable_security_group_ingress"]),
 		ElbSecurityGroup: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -141,6 +161,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["elb_security_group"]),
 		VSphereUsername: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -157,6 +180,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_username"]),
 		VSpherePassword: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -173,6 +199,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_password"]),
 		VSphereServer: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -189,6 +218,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_server"]),
 		VSphereDatacenter: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -205,6 +237,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_datacenter"]),
 		VSphereResourcePool: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -221,6 +256,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_resource_pool"]),
 		VSphereDatastore: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -237,6 +275,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_datastore"]),
 		VSphereCoreDNSServer: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -253,6 +294,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["v_sphere_core_dns_server"]),
 		SpotinstProduct: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -269,6 +313,9 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			}(in)
 		}(in["spotinst_product"]),
 		SpotinstOrientation: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceEtcdManagerSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":                   ComputedString(),
 			"env":                     ComputedList(DataSourceEnvVar()),
@@ -19,6 +19,8 @@ func DataSourceEtcdManagerSpec() *schema.Resource {
 			"log_level":               ComputedInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSpec {
@@ -31,6 +33,9 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 		}(in["image"]),
 		Env: func(in interface{}) []kops.EnvVar {
 			return func(in interface{}) []kops.EnvVar {
+				if in == nil {
+					return nil
+				}
 				var out []kops.EnvVar
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.EnvVar {
@@ -44,6 +49,9 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 			}(in)
 		}(in["env"]),
 		DiscoveryPollInterval: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -60,6 +68,9 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 			}(in)
 		}(in["discovery_poll_interval"]),
 		LogLevel: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

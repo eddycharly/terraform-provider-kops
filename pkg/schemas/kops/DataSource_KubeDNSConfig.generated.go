@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceKubeDNSConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cache_max_size":       ComputedInt(),
 			"cache_max_concurrent": ComputedInt(),
@@ -32,6 +32,8 @@ func DataSourceKubeDNSConfig() *schema.Resource {
 			"node_local_dns":       ComputedStruct(DataSourceNodeLocalDNSConfig()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
@@ -77,6 +79,9 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				out := map[string][]string{}
 				for key, in := range in.(map[string]interface{}) {
 					out[key] = func(in interface{}) []string {
+						if in == nil {
+							return nil
+						}
 						var out []string
 						for _, in := range in.([]interface{}) {
 							out = append(out, string(ExpandString(in)))
@@ -89,6 +94,9 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 		}(in["stub_domains"]),
 		UpstreamNameservers: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -97,6 +105,9 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 			}(in)
 		}(in["upstream_nameservers"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -113,6 +124,9 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 			}(in)
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -129,6 +143,9 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 			}(in)
 		}(in["cpu_request"]),
 		MemoryLimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

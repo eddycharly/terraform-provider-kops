@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceGossipConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"protocol":  ComputedString(),
 			"listen":    ComputedString(),
@@ -19,6 +19,8 @@ func DataSourceGossipConfig() *schema.Resource {
 			"secondary": ComputedStruct(DataSourceGossipConfigSecondary()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
@@ -27,6 +29,9 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 	}
 	return kops.GossipConfig{
 		Protocol: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 			}(in)
 		}(in["protocol"]),
 		Listen: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 			}(in)
 		}(in["listen"]),
 		Secret: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

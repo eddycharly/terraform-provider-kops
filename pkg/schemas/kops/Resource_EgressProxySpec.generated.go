@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceEgressProxySpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"http_proxy":     RequiredStruct(ResourceHTTPProxy()),
 			"proxy_excludes": OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceEgressProxySpec(in map[string]interface{}) kops.EgressProxySpec {

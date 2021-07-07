@@ -33,6 +33,7 @@ func toSnakeCase(str string) string {
 
 type options struct {
 	noSchema     bool
+	version      *int
 	exclude      sets.String
 	asSets       sets.String
 	rename       map[string]string
@@ -63,6 +64,12 @@ func newOptions() *options {
 func noSchema() func(o *options) {
 	return func(o *options) {
 		o.noSchema = true
+	}
+}
+
+func version(v int) func(o *options) {
+	return func(o *options) {
+		o.version = &v
 	}
 }
 
@@ -290,6 +297,12 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"fields": getFields,
 		"needsSchema": func(t reflect.Type) bool {
 			return !optionsMap[t].noSchema
+		},
+		"hasVersion": func(t reflect.Type) bool {
+			return optionsMap[t].version != nil
+		},
+		"schemaVersion": func(t reflect.Type) int {
+			return *(optionsMap[t].version)
 		},
 		"schemaType": schemaType,
 		"resourceComment": func(t reflect.Type) string {
@@ -530,7 +543,7 @@ Struct({{ mapping . }}{{ scope }}{{ .Name }}())
 
 {{ if needsSchema . }}
 func {{ scope }}{{ .Name }}() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			{{- range (fields . true) }}
 			{{- if not (isExcluded .) }}
@@ -567,6 +580,23 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			{{- end }}
 		},
 	}
+	{{ if hasVersion . -}}
+	res.SchemaVersion = {{ schemaVersion . }}
+	res.StateUpgraders = []schema.StateUpgrader{
+		{{ range $version := until (schemaVersion .) -}}
+		{
+				Type:    res.CoreConfigSchema().ImpliedType(),
+				Upgrade: func (ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+					ret := Flatten{{ scope }}{{ $.Name }}(Expand{{ scope }}{{ $.Name }}(rawState))
+					ret["id"] = rawState["id"]
+					return ret, nil
+				},
+				Version: {{ $version}},
+		},
+		{{- end }}
+	}
+	{{- end }}
+	return res
 }
 {{ end }}
 
@@ -616,6 +646,9 @@ func (in interface{}) {{ .String }} {
 }(in)
 {{- else if isList . -}}
 func (in interface{}) {{ .String }} {
+	if in == nil {
+		return nil
+	}
 	var out {{ .String }}
 	for _, in := range in.([]interface{}) {
 		out = append(out, {{ template "expandElem" .Elem }})
@@ -730,6 +763,9 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
 		{{- if not .Anonymous -}}
 		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) (not (isNullable .)) }}
+		if in == nil {
+			return nil
+		}
 		if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 			return nil
 		}
@@ -1005,6 +1041,7 @@ func main() {
 		),
 		generate(resources.ApplyOptions{}),
 		generate(resources.Cluster{},
+			version(1),
 			required("Name", "AdminSshKey"),
 			computedOnly("Revision"),
 			sensitive("AdminSshKey"),
@@ -1065,6 +1102,7 @@ func main() {
 		generate(kops.RBACAuthorizationSpec{}),
 		generate(kops.NodeAuthorizerSpec{}),
 		generate(resources.InstanceGroup{},
+			version(1),
 			required("ClusterName", "Name"),
 			forceNew("ClusterName", "Name"),
 			computedOnly("Revision"),
@@ -1192,6 +1230,7 @@ func main() {
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
 		generate(resources.Cluster{},
+			version(1),
 			required("Name"),
 			exclude("Revision"),
 		),
@@ -1272,6 +1311,7 @@ func main() {
 		generate(kops.DNSSpec{}),
 		generate(kops.BastionLoadBalancerSpec{}),
 		generate(resources.InstanceGroup{},
+			version(1),
 			required("ClusterName", "Name"),
 			exclude("Revision"),
 		),
@@ -1285,7 +1325,9 @@ func main() {
 		generate(kops.KubeletConfigSpec{},
 			nullable("AnonymousAuth"),
 		),
-		generate(kops.MixedInstancesPolicySpec{}),
+		generate(kops.MixedInstancesPolicySpec{},
+			nullable("OnDemandBase", "OnDemandAboveBase"),
+		),
 		generate(kops.UserData{}),
 		generate(kops.LoadBalancer{}),
 		generate(kops.IAMProfileSpec{}),

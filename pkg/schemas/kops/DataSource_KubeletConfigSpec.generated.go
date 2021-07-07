@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceKubeletConfigSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"api_servers":                            ComputedString(),
 			"anonymous_auth":                         Nullable(ComputedBool()),
@@ -101,6 +101,8 @@ func DataSourceKubeletConfigSpec() *schema.Resource {
 			"enable_cadvisor_json_endpoints":         ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConfigSpec {
@@ -149,6 +151,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 		}(in["tls_private_key_file"]),
 		TLSCipherSuites: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -163,6 +168,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["kubeconfig_path"]),
 		RequireKubeconfig: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -179,6 +187,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["require_kubeconfig"]),
 		LogLevel: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -204,6 +215,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["pod_infra_container_image"]),
 		SeccompProfileRoot: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -220,6 +234,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["seccomp_profile_root"]),
 		AllowPrivileged: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -236,6 +253,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["allow_privileged"]),
 		EnableDebuggingHandlers: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -252,6 +272,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["enable_debugging_handlers"]),
 		RegisterNode: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -268,6 +291,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["register_node"]),
 		NodeStatusUpdateFrequency: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -302,6 +328,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["runtime_cgroups"]),
 		ReadOnlyPort: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -324,6 +353,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["cgroup_root"]),
 		ConfigureCBR0: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -343,6 +375,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["hairpin_mode"]),
 		BabysitDaemons: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -359,6 +394,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["babysit_daemons"]),
 		MaxPods: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -381,6 +419,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["pod_cidr"]),
 		ResolverConfig: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -397,6 +438,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["resolver_config"]),
 		ReconcileCIDR: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -413,6 +457,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["reconcile_cidr"]),
 		RegisterSchedulable: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -429,6 +476,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["register_schedulable"]),
 		SerializeImagePulls: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -460,6 +510,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["non_masquerade_cidr"]),
 		EnableCustomMetrics: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -476,6 +529,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["enable_custom_metrics"]),
 		NetworkPluginMTU: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -492,6 +548,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["network_plugin_mtu"]),
 		ImageGCHighThresholdPercent: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -508,6 +567,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["image_gc_high_threshold_percent"]),
 		ImageGCLowThresholdPercent: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -524,6 +586,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["image_gc_low_threshold_percent"]),
 		ImagePullProgressDeadline: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -540,6 +605,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["image_pull_progress_deadline"]),
 		EvictionHard: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -562,6 +630,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["eviction_soft_grace_period"]),
 		EvictionPressureTransitionPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -588,6 +659,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 		}(in["volume_plugin_directory"]),
 		Taints: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -641,6 +715,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["enforce_node_allocatable"]),
 		RuntimeRequestTimeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -657,6 +734,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["runtime_request_timeout"]),
 		VolumeStatsAggPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -673,6 +753,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["volume_stats_agg_period"]),
 		FailSwapOn: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -690,6 +773,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 		}(in["fail_swap_on"]),
 		ExperimentalAllowedUnsafeSysctls: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -699,6 +785,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 		}(in["experimental_allowed_unsafe_sysctls"]),
 		AllowedUnsafeSysctls: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -707,6 +796,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["allowed_unsafe_sysctls"]),
 		StreamingConnectionIdleTimeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -723,6 +815,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["streaming_connection_idle_timeout"]),
 		DockerDisableSharedPID: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -742,6 +837,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["root_dir"]),
 		AuthenticationTokenWebhook: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -758,6 +856,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["authentication_token_webhook"]),
 		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -774,6 +875,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["authentication_token_webhook_cache_ttl"]),
 		CPUCFSQuota: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -790,6 +894,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["cpucfs_quota"]),
 		CPUCFSQuotaPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -809,6 +916,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["cpu_manager_policy"]),
 		RegistryPullQPS: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -825,6 +935,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["registry_pull_qps"]),
 		RegistryBurst: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -844,6 +957,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["topology_manager_policy"]),
 		RotateCertificates: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -860,6 +976,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["rotate_certificates"]),
 		ProtectKernelDefaults: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -879,6 +998,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["cgroup_driver"]),
 		HousekeepingInterval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -895,6 +1017,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["housekeeping_interval"]),
 		EventQPS: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -911,6 +1036,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["event_qps"]),
 		EventBurst: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -930,6 +1058,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			return string(ExpandString(in))
 		}(in["container_log_max_size"]),
 		ContainerLogMaxFiles: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -946,6 +1077,9 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}(in)
 		}(in["container_log_max_files"]),
 		EnableCadvisorJsonEndpoints: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

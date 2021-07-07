@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceCertManagerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":        OptionalBool(),
 			"managed":        OptionalBool(),
@@ -19,6 +19,8 @@ func ResourceCertManagerConfig() *schema.Resource {
 			"default_issuer": OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManagerConfig {
@@ -27,6 +29,9 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 	}
 	return kops.CertManagerConfig{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			}(in)
 		}(in["enabled"]),
 		Managed: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			}(in)
 		}(in["managed"]),
 		Image: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -75,6 +86,9 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 			}(in)
 		}(in["image"]),
 		DefaultIssuer: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

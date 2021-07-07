@@ -9,13 +9,15 @@ import (
 var _ = Schema
 
 func ResourceExecContainerAction() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":       RequiredString(),
 			"command":     OptionalList(String()),
 			"environment": OptionalMap(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceExecContainerAction(in map[string]interface{}) kops.ExecContainerAction {
@@ -28,6 +30,9 @@ func ExpandResourceExecContainerAction(in map[string]interface{}) kops.ExecConta
 		}(in["image"]),
 		Command: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
