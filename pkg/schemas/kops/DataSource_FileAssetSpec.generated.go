@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceFileAssetSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":      ComputedString(),
 			"path":      ComputedString(),
@@ -18,6 +18,8 @@ func DataSourceFileAssetSpec() *schema.Resource {
 			"is_base64": ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec {
@@ -33,6 +35,9 @@ func ExpandDataSourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec
 		}(in["path"]),
 		Roles: func(in interface{}) []kops.InstanceGroupRole {
 			return func(in interface{}) []kops.InstanceGroupRole {
+				if in == nil {
+					return nil
+				}
 				var out []kops.InstanceGroupRole
 				for _, in := range in.([]interface{}) {
 					out = append(out, kops.InstanceGroupRole(ExpandString(in)))

@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func ResourceKopeioNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandResourceKopeioNetworkingSpec(in map[string]interface{}) kops.KopeioNetworkingSpec {

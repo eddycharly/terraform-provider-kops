@@ -12,13 +12,15 @@ import (
 var _ = Schema
 
 func ResourceRollingUpdate() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"drain_and_terminate": OptionalBool(),
 			"max_unavailable":     OptionalIntOrString(),
 			"max_surge":           OptionalIntOrString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
@@ -27,6 +29,9 @@ func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 	}
 	return kops.RollingUpdate{
 		DrainAndTerminate: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 			}(in)
 		}(in["drain_and_terminate"]),
 		MaxUnavailable: func(in interface{}) *intstr.IntOrString {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 			}(in)
 		}(in["max_unavailable"]),
 		MaxSurge: func(in interface{}) *intstr.IntOrString {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

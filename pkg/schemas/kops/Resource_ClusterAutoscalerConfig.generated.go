@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func ResourceClusterAutoscalerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":                          OptionalBool(),
 			"expander":                         OptionalString(),
@@ -27,6 +27,8 @@ func ResourceClusterAutoscalerConfig() *schema.Resource {
 			"cpu_request":                      OptionalQuantity(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.ClusterAutoscalerConfig {
@@ -35,6 +37,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 	}
 	return kops.ClusterAutoscalerConfig{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -51,6 +56,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["enabled"]),
 		Expander: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -67,6 +75,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["expander"]),
 		BalanceSimilarNodeGroups: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -83,6 +94,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["balance_similar_node_groups"]),
 		ScaleDownUtilizationThreshold: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -99,6 +113,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["scale_down_utilization_threshold"]),
 		SkipNodesWithSystemPods: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -115,6 +132,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["skip_nodes_with_system_pods"]),
 		SkipNodesWithLocalStorage: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -131,6 +151,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["skip_nodes_with_local_storage"]),
 		NewPodScaleUpDelay: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -147,6 +170,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["new_pod_scale_up_delay"]),
 		ScaleDownDelayAfterAdd: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -163,6 +189,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["scale_down_delay_after_add"]),
 		Image: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -179,6 +208,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["image"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -195,6 +227,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

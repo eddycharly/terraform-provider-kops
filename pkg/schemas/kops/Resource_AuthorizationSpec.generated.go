@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceAuthorizationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"always_allow": OptionalStruct(ResourceAlwaysAllowAuthorizationSpec()),
 			"rbac":         OptionalStruct(ResourceRBACAuthorizationSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceAuthorizationSpec(in map[string]interface{}) kops.AuthorizationSpec {

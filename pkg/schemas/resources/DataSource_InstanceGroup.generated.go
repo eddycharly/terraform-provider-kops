@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"context"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
@@ -11,7 +13,7 @@ import (
 var _ = Schema
 
 func DataSourceInstanceGroup() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"cluster_name":                      RequiredString(),
 			"name":                              RequiredString(),
@@ -61,6 +63,19 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"update_policy":                     ComputedString(),
 		},
 	}
+	res.SchemaVersion = 1
+	res.StateUpgraders = []schema.StateUpgrader{
+		{
+			Type: res.CoreConfigSchema().ImpliedType(),
+			Upgrade: func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+				ret := FlattenDataSourceInstanceGroup(ExpandDataSourceInstanceGroup(rawState))
+				ret["id"] = rawState["id"]
+				return ret, nil
+			},
+			Version: 0,
+		},
+	}
+	return res
 }
 
 func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.InstanceGroup {

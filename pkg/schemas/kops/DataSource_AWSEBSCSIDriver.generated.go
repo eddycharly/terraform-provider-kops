@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func DataSourceAWSEBSCSIDriver() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":             ComputedBool(),
 			"version":             ComputedString(),
 			"volume_attach_limit": ComputedInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDriver {
@@ -26,6 +28,9 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 	}
 	return kops.AWSEBSCSIDriver{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -42,6 +47,9 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 			}(in)
 		}(in["enabled"]),
 		Version: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -58,6 +66,9 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 			}(in)
 		}(in["version"]),
 		VolumeAttachLimit: func(in interface{}) *int {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func DataSourceLoadBalancerSubnetSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":                 ComputedString(),
 			"private_ipv4_address": ComputedString(),
 			"allocation_id":        ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.LoadBalancerSubnetSpec {
@@ -29,6 +31,9 @@ func ExpandDataSourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.Load
 			return string(ExpandString(in))
 		}(in["name"]),
 		PrivateIPv4Address: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -45,6 +50,9 @@ func ExpandDataSourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.Load
 			}(in)
 		}(in["private_ipv4_address"]),
 		AllocationID: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

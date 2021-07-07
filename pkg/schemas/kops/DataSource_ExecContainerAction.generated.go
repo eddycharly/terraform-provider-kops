@@ -9,13 +9,15 @@ import (
 var _ = Schema
 
 func DataSourceExecContainerAction() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":       ComputedString(),
 			"command":     ComputedList(String()),
 			"environment": ComputedMap(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceExecContainerAction(in map[string]interface{}) kops.ExecContainerAction {
@@ -28,6 +30,9 @@ func ExpandDataSourceExecContainerAction(in map[string]interface{}) kops.ExecCon
 		}(in["image"]),
 		Command: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

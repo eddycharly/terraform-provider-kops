@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceAccessSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"dns":           OptionalStruct(ResourceDNSAccessSpec()),
 			"load_balancer": OptionalStruct(ResourceLoadBalancerAccessSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceAccessSpec(in map[string]interface{}) kops.AccessSpec {

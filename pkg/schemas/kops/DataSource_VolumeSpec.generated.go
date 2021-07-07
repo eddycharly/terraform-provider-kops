@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceVolumeSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"delete_on_termination": ComputedBool(),
 			"device":                ComputedString(),
@@ -23,6 +23,8 @@ func DataSourceVolumeSpec() *schema.Resource {
 			"type":                  ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
@@ -31,6 +33,9 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 	}
 	return kops.VolumeSpec{
 		DeleteOnTermination: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -50,6 +55,9 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 			return string(ExpandString(in))
 		}(in["device"]),
 		Encrypted: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -66,6 +74,9 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 			}(in)
 		}(in["encrypted"]),
 		Iops: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -82,6 +93,9 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 			}(in)
 		}(in["iops"]),
 		Throughput: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -98,6 +112,9 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 			}(in)
 		}(in["throughput"]),
 		Key: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -16,6 +16,9 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 	}
 	return utils.ValidateOptions{
 		Timeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -32,6 +35,9 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 			}(in)
 		}(in["timeout"]),
 		PollInterval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

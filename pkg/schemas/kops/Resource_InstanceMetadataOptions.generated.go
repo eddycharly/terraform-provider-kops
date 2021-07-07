@@ -11,12 +11,14 @@ import (
 var _ = Schema
 
 func ResourceInstanceMetadataOptions() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"http_put_response_hop_limit": OptionalInt(),
 			"http_tokens":                 OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceInstanceMetadataOptions(in map[string]interface{}) kops.InstanceMetadataOptions {
@@ -25,6 +27,9 @@ func ExpandResourceInstanceMetadataOptions(in map[string]interface{}) kops.Insta
 	}
 	return kops.InstanceMetadataOptions{
 		HTTPPutResponseHopLimit: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -41,6 +46,9 @@ func ExpandResourceInstanceMetadataOptions(in map[string]interface{}) kops.Insta
 			}(in)
 		}(in["http_put_response_hop_limit"]),
 		HTTPTokens: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

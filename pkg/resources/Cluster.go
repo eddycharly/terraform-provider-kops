@@ -12,13 +12,16 @@ import (
 )
 
 func Cluster() *schema.Resource {
+	res := resourcesschema.ResourceCluster()
 	return &schema.Resource{
-		CreateContext: ClusterCreate,
-		ReadContext:   ClusterRead,
-		UpdateContext: ClusterUpdate,
-		DeleteContext: ClusterDelete,
-		CustomizeDiff: schemas.CustomizeDiffRevision,
-		Schema:        resourcesschema.ResourceCluster().Schema,
+		CreateContext:  ClusterCreate,
+		ReadContext:    ClusterRead,
+		UpdateContext:  ClusterUpdate,
+		DeleteContext:  ClusterDelete,
+		CustomizeDiff:  schemas.CustomizeDiffRevision,
+		Schema:         res.Schema,
+		SchemaVersion:  res.SchemaVersion,
+		StateUpgraders: res.StateUpgraders,
 		Importer: &schema.ResourceImporter{
 			StateContext: ClusterImport,
 		},

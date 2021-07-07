@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceOpenstackLoadbalancerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"method":              OptionalString(),
 			"provider":            OptionalString(),
@@ -23,6 +23,8 @@ func ResourceOpenstackLoadbalancerConfig() *schema.Resource {
 			"manage_sec_groups":   OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.OpenstackLoadbalancerConfig {
@@ -31,6 +33,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 	}
 	return kops.OpenstackLoadbalancerConfig{
 		Method: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -47,6 +52,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["method"]),
 		Provider: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -63,6 +71,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["provider"]),
 		UseOctavia: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -79,6 +90,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["use_octavia"]),
 		FloatingNetwork: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -95,6 +109,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["floating_network"]),
 		FloatingNetworkID: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -111,6 +128,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["floating_network_id"]),
 		FloatingSubnet: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -127,6 +147,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["floating_subnet"]),
 		SubnetID: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -143,6 +166,9 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 			}(in)
 		}(in["subnet_id"]),
 		ManageSecGroups: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func DataSourceAlwaysAllowAuthorizationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAlwaysAllowAuthorizationSpec(in map[string]interface{}) kops.AlwaysAllowAuthorizationSpec {

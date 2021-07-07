@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceNodeAuthorizerSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"authorizer": ComputedString(),
 			"features":   ComputedList(String()),
@@ -24,6 +24,8 @@ func DataSourceNodeAuthorizerSpec() *schema.Resource {
 			"token_ttl":  ComputedDuration(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuthorizerSpec {
@@ -36,6 +38,9 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 		}(in["authorizer"]),
 		Features: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -53,6 +58,9 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 			return int(ExpandInt(in))
 		}(in["port"]),
 		Interval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -69,6 +77,9 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 			}(in)
 		}(in["interval"]),
 		Timeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -85,6 +96,9 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 			}(in)
 		}(in["timeout"]),
 		TokenTTL: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func DataSourceClassicNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandDataSourceClassicNetworkingSpec(in map[string]interface{}) kops.ClassicNetworkingSpec {

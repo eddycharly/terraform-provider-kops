@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceOpenstackConfiguration() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"loadbalancer":         ComputedStruct(DataSourceOpenstackLoadbalancerConfig()),
 			"monitor":              ComputedStruct(DataSourceOpenstackMonitor()),
@@ -21,6 +21,8 @@ func DataSourceOpenstackConfiguration() *schema.Resource {
 			"network":              ComputedStruct(DataSourceOpenstackNetwork()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfiguration {
@@ -101,6 +103,9 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 			}(in)
 		}(in["block_storage"]),
 		InsecureSkipVerify: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

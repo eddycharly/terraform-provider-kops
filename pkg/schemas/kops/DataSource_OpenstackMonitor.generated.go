@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func DataSourceOpenstackMonitor() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"delay":       ComputedString(),
 			"timeout":     ComputedString(),
 			"max_retries": ComputedInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackMonitor {
@@ -26,6 +28,9 @@ func ExpandDataSourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackM
 	}
 	return kops.OpenstackMonitor{
 		Delay: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -42,6 +47,9 @@ func ExpandDataSourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackM
 			}(in)
 		}(in["delay"]),
 		Timeout: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -58,6 +66,9 @@ func ExpandDataSourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackM
 			}(in)
 		}(in["timeout"]),
 		MaxRetries: func(in interface{}) *int {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

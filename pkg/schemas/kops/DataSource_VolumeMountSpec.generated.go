@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceVolumeMountSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"device":         ComputedString(),
 			"filesystem":     ComputedString(),
@@ -18,6 +18,8 @@ func DataSourceVolumeMountSpec() *schema.Resource {
 			"path":           ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSpec {
@@ -33,6 +35,9 @@ func ExpandDataSourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMount
 		}(in["filesystem"]),
 		FormatOptions: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -42,6 +47,9 @@ func ExpandDataSourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMount
 		}(in["format_options"]),
 		MountOptions: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

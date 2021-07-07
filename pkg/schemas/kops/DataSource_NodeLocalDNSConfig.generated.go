@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceNodeLocalDNSConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":             ComputedBool(),
 			"local_ip":            ComputedString(),
@@ -21,6 +21,8 @@ func DataSourceNodeLocalDNSConfig() *schema.Resource {
 			"cpu_request":         ComputedQuantity(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalDNSConfig {
@@ -29,6 +31,9 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 	}
 	return kops.NodeLocalDNSConfig{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -48,6 +53,9 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 			return string(ExpandString(in))
 		}(in["local_ip"]),
 		ForwardToKubeDNS: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -64,6 +72,9 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 			}(in)
 		}(in["forward_to_kube_dns"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -80,6 +91,9 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 			}(in)
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

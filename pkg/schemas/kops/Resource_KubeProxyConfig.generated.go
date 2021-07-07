@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func ResourceKubeProxyConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image":                  OptionalString(),
 			"cpu_request":            OptionalString(),
@@ -36,6 +36,8 @@ func ResourceKubeProxyConfig() *schema.Resource {
 			"conntrack_min":          OptionalInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConfig {
@@ -74,6 +76,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			return string(ExpandString(in))
 		}(in["master"]),
 		MetricsBindAddress: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -90,6 +95,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["metrics_bind_address"]),
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -110,6 +118,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 		}(in["proxy_mode"]),
 		IPVSExcludeCIDRS: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -118,6 +129,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["ip_vs_exclude_cidr_s"]),
 		IPVSMinSyncPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -134,6 +148,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["ip_vs_min_sync_period"]),
 		IPVSScheduler: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -150,6 +167,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["ip_vs_scheduler"]),
 		IPVSSyncPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -178,6 +198,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["feature_gates"]),
 		ConntrackMaxPerCore: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -194,6 +217,9 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["conntrack_max_per_core"]),
 		ConntrackMin: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

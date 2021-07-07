@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ResourceIAMProfileSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"profile": RequiredString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSpec {

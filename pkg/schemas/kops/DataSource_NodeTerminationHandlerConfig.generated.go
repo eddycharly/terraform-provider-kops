@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func DataSourceNodeTerminationHandlerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":                           ComputedBool(),
 			"enable_spot_interruption_draining": ComputedBool(),
@@ -19,6 +19,8 @@ func DataSourceNodeTerminationHandlerConfig() *schema.Resource {
 			"enable_prometheus_metrics":         ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.NodeTerminationHandlerConfig {
@@ -27,6 +29,9 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 	}
 	return kops.NodeTerminationHandlerConfig{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 			}(in)
 		}(in["enabled"]),
 		EnableSpotInterruptionDraining: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 			}(in)
 		}(in["enable_spot_interruption_draining"]),
 		EnableScheduledEventDraining: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -75,6 +86,9 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 			}(in)
 		}(in["enable_scheduled_event_draining"]),
 		EnablePrometheusMetrics: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

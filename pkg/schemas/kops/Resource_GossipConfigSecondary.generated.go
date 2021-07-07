@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func ResourceGossipConfigSecondary() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"protocol": OptionalString(),
 			"listen":   OptionalString(),
 			"secret":   OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipConfigSecondary {
@@ -26,6 +28,9 @@ func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipC
 	}
 	return kops.GossipConfigSecondary{
 		Protocol: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -42,6 +47,9 @@ func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipC
 			}(in)
 		}(in["protocol"]),
 		Listen: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -58,6 +66,9 @@ func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipC
 			}(in)
 		}(in["listen"]),
 		Secret: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

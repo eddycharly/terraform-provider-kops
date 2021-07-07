@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func ResourceBastionSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"bastion_public_name":  RequiredString(),
 			"idle_timeout_seconds": OptionalInt(),
 			"load_balancer":        OptionalStruct(ResourceBastionLoadBalancerSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
@@ -29,6 +31,9 @@ func ExpandResourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 			return string(ExpandString(in))
 		}(in["bastion_public_name"]),
 		IdleTimeoutSeconds: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

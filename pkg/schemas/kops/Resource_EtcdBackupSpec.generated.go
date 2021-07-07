@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceEtcdBackupSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"backup_store": RequiredString(),
 			"image":        RequiredString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceEtcdBackupSpec(in map[string]interface{}) kops.EtcdBackupSpec {

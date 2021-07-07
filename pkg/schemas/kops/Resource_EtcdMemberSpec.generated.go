@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceEtcdMemberSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":              RequiredString(),
 			"instance_group":    RequiredString(),
@@ -23,6 +23,8 @@ func ResourceEtcdMemberSpec() *schema.Resource {
 			"encrypted_volume":  OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec {
@@ -47,6 +49,9 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			}(in)
 		}(in["instance_group"]),
 		VolumeType: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -63,6 +68,9 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			}(in)
 		}(in["volume_type"]),
 		VolumeIops: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -79,6 +87,9 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			}(in)
 		}(in["volume_iops"]),
 		VolumeThroughput: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -95,6 +106,9 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			}(in)
 		}(in["volume_throughput"]),
 		VolumeSize: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -111,6 +125,9 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			}(in)
 		}(in["volume_size"]),
 		KmsKeyId: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -127,6 +144,9 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 			}(in)
 		}(in["kms_key_id"]),
 		EncryptedVolume: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

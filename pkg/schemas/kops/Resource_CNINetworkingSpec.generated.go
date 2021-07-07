@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ResourceCNINetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"uses_secondary_ip": OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceCNINetworkingSpec(in map[string]interface{}) kops.CNINetworkingSpec {

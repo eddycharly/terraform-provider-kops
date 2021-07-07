@@ -15,14 +15,17 @@ import (
 )
 
 func InstanceGroup() *schema.Resource {
+	res := resourcesschema.ResourceInstanceGroup()
 	return &schema.Resource{
-		CreateContext: InstanceGroupCreate,
-		ReadContext:   InstanceGroupRead,
-		UpdateContext: InstanceGroupUpdate,
-		DeleteContext: InstanceGroupDelete,
-		CustomizeDiff: schemas.CustomizeDiffRevision,
-		Importer:      &schema.ResourceImporter{StateContext: InstanceGroupImport},
-		Schema:        resourcesschema.ResourceInstanceGroup().Schema,
+		CreateContext:  InstanceGroupCreate,
+		ReadContext:    InstanceGroupRead,
+		UpdateContext:  InstanceGroupUpdate,
+		DeleteContext:  InstanceGroupDelete,
+		CustomizeDiff:  schemas.CustomizeDiffRevision,
+		Importer:       &schema.ResourceImporter{StateContext: InstanceGroupImport},
+		Schema:         res.Schema,
+		SchemaVersion:  res.SchemaVersion,
+		StateUpgraders: res.StateUpgraders,
 	}
 }
 

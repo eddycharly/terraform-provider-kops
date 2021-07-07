@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceCanalNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"chain_insert_mode":                  ComputedString(),
 			"cpu_request":                        ComputedQuantity(),
@@ -31,6 +31,8 @@ func DataSourceCanalNetworkingSpec() *schema.Resource {
 			"typha_replicas":                     ComputedInt(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNetworkingSpec {
@@ -42,6 +44,9 @@ func ExpandDataSourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNe
 			return string(ExpandString(in))
 		}(in["chain_insert_mode"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -73,6 +78,9 @@ func ExpandDataSourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNe
 			return string(ExpandString(in))
 		}(in["log_severity_sys"]),
 		MTU: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -13,7 +13,7 @@ import (
 var _ = Schema
 
 func ResourceEtcdClusterSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":                    RequiredString(),
 			"provider":                OptionalString(),
@@ -30,6 +30,8 @@ func ResourceEtcdClusterSpec() *schema.Resource {
 			"cpu_request":             OptionalQuantity(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSpec {
@@ -45,6 +47,9 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 		}(in["provider"]),
 		Members: func(in interface{}) []kops.EtcdMemberSpec {
 			return func(in interface{}) []kops.EtcdMemberSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.EtcdMemberSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.EtcdMemberSpec {
@@ -67,6 +72,9 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			return string(ExpandString(in))
 		}(in["version"]),
 		LeaderElectionTimeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -83,6 +91,9 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			}(in)
 		}(in["leader_election_timeout"]),
 		HeartbeatInterval: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -138,6 +149,9 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			}(in)
 		}(in["manager"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -154,6 +168,9 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 			}(in)
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

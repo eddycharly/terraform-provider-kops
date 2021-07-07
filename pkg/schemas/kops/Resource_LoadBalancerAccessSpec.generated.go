@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceLoadBalancerAccessSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"class":                      OptionalString(),
 			"type":                       RequiredString(),
@@ -25,6 +25,8 @@ func ResourceLoadBalancerAccessSpec() *schema.Resource {
 			"subnets":                    OptionalList(ResourceLoadBalancerSubnetSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBalancerAccessSpec {
@@ -39,6 +41,9 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 			return kops.LoadBalancerType(ExpandString(in))
 		}(in["type"]),
 		IdleTimeoutSeconds: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -55,6 +60,9 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 			}(in)
 		}(in["idle_timeout_seconds"]),
 		SecurityGroupOverride: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -72,6 +80,9 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 		}(in["security_group_override"]),
 		AdditionalSecurityGroups: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -86,6 +97,9 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 			return string(ExpandString(in))
 		}(in["ssl_certificate"]),
 		SSLPolicy: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -102,6 +116,9 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 			}(in)
 		}(in["ssl_policy"]),
 		CrossZoneLoadBalancing: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -119,6 +136,9 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 		}(in["cross_zone_load_balancing"]),
 		Subnets: func(in interface{}) []kops.LoadBalancerSubnetSpec {
 			return func(in interface{}) []kops.LoadBalancerSubnetSpec {
+				if in == nil {
+					return nil
+				}
 				var out []kops.LoadBalancerSubnetSpec
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.LoadBalancerSubnetSpec {

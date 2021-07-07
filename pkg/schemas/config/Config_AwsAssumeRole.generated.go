@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ConfigAwsAssumeRole() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"role_arn": OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandConfigAwsAssumeRole(in map[string]interface{}) config.AwsAssumeRole {

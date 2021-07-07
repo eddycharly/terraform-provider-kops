@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func ResourceKubeSchedulerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                           OptionalString(),
 			"log_level":                        OptionalInt(),
@@ -29,6 +29,8 @@ func ResourceKubeSchedulerConfig() *schema.Resource {
 			"enable_profiling":                 OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSchedulerConfig {
@@ -64,6 +66,9 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 			}(in)
 		}(in["leader_election"]),
 		UsePolicyConfigMap: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -92,6 +97,9 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 			}(in)
 		}(in["feature_gates"]),
 		MaxPersistentVolumes: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -108,6 +116,9 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 			}(in)
 		}(in["max_persistent_volumes"]),
 		Qps: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -134,6 +145,9 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 		}(in["authorization_kubeconfig"]),
 		AuthorizationAlwaysAllowPaths: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -142,6 +156,9 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 			}(in)
 		}(in["authorization_always_allow_paths"]),
 		EnableProfiling: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

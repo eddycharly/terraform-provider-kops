@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceOpenstackRouter() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"external_network":        OptionalString(),
 			"dns_servers":             OptionalString(),
@@ -19,6 +19,8 @@ func ResourceOpenstackRouter() *schema.Resource {
 			"availability_zone_hints": OptionalList(String()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRouter {
@@ -27,6 +29,9 @@ func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRout
 	}
 	return kops.OpenstackRouter{
 		ExternalNetwork: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRout
 			}(in)
 		}(in["external_network"]),
 		DNSServers: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRout
 			}(in)
 		}(in["dns_servers"]),
 		ExternalSubnet: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -76,6 +87,9 @@ func ExpandResourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRout
 		}(in["external_subnet"]),
 		AvailabilityZoneHints: func(in interface{}) []*string {
 			return func(in interface{}) []*string {
+				if in == nil {
+					return nil
+				}
 				var out []*string
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) *string {

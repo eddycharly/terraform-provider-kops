@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func ResourceTopologySpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"masters": RequiredString(),
 			"nodes":   RequiredString(),
@@ -17,6 +17,8 @@ func ResourceTopologySpec() *schema.Resource {
 			"dns":     RequiredStruct(ResourceDNSSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {

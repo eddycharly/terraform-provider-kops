@@ -9,12 +9,14 @@ import (
 var _ = Schema
 
 func ResourceAuthenticationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"kopeio": OptionalStruct(ResourceKopeioAuthenticationSpec()),
 			"aws":    OptionalStruct(ResourceAwsAuthenticationSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceAuthenticationSpec(in map[string]interface{}) kops.AuthenticationSpec {

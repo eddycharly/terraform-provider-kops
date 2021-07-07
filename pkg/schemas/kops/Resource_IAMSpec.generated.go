@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func ResourceIAMSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"legacy":                   OptionalBool(),
 			"allow_container_registry": OptionalBool(),
 			"permissions_boundary":     OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
@@ -32,6 +34,9 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 			return bool(ExpandBool(in))
 		}(in["allow_container_registry"]),
 		PermissionsBoundary: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

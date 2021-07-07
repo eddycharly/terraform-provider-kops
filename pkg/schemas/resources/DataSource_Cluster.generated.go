@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"context"
+
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
@@ -11,7 +13,7 @@ import (
 var _ = Schema
 
 func DataSourceCluster() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":                              RequiredString(),
 			"admin_ssh_key":                     ComputedString(),
@@ -83,6 +85,19 @@ func DataSourceCluster() *schema.Resource {
 			"cluster_autoscaler":                ComputedStruct(kopsschemas.DataSourceClusterAutoscalerConfig()),
 		},
 	}
+	res.SchemaVersion = 1
+	res.StateUpgraders = []schema.StateUpgrader{
+		{
+			Type: res.CoreConfigSchema().ImpliedType(),
+			Upgrade: func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+				ret := FlattenDataSourceCluster(ExpandDataSourceCluster(rawState))
+				ret["id"] = rawState["id"]
+				return ret, nil
+			},
+			Version: 0,
+		},
+	}
+	return res
 }
 
 func ExpandDataSourceCluster(in map[string]interface{}) resources.Cluster {

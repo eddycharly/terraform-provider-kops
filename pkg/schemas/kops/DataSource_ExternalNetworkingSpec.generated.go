@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func DataSourceExternalNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandDataSourceExternalNetworkingSpec(in map[string]interface{}) kops.ExternalNetworkingSpec {

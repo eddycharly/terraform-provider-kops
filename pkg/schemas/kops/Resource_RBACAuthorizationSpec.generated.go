@@ -9,9 +9,11 @@ import (
 var _ = Schema
 
 func ResourceRBACAuthorizationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{},
 	}
+
+	return res
 }
 
 func ExpandResourceRBACAuthorizationSpec(in map[string]interface{}) kops.RBACAuthorizationSpec {

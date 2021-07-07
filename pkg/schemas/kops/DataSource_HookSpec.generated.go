@@ -9,7 +9,7 @@ import (
 var _ = Schema
 
 func DataSourceHookSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":             ComputedString(),
 			"disabled":         ComputedBool(),
@@ -21,6 +21,8 @@ func DataSourceHookSpec() *schema.Resource {
 			"use_raw_manifest": ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
@@ -36,6 +38,9 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 		}(in["disabled"]),
 		Roles: func(in interface{}) []kops.InstanceGroupRole {
 			return func(in interface{}) []kops.InstanceGroupRole {
+				if in == nil {
+					return nil
+				}
 				var out []kops.InstanceGroupRole
 				for _, in := range in.([]interface{}) {
 					out = append(out, kops.InstanceGroupRole(ExpandString(in)))
@@ -45,6 +50,9 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 		}(in["roles"]),
 		Requires: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -54,6 +62,9 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 		}(in["requires"]),
 		Before: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))

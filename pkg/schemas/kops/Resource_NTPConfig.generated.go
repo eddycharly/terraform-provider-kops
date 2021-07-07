@@ -11,11 +11,13 @@ import (
 var _ = Schema
 
 func ResourceNTPConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"managed": OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceNTPConfig(in map[string]interface{}) kops.NTPConfig {
@@ -24,6 +26,9 @@ func ExpandResourceNTPConfig(in map[string]interface{}) kops.NTPConfig {
 	}
 	return kops.NTPConfig{
 		Managed: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

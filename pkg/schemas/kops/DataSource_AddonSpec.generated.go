@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func DataSourceAddonSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"manifest": ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceAddonSpec(in map[string]interface{}) kops.AddonSpec {

@@ -12,7 +12,7 @@ import (
 var _ = Schema
 
 func DataSourceWeaveNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"mtu":                ComputedInt(),
 			"conn_limit":         ComputedInt(),
@@ -30,6 +30,8 @@ func DataSourceWeaveNetworkingSpec() *schema.Resource {
 			"version":            ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetworkingSpec {
@@ -38,6 +40,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 	}
 	return kops.WeaveNetworkingSpec{
 		MTU: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -54,6 +59,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["mtu"]),
 		ConnLimit: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -70,6 +78,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["conn_limit"]),
 		NoMasqLocal: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -86,6 +97,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["no_masq_local"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -102,6 +116,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["memory_request"]),
 		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -118,6 +135,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["cpu_request"]),
 		MemoryLimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -134,6 +154,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["memory_limit"]),
 		CPULimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -153,6 +176,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			return string(ExpandString(in))
 		}(in["net_extra_args"]),
 		NPCMemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -169,6 +195,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["npc_memory_request"]),
 		NPCCPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -185,6 +214,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["npccpu_request"]),
 		NPCMemoryLimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -201,6 +233,9 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 			}(in)
 		}(in["npc_memory_limit"]),
 		NPCCPULimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

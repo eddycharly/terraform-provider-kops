@@ -13,7 +13,7 @@ import (
 var _ = Schema
 
 func DataSourceKubeControllerManagerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                                    ComputedString(),
 			"log_level":                                 ComputedInt(),
@@ -66,6 +66,8 @@ func DataSourceKubeControllerManagerConfig() *schema.Resource {
 			"enable_profiling":                                    ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops.KubeControllerManagerConfig {
@@ -95,6 +97,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			return string(ExpandString(in))
 		}(in["cluster_cidr"]),
 		AllocateNodeCIDRs: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -111,6 +116,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["allocate_node_cidrs"]),
 		NodeCIDRMaskSize: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -127,6 +135,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["node_cidr_mask_size"]),
 		ConfigureCloudRoutes: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -144,6 +155,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 		}(in["configure_cloud_routes"]),
 		Controllers: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -152,6 +166,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["controllers"]),
 		CIDRAllocatorType: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -189,6 +206,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["leader_election"]),
 		AttachDetachReconcileSyncPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -205,6 +225,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["attach_detach_reconcile_sync_period"]),
 		DisableAttachDetachReconcileSync: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -221,6 +244,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["disable_attach_detach_reconcile_sync"]),
 		TerminatedPodGCThreshold: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -237,6 +263,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["terminated_pod_gc_threshold"]),
 		NodeMonitorPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -253,6 +282,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["node_monitor_period"]),
 		NodeMonitorGracePeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -269,6 +301,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["node_monitor_grace_period"]),
 		PodEvictionTimeout: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -285,6 +320,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["pod_eviction_timeout"]),
 		UseServiceAccountCredentials: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -301,6 +339,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["use_service_account_credentials"]),
 		HorizontalPodAutoscalerSyncPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -317,6 +358,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_sync_period"]),
 		HorizontalPodAutoscalerDownscaleDelay: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -333,6 +377,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_downscale_delay"]),
 		HorizontalPodAutoscalerDownscaleStabilization: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -349,6 +396,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_downscale_stabilization"]),
 		HorizontalPodAutoscalerUpscaleDelay: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -365,6 +415,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_upscale_delay"]),
 		HorizontalPodAutoscalerInitialReadinessDelay: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -381,6 +434,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_initial_readiness_delay"]),
 		HorizontalPodAutoscalerCPUInitializationPeriod: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -397,6 +453,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_cpu_initialization_period"]),
 		HorizontalPodAutoscalerTolerance: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -413,6 +472,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_tolerance"]),
 		HorizontalPodAutoscalerUseRestClients: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -429,6 +491,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["horizontal_pod_autoscaler_use_rest_clients"]),
 		ExperimentalClusterSigningDuration: func(in interface{}) *v1.Duration {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -458,6 +523,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 		}(in["feature_gates"]),
 		TLSCipherSuites: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -472,6 +540,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			return string(ExpandString(in))
 		}(in["min_resync_period"]),
 		KubeAPIQPS: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -488,6 +559,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["kube_api_qps"]),
 		KubeAPIBurst: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -504,6 +578,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["kube_api_burst"]),
 		ConcurrentDeploymentSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -520,6 +597,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_deployment_syncs"]),
 		ConcurrentEndpointSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -536,6 +616,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_endpoint_syncs"]),
 		ConcurrentNamespaceSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -552,6 +635,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_namespace_syncs"]),
 		ConcurrentReplicasetSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -568,6 +654,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_replicaset_syncs"]),
 		ConcurrentServiceSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -584,6 +673,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_service_syncs"]),
 		ConcurrentResourceQuotaSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -600,6 +692,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_resource_quota_syncs"]),
 		ConcurrentServiceaccountTokenSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -616,6 +711,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			}(in)
 		}(in["concurrent_serviceaccount_token_syncs"]),
 		ConcurrentRcSyncs: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -639,6 +737,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 		}(in["authorization_kubeconfig"]),
 		AuthorizationAlwaysAllowPaths: func(in interface{}) []string {
 			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
 				var out []string
 				for _, in := range in.([]interface{}) {
 					out = append(out, string(ExpandString(in)))
@@ -650,6 +751,9 @@ func ExpandDataSourceKubeControllerManagerConfig(in map[string]interface{}) kops
 			return string(ExpandString(in))
 		}(in["external_cloud_volume_plugin"]),
 		EnableProfiling: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

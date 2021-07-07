@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func DataSourceDNSSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"type": ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceDNSSpec(in map[string]interface{}) kops.DNSSpec {

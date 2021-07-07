@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourcePackagesConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"hash_amd64": OptionalString(),
 			"hash_arm64": OptionalString(),
@@ -19,6 +19,8 @@ func ResourcePackagesConfig() *schema.Resource {
 			"url_arm64":  OptionalString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig {
@@ -27,6 +29,9 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 	}
 	return kops.PackagesConfig{
 		HashAmd64: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -43,6 +48,9 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 			}(in)
 		}(in["hash_amd64"]),
 		HashArm64: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -59,6 +67,9 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 			}(in)
 		}(in["hash_arm64"]),
 		UrlAmd64: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -75,6 +86,9 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 			}(in)
 		}(in["url_amd64"]),
 		UrlArm64: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

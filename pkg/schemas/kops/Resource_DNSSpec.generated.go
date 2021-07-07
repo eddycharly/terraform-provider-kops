@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func ResourceDNSSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"type": RequiredString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceDNSSpec(in map[string]interface{}) kops.DNSSpec {

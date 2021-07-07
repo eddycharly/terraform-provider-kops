@@ -9,13 +9,15 @@ import (
 var _ = Schema
 
 func ResourceAmazonVPCNetworkingSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"image_name":      OptionalString(),
 			"init_image_name": OptionalString(),
 			"env":             OptionalList(ResourceEnvVar()),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.AmazonVPCNetworkingSpec {
@@ -31,6 +33,9 @@ func ExpandResourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Amazo
 		}(in["init_image_name"]),
 		Env: func(in interface{}) []kops.EnvVar {
 			return func(in interface{}) []kops.EnvVar {
+				if in == nil {
+					return nil
+				}
 				var out []kops.EnvVar
 				for _, in := range in.([]interface{}) {
 					out = append(out, func(in interface{}) kops.EnvVar {

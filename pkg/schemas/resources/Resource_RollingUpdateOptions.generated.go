@@ -11,7 +11,7 @@ import (
 var _ = Schema
 
 func ResourceRollingUpdateOptions() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"skip":                OptionalBool(),
 			"master_interval":     OptionalDuration(),
@@ -25,6 +25,8 @@ func ResourceRollingUpdateOptions() *schema.Resource {
 			"cloud_only":          OptionalBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceRollingUpdateOptions(in map[string]interface{}) resources.RollingUpdateOptions {

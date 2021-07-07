@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func DataSourceMetricsServerConfig() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":  ComputedBool(),
 			"image":    ComputedString(),
 			"insecure": ComputedBool(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceMetricsServerConfig(in map[string]interface{}) kops.MetricsServerConfig {
@@ -26,6 +28,9 @@ func ExpandDataSourceMetricsServerConfig(in map[string]interface{}) kops.Metrics
 	}
 	return kops.MetricsServerConfig{
 		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -42,6 +47,9 @@ func ExpandDataSourceMetricsServerConfig(in map[string]interface{}) kops.Metrics
 			}(in)
 		}(in["enabled"]),
 		Image: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
@@ -58,6 +66,9 @@ func ExpandDataSourceMetricsServerConfig(in map[string]interface{}) kops.Metrics
 			}(in)
 		}(in["image"]),
 		Insecure: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}

@@ -9,13 +9,15 @@ import (
 var _ = Schema
 
 func DataSourceUserData() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":    ComputedString(),
 			"type":    ComputedString(),
 			"content": ComputedString(),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceUserData(in map[string]interface{}) kops.UserData {

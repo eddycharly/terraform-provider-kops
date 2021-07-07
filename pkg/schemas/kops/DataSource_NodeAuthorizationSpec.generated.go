@@ -9,11 +9,13 @@ import (
 var _ = Schema
 
 func DataSourceNodeAuthorizationSpec() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"node_authorizer": ComputedStruct(DataSourceNodeAuthorizerSpec()),
 		},
 	}
+
+	return res
 }
 
 func ExpandDataSourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeAuthorizationSpec {

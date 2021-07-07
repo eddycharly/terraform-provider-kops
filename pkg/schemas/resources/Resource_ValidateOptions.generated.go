@@ -11,13 +11,15 @@ import (
 var _ = Schema
 
 func ResourceValidateOptions() *schema.Resource {
-	return &schema.Resource{
+	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"skip":          OptionalBool(),
 			"timeout":       OptionalDuration(),
 			"poll_interval": OptionalDuration(),
 		},
 	}
+
+	return res
 }
 
 func ExpandResourceValidateOptions(in map[string]interface{}) resources.ValidateOptions {
