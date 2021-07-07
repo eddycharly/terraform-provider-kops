@@ -17,9 +17,11 @@ type ClusterSecrets struct {
 
 func GetClusterSecrets(secretStore fi.SecretStore) (*ClusterSecrets, error) {
 	secret, err := secretStore.FindSecret("dockerconfig")
-	// TODO: is not found handling ?
 	if err != nil {
 		return nil, err
+	}
+	if secret == nil {
+		return nil, nil
 	}
 	return &ClusterSecrets{
 		DockerConfig: string(secret.Data),
@@ -28,7 +30,6 @@ func GetClusterSecrets(secretStore fi.SecretStore) (*ClusterSecrets, error) {
 
 func CreateOrUpdateClusterSecrets(secretStore fi.SecretStore, secrets *ClusterSecrets) (*ClusterSecrets, error) {
 	if secrets == nil || secrets.DockerConfig == "" {
-		// TODO: is not found handling ?
 		return nil, secretStore.DeleteSecret("dockerconfig")
 	}
 	secret, err := fi.CreateSecret()
