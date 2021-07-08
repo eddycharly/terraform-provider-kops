@@ -89,6 +89,41 @@ resource "kops_cluster" "cluster" {
 }
 ```
 
+## Nullable arguments
+
+Because kOps sometimes uses pointers to hold data and terraform doesn't offer a way to
+differentiate between unset arguments and their default value in a configuration, it can
+be necessary wrap those arguments in a nested resource to account for the `null` value.
+
+An example of this is the `anonymous_auth` argument in the `kube_api_server_config` or `kubelet_config_spec`
+resources. The `null` value cannot be considered equivalent to `false` on the kOps side, but terraform won't
+let us know when it is set or not in the configuration and therefore will provide `false` in case it is unset
+in the configuration.
+
+To workaround this limitation, the nullable type is a resource with a single `value` argument. It wraps the
+actual value of the argument and makes it possible to account for `null`. When using a nullable argument,
+you should assign it this way in the configuration:
+
+```hcl
+resource "kops_cluster" "cluster" {
+  // ...
+
+  kubelet {
+    anonymous_auth {
+      value = false
+    }
+  }
+
+  kube_api_server {
+    anonymous_auth {
+      value = false
+    }
+  }
+
+  // ...
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -486,7 +521,7 @@ The following arguments are supported:
 - `kubelet_client_certificate` - (Optional) - String - KubeletClientCertificate is the path of a certificate for secure communication between api and kubelet.
 - `kubelet_certificate_authority` - (Optional) - String - KubeletCertificateAuthority is the path of a certificate authority for secure communication between api and kubelet.
 - `kubelet_client_key` - (Optional) - String - KubeletClientKey is the path of a private to secure communication between api and kubelet.
-- `anonymous_auth` - (Optional) - Bool - AnonymousAuth indicates if anonymous authentication is permitted.
+- `anonymous_auth` - (Optional) - Bool([Nullable](#nullable-arguments)) - AnonymousAuth indicates if anonymous authentication is permitted.
 - `kubelet_preferred_address_types` - (Optional) - List(String) - KubeletPreferredAddressTypes is a list of the preferred NodeAddressTypes to use for kubelet connections.
 - `storage_backend` - (Optional) - String - StorageBackend is the backend storage.
 - `oidc_username_claim` - (Optional) - String - OIDCUsernameClaim is the OpenID claim to use as the user name.<br />Note that claims other than the default ('sub') is not guaranteed to be<br />unique and immutable.
@@ -706,7 +741,7 @@ KubeletConfigSpec defines the kubelet configuration.
 The following arguments are supported:
 
 - `api_servers` - (Optional) - String - APIServers is not used for clusters version 1.6 and later - flag removed.
-- `anonymous_auth` - (Optional) - Bool - AnonymousAuth permits you to control auth to the kubelet api.
+- `anonymous_auth` - (Optional) - Bool([Nullable](#nullable-arguments)) - AnonymousAuth permits you to control auth to the kubelet api.
 - `authorization_mode` - (Optional) - String - AuthorizationMode is the authorization mode the kubelet is running in.
 - `bootstrap_kubeconfig` - (Optional) - String - BootstrapKubeconfig is the path to a kubeconfig file that will be used to get client certificate for kubelet.
 - `client_ca_file` - (Optional) - String - ClientCAFile is the path to a CA certificate.

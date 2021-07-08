@@ -424,7 +424,11 @@ The following arguments are supported:
 {{- if isRequired . }} - (Required){{ end }}
 {{- if forceNew . }} - (Force new){{ end }}
 {{- if isSensitive . }} - (Sensitive){{ end }}
-{{- if isComputed . }} - (Computed){{ end }} - {{ template "type" .Type }}{{ if (attributeComment .) }} - {{ attributeComment . }}{{ end }}
+{{- if isComputed . }} - (Computed){{ end }} - {{ if isNullable . -}}
+{{ template "type" .Type }}([Nullable](#nullable-arguments))
+{{- else -}}
+{{ template "type" .Type }}
+{{- end -}}{{ if (attributeComment .) }} - {{ attributeComment . }}{{ end }}
 {{- end }}
 {{- end }}
 
@@ -451,7 +455,11 @@ The following arguments are supported:
 {{- if isRequired . }} - (Required){{ end }}
 {{- if forceNew . }} - (Force new){{ end }}
 {{- if isSensitive . }} - (Sensitive){{ end }}
-{{- if isComputed . }} - (Computed){{ end }} - {{ template "type" .Type }}{{ if (attributeComment .) }} - {{ attributeComment . }}{{ end }}
+{{- if isComputed . }} - (Computed){{ end }} - {{ if isNullable . -}}
+{{ template "type" .Type }}([Nullable](#nullable-arguments))
+{{- else -}}
+{{ template "type" .Type }}
+{{- end -}}{{ if (attributeComment .) }} - {{ attributeComment . }}{{ end }}
 {{- end -}}
 {{- end }}
 {{- end }}

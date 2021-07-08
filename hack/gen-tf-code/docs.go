@@ -1,6 +1,9 @@
 package main
 
-import "io/ioutil"
+import (
+	"fmt"
+	"io/ioutil"
+)
 
 func readFile(path string) string {
 	if out, err := ioutil.ReadFile(path); err != nil {
@@ -10,22 +13,24 @@ func readFile(path string) string {
 	}
 }
 
-const genericHeader = `
-{{- $comment := resourceComment . }}
-{{ if $comment }}
-{{ $comment }}
-{{- end }}
-`
+var nullableSection = readFile("hack/gen-tf-code/nullable-section.md")
+
+func readHeader(path string, nullable bool) string {
+	if !nullable {
+		return readFile(path)
+	}
+	return fmt.Sprintf("%s\n\n%s", readFile(path), nullableSection)
+}
 
 var (
-	resourceClusterHeader        = readFile("hack/gen-tf-code/resource-cluster-header.md")
+	resourceClusterHeader        = readHeader("hack/gen-tf-code/resource-cluster-header.md", true)
 	resourceClusterFooter        = readFile("hack/gen-tf-code/resource-cluster-footer.md")
-	resourceClusterUpdaterHeader = readFile("hack/gen-tf-code/resource-cluster-updater-header.md")
-	resourceInstanceGroupHeader  = readFile("hack/gen-tf-code/resource-instance-group-header.md")
+	resourceClusterUpdaterHeader = readHeader("hack/gen-tf-code/resource-cluster-updater-header.md", false)
+	resourceInstanceGroupHeader  = readHeader("hack/gen-tf-code/resource-instance-group-header.md", true)
 	resourceInstanceGroupFooter  = readFile("hack/gen-tf-code/resource-instance-group-footer.md")
-	dataClusterHeader            = readFile("hack/gen-tf-code/data-cluster-header.md")
-	dataClusterStatusHeader      = readFile("hack/gen-tf-code/data-cluster-status-header.md")
-	dataInstanceGroupHeader      = readFile("hack/gen-tf-code/data-instance-group-header.md")
-	dataKubeConfigHeader         = readFile("hack/gen-tf-code/data-kube-config-header.md")
-	configProviderHeader         = readFile("hack/gen-tf-code/config-provider-header.md")
+	dataClusterHeader            = readHeader("hack/gen-tf-code/data-cluster-header.md", true)
+	dataClusterStatusHeader      = readHeader("hack/gen-tf-code/data-cluster-status-header.md", false)
+	dataInstanceGroupHeader      = readHeader("hack/gen-tf-code/data-instance-group-header.md", true)
+	dataKubeConfigHeader         = readHeader("hack/gen-tf-code/data-kube-config-header.md", false)
+	configProviderHeader         = readHeader("hack/gen-tf-code/config-provider-header.md", true)
 )

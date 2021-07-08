@@ -45,6 +45,41 @@ resource "kops_instance_group" "master-2" {
 }
 ```
 
+## Nullable arguments
+
+Because kOps sometimes uses pointers to hold data and terraform doesn't offer a way to
+differentiate between unset arguments and their default value in a configuration, it can
+be necessary wrap those arguments in a nested resource to account for the `null` value.
+
+An example of this is the `anonymous_auth` argument in the `kube_api_server_config` or `kubelet_config_spec`
+resources. The `null` value cannot be considered equivalent to `false` on the kOps side, but terraform won't
+let us know when it is set or not in the configuration and therefore will provide `false` in case it is unset
+in the configuration.
+
+To workaround this limitation, the nullable type is a resource with a single `value` argument. It wraps the
+actual value of the argument and makes it possible to account for `null`. When using a nullable argument,
+you should assign it this way in the configuration:
+
+```hcl
+resource "kops_cluster" "cluster" {
+  // ...
+
+  kubelet {
+    anonymous_auth {
+      value = false
+    }
+  }
+
+  kube_api_server {
+    anonymous_auth {
+      value = false
+    }
+  }
+
+  // ...
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -181,7 +216,7 @@ KubeletConfigSpec defines the kubelet configuration.
 The following arguments are supported:
 
 - `api_servers` - (Optional) - String - APIServers is not used for clusters version 1.6 and later - flag removed.
-- `anonymous_auth` - (Optional) - Bool - AnonymousAuth permits you to control auth to the kubelet api.
+- `anonymous_auth` - (Optional) - Bool([Nullable](#nullable-arguments)) - AnonymousAuth permits you to control auth to the kubelet api.
 - `authorization_mode` - (Optional) - String - AuthorizationMode is the authorization mode the kubelet is running in.
 - `bootstrap_kubeconfig` - (Optional) - String - BootstrapKubeconfig is the path to a kubeconfig file that will be used to get client certificate for kubelet.
 - `client_ca_file` - (Optional) - String - ClientCAFile is the path to a CA certificate.
@@ -276,8 +311,8 @@ The following arguments are supported:
 
 - `instances` - (Optional) - List(String) - Instances is a list of instance types which we are willing to run in the EC2 fleet.
 - `on_demand_allocation_strategy` - (Optional) - String - OnDemandAllocationStrategy indicates how to allocate instance types to fulfill On-Demand capacity.
-- `on_demand_base` - (Optional) - Int - OnDemandBase is the minimum amount of the Auto Scaling group's capacity that must be<br />fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.
-- `on_demand_above_base` - (Optional) - Int - OnDemandAboveBase controls the percentages of On-Demand Instances and Spot Instances for your<br />additional capacity beyond OnDemandBase. The range is 0–100. The default value is 100. If you<br />leave this parameter set to 100, the percentages are 100% for On-Demand Instances and 0% for<br />Spot Instances.
+- `on_demand_base` - (Optional) - Int([Nullable](#nullable-arguments)) - OnDemandBase is the minimum amount of the Auto Scaling group's capacity that must be<br />fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.
+- `on_demand_above_base` - (Optional) - Int([Nullable](#nullable-arguments)) - OnDemandAboveBase controls the percentages of On-Demand Instances and Spot Instances for your<br />additional capacity beyond OnDemandBase. The range is 0–100. The default value is 100. If you<br />leave this parameter set to 100, the percentages are 100% for On-Demand Instances and 0% for<br />Spot Instances.
 - `spot_allocation_strategy` - (Optional) - String - SpotAllocationStrategy diversifies your Spot capacity across multiple instance types to<br />find the best pricing. Higher Spot availability may result from a larger number of<br />instance types to choose from.
 - `spot_instance_pools` - (Optional) - Int - SpotInstancePools is the number of Spot pools to use to allocate your Spot capacity (defaults to 2)<br />pools are determined from the different instance types in the Overrides array of LaunchTemplate.
 
