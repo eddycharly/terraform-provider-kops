@@ -12,12 +12,12 @@ import (
 
 func ClusterUpdater() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: ClusterUpdaterCreateOrUpdate,
-		ReadContext:   schema.NoopContext,
-		UpdateContext: ClusterUpdaterCreateOrUpdate,
-		DeleteContext: ClusterUpdaterDelete,
-		CustomizeDiff: schemas.CustomizeDiffRevision,
-		Schema:        resourcesschema.ResourceClusterUpdater().Schema,
+		CreateWithoutTimeout: ClusterUpdaterCreateOrUpdate,
+		ReadContext:          schema.NoopContext,
+		UpdateWithoutTimeout: ClusterUpdaterCreateOrUpdate,
+		DeleteWithoutTimeout: ClusterUpdaterDelete,
+		CustomizeDiff:        schemas.CustomizeDiffRevision,
+		Schema:               resourcesschema.ResourceClusterUpdater().Schema,
 	}
 }
 
