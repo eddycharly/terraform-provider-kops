@@ -189,6 +189,7 @@ func fieldName(in string) string {
 	in = strings.ReplaceAll(in, "API", "Api")
 	in = strings.ReplaceAll(in, "SAN", "San")
 	in = strings.ReplaceAll(in, "SQS", "Sqs")
+	in = strings.ReplaceAll(in, "AWS", "Aws")
 	return in
 }
 
@@ -1210,6 +1211,12 @@ func main() {
 		generate(kops.LoadBalancerSubnetSpec{}),
 		generate(kops.DNSControllerGossipConfigSecondary{}),
 		generate(kops.OpenstackNetwork{}),
+		// 1.21
+		generate(kops.WarmPoolSpec{}),
+		generate(kops.ServiceAccountIssuerDiscoveryConfig{}),
+		generate(kops.SnapshotControllerConfig{}),
+		generate(kops.ServiceAccountExternalPermission{}),
+		generate(kops.AWSPermission{}),
 	)
 	configMap := build(
 		"Config",
@@ -1355,8 +1362,13 @@ func main() {
 		generate(kops.LoadBalancerSubnetSpec{}),
 		generate(kops.DNSControllerGossipConfigSecondary{}),
 		generate(kops.OpenstackNetwork{}),
+		// 1.21
+		generate(kops.WarmPoolSpec{}),
+		generate(kops.ServiceAccountIssuerDiscoveryConfig{}),
+		generate(kops.SnapshotControllerConfig{}),
+		generate(kops.ServiceAccountExternalPermission{}),
+		generate(kops.AWSPermission{}),
 	)
-	log.Println("generating docs...")
 	// resources
 	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
 	buildDoc(resources.ClusterUpdater{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterUpdaterHeader, "")

@@ -713,6 +713,24 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["update_policy"]),
+		WarmPool: func(in interface{}) *kops.WarmPoolSpec {
+			return func(in interface{}) *kops.WarmPoolSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.WarmPoolSpec) *kops.WarmPoolSpec {
+					return &in
+				}(func(in interface{}) kops.WarmPoolSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.WarmPoolSpec{}
+					}
+					return (ExpandDataSourceWarmPoolSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["warm_pool"]),
 	}
 }
 
@@ -1143,6 +1161,18 @@ func FlattenDataSourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[s
 			}(*in)
 		}(in)
 	}(in.UpdatePolicy)
+	out["warm_pool"] = func(in *kops.WarmPoolSpec) interface{} {
+		return func(in *kops.WarmPoolSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.WarmPoolSpec) interface{} {
+				return func(in kops.WarmPoolSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenDataSourceWarmPoolSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.WarmPool)
 }
 
 func FlattenDataSourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {

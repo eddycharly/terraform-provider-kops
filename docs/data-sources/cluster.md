@@ -96,7 +96,7 @@ The following arguments are supported:
 - `cloud_config` - (Computed) - [cloud_configuration](#cloud_configuration)
 - `external_dns` - (Computed) - [external_dns_config](#external_dns_config)
 - `ntp` - (Computed) - [ntp_config](#ntp_config)
-- `node_termination_handler` - (Computed) - [node_termination_handler_config](#node_termination_handler_config) - NodeTerminationHandler determines the cluster autoscaler configuration.
+- `node_termination_handler` - (Computed) - [node_termination_handler_config](#node_termination_handler_config) - NodeTerminationHandler determines the node termination handler configuration.
 - `metrics_server` - (Computed) - [metrics_server_config](#metrics_server_config) - MetricsServer determines the metrics server configuration.
 - `cert_manager` - (Computed) - [cert_manager_config](#cert_manager_config) - CertManager determines the metrics server configuration.
 - `aws_load_balancer_controller` - (Computed) - [aws_load_balancer_controller_config](#aws_load_balancer_controller_config) - AWSLoadbalancerControllerConfig determines the AWS LB controller configuration.
@@ -105,7 +105,7 @@ The following arguments are supported:
 - `authentication` - (Computed) - [authentication_spec](#authentication_spec) - Authentication field controls how the cluster is configured for authentication.
 - `authorization` - (Computed) - [authorization_spec](#authorization_spec) - Authorization field controls how the cluster is configured for authorization.
 - `node_authorization` - (Computed) - [node_authorization_spec](#node_authorization_spec) - NodeAuthorization defined the custom node authorization configuration.
-- `cloud_labels` - (Computed) - Map(String) - Tags for AWS instance groups.
+- `cloud_labels` - (Computed) - Map(String) - CloudLabels defines additional tags or labels on cloud provider resources.
 - `hooks` - (Computed) - List([hook_spec](#hook_spec)) - Hooks for custom actions e.g. on first installation.
 - `assets` - (Computed) - [assets](#assets) - Assets is alternative locations for files and containers; the API under construction, will remove this comment once this API is fully functional.
 - `iam` - (Computed) - [iam_spec](#iam_spec) - IAM field adds control over the IAM security policies applied to resources.
@@ -115,6 +115,9 @@ The following arguments are supported:
 - `sysctl_parameters` - (Computed) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Computed) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.
 - `cluster_autoscaler` - (Computed) - [cluster_autoscaler_config](#cluster_autoscaler_config) - ClusterAutoscaler defines the cluster autoscaler configuration.
+- `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool defines the default warm pool settings for instance groups (AWS only).
+- `service_account_issuer_discovery` - (Computed) - [service_account_issuer_discovery_config](#service_account_issuer_discovery_config) - ServiceAccountIssuerDiscovery configures the OIDC Issuer for ServiceAccounts.
+- `snapshot_controller` - (Computed) - [snapshot_controller_config](#snapshot_controller_config) - SnapshotController defines the CSI Snapshot Controller configuration.
 - `name` - (Required) - String - Name defines the cluster name.
 - `admin_ssh_key` - (Computed) - String - AdminSshKey defines the cluster admin ssh key.
 - `secrets` - (Computed) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.
@@ -430,7 +433,7 @@ The following arguments are supported:
 - `etcd_cert_file` - (Computed) - String - EtcdCertFile is the path to a certificate.
 - `etcd_key_file` - (Computed) - String - EtcdKeyFile is the path to a private key.
 - `basic_auth_file` - (Computed) - String - TODO: Remove unused BasicAuthFile.
-- `client_ca_file` - (Computed) - String - TODO: Remove unused ClientCAFile.
+- `client_ca_file` - (Computed) - String - ClientCAFile is the file used by apisever that contains the client CA.
 - `tls_cert_file` - (Computed) - String - TODO: Remove unused TLSCertFile.
 - `tls_private_key_file` - (Computed) - String - TODO: Remove unused TLSPrivateKeyFile.
 - `tls_cipher_suites` - (Computed) - List(String) - TLSCipherSuites indicates the allowed TLS cipher suite.
@@ -915,6 +918,10 @@ The following arguments are supported:
 - `enable_spot_interruption_draining` - (Computed) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Default: true.
 - `enable_scheduled_event_draining` - (Computed) - Bool - EnableScheduledEventDraining makes node termination handler drain nodes before the maintenance window starts for an EC2 instance scheduled event.<br />Default: false.
 - `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
+- `enable_sqs_termination_draining` - (Computed) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.
+- `managed_asg_tag` - (Computed) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on.
+- `memory_request` - (Computed) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
+- `cpu_request` - (Computed) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
 
 ### metrics_server_config
 
@@ -1147,6 +1154,8 @@ CiliumNetworkingSpec declares that we want Cilium networking.
 The following arguments are supported:
 
 - `version` - (Computed) - String - Version is the version of the Cilium agent and the Cilium Operator.
+- `memory_request` - (Computed) - Quantity - MemoryRequest memory request of Cilium agent + operator container. (default: 128Mi).
+- `cpu_request` - (Computed) - Quantity - CPURequest CPU request of Cilium agent + operator container. (default: 25m).
 - `access_log` - (Computed) - String - AccessLog is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `agent_labels` - (Computed) - List(String) - AgentLabels is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `agent_prometheus_port` - (Computed) - Int - AgentPrometheusPort is the port to listen to for Prometheus metrics.<br />Defaults to 9090.
@@ -1424,6 +1433,30 @@ The following arguments are supported:
 - `legacy` - (Computed) - Bool - TODO: remove Legacy in next APIVersion.
 - `allow_container_registry` - (Computed) - Bool
 - `permissions_boundary` - (Computed) - String
+- `service_account_external_permissions` - (Computed) - List([service_account_external_permission](#service_account_external_permission)) - ServiceAccountExternalPermissions defines the relatinship between Kubernetes ServiceAccounts and permissions with external resources.
+
+### service_account_external_permission
+
+ServiceAccountExternalPermissions grants a ServiceAccount permissions to external resources.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `name` - (Computed) - String - Name is the name of the Kubernetes ServiceAccount.
+- `namespace` - (Computed) - String - Namespace is the namespace of the Kubernetes ServiceAccount.
+- `aws` - (Computed) - [aws_permission](#aws_permission) - AWS grants permissions to AWS resources.
+
+### aws_permission
+
+AWSPermission grants permissions to AWS resources.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `policy_ar_ns` - (Computed) - List(String) - PolicyARNs is a list of existing IAM Policies.
+- `inline_policy` - (Computed) - String - InlinePolicy is an IAM Policy that will be attached inline to the IAM Role.
 
 ### rolling_update
 
@@ -1454,6 +1487,38 @@ The following arguments are supported:
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `memory_request` - (Computed) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
+
+### warm_pool_spec
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `min_size` - (Computed) - Int - MinSize is the minimum size of the warm pool.
+- `max_size` - (Computed) - Int - MaxSize is the maximum size of the warm pool. The desired size of the instance group<br />is subtracted from this number to determine the desired size of the warm pool<br />(unless the resulting number is smaller than MinSize).<br />The default is the instance group's MaxSize.
+- `enable_lifecycle_hook` - (Computed) - Bool - EnableLifecyleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
+
+### service_account_issuer_discovery_config
+
+ServiceAccountIssuerDiscoveryConfig configures an OIDC Issuer.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `discovery_store` - (Computed) - String - DiscoveryStore is the VFS path to where OIDC Issuer Discovery metadata is stored.
+- `enable_aws_oidc_provider` - (Computed) - Bool - EnableAWSOIDCProvider will provision an AWS OIDC provider that trusts the ServiceAccount Issuer.
+
+### snapshot_controller_config
+
+SnapshotControllerConfig is the config for the CSI Snapshot Controller.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the CSI Snapshot Controller.
+- `install_default_class` - (Computed) - Bool - InstallDefaultClass will install the default VolumeSnapshotClass.
 
 ### cluster_secrets
 

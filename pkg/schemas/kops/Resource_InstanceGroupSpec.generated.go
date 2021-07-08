@@ -701,6 +701,24 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["update_policy"]),
+		WarmPool: func(in interface{}) *kops.WarmPoolSpec {
+			return func(in interface{}) *kops.WarmPoolSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.WarmPoolSpec) *kops.WarmPoolSpec {
+					return &in
+				}(func(in interface{}) kops.WarmPoolSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.WarmPoolSpec{}
+					}
+					return (ExpandResourceWarmPoolSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["warm_pool"]),
 	}
 }
 
@@ -1131,6 +1149,18 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.UpdatePolicy)
+	out["warm_pool"] = func(in *kops.WarmPoolSpec) interface{} {
+		return func(in *kops.WarmPoolSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.WarmPoolSpec) interface{} {
+				return func(in kops.WarmPoolSpec) []map[string]interface{} {
+					return []map[string]interface{}{FlattenResourceWarmPoolSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.WarmPool)
 }
 
 func FlattenResourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {

@@ -61,7 +61,7 @@ The following arguments are supported:
 - `root_volume_iops` - (Computed) - Int - RootVolumeIops is the provisioned IOPS when the volume type is io1, io2 or gp3 (AWS only).
 - `root_volume_throughput` - (Computed) - Int - RootVolumeThroughput is the volume throughput in MBps when the volume type is gp3 (AWS only).
 - `root_volume_optimization` - (Computed) - Bool - RootVolumeOptimization enables EBS optimization for an instance.
-- `root_volume_delete_on_termination` - (Computed) - Bool - RootVolumeDeleteOnTermination configures root volume retention policy upon instance termination.<br />The root volume is deleted by default. Cluster deletion does not remove retained root volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
+- `root_volume_delete_on_termination` - (Computed) - Bool - RootVolumeDeleteOnTermination is deprecated as of kOps 1.21 and has no effect.
 - `root_volume_encryption` - (Computed) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
 - `root_volume_encryption_key` - (Computed) - String - RootVolumeEncryptionKey provides the key identifier for root volume encryption.
 - `volumes` - (Computed) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this instance group.
@@ -74,7 +74,7 @@ The following arguments are supported:
 - `cpu_credits` - (Computed) - String - CPUCredits is the credit option for CPU Usage on burstable instance types (AWS only).
 - `associate_public_ip` - (Computed) - Bool - AssociatePublicIP is true if we want instances to have a public IP.
 - `additional_security_groups` - (Computed) - List(String) - AdditionalSecurityGroups attaches additional security groups (e.g. i-123456).
-- `cloud_labels` - (Computed) - Map(String) - CloudLabels indicates the labels for instances in this group, at the AWS level.
+- `cloud_labels` - (Computed) - Map(String) - CloudLabels defines additional tags or labels on cloud provider resources.
 - `node_labels` - (Computed) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this instance group.
 - `file_assets` - (Computed) - List([file_asset_spec](#file_asset_spec)) - FileAssets is a collection of file assets for this instance group.
 - `tenancy` - (Computed) - String - Describes the tenancy of this instance group. Can be either default or dedicated. Currently only applies to AWS.
@@ -94,6 +94,7 @@ The following arguments are supported:
 - `compress_user_data` - (Computed) - Bool - CompressUserData compresses parts of the user data to save space.
 - `instance_metadata` - (Computed) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 - `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
+- `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool specifies a pool of pre-warmed instances for later use (AWS only).
 - `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
 - `name` - (Required) - String - Name defines the instance group name.
 
@@ -335,6 +336,16 @@ The following arguments are supported:
 
 - `http_put_response_hop_limit` - (Computed) - Int - HTTPPutResponseHopLimit is the desired HTTP PUT response hop limit for instance metadata requests.<br />The larger the number, the further instance metadata requests can travel. The default value is 1.
 - `http_tokens` - (Computed) - String - HTTPTokens is the state of token usage for the instance metadata requests.<br />If the parameter is not specified in the request, the default state is "required".
+
+### warm_pool_spec
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `min_size` - (Computed) - Int - MinSize is the minimum size of the warm pool.
+- `max_size` - (Computed) - Int - MaxSize is the maximum size of the warm pool. The desired size of the instance group<br />is subtracted from this number to determine the desired size of the warm pool<br />(unless the resulting number is smaller than MinSize).<br />The default is the instance group's MaxSize.
+- `enable_lifecycle_hook` - (Computed) - Bool - EnableLifecyleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
 
 
 
