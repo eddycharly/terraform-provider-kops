@@ -30,6 +30,13 @@ func GetClusterSecrets(secretStore fi.SecretStore) (*ClusterSecrets, error) {
 
 func CreateOrUpdateClusterSecrets(secretStore fi.SecretStore, secrets *ClusterSecrets) (*ClusterSecrets, error) {
 	if secrets == nil || secrets.DockerConfig == "" {
+		secret, err := secretStore.FindSecret("dockerconfig")
+		if err != nil {
+			return nil, err
+		}
+		if secret == nil {
+			return nil, nil
+		}
 		return nil, secretStore.DeleteSecret("dockerconfig")
 	}
 	secret, err := fi.CreateSecret()
