@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	configschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/config"
@@ -15,8 +16,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/klog"
+	"k8s.io/kops/cloudmock/aws/mockec2"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/client/simple/vfsclientset"
+	"k8s.io/kops/pkg/testutils"
+	"k8s.io/kops/upup/pkg/fi/cloudup/awsup"
 	"k8s.io/kops/util/pkg/vfs"
 )
 
@@ -49,6 +53,31 @@ func ConfigureProvider(_ context.Context, d *schema.ResourceData) (interface{}, 
 	if !vfs.IsClusterReadable(basePath) {
 		return nil, diag.FromErr(field.Invalid(field.NewPath("State Store"), providerConfig.StateStore, invalidStateError))
 	}
+
+	h := &testutils.IntegrationTestHarness{}
+	// defer h.Close()
+
+	h.SetupMockAWS()
+	h.SetupMockGCE()
+
+	cloudTags := map[string]string{}
+	awsCloud, _ := awsup.NewAWSCloud("us-test-1", cloudTags)
+	(awsCloud.EC2().(*mockec2.MockEC2)).CreateVpcWithId(&ec2.CreateVpcInput{
+		CidrBlock: aws.String("10.0.0.0/12"),
+	}, "vpc-12345678")
+
+	awsCloud.EC2().CreateSubnet(&ec2.CreateSubnetInput{
+		AvailabilityZone: aws.String("us-test-1a"),
+		VpcId:            aws.String("vpc-12345678"),
+		CidrBlock:        aws.String("10.10.0.0/24"),
+	})
+
+	awsCloud.EC2().CreateSubnet(&ec2.CreateSubnetInput{
+		AvailabilityZone: aws.String("us-test-1a"),
+		VpcId:            aws.String("vpc-12345678"),
+		CidrBlock:        aws.String("10.11.0.0/24"),
+	})
+
 	return &options{
 		clientset: vfsclientset.NewVFSClientset(basePath),
 	}, nil
