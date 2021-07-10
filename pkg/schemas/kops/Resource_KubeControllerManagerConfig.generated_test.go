@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceKubeControllerManagerConfig(t *testing.T) {
+	_default := kops.KubeControllerManagerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,69 @@ func TestExpandResourceKubeControllerManagerConfig(t *testing.T) {
 		args args
 		want kops.KubeControllerManagerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"master":                                    "",
+					"log_level":                                 0,
+					"service_account_private_key_file":          "",
+					"image":                                     "",
+					"cloud_provider":                            "",
+					"cluster_name":                              "",
+					"cluster_cidr":                              "",
+					"allocate_node_cidrs":                       nil,
+					"node_cidr_mask_size":                       nil,
+					"configure_cloud_routes":                    nil,
+					"controllers":                               func() []interface{} { return nil }(),
+					"cidr_allocator_type":                       nil,
+					"root_ca_file":                              "",
+					"leader_election":                           nil,
+					"attach_detach_reconcile_sync_period":       nil,
+					"disable_attach_detach_reconcile_sync":      nil,
+					"terminated_pod_gc_threshold":               nil,
+					"node_monitor_period":                       nil,
+					"node_monitor_grace_period":                 nil,
+					"pod_eviction_timeout":                      nil,
+					"use_service_account_credentials":           nil,
+					"horizontal_pod_autoscaler_sync_period":     nil,
+					"horizontal_pod_autoscaler_downscale_delay": nil,
+					"horizontal_pod_autoscaler_downscale_stabilization":   nil,
+					"horizontal_pod_autoscaler_upscale_delay":             nil,
+					"horizontal_pod_autoscaler_initial_readiness_delay":   nil,
+					"horizontal_pod_autoscaler_cpu_initialization_period": nil,
+					"horizontal_pod_autoscaler_tolerance":                 nil,
+					"horizontal_pod_autoscaler_use_rest_clients":          nil,
+					"experimental_cluster_signing_duration":               nil,
+					"feature_gates":                                       func() map[string]interface{} { return nil }(),
+					"tls_cipher_suites":                                   func() []interface{} { return nil }(),
+					"tls_min_version":                                     "",
+					"min_resync_period":                                   "",
+					"kube_api_qps":                                        nil,
+					"kube_api_burst":                                      nil,
+					"concurrent_deployment_syncs":                         nil,
+					"concurrent_endpoint_syncs":                           nil,
+					"concurrent_namespace_syncs":                          nil,
+					"concurrent_replicaset_syncs":                         nil,
+					"concurrent_service_syncs":                            nil,
+					"concurrent_resource_quota_syncs":                     nil,
+					"concurrent_serviceaccount_token_syncs":               nil,
+					"concurrent_rc_syncs":                                 nil,
+					"authentication_kubeconfig":                           "",
+					"authorization_kubeconfig":                            "",
+					"authorization_always_allow_paths":                    func() []interface{} { return nil }(),
+					"external_cloud_volume_plugin":                        "",
+					"enable_profiling":                                    nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceKubeControllerManagerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceKubeControllerManagerConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceKubeControllerManagerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceKubeControllerManagerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

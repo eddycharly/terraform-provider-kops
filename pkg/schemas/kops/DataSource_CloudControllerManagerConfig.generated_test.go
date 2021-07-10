@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceCloudControllerManagerConfig(t *testing.T) {
+	_default := kops.CloudControllerManagerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,31 @@ func TestExpandDataSourceCloudControllerManagerConfig(t *testing.T) {
 		args args
 		want kops.CloudControllerManagerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"master":                          "",
+					"log_level":                       0,
+					"image":                           "",
+					"cloud_provider":                  "",
+					"cluster_name":                    "",
+					"cluster_cidr":                    "",
+					"allocate_node_cidrs":             nil,
+					"configure_cloud_routes":          nil,
+					"cidr_allocator_type":             nil,
+					"leader_election":                 nil,
+					"use_service_account_credentials": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceCloudControllerManagerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceCloudControllerManagerConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceCloudControllerManagerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceCloudControllerManagerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

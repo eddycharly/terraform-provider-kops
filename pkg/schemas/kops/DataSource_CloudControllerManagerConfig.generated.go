@@ -205,8 +205,8 @@ func FlattenDataSourceCloudControllerManagerConfigInto(in kops.CloudControllerMa
 				return nil
 			}
 			return func(in kops.LeaderElectionConfiguration) interface{} {
-				return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceLeaderElectionConfiguration(in)}
+				return func(in kops.LeaderElectionConfiguration) []interface{} {
+					return []interface{}{FlattenDataSourceLeaderElectionConfiguration(in)}
 				}(in)
 			}(*in)
 		}(in)

@@ -39,11 +39,16 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["keepers"]),
 		Apply: func(in interface{}) resources.ApplyOptions {
@@ -93,18 +98,18 @@ func FlattenResourceClusterUpdaterInto(in resources.ClusterUpdater, out map[stri
 		}(in)
 	}(in.Keepers)
 	out["apply"] = func(in resources.ApplyOptions) interface{} {
-		return func(in resources.ApplyOptions) []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceApplyOptions(in)}
+		return func(in resources.ApplyOptions) []interface{} {
+			return []interface{}{FlattenResourceApplyOptions(in)}
 		}(in)
 	}(in.Apply)
 	out["rolling_update"] = func(in resources.RollingUpdateOptions) interface{} {
-		return func(in resources.RollingUpdateOptions) []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceRollingUpdateOptions(in)}
+		return func(in resources.RollingUpdateOptions) []interface{} {
+			return []interface{}{FlattenResourceRollingUpdateOptions(in)}
 		}(in)
 	}(in.RollingUpdate)
 	out["validate"] = func(in resources.ValidateOptions) interface{} {
-		return func(in resources.ValidateOptions) []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceValidateOptions(in)}
+		return func(in resources.ValidateOptions) []interface{} {
+			return []interface{}{FlattenResourceValidateOptions(in)}
 		}(in)
 	}(in.Validate)
 }

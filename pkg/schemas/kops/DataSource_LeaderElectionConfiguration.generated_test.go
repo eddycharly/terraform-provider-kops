@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceLeaderElectionConfiguration(t *testing.T) {
+	_default := kops.LeaderElectionConfiguration{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,27 @@ func TestExpandDataSourceLeaderElectionConfiguration(t *testing.T) {
 		args args
 		want kops.LeaderElectionConfiguration
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"leader_elect":                         nil,
+					"leader_elect_lease_duration":          nil,
+					"leader_elect_renew_deadline_duration": nil,
+					"leader_elect_resource_lock":           nil,
+					"leader_elect_resource_name":           nil,
+					"leader_elect_resource_namespace":      nil,
+					"leader_elect_retry_period":            nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceLeaderElectionConfiguration(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceLeaderElectionConfiguration() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceLeaderElectionConfiguration(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceLeaderElectionConfiguration() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceLyftVPCNetworkingSpec(t *testing.T) {
+	_default := kops.LyftVPCNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandDataSourceLyftVPCNetworkingSpec(t *testing.T) {
 		args args
 		want kops.LyftVPCNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"subnet_tags": func() map[string]interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceLyftVPCNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceLyftVPCNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceLyftVPCNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceLyftVPCNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

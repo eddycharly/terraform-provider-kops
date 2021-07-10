@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceKubeSchedulerConfig(t *testing.T) {
+	_default := kops.KubeSchedulerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,33 @@ func TestExpandDataSourceKubeSchedulerConfig(t *testing.T) {
 		args args
 		want kops.KubeSchedulerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"master":                           "",
+					"log_level":                        0,
+					"image":                            "",
+					"leader_election":                  nil,
+					"use_policy_config_map":            nil,
+					"feature_gates":                    func() map[string]interface{} { return nil }(),
+					"max_persistent_volumes":           nil,
+					"qps":                              nil,
+					"burst":                            0,
+					"authentication_kubeconfig":        "",
+					"authorization_kubeconfig":         "",
+					"authorization_always_allow_paths": func() []interface{} { return nil }(),
+					"enable_profiling":                 nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceKubeSchedulerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceKubeSchedulerConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceKubeSchedulerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKubeSchedulerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

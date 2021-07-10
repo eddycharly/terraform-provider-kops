@@ -51,8 +51,8 @@ func FlattenResourceNodeAuthorizationSpecInto(in kops.NodeAuthorizationSpec, out
 				return nil
 			}
 			return func(in kops.NodeAuthorizerSpec) interface{} {
-				return func(in kops.NodeAuthorizerSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceNodeAuthorizerSpec(in)}
+				return func(in kops.NodeAuthorizerSpec) []interface{} {
+					return []interface{}{FlattenResourceNodeAuthorizerSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

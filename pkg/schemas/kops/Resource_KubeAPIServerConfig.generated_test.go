@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceKubeAPIServerConfig(t *testing.T) {
+	_default := kops.KubeAPIServerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,121 @@ func TestExpandResourceKubeAPIServerConfig(t *testing.T) {
 		args args
 		want kops.KubeAPIServerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"image":                                        "",
+					"disable_basic_auth":                           nil,
+					"log_level":                                    0,
+					"cloud_provider":                               "",
+					"secure_port":                                  0,
+					"insecure_port":                                0,
+					"address":                                      "",
+					"bind_address":                                 "",
+					"insecure_bind_address":                        "",
+					"enable_bootstrap_auth_token":                  nil,
+					"enable_aggregator_routing":                    nil,
+					"admission_control":                            func() []interface{} { return nil }(),
+					"append_admission_plugins":                     func() []interface{} { return nil }(),
+					"enable_admission_plugins":                     func() []interface{} { return nil }(),
+					"disable_admission_plugins":                    func() []interface{} { return nil }(),
+					"admission_control_config_file":                "",
+					"service_cluster_ip_range":                     "",
+					"service_node_port_range":                      "",
+					"etcd_servers":                                 func() []interface{} { return nil }(),
+					"etcd_servers_overrides":                       func() []interface{} { return nil }(),
+					"etcd_ca_file":                                 "",
+					"etcd_cert_file":                               "",
+					"etcd_key_file":                                "",
+					"basic_auth_file":                              "",
+					"client_ca_file":                               "",
+					"tls_cert_file":                                "",
+					"tls_private_key_file":                         "",
+					"tls_cipher_suites":                            func() []interface{} { return nil }(),
+					"tls_min_version":                              "",
+					"token_auth_file":                              "",
+					"allow_privileged":                             nil,
+					"api_server_count":                             nil,
+					"runtime_config":                               func() map[string]interface{} { return nil }(),
+					"kubelet_client_certificate":                   "",
+					"kubelet_certificate_authority":                "",
+					"kubelet_client_key":                           "",
+					"anonymous_auth":                               nil,
+					"kubelet_preferred_address_types":              func() []interface{} { return nil }(),
+					"storage_backend":                              nil,
+					"oidc_username_claim":                          nil,
+					"oidc_username_prefix":                         nil,
+					"oidc_groups_claim":                            nil,
+					"oidc_groups_prefix":                           nil,
+					"oidc_issuer_url":                              nil,
+					"oidc_client_id":                               nil,
+					"oidc_required_claim":                          func() []interface{} { return nil }(),
+					"oidcca_file":                                  nil,
+					"proxy_client_cert_file":                       nil,
+					"proxy_client_key_file":                        nil,
+					"audit_log_format":                             nil,
+					"audit_log_path":                               nil,
+					"audit_log_max_age":                            nil,
+					"audit_log_max_backups":                        nil,
+					"audit_log_max_size":                           nil,
+					"audit_policy_file":                            "",
+					"audit_webhook_batch_buffer_size":              nil,
+					"audit_webhook_batch_max_size":                 nil,
+					"audit_webhook_batch_max_wait":                 nil,
+					"audit_webhook_batch_throttle_burst":           nil,
+					"audit_webhook_batch_throttle_enable":          nil,
+					"audit_webhook_batch_throttle_qps":             nil,
+					"audit_webhook_config_file":                    "",
+					"audit_webhook_initial_backoff":                nil,
+					"audit_webhook_mode":                           "",
+					"authentication_token_webhook_config_file":     nil,
+					"authentication_token_webhook_cache_ttl":       nil,
+					"authorization_mode":                           nil,
+					"authorization_webhook_config_file":            nil,
+					"authorization_webhook_cache_authorized_ttl":   nil,
+					"authorization_webhook_cache_unauthorized_ttl": nil,
+					"authorization_rbac_super_user":                nil,
+					"encryption_provider_config":                   nil,
+					"experimental_encryption_provider_config":      nil,
+					"requestheader_username_headers":               func() []interface{} { return nil }(),
+					"requestheader_group_headers":                  func() []interface{} { return nil }(),
+					"requestheader_extra_header_prefixes":          func() []interface{} { return nil }(),
+					"requestheader_client_ca_file":                 "",
+					"requestheader_allowed_names":                  func() []interface{} { return nil }(),
+					"feature_gates":                                func() map[string]interface{} { return nil }(),
+					"max_requests_inflight":                        0,
+					"max_mutating_requests_inflight":               0,
+					"http2_max_streams_per_connection":             nil,
+					"etcd_quorum_read":                             nil,
+					"request_timeout":                              nil,
+					"min_request_timeout":                          nil,
+					"target_ram_mb":                                0,
+					"service_account_key_file":                     func() []interface{} { return nil }(),
+					"service_account_signing_key_file":             nil,
+					"service_account_issuer":                       nil,
+					"service_account_jwksuri":                      nil,
+					"api_audiences":                                func() []interface{} { return nil }(),
+					"cpu_request":                                  "",
+					"cpu_limit":                                    "",
+					"memory_request":                               "",
+					"memory_limit":                                 "",
+					"event_ttl":                                    nil,
+					"audit_dynamic_configuration":                  nil,
+					"enable_profiling":                             nil,
+					"cors_allowed_origins":                         func() []interface{} { return nil }(),
+					"default_not_ready_toleration_seconds":         nil,
+					"default_unreachable_toleration_seconds":       nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceKubeAPIServerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceKubeAPIServerConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceKubeAPIServerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceKubeAPIServerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

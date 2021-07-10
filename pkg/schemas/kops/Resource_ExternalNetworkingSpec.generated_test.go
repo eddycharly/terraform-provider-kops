@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceExternalNetworkingSpec(t *testing.T) {
+	_default := kops.ExternalNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,19 @@ func TestExpandResourceExternalNetworkingSpec(t *testing.T) {
 		args args
 		want kops.ExternalNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceExternalNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceExternalNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceExternalNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceExternalNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

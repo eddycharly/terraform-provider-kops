@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceOpenstackBlockStorageConfig(t *testing.T) {
+	_default := kops.OpenstackBlockStorageConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,26 @@ func TestExpandResourceOpenstackBlockStorageConfig(t *testing.T) {
 		args args
 		want kops.OpenstackBlockStorageConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"version":              nil,
+					"ignore_az":            nil,
+					"override_az":          nil,
+					"create_storage_class": nil,
+					"csi_plugin_image":     "",
+					"csi_topology_support": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceOpenstackBlockStorageConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceOpenstackBlockStorageConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceOpenstackBlockStorageConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceOpenstackBlockStorageConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

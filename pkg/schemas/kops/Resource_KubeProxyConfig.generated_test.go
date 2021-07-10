@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceKubeProxyConfig(t *testing.T) {
+	_default := kops.KubeProxyConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,40 @@ func TestExpandResourceKubeProxyConfig(t *testing.T) {
 		args args
 		want kops.KubeProxyConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"image":                  "",
+					"cpu_request":            "",
+					"cpu_limit":              "",
+					"memory_request":         "",
+					"memory_limit":           "",
+					"log_level":              0,
+					"cluster_cidr":           "",
+					"hostname_override":      "",
+					"bind_address":           "",
+					"master":                 "",
+					"metrics_bind_address":   nil,
+					"enabled":                nil,
+					"proxy_mode":             "",
+					"ip_vs_exclude_cidr_s":   func() []interface{} { return nil }(),
+					"ip_vs_min_sync_period":  nil,
+					"ip_vs_scheduler":        nil,
+					"ip_vs_sync_period":      nil,
+					"feature_gates":          func() map[string]interface{} { return nil }(),
+					"conntrack_max_per_core": nil,
+					"conntrack_min":          nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceKubeProxyConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceKubeProxyConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceKubeProxyConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceKubeProxyConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

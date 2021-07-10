@@ -163,8 +163,8 @@ func FlattenDataSourceDNSControllerGossipConfigInto(in kops.DNSControllerGossipC
 				return nil
 			}
 			return func(in kops.DNSControllerGossipConfigSecondary) interface{} {
-				return func(in kops.DNSControllerGossipConfigSecondary) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceDNSControllerGossipConfigSecondary(in)}
+				return func(in kops.DNSControllerGossipConfigSecondary) []interface{} {
+					return []interface{}{FlattenDataSourceDNSControllerGossipConfigSecondary(in)}
 				}(in)
 			}(*in)
 		}(in)

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceTopologySpec(t *testing.T) {
+	_default := kops.TopologySpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandResourceTopologySpec(t *testing.T) {
 		args args
 		want kops.TopologySpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"masters": "",
+					"nodes":   "",
+					"bastion": nil,
+					"dns":     nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceTopologySpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceTopologySpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceTopologySpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceTopologySpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

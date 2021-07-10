@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceMetricsServerConfig(t *testing.T) {
+	_default := kops.MetricsServerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceMetricsServerConfig(t *testing.T) {
 		args args
 		want kops.MetricsServerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled":  nil,
+					"image":    nil,
+					"insecure": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceMetricsServerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceMetricsServerConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceMetricsServerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceMetricsServerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

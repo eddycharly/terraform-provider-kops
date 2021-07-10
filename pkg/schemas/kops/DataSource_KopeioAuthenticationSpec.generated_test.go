@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceKopeioAuthenticationSpec(t *testing.T) {
+	_default := kops.KopeioAuthenticationSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,19 @@ func TestExpandDataSourceKopeioAuthenticationSpec(t *testing.T) {
 		args args
 		want kops.KopeioAuthenticationSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceKopeioAuthenticationSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceKopeioAuthenticationSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceKopeioAuthenticationSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKopeioAuthenticationSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

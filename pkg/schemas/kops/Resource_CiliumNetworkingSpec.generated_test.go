@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceCiliumNetworkingSpec(t *testing.T) {
+	_default := kops.CiliumNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,98 @@ func TestExpandResourceCiliumNetworkingSpec(t *testing.T) {
 		args args
 		want kops.CiliumNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"version":                           "",
+					"memory_request":                    nil,
+					"cpu_request":                       nil,
+					"access_log":                        "",
+					"agent_labels":                      func() []interface{} { return nil }(),
+					"agent_prometheus_port":             0,
+					"allow_localhost":                   "",
+					"auto_ipv6_node_routes":             false,
+					"bpf_root":                          "",
+					"container_runtime":                 func() []interface{} { return nil }(),
+					"container_runtime_endpoint":        func() map[string]interface{} { return nil }(),
+					"debug":                             false,
+					"debug_verbose":                     func() []interface{} { return nil }(),
+					"device":                            "",
+					"disable_conntrack":                 false,
+					"disable_ipv4":                      false,
+					"disable_k_8s_services":             false,
+					"enable_policy":                     "",
+					"enable_tracing":                    false,
+					"enable_prometheus_metrics":         false,
+					"enable_encryption":                 false,
+					"envoy_log":                         "",
+					"ipv4_cluster_cidr_mask_size":       0,
+					"ipv4_node":                         "",
+					"ipv4_range":                        "",
+					"ipv4_service_range":                "",
+					"ipv6_cluster_alloc_cidr":           "",
+					"ipv6_node":                         "",
+					"ipv6_range":                        "",
+					"ipv6_service_range":                "",
+					"k_8s_api_server":                   "",
+					"k_8s_kubeconfig_path":              "",
+					"keep_bpf_templates":                false,
+					"keep_config":                       false,
+					"label_prefix_file":                 "",
+					"labels":                            func() []interface{} { return nil }(),
+					"lb":                                "",
+					"lib_dir":                           "",
+					"log_drivers":                       func() []interface{} { return nil }(),
+					"log_opt":                           func() map[string]interface{} { return nil }(),
+					"logstash":                          false,
+					"logstash_agent":                    "",
+					"logstash_probe_timer":              0,
+					"disable_masquerade":                false,
+					"nat46_range":                       "",
+					"pprof":                             false,
+					"prefilter_device":                  "",
+					"prometheus_serve_addr":             "",
+					"restore":                           false,
+					"single_cluster_route":              false,
+					"socket_path":                       "",
+					"state_dir":                         "",
+					"trace_payload_len":                 0,
+					"tunnel":                            "",
+					"enable_ipv6":                       false,
+					"enable_ipv4":                       false,
+					"monitor_aggregation":               "",
+					"bpfct_global_tcp_max":              0,
+					"bpfct_global_any_max":              0,
+					"preallocate_bpf_maps":              false,
+					"sidecar_istio_proxy_image":         "",
+					"cluster_name":                      "",
+					"to_fqdns_dns_reject_response_code": "",
+					"to_fqdns_enable_poller":            false,
+					"container_runtime_labels":          "",
+					"ipam":                              "",
+					"ip_tables_rules_noinstall":         false,
+					"auto_direct_node_routes":           false,
+					"enable_host_reachable_services":    false,
+					"enable_node_port":                  false,
+					"etcd_managed":                      false,
+					"enable_remote_node_identity":       nil,
+					"hubble":                            nil,
+					"remove_cbr_bridge":                 false,
+					"restart_pods":                      false,
+					"reconfigure_kubelet":               false,
+					"node_init_bootstrap_file":          "",
+					"cni_bin_path":                      "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceCiliumNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceCiliumNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceCiliumNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceCiliumNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

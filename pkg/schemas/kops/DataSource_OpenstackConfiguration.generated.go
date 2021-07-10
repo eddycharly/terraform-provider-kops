@@ -149,8 +149,8 @@ func FlattenDataSourceOpenstackConfigurationInto(in kops.OpenstackConfiguration,
 				return nil
 			}
 			return func(in kops.OpenstackLoadbalancerConfig) interface{} {
-				return func(in kops.OpenstackLoadbalancerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceOpenstackLoadbalancerConfig(in)}
+				return func(in kops.OpenstackLoadbalancerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceOpenstackLoadbalancerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -161,8 +161,8 @@ func FlattenDataSourceOpenstackConfigurationInto(in kops.OpenstackConfiguration,
 				return nil
 			}
 			return func(in kops.OpenstackMonitor) interface{} {
-				return func(in kops.OpenstackMonitor) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceOpenstackMonitor(in)}
+				return func(in kops.OpenstackMonitor) []interface{} {
+					return []interface{}{FlattenDataSourceOpenstackMonitor(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -173,8 +173,8 @@ func FlattenDataSourceOpenstackConfigurationInto(in kops.OpenstackConfiguration,
 				return nil
 			}
 			return func(in kops.OpenstackRouter) interface{} {
-				return func(in kops.OpenstackRouter) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceOpenstackRouter(in)}
+				return func(in kops.OpenstackRouter) []interface{} {
+					return []interface{}{FlattenDataSourceOpenstackRouter(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -185,8 +185,8 @@ func FlattenDataSourceOpenstackConfigurationInto(in kops.OpenstackConfiguration,
 				return nil
 			}
 			return func(in kops.OpenstackBlockStorageConfig) interface{} {
-				return func(in kops.OpenstackBlockStorageConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceOpenstackBlockStorageConfig(in)}
+				return func(in kops.OpenstackBlockStorageConfig) []interface{} {
+					return []interface{}{FlattenDataSourceOpenstackBlockStorageConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -207,8 +207,8 @@ func FlattenDataSourceOpenstackConfigurationInto(in kops.OpenstackConfiguration,
 				return nil
 			}
 			return func(in kops.OpenstackNetwork) interface{} {
-				return func(in kops.OpenstackNetwork) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceOpenstackNetwork(in)}
+				return func(in kops.OpenstackNetwork) []interface{} {
+					return []interface{}{FlattenDataSourceOpenstackNetwork(in)}
 				}(in)
 			}(*in)
 		}(in)

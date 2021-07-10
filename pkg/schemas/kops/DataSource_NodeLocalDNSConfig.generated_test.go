@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceNodeLocalDNSConfig(t *testing.T) {
+	_default := kops.NodeLocalDNSConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,25 @@ func TestExpandDataSourceNodeLocalDNSConfig(t *testing.T) {
 		args args
 		want kops.NodeLocalDNSConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled":             nil,
+					"local_ip":            "",
+					"forward_to_kube_dns": nil,
+					"memory_request":      nil,
+					"cpu_request":         nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceNodeLocalDNSConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceNodeLocalDNSConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceNodeLocalDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceNodeLocalDNSConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceClusterStatus(t *testing.T) {
+	_default := datasources.ClusterStatus{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,25 @@ func TestExpandDataSourceClusterStatus(t *testing.T) {
 		args args
 		want datasources.ClusterStatus
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"cluster_name":    "",
+					"exists":          false,
+					"is_valid":        false,
+					"needs_update":    false,
+					"instance_groups": func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceClusterStatus(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceClusterStatus() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceClusterStatus(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceClusterStatus() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -548,8 +548,8 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 				return nil
 			}
 			return func(in kops.OpenstackConfiguration) interface{} {
-				return func(in kops.OpenstackConfiguration) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceOpenstackConfiguration(in)}
+				return func(in kops.OpenstackConfiguration) []interface{} {
+					return []interface{}{FlattenResourceOpenstackConfiguration(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -560,8 +560,8 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 				return nil
 			}
 			return func(in kops.AzureConfiguration) interface{} {
-				return func(in kops.AzureConfiguration) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceAzureConfiguration(in)}
+				return func(in kops.AzureConfiguration) []interface{} {
+					return []interface{}{FlattenResourceAzureConfiguration(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -572,8 +572,8 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 				return nil
 			}
 			return func(in kops.AWSEBSCSIDriver) interface{} {
-				return func(in kops.AWSEBSCSIDriver) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceAWSEBSCSIDriver(in)}
+				return func(in kops.AWSEBSCSIDriver) []interface{} {
+					return []interface{}{FlattenResourceAWSEBSCSIDriver(in)}
 				}(in)
 			}(*in)
 		}(in)

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceCanalNetworkingSpec(t *testing.T) {
+	_default := kops.CanalNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,35 @@ func TestExpandDataSourceCanalNetworkingSpec(t *testing.T) {
 		args args
 		want kops.CanalNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"chain_insert_mode":                  "",
+					"cpu_request":                        nil,
+					"default_endpoint_to_host_action":    "",
+					"disable_flannel_forward_rules":      false,
+					"disable_tx_checksum_offloading":     false,
+					"iptables_backend":                   "",
+					"log_severity_sys":                   "",
+					"mtu":                                nil,
+					"prometheus_go_metrics_enabled":      false,
+					"prometheus_metrics_enabled":         false,
+					"prometheus_metrics_port":            0,
+					"prometheus_process_metrics_enabled": false,
+					"typha_prometheus_metrics_enabled":   false,
+					"typha_prometheus_metrics_port":      0,
+					"typha_replicas":                     0,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceCanalNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceCanalNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceCanalNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceCanalNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

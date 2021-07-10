@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceFlannelNetworkingSpec(t *testing.T) {
+	_default := kops.FlannelNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceFlannelNetworkingSpec(t *testing.T) {
 		args args
 		want kops.FlannelNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"backend":                        "",
+					"disable_tx_checksum_offloading": false,
+					"iptables_resync_seconds":        nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceFlannelNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceFlannelNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceFlannelNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceFlannelNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

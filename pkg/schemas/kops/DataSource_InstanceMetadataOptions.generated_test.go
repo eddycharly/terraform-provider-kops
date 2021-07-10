@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceInstanceMetadataOptions(t *testing.T) {
+	_default := kops.InstanceMetadataOptions{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandDataSourceInstanceMetadataOptions(t *testing.T) {
 		args args
 		want kops.InstanceMetadataOptions
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"http_put_response_hop_limit": nil,
+					"http_tokens":                 nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceInstanceMetadataOptions(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceInstanceMetadataOptions() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceInstanceMetadataOptions(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceInstanceMetadataOptions() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

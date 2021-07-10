@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceClusterUpdater(t *testing.T) {
+	_default := resources.ClusterUpdater{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,30 @@ func TestExpandResourceClusterUpdater(t *testing.T) {
 		args args
 		want resources.ClusterUpdater
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"revision":     0,
+					"cluster_name": "",
+					"keepers":      func() map[string]interface{} { return nil }(),
+					"apply":        func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
+					"rolling_update": func() []interface{} {
+						return []interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
+					}(),
+					"validate": func() []interface{} {
+						return []interface{}{FlattenResourceValidateOptions(resources.ValidateOptions{})}
+					}(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceClusterUpdater(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceClusterUpdater() = %v, want %v", got, tt.want)
+			got := ExpandResourceClusterUpdater(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceClusterUpdater() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
@@ -33,14 +51,12 @@ func TestFlattenResourceClusterUpdaterInto(t *testing.T) {
 		"revision":     0,
 		"cluster_name": "",
 		"keepers":      func() map[string]interface{} { return nil }(),
-		"apply": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})}
+		"apply":        func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
+		"rolling_update": func() []interface{} {
+			return []interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
 		}(),
-		"rolling_update": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
-		}(),
-		"validate": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceValidateOptions(resources.ValidateOptions{})}
+		"validate": func() []interface{} {
+			return []interface{}{FlattenResourceValidateOptions(resources.ValidateOptions{})}
 		}(),
 	}
 	type args struct {
@@ -141,14 +157,12 @@ func TestFlattenResourceClusterUpdater(t *testing.T) {
 		"revision":     0,
 		"cluster_name": "",
 		"keepers":      func() map[string]interface{} { return nil }(),
-		"apply": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})}
+		"apply":        func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
+		"rolling_update": func() []interface{} {
+			return []interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
 		}(),
-		"rolling_update": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
-		}(),
-		"validate": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceValidateOptions(resources.ValidateOptions{})}
+		"validate": func() []interface{} {
+			return []interface{}{FlattenResourceValidateOptions(resources.ValidateOptions{})}
 		}(),
 	}
 	type args struct {

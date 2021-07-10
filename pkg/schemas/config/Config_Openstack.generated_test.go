@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandConfigOpenstack(t *testing.T) {
+	_default := config.Openstack{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,34 @@ func TestExpandConfigOpenstack(t *testing.T) {
 		args args
 		want config.Openstack
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"tenant_id":                     "",
+					"tenant_name":                   "",
+					"project_id":                    "",
+					"project_name":                  "",
+					"project_domain_id":             "",
+					"project_domain_name":           "",
+					"domain_id":                     "",
+					"domain_name":                   "",
+					"username":                      "",
+					"password":                      "",
+					"auth_url":                      "",
+					"region_name":                   "",
+					"application_credential_id":     "",
+					"application_credential_secret": "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandConfigOpenstack(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandConfigOpenstack() = %v, want %v", got, tt.want)
+			got := ExpandConfigOpenstack(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandConfigOpenstack() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceContainerdConfig(t *testing.T) {
+	_default := kops.ContainerdConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,29 @@ func TestExpandResourceContainerdConfig(t *testing.T) {
 		args args
 		want kops.ContainerdConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"address":          nil,
+					"config_override":  nil,
+					"log_level":        nil,
+					"packages":         nil,
+					"registry_mirrors": func() map[string]interface{} { return nil }(),
+					"root":             nil,
+					"skip_install":     false,
+					"state":            nil,
+					"version":          nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceContainerdConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceContainerdConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceContainerdConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceContainerdConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

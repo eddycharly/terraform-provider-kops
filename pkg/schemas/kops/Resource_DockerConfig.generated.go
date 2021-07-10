@@ -719,8 +719,8 @@ func FlattenResourceDockerConfigInto(in kops.DockerConfig, out map[string]interf
 				return nil
 			}
 			return func(in kops.PackagesConfig) interface{} {
-				return func(in kops.PackagesConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourcePackagesConfig(in)}
+				return func(in kops.PackagesConfig) []interface{} {
+					return []interface{}{FlattenResourcePackagesConfig(in)}
 				}(in)
 			}(*in)
 		}(in)

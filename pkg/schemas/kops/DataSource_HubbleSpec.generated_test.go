@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceHubbleSpec(t *testing.T) {
+	_default := kops.HubbleSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandDataSourceHubbleSpec(t *testing.T) {
 		args args
 		want kops.HubbleSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled": nil,
+					"metrics": func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceHubbleSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceHubbleSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceHubbleSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceHubbleSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

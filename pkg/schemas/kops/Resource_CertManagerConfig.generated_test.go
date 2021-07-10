@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceCertManagerConfig(t *testing.T) {
+	_default := kops.CertManagerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandResourceCertManagerConfig(t *testing.T) {
 		args args
 		want kops.CertManagerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled":        nil,
+					"managed":        nil,
+					"image":          nil,
+					"default_issuer": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceCertManagerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceCertManagerConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceCertManagerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceCertManagerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

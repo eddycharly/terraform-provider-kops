@@ -96,8 +96,8 @@ func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
 				return nil
 			}
 			return func(in config.Aws) interface{} {
-				return func(in config.Aws) []map[string]interface{} {
-					return []map[string]interface{}{FlattenConfigAws(in)}
+				return func(in config.Aws) []interface{} {
+					return []interface{}{FlattenConfigAws(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -108,8 +108,8 @@ func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
 				return nil
 			}
 			return func(in config.Openstack) interface{} {
-				return func(in config.Openstack) []map[string]interface{} {
-					return []map[string]interface{}{FlattenConfigOpenstack(in)}
+				return func(in config.Openstack) []interface{} {
+					return []interface{}{FlattenConfigOpenstack(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -120,8 +120,8 @@ func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
 				return nil
 			}
 			return func(in config.Klog) interface{} {
-				return func(in config.Klog) []map[string]interface{} {
-					return []map[string]interface{}{FlattenConfigKlog(in)}
+				return func(in config.Klog) []interface{} {
+					return []interface{}{FlattenConfigKlog(in)}
 				}(in)
 			}(*in)
 		}(in)

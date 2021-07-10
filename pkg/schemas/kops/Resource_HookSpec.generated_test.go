@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceHookSpec(t *testing.T) {
+	_default := kops.HookSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,28 @@ func TestExpandResourceHookSpec(t *testing.T) {
 		args args
 		want kops.HookSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"name":             "",
+					"disabled":         false,
+					"roles":            func() []interface{} { return nil }(),
+					"requires":         func() []interface{} { return nil }(),
+					"before":           func() []interface{} { return nil }(),
+					"exec_container":   nil,
+					"manifest":         "",
+					"use_raw_manifest": false,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceHookSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceHookSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceHookSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceHookSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -70,8 +70,8 @@ func FlattenDataSourceAuthorizationSpecInto(in kops.AuthorizationSpec, out map[s
 				return nil
 			}
 			return func(in kops.AlwaysAllowAuthorizationSpec) interface{} {
-				return func(in kops.AlwaysAllowAuthorizationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAlwaysAllowAuthorizationSpec(in)}
+				return func(in kops.AlwaysAllowAuthorizationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceAlwaysAllowAuthorizationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -82,8 +82,8 @@ func FlattenDataSourceAuthorizationSpecInto(in kops.AuthorizationSpec, out map[s
 				return nil
 			}
 			return func(in kops.RBACAuthorizationSpec) interface{} {
-				return func(in kops.RBACAuthorizationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceRBACAuthorizationSpec(in)}
+				return func(in kops.RBACAuthorizationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceRBACAuthorizationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

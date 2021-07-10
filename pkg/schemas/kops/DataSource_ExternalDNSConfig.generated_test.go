@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceExternalDNSConfig(t *testing.T) {
+	_default := kops.ExternalDNSConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandDataSourceExternalDNSConfig(t *testing.T) {
 		args args
 		want kops.ExternalDNSConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"disable":         false,
+					"watch_ingress":   nil,
+					"watch_namespace": "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceExternalDNSConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceExternalDNSConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceExternalDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceExternalDNSConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

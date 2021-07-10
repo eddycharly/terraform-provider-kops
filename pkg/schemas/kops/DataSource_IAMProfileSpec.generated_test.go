@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceIAMProfileSpec(t *testing.T) {
+	_default := kops.IAMProfileSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandDataSourceIAMProfileSpec(t *testing.T) {
 		args args
 		want kops.IAMProfileSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"profile": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceIAMProfileSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceIAMProfileSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceIAMProfileSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceIAMProfileSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
+	_default := kops.ClusterAutoscalerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,31 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 		args args
 		want kops.ClusterAutoscalerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled":                          nil,
+					"expander":                         nil,
+					"balance_similar_node_groups":      nil,
+					"scale_down_utilization_threshold": nil,
+					"skip_nodes_with_system_pods":      nil,
+					"skip_nodes_with_local_storage":    nil,
+					"new_pod_scale_up_delay":           nil,
+					"scale_down_delay_after_add":       nil,
+					"image":                            nil,
+					"memory_request":                   nil,
+					"cpu_request":                      nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceClusterAutoscalerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceClusterAutoscalerConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceClusterAutoscalerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceClusterAutoscalerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

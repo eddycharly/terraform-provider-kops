@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceClusterSecrets(t *testing.T) {
+	_default := resources.ClusterSecrets{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandResourceClusterSecrets(t *testing.T) {
 		args args
 		want resources.ClusterSecrets
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"docker_config": "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceClusterSecrets(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceClusterSecrets() = %v, want %v", got, tt.want)
+			got := ExpandResourceClusterSecrets(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceClusterSecrets() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

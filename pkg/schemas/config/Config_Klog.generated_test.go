@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandConfigKlog(t *testing.T) {
+	_default := config.Klog{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandConfigKlog(t *testing.T) {
 		args args
 		want config.Klog
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"verbosity": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandConfigKlog(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandConfigKlog() = %v, want %v", got, tt.want)
+			got := ExpandConfigKlog(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandConfigKlog() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

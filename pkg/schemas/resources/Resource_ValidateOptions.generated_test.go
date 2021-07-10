@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceValidateOptions(t *testing.T) {
+	_default := resources.ValidateOptions{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceValidateOptions(t *testing.T) {
 		args args
 		want resources.ValidateOptions
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"skip":          false,
+					"timeout":       nil,
+					"poll_interval": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceValidateOptions(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceValidateOptions() = %v, want %v", got, tt.want)
+			got := ExpandResourceValidateOptions(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceValidateOptions() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

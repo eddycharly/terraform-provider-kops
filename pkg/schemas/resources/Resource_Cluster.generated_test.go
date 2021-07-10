@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceCluster(t *testing.T) {
+	_default := resources.Cluster{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,93 @@ func TestExpandResourceCluster(t *testing.T) {
 		args args
 		want resources.Cluster
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"channel":                           "",
+					"addons":                            func() []interface{} { return nil }(),
+					"config_base":                       "",
+					"cloud_provider":                    "",
+					"container_runtime":                 "",
+					"kubernetes_version":                "",
+					"subnet":                            func() []interface{} { return nil }(),
+					"project":                           "",
+					"master_public_name":                "",
+					"master_internal_name":              "",
+					"network_cidr":                      "",
+					"additional_network_cidrs":          func() []interface{} { return nil }(),
+					"network_id":                        "",
+					"topology":                          nil,
+					"secret_store":                      "",
+					"key_store":                         "",
+					"config_store":                      "",
+					"dns_zone":                          "",
+					"additional_sans":                   func() []interface{} { return nil }(),
+					"cluster_dns_domain":                "",
+					"service_cluster_ip_range":          "",
+					"pod_cidr":                          "",
+					"non_masquerade_cidr":               "",
+					"ssh_access":                        func() []interface{} { return nil }(),
+					"node_port_access":                  func() []interface{} { return nil }(),
+					"egress_proxy":                      nil,
+					"ssh_key_name":                      nil,
+					"kubernetes_api_access":             func() []interface{} { return nil }(),
+					"isolate_masters":                   nil,
+					"update_policy":                     nil,
+					"external_policies":                 nil,
+					"additional_policies":               nil,
+					"file_assets":                       func() []interface{} { return nil }(),
+					"etcd_cluster":                      func() []interface{} { return nil }(),
+					"containerd":                        nil,
+					"docker":                            nil,
+					"kube_dns":                          nil,
+					"kube_api_server":                   nil,
+					"kube_controller_manager":           nil,
+					"external_cloud_controller_manager": nil,
+					"kube_scheduler":                    nil,
+					"kube_proxy":                        nil,
+					"kubelet":                           nil,
+					"master_kubelet":                    nil,
+					"cloud_config":                      nil,
+					"external_dns":                      nil,
+					"ntp":                               nil,
+					"node_termination_handler":          nil,
+					"metrics_server":                    nil,
+					"cert_manager":                      nil,
+					"aws_load_balancer_controller":      nil,
+					"networking":                        nil,
+					"api":                               nil,
+					"authentication":                    nil,
+					"authorization":                     nil,
+					"node_authorization":                nil,
+					"cloud_labels":                      func() map[string]interface{} { return nil }(),
+					"hooks":                             func() []interface{} { return nil }(),
+					"assets":                            nil,
+					"iam":                               nil,
+					"encryption_config":                 nil,
+					"disable_subnet_tags":               false,
+					"use_host_certificates":             nil,
+					"sysctl_parameters":                 func() []interface{} { return nil }(),
+					"rolling_update":                    nil,
+					"cluster_autoscaler":                nil,
+					"warm_pool":                         nil,
+					"service_account_issuer_discovery":  nil,
+					"snapshot_controller":               nil,
+					"revision":                          0,
+					"name":                              "",
+					"admin_ssh_key":                     "",
+					"secrets":                           nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceCluster(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceCluster() = %v, want %v", got, tt.want)
+			got := ExpandResourceCluster(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceCluster() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

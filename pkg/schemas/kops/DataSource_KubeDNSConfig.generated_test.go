@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceKubeDNSConfig(t *testing.T) {
+	_default := kops.KubeDNSConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,36 @@ func TestExpandDataSourceKubeDNSConfig(t *testing.T) {
 		args args
 		want kops.KubeDNSConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"cache_max_size":       0,
+					"cache_max_concurrent": 0,
+					"core_dns_image":       "",
+					"cpa_image":            "",
+					"domain":               "",
+					"external_core_file":   "",
+					"image":                "",
+					"replicas":             0,
+					"provider":             "",
+					"server_ip":            "",
+					"stub_domains":         func() map[string]interface{} { return nil }(),
+					"upstream_nameservers": func() []interface{} { return nil }(),
+					"memory_request":       nil,
+					"cpu_request":          nil,
+					"memory_limit":         nil,
+					"node_local_dns":       nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceKubeDNSConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceKubeDNSConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceKubeDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKubeDNSConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

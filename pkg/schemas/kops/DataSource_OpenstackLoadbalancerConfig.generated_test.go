@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceOpenstackLoadbalancerConfig(t *testing.T) {
+	_default := kops.OpenstackLoadbalancerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,28 @@ func TestExpandDataSourceOpenstackLoadbalancerConfig(t *testing.T) {
 		args args
 		want kops.OpenstackLoadbalancerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"method":              nil,
+					"provider":            nil,
+					"use_octavia":         nil,
+					"floating_network":    nil,
+					"floating_network_id": nil,
+					"floating_subnet":     nil,
+					"subnet_id":           nil,
+					"manage_sec_groups":   nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceOpenstackLoadbalancerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceOpenstackLoadbalancerConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceOpenstackLoadbalancerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceOpenstackLoadbalancerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

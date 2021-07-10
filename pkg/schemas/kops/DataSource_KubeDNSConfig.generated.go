@@ -76,20 +76,25 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				if in == nil {
 					return nil
 				}
-				out := map[string][]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = func(in interface{}) []string {
-						if in == nil {
-							return nil
-						}
-						var out []string
-						for _, in := range in.([]interface{}) {
-							out = append(out, string(ExpandString(in)))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string][]string{}
+						for key, in := range in {
+							out[key] = func(in interface{}) []string {
+								if in == nil {
+									return nil
+								}
+								var out []string
+								for _, in := range in.([]interface{}) {
+									out = append(out, string(ExpandString(in)))
+								}
+								return out
+							}(in)
 						}
 						return out
-					}(in)
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["stub_domains"]),
 		UpstreamNameservers: func(in interface{}) []string {
@@ -276,8 +281,8 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 				return nil
 			}
 			return func(in kops.NodeLocalDNSConfig) interface{} {
-				return func(in kops.NodeLocalDNSConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceNodeLocalDNSConfig(in)}
+				return func(in kops.NodeLocalDNSConfig) []interface{} {
+					return []interface{}{FlattenDataSourceNodeLocalDNSConfig(in)}
 				}(in)
 			}(*in)
 		}(in)

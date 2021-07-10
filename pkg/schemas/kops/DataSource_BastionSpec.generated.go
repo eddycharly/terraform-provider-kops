@@ -90,8 +90,8 @@ func FlattenDataSourceBastionSpecInto(in kops.BastionSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.BastionLoadBalancerSpec) interface{} {
-				return func(in kops.BastionLoadBalancerSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceBastionLoadBalancerSpec(in)}
+				return func(in kops.BastionLoadBalancerSpec) []interface{} {
+					return []interface{}{FlattenDataSourceBastionLoadBalancerSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

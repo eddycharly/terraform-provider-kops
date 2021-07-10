@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceWarmPoolSpec(t *testing.T) {
+	_default := kops.WarmPoolSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandDataSourceWarmPoolSpec(t *testing.T) {
 		args args
 		want kops.WarmPoolSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"min_size":              0,
+					"max_size":              nil,
+					"enable_lifecycle_hook": false,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceWarmPoolSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceWarmPoolSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceWarmPoolSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceWarmPoolSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

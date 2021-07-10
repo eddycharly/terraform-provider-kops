@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceBastionLoadBalancerSpec(t *testing.T) {
+	_default := kops.BastionLoadBalancerSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandDataSourceBastionLoadBalancerSpec(t *testing.T) {
 		args args
 		want kops.BastionLoadBalancerSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"additional_security_groups": func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceBastionLoadBalancerSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceBastionLoadBalancerSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceBastionLoadBalancerSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceBastionLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

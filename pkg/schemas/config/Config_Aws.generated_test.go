@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandConfigAws(t *testing.T) {
+	_default := config.Aws{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,30 @@ func TestExpandConfigAws(t *testing.T) {
 		args args
 		want config.Aws
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"profile":           "",
+					"region":            "",
+					"access_key":        "",
+					"secret_key":        "",
+					"assume_role":       nil,
+					"s3_endpoint":       "",
+					"s3_region":         "",
+					"s3_access_key":     "",
+					"s3_secret_key":     "",
+					"skip_region_check": false,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandConfigAws(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandConfigAws() = %v, want %v", got, tt.want)
+			got := ExpandConfigAws(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandConfigAws() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

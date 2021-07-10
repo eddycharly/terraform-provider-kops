@@ -65,8 +65,8 @@ func FlattenDataSourceServiceAccountExternalPermissionInto(in kops.ServiceAccoun
 				return nil
 			}
 			return func(in kops.AWSPermission) interface{} {
-				return func(in kops.AWSPermission) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAWSPermission(in)}
+				return func(in kops.AWSPermission) []interface{} {
+					return []interface{}{FlattenDataSourceAWSPermission(in)}
 				}(in)
 			}(*in)
 		}(in)

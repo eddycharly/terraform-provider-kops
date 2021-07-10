@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceEtcdBackupSpec(t *testing.T) {
+	_default := kops.EtcdBackupSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandDataSourceEtcdBackupSpec(t *testing.T) {
 		args args
 		want kops.EtcdBackupSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"backup_store": "",
+					"image":        "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceEtcdBackupSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceEtcdBackupSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceEtcdBackupSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceEtcdBackupSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

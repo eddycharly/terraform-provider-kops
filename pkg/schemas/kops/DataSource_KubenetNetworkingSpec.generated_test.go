@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceKubenetNetworkingSpec(t *testing.T) {
+	_default := kops.KubenetNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,19 @@ func TestExpandDataSourceKubenetNetworkingSpec(t *testing.T) {
 		args args
 		want kops.KubenetNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceKubenetNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceKubenetNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceKubenetNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKubenetNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

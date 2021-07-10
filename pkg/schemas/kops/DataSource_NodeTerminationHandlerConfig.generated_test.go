@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceNodeTerminationHandlerConfig(t *testing.T) {
+	_default := kops.NodeTerminationHandlerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,28 @@ func TestExpandDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 		args args
 		want kops.NodeTerminationHandlerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled":                           nil,
+					"enable_spot_interruption_draining": nil,
+					"enable_scheduled_event_draining":   nil,
+					"enable_prometheus_metrics":         nil,
+					"enable_sqs_termination_draining":   nil,
+					"managed_asg_tag":                   nil,
+					"memory_request":                    nil,
+					"cpu_request":                       nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceNodeTerminationHandlerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceNodeTerminationHandlerConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceNodeTerminationHandlerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceNodeTerminationHandlerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

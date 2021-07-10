@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceCalicoNetworkingSpec(t *testing.T) {
+	_default := kops.CalicoNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,46 @@ func TestExpandDataSourceCalicoNetworkingSpec(t *testing.T) {
 		args args
 		want kops.CalicoNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"registry":                  "",
+					"version":                   "",
+					"aws_src_dst_check":         "",
+					"bpf_enabled":               false,
+					"bpf_external_service_mode": "",
+					"bpf_kube_proxy_iptables_cleanup_enabled": false,
+					"bpf_log_level":                      "",
+					"chain_insert_mode":                  "",
+					"cpu_request":                        nil,
+					"cross_subnet":                       false,
+					"encapsulation_mode":                 "",
+					"ip_ip_mode":                         "",
+					"ipv4_auto_detection_method":         "",
+					"ipv6_auto_detection_method":         "",
+					"iptables_backend":                   "",
+					"log_severity_screen":                "",
+					"mtu":                                nil,
+					"prometheus_metrics_enabled":         false,
+					"prometheus_metrics_port":            0,
+					"prometheus_go_metrics_enabled":      false,
+					"prometheus_process_metrics_enabled": false,
+					"major_version":                      "",
+					"typha_prometheus_metrics_enabled":   false,
+					"typha_prometheus_metrics_port":      0,
+					"typha_replicas":                     0,
+					"wireguard_enabled":                  false,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceCalicoNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceCalicoNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceCalicoNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceCalicoNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

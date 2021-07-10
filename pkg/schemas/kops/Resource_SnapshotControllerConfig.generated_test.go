@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceSnapshotControllerConfig(t *testing.T) {
+	_default := kops.SnapshotControllerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandResourceSnapshotControllerConfig(t *testing.T) {
 		args args
 		want kops.SnapshotControllerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"enabled":               nil,
+					"install_default_class": false,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceSnapshotControllerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceSnapshotControllerConfig() = %v, want %v", got, tt.want)
+			got := ExpandResourceSnapshotControllerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceSnapshotControllerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceEtcdMemberSpec(t *testing.T) {
+	_default := kops.EtcdMemberSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,28 @@ func TestExpandDataSourceEtcdMemberSpec(t *testing.T) {
 		args args
 		want kops.EtcdMemberSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"name":              "",
+					"instance_group":    nil,
+					"volume_type":       nil,
+					"volume_iops":       nil,
+					"volume_throughput": nil,
+					"volume_size":       nil,
+					"kms_key_id":        nil,
+					"encrypted_volume":  nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceEtcdMemberSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceEtcdMemberSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceEtcdMemberSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceEtcdMemberSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

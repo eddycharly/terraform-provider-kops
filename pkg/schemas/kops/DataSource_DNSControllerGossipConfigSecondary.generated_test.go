@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceDNSControllerGossipConfigSecondary(t *testing.T) {
+	_default := kops.DNSControllerGossipConfigSecondary{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandDataSourceDNSControllerGossipConfigSecondary(t *testing.T) {
 		args args
 		want kops.DNSControllerGossipConfigSecondary
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"protocol": nil,
+					"listen":   nil,
+					"secret":   nil,
+					"seed":     nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceDNSControllerGossipConfigSecondary(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceDNSControllerGossipConfigSecondary() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceDNSControllerGossipConfigSecondary(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceDNSControllerGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

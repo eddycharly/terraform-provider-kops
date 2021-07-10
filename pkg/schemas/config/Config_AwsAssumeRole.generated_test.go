@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandConfigAwsAssumeRole(t *testing.T) {
+	_default := config.AwsAssumeRole{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandConfigAwsAssumeRole(t *testing.T) {
 		args args
 		want config.AwsAssumeRole
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"role_arn": "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandConfigAwsAssumeRole(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandConfigAwsAssumeRole() = %v, want %v", got, tt.want)
+			got := ExpandConfigAwsAssumeRole(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandConfigAwsAssumeRole() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

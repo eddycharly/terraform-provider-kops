@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceVolumeSpec(t *testing.T) {
+	_default := kops.VolumeSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,28 @@ func TestExpandResourceVolumeSpec(t *testing.T) {
 		args args
 		want kops.VolumeSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"delete_on_termination": nil,
+					"device":                "",
+					"encrypted":             nil,
+					"iops":                  nil,
+					"throughput":            nil,
+					"key":                   nil,
+					"size":                  0,
+					"type":                  "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceVolumeSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceVolumeSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceVolumeSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceVolumeSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

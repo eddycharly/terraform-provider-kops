@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceRollingUpdateOptions(t *testing.T) {
+	_default := utils.RollingUpdateOptions{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,30 @@ func TestExpandResourceRollingUpdateOptions(t *testing.T) {
 		args args
 		want utils.RollingUpdateOptions
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"master_interval":     nil,
+					"node_interval":       nil,
+					"bastion_interval":    nil,
+					"fail_on_drain_error": false,
+					"fail_on_validate":    false,
+					"post_drain_delay":    nil,
+					"validation_timeout":  nil,
+					"validate_count":      nil,
+					"cloud_only":          false,
+					"force":               false,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceRollingUpdateOptions(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceRollingUpdateOptions() = %v, want %v", got, tt.want)
+			got := ExpandResourceRollingUpdateOptions(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceRollingUpdateOptions() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

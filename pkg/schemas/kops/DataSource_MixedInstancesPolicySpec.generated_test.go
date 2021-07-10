@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceMixedInstancesPolicySpec(t *testing.T) {
+	_default := kops.MixedInstancesPolicySpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,26 @@ func TestExpandDataSourceMixedInstancesPolicySpec(t *testing.T) {
 		args args
 		want kops.MixedInstancesPolicySpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"instances":                     func() []interface{} { return nil }(),
+					"on_demand_allocation_strategy": nil,
+					"on_demand_base":                nil,
+					"on_demand_above_base":          nil,
+					"spot_allocation_strategy":      nil,
+					"spot_instance_pools":           nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceMixedInstancesPolicySpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceMixedInstancesPolicySpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceMixedInstancesPolicySpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceMixedInstancesPolicySpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -84,8 +84,8 @@ func FlattenDataSourceTopologySpecInto(in kops.TopologySpec, out map[string]inte
 				return nil
 			}
 			return func(in kops.BastionSpec) interface{} {
-				return func(in kops.BastionSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceBastionSpec(in)}
+				return func(in kops.BastionSpec) []interface{} {
+					return []interface{}{FlattenDataSourceBastionSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -96,8 +96,8 @@ func FlattenDataSourceTopologySpecInto(in kops.TopologySpec, out map[string]inte
 				return nil
 			}
 			return func(in kops.DNSSpec) interface{} {
-				return func(in kops.DNSSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceDNSSpec(in)}
+				return func(in kops.DNSSpec) []interface{} {
+					return []interface{}{FlattenDataSourceDNSSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

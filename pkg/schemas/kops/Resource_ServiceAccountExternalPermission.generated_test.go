@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceServiceAccountExternalPermission(t *testing.T) {
+	_default := kops.ServiceAccountExternalPermission{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceServiceAccountExternalPermission(t *testing.T) {
 		args args
 		want kops.ServiceAccountExternalPermission
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"name":      "",
+					"namespace": "",
+					"aws":       nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceServiceAccountExternalPermission(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceServiceAccountExternalPermission() = %v, want %v", got, tt.want)
+			got := ExpandResourceServiceAccountExternalPermission(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceServiceAccountExternalPermission() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

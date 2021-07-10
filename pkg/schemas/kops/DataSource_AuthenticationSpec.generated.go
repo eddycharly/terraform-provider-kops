@@ -70,8 +70,8 @@ func FlattenDataSourceAuthenticationSpecInto(in kops.AuthenticationSpec, out map
 				return nil
 			}
 			return func(in kops.KopeioAuthenticationSpec) interface{} {
-				return func(in kops.KopeioAuthenticationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKopeioAuthenticationSpec(in)}
+				return func(in kops.KopeioAuthenticationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceKopeioAuthenticationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -82,8 +82,8 @@ func FlattenDataSourceAuthenticationSpecInto(in kops.AuthenticationSpec, out map
 				return nil
 			}
 			return func(in kops.AwsAuthenticationSpec) interface{} {
-				return func(in kops.AwsAuthenticationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAwsAuthenticationSpec(in)}
+				return func(in kops.AwsAuthenticationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceAwsAuthenticationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceHTTPProxy(t *testing.T) {
+	_default := kops.HTTPProxy{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandResourceHTTPProxy(t *testing.T) {
 		args args
 		want kops.HTTPProxy
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"host": "",
+					"port": 0,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceHTTPProxy(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceHTTPProxy() = %v, want %v", got, tt.want)
+			got := ExpandResourceHTTPProxy(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceHTTPProxy() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

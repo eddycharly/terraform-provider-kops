@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceEtcdClusterSpec(t *testing.T) {
+	_default := kops.EtcdClusterSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,33 @@ func TestExpandDataSourceEtcdClusterSpec(t *testing.T) {
 		args args
 		want kops.EtcdClusterSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"name":                    "",
+					"provider":                "",
+					"member":                  func() []interface{} { return nil }(),
+					"enable_etcd_tls":         false,
+					"enable_tls_auth":         false,
+					"version":                 "",
+					"leader_election_timeout": nil,
+					"heartbeat_interval":      nil,
+					"image":                   "",
+					"backups":                 nil,
+					"manager":                 nil,
+					"memory_request":          nil,
+					"cpu_request":             nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceEtcdClusterSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceEtcdClusterSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceEtcdClusterSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceEtcdClusterSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

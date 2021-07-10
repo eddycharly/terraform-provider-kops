@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceAwsAuthenticationSpec(t *testing.T) {
+	_default := kops.AwsAuthenticationSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,27 @@ func TestExpandResourceAwsAuthenticationSpec(t *testing.T) {
 		args args
 		want kops.AwsAuthenticationSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"image":          "",
+					"backend_mode":   "",
+					"cluster_id":     "",
+					"memory_request": nil,
+					"cpu_request":    nil,
+					"memory_limit":   nil,
+					"cpu_limit":      nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceAwsAuthenticationSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceAwsAuthenticationSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceAwsAuthenticationSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceAwsAuthenticationSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

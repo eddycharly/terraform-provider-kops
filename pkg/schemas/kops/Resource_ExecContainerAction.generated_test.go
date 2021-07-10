@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceExecContainerAction(t *testing.T) {
+	_default := kops.ExecContainerAction{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceExecContainerAction(t *testing.T) {
 		args args
 		want kops.ExecContainerAction
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"image":       "",
+					"command":     func() []interface{} { return nil }(),
+					"environment": func() map[string]interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceExecContainerAction(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceExecContainerAction() = %v, want %v", got, tt.want)
+			got := ExpandResourceExecContainerAction(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceExecContainerAction() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

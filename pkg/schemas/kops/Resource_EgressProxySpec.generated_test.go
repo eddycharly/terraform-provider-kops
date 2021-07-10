@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceEgressProxySpec(t *testing.T) {
+	_default := kops.EgressProxySpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandResourceEgressProxySpec(t *testing.T) {
 		args args
 		want kops.EgressProxySpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"http_proxy":     func() []interface{} { return []interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})} }(),
+					"proxy_excludes": "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceEgressProxySpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceEgressProxySpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceEgressProxySpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceEgressProxySpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
@@ -30,9 +40,7 @@ func TestExpandResourceEgressProxySpec(t *testing.T) {
 
 func TestFlattenResourceEgressProxySpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"http_proxy": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
-		}(),
+		"http_proxy":     func() []interface{} { return []interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})} }(),
 		"proxy_excludes": "",
 	}
 	type args struct {
@@ -86,9 +94,7 @@ func TestFlattenResourceEgressProxySpecInto(t *testing.T) {
 
 func TestFlattenResourceEgressProxySpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"http_proxy": func() []map[string]interface{} {
-			return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
-		}(),
+		"http_proxy":     func() []interface{} { return []interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})} }(),
 		"proxy_excludes": "",
 	}
 	type args struct {

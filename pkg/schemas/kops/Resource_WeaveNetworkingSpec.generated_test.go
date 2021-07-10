@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceWeaveNetworkingSpec(t *testing.T) {
+	_default := kops.WeaveNetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,34 @@ func TestExpandResourceWeaveNetworkingSpec(t *testing.T) {
 		args args
 		want kops.WeaveNetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"mtu":                nil,
+					"conn_limit":         nil,
+					"no_masq_local":      nil,
+					"memory_request":     nil,
+					"cpu_request":        nil,
+					"memory_limit":       nil,
+					"cpu_limit":          nil,
+					"net_extra_args":     "",
+					"npc_memory_request": nil,
+					"npccpu_request":     nil,
+					"npc_memory_limit":   nil,
+					"npccpu_limit":       nil,
+					"npc_extra_args":     "",
+					"version":            "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceWeaveNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceWeaveNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceWeaveNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceWeaveNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

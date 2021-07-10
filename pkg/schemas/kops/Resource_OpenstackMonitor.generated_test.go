@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceOpenstackMonitor(t *testing.T) {
+	_default := kops.OpenstackMonitor{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceOpenstackMonitor(t *testing.T) {
 		args args
 		want kops.OpenstackMonitor
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"delay":       nil,
+					"timeout":     nil,
+					"max_retries": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceOpenstackMonitor(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceOpenstackMonitor() = %v, want %v", got, tt.want)
+			got := ExpandResourceOpenstackMonitor(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceOpenstackMonitor() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

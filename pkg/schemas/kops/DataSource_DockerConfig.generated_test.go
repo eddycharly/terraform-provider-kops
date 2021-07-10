@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceDockerConfig(t *testing.T) {
+	_default := kops.DockerConfig{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,50 @@ func TestExpandDataSourceDockerConfig(t *testing.T) {
 		args args
 		want kops.DockerConfig
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"authorization_plugins": func() []interface{} { return nil }(),
+					"bridge":                nil,
+					"bridge_ip":             nil,
+					"data_root":             nil,
+					"default_ulimit":        func() []interface{} { return nil }(),
+					"default_runtime":       nil,
+					"exec_opt":              func() []interface{} { return nil }(),
+					"exec_root":             nil,
+					"experimental":          nil,
+					"health_check":          false,
+					"hosts":                 func() []interface{} { return nil }(),
+					"ip_masq":               nil,
+					"ip_tables":             nil,
+					"insecure_registry":     nil,
+					"insecure_registries":   func() []interface{} { return nil }(),
+					"live_restore":          nil,
+					"log_driver":            nil,
+					"log_level":             nil,
+					"log_opt":               func() []interface{} { return nil }(),
+					"metrics_address":       nil,
+					"mtu":                   nil,
+					"packages":              nil,
+					"registry_mirrors":      func() []interface{} { return nil }(),
+					"runtimes":              func() []interface{} { return nil }(),
+					"selinux_enabled":       nil,
+					"skip_install":          false,
+					"storage":               nil,
+					"storage_opts":          func() []interface{} { return nil }(),
+					"user_namespace_remap":  "",
+					"version":               nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceDockerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceDockerConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceDockerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceDockerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

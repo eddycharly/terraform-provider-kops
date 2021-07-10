@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceBastionSpec(t *testing.T) {
+	_default := kops.BastionSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandResourceBastionSpec(t *testing.T) {
 		args args
 		want kops.BastionSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"bastion_public_name":  "",
+					"idle_timeout_seconds": nil,
+					"load_balancer":        nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceBastionSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceBastionSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceBastionSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceBastionSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

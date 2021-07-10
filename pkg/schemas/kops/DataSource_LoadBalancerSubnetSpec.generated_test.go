@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceLoadBalancerSubnetSpec(t *testing.T) {
+	_default := kops.LoadBalancerSubnetSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandDataSourceLoadBalancerSubnetSpec(t *testing.T) {
 		args args
 		want kops.LoadBalancerSubnetSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"name":                 "",
+					"private_ipv4_address": nil,
+					"allocation_id":        nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceLoadBalancerSubnetSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceLoadBalancerSubnetSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceLoadBalancerSubnetSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceLoadBalancerSubnetSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

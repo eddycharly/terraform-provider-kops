@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceOpenstackRouter(t *testing.T) {
+	_default := kops.OpenstackRouter{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandResourceOpenstackRouter(t *testing.T) {
 		args args
 		want kops.OpenstackRouter
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"external_network":        nil,
+					"dns_servers":             nil,
+					"external_subnet":         nil,
+					"availability_zone_hints": func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceOpenstackRouter(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceOpenstackRouter() = %v, want %v", got, tt.want)
+			got := ExpandResourceOpenstackRouter(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceOpenstackRouter() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

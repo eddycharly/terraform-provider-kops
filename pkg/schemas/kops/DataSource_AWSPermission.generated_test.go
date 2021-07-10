@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceAWSPermission(t *testing.T) {
+	_default := kops.AWSPermission{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,22 @@ func TestExpandDataSourceAWSPermission(t *testing.T) {
 		args args
 		want kops.AWSPermission
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"policy_ar_ns":  func() []interface{} { return nil }(),
+					"inline_policy": "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceAWSPermission(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceAWSPermission() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceAWSPermission(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceAWSPermission() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

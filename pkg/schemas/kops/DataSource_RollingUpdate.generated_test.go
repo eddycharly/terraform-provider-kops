@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceRollingUpdate(t *testing.T) {
+	_default := kops.RollingUpdate{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,23 @@ func TestExpandDataSourceRollingUpdate(t *testing.T) {
 		args args
 		want kops.RollingUpdate
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"drain_and_terminate": nil,
+					"max_unavailable":     nil,
+					"max_surge":           nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceRollingUpdate(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceRollingUpdate() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceRollingUpdate(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceRollingUpdate() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

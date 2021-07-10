@@ -188,11 +188,16 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["container_runtime_endpoint"]),
 		Debug: func(in interface{}) bool {
@@ -311,11 +316,16 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["log_opt"]),
 		Logstash: func(in interface{}) bool {
@@ -758,8 +768,8 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 				return nil
 			}
 			return func(in kops.HubbleSpec) interface{} {
-				return func(in kops.HubbleSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceHubbleSpec(in)}
+				return func(in kops.HubbleSpec) []interface{} {
+					return []interface{}{FlattenResourceHubbleSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

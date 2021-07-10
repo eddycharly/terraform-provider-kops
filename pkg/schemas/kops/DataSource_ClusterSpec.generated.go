@@ -348,20 +348,25 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 					if in == nil {
 						return nil
 					}
-					out := map[string][]string{}
-					for key, in := range in.(map[string]interface{}) {
-						out[key] = func(in interface{}) []string {
-							if in == nil {
-								return nil
-							}
-							var out []string
-							for _, in := range in.([]interface{}) {
-								out = append(out, string(ExpandString(in)))
+					if in, ok := in.(map[string]interface{}); ok {
+						if len(in) > 0 {
+							out := map[string][]string{}
+							for key, in := range in {
+								out[key] = func(in interface{}) []string {
+									if in == nil {
+										return nil
+									}
+									var out []string
+									for _, in := range in.([]interface{}) {
+										out = append(out, string(ExpandString(in)))
+									}
+									return out
+								}(in)
 							}
 							return out
-						}(in)
+						}
 					}
-					return out
+					return nil
 				}(in))
 			}(in)
 		}(in["external_policies"]),
@@ -379,11 +384,16 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 					if in == nil {
 						return nil
 					}
-					out := map[string]string{}
-					for key, in := range in.(map[string]interface{}) {
-						out[key] = string(ExpandString(in))
+					if in, ok := in.(map[string]interface{}); ok {
+						if len(in) > 0 {
+							out := map[string]string{}
+							for key, in := range in {
+								out[key] = string(ExpandString(in))
+							}
+							return out
+						}
 					}
-					return out
+					return nil
 				}(in))
 			}(in)
 		}(in["additional_policies"]),
@@ -822,11 +832,16 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["cloud_labels"]),
 		Hooks: func(in interface{}) []kops.HookSpec {
@@ -1096,8 +1111,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.TopologySpec) interface{} {
-				return func(in kops.TopologySpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceTopologySpec(in)}
+				return func(in kops.TopologySpec) []interface{} {
+					return []interface{}{FlattenDataSourceTopologySpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1159,8 +1174,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.EgressProxySpec) interface{} {
-				return func(in kops.EgressProxySpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceEgressProxySpec(in)}
+				return func(in kops.EgressProxySpec) []interface{} {
+					return []interface{}{FlattenDataSourceEgressProxySpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1276,8 +1291,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.ContainerdConfig) interface{} {
-				return func(in kops.ContainerdConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceContainerdConfig(in)}
+				return func(in kops.ContainerdConfig) []interface{} {
+					return []interface{}{FlattenDataSourceContainerdConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1288,8 +1303,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.DockerConfig) interface{} {
-				return func(in kops.DockerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceDockerConfig(in)}
+				return func(in kops.DockerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceDockerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1300,8 +1315,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeDNSConfig) interface{} {
-				return func(in kops.KubeDNSConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeDNSConfig(in)}
+				return func(in kops.KubeDNSConfig) []interface{} {
+					return []interface{}{FlattenDataSourceKubeDNSConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1312,8 +1327,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeAPIServerConfig) interface{} {
-				return func(in kops.KubeAPIServerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeAPIServerConfig(in)}
+				return func(in kops.KubeAPIServerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceKubeAPIServerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1324,8 +1339,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeControllerManagerConfig) interface{} {
-				return func(in kops.KubeControllerManagerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeControllerManagerConfig(in)}
+				return func(in kops.KubeControllerManagerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceKubeControllerManagerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1336,8 +1351,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.CloudControllerManagerConfig) interface{} {
-				return func(in kops.CloudControllerManagerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceCloudControllerManagerConfig(in)}
+				return func(in kops.CloudControllerManagerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceCloudControllerManagerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1348,8 +1363,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeSchedulerConfig) interface{} {
-				return func(in kops.KubeSchedulerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeSchedulerConfig(in)}
+				return func(in kops.KubeSchedulerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceKubeSchedulerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1360,8 +1375,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeProxyConfig) interface{} {
-				return func(in kops.KubeProxyConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeProxyConfig(in)}
+				return func(in kops.KubeProxyConfig) []interface{} {
+					return []interface{}{FlattenDataSourceKubeProxyConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1372,8 +1387,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeletConfigSpec) interface{} {
-				return func(in kops.KubeletConfigSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeletConfigSpec(in)}
+				return func(in kops.KubeletConfigSpec) []interface{} {
+					return []interface{}{FlattenDataSourceKubeletConfigSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1384,8 +1399,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.KubeletConfigSpec) interface{} {
-				return func(in kops.KubeletConfigSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceKubeletConfigSpec(in)}
+				return func(in kops.KubeletConfigSpec) []interface{} {
+					return []interface{}{FlattenDataSourceKubeletConfigSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1396,8 +1411,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.CloudConfiguration) interface{} {
-				return func(in kops.CloudConfiguration) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceCloudConfiguration(in)}
+				return func(in kops.CloudConfiguration) []interface{} {
+					return []interface{}{FlattenDataSourceCloudConfiguration(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1408,8 +1423,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.ExternalDNSConfig) interface{} {
-				return func(in kops.ExternalDNSConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceExternalDNSConfig(in)}
+				return func(in kops.ExternalDNSConfig) []interface{} {
+					return []interface{}{FlattenDataSourceExternalDNSConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1420,8 +1435,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.NTPConfig) interface{} {
-				return func(in kops.NTPConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceNTPConfig(in)}
+				return func(in kops.NTPConfig) []interface{} {
+					return []interface{}{FlattenDataSourceNTPConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1432,8 +1447,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.NodeTerminationHandlerConfig) interface{} {
-				return func(in kops.NodeTerminationHandlerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceNodeTerminationHandlerConfig(in)}
+				return func(in kops.NodeTerminationHandlerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceNodeTerminationHandlerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1444,8 +1459,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.MetricsServerConfig) interface{} {
-				return func(in kops.MetricsServerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceMetricsServerConfig(in)}
+				return func(in kops.MetricsServerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceMetricsServerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1456,8 +1471,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.CertManagerConfig) interface{} {
-				return func(in kops.CertManagerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceCertManagerConfig(in)}
+				return func(in kops.CertManagerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceCertManagerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1468,8 +1483,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.AWSLoadBalancerControllerConfig) interface{} {
-				return func(in kops.AWSLoadBalancerControllerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAWSLoadBalancerControllerConfig(in)}
+				return func(in kops.AWSLoadBalancerControllerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceAWSLoadBalancerControllerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1480,8 +1495,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.NetworkingSpec) interface{} {
-				return func(in kops.NetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceNetworkingSpec(in)}
+				return func(in kops.NetworkingSpec) []interface{} {
+					return []interface{}{FlattenDataSourceNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1492,8 +1507,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.AccessSpec) interface{} {
-				return func(in kops.AccessSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAccessSpec(in)}
+				return func(in kops.AccessSpec) []interface{} {
+					return []interface{}{FlattenDataSourceAccessSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1504,8 +1519,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.AuthenticationSpec) interface{} {
-				return func(in kops.AuthenticationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAuthenticationSpec(in)}
+				return func(in kops.AuthenticationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceAuthenticationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1516,8 +1531,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.AuthorizationSpec) interface{} {
-				return func(in kops.AuthorizationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAuthorizationSpec(in)}
+				return func(in kops.AuthorizationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceAuthorizationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1528,8 +1543,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.NodeAuthorizationSpec) interface{} {
-				return func(in kops.NodeAuthorizationSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceNodeAuthorizationSpec(in)}
+				return func(in kops.NodeAuthorizationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceNodeAuthorizationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1563,8 +1578,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.Assets) interface{} {
-				return func(in kops.Assets) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceAssets(in)}
+				return func(in kops.Assets) []interface{} {
+					return []interface{}{FlattenDataSourceAssets(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1575,8 +1590,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.IAMSpec) interface{} {
-				return func(in kops.IAMSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceIAMSpec(in)}
+				return func(in kops.IAMSpec) []interface{} {
+					return []interface{}{FlattenDataSourceIAMSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1619,8 +1634,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.RollingUpdate) interface{} {
-				return func(in kops.RollingUpdate) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceRollingUpdate(in)}
+				return func(in kops.RollingUpdate) []interface{} {
+					return []interface{}{FlattenDataSourceRollingUpdate(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1631,8 +1646,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.ClusterAutoscalerConfig) interface{} {
-				return func(in kops.ClusterAutoscalerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceClusterAutoscalerConfig(in)}
+				return func(in kops.ClusterAutoscalerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceClusterAutoscalerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1643,8 +1658,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.WarmPoolSpec) interface{} {
-				return func(in kops.WarmPoolSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceWarmPoolSpec(in)}
+				return func(in kops.WarmPoolSpec) []interface{} {
+					return []interface{}{FlattenDataSourceWarmPoolSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1655,8 +1670,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.ServiceAccountIssuerDiscoveryConfig) interface{} {
-				return func(in kops.ServiceAccountIssuerDiscoveryConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceServiceAccountIssuerDiscoveryConfig(in)}
+				return func(in kops.ServiceAccountIssuerDiscoveryConfig) []interface{} {
+					return []interface{}{FlattenDataSourceServiceAccountIssuerDiscoveryConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1667,8 +1682,8 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				return nil
 			}
 			return func(in kops.SnapshotControllerConfig) interface{} {
-				return func(in kops.SnapshotControllerConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceSnapshotControllerConfig(in)}
+				return func(in kops.SnapshotControllerConfig) []interface{} {
+					return []interface{}{FlattenDataSourceSnapshotControllerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)

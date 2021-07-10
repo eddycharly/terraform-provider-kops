@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceAzureConfiguration(t *testing.T) {
+	_default := kops.AzureConfiguration{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,25 @@ func TestExpandResourceAzureConfiguration(t *testing.T) {
 		args args
 		want kops.AzureConfiguration
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"subscription_id":     "",
+					"tenant_id":           "",
+					"resource_group_name": "",
+					"route_table_name":    "",
+					"admin_user":          "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceAzureConfiguration(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceAzureConfiguration() = %v, want %v", got, tt.want)
+			got := ExpandResourceAzureConfiguration(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceAzureConfiguration() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

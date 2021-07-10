@@ -70,8 +70,8 @@ func FlattenResourceAccessSpecInto(in kops.AccessSpec, out map[string]interface{
 				return nil
 			}
 			return func(in kops.DNSAccessSpec) interface{} {
-				return func(in kops.DNSAccessSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceDNSAccessSpec(in)}
+				return func(in kops.DNSAccessSpec) []interface{} {
+					return []interface{}{FlattenResourceDNSAccessSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -82,8 +82,8 @@ func FlattenResourceAccessSpecInto(in kops.AccessSpec, out map[string]interface{
 				return nil
 			}
 			return func(in kops.LoadBalancerAccessSpec) interface{} {
-				return func(in kops.LoadBalancerAccessSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceLoadBalancerAccessSpec(in)}
+				return func(in kops.LoadBalancerAccessSpec) []interface{} {
+					return []interface{}{FlattenResourceLoadBalancerAccessSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

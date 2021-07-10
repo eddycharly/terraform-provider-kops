@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceConfig(t *testing.T) {
+	_default := kube.Config{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,28 @@ func TestExpandDataSourceConfig(t *testing.T) {
 		args args
 		want kube.Config
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"server":        "",
+					"context":       "",
+					"namespace":     "",
+					"kube_user":     "",
+					"kube_password": "",
+					"ca_cert":       "",
+					"client_cert":   "",
+					"client_key":    "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceConfig() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

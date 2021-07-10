@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceIAMSpec(t *testing.T) {
+	_default := kops.IAMSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandResourceIAMSpec(t *testing.T) {
 		args args
 		want kops.IAMSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"legacy":                               false,
+					"allow_container_registry":             false,
+					"permissions_boundary":                 nil,
+					"service_account_external_permissions": func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceIAMSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceIAMSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceIAMSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceIAMSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

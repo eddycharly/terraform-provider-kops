@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceLoadBalancerAccessSpec(t *testing.T) {
+	_default := kops.LoadBalancerAccessSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,30 @@ func TestExpandDataSourceLoadBalancerAccessSpec(t *testing.T) {
 		args args
 		want kops.LoadBalancerAccessSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"class":                      "",
+					"type":                       "",
+					"idle_timeout_seconds":       nil,
+					"security_group_override":    nil,
+					"additional_security_groups": func() []interface{} { return nil }(),
+					"use_for_internal_api":       false,
+					"ssl_certificate":            "",
+					"ssl_policy":                 nil,
+					"cross_zone_load_balancing":  nil,
+					"subnets":                    func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceLoadBalancerAccessSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceLoadBalancerAccessSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceLoadBalancerAccessSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceLoadBalancerAccessSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

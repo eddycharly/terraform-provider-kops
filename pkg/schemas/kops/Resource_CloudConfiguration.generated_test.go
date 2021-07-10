@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceCloudConfiguration(t *testing.T) {
+	_default := kops.CloudConfiguration{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,39 @@ func TestExpandResourceCloudConfiguration(t *testing.T) {
 		args args
 		want kops.CloudConfiguration
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"manage_storage_classes":         nil,
+					"multizone":                      nil,
+					"node_tags":                      nil,
+					"node_instance_prefix":           nil,
+					"gce_service_account":            "",
+					"disable_security_group_ingress": nil,
+					"elb_security_group":             nil,
+					"v_sphere_username":              nil,
+					"v_sphere_password":              nil,
+					"v_sphere_server":                nil,
+					"v_sphere_datacenter":            nil,
+					"v_sphere_resource_pool":         nil,
+					"v_sphere_datastore":             nil,
+					"v_sphere_core_dns_server":       nil,
+					"spotinst_product":               nil,
+					"spotinst_orientation":           nil,
+					"openstack":                      nil,
+					"azure":                          nil,
+					"aws_ebs_csi_driver":             nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceCloudConfiguration(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceCloudConfiguration() = %v, want %v", got, tt.want)
+			got := ExpandResourceCloudConfiguration(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceCloudConfiguration() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

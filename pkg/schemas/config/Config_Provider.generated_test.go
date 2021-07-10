@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandConfigProvider(t *testing.T) {
+	_default := config.Provider{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandConfigProvider(t *testing.T) {
 		args args
 		want config.Provider
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"state_store": "",
+					"aws":         nil,
+					"openstack":   nil,
+					"klog":        nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandConfigProvider(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandConfigProvider() = %v, want %v", got, tt.want)
+			got := ExpandConfigProvider(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandConfigProvider() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

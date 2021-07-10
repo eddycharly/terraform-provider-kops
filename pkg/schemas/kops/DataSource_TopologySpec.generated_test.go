@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceTopologySpec(t *testing.T) {
+	_default := kops.TopologySpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,24 @@ func TestExpandDataSourceTopologySpec(t *testing.T) {
 		args args
 		want kops.TopologySpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"masters": "",
+					"nodes":   "",
+					"bastion": nil,
+					"dns":     nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceTopologySpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceTopologySpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceTopologySpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceTopologySpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

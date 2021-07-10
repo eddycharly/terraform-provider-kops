@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceInstanceGroup(t *testing.T) {
+	_default := resources.InstanceGroup{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,67 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 		args args
 		want resources.InstanceGroup
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"role":                              "",
+					"image":                             "",
+					"min_size":                          nil,
+					"max_size":                          nil,
+					"autoscale":                         nil,
+					"machine_type":                      "",
+					"root_volume_size":                  nil,
+					"root_volume_type":                  nil,
+					"root_volume_iops":                  nil,
+					"root_volume_throughput":            nil,
+					"root_volume_optimization":          nil,
+					"root_volume_delete_on_termination": nil,
+					"root_volume_encryption":            nil,
+					"root_volume_encryption_key":        nil,
+					"volumes":                           func() []interface{} { return nil }(),
+					"volume_mounts":                     func() []interface{} { return nil }(),
+					"subnets":                           func() []interface{} { return nil }(),
+					"zones":                             func() []interface{} { return nil }(),
+					"hooks":                             func() []interface{} { return nil }(),
+					"max_price":                         nil,
+					"spot_duration_in_minutes":          nil,
+					"cpu_credits":                       nil,
+					"associate_public_ip":               nil,
+					"additional_security_groups":        func() []interface{} { return nil }(),
+					"cloud_labels":                      func() map[string]interface{} { return nil }(),
+					"node_labels":                       func() map[string]interface{} { return nil }(),
+					"file_assets":                       func() []interface{} { return nil }(),
+					"tenancy":                           "",
+					"kubelet":                           nil,
+					"taints":                            func() []interface{} { return nil }(),
+					"mixed_instances_policy":            nil,
+					"additional_user_data":              func() []interface{} { return nil }(),
+					"suspend_processes":                 func() []interface{} { return nil }(),
+					"external_load_balancers":           func() []interface{} { return nil }(),
+					"detailed_instance_monitoring":      nil,
+					"iam":                               nil,
+					"security_group_override":           nil,
+					"instance_protection":               nil,
+					"sysctl_parameters":                 func() []interface{} { return nil }(),
+					"rolling_update":                    nil,
+					"instance_interruption_behavior":    nil,
+					"compress_user_data":                nil,
+					"instance_metadata":                 nil,
+					"update_policy":                     nil,
+					"warm_pool":                         nil,
+					"cluster_name":                      "",
+					"name":                              "",
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceInstanceGroup(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceInstanceGroup() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceInstanceGroup(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceInstanceGroup() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

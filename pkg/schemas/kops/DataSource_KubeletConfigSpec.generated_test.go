@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
+	_default := kops.KubeletConfigSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,105 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 		args args
 		want kops.KubeletConfigSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"api_servers":                            "",
+					"anonymous_auth":                         nil,
+					"authorization_mode":                     "",
+					"bootstrap_kubeconfig":                   "",
+					"client_ca_file":                         "",
+					"tls_cert_file":                          "",
+					"tls_private_key_file":                   "",
+					"tls_cipher_suites":                      func() []interface{} { return nil }(),
+					"tls_min_version":                        "",
+					"kubeconfig_path":                        "",
+					"require_kubeconfig":                     nil,
+					"log_level":                              nil,
+					"pod_manifest_path":                      "",
+					"hostname_override":                      "",
+					"pod_infra_container_image":              "",
+					"seccomp_profile_root":                   nil,
+					"allow_privileged":                       nil,
+					"enable_debugging_handlers":              nil,
+					"register_node":                          nil,
+					"node_status_update_frequency":           nil,
+					"cluster_domain":                         "",
+					"cluster_dns":                            "",
+					"network_plugin_name":                    "",
+					"cloud_provider":                         "",
+					"kubelet_cgroups":                        "",
+					"runtime_cgroups":                        "",
+					"read_only_port":                         nil,
+					"system_cgroups":                         "",
+					"cgroup_root":                            "",
+					"configure_cbr0":                         nil,
+					"hairpin_mode":                           "",
+					"babysit_daemons":                        nil,
+					"max_pods":                               nil,
+					"nvidia_gp_us":                           0,
+					"pod_cidr":                               "",
+					"resolver_config":                        nil,
+					"reconcile_cidr":                         nil,
+					"register_schedulable":                   nil,
+					"serialize_image_pulls":                  nil,
+					"node_labels":                            func() map[string]interface{} { return nil }(),
+					"non_masquerade_cidr":                    "",
+					"enable_custom_metrics":                  nil,
+					"network_plugin_mtu":                     nil,
+					"image_gc_high_threshold_percent":        nil,
+					"image_gc_low_threshold_percent":         nil,
+					"image_pull_progress_deadline":           nil,
+					"eviction_hard":                          nil,
+					"eviction_soft":                          "",
+					"eviction_soft_grace_period":             "",
+					"eviction_pressure_transition_period":    nil,
+					"eviction_max_pod_grace_period":          0,
+					"eviction_minimum_reclaim":               "",
+					"volume_plugin_directory":                "",
+					"taints":                                 func() []interface{} { return nil }(),
+					"feature_gates":                          func() map[string]interface{} { return nil }(),
+					"kube_reserved":                          func() map[string]interface{} { return nil }(),
+					"kube_reserved_cgroup":                   "",
+					"system_reserved":                        func() map[string]interface{} { return nil }(),
+					"system_reserved_cgroup":                 "",
+					"enforce_node_allocatable":               "",
+					"runtime_request_timeout":                nil,
+					"volume_stats_agg_period":                nil,
+					"fail_swap_on":                           nil,
+					"experimental_allowed_unsafe_sysctls":    func() []interface{} { return nil }(),
+					"allowed_unsafe_sysctls":                 func() []interface{} { return nil }(),
+					"streaming_connection_idle_timeout":      nil,
+					"docker_disable_shared_pid":              nil,
+					"root_dir":                               "",
+					"authentication_token_webhook":           nil,
+					"authentication_token_webhook_cache_ttl": nil,
+					"cpucfs_quota":                           nil,
+					"cpucfs_quota_period":                    nil,
+					"cpu_manager_policy":                     "",
+					"registry_pull_qps":                      nil,
+					"registry_burst":                         nil,
+					"topology_manager_policy":                "",
+					"rotate_certificates":                    nil,
+					"protect_kernel_defaults":                nil,
+					"cgroup_driver":                          "",
+					"housekeeping_interval":                  nil,
+					"event_qps":                              nil,
+					"event_burst":                            nil,
+					"container_log_max_size":                 "",
+					"container_log_max_files":                nil,
+					"enable_cadvisor_json_endpoints":         nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceKubeletConfigSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceKubeletConfigSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceKubeletConfigSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKubeletConfigSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

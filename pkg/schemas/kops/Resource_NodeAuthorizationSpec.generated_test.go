@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandResourceNodeAuthorizationSpec(t *testing.T) {
+	_default := kops.NodeAuthorizationSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,21 @@ func TestExpandResourceNodeAuthorizationSpec(t *testing.T) {
 		args args
 		want kops.NodeAuthorizationSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"node_authorizer": nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandResourceNodeAuthorizationSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandResourceNodeAuthorizationSpec() = %v, want %v", got, tt.want)
+			got := ExpandResourceNodeAuthorizationSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceNodeAuthorizationSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -706,11 +706,16 @@ func (in interface{}) map[string]{{ .Elem.String }} {
 	if in == nil {
 		return nil
 	}
-	out := {{ .String }}{}
-	for key, in := range in.(map[string]interface{}) {
-		out[key] = {{ template "expand" .Elem }}
+	if in, ok := in.(map[string]interface{}); ok {
+		if len(in) > 0 {
+			out := {{ .String }}{}
+			for key, in := range in {
+				out[key] = {{ template "expand" .Elem }}
+			}
+			return out
+		}
 	}
-	return out
+	return nil
 }(in)
 {{- else if isDuration . -}}
 ExpandDuration(in)
@@ -791,8 +796,8 @@ FlattenQuantity(in)
 {{- else if isIntOrString . -}}
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
-func (in {{ .String }}) []map[string]interface{} {
-	return []map[string]interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
+func (in {{ .String }}) []interface{} {
+	return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
 }(in)
 {{- else -}}
 Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
@@ -933,7 +938,7 @@ false
 {{- end -}}
 {{- end }}
 
-{{- define "default" -}}
+{{- define "expandDefault" -}}
 {{- if isPtr . -}}
 nil
 {{- else if isList . -}}
@@ -947,7 +952,7 @@ func() map[string]interface{} { return nil }()
 {{- else if isIntOrString . -}}
 ""
 {{- else if isStruct . -}}
-func() []map[string]interface{}{ return []map[string]interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
 {{- else if isInt . -}}
 0
 {{- else if isBool . -}}
@@ -959,12 +964,65 @@ false
 {{- end -}}
 {{- end -}}
 
+{{- define "flattenDefault" -}}
+{{- if isPtr . -}}
+nil
+{{- else if isList . -}}
+func() []interface{} { return nil }()
+{{- else if isMap . -}}
+func() map[string]interface{} { return nil }()
+{{- else if isDuration . -}}
+""
+{{- else if isQuantity . -}}
+""
+{{- else if isIntOrString . -}}
+""
+{{- else if isStruct . -}}
+func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+{{- else if isInt . -}}
+0
+{{- else if isBool . -}}
+false
+{{- else if isFloat . -}}
+0
+{{- else if isString . -}}
+""
+{{- end -}}
+{{- end -}}
+
+{{- define "expandCases" -}}
+{{- $fields := (fields . true) -}}
+_default := {{ $.String }}{}
+type args struct {
+	in map[string]interface{}
+}
+tests := []struct {
+	name string
+	args args
+	want {{ .String }}
+}{
+	{
+		name: "default",
+		args: args{
+			in: map[string]interface{}{
+				{{- range $fields }}
+				{{- if not (isExcluded .) }}
+				{{ fieldName . | snakecase | quote }}: {{ template "expandDefault" .Type }},
+				{{- end }}
+				{{- end }}
+			},
+		},
+		want: _default,
+	},
+}
+{{- end -}}
+
 {{- define "flattenCases" -}}
 {{- $fields := (fields . true) -}}
 _default := map[string]interface{}{
 	{{- range $fields }}
 	{{- if not (isExcluded .) }}
-	{{ fieldName . | snakecase | quote }}: {{ template "default" .Type }},
+	{{ fieldName . | snakecase | quote }}: {{ template "flattenDefault" .Type }},
 	{{- end }}
 	{{- end }}
 }
@@ -1003,20 +1061,12 @@ tests := []struct {
 {{- end }}
 
 func TestExpand{{ scope }}{{ .Name }}(t *testing.T) {
-	type args struct {
-		in map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-		want {{ .String }}
-	}{
-		// TODO: Add test cases.
-	}
+	{{ template "expandCases" . }}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Expand{{ scope }}{{ .Name }}(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Expand{{ scope }}{{ .Name }}() = %v, want %v", got, tt.want)
+			got := Expand{{ scope }}{{ .Name }}(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Expand{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

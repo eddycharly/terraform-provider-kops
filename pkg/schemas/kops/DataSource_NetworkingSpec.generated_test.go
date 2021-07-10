@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -9,6 +8,7 @@ import (
 )
 
 func TestExpandDataSourceNetworkingSpec(t *testing.T) {
+	_default := kops.NetworkingSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
@@ -17,12 +17,35 @@ func TestExpandDataSourceNetworkingSpec(t *testing.T) {
 		args args
 		want kops.NetworkingSpec
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"classic":    nil,
+					"kubenet":    nil,
+					"external":   nil,
+					"cni":        nil,
+					"kopeio":     nil,
+					"weave":      nil,
+					"flannel":    nil,
+					"calico":     nil,
+					"canal":      nil,
+					"kuberouter": nil,
+					"romana":     nil,
+					"amazon_vpc": nil,
+					"cilium":     nil,
+					"lyft_vpc":   nil,
+					"gce":        nil,
+				},
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExpandDataSourceNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExpandDataSourceNetworkingSpec() = %v, want %v", got, tt.want)
+			got := ExpandDataSourceNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
