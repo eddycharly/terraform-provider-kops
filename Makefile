@@ -115,3 +115,27 @@ example-15-klog: install
 	@terraform -chdir=./examples/klog init
 	@terraform -chdir=./examples/klog validate
 	@terraform -chdir=./examples/klog plan
+
+# INTEGRATION TESTS
+
+.PHONY: integration
+integration: integration-basic integration-external-policies
+
+.PHONY: integration-reset
+integration-reset:
+	@rm -rf ./store
+	@rm -f 	./terraform.tfstate
+
+.PHONY: integration-basic
+integration-basic: integration-reset
+	@terraform init 									./tests/basic
+	@terraform validate 							./tests/basic
+	@terraform plan 									./tests/basic
+	@terraform apply  -auto-approve 	./tests/basic
+
+.PHONY: integration-external-policies
+integration-external-policies: integration-reset
+	@terraform init 									./tests/external-policies
+	@terraform validate 							./tests/external-policies
+	@terraform plan 									./tests/external-policies
+	@terraform apply  -auto-approve 	./tests/external-policies

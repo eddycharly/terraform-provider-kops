@@ -11,6 +11,10 @@ resource "kops_cluster" "cluster" {
   dns_zone             = "example.com"
   network_id           = "net-0"
 
+  iam {
+    allow_container_registry = true
+  }
+
   networking {
     calico {}
   }

@@ -151,6 +151,10 @@ resource "kops_cluster" "cluster" {
   dns_zone           = local.dnsZone
   network_id         = local.vpcId
 
+  iam {
+    allow_container_registry = true
+  }
+
   networking {
     calico {}
   }
