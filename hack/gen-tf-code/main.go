@@ -163,6 +163,38 @@ func schemaType(in reflect.Type) string {
 	}
 }
 
+func isBool(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Bool:
+		return true
+	}
+	return false
+}
+
+func isInt(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return true
+	}
+	return false
+}
+
+func isString(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.String:
+		return true
+	}
+	return false
+}
+
+func isFloat(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Float32, reflect.Float64:
+		return true
+	}
+	return false
+}
+
 func getFields(t reflect.Type, flatten bool) []_field {
 	var ret []_field
 	for i := 0; i < t.NumField(); i++ {
@@ -367,6 +399,10 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"isPtr": func(t reflect.Type) bool {
 			return t.Kind() == reflect.Ptr
 		},
+		"isBool":   isBool,
+		"isInt":    isInt,
+		"isString": isString,
+		"isFloat":  isFloat,
 		"isList": func(t reflect.Type) bool {
 			return t.Kind() == reflect.Slice
 		},
@@ -857,6 +893,199 @@ func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	}
 }
 
+func buildTests(t reflect.Type, p string, scope string, funcMaps ...template.FuncMap) {
+	tmplString := `
+package schemas
+
+import (
+	"encoding/json"
+	"log"
+	"strings"
+	"time"
+
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/kops/pkg/apis/kops"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	"github.com/google/go-cmp/cmp"
+	{{ range $k, $v := imports -}}
+	{{ $v }} {{ $k | quote }}
+	{{ end -}}
+)
+
+func TestExpand{{ scope }}{{ .Name }}(t *testing.T) {
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want {{ .String }}
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Expand{{ scope }}{{ .Name }}(tt.args.in); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Expand{{ scope }}{{ .Name }}() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFlatten{{ scope }}{{ .Name }}Into(t *testing.T) {
+	type args struct {
+		in  {{ .String }}
+		out map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Flatten{{ scope }}{{ .Name }}Into(tt.args.in, tt.args.out)
+		})
+	}
+}
+
+{{- define "defaultValue" -}}
+{{- if isPtr . -}}
+nil
+{{- else if isList . -}}
+nil
+{{- else if isMap . -}}
+nil
+{{- else if isDuration . -}}
+""
+{{- else if isQuantity . -}}
+""
+{{- else if isIntOrString . -}}
+""
+{{- else if isStruct . -}}
+{{ .String }}{}
+{{- else if isInt . -}}
+0
+{{- else if isBool . -}}
+false
+{{- else if isFloat . -}}
+0
+{{- else if isString . -}}
+""
+{{- end -}}
+{{- end }}
+
+{{- define "default" -}}
+{{- if isPtr . -}}
+nil
+{{- else if isList . -}}
+func() []interface{} { return nil }()
+{{- else if isMap . -}}
+func() map[string]interface{} { return nil }()
+{{- else if isDuration . -}}
+""
+{{- else if isQuantity . -}}
+""
+{{- else if isIntOrString . -}}
+""
+{{- else if isStruct . -}}
+func() []map[string]interface{}{ return []map[string]interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+{{- else if isInt . -}}
+0
+{{- else if isBool . -}}
+false
+{{- else if isFloat . -}}
+0
+{{- else if isString . -}}
+""
+{{- end -}}
+{{- end }}
+
+func TestFlatten{{ scope }}{{ .Name }}(t *testing.T) {
+	type args struct {
+		in {{ .String }}
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{{- $fields := (fields . true) }}
+		{
+			name: "default",
+			args: args{
+				in: {{ .String }}{},
+			},
+			want: map[string]interface{}{
+				{{- range $fields }}
+				{{- if not (isExcluded .) }}
+				{{ fieldName . | snakecase | quote }}: {{ template "default" .Type }},
+				{{- end }}
+				{{- end }}
+			},
+		},
+		{{- range $fields }}
+		{{- $field := . }}
+		{{- if not (isExcluded .) }}
+		{
+			name: "{{ fieldName . }} - default",
+			args: args{
+				in: func() {{ $.String }}{
+					subject := {{ $.String }}{}
+					subject.{{ .Name }} = {{ template "defaultValue" .Type }}
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				{{- range $fields }}
+				{{- if not (isExcluded .) }}
+				{{ fieldName . | snakecase | quote }}: {{ if not (eq .Name $field.Name) }}{{ template "default" .Type }}{{- else -}}{{ template "default" .Type }}{{- end -}},
+				{{- end }}
+				{{- end }}
+			},
+		},
+		{{- end }}
+		{{- end }}
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Flatten{{ scope }}{{ .Name }}(tt.args.in); !reflect.DeepEqual(got, tt.want) {
+				if diff := cmp.Diff(tt.want, got); diff != "" {
+					t.Errorf("Flatten{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
+				}
+			}
+		})
+	}
+}
+`
+	tmpl := template.New("doc")
+	for _, funcMap := range funcMaps {
+		tmpl = tmpl.Funcs(funcMap)
+	}
+	if _, err := tmpl.Parse(tmplString); err != nil {
+		panic(err)
+	}
+	folder := p
+	if err := os.MkdirAll(folder, 0755); err != nil {
+		panic(fmt.Sprintf("Failed to create directories for %s", folder))
+	}
+	fileName := fmt.Sprintf("%s_%s.generated_test.go", scope, t.Name())
+	f, err := os.Create(path.Join(folder, fileName))
+	if err != nil {
+		panic(fmt.Sprintf("Failed to create file %s", path.Join(p, fileName)))
+	}
+	defer f.Close()
+	if err := tmpl.Execute(f, t); err != nil {
+		panic(err)
+	}
+}
+
 type generated struct {
 	t reflect.Type
 	o *options
@@ -870,9 +1099,9 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	t := reflect.TypeOf(i)
 	verifyFields(t, o.exclude.List()...)
 	verifyFields(t, o.asSets.List()...)
+	verifyFields(t, o.nullable.List()...)
 	verifyFields(t, o.required.List()...)
 	verifyFields(t, o.computed.List()...)
-	verifyFields(t, o.computedOnly.List()...)
 	verifyFields(t, o.computedOnly.List()...)
 	verifyFields(t, o.forceNew.List()...)
 	verifyFields(t, o.suppressDiff.List()...)
@@ -896,6 +1125,7 @@ func build(scope string, parser parser, g ...generated) map[reflect.Type]*option
 			sprig.TxtFuncMap(),
 		}
 		buildSchema(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
+		buildTests(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 	}
 	return o
 }

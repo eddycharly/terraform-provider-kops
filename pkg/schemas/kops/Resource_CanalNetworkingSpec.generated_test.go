@@ -1,0 +1,496 @@
+package schemas
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	"k8s.io/kops/pkg/apis/kops"
+)
+
+func TestExpandResourceCanalNetworkingSpec(t *testing.T) {
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want kops.CanalNetworkingSpec
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ExpandResourceCanalNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExpandResourceCanalNetworkingSpec() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceCanalNetworkingSpecInto(t *testing.T) {
+	type args struct {
+		in  kops.CanalNetworkingSpec
+		out map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			FlattenResourceCanalNetworkingSpecInto(tt.args.in, tt.args.out)
+		})
+	}
+}
+
+func TestFlattenResourceCanalNetworkingSpec(t *testing.T) {
+	type args struct {
+		in kops.CanalNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.CanalNetworkingSpec{},
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "ChainInsertMode - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.ChainInsertMode = ""
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "CPURequest - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "DefaultEndpointToHostAction - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.DefaultEndpointToHostAction = ""
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "DisableFlannelForwardRules - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.DisableFlannelForwardRules = false
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "DisableTxChecksumOffloading - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.DisableTxChecksumOffloading = false
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "IptablesBackend - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.IptablesBackend = ""
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "LogSeveritySys - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.LogSeveritySys = ""
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "MTU - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.MTU = nil
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "PrometheusGoMetricsEnabled - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.PrometheusGoMetricsEnabled = false
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "PrometheusMetricsEnabled - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.PrometheusMetricsEnabled = false
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "PrometheusMetricsPort - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.PrometheusMetricsPort = 0
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "PrometheusProcessMetricsEnabled - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.PrometheusProcessMetricsEnabled = false
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "TyphaPrometheusMetricsEnabled - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.TyphaPrometheusMetricsEnabled = false
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "TyphaPrometheusMetricsPort - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.TyphaPrometheusMetricsPort = 0
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+		{
+			name: "TyphaReplicas - default",
+			args: args{
+				in: func() kops.CanalNetworkingSpec {
+					subject := kops.CanalNetworkingSpec{}
+					subject.TyphaReplicas = 0
+					return subject
+				}(),
+			},
+			want: map[string]interface{}{
+				"chain_insert_mode":                  "",
+				"cpu_request":                        nil,
+				"default_endpoint_to_host_action":    "",
+				"disable_flannel_forward_rules":      false,
+				"disable_tx_checksum_offloading":     false,
+				"iptables_backend":                   "",
+				"log_severity_sys":                   "",
+				"mtu":                                nil,
+				"prometheus_go_metrics_enabled":      false,
+				"prometheus_metrics_enabled":         false,
+				"prometheus_metrics_port":            0,
+				"prometheus_process_metrics_enabled": false,
+				"typha_prometheus_metrics_enabled":   false,
+				"typha_prometheus_metrics_port":      0,
+				"typha_replicas":                     0,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FlattenResourceCanalNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
+				if diff := cmp.Diff(tt.want, got); diff != "" {
+					t.Errorf("FlattenResourceCanalNetworkingSpec() mismatch (-want +got):\n%s", diff)
+				}
+			}
+		})
+	}
+}
