@@ -29,24 +29,9 @@ func TestExpandResourceIAMProfileSpec(t *testing.T) {
 }
 
 func TestFlattenResourceIAMProfileSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.IAMProfileSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"profile": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceIAMProfileSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceIAMProfileSpec(t *testing.T) {
 	type args struct {
 		in kops.IAMProfileSpec
 	}
@@ -60,9 +45,7 @@ func TestFlattenResourceIAMProfileSpec(t *testing.T) {
 			args: args{
 				in: kops.IAMProfileSpec{},
 			},
-			want: map[string]interface{}{
-				"profile": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Profile - default",
@@ -73,17 +56,56 @@ func TestFlattenResourceIAMProfileSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceIAMProfileSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceIAMProfileSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceIAMProfileSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceIAMProfileSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceIAMProfileSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"profile": nil,
+	}
+	type args struct {
+		in kops.IAMProfileSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.IAMProfileSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Profile - default",
+			args: args{
+				in: func() kops.IAMProfileSpec {
+					subject := kops.IAMProfileSpec{}
+					subject.Profile = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceIAMProfileSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceIAMProfileSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -29,24 +29,12 @@ func TestExpandDataSourceCertManagerConfig(t *testing.T) {
 }
 
 func TestFlattenDataSourceCertManagerConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.CertManagerConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"enabled":        nil,
+		"managed":        nil,
+		"image":          nil,
+		"default_issuer": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceCertManagerConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 	type args struct {
 		in kops.CertManagerConfig
 	}
@@ -60,12 +48,7 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 			args: args{
 				in: kops.CertManagerConfig{},
 			},
-			want: map[string]interface{}{
-				"enabled":        nil,
-				"managed":        nil,
-				"image":          nil,
-				"default_issuer": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Enabled - default",
@@ -76,12 +59,7 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":        nil,
-				"managed":        nil,
-				"image":          nil,
-				"default_issuer": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Managed - default",
@@ -92,12 +70,7 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":        nil,
-				"managed":        nil,
-				"image":          nil,
-				"default_issuer": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Image - default",
@@ -108,12 +81,7 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":        nil,
-				"managed":        nil,
-				"image":          nil,
-				"default_issuer": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "DefaultIssuer - default",
@@ -124,20 +92,92 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":        nil,
-				"managed":        nil,
-				"image":          nil,
-				"default_issuer": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceCertManagerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceCertManagerConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceCertManagerConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceCertManagerConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"enabled":        nil,
+		"managed":        nil,
+		"image":          nil,
+		"default_issuer": nil,
+	}
+	type args struct {
+		in kops.CertManagerConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.CertManagerConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "Enabled - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Managed - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.Managed = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Image - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.Image = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DefaultIssuer - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.DefaultIssuer = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceCertManagerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceCertManagerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

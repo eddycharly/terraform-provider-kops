@@ -29,24 +29,7 @@ func TestExpandResourceDNSAccessSpec(t *testing.T) {
 }
 
 func TestFlattenResourceDNSAccessSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.DNSAccessSpec
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceDNSAccessSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceDNSAccessSpec(t *testing.T) {
+	_default := map[string]interface{}{}
 	type args struct {
 		in kops.DNSAccessSpec
 	}
@@ -60,15 +43,43 @@ func TestFlattenResourceDNSAccessSpec(t *testing.T) {
 			args: args{
 				in: kops.DNSAccessSpec{},
 			},
-			want: map[string]interface{}{},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceDNSAccessSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceDNSAccessSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceDNSAccessSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceDNSAccessSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceDNSAccessSpec(t *testing.T) {
+	_default := map[string]interface{}{}
+	type args struct {
+		in kops.DNSAccessSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.DNSAccessSpec{},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceDNSAccessSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceDNSAccessSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

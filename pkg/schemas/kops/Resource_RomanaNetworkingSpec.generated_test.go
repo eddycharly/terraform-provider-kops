@@ -29,24 +29,10 @@ func TestExpandResourceRomanaNetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenResourceRomanaNetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.RomanaNetworkingSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"daemon_service_ip": "",
+		"etcd_service_ip":   "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceRomanaNetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceRomanaNetworkingSpec(t *testing.T) {
 	type args struct {
 		in kops.RomanaNetworkingSpec
 	}
@@ -60,10 +46,7 @@ func TestFlattenResourceRomanaNetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.RomanaNetworkingSpec{},
 			},
-			want: map[string]interface{}{
-				"daemon_service_ip": "",
-				"etcd_service_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "DaemonServiceIp - default",
@@ -74,10 +57,7 @@ func TestFlattenResourceRomanaNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"daemon_service_ip": "",
-				"etcd_service_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "EtcdServiceIp - default",
@@ -88,18 +68,68 @@ func TestFlattenResourceRomanaNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"daemon_service_ip": "",
-				"etcd_service_ip":   "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceRomanaNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceRomanaNetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceRomanaNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceRomanaNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceRomanaNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"daemon_service_ip": "",
+		"etcd_service_ip":   "",
+	}
+	type args struct {
+		in kops.RomanaNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.RomanaNetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "DaemonServiceIp - default",
+			args: args{
+				in: func() kops.RomanaNetworkingSpec {
+					subject := kops.RomanaNetworkingSpec{}
+					subject.DaemonServiceIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EtcdServiceIp - default",
+			args: args{
+				in: func() kops.RomanaNetworkingSpec {
+					subject := kops.RomanaNetworkingSpec{}
+					subject.EtcdServiceIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceRomanaNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceRomanaNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

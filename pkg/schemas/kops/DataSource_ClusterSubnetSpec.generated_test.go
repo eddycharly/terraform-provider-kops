@@ -29,24 +29,16 @@ func TestExpandDataSourceClusterSubnetSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.ClusterSubnetSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"name":        "",
+		"cidr":        "",
+		"zone":        "",
+		"region":      "",
+		"provider_id": "",
+		"egress":      "",
+		"type":        "",
+		"public_ip":   "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceClusterSubnetSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 	type args struct {
 		in kops.ClusterSubnetSpec
 	}
@@ -60,16 +52,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 			args: args{
 				in: kops.ClusterSubnetSpec{},
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "Name - default",
@@ -80,16 +63,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "Cidr - default",
@@ -100,16 +74,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "Zone - default",
@@ -120,16 +85,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "Region - default",
@@ -140,16 +96,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "ProviderID - default",
@@ -160,16 +107,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "Egress - default",
@@ -180,16 +118,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "Type - default",
@@ -200,16 +129,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 		{
 			name: "PublicIp - default",
@@ -220,24 +140,140 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":        "",
-				"cidr":        "",
-				"zone":        "",
-				"region":      "",
-				"provider_id": "",
-				"egress":      "",
-				"type":        "",
-				"public_ip":   "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceClusterSubnetSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceClusterSubnetSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceClusterSubnetSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceClusterSubnetSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"name":        "",
+		"cidr":        "",
+		"zone":        "",
+		"region":      "",
+		"provider_id": "",
+		"egress":      "",
+		"type":        "",
+		"public_ip":   "",
+	}
+	type args struct {
+		in kops.ClusterSubnetSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.ClusterSubnetSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Name - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Cidr - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.CIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Zone - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.Zone = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Region - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.Region = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderID - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.ProviderID = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Egress - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.Egress = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Type - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.Type = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PublicIp - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.PublicIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceClusterSubnetSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceClusterSubnetSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

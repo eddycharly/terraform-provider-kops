@@ -29,24 +29,9 @@ func TestExpandResourceNTPConfig(t *testing.T) {
 }
 
 func TestFlattenResourceNTPConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.NTPConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"managed": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceNTPConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceNTPConfig(t *testing.T) {
 	type args struct {
 		in kops.NTPConfig
 	}
@@ -60,9 +45,7 @@ func TestFlattenResourceNTPConfig(t *testing.T) {
 			args: args{
 				in: kops.NTPConfig{},
 			},
-			want: map[string]interface{}{
-				"managed": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Managed - default",
@@ -73,17 +56,56 @@ func TestFlattenResourceNTPConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"managed": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceNTPConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceNTPConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceNTPConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceNTPConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceNTPConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"managed": nil,
+	}
+	type args struct {
+		in kops.NTPConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.NTPConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "Managed - default",
+			args: args{
+				in: func() kops.NTPConfig {
+					subject := kops.NTPConfig{}
+					subject.Managed = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceNTPConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceNTPConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

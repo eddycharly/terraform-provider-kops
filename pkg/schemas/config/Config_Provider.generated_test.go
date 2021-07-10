@@ -29,24 +29,12 @@ func TestExpandConfigProvider(t *testing.T) {
 }
 
 func TestFlattenConfigProviderInto(t *testing.T) {
-	type args struct {
-		in  config.Provider
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"state_store": "",
+		"aws":         nil,
+		"openstack":   nil,
+		"klog":        nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenConfigProviderInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenConfigProvider(t *testing.T) {
 	type args struct {
 		in config.Provider
 	}
@@ -60,12 +48,7 @@ func TestFlattenConfigProvider(t *testing.T) {
 			args: args{
 				in: config.Provider{},
 			},
-			want: map[string]interface{}{
-				"state_store": "",
-				"aws":         nil,
-				"openstack":   nil,
-				"klog":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "StateStore - default",
@@ -76,12 +59,7 @@ func TestFlattenConfigProvider(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"state_store": "",
-				"aws":         nil,
-				"openstack":   nil,
-				"klog":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Aws - default",
@@ -92,12 +70,7 @@ func TestFlattenConfigProvider(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"state_store": "",
-				"aws":         nil,
-				"openstack":   nil,
-				"klog":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Openstack - default",
@@ -108,12 +81,7 @@ func TestFlattenConfigProvider(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"state_store": "",
-				"aws":         nil,
-				"openstack":   nil,
-				"klog":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Klog - default",
@@ -124,20 +92,92 @@ func TestFlattenConfigProvider(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"state_store": "",
-				"aws":         nil,
-				"openstack":   nil,
-				"klog":        nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenConfigProvider(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenConfigProvider() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenConfigProviderInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenConfigProvider() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenConfigProvider(t *testing.T) {
+	_default := map[string]interface{}{
+		"state_store": "",
+		"aws":         nil,
+		"openstack":   nil,
+		"klog":        nil,
+	}
+	type args struct {
+		in config.Provider
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: config.Provider{},
+			},
+			want: _default,
+		},
+		{
+			name: "StateStore - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.StateStore = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Aws - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.Aws = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Openstack - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.Openstack = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Klog - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.Klog = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenConfigProvider(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenConfigProvider() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

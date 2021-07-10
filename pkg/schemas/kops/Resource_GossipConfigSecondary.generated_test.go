@@ -29,24 +29,11 @@ func TestExpandResourceGossipConfigSecondary(t *testing.T) {
 }
 
 func TestFlattenResourceGossipConfigSecondaryInto(t *testing.T) {
-	type args struct {
-		in  kops.GossipConfigSecondary
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"protocol": nil,
+		"listen":   nil,
+		"secret":   nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceGossipConfigSecondaryInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceGossipConfigSecondary(t *testing.T) {
 	type args struct {
 		in kops.GossipConfigSecondary
 	}
@@ -60,11 +47,7 @@ func TestFlattenResourceGossipConfigSecondary(t *testing.T) {
 			args: args{
 				in: kops.GossipConfigSecondary{},
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Protocol - default",
@@ -75,11 +58,7 @@ func TestFlattenResourceGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Listen - default",
@@ -90,11 +69,7 @@ func TestFlattenResourceGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Secret - default",
@@ -105,19 +80,80 @@ func TestFlattenResourceGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceGossipConfigSecondary(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceGossipConfigSecondaryInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceGossipConfigSecondary(t *testing.T) {
+	_default := map[string]interface{}{
+		"protocol": nil,
+		"listen":   nil,
+		"secret":   nil,
+	}
+	type args struct {
+		in kops.GossipConfigSecondary
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.GossipConfigSecondary{},
+			},
+			want: _default,
+		},
+		{
+			name: "Protocol - default",
+			args: args{
+				in: func() kops.GossipConfigSecondary {
+					subject := kops.GossipConfigSecondary{}
+					subject.Protocol = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Listen - default",
+			args: args{
+				in: func() kops.GossipConfigSecondary {
+					subject := kops.GossipConfigSecondary{}
+					subject.Listen = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Secret - default",
+			args: args{
+				in: func() kops.GossipConfigSecondary {
+					subject := kops.GossipConfigSecondary{}
+					subject.Secret = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceGossipConfigSecondary(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

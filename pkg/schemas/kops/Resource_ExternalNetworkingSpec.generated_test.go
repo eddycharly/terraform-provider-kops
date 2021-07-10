@@ -29,24 +29,7 @@ func TestExpandResourceExternalNetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenResourceExternalNetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.ExternalNetworkingSpec
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceExternalNetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceExternalNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
 	type args struct {
 		in kops.ExternalNetworkingSpec
 	}
@@ -60,15 +43,43 @@ func TestFlattenResourceExternalNetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.ExternalNetworkingSpec{},
 			},
-			want: map[string]interface{}{},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceExternalNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceExternalNetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceExternalNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceExternalNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceExternalNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
+	type args struct {
+		in kops.ExternalNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.ExternalNetworkingSpec{},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceExternalNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceExternalNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

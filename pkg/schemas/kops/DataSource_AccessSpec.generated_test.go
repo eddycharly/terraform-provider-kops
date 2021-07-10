@@ -29,24 +29,10 @@ func TestExpandDataSourceAccessSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceAccessSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.AccessSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"dns":           nil,
+		"load_balancer": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceAccessSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceAccessSpec(t *testing.T) {
 	type args struct {
 		in kops.AccessSpec
 	}
@@ -60,10 +46,7 @@ func TestFlattenDataSourceAccessSpec(t *testing.T) {
 			args: args{
 				in: kops.AccessSpec{},
 			},
-			want: map[string]interface{}{
-				"dns":           nil,
-				"load_balancer": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Dns - default",
@@ -74,10 +57,7 @@ func TestFlattenDataSourceAccessSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"dns":           nil,
-				"load_balancer": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LoadBalancer - default",
@@ -88,18 +68,68 @@ func TestFlattenDataSourceAccessSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"dns":           nil,
-				"load_balancer": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceAccessSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceAccessSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceAccessSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceAccessSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceAccessSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"dns":           nil,
+		"load_balancer": nil,
+	}
+	type args struct {
+		in kops.AccessSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.AccessSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Dns - default",
+			args: args{
+				in: func() kops.AccessSpec {
+					subject := kops.AccessSpec{}
+					subject.DNS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LoadBalancer - default",
+			args: args{
+				in: func() kops.AccessSpec {
+					subject := kops.AccessSpec{}
+					subject.LoadBalancer = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceAccessSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceAccessSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

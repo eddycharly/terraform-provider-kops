@@ -29,24 +29,12 @@ func TestExpandResourceEgressProxySpec(t *testing.T) {
 }
 
 func TestFlattenResourceEgressProxySpecInto(t *testing.T) {
-	type args struct {
-		in  kops.EgressProxySpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"http_proxy": func() []map[string]interface{} {
+			return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
+		}(),
+		"proxy_excludes": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceEgressProxySpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceEgressProxySpec(t *testing.T) {
 	type args struct {
 		in kops.EgressProxySpec
 	}
@@ -60,12 +48,7 @@ func TestFlattenResourceEgressProxySpec(t *testing.T) {
 			args: args{
 				in: kops.EgressProxySpec{},
 			},
-			want: map[string]interface{}{
-				"http_proxy": func() []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
-				}(),
-				"proxy_excludes": "",
-			},
+			want: _default,
 		},
 		{
 			name: "HTTPProxy - default",
@@ -76,12 +59,7 @@ func TestFlattenResourceEgressProxySpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"http_proxy": func() []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
-				}(),
-				"proxy_excludes": "",
-			},
+			want: _default,
 		},
 		{
 			name: "ProxyExcludes - default",
@@ -92,20 +70,70 @@ func TestFlattenResourceEgressProxySpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"http_proxy": func() []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
-				}(),
-				"proxy_excludes": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceEgressProxySpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceEgressProxySpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceEgressProxySpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceEgressProxySpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceEgressProxySpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"http_proxy": func() []map[string]interface{} {
+			return []map[string]interface{}{FlattenResourceHTTPProxy(kops.HTTPProxy{})}
+		}(),
+		"proxy_excludes": "",
+	}
+	type args struct {
+		in kops.EgressProxySpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.EgressProxySpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "HTTPProxy - default",
+			args: args{
+				in: func() kops.EgressProxySpec {
+					subject := kops.EgressProxySpec{}
+					subject.HTTPProxy = kops.HTTPProxy{}
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProxyExcludes - default",
+			args: args{
+				in: func() kops.EgressProxySpec {
+					subject := kops.EgressProxySpec{}
+					subject.ProxyExcludes = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceEgressProxySpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceEgressProxySpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

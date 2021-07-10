@@ -29,24 +29,15 @@ func TestExpandResourceLeaderElectionConfiguration(t *testing.T) {
 }
 
 func TestFlattenResourceLeaderElectionConfigurationInto(t *testing.T) {
-	type args struct {
-		in  kops.LeaderElectionConfiguration
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"leader_elect":                         nil,
+		"leader_elect_lease_duration":          nil,
+		"leader_elect_renew_deadline_duration": nil,
+		"leader_elect_resource_lock":           nil,
+		"leader_elect_resource_name":           nil,
+		"leader_elect_resource_namespace":      nil,
+		"leader_elect_retry_period":            nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceLeaderElectionConfigurationInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 	type args struct {
 		in kops.LeaderElectionConfiguration
 	}
@@ -60,15 +51,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 			args: args{
 				in: kops.LeaderElectionConfiguration{},
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElect - default",
@@ -79,15 +62,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElectLeaseDuration - default",
@@ -98,15 +73,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElectRenewDeadlineDuration - default",
@@ -117,15 +84,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElectResourceLock - default",
@@ -136,15 +95,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElectResourceName - default",
@@ -155,15 +106,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElectResourceNamespace - default",
@@ -174,15 +117,7 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LeaderElectRetryPeriod - default",
@@ -193,23 +128,128 @@ func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"leader_elect":                         nil,
-				"leader_elect_lease_duration":          nil,
-				"leader_elect_renew_deadline_duration": nil,
-				"leader_elect_resource_lock":           nil,
-				"leader_elect_resource_name":           nil,
-				"leader_elect_resource_namespace":      nil,
-				"leader_elect_retry_period":            nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceLeaderElectionConfiguration(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceLeaderElectionConfiguration() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceLeaderElectionConfigurationInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceLeaderElectionConfiguration() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceLeaderElectionConfiguration(t *testing.T) {
+	_default := map[string]interface{}{
+		"leader_elect":                         nil,
+		"leader_elect_lease_duration":          nil,
+		"leader_elect_renew_deadline_duration": nil,
+		"leader_elect_resource_lock":           nil,
+		"leader_elect_resource_name":           nil,
+		"leader_elect_resource_namespace":      nil,
+		"leader_elect_retry_period":            nil,
+	}
+	type args struct {
+		in kops.LeaderElectionConfiguration
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.LeaderElectionConfiguration{},
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElect - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElect = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElectLeaseDuration - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElectLeaseDuration = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElectRenewDeadlineDuration - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElectRenewDeadlineDuration = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElectResourceLock - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElectResourceLock = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElectResourceName - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElectResourceName = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElectResourceNamespace - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElectResourceNamespace = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LeaderElectRetryPeriod - default",
+			args: args{
+				in: func() kops.LeaderElectionConfiguration {
+					subject := kops.LeaderElectionConfiguration{}
+					subject.LeaderElectRetryPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceLeaderElectionConfiguration(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceLeaderElectionConfiguration() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

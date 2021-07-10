@@ -29,24 +29,10 @@ func TestExpandResourceAuthorizationSpec(t *testing.T) {
 }
 
 func TestFlattenResourceAuthorizationSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.AuthorizationSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"always_allow": nil,
+		"rbac":         nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceAuthorizationSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceAuthorizationSpec(t *testing.T) {
 	type args struct {
 		in kops.AuthorizationSpec
 	}
@@ -60,10 +46,7 @@ func TestFlattenResourceAuthorizationSpec(t *testing.T) {
 			args: args{
 				in: kops.AuthorizationSpec{},
 			},
-			want: map[string]interface{}{
-				"always_allow": nil,
-				"rbac":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "AlwaysAllow - default",
@@ -74,10 +57,7 @@ func TestFlattenResourceAuthorizationSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"always_allow": nil,
-				"rbac":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "RBAC - default",
@@ -88,18 +68,68 @@ func TestFlattenResourceAuthorizationSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"always_allow": nil,
-				"rbac":         nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceAuthorizationSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceAuthorizationSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceAuthorizationSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceAuthorizationSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceAuthorizationSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"always_allow": nil,
+		"rbac":         nil,
+	}
+	type args struct {
+		in kops.AuthorizationSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.AuthorizationSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "AlwaysAllow - default",
+			args: args{
+				in: func() kops.AuthorizationSpec {
+					subject := kops.AuthorizationSpec{}
+					subject.AlwaysAllow = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RBAC - default",
+			args: args{
+				in: func() kops.AuthorizationSpec {
+					subject := kops.AuthorizationSpec{}
+					subject.RBAC = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceAuthorizationSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceAuthorizationSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

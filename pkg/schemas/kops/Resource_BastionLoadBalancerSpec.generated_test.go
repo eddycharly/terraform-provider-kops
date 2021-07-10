@@ -29,24 +29,9 @@ func TestExpandResourceBastionLoadBalancerSpec(t *testing.T) {
 }
 
 func TestFlattenResourceBastionLoadBalancerSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.BastionLoadBalancerSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"additional_security_groups": func() []interface{} { return nil }(),
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceBastionLoadBalancerSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceBastionLoadBalancerSpec(t *testing.T) {
 	type args struct {
 		in kops.BastionLoadBalancerSpec
 	}
@@ -60,9 +45,7 @@ func TestFlattenResourceBastionLoadBalancerSpec(t *testing.T) {
 			args: args{
 				in: kops.BastionLoadBalancerSpec{},
 			},
-			want: map[string]interface{}{
-				"additional_security_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "AdditionalSecurityGroups - default",
@@ -73,17 +56,56 @@ func TestFlattenResourceBastionLoadBalancerSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"additional_security_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceBastionLoadBalancerSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceBastionLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceBastionLoadBalancerSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceBastionLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceBastionLoadBalancerSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"additional_security_groups": func() []interface{} { return nil }(),
+	}
+	type args struct {
+		in kops.BastionLoadBalancerSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.BastionLoadBalancerSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalSecurityGroups - default",
+			args: args{
+				in: func() kops.BastionLoadBalancerSpec {
+					subject := kops.BastionLoadBalancerSpec{}
+					subject.AdditionalSecurityGroups = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceBastionLoadBalancerSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceBastionLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

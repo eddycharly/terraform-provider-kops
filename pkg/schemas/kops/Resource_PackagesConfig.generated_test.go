@@ -29,24 +29,12 @@ func TestExpandResourcePackagesConfig(t *testing.T) {
 }
 
 func TestFlattenResourcePackagesConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.PackagesConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"hash_amd64": nil,
+		"hash_arm64": nil,
+		"url_amd64":  nil,
+		"url_arm64":  nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourcePackagesConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourcePackagesConfig(t *testing.T) {
 	type args struct {
 		in kops.PackagesConfig
 	}
@@ -60,12 +48,7 @@ func TestFlattenResourcePackagesConfig(t *testing.T) {
 			args: args{
 				in: kops.PackagesConfig{},
 			},
-			want: map[string]interface{}{
-				"hash_amd64": nil,
-				"hash_arm64": nil,
-				"url_amd64":  nil,
-				"url_arm64":  nil,
-			},
+			want: _default,
 		},
 		{
 			name: "HashAmd64 - default",
@@ -76,12 +59,7 @@ func TestFlattenResourcePackagesConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"hash_amd64": nil,
-				"hash_arm64": nil,
-				"url_amd64":  nil,
-				"url_arm64":  nil,
-			},
+			want: _default,
 		},
 		{
 			name: "HashArm64 - default",
@@ -92,12 +70,7 @@ func TestFlattenResourcePackagesConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"hash_amd64": nil,
-				"hash_arm64": nil,
-				"url_amd64":  nil,
-				"url_arm64":  nil,
-			},
+			want: _default,
 		},
 		{
 			name: "UrlAmd64 - default",
@@ -108,12 +81,7 @@ func TestFlattenResourcePackagesConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"hash_amd64": nil,
-				"hash_arm64": nil,
-				"url_amd64":  nil,
-				"url_arm64":  nil,
-			},
+			want: _default,
 		},
 		{
 			name: "UrlArm64 - default",
@@ -124,20 +92,92 @@ func TestFlattenResourcePackagesConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"hash_amd64": nil,
-				"hash_arm64": nil,
-				"url_amd64":  nil,
-				"url_arm64":  nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourcePackagesConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourcePackagesConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourcePackagesConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourcePackagesConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourcePackagesConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"hash_amd64": nil,
+		"hash_arm64": nil,
+		"url_amd64":  nil,
+		"url_arm64":  nil,
+	}
+	type args struct {
+		in kops.PackagesConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.PackagesConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "HashAmd64 - default",
+			args: args{
+				in: func() kops.PackagesConfig {
+					subject := kops.PackagesConfig{}
+					subject.HashAmd64 = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HashArm64 - default",
+			args: args{
+				in: func() kops.PackagesConfig {
+					subject := kops.PackagesConfig{}
+					subject.HashArm64 = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "UrlAmd64 - default",
+			args: args{
+				in: func() kops.PackagesConfig {
+					subject := kops.PackagesConfig{}
+					subject.UrlAmd64 = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "UrlArm64 - default",
+			args: args{
+				in: func() kops.PackagesConfig {
+					subject := kops.PackagesConfig{}
+					subject.UrlArm64 = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourcePackagesConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourcePackagesConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

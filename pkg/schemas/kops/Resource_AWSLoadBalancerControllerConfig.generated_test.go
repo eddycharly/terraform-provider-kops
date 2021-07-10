@@ -29,24 +29,10 @@ func TestExpandResourceAWSLoadBalancerControllerConfig(t *testing.T) {
 }
 
 func TestFlattenResourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.AWSLoadBalancerControllerConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"enabled": nil,
+		"version": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceAWSLoadBalancerControllerConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceAWSLoadBalancerControllerConfig(t *testing.T) {
 	type args struct {
 		in kops.AWSLoadBalancerControllerConfig
 	}
@@ -60,10 +46,7 @@ func TestFlattenResourceAWSLoadBalancerControllerConfig(t *testing.T) {
 			args: args{
 				in: kops.AWSLoadBalancerControllerConfig{},
 			},
-			want: map[string]interface{}{
-				"enabled": nil,
-				"version": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Enabled - default",
@@ -74,10 +57,7 @@ func TestFlattenResourceAWSLoadBalancerControllerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled": nil,
-				"version": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Version - default",
@@ -88,18 +68,68 @@ func TestFlattenResourceAWSLoadBalancerControllerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled": nil,
-				"version": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceAWSLoadBalancerControllerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceAWSLoadBalancerControllerConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceAWSLoadBalancerControllerConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceAWSLoadBalancerControllerConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceAWSLoadBalancerControllerConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"enabled": nil,
+		"version": nil,
+	}
+	type args struct {
+		in kops.AWSLoadBalancerControllerConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.AWSLoadBalancerControllerConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "Enabled - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.Version = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceAWSLoadBalancerControllerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceAWSLoadBalancerControllerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

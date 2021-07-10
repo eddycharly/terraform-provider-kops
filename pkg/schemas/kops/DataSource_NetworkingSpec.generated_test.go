@@ -29,24 +29,23 @@ func TestExpandDataSourceNetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceNetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.NetworkingSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"classic":    nil,
+		"kubenet":    nil,
+		"external":   nil,
+		"cni":        nil,
+		"kopeio":     nil,
+		"weave":      nil,
+		"flannel":    nil,
+		"calico":     nil,
+		"canal":      nil,
+		"kuberouter": nil,
+		"romana":     nil,
+		"amazon_vpc": nil,
+		"cilium":     nil,
+		"lyft_vpc":   nil,
+		"gce":        nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceNetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 	type args struct {
 		in kops.NetworkingSpec
 	}
@@ -60,23 +59,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.NetworkingSpec{},
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Classic - default",
@@ -87,23 +70,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Kubenet - default",
@@ -114,23 +81,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "External - default",
@@ -141,23 +92,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "CNI - default",
@@ -168,23 +103,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Kopeio - default",
@@ -195,23 +114,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Weave - default",
@@ -222,23 +125,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Flannel - default",
@@ -249,23 +136,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Calico - default",
@@ -276,23 +147,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Canal - default",
@@ -303,23 +158,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Kuberouter - default",
@@ -330,23 +169,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Romana - default",
@@ -357,23 +180,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "AmazonVPC - default",
@@ -384,23 +191,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Cilium - default",
@@ -411,23 +202,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LyftVPC - default",
@@ -438,23 +213,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "GCE - default",
@@ -465,31 +224,224 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"classic":    nil,
-				"kubenet":    nil,
-				"external":   nil,
-				"cni":        nil,
-				"kopeio":     nil,
-				"weave":      nil,
-				"flannel":    nil,
-				"calico":     nil,
-				"canal":      nil,
-				"kuberouter": nil,
-				"romana":     nil,
-				"amazon_vpc": nil,
-				"cilium":     nil,
-				"lyft_vpc":   nil,
-				"gce":        nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceNetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"classic":    nil,
+		"kubenet":    nil,
+		"external":   nil,
+		"cni":        nil,
+		"kopeio":     nil,
+		"weave":      nil,
+		"flannel":    nil,
+		"calico":     nil,
+		"canal":      nil,
+		"kuberouter": nil,
+		"romana":     nil,
+		"amazon_vpc": nil,
+		"cilium":     nil,
+		"lyft_vpc":   nil,
+		"gce":        nil,
+	}
+	type args struct {
+		in kops.NetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.NetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Classic - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Classic = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Kubenet - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Kubenet = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "External - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.External = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CNI - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.CNI = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Kopeio - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Kopeio = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Weave - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Weave = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Flannel - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Flannel = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Calico - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Calico = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Canal - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Canal = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Kuberouter - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Kuberouter = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Romana - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Romana = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AmazonVPC - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.AmazonVPC = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Cilium - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Cilium = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LyftVPC - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.LyftVPC = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GCE - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.GCE = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

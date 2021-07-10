@@ -29,24 +29,11 @@ func TestExpandDataSourceUserData(t *testing.T) {
 }
 
 func TestFlattenDataSourceUserDataInto(t *testing.T) {
-	type args struct {
-		in  kops.UserData
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"name":    "",
+		"type":    "",
+		"content": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceUserDataInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceUserData(t *testing.T) {
 	type args struct {
 		in kops.UserData
 	}
@@ -60,11 +47,7 @@ func TestFlattenDataSourceUserData(t *testing.T) {
 			args: args{
 				in: kops.UserData{},
 			},
-			want: map[string]interface{}{
-				"name":    "",
-				"type":    "",
-				"content": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Name - default",
@@ -75,11 +58,7 @@ func TestFlattenDataSourceUserData(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":    "",
-				"type":    "",
-				"content": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Type - default",
@@ -90,11 +69,7 @@ func TestFlattenDataSourceUserData(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":    "",
-				"type":    "",
-				"content": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Content - default",
@@ -105,19 +80,80 @@ func TestFlattenDataSourceUserData(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":    "",
-				"type":    "",
-				"content": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceUserData(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceUserData() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceUserDataInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceUserData() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceUserData(t *testing.T) {
+	_default := map[string]interface{}{
+		"name":    "",
+		"type":    "",
+		"content": "",
+	}
+	type args struct {
+		in kops.UserData
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.UserData{},
+			},
+			want: _default,
+		},
+		{
+			name: "Name - default",
+			args: args{
+				in: func() kops.UserData {
+					subject := kops.UserData{}
+					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Type - default",
+			args: args{
+				in: func() kops.UserData {
+					subject := kops.UserData{}
+					subject.Type = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Content - default",
+			args: args{
+				in: func() kops.UserData {
+					subject := kops.UserData{}
+					subject.Content = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceUserData(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceUserData() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

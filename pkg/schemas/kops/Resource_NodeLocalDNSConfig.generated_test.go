@@ -29,24 +29,13 @@ func TestExpandResourceNodeLocalDNSConfig(t *testing.T) {
 }
 
 func TestFlattenResourceNodeLocalDNSConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.NodeLocalDNSConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"enabled":             nil,
+		"local_ip":            "",
+		"forward_to_kube_dns": nil,
+		"memory_request":      nil,
+		"cpu_request":         nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceNodeLocalDNSConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 	type args struct {
 		in kops.NodeLocalDNSConfig
 	}
@@ -60,13 +49,7 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 			args: args{
 				in: kops.NodeLocalDNSConfig{},
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"local_ip":            "",
-				"forward_to_kube_dns": nil,
-				"memory_request":      nil,
-				"cpu_request":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Enabled - default",
@@ -77,13 +60,7 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"local_ip":            "",
-				"forward_to_kube_dns": nil,
-				"memory_request":      nil,
-				"cpu_request":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LocalIp - default",
@@ -94,13 +71,7 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"local_ip":            "",
-				"forward_to_kube_dns": nil,
-				"memory_request":      nil,
-				"cpu_request":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "ForwardToKubeDns - default",
@@ -111,13 +82,7 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"local_ip":            "",
-				"forward_to_kube_dns": nil,
-				"memory_request":      nil,
-				"cpu_request":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "MemoryRequest - default",
@@ -128,13 +93,7 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"local_ip":            "",
-				"forward_to_kube_dns": nil,
-				"memory_request":      nil,
-				"cpu_request":         nil,
-			},
+			want: _default,
 		},
 		{
 			name: "CPURequest - default",
@@ -145,21 +104,104 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"local_ip":            "",
-				"forward_to_kube_dns": nil,
-				"memory_request":      nil,
-				"cpu_request":         nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceNodeLocalDNSConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceNodeLocalDNSConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceNodeLocalDNSConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceNodeLocalDNSConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"enabled":             nil,
+		"local_ip":            "",
+		"forward_to_kube_dns": nil,
+		"memory_request":      nil,
+		"cpu_request":         nil,
+	}
+	type args struct {
+		in kops.NodeLocalDNSConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.NodeLocalDNSConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "Enabled - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LocalIp - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.LocalIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ForwardToKubeDns - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.ForwardToKubeDNS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CPURequest - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceNodeLocalDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceNodeLocalDNSConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

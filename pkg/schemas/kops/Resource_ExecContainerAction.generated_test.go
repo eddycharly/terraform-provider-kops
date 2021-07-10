@@ -29,24 +29,11 @@ func TestExpandResourceExecContainerAction(t *testing.T) {
 }
 
 func TestFlattenResourceExecContainerActionInto(t *testing.T) {
-	type args struct {
-		in  kops.ExecContainerAction
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"image":       "",
+		"command":     func() []interface{} { return nil }(),
+		"environment": func() map[string]interface{} { return nil }(),
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceExecContainerActionInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceExecContainerAction(t *testing.T) {
 	type args struct {
 		in kops.ExecContainerAction
 	}
@@ -60,11 +47,7 @@ func TestFlattenResourceExecContainerAction(t *testing.T) {
 			args: args{
 				in: kops.ExecContainerAction{},
 			},
-			want: map[string]interface{}{
-				"image":       "",
-				"command":     func() []interface{} { return nil }(),
-				"environment": func() map[string]interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "Image - default",
@@ -75,11 +58,7 @@ func TestFlattenResourceExecContainerAction(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"image":       "",
-				"command":     func() []interface{} { return nil }(),
-				"environment": func() map[string]interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "Command - default",
@@ -90,11 +69,7 @@ func TestFlattenResourceExecContainerAction(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"image":       "",
-				"command":     func() []interface{} { return nil }(),
-				"environment": func() map[string]interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "Environment - default",
@@ -105,19 +80,80 @@ func TestFlattenResourceExecContainerAction(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"image":       "",
-				"command":     func() []interface{} { return nil }(),
-				"environment": func() map[string]interface{} { return nil }(),
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceExecContainerAction(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceExecContainerAction() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceExecContainerActionInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceExecContainerAction() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceExecContainerAction(t *testing.T) {
+	_default := map[string]interface{}{
+		"image":       "",
+		"command":     func() []interface{} { return nil }(),
+		"environment": func() map[string]interface{} { return nil }(),
+	}
+	type args struct {
+		in kops.ExecContainerAction
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.ExecContainerAction{},
+			},
+			want: _default,
+		},
+		{
+			name: "Image - default",
+			args: args{
+				in: func() kops.ExecContainerAction {
+					subject := kops.ExecContainerAction{}
+					subject.Image = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Command - default",
+			args: args{
+				in: func() kops.ExecContainerAction {
+					subject := kops.ExecContainerAction{}
+					subject.Command = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Environment - default",
+			args: args{
+				in: func() kops.ExecContainerAction {
+					subject := kops.ExecContainerAction{}
+					subject.Environment = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceExecContainerAction(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceExecContainerAction() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

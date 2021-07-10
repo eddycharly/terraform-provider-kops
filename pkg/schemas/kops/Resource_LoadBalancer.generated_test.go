@@ -29,24 +29,10 @@ func TestExpandResourceLoadBalancer(t *testing.T) {
 }
 
 func TestFlattenResourceLoadBalancerInto(t *testing.T) {
-	type args struct {
-		in  kops.LoadBalancer
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"load_balancer_name": nil,
+		"target_group_arn":   nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceLoadBalancerInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceLoadBalancer(t *testing.T) {
 	type args struct {
 		in kops.LoadBalancer
 	}
@@ -60,10 +46,7 @@ func TestFlattenResourceLoadBalancer(t *testing.T) {
 			args: args{
 				in: kops.LoadBalancer{},
 			},
-			want: map[string]interface{}{
-				"load_balancer_name": nil,
-				"target_group_arn":   nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LoadBalancerName - default",
@@ -74,10 +57,7 @@ func TestFlattenResourceLoadBalancer(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"load_balancer_name": nil,
-				"target_group_arn":   nil,
-			},
+			want: _default,
 		},
 		{
 			name: "TargetGroupARN - default",
@@ -88,18 +68,68 @@ func TestFlattenResourceLoadBalancer(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"load_balancer_name": nil,
-				"target_group_arn":   nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceLoadBalancer(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceLoadBalancer() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceLoadBalancerInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceLoadBalancer() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceLoadBalancer(t *testing.T) {
+	_default := map[string]interface{}{
+		"load_balancer_name": nil,
+		"target_group_arn":   nil,
+	}
+	type args struct {
+		in kops.LoadBalancer
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.LoadBalancer{},
+			},
+			want: _default,
+		},
+		{
+			name: "LoadBalancerName - default",
+			args: args{
+				in: func() kops.LoadBalancer {
+					subject := kops.LoadBalancer{}
+					subject.LoadBalancerName = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TargetGroupARN - default",
+			args: args{
+				in: func() kops.LoadBalancer {
+					subject := kops.LoadBalancer{}
+					subject.TargetGroupARN = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceLoadBalancer(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceLoadBalancer() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

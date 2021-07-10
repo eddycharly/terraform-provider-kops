@@ -29,24 +29,10 @@ func TestExpandResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 }
 
 func TestFlattenResourceServiceAccountIssuerDiscoveryConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.ServiceAccountIssuerDiscoveryConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"discovery_store":          "",
+		"enable_aws_oidc_provider": false,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceServiceAccountIssuerDiscoveryConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 	type args struct {
 		in kops.ServiceAccountIssuerDiscoveryConfig
 	}
@@ -60,10 +46,7 @@ func TestFlattenResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 			args: args{
 				in: kops.ServiceAccountIssuerDiscoveryConfig{},
 			},
-			want: map[string]interface{}{
-				"discovery_store":          "",
-				"enable_aws_oidc_provider": false,
-			},
+			want: _default,
 		},
 		{
 			name: "DiscoveryStore - default",
@@ -74,10 +57,7 @@ func TestFlattenResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"discovery_store":          "",
-				"enable_aws_oidc_provider": false,
-			},
+			want: _default,
 		},
 		{
 			name: "EnableAwsOIDCProvider - default",
@@ -88,18 +68,68 @@ func TestFlattenResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"discovery_store":          "",
-				"enable_aws_oidc_provider": false,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceServiceAccountIssuerDiscoveryConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceServiceAccountIssuerDiscoveryConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceServiceAccountIssuerDiscoveryConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceServiceAccountIssuerDiscoveryConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"discovery_store":          "",
+		"enable_aws_oidc_provider": false,
+	}
+	type args struct {
+		in kops.ServiceAccountIssuerDiscoveryConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.ServiceAccountIssuerDiscoveryConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "DiscoveryStore - default",
+			args: args{
+				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
+					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
+					subject.DiscoveryStore = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableAwsOIDCProvider - default",
+			args: args{
+				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
+					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
+					subject.EnableAWSOIDCProvider = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceServiceAccountIssuerDiscoveryConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceServiceAccountIssuerDiscoveryConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

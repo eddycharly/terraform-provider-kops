@@ -29,24 +29,7 @@ func TestExpandResourceGCENetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenResourceGCENetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.GCENetworkingSpec
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceGCENetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceGCENetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
 	type args struct {
 		in kops.GCENetworkingSpec
 	}
@@ -60,15 +43,43 @@ func TestFlattenResourceGCENetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.GCENetworkingSpec{},
 			},
-			want: map[string]interface{}{},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceGCENetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceGCENetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceGCENetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceGCENetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceGCENetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
+	type args struct {
+		in kops.GCENetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.GCENetworkingSpec{},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceGCENetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceGCENetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

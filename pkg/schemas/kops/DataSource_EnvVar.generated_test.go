@@ -29,24 +29,10 @@ func TestExpandDataSourceEnvVar(t *testing.T) {
 }
 
 func TestFlattenDataSourceEnvVarInto(t *testing.T) {
-	type args struct {
-		in  kops.EnvVar
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"name":  "",
+		"value": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceEnvVarInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceEnvVar(t *testing.T) {
 	type args struct {
 		in kops.EnvVar
 	}
@@ -60,10 +46,7 @@ func TestFlattenDataSourceEnvVar(t *testing.T) {
 			args: args{
 				in: kops.EnvVar{},
 			},
-			want: map[string]interface{}{
-				"name":  "",
-				"value": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Name - default",
@@ -74,10 +57,7 @@ func TestFlattenDataSourceEnvVar(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":  "",
-				"value": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Value - default",
@@ -88,18 +68,68 @@ func TestFlattenDataSourceEnvVar(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"name":  "",
-				"value": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceEnvVar(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceEnvVar() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceEnvVarInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceEnvVar() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceEnvVar(t *testing.T) {
+	_default := map[string]interface{}{
+		"name":  "",
+		"value": "",
+	}
+	type args struct {
+		in kops.EnvVar
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.EnvVar{},
+			},
+			want: _default,
+		},
+		{
+			name: "Name - default",
+			args: args{
+				in: func() kops.EnvVar {
+					subject := kops.EnvVar{}
+					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Value - default",
+			args: args{
+				in: func() kops.EnvVar {
+					subject := kops.EnvVar{}
+					subject.Value = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceEnvVar(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceEnvVar() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

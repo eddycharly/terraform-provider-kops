@@ -29,24 +29,9 @@ func TestExpandDataSourceLyftVPCNetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceLyftVPCNetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.LyftVPCNetworkingSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"subnet_tags": func() map[string]interface{} { return nil }(),
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceLyftVPCNetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceLyftVPCNetworkingSpec(t *testing.T) {
 	type args struct {
 		in kops.LyftVPCNetworkingSpec
 	}
@@ -60,9 +45,7 @@ func TestFlattenDataSourceLyftVPCNetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.LyftVPCNetworkingSpec{},
 			},
-			want: map[string]interface{}{
-				"subnet_tags": func() map[string]interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "SubnetTags - default",
@@ -73,17 +56,56 @@ func TestFlattenDataSourceLyftVPCNetworkingSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"subnet_tags": func() map[string]interface{} { return nil }(),
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceLyftVPCNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceLyftVPCNetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceLyftVPCNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceLyftVPCNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceLyftVPCNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"subnet_tags": func() map[string]interface{} { return nil }(),
+	}
+	type args struct {
+		in kops.LyftVPCNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.LyftVPCNetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "SubnetTags - default",
+			args: args{
+				in: func() kops.LyftVPCNetworkingSpec {
+					subject := kops.LyftVPCNetworkingSpec{}
+					subject.SubnetTags = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceLyftVPCNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceLyftVPCNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

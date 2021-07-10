@@ -29,24 +29,9 @@ func TestExpandDataSourceDNSSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceDNSSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.DNSSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"type": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceDNSSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceDNSSpec(t *testing.T) {
 	type args struct {
 		in kops.DNSSpec
 	}
@@ -60,9 +45,7 @@ func TestFlattenDataSourceDNSSpec(t *testing.T) {
 			args: args{
 				in: kops.DNSSpec{},
 			},
-			want: map[string]interface{}{
-				"type": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Type - default",
@@ -73,17 +56,56 @@ func TestFlattenDataSourceDNSSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"type": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceDNSSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceDNSSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceDNSSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceDNSSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceDNSSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"type": "",
+	}
+	type args struct {
+		in kops.DNSSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.DNSSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Type - default",
+			args: args{
+				in: func() kops.DNSSpec {
+					subject := kops.DNSSpec{}
+					subject.Type = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceDNSSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceDNSSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

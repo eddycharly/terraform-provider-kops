@@ -29,24 +29,18 @@ func TestExpandConfigAws(t *testing.T) {
 }
 
 func TestFlattenConfigAwsInto(t *testing.T) {
-	type args struct {
-		in  config.Aws
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"profile":           "",
+		"region":            "",
+		"access_key":        "",
+		"secret_key":        "",
+		"assume_role":       nil,
+		"s3_endpoint":       "",
+		"s3_region":         "",
+		"s3_access_key":     "",
+		"s3_secret_key":     "",
+		"skip_region_check": false,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenConfigAwsInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenConfigAws(t *testing.T) {
 	type args struct {
 		in config.Aws
 	}
@@ -60,18 +54,7 @@ func TestFlattenConfigAws(t *testing.T) {
 			args: args{
 				in: config.Aws{},
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "Profile - default",
@@ -82,18 +65,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "Region - default",
@@ -104,18 +76,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "AccessKey - default",
@@ -126,18 +87,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "SecretKey - default",
@@ -148,18 +98,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "AssumeRole - default",
@@ -170,18 +109,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "S3Endpoint - default",
@@ -192,18 +120,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "S3Region - default",
@@ -214,18 +131,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "S3AccessKey - default",
@@ -236,18 +142,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "S3SecretKey - default",
@@ -258,18 +153,7 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 		{
 			name: "SkipRegionCheck - default",
@@ -280,26 +164,164 @@ func TestFlattenConfigAws(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"profile":           "",
-				"region":            "",
-				"access_key":        "",
-				"secret_key":        "",
-				"assume_role":       nil,
-				"s3_endpoint":       "",
-				"s3_region":         "",
-				"s3_access_key":     "",
-				"s3_secret_key":     "",
-				"skip_region_check": false,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenConfigAws(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenConfigAws() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenConfigAwsInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenConfigAws() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenConfigAws(t *testing.T) {
+	_default := map[string]interface{}{
+		"profile":           "",
+		"region":            "",
+		"access_key":        "",
+		"secret_key":        "",
+		"assume_role":       nil,
+		"s3_endpoint":       "",
+		"s3_region":         "",
+		"s3_access_key":     "",
+		"s3_secret_key":     "",
+		"skip_region_check": false,
+	}
+	type args struct {
+		in config.Aws
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: config.Aws{},
+			},
+			want: _default,
+		},
+		{
+			name: "Profile - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.Profile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Region - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.Region = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AccessKey - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.AccessKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SecretKey - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.SecretKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AssumeRole - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.AssumeRole = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "S3Endpoint - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.S3Endpoint = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "S3Region - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.S3Region = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "S3AccessKey - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.S3AccessKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "S3SecretKey - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.S3SecretKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SkipRegionCheck - default",
+			args: args{
+				in: func() config.Aws {
+					subject := config.Aws{}
+					subject.SkipRegionCheck = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenConfigAws(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenConfigAws() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

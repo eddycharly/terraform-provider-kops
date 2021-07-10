@@ -29,24 +29,9 @@ func TestExpandResourceClusterSecrets(t *testing.T) {
 }
 
 func TestFlattenResourceClusterSecretsInto(t *testing.T) {
-	type args struct {
-		in  resources.ClusterSecrets
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"docker_config": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceClusterSecretsInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceClusterSecrets(t *testing.T) {
 	type args struct {
 		in resources.ClusterSecrets
 	}
@@ -60,9 +45,7 @@ func TestFlattenResourceClusterSecrets(t *testing.T) {
 			args: args{
 				in: resources.ClusterSecrets{},
 			},
-			want: map[string]interface{}{
-				"docker_config": "",
-			},
+			want: _default,
 		},
 		{
 			name: "DockerConfig - default",
@@ -73,17 +56,56 @@ func TestFlattenResourceClusterSecrets(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"docker_config": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceClusterSecrets(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceClusterSecrets() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceClusterSecretsInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceClusterSecrets() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceClusterSecrets(t *testing.T) {
+	_default := map[string]interface{}{
+		"docker_config": "",
+	}
+	type args struct {
+		in resources.ClusterSecrets
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: resources.ClusterSecrets{},
+			},
+			want: _default,
+		},
+		{
+			name: "DockerConfig - default",
+			args: args{
+				in: func() resources.ClusterSecrets {
+					subject := resources.ClusterSecrets{}
+					subject.DockerConfig = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceClusterSecrets(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceClusterSecrets() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

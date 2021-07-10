@@ -29,24 +29,7 @@ func TestExpandResourceKopeioAuthenticationSpec(t *testing.T) {
 }
 
 func TestFlattenResourceKopeioAuthenticationSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.KopeioAuthenticationSpec
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceKopeioAuthenticationSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceKopeioAuthenticationSpec(t *testing.T) {
+	_default := map[string]interface{}{}
 	type args struct {
 		in kops.KopeioAuthenticationSpec
 	}
@@ -60,15 +43,43 @@ func TestFlattenResourceKopeioAuthenticationSpec(t *testing.T) {
 			args: args{
 				in: kops.KopeioAuthenticationSpec{},
 			},
-			want: map[string]interface{}{},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceKopeioAuthenticationSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceKopeioAuthenticationSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceKopeioAuthenticationSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceKopeioAuthenticationSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceKopeioAuthenticationSpec(t *testing.T) {
+	_default := map[string]interface{}{}
+	type args struct {
+		in kops.KopeioAuthenticationSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.KopeioAuthenticationSpec{},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceKopeioAuthenticationSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceKopeioAuthenticationSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

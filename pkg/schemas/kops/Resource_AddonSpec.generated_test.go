@@ -29,24 +29,9 @@ func TestExpandResourceAddonSpec(t *testing.T) {
 }
 
 func TestFlattenResourceAddonSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.AddonSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"manifest": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceAddonSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceAddonSpec(t *testing.T) {
 	type args struct {
 		in kops.AddonSpec
 	}
@@ -60,9 +45,7 @@ func TestFlattenResourceAddonSpec(t *testing.T) {
 			args: args{
 				in: kops.AddonSpec{},
 			},
-			want: map[string]interface{}{
-				"manifest": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Manifest - default",
@@ -73,17 +56,56 @@ func TestFlattenResourceAddonSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"manifest": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceAddonSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceAddonSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceAddonSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceAddonSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceAddonSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"manifest": "",
+	}
+	type args struct {
+		in kops.AddonSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.AddonSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manifest - default",
+			args: args{
+				in: func() kops.AddonSpec {
+					subject := kops.AddonSpec{}
+					subject.Manifest = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceAddonSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceAddonSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

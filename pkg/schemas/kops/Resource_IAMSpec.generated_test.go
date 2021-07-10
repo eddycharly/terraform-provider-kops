@@ -29,24 +29,12 @@ func TestExpandResourceIAMSpec(t *testing.T) {
 }
 
 func TestFlattenResourceIAMSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.IAMSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"legacy":                               false,
+		"allow_container_registry":             false,
+		"permissions_boundary":                 nil,
+		"service_account_external_permissions": func() []interface{} { return nil }(),
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceIAMSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceIAMSpec(t *testing.T) {
 	type args struct {
 		in kops.IAMSpec
 	}
@@ -60,12 +48,7 @@ func TestFlattenResourceIAMSpec(t *testing.T) {
 			args: args{
 				in: kops.IAMSpec{},
 			},
-			want: map[string]interface{}{
-				"legacy":                               false,
-				"allow_container_registry":             false,
-				"permissions_boundary":                 nil,
-				"service_account_external_permissions": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "Legacy - default",
@@ -76,12 +59,7 @@ func TestFlattenResourceIAMSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"legacy":                               false,
-				"allow_container_registry":             false,
-				"permissions_boundary":                 nil,
-				"service_account_external_permissions": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "AllowContainerRegistry - default",
@@ -92,12 +70,7 @@ func TestFlattenResourceIAMSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"legacy":                               false,
-				"allow_container_registry":             false,
-				"permissions_boundary":                 nil,
-				"service_account_external_permissions": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "PermissionsBoundary - default",
@@ -108,12 +81,7 @@ func TestFlattenResourceIAMSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"legacy":                               false,
-				"allow_container_registry":             false,
-				"permissions_boundary":                 nil,
-				"service_account_external_permissions": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "ServiceAccountExternalPermissions - default",
@@ -124,20 +92,92 @@ func TestFlattenResourceIAMSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"legacy":                               false,
-				"allow_container_registry":             false,
-				"permissions_boundary":                 nil,
-				"service_account_external_permissions": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceIAMSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceIAMSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceIAMSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceIAMSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceIAMSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"legacy":                               false,
+		"allow_container_registry":             false,
+		"permissions_boundary":                 nil,
+		"service_account_external_permissions": func() []interface{} { return nil }(),
+	}
+	type args struct {
+		in kops.IAMSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.IAMSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Legacy - default",
+			args: args{
+				in: func() kops.IAMSpec {
+					subject := kops.IAMSpec{}
+					subject.Legacy = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowContainerRegistry - default",
+			args: args{
+				in: func() kops.IAMSpec {
+					subject := kops.IAMSpec{}
+					subject.AllowContainerRegistry = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PermissionsBoundary - default",
+			args: args{
+				in: func() kops.IAMSpec {
+					subject := kops.IAMSpec{}
+					subject.PermissionsBoundary = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServiceAccountExternalPermissions - default",
+			args: args{
+				in: func() kops.IAMSpec {
+					subject := kops.IAMSpec{}
+					subject.ServiceAccountExternalPermissions = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceIAMSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceIAMSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

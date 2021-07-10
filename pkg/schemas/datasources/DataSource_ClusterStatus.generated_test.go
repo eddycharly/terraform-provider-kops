@@ -29,24 +29,13 @@ func TestExpandDataSourceClusterStatus(t *testing.T) {
 }
 
 func TestFlattenDataSourceClusterStatusInto(t *testing.T) {
-	type args struct {
-		in  datasources.ClusterStatus
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"cluster_name":    "",
+		"exists":          false,
+		"is_valid":        false,
+		"needs_update":    false,
+		"instance_groups": func() []interface{} { return nil }(),
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceClusterStatusInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceClusterStatus(t *testing.T) {
 	type args struct {
 		in datasources.ClusterStatus
 	}
@@ -60,13 +49,7 @@ func TestFlattenDataSourceClusterStatus(t *testing.T) {
 			args: args{
 				in: datasources.ClusterStatus{},
 			},
-			want: map[string]interface{}{
-				"cluster_name":    "",
-				"exists":          false,
-				"is_valid":        false,
-				"needs_update":    false,
-				"instance_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "ClusterName - default",
@@ -77,13 +60,7 @@ func TestFlattenDataSourceClusterStatus(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"cluster_name":    "",
-				"exists":          false,
-				"is_valid":        false,
-				"needs_update":    false,
-				"instance_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "Exists - default",
@@ -94,13 +71,7 @@ func TestFlattenDataSourceClusterStatus(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"cluster_name":    "",
-				"exists":          false,
-				"is_valid":        false,
-				"needs_update":    false,
-				"instance_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "IsValid - default",
@@ -111,13 +82,7 @@ func TestFlattenDataSourceClusterStatus(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"cluster_name":    "",
-				"exists":          false,
-				"is_valid":        false,
-				"needs_update":    false,
-				"instance_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "NeedsUpdate - default",
@@ -128,13 +93,7 @@ func TestFlattenDataSourceClusterStatus(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"cluster_name":    "",
-				"exists":          false,
-				"is_valid":        false,
-				"needs_update":    false,
-				"instance_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "InstanceGroups - default",
@@ -145,21 +104,104 @@ func TestFlattenDataSourceClusterStatus(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"cluster_name":    "",
-				"exists":          false,
-				"is_valid":        false,
-				"needs_update":    false,
-				"instance_groups": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceClusterStatus(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceClusterStatus() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceClusterStatusInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceClusterStatus() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceClusterStatus(t *testing.T) {
+	_default := map[string]interface{}{
+		"cluster_name":    "",
+		"exists":          false,
+		"is_valid":        false,
+		"needs_update":    false,
+		"instance_groups": func() []interface{} { return nil }(),
+	}
+	type args struct {
+		in datasources.ClusterStatus
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: datasources.ClusterStatus{},
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterName - default",
+			args: args{
+				in: func() datasources.ClusterStatus {
+					subject := datasources.ClusterStatus{}
+					subject.ClusterName = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Exists - default",
+			args: args{
+				in: func() datasources.ClusterStatus {
+					subject := datasources.ClusterStatus{}
+					subject.Exists = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IsValid - default",
+			args: args{
+				in: func() datasources.ClusterStatus {
+					subject := datasources.ClusterStatus{}
+					subject.IsValid = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NeedsUpdate - default",
+			args: args{
+				in: func() datasources.ClusterStatus {
+					subject := datasources.ClusterStatus{}
+					subject.NeedsUpdate = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstanceGroups - default",
+			args: args{
+				in: func() datasources.ClusterStatus {
+					subject := datasources.ClusterStatus{}
+					subject.InstanceGroups = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceClusterStatus(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceClusterStatus() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

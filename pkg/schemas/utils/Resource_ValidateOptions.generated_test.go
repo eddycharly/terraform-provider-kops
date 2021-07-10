@@ -29,24 +29,10 @@ func TestExpandResourceValidateOptions(t *testing.T) {
 }
 
 func TestFlattenResourceValidateOptionsInto(t *testing.T) {
-	type args struct {
-		in  utils.ValidateOptions
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"timeout":       nil,
+		"poll_interval": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceValidateOptionsInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceValidateOptions(t *testing.T) {
 	type args struct {
 		in utils.ValidateOptions
 	}
@@ -60,10 +46,7 @@ func TestFlattenResourceValidateOptions(t *testing.T) {
 			args: args{
 				in: utils.ValidateOptions{},
 			},
-			want: map[string]interface{}{
-				"timeout":       nil,
-				"poll_interval": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Timeout - default",
@@ -74,10 +57,7 @@ func TestFlattenResourceValidateOptions(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"timeout":       nil,
-				"poll_interval": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "PollInterval - default",
@@ -88,18 +68,68 @@ func TestFlattenResourceValidateOptions(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"timeout":       nil,
-				"poll_interval": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceValidateOptions(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceValidateOptions() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceValidateOptionsInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceValidateOptions() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceValidateOptions(t *testing.T) {
+	_default := map[string]interface{}{
+		"timeout":       nil,
+		"poll_interval": nil,
+	}
+	type args struct {
+		in utils.ValidateOptions
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: utils.ValidateOptions{},
+			},
+			want: _default,
+		},
+		{
+			name: "Timeout - default",
+			args: args{
+				in: func() utils.ValidateOptions {
+					subject := utils.ValidateOptions{}
+					subject.Timeout = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PollInterval - default",
+			args: args{
+				in: func() utils.ValidateOptions {
+					subject := utils.ValidateOptions{}
+					subject.PollInterval = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceValidateOptions(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceValidateOptions() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

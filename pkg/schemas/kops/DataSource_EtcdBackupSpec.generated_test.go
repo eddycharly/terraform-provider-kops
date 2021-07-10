@@ -29,24 +29,10 @@ func TestExpandDataSourceEtcdBackupSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceEtcdBackupSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.EtcdBackupSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"backup_store": "",
+		"image":        "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceEtcdBackupSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceEtcdBackupSpec(t *testing.T) {
 	type args struct {
 		in kops.EtcdBackupSpec
 	}
@@ -60,10 +46,7 @@ func TestFlattenDataSourceEtcdBackupSpec(t *testing.T) {
 			args: args{
 				in: kops.EtcdBackupSpec{},
 			},
-			want: map[string]interface{}{
-				"backup_store": "",
-				"image":        "",
-			},
+			want: _default,
 		},
 		{
 			name: "BackupStore - default",
@@ -74,10 +57,7 @@ func TestFlattenDataSourceEtcdBackupSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"backup_store": "",
-				"image":        "",
-			},
+			want: _default,
 		},
 		{
 			name: "Image - default",
@@ -88,18 +68,68 @@ func TestFlattenDataSourceEtcdBackupSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"backup_store": "",
-				"image":        "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceEtcdBackupSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceEtcdBackupSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceEtcdBackupSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceEtcdBackupSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceEtcdBackupSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"backup_store": "",
+		"image":        "",
+	}
+	type args struct {
+		in kops.EtcdBackupSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.EtcdBackupSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "BackupStore - default",
+			args: args{
+				in: func() kops.EtcdBackupSpec {
+					subject := kops.EtcdBackupSpec{}
+					subject.BackupStore = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Image - default",
+			args: args{
+				in: func() kops.EtcdBackupSpec {
+					subject := kops.EtcdBackupSpec{}
+					subject.Image = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceEtcdBackupSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceEtcdBackupSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

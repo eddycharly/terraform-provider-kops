@@ -29,24 +29,9 @@ func TestExpandResourceOpenstackNetwork(t *testing.T) {
 }
 
 func TestFlattenResourceOpenstackNetworkInto(t *testing.T) {
-	type args struct {
-		in  kops.OpenstackNetwork
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"availability_zone_hints": func() []interface{} { return nil }(),
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceOpenstackNetworkInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceOpenstackNetwork(t *testing.T) {
 	type args struct {
 		in kops.OpenstackNetwork
 	}
@@ -60,9 +45,7 @@ func TestFlattenResourceOpenstackNetwork(t *testing.T) {
 			args: args{
 				in: kops.OpenstackNetwork{},
 			},
-			want: map[string]interface{}{
-				"availability_zone_hints": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 		{
 			name: "AvailabilityZoneHints - default",
@@ -73,17 +56,56 @@ func TestFlattenResourceOpenstackNetwork(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"availability_zone_hints": func() []interface{} { return nil }(),
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceOpenstackNetwork(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceOpenstackNetwork() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceOpenstackNetworkInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceOpenstackNetwork() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceOpenstackNetwork(t *testing.T) {
+	_default := map[string]interface{}{
+		"availability_zone_hints": func() []interface{} { return nil }(),
+	}
+	type args struct {
+		in kops.OpenstackNetwork
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.OpenstackNetwork{},
+			},
+			want: _default,
+		},
+		{
+			name: "AvailabilityZoneHints - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.AvailabilityZoneHints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceOpenstackNetwork(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceOpenstackNetwork() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

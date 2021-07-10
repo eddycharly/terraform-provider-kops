@@ -29,24 +29,16 @@ func TestExpandDataSourceVolumeSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceVolumeSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.VolumeSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"delete_on_termination": nil,
+		"device":                "",
+		"encrypted":             nil,
+		"iops":                  nil,
+		"throughput":            nil,
+		"key":                   nil,
+		"size":                  0,
+		"type":                  "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceVolumeSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 	type args struct {
 		in kops.VolumeSpec
 	}
@@ -60,16 +52,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 			args: args{
 				in: kops.VolumeSpec{},
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "DeleteOnTermination - default",
@@ -80,16 +63,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Device - default",
@@ -100,16 +74,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Encrypted - default",
@@ -120,16 +85,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Iops - default",
@@ -140,16 +96,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Throughput - default",
@@ -160,16 +107,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Key - default",
@@ -180,16 +118,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Size - default",
@@ -200,16 +129,7 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 		{
 			name: "Type - default",
@@ -220,24 +140,140 @@ func TestFlattenDataSourceVolumeSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delete_on_termination": nil,
-				"device":                "",
-				"encrypted":             nil,
-				"iops":                  nil,
-				"throughput":            nil,
-				"key":                   nil,
-				"size":                  0,
-				"type":                  "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceVolumeSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceVolumeSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceVolumeSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceVolumeSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceVolumeSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"delete_on_termination": nil,
+		"device":                "",
+		"encrypted":             nil,
+		"iops":                  nil,
+		"throughput":            nil,
+		"key":                   nil,
+		"size":                  0,
+		"type":                  "",
+	}
+	type args struct {
+		in kops.VolumeSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.VolumeSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "DeleteOnTermination - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.DeleteOnTermination = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Device - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Device = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Encrypted - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Encrypted = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Iops - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Iops = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Throughput - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Throughput = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Key - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Key = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Size - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Size = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Type - default",
+			args: args{
+				in: func() kops.VolumeSpec {
+					subject := kops.VolumeSpec{}
+					subject.Type = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceVolumeSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceVolumeSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

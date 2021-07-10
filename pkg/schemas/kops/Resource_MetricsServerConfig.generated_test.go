@@ -29,24 +29,11 @@ func TestExpandResourceMetricsServerConfig(t *testing.T) {
 }
 
 func TestFlattenResourceMetricsServerConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.MetricsServerConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"enabled":  nil,
+		"image":    nil,
+		"insecure": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceMetricsServerConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceMetricsServerConfig(t *testing.T) {
 	type args struct {
 		in kops.MetricsServerConfig
 	}
@@ -60,11 +47,7 @@ func TestFlattenResourceMetricsServerConfig(t *testing.T) {
 			args: args{
 				in: kops.MetricsServerConfig{},
 			},
-			want: map[string]interface{}{
-				"enabled":  nil,
-				"image":    nil,
-				"insecure": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Enabled - default",
@@ -75,11 +58,7 @@ func TestFlattenResourceMetricsServerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":  nil,
-				"image":    nil,
-				"insecure": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Image - default",
@@ -90,11 +69,7 @@ func TestFlattenResourceMetricsServerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":  nil,
-				"image":    nil,
-				"insecure": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Insecure - default",
@@ -105,19 +80,80 @@ func TestFlattenResourceMetricsServerConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":  nil,
-				"image":    nil,
-				"insecure": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceMetricsServerConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceMetricsServerConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceMetricsServerConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceMetricsServerConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceMetricsServerConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"enabled":  nil,
+		"image":    nil,
+		"insecure": nil,
+	}
+	type args struct {
+		in kops.MetricsServerConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.MetricsServerConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "Enabled - default",
+			args: args{
+				in: func() kops.MetricsServerConfig {
+					subject := kops.MetricsServerConfig{}
+					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Image - default",
+			args: args{
+				in: func() kops.MetricsServerConfig {
+					subject := kops.MetricsServerConfig{}
+					subject.Image = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Insecure - default",
+			args: args{
+				in: func() kops.MetricsServerConfig {
+					subject := kops.MetricsServerConfig{}
+					subject.Insecure = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceMetricsServerConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceMetricsServerConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

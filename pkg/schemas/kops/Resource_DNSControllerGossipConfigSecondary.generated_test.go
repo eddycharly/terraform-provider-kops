@@ -29,24 +29,12 @@ func TestExpandResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 }
 
 func TestFlattenResourceDNSControllerGossipConfigSecondaryInto(t *testing.T) {
-	type args struct {
-		in  kops.DNSControllerGossipConfigSecondary
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"protocol": nil,
+		"listen":   nil,
+		"secret":   nil,
+		"seed":     nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceDNSControllerGossipConfigSecondaryInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 	type args struct {
 		in kops.DNSControllerGossipConfigSecondary
 	}
@@ -60,12 +48,7 @@ func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 			args: args{
 				in: kops.DNSControllerGossipConfigSecondary{},
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-				"seed":     nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Protocol - default",
@@ -76,12 +59,7 @@ func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-				"seed":     nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Listen - default",
@@ -92,12 +70,7 @@ func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-				"seed":     nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Secret - default",
@@ -108,12 +81,7 @@ func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-				"seed":     nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Seed - default",
@@ -124,20 +92,92 @@ func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"protocol": nil,
-				"listen":   nil,
-				"secret":   nil,
-				"seed":     nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceDNSControllerGossipConfigSecondary(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceDNSControllerGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceDNSControllerGossipConfigSecondaryInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceDNSControllerGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceDNSControllerGossipConfigSecondary(t *testing.T) {
+	_default := map[string]interface{}{
+		"protocol": nil,
+		"listen":   nil,
+		"secret":   nil,
+		"seed":     nil,
+	}
+	type args struct {
+		in kops.DNSControllerGossipConfigSecondary
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.DNSControllerGossipConfigSecondary{},
+			},
+			want: _default,
+		},
+		{
+			name: "Protocol - default",
+			args: args{
+				in: func() kops.DNSControllerGossipConfigSecondary {
+					subject := kops.DNSControllerGossipConfigSecondary{}
+					subject.Protocol = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Listen - default",
+			args: args{
+				in: func() kops.DNSControllerGossipConfigSecondary {
+					subject := kops.DNSControllerGossipConfigSecondary{}
+					subject.Listen = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Secret - default",
+			args: args{
+				in: func() kops.DNSControllerGossipConfigSecondary {
+					subject := kops.DNSControllerGossipConfigSecondary{}
+					subject.Secret = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Seed - default",
+			args: args{
+				in: func() kops.DNSControllerGossipConfigSecondary {
+					subject := kops.DNSControllerGossipConfigSecondary{}
+					subject.Seed = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceDNSControllerGossipConfigSecondary(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceDNSControllerGossipConfigSecondary() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

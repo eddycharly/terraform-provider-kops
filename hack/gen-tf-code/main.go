@@ -898,62 +898,14 @@ func buildTests(t reflect.Type, p string, scope string, funcMaps ...template.Fun
 package schemas
 
 import (
-	"encoding/json"
-	"log"
-	"strings"
-	"time"
+	"reflect"
+	"testing"
 
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kops/pkg/apis/kops"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/google/go-cmp/cmp"
 	{{ range $k, $v := imports -}}
 	{{ $v }} {{ $k | quote }}
 	{{ end -}}
 )
-
-func TestExpand{{ scope }}{{ .Name }}(t *testing.T) {
-	type args struct {
-		in map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-		want {{ .String }}
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := Expand{{ scope }}{{ .Name }}(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Expand{{ scope }}{{ .Name }}() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestFlatten{{ scope }}{{ .Name }}Into(t *testing.T) {
-	type args struct {
-		in  {{ .String }}
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			Flatten{{ scope }}{{ .Name }}Into(tt.args.in, tt.args.out)
-		})
-	}
-}
 
 {{- define "defaultValue" -}}
 {{- if isPtr . -}}
@@ -1005,60 +957,91 @@ false
 {{- else if isString . -}}
 ""
 {{- end -}}
+{{- end -}}
+
+{{- define "flattenCases" -}}
+{{- $fields := (fields . true) -}}
+_default := map[string]interface{}{
+	{{- range $fields }}
+	{{- if not (isExcluded .) }}
+	{{ fieldName . | snakecase | quote }}: {{ template "default" .Type }},
+	{{- end }}
+	{{- end }}
+}
+type args struct {
+	in {{ .String }}
+}
+tests := []struct {
+	name string
+	args args
+	want map[string]interface{}
+}{
+	{
+		name: "default",
+		args: args{
+			in: {{ .String }}{},
+		},
+		want: _default,
+	},
+	{{- range $fields }}
+	{{- $field := . }}
+	{{- if not (isExcluded .) }}
+	{
+		name: "{{ fieldName . }} - default",
+		args: args{
+			in: func() {{ $.String }}{
+				subject := {{ $.String }}{}
+				subject.{{ .Name }} = {{ template "defaultValue" .Type }}
+				return subject
+			}(),
+		},
+		want: _default,
+	},
+	{{- end }}
+	{{- end }}
+}
 {{- end }}
 
-func TestFlatten{{ scope }}{{ .Name }}(t *testing.T) {
+func TestExpand{{ scope }}{{ .Name }}(t *testing.T) {
 	type args struct {
-		in {{ .String }}
+		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want map[string]interface{}
+		want {{ .String }}
 	}{
-		{{- $fields := (fields . true) }}
-		{
-			name: "default",
-			args: args{
-				in: {{ .String }}{},
-			},
-			want: map[string]interface{}{
-				{{- range $fields }}
-				{{- if not (isExcluded .) }}
-				{{ fieldName . | snakecase | quote }}: {{ template "default" .Type }},
-				{{- end }}
-				{{- end }}
-			},
-		},
-		{{- range $fields }}
-		{{- $field := . }}
-		{{- if not (isExcluded .) }}
-		{
-			name: "{{ fieldName . }} - default",
-			args: args{
-				in: func() {{ $.String }}{
-					subject := {{ $.String }}{}
-					subject.{{ .Name }} = {{ template "defaultValue" .Type }}
-					return subject
-				}(),
-			},
-			want: map[string]interface{}{
-				{{- range $fields }}
-				{{- if not (isExcluded .) }}
-				{{ fieldName . | snakecase | quote }}: {{ if not (eq .Name $field.Name) }}{{ template "default" .Type }}{{- else -}}{{ template "default" .Type }}{{- end -}},
-				{{- end }}
-				{{- end }}
-			},
-		},
-		{{- end }}
-		{{- end }}
+		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Flatten{{ scope }}{{ .Name }}(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("Flatten{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
-				}
+			if got := Expand{{ scope }}{{ .Name }}(tt.args.in); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Expand{{ scope }}{{ .Name }}() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFlatten{{ scope }}{{ .Name }}Into(t *testing.T) {
+	{{ template "flattenCases" . }}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			Flatten{{ scope }}{{ .Name }}Into(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Flatten{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlatten{{ scope }}{{ .Name }}(t *testing.T) {
+	{{ template "flattenCases" . }}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Flatten{{ scope }}{{ .Name }}(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Flatten{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

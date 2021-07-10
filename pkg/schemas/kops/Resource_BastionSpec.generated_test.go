@@ -29,24 +29,11 @@ func TestExpandResourceBastionSpec(t *testing.T) {
 }
 
 func TestFlattenResourceBastionSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.BastionSpec
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"bastion_public_name":  "",
+		"idle_timeout_seconds": nil,
+		"load_balancer":        nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceBastionSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceBastionSpec(t *testing.T) {
 	type args struct {
 		in kops.BastionSpec
 	}
@@ -60,11 +47,7 @@ func TestFlattenResourceBastionSpec(t *testing.T) {
 			args: args{
 				in: kops.BastionSpec{},
 			},
-			want: map[string]interface{}{
-				"bastion_public_name":  "",
-				"idle_timeout_seconds": nil,
-				"load_balancer":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "BastionPublicName - default",
@@ -75,11 +58,7 @@ func TestFlattenResourceBastionSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"bastion_public_name":  "",
-				"idle_timeout_seconds": nil,
-				"load_balancer":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "IdleTimeoutSeconds - default",
@@ -90,11 +69,7 @@ func TestFlattenResourceBastionSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"bastion_public_name":  "",
-				"idle_timeout_seconds": nil,
-				"load_balancer":        nil,
-			},
+			want: _default,
 		},
 		{
 			name: "LoadBalancer - default",
@@ -105,19 +80,80 @@ func TestFlattenResourceBastionSpec(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"bastion_public_name":  "",
-				"idle_timeout_seconds": nil,
-				"load_balancer":        nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceBastionSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceBastionSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceBastionSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceBastionSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceBastionSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"bastion_public_name":  "",
+		"idle_timeout_seconds": nil,
+		"load_balancer":        nil,
+	}
+	type args struct {
+		in kops.BastionSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.BastionSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "BastionPublicName - default",
+			args: args{
+				in: func() kops.BastionSpec {
+					subject := kops.BastionSpec{}
+					subject.BastionPublicName = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdleTimeoutSeconds - default",
+			args: args{
+				in: func() kops.BastionSpec {
+					subject := kops.BastionSpec{}
+					subject.IdleTimeoutSeconds = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LoadBalancer - default",
+			args: args{
+				in: func() kops.BastionSpec {
+					subject := kops.BastionSpec{}
+					subject.LoadBalancer = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceBastionSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceBastionSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

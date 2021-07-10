@@ -29,24 +29,7 @@ func TestExpandDataSourceKuberouterNetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceKuberouterNetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.KuberouterNetworkingSpec
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceKuberouterNetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceKuberouterNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
 	type args struct {
 		in kops.KuberouterNetworkingSpec
 	}
@@ -60,15 +43,43 @@ func TestFlattenDataSourceKuberouterNetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.KuberouterNetworkingSpec{},
 			},
-			want: map[string]interface{}{},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceKuberouterNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceKuberouterNetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceKuberouterNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceKuberouterNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceKuberouterNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
+	type args struct {
+		in kops.KuberouterNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.KuberouterNetworkingSpec{},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceKuberouterNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceKuberouterNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

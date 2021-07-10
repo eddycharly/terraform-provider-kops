@@ -29,24 +29,11 @@ func TestExpandDataSourceAWSEBSCSIDriver(t *testing.T) {
 }
 
 func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
-	type args struct {
-		in  kops.AWSEBSCSIDriver
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"enabled":             nil,
+		"version":             nil,
+		"volume_attach_limit": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceAWSEBSCSIDriverInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 	type args struct {
 		in kops.AWSEBSCSIDriver
 	}
@@ -60,11 +47,7 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 			args: args{
 				in: kops.AWSEBSCSIDriver{},
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"version":             nil,
-				"volume_attach_limit": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Enabled - default",
@@ -75,11 +58,7 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"version":             nil,
-				"volume_attach_limit": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Version - default",
@@ -90,11 +69,7 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"version":             nil,
-				"volume_attach_limit": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "VolumeAttachLimit - default",
@@ -105,19 +80,80 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"enabled":             nil,
-				"version":             nil,
-				"volume_attach_limit": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceAWSEBSCSIDriver(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceAWSEBSCSIDriver() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceAWSEBSCSIDriverInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceAWSEBSCSIDriver() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
+	_default := map[string]interface{}{
+		"enabled":             nil,
+		"version":             nil,
+		"volume_attach_limit": nil,
+	}
+	type args struct {
+		in kops.AWSEBSCSIDriver
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.AWSEBSCSIDriver{},
+			},
+			want: _default,
+		},
+		{
+			name: "Enabled - default",
+			args: args{
+				in: func() kops.AWSEBSCSIDriver {
+					subject := kops.AWSEBSCSIDriver{}
+					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kops.AWSEBSCSIDriver {
+					subject := kops.AWSEBSCSIDriver{}
+					subject.Version = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VolumeAttachLimit - default",
+			args: args{
+				in: func() kops.AWSEBSCSIDriver {
+					subject := kops.AWSEBSCSIDriver{}
+					subject.VolumeAttachLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceAWSEBSCSIDriver(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceAWSEBSCSIDriver() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

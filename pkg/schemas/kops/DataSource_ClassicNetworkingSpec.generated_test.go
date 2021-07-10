@@ -29,24 +29,7 @@ func TestExpandDataSourceClassicNetworkingSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceClassicNetworkingSpecInto(t *testing.T) {
-	type args struct {
-		in  kops.ClassicNetworkingSpec
-		out map[string]interface{}
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceClassicNetworkingSpecInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceClassicNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
 	type args struct {
 		in kops.ClassicNetworkingSpec
 	}
@@ -60,15 +43,43 @@ func TestFlattenDataSourceClassicNetworkingSpec(t *testing.T) {
 			args: args{
 				in: kops.ClassicNetworkingSpec{},
 			},
-			want: map[string]interface{}{},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceClassicNetworkingSpec(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceClassicNetworkingSpec() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceClassicNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceClassicNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceClassicNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{}
+	type args struct {
+		in kops.ClassicNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.ClassicNetworkingSpec{},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceClassicNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceClassicNetworkingSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

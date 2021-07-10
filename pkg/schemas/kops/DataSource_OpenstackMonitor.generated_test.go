@@ -29,24 +29,11 @@ func TestExpandDataSourceOpenstackMonitor(t *testing.T) {
 }
 
 func TestFlattenDataSourceOpenstackMonitorInto(t *testing.T) {
-	type args struct {
-		in  kops.OpenstackMonitor
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"delay":       nil,
+		"timeout":     nil,
+		"max_retries": nil,
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenDataSourceOpenstackMonitorInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenDataSourceOpenstackMonitor(t *testing.T) {
 	type args struct {
 		in kops.OpenstackMonitor
 	}
@@ -60,11 +47,7 @@ func TestFlattenDataSourceOpenstackMonitor(t *testing.T) {
 			args: args{
 				in: kops.OpenstackMonitor{},
 			},
-			want: map[string]interface{}{
-				"delay":       nil,
-				"timeout":     nil,
-				"max_retries": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Delay - default",
@@ -75,11 +58,7 @@ func TestFlattenDataSourceOpenstackMonitor(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delay":       nil,
-				"timeout":     nil,
-				"max_retries": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "Timeout - default",
@@ -90,11 +69,7 @@ func TestFlattenDataSourceOpenstackMonitor(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delay":       nil,
-				"timeout":     nil,
-				"max_retries": nil,
-			},
+			want: _default,
 		},
 		{
 			name: "MaxRetries - default",
@@ -105,19 +80,80 @@ func TestFlattenDataSourceOpenstackMonitor(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"delay":       nil,
-				"timeout":     nil,
-				"max_retries": nil,
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenDataSourceOpenstackMonitor(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenDataSourceOpenstackMonitor() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenDataSourceOpenstackMonitorInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceOpenstackMonitor() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceOpenstackMonitor(t *testing.T) {
+	_default := map[string]interface{}{
+		"delay":       nil,
+		"timeout":     nil,
+		"max_retries": nil,
+	}
+	type args struct {
+		in kops.OpenstackMonitor
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.OpenstackMonitor{},
+			},
+			want: _default,
+		},
+		{
+			name: "Delay - default",
+			args: args{
+				in: func() kops.OpenstackMonitor {
+					subject := kops.OpenstackMonitor{}
+					subject.Delay = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Timeout - default",
+			args: args{
+				in: func() kops.OpenstackMonitor {
+					subject := kops.OpenstackMonitor{}
+					subject.Timeout = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxRetries - default",
+			args: args{
+				in: func() kops.OpenstackMonitor {
+					subject := kops.OpenstackMonitor{}
+					subject.MaxRetries = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceOpenstackMonitor(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceOpenstackMonitor() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

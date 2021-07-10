@@ -29,24 +29,9 @@ func TestExpandConfigAwsAssumeRole(t *testing.T) {
 }
 
 func TestFlattenConfigAwsAssumeRoleInto(t *testing.T) {
-	type args struct {
-		in  config.AwsAssumeRole
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"role_arn": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenConfigAwsAssumeRoleInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenConfigAwsAssumeRole(t *testing.T) {
 	type args struct {
 		in config.AwsAssumeRole
 	}
@@ -60,9 +45,7 @@ func TestFlattenConfigAwsAssumeRole(t *testing.T) {
 			args: args{
 				in: config.AwsAssumeRole{},
 			},
-			want: map[string]interface{}{
-				"role_arn": "",
-			},
+			want: _default,
 		},
 		{
 			name: "RoleArn - default",
@@ -73,17 +56,56 @@ func TestFlattenConfigAwsAssumeRole(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"role_arn": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenConfigAwsAssumeRole(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenConfigAwsAssumeRole() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenConfigAwsAssumeRoleInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenConfigAwsAssumeRole() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenConfigAwsAssumeRole(t *testing.T) {
+	_default := map[string]interface{}{
+		"role_arn": "",
+	}
+	type args struct {
+		in config.AwsAssumeRole
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: config.AwsAssumeRole{},
+			},
+			want: _default,
+		},
+		{
+			name: "RoleArn - default",
+			args: args{
+				in: func() config.AwsAssumeRole {
+					subject := config.AwsAssumeRole{}
+					subject.RoleArn = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenConfigAwsAssumeRole(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenConfigAwsAssumeRole() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

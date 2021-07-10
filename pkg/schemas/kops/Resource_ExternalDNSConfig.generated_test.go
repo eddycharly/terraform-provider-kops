@@ -29,24 +29,11 @@ func TestExpandResourceExternalDNSConfig(t *testing.T) {
 }
 
 func TestFlattenResourceExternalDNSConfigInto(t *testing.T) {
-	type args struct {
-		in  kops.ExternalDNSConfig
-		out map[string]interface{}
+	_default := map[string]interface{}{
+		"disable":         false,
+		"watch_ingress":   nil,
+		"watch_namespace": "",
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			FlattenResourceExternalDNSConfigInto(tt.args.in, tt.args.out)
-		})
-	}
-}
-
-func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 	type args struct {
 		in kops.ExternalDNSConfig
 	}
@@ -60,11 +47,7 @@ func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 			args: args{
 				in: kops.ExternalDNSConfig{},
 			},
-			want: map[string]interface{}{
-				"disable":         false,
-				"watch_ingress":   nil,
-				"watch_namespace": "",
-			},
+			want: _default,
 		},
 		{
 			name: "Disable - default",
@@ -75,11 +58,7 @@ func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"disable":         false,
-				"watch_ingress":   nil,
-				"watch_namespace": "",
-			},
+			want: _default,
 		},
 		{
 			name: "WatchIngress - default",
@@ -90,11 +69,7 @@ func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"disable":         false,
-				"watch_ingress":   nil,
-				"watch_namespace": "",
-			},
+			want: _default,
 		},
 		{
 			name: "WatchNamespace - default",
@@ -105,19 +80,80 @@ func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 					return subject
 				}(),
 			},
-			want: map[string]interface{}{
-				"disable":         false,
-				"watch_ingress":   nil,
-				"watch_namespace": "",
-			},
+			want: _default,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FlattenResourceExternalDNSConfig(tt.args.in); !reflect.DeepEqual(got, tt.want) {
-				if diff := cmp.Diff(tt.want, got); diff != "" {
-					t.Errorf("FlattenResourceExternalDNSConfig() mismatch (-want +got):\n%s", diff)
-				}
+			got := map[string]interface{}{}
+			FlattenResourceExternalDNSConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceExternalDNSConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceExternalDNSConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"disable":         false,
+		"watch_ingress":   nil,
+		"watch_namespace": "",
+	}
+	type args struct {
+		in kops.ExternalDNSConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kops.ExternalDNSConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "Disable - default",
+			args: args{
+				in: func() kops.ExternalDNSConfig {
+					subject := kops.ExternalDNSConfig{}
+					subject.Disable = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "WatchIngress - default",
+			args: args{
+				in: func() kops.ExternalDNSConfig {
+					subject := kops.ExternalDNSConfig{}
+					subject.WatchIngress = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "WatchNamespace - default",
+			args: args{
+				in: func() kops.ExternalDNSConfig {
+					subject := kops.ExternalDNSConfig{}
+					subject.WatchNamespace = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceExternalDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceExternalDNSConfig() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
