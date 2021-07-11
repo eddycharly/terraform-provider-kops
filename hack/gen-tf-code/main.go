@@ -108,7 +108,12 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 }
 
 func buildDoc(i interface{}, p string, optionsMap map[reflect.Type]*options, scope string, parser *parser, header, footer string) {
-	t := reflect.TypeOf(i)
+	var t reflect.Type
+	if tt, ok := i.(reflect.Type); ok {
+		t = tt
+	} else {
+		t = reflect.TypeOf(i)
+	}
 	tmplString := fmt.Sprintf(`# kops_{{ schemaName .Name | snakecase }}
 
 %s
@@ -816,7 +821,7 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	}
 }
 
-func build(scope string, parser *parser, g ...generated) map[reflect.Type]*options {
+func build(scope, docs string, parser *parser, g ...generated) {
 	o := map[reflect.Type]*options{}
 	for _, gen := range g {
 		o[gen.t] = gen.o
@@ -830,8 +835,10 @@ func build(scope string, parser *parser, g ...generated) map[reflect.Type]*optio
 		}
 		buildSchema(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 		buildTests(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
+		if gen.o.doc != nil {
+			buildDoc(gen.t, docs, o, scope, parser, gen.o.doc.header, gen.o.doc.footer)
+		}
 	}
-	return o
 }
 
 func main() {
@@ -846,12 +853,29 @@ func main() {
 		panic(err)
 	}
 	log.Println("generating schemas, expanders and flatteners...")
-	resourcesMap := build(
+	build(
 		"Resource",
+		"docs/resources/",
 		parser,
+		generate(resources.Cluster{},
+			version(1),
+			required("Name", "AdminSshKey"),
+			computedOnly("Revision"),
+			sensitive("AdminSshKey"),
+			forceNew("Name"),
+			doc(resourceClusterHeader, resourceClusterFooter),
+		),
+		generate(resources.InstanceGroup{},
+			version(1),
+			required("ClusterName", "Name"),
+			forceNew("ClusterName", "Name"),
+			computedOnly("Revision"),
+			doc(resourceInstanceGroupHeader, resourceInstanceGroupFooter),
+		),
 		generate(resources.ClusterUpdater{},
 			required("ClusterName"),
 			computedOnly("Revision"),
+			doc(resourceClusterUpdaterHeader, ""),
 		),
 		generate(utils.RollingUpdateOptions{},
 			noSchema(),
@@ -864,13 +888,6 @@ func main() {
 			noSchema(),
 		),
 		generate(resources.ApplyOptions{}),
-		generate(resources.Cluster{},
-			version(1),
-			required("Name", "AdminSshKey"),
-			computedOnly("Revision"),
-			sensitive("AdminSshKey"),
-			forceNew("Name"),
-		),
 		generate(kops.ClusterSpec{},
 			noSchema(),
 			exclude("GossipConfig", "DNSControllerGossipConfig", "Target"),
@@ -925,12 +942,6 @@ func main() {
 		generate(kops.AlwaysAllowAuthorizationSpec{}),
 		generate(kops.RBACAuthorizationSpec{}),
 		generate(kops.NodeAuthorizerSpec{}),
-		generate(resources.InstanceGroup{},
-			version(1),
-			required("ClusterName", "Name"),
-			forceNew("ClusterName", "Name"),
-			computedOnly("Revision"),
-		),
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),
 			required("Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
@@ -1032,11 +1043,13 @@ func main() {
 		generate(kops.ServiceAccountExternalPermission{}),
 		generate(kops.AWSPermission{}),
 	)
-	configMap := build(
+	build(
 		"Config",
+		"docs/guides/",
 		parser,
 		generate(config.Provider{},
 			required("StateStore"),
+			doc(configProviderHeader, ""),
 		),
 		generate(config.Aws{}),
 		generate(config.AwsAssumeRole{}),
@@ -1045,15 +1058,30 @@ func main() {
 			nullable("Verbosity"),
 		),
 	)
-	dataSourcesMap := build(
+	build(
 		"DataSource",
+		"docs/data-sources/",
 		parser,
 		generate(datasources.KubeConfig{},
 			required("ClusterName"),
 			computed("Admin", "Internal"),
+			doc(dataKubeConfigHeader, ""),
 		),
 		generate(datasources.ClusterStatus{},
 			required("ClusterName"),
+			doc(dataClusterStatusHeader, ""),
+		),
+		generate(resources.Cluster{},
+			version(1),
+			required("Name"),
+			exclude("Revision"),
+			doc(dataClusterHeader, ""),
+		),
+		generate(resources.InstanceGroup{},
+			version(1),
+			required("ClusterName", "Name"),
+			exclude("Revision"),
+			doc(dataInstanceGroupHeader, ""),
 		),
 		generate(resources.ClusterSecrets{},
 			sensitive("DockerConfig"),
@@ -1061,11 +1089,6 @@ func main() {
 		generate(kube.Config{},
 			noSchema(),
 			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
-		),
-		generate(resources.Cluster{},
-			version(1),
-			required("Name"),
-			exclude("Revision"),
 		),
 		generate(kops.ClusterSpec{},
 			exclude("GossipConfig", "DNSControllerGossipConfig", "Target"),
@@ -1143,11 +1166,6 @@ func main() {
 		generate(kops.BastionSpec{}),
 		generate(kops.DNSSpec{}),
 		generate(kops.BastionLoadBalancerSpec{}),
-		generate(resources.InstanceGroup{},
-			version(1),
-			required("ClusterName", "Name"),
-			exclude("Revision"),
-		),
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),
 		),
@@ -1183,15 +1201,4 @@ func main() {
 		generate(kops.ServiceAccountExternalPermission{}),
 		generate(kops.AWSPermission{}),
 	)
-	// resources
-	buildDoc(resources.Cluster{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterHeader, resourceClusterFooter)
-	buildDoc(resources.ClusterUpdater{}, "docs/resources/", resourcesMap, "Resource", parser, resourceClusterUpdaterHeader, "")
-	buildDoc(resources.InstanceGroup{}, "docs/resources/", resourcesMap, "Resource", parser, resourceInstanceGroupHeader, resourceInstanceGroupFooter)
-	// data sources
-	buildDoc(datasources.ClusterStatus{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterStatusHeader, "")
-	buildDoc(datasources.KubeConfig{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataKubeConfigHeader, "")
-	buildDoc(resources.Cluster{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataClusterHeader, "")
-	buildDoc(resources.InstanceGroup{}, "docs/data-sources/", dataSourcesMap, "DataSource", parser, dataInstanceGroupHeader, "")
-	// config
-	buildDoc(config.Provider{}, "docs/guides/", configMap, "Config", parser, configProviderHeader, "")
 }

@@ -6,6 +6,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
+type optionsDoc struct {
+	header string
+	footer string
+}
+
 type options struct {
 	noSchema     bool
 	version      *int
@@ -18,6 +23,7 @@ type options struct {
 	forceNew     sets.String
 	sensitive    sets.String
 	suppressDiff sets.String
+	doc          *optionsDoc
 }
 
 func newOptions() *options {
@@ -97,6 +103,15 @@ func sensitive(sensitive ...string) func(o *options) {
 func suppressDiff(suppressDiff ...string) func(o *options) {
 	return func(o *options) {
 		o.suppressDiff.Insert(suppressDiff...)
+	}
+}
+
+func doc(header, footer string) func(o *options) {
+	return func(o *options) {
+		o.doc = &optionsDoc{
+			header: header,
+			footer: footer,
+		}
 	}
 }
 
