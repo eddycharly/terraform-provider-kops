@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"go/ast"
 	"log"
 	"os"
 	"path"
@@ -17,8 +16,6 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
-	"golang.org/x/tools/go/packages"
-	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -29,108 +26,6 @@ func toSnakeCase(str string) string {
 	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
-}
-
-type options struct {
-	noSchema     bool
-	version      *int
-	exclude      sets.String
-	asSets       sets.String
-	rename       map[string]string
-	nullable     sets.String
-	required     sets.String
-	computed     sets.String
-	computedOnly sets.String
-	forceNew     sets.String
-	sensitive    sets.String
-	suppressDiff sets.String
-}
-
-func newOptions() *options {
-	return &options{
-		exclude:      sets.NewString(),
-		asSets:       sets.NewString(),
-		rename:       make(map[string]string),
-		nullable:     sets.NewString(),
-		required:     sets.NewString(),
-		computed:     sets.NewString(),
-		computedOnly: sets.NewString(),
-		forceNew:     sets.NewString(),
-		sensitive:    sets.NewString(),
-		suppressDiff: sets.NewString(),
-	}
-}
-
-func noSchema() func(o *options) {
-	return func(o *options) {
-		o.noSchema = true
-	}
-}
-
-func version(v int) func(o *options) {
-	return func(o *options) {
-		o.version = &v
-	}
-}
-
-func exclude(excluded ...string) func(o *options) {
-	return func(o *options) {
-		o.exclude.Insert(excluded...)
-	}
-}
-
-func asSets(s ...string) func(o *options) {
-	return func(o *options) {
-		o.asSets.Insert(s...)
-	}
-}
-
-func rename(old, new string) func(o *options) {
-	return func(o *options) {
-		o.rename[old] = new
-	}
-}
-
-func required(required ...string) func(o *options) {
-	return func(o *options) {
-		o.required.Insert(required...)
-	}
-}
-
-func nullable(required ...string) func(o *options) {
-	return func(o *options) {
-		o.nullable.Insert(required...)
-	}
-}
-
-func computed(computed ...string) func(o *options) {
-	return func(o *options) {
-		o.computed.Insert(computed...)
-	}
-}
-
-func computedOnly(computedOnly ...string) func(o *options) {
-	return func(o *options) {
-		o.computedOnly.Insert(computedOnly...)
-	}
-}
-
-func forceNew(forceNew ...string) func(o *options) {
-	return func(o *options) {
-		o.forceNew.Insert(forceNew...)
-	}
-}
-
-func sensitive(sensitive ...string) func(o *options) {
-	return func(o *options) {
-		o.sensitive.Insert(sensitive...)
-	}
-}
-
-func suppressDiff(suppressDiff ...string) func(o *options) {
-	return func(o *options) {
-		o.suppressDiff.Insert(suppressDiff...)
-	}
 }
 
 func verifyFields(t reflect.Type, fields ...string) {
@@ -161,38 +56,6 @@ func schemaType(in reflect.Type) string {
 	default:
 		panic(fmt.Sprintf("unknown kind %v", in.Kind()))
 	}
-}
-
-func isBool(in reflect.Type) bool {
-	switch in.Kind() {
-	case reflect.Bool:
-		return true
-	}
-	return false
-}
-
-func isInt(in reflect.Type) bool {
-	switch in.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return true
-	}
-	return false
-}
-
-func isString(in reflect.Type) bool {
-	switch in.Kind() {
-	case reflect.String:
-		return true
-	}
-	return false
-}
-
-func isFloat(in reflect.Type) bool {
-	switch in.Kind() {
-	case reflect.Float32, reflect.Float64:
-		return true
-	}
-	return false
 }
 
 func getFields(t reflect.Type, flatten bool) []_field {
@@ -302,7 +165,7 @@ var mappings = map[string]string{
 	"k8s.io/kops/pkg/apis/kops":                                         "kops",
 }
 
-func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope string, parser parser) template.FuncMap {
+func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope string, parser *parser) template.FuncMap {
 	dataSource := scope == "DataSource"
 	return template.FuncMap{
 		"scope": func() string {
@@ -353,9 +216,6 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"isExcluded": func(in _field) bool {
 			return optionsMap[in.Owner].exclude.Has(in.Name)
 		},
-		"isSet": func(in _field) bool {
-			return optionsMap[in.Owner].asSets.Has(in.Name)
-		},
 		"isRequired": func(in _field) bool {
 			return optionsMap[in.Owner].required.Has(in.Name)
 		},
@@ -396,35 +256,21 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"code": func(in string) string {
 			return fmt.Sprintf("`%s`", in)
 		},
-		"isPtr": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Ptr
-		},
-		"isBool":   isBool,
-		"isInt":    isInt,
-		"isString": isString,
-		"isFloat":  isFloat,
-		"isList": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Slice
-		},
-		"isStruct": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct
-		},
-		"isMap": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Map
-		},
-		"isDuration": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
-		},
-		"isQuantity": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
-		},
-		"isIntOrString": func(t reflect.Type) bool {
-			return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
-		},
+		"isPtr":         isPtr,
+		"isBool":        isBool,
+		"isInt":         isInt,
+		"isString":      isString,
+		"isFloat":       isFloat,
+		"isList":        isSlice,
+		"isStruct":      isStruct,
+		"isMap":         isMap,
+		"isDuration":    isDuration,
+		"isQuantity":    isQuantity,
+		"isIntOrString": isIntOrString,
 	}
 }
 
-func buildDoc(i interface{}, p string, optionsMap map[reflect.Type]*options, scope string, parser parser, header, footer string) {
+func buildDoc(i interface{}, p string, optionsMap map[reflect.Type]*options, scope string, parser *parser, header, footer string) {
 	t := reflect.TypeOf(i)
 	tmplString := fmt.Sprintf(`# kops_{{ schemaName .Name | snakecase }}
 
@@ -610,9 +456,6 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 			{{- end -}}
 			{{- if isComputed . -}}
 			Computed
-			{{- end -}}
-			{{- if isSet . -}}
-			Set
 			{{- end -}}
 			{{ template "schema" .Type }}
 			{{- if isNullable . -}}
@@ -821,12 +664,7 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 			return nil
 		}
 		{{- end }}
-		{{ if isSet . -}}
-		return func (in interface{}) {{ .Type.String }} {
-			return {{ template "expand" .Type }}
-		}(in.(*schema.Set).List())
-		{{- else -}}
-		{{- if isNullable . -}}
+		{{ if isNullable . -}}
 		if in == nil {
 			return nil
 		}
@@ -838,7 +676,6 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 		return nil
 		{{- else -}}
 		return {{ template "expand" .Type }}
-		{{- end -}}
 		{{- end -}}
 		{{- else -}}
 		return {{ mapping .Type }}Expand{{ scope }}{{ .Type.Name }}(in.(map[string]interface{}))
@@ -1131,7 +968,6 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	}
 	t := reflect.TypeOf(i)
 	verifyFields(t, o.exclude.List()...)
-	verifyFields(t, o.asSets.List()...)
 	verifyFields(t, o.nullable.List()...)
 	verifyFields(t, o.required.List()...)
 	verifyFields(t, o.computed.List()...)
@@ -1147,7 +983,7 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	}
 }
 
-func build(scope string, parser parser, g ...generated) map[reflect.Type]*options {
+func build(scope string, parser *parser, g ...generated) map[reflect.Type]*options {
 	o := map[reflect.Type]*options{}
 	for _, gen := range g {
 		o[gen.t] = gen.o
@@ -1163,122 +999,9 @@ func build(scope string, parser parser, g ...generated) map[reflect.Type]*option
 	return o
 }
 
-func buildImportsLookup(pack *packages.Package, file *ast.File) map[string]*packages.Package {
-	out := make(map[string]*packages.Package)
-	for _, i := range file.Imports {
-		path := strings.ReplaceAll(i.Path.Value, "\"", "")
-		if i.Name != nil {
-			out[i.Name.Name] = pack.Imports[path]
-		} else {
-			out[pack.Imports[path].Name] = pack.Imports[path]
-		}
-	}
-	return out
-}
-
-func (p *parser) parseStruct(pack *packages.Package, typeSpec *ast.TypeSpec, doc string, file *ast.File) _struct {
-	ret := _struct{
-		doc:    doc,
-		fields: make(map[string]string),
-	}
-	structure, ok := typeSpec.Type.(*ast.StructType)
-	if ok {
-		importsLookup := buildImportsLookup(pack, file)
-		for _, field := range structure.Fields.List {
-			if len(field.Names) == 0 {
-				switch t := field.Type.(type) {
-				case *ast.Ident:
-					ret.nested = append(ret.nested, _nested{
-						pack:       pack.ID,
-						structName: t.Name,
-					})
-				case *ast.SelectorExpr:
-					x := t.X.(*ast.Ident)
-					sel := t.Sel
-					from := importsLookup[x.Name]
-					ret.nested = append(ret.nested, _nested{
-						pack:       from.ID,
-						structName: sel.Name,
-					})
-				}
-			} else {
-				for _, name := range field.Names {
-					ret.fields[name.Name] = field.Doc.Text()
-				}
-			}
-		}
-	}
-	return ret
-}
-
-func (p *parser) parsePackage(pack *packages.Package) {
-	p.packages[pack.PkgPath] = pack
-	if _, ok := p.packs[pack.ID]; !ok {
-		p.packs[pack.ID] = make(map[string]_struct)
-		for _, v := range pack.Imports {
-			p.parsePackage(v)
-		}
-		for _, node := range pack.Syntax {
-			for _, decl := range node.Decls {
-				genDecl, ok := decl.(*ast.GenDecl)
-				if ok {
-					for _, spec := range genDecl.Specs {
-						typeSpec, ok := spec.(*ast.TypeSpec)
-						if ok {
-							p.packs[pack.ID][typeSpec.Name.Name] = p.parseStruct(pack, typeSpec, genDecl.Doc.Text(), node)
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-type _field struct {
-	reflect.StructField
-	Owner reflect.Type
-}
-
-type _nested struct {
-	pack       string
-	structName string
-}
-
-type _struct struct {
-	doc    string
-	fields map[string]string
-	nested []_nested
-}
-
-func (s _struct) lookup(in string, c map[string]map[string]_struct) string {
-	if s, ok := s.fields[in]; ok && s != "" {
-		return s
-	}
-	for _, n := range s.nested {
-		if p, ok := c[n.pack]; ok {
-			if s, ok := p[n.structName]; ok {
-				out := s.lookup(in, c)
-				if out != "" {
-					return out
-				}
-			}
-		}
-	}
-	return ""
-}
-
-type parser struct {
-	packages map[string]*packages.Package
-	packs    map[string]map[string]_struct
-}
-
 func main() {
 	log.Println("loading packages...")
-	cfg := packages.Config{
-		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles | packages.NeedImports | packages.NeedDeps | packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo,
-	}
-	packs, err := packages.Load(
-		&cfg,
+	parser, err := initParser(
 		"github.com/eddycharly/terraform-provider-kops/pkg/api/config",
 		"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources",
 		"github.com/eddycharly/terraform-provider-kops/pkg/api/kube",
@@ -1286,13 +1009,6 @@ func main() {
 	)
 	if err != nil {
 		panic(err)
-	}
-	parser := parser{
-		packages: make(map[string]*packages.Package),
-		packs:    make(map[string]map[string]_struct),
-	}
-	for _, pack := range packs {
-		parser.parsePackage(pack)
 	}
 	log.Println("generating schemas, expanders and flatteners...")
 	resourcesMap := build(

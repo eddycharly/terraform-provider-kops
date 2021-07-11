@@ -19,7 +19,7 @@ clean:
 
 .PHONY: gen-tf-code
 gen-tf-code: clean
-	@go run ./hack/gen-tf-code/main.go ./hack/gen-tf-code/docs.go
+	@go run ./hack/gen-tf-code/...
 	@go fmt ./pkg/schemas/...
 	@~/go/bin/goimports -w ./pkg/schemas
 
