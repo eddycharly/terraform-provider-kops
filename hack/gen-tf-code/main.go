@@ -25,19 +25,19 @@ var mappings = map[string]string{
 	"k8s.io/kops/pkg/apis/kops":                                         "kops",
 }
 
-func buildDoc(t reflect.Type, p, header, footer string, funcMaps ...template.FuncMap) {
+func buildDoc(t reflect.Type, p string, funcMaps ...template.FuncMap) {
 	fileName := toSnakeCase(fieldName(t.Name())) + ".md"
-	executeTemplate(t, fmt.Sprintf(docs, header, footer), p, fileName, funcMaps...)
+	executeTemplate(t, docsTemplate, p, fileName, funcMaps...)
 }
 
 func buildSchema(t reflect.Type, p, scope string, funcMaps ...template.FuncMap) {
 	fileName := fmt.Sprintf("%s_%s.generated.go", scope, t.Name())
-	executeTemplate(t, schemas, p, fileName, funcMaps...)
+	executeTemplate(t, schemasTemplate, p, fileName, funcMaps...)
 }
 
 func buildTests(t reflect.Type, p, scope string, funcMaps ...template.FuncMap) {
 	fileName := fmt.Sprintf("%s_%s.generated_test.go", scope, t.Name())
-	executeTemplate(t, tests, p, fileName, funcMaps...)
+	executeTemplate(t, testsTemplate, p, fileName, funcMaps...)
 }
 
 type generated struct {
@@ -70,13 +70,12 @@ func build(scope, docs string, parser *parser, g ...generated) {
 			reflectFuncs(gen.t, mappings, parser),
 			optionFuncs(scope == "DataSource", o),
 			schemaFuncs(scope),
-			docFuncs(parser, o),
 			sprig.TxtFuncMap(),
 		}
 		buildSchema(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 		buildTests(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 		if gen.o.doc != nil {
-			buildDoc(gen.t, docs, gen.o.doc.header, gen.o.doc.footer, funcMaps...)
+			buildDoc(gen.t, docs, append(funcMaps, docFuncs(gen.o.doc.header, gen.o.doc.footer, parser, o))...)
 		}
 	}
 }

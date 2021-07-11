@@ -106,7 +106,7 @@ func schemaFuncs(scope string) template.FuncMap {
 	}
 }
 
-func docFuncs(parser *parser, optionsMap map[reflect.Type]*options) template.FuncMap {
+func docFuncs(header, footer string, parser *parser, optionsMap map[reflect.Type]*options) template.FuncMap {
 	return template.FuncMap{
 		"resourceComment": func(t reflect.Type) string {
 			return getResourceComment(t.PkgPath(), t.Name(), parser.packs)
@@ -118,6 +118,12 @@ func docFuncs(parser *parser, optionsMap map[reflect.Type]*options) template.Fun
 			return getSubResources(t, map[reflect.Type]bool{}, func(in _field) bool {
 				return optionsMap[in.Owner].exclude.Has(in.Name)
 			})[1:]
+		},
+		"header": func() string {
+			return header
+		},
+		"footer": func() string {
+			return footer
 		},
 		"code": func(in string) string {
 			return fmt.Sprintf("`%s`", in)

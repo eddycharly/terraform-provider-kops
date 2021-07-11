@@ -47,6 +47,7 @@ resource "kops_cluster" "cluster" {
 }
 ```
 
+
 ## Argument Reference
 
 The following arguments are supported:

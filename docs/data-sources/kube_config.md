@@ -21,6 +21,7 @@ provider "kubectl" {
 }
 ```
 
+
 ## Argument Reference
 
 The following arguments are supported:

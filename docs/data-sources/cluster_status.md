@@ -23,6 +23,7 @@ output "needs_update {
 }
 ```
 
+
 ## Argument Reference
 
 The following arguments are supported:
