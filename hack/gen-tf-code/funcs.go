@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 	"text/template"
 )
 
-func reflectFuncs() template.FuncMap {
+func reflectFuncs(baseType reflect.Type, mappings map[string]string, parser *parser) template.FuncMap {
 	return template.FuncMap{
 		"isPtr":         isPtr,
 		"isBool":        isBool,
@@ -20,6 +21,26 @@ func reflectFuncs() template.FuncMap {
 		"isIntOrString": isIntOrString,
 		"isValueType":   isValueType,
 		"fields":        getFields,
+		"imports": func() map[string]string {
+			out := make(map[string]string)
+			for i, v := range parser.packages[baseType.PkgPath()].Imports {
+				if v, ok := mappings[i]; ok {
+					out["github.com/eddycharly/terraform-provider-kops/pkg/schemas/"+v] = v + "schemas"
+				}
+				for i2 := range parser.packages[v.PkgPath].Imports {
+					if v, ok := mappings[i2]; ok {
+						out["github.com/eddycharly/terraform-provider-kops/pkg/schemas/"+v] = v + "schemas"
+					}
+				}
+			}
+			return out
+		},
+		"mapping": func(t reflect.Type) string {
+			if baseType.PkgPath() == t.PkgPath() {
+				return ""
+			}
+			return mappings[t.PkgPath()] + "schemas."
+		},
 	}
 }
 
@@ -73,6 +94,18 @@ func optionFuncs(dataSource bool, optionsMap map[reflect.Type]*options) template
 	}
 }
 
+func schemaFuncs(scope string) template.FuncMap {
+	return template.FuncMap{
+		"scope": func() string {
+			return scope
+		},
+		"schemaType": schemaType,
+		"schemaName": func(in string) string {
+			return fieldName(in)
+		},
+	}
+}
+
 func docFuncs(parser *parser, optionsMap map[reflect.Type]*options) template.FuncMap {
 	return template.FuncMap{
 		"resourceComment": func(t reflect.Type) string {
@@ -85,6 +118,9 @@ func docFuncs(parser *parser, optionsMap map[reflect.Type]*options) template.Fun
 			return getSubResources(t, map[reflect.Type]bool{}, func(in _field) bool {
 				return optionsMap[in.Owner].exclude.Has(in.Name)
 			})[1:]
+		},
+		"code": func(in string) string {
+			return fmt.Sprintf("`%s`", in)
 		},
 	}
 }
