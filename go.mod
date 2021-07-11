@@ -37,6 +37,7 @@ replace (
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/aws/aws-sdk-go v1.39.4
+	github.com/google/go-cmp v0.5.6
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.7.0
 	golang.org/x/tools v0.1.4
 	k8s.io/api v0.21.0

@@ -99,8 +99,8 @@ func FlattenConfigAwsInto(in config.Aws, out map[string]interface{}) {
 				return nil
 			}
 			return func(in config.AwsAssumeRole) interface{} {
-				return func(in config.AwsAssumeRole) []map[string]interface{} {
-					return []map[string]interface{}{FlattenConfigAwsAssumeRole(in)}
+				return func(in config.AwsAssumeRole) []interface{} {
+					return []interface{}{FlattenConfigAwsAssumeRole(in)}
 				}(in)
 			}(*in)
 		}(in)

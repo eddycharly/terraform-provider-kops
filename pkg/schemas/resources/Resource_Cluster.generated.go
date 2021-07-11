@@ -160,8 +160,8 @@ func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}
 				return nil
 			}
 			return func(in resources.ClusterSecrets) interface{} {
-				return func(in resources.ClusterSecrets) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceClusterSecrets(in)}
+				return func(in resources.ClusterSecrets) []interface{} {
+					return []interface{}{FlattenResourceClusterSecrets(in)}
 				}(in)
 			}(*in)
 		}(in)

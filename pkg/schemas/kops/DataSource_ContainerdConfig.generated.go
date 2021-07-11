@@ -113,20 +113,25 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 				if in == nil {
 					return nil
 				}
-				out := map[string][]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = func(in interface{}) []string {
-						if in == nil {
-							return nil
-						}
-						var out []string
-						for _, in := range in.([]interface{}) {
-							out = append(out, string(ExpandString(in)))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string][]string{}
+						for key, in := range in {
+							out[key] = func(in interface{}) []string {
+								if in == nil {
+									return nil
+								}
+								var out []string
+								for _, in := range in.([]interface{}) {
+									out = append(out, string(ExpandString(in)))
+								}
+								return out
+							}(in)
 						}
 						return out
-					}(in)
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["registry_mirrors"]),
 		Root: func(in interface{}) *string {
@@ -229,8 +234,8 @@ func FlattenDataSourceContainerdConfigInto(in kops.ContainerdConfig, out map[str
 				return nil
 			}
 			return func(in kops.PackagesConfig) interface{} {
-				return func(in kops.PackagesConfig) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourcePackagesConfig(in)}
+				return func(in kops.PackagesConfig) []interface{} {
+					return []interface{}{FlattenDataSourcePackagesConfig(in)}
 				}(in)
 			}(*in)
 		}(in)

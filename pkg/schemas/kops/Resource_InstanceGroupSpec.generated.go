@@ -388,11 +388,16 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["cloud_labels"]),
 		NodeLabels: func(in interface{}) map[string]string {
@@ -400,11 +405,16 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["node_labels"]),
 		FileAssets: func(in interface{}) []kops.FileAssetSpec {
@@ -986,8 +996,8 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 				return nil
 			}
 			return func(in kops.KubeletConfigSpec) interface{} {
-				return func(in kops.KubeletConfigSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKubeletConfigSpec(in)}
+				return func(in kops.KubeletConfigSpec) []interface{} {
+					return []interface{}{FlattenResourceKubeletConfigSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1007,8 +1017,8 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 				return nil
 			}
 			return func(in kops.MixedInstancesPolicySpec) interface{} {
-				return func(in kops.MixedInstancesPolicySpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceMixedInstancesPolicySpec(in)}
+				return func(in kops.MixedInstancesPolicySpec) []interface{} {
+					return []interface{}{FlattenResourceMixedInstancesPolicySpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1060,8 +1070,8 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 				return nil
 			}
 			return func(in kops.IAMProfileSpec) interface{} {
-				return func(in kops.IAMProfileSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceIAMProfileSpec(in)}
+				return func(in kops.IAMProfileSpec) []interface{} {
+					return []interface{}{FlattenResourceIAMProfileSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1101,8 +1111,8 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 				return nil
 			}
 			return func(in kops.RollingUpdate) interface{} {
-				return func(in kops.RollingUpdate) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceRollingUpdate(in)}
+				return func(in kops.RollingUpdate) []interface{} {
+					return []interface{}{FlattenResourceRollingUpdate(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1133,8 +1143,8 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 				return nil
 			}
 			return func(in kops.InstanceMetadataOptions) interface{} {
-				return func(in kops.InstanceMetadataOptions) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceInstanceMetadataOptions(in)}
+				return func(in kops.InstanceMetadataOptions) []interface{} {
+					return []interface{}{FlattenResourceInstanceMetadataOptions(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -1155,8 +1165,8 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 				return nil
 			}
 			return func(in kops.WarmPoolSpec) interface{} {
-				return func(in kops.WarmPoolSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceWarmPoolSpec(in)}
+				return func(in kops.WarmPoolSpec) []interface{} {
+					return []interface{}{FlattenResourceWarmPoolSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

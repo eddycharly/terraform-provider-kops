@@ -499,11 +499,16 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["node_labels"]),
 		NonMasqueradeCIDR: func(in interface{}) string {
@@ -674,11 +679,16 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["feature_gates"]),
 		KubeReserved: func(in interface{}) map[string]string {
@@ -686,11 +696,16 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["kube_reserved"]),
 		KubeReservedCgroup: func(in interface{}) string {
@@ -701,11 +716,16 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["system_reserved"]),
 		SystemReservedCgroup: func(in interface{}) string {

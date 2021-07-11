@@ -2,7 +2,7 @@ PROVIDER_VERSION := "0.0.1"
 OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
 
 .PHONY: all
-all: clean gen fmt build
+all: clean gen fmt build vet test
 
 .PHONY: clean
 clean:
@@ -18,7 +18,7 @@ clean:
 	@rm -rf ./docs/resources/*.md
 
 .PHONY: gen-tf-code
-gen-tf-code:
+gen-tf-code: clean
 	@go run ./hack/gen-tf-code/main.go ./hack/gen-tf-code/docs.go
 	@go fmt ./pkg/schemas/...
 	@~/go/bin/goimports -w ./pkg/schemas
@@ -27,13 +27,21 @@ gen-tf-code:
 gen: gen-tf-code
 
 .PHONY: build
-build:
+build: gen
 	@CGO_ENABLED=0 go build -ldflags="-s -w" ./cmd/terraform-provider-kops
 
 .PHONY: fmt
-fmt:
+fmt: build
 	@go fmt ./cmd/...
 	@go fmt ./pkg/...
+
+.PHONY: test
+test: fmt
+	@go test ./...
+
+.PHONY: vet
+vet: fmt
+	@go vet ./...
 
 .PHONY: install
 install: all

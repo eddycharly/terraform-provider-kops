@@ -205,8 +205,8 @@ func FlattenResourceCloudControllerManagerConfigInto(in kops.CloudControllerMana
 				return nil
 			}
 			return func(in kops.LeaderElectionConfiguration) interface{} {
-				return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceLeaderElectionConfiguration(in)}
+				return func(in kops.LeaderElectionConfiguration) []interface{} {
+					return []interface{}{FlattenResourceLeaderElectionConfiguration(in)}
 				}(in)
 			}(*in)
 		}(in)

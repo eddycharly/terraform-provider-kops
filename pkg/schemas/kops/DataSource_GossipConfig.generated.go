@@ -143,8 +143,8 @@ func FlattenDataSourceGossipConfigInto(in kops.GossipConfig, out map[string]inte
 				return nil
 			}
 			return func(in kops.GossipConfigSecondary) interface{} {
-				return func(in kops.GossipConfigSecondary) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceGossipConfigSecondary(in)}
+				return func(in kops.GossipConfigSecondary) []interface{} {
+					return []interface{}{FlattenDataSourceGossipConfigSecondary(in)}
 				}(in)
 			}(*in)
 		}(in)

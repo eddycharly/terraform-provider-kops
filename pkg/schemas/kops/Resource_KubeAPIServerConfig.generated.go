@@ -371,11 +371,16 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["runtime_config"]),
 		KubeletClientCertificate: func(in interface{}) string {
@@ -1086,11 +1091,16 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["feature_gates"]),
 		MaxRequestsInflight: func(in interface{}) int32 {

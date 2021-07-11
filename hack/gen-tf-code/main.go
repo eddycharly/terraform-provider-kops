@@ -163,6 +163,38 @@ func schemaType(in reflect.Type) string {
 	}
 }
 
+func isBool(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Bool:
+		return true
+	}
+	return false
+}
+
+func isInt(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return true
+	}
+	return false
+}
+
+func isString(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.String:
+		return true
+	}
+	return false
+}
+
+func isFloat(in reflect.Type) bool {
+	switch in.Kind() {
+	case reflect.Float32, reflect.Float64:
+		return true
+	}
+	return false
+}
+
 func getFields(t reflect.Type, flatten bool) []_field {
 	var ret []_field
 	for i := 0; i < t.NumField(); i++ {
@@ -367,6 +399,10 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"isPtr": func(t reflect.Type) bool {
 			return t.Kind() == reflect.Ptr
 		},
+		"isBool":   isBool,
+		"isInt":    isInt,
+		"isString": isString,
+		"isFloat":  isFloat,
 		"isList": func(t reflect.Type) bool {
 			return t.Kind() == reflect.Slice
 		},
@@ -670,11 +706,16 @@ func (in interface{}) map[string]{{ .Elem.String }} {
 	if in == nil {
 		return nil
 	}
-	out := {{ .String }}{}
-	for key, in := range in.(map[string]interface{}) {
-		out[key] = {{ template "expand" .Elem }}
+	if in, ok := in.(map[string]interface{}); ok {
+		if len(in) > 0 {
+			out := {{ .String }}{}
+			for key, in := range in {
+				out[key] = {{ template "expand" .Elem }}
+			}
+			return out
+		}
 	}
-	return out
+	return nil
 }(in)
 {{- else if isDuration . -}}
 ExpandDuration(in)
@@ -755,8 +796,8 @@ FlattenQuantity(in)
 {{- else if isIntOrString . -}}
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
-func (in {{ .String }}) []map[string]interface{} {
-	return []map[string]interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
+func (in {{ .String }}) []interface{} {
+	return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
 }(in)
 {{- else -}}
 Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
@@ -857,6 +898,227 @@ func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
 	}
 }
 
+func buildTests(t reflect.Type, p string, scope string, funcMaps ...template.FuncMap) {
+	tmplString := `
+package schemas
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	{{ range $k, $v := imports -}}
+	{{ $v }} {{ $k | quote }}
+	{{ end -}}
+)
+
+{{- define "defaultValue" -}}
+{{- if isPtr . -}}
+nil
+{{- else if isList . -}}
+nil
+{{- else if isMap . -}}
+nil
+{{- else if isDuration . -}}
+""
+{{- else if isQuantity . -}}
+""
+{{- else if isIntOrString . -}}
+""
+{{- else if isStruct . -}}
+{{ .String }}{}
+{{- else if isInt . -}}
+0
+{{- else if isBool . -}}
+false
+{{- else if isFloat . -}}
+0
+{{- else if isString . -}}
+""
+{{- end -}}
+{{- end }}
+
+{{- define "expandDefault" -}}
+{{- if isPtr . -}}
+nil
+{{- else if isList . -}}
+func() []interface{} { return nil }()
+{{- else if isMap . -}}
+func() map[string]interface{} { return nil }()
+{{- else if isDuration . -}}
+""
+{{- else if isQuantity . -}}
+""
+{{- else if isIntOrString . -}}
+""
+{{- else if isStruct . -}}
+func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+{{- else if isInt . -}}
+0
+{{- else if isBool . -}}
+false
+{{- else if isFloat . -}}
+0
+{{- else if isString . -}}
+""
+{{- end -}}
+{{- end -}}
+
+{{- define "flattenDefault" -}}
+{{- if isPtr . -}}
+nil
+{{- else if isList . -}}
+func() []interface{} { return nil }()
+{{- else if isMap . -}}
+func() map[string]interface{} { return nil }()
+{{- else if isDuration . -}}
+""
+{{- else if isQuantity . -}}
+""
+{{- else if isIntOrString . -}}
+""
+{{- else if isStruct . -}}
+func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+{{- else if isInt . -}}
+0
+{{- else if isBool . -}}
+false
+{{- else if isFloat . -}}
+0
+{{- else if isString . -}}
+""
+{{- end -}}
+{{- end -}}
+
+{{- define "expandCases" -}}
+{{- $fields := (fields . true) -}}
+_default := {{ $.String }}{}
+type args struct {
+	in map[string]interface{}
+}
+tests := []struct {
+	name string
+	args args
+	want {{ .String }}
+}{
+	{
+		name: "default",
+		args: args{
+			in: map[string]interface{}{
+				{{- range $fields }}
+				{{- if not (isExcluded .) }}
+				{{ fieldName . | snakecase | quote }}: {{ template "expandDefault" .Type }},
+				{{- end }}
+				{{- end }}
+			},
+		},
+		want: _default,
+	},
+}
+{{- end -}}
+
+{{- define "flattenCases" -}}
+{{- $fields := (fields . true) -}}
+_default := map[string]interface{}{
+	{{- range $fields }}
+	{{- if not (isExcluded .) }}
+	{{ fieldName . | snakecase | quote }}: {{ template "flattenDefault" .Type }},
+	{{- end }}
+	{{- end }}
+}
+type args struct {
+	in {{ .String }}
+}
+tests := []struct {
+	name string
+	args args
+	want map[string]interface{}
+}{
+	{
+		name: "default",
+		args: args{
+			in: {{ .String }}{},
+		},
+		want: _default,
+	},
+	{{- range $fields }}
+	{{- $field := . }}
+	{{- if not (isExcluded .) }}
+	{
+		name: "{{ fieldName . }} - default",
+		args: args{
+			in: func() {{ $.String }}{
+				subject := {{ $.String }}{}
+				subject.{{ .Name }} = {{ template "defaultValue" .Type }}
+				return subject
+			}(),
+		},
+		want: _default,
+	},
+	{{- end }}
+	{{- end }}
+}
+{{- end }}
+
+func TestExpand{{ scope }}{{ .Name }}(t *testing.T) {
+	{{ template "expandCases" . }}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Expand{{ scope }}{{ .Name }}(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Expand{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlatten{{ scope }}{{ .Name }}Into(t *testing.T) {
+	{{ template "flattenCases" . }}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			Flatten{{ scope }}{{ .Name }}Into(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Flatten{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlatten{{ scope }}{{ .Name }}(t *testing.T) {
+	{{ template "flattenCases" . }}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Flatten{{ scope }}{{ .Name }}(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Flatten{{ scope }}{{ .Name }}() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+`
+	tmpl := template.New("doc")
+	for _, funcMap := range funcMaps {
+		tmpl = tmpl.Funcs(funcMap)
+	}
+	if _, err := tmpl.Parse(tmplString); err != nil {
+		panic(err)
+	}
+	folder := p
+	if err := os.MkdirAll(folder, 0755); err != nil {
+		panic(fmt.Sprintf("Failed to create directories for %s", folder))
+	}
+	fileName := fmt.Sprintf("%s_%s.generated_test.go", scope, t.Name())
+	f, err := os.Create(path.Join(folder, fileName))
+	if err != nil {
+		panic(fmt.Sprintf("Failed to create file %s", path.Join(p, fileName)))
+	}
+	defer f.Close()
+	if err := tmpl.Execute(f, t); err != nil {
+		panic(err)
+	}
+}
+
 type generated struct {
 	t reflect.Type
 	o *options
@@ -870,9 +1132,9 @@ func generate(i interface{}, opts ...func(o *options)) generated {
 	t := reflect.TypeOf(i)
 	verifyFields(t, o.exclude.List()...)
 	verifyFields(t, o.asSets.List()...)
+	verifyFields(t, o.nullable.List()...)
 	verifyFields(t, o.required.List()...)
 	verifyFields(t, o.computed.List()...)
-	verifyFields(t, o.computedOnly.List()...)
 	verifyFields(t, o.computedOnly.List()...)
 	verifyFields(t, o.forceNew.List()...)
 	verifyFields(t, o.suppressDiff.List()...)
@@ -896,6 +1158,7 @@ func build(scope string, parser parser, g ...generated) map[reflect.Type]*option
 			sprig.TxtFuncMap(),
 		}
 		buildSchema(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
+		buildTests(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 	}
 	return o
 }

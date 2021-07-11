@@ -40,8 +40,8 @@ func ExpandDataSourceEgressProxySpec(in map[string]interface{}) kops.EgressProxy
 
 func FlattenDataSourceEgressProxySpecInto(in kops.EgressProxySpec, out map[string]interface{}) {
 	out["http_proxy"] = func(in kops.HTTPProxy) interface{} {
-		return func(in kops.HTTPProxy) []map[string]interface{} {
-			return []map[string]interface{}{FlattenDataSourceHTTPProxy(in)}
+		return func(in kops.HTTPProxy) []interface{} {
+			return []interface{}{FlattenDataSourceHTTPProxy(in)}
 		}(in)
 	}(in.HTTPProxy)
 	out["proxy_excludes"] = func(in string) interface{} {

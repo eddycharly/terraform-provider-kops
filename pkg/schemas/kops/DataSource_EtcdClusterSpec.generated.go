@@ -245,8 +245,8 @@ func FlattenDataSourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[strin
 				return nil
 			}
 			return func(in kops.EtcdBackupSpec) interface{} {
-				return func(in kops.EtcdBackupSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceEtcdBackupSpec(in)}
+				return func(in kops.EtcdBackupSpec) []interface{} {
+					return []interface{}{FlattenDataSourceEtcdBackupSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -257,8 +257,8 @@ func FlattenDataSourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[strin
 				return nil
 			}
 			return func(in kops.EtcdManagerSpec) interface{} {
-				return func(in kops.EtcdManagerSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceEtcdManagerSpec(in)}
+				return func(in kops.EtcdManagerSpec) []interface{} {
+					return []interface{}{FlattenDataSourceEtcdManagerSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

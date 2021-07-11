@@ -317,8 +317,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.ClassicNetworkingSpec) interface{} {
-				return func(in kops.ClassicNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceClassicNetworkingSpec(in)}
+				return func(in kops.ClassicNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceClassicNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -329,8 +329,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.KubenetNetworkingSpec) interface{} {
-				return func(in kops.KubenetNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKubenetNetworkingSpec(in)}
+				return func(in kops.KubenetNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceKubenetNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -341,8 +341,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.ExternalNetworkingSpec) interface{} {
-				return func(in kops.ExternalNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceExternalNetworkingSpec(in)}
+				return func(in kops.ExternalNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceExternalNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -353,8 +353,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.CNINetworkingSpec) interface{} {
-				return func(in kops.CNINetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCNINetworkingSpec(in)}
+				return func(in kops.CNINetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceCNINetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -365,8 +365,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.KopeioNetworkingSpec) interface{} {
-				return func(in kops.KopeioNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKopeioNetworkingSpec(in)}
+				return func(in kops.KopeioNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceKopeioNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -377,8 +377,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.WeaveNetworkingSpec) interface{} {
-				return func(in kops.WeaveNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceWeaveNetworkingSpec(in)}
+				return func(in kops.WeaveNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceWeaveNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -389,8 +389,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.FlannelNetworkingSpec) interface{} {
-				return func(in kops.FlannelNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceFlannelNetworkingSpec(in)}
+				return func(in kops.FlannelNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceFlannelNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -401,8 +401,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.CalicoNetworkingSpec) interface{} {
-				return func(in kops.CalicoNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCalicoNetworkingSpec(in)}
+				return func(in kops.CalicoNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceCalicoNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -413,8 +413,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.CanalNetworkingSpec) interface{} {
-				return func(in kops.CanalNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCanalNetworkingSpec(in)}
+				return func(in kops.CanalNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceCanalNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -425,8 +425,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.KuberouterNetworkingSpec) interface{} {
-				return func(in kops.KuberouterNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceKuberouterNetworkingSpec(in)}
+				return func(in kops.KuberouterNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceKuberouterNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -437,8 +437,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.RomanaNetworkingSpec) interface{} {
-				return func(in kops.RomanaNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceRomanaNetworkingSpec(in)}
+				return func(in kops.RomanaNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceRomanaNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -449,8 +449,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.AmazonVPCNetworkingSpec) interface{} {
-				return func(in kops.AmazonVPCNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceAmazonVPCNetworkingSpec(in)}
+				return func(in kops.AmazonVPCNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceAmazonVPCNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -461,8 +461,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.CiliumNetworkingSpec) interface{} {
-				return func(in kops.CiliumNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceCiliumNetworkingSpec(in)}
+				return func(in kops.CiliumNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceCiliumNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -473,8 +473,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.LyftVPCNetworkingSpec) interface{} {
-				return func(in kops.LyftVPCNetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceLyftVPCNetworkingSpec(in)}
+				return func(in kops.LyftVPCNetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceLyftVPCNetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -485,8 +485,8 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				return nil
 			}
 			return func(in kops.GCENetworkingSpec) interface{} {
-				return func(in kops.GCENetworkingSpec) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceGCENetworkingSpec(in)}
+				return func(in kops.GCENetworkingSpec) []interface{} {
+					return []interface{}{FlattenResourceGCENetworkingSpec(in)}
 				}(in)
 			}(*in)
 		}(in)

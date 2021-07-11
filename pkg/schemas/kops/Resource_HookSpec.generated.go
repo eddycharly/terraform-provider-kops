@@ -139,8 +139,8 @@ func FlattenResourceHookSpecInto(in kops.HookSpec, out map[string]interface{}) {
 				return nil
 			}
 			return func(in kops.ExecContainerAction) interface{} {
-				return func(in kops.ExecContainerAction) []map[string]interface{} {
-					return []map[string]interface{}{FlattenResourceExecContainerAction(in)}
+				return func(in kops.ExecContainerAction) []interface{} {
+					return []interface{}{FlattenResourceExecContainerAction(in)}
 				}(in)
 			}(*in)
 		}(in)

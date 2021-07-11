@@ -89,11 +89,16 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				if in == nil {
 					return nil
 				}
-				out := map[string]string{}
-				for key, in := range in.(map[string]interface{}) {
-					out[key] = string(ExpandString(in))
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
 				}
-				return out
+				return nil
 			}(in)
 		}(in["feature_gates"]),
 		MaxPersistentVolumes: func(in interface{}) *int32 {
@@ -193,8 +198,8 @@ func FlattenDataSourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out m
 				return nil
 			}
 			return func(in kops.LeaderElectionConfiguration) interface{} {
-				return func(in kops.LeaderElectionConfiguration) []map[string]interface{} {
-					return []map[string]interface{}{FlattenDataSourceLeaderElectionConfiguration(in)}
+				return func(in kops.LeaderElectionConfiguration) []interface{} {
+					return []interface{}{FlattenDataSourceLeaderElectionConfiguration(in)}
 				}(in)
 			}(*in)
 		}(in)
