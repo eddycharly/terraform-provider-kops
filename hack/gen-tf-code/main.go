@@ -19,6 +19,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
+var mappings = map[string]string{
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/config":      "config",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources": "datasources",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube":        "kube",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources":   "resources",
+	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils":       "utils",
+	"k8s.io/kops/pkg/apis/kops":                                         "kops",
+}
+
 var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
 var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
 
@@ -26,21 +35,6 @@ func toSnakeCase(str string) string {
 	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
-}
-
-func verifyFields(t reflect.Type, fields ...string) {
-	for _, field := range fields {
-		valid := false
-		for i := 0; i < t.NumField(); i++ {
-			f := t.Field(i)
-			if f.Name == field {
-				valid = true
-			}
-		}
-		if !valid {
-			panic(fmt.Sprintf("field %s is not part of struct %s", field, t.Name()))
-		}
-	}
 }
 
 func schemaType(in reflect.Type) string {
@@ -58,22 +52,6 @@ func schemaType(in reflect.Type) string {
 	}
 }
 
-func getFields(t reflect.Type, flatten bool) []_field {
-	var ret []_field
-	for i := 0; i < t.NumField(); i++ {
-		f := t.Field(i)
-		if f.Anonymous && flatten {
-			ret = append(ret, getFields(f.Type, flatten)...)
-		} else {
-			ret = append(ret, _field{
-				StructField: t.Field(i),
-				Owner:       t,
-			})
-		}
-	}
-	return ret
-}
-
 func fieldName(in string) string {
 	in = strings.ReplaceAll(in, "EBS", "Ebs")
 	in = strings.ReplaceAll(in, "CSI", "Csi")
@@ -88,85 +66,7 @@ func fieldName(in string) string {
 	return in
 }
 
-func isValueType(in reflect.Type) bool {
-	switch in.Kind() {
-	case reflect.Ptr:
-		return isValueType(in.Elem())
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64, reflect.String, reflect.Bool:
-		return true
-	case reflect.Slice, reflect.Map:
-		return false
-	case reflect.Struct:
-		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString"
-	default:
-		panic(fmt.Sprintf("unknown kind %v", in.Kind()))
-	}
-}
-
-func getSubResources(t reflect.Type, seen map[reflect.Type]bool, isExcluded func(in _field) bool) []reflect.Type {
-	if t.Kind() == reflect.Array || t.Kind() == reflect.Map || t.Kind() == reflect.Slice || t.Kind() == reflect.Ptr {
-		return getSubResources(t.Elem(), seen, isExcluded)
-	}
-	if t.Kind() != reflect.Struct {
-		return nil
-	}
-	if isValueType(t) {
-		return nil
-	}
-	if _, ok := seen[t]; ok {
-		return nil
-	}
-	seen[t] = true
-	ret := []reflect.Type{t}
-	for _, f := range getFields(t, true) {
-		if !isExcluded(f) {
-			ret = append(ret, getSubResources(f.Type, seen, isExcluded)...)
-		}
-	}
-	return ret
-}
-
-func getResourceComment(packName, structName string, c map[string]map[string]_struct) string {
-	if p, ok := c[packName]; ok {
-		if s, ok := p[structName]; ok {
-			ret := strings.ReplaceAll(strings.TrimSpace(s.doc), "\n", "<br />")
-			if ret != "" {
-				if !strings.HasSuffix(ret, ".") {
-					ret = ret + "."
-				}
-				return ret
-			}
-		}
-	}
-	return ""
-}
-
-func getAttributeComment(packName, structName, fieldName string, c map[string]map[string]_struct) string {
-	if p, ok := c[packName]; ok {
-		if s, ok := p[structName]; ok {
-			ret := strings.ReplaceAll(strings.TrimSpace(s.lookup(fieldName, c)), "\n", "<br />")
-			if ret != "" {
-				if !strings.HasSuffix(ret, ".") {
-					ret = ret + "."
-				}
-				return ret
-			}
-		}
-	}
-	return ""
-}
-
-var mappings = map[string]string{
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/config":      "config",
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources": "datasources",
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube":        "kube",
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources":   "resources",
-	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils":       "utils",
-	"k8s.io/kops/pkg/apis/kops":                                         "kops",
-}
-
 func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope string, parser *parser) template.FuncMap {
-	dataSource := scope == "DataSource"
 	return template.FuncMap{
 		"scope": func() string {
 			return scope
@@ -191,58 +91,7 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 			}
 			return mappings[t.PkgPath()] + "schemas."
 		},
-		"fields": getFields,
-		"needsSchema": func(t reflect.Type) bool {
-			return !optionsMap[t].noSchema
-		},
-		"hasVersion": func(t reflect.Type) bool {
-			return optionsMap[t].version != nil
-		},
-		"schemaVersion": func(t reflect.Type) int {
-			return *(optionsMap[t].version)
-		},
 		"schemaType": schemaType,
-		"resourceComment": func(t reflect.Type) string {
-			return getResourceComment(t.PkgPath(), t.Name(), parser.packs)
-		},
-		"attributeComment": func(f _field) string {
-			return getAttributeComment(f.Owner.PkgPath(), f.Owner.Name(), f.Name, parser.packs)
-		},
-		"subResources": func(t reflect.Type) []reflect.Type {
-			return getSubResources(t, map[reflect.Type]bool{}, func(in _field) bool {
-				return optionsMap[in.Owner].exclude.Has(in.Name)
-			})[1:]
-		},
-		"isExcluded": func(in _field) bool {
-			return optionsMap[in.Owner].exclude.Has(in.Name)
-		},
-		"isRequired": func(in _field) bool {
-			return optionsMap[in.Owner].required.Has(in.Name)
-		},
-		"isOptional": func(in _field) bool {
-			if dataSource {
-				return optionsMap[in.Owner].computed.Has(in.Name)
-			}
-			return !optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name)
-		},
-		"isNullable": func(in _field) bool {
-			return optionsMap[in.Owner].nullable.Has(in.Name)
-		},
-		"isComputed": func(in _field) bool {
-			if optionsMap[in.Owner].required.Has(in.Name) {
-				return false
-			}
-			return dataSource || (optionsMap[in.Owner].computed.Has(in.Name) || optionsMap[in.Owner].computedOnly.Has(in.Name))
-		},
-		"isSensitive": func(in _field) bool {
-			return optionsMap[in.Owner].sensitive.Has(in.Name)
-		},
-		"forceNew": func(in _field) bool {
-			return optionsMap[in.Owner].forceNew.Has(in.Name)
-		},
-		"suppressDiff": func(in _field) bool {
-			return optionsMap[in.Owner].suppressDiff.Has(in.Name)
-		},
 		"fieldName": func(in _field) string {
 			if optionsMap[in.Owner].rename[in.Name] != "" {
 				return fieldName(optionsMap[in.Owner].rename[in.Name])
@@ -252,21 +101,9 @@ func funcMap(baseType reflect.Type, optionsMap map[reflect.Type]*options, scope 
 		"schemaName": func(in string) string {
 			return fieldName(in)
 		},
-		"isValueType": isValueType,
 		"code": func(in string) string {
 			return fmt.Sprintf("`%s`", in)
 		},
-		"isPtr":         isPtr,
-		"isBool":        isBool,
-		"isInt":         isInt,
-		"isString":      isString,
-		"isFloat":       isFloat,
-		"isList":        isSlice,
-		"isStruct":      isStruct,
-		"isMap":         isMap,
-		"isDuration":    isDuration,
-		"isQuantity":    isQuantity,
-		"isIntOrString": isIntOrString,
 	}
 }
 
@@ -354,6 +191,9 @@ The following arguments are supported:
 
 	tmpl := template.New("doc")
 	funcMaps := []template.FuncMap{
+		reflectFuncs(),
+		docFuncs(parser, optionsMap),
+		optionFuncs(scope == "DataSource", optionsMap),
 		funcMap(t, optionsMap, scope, parser),
 		sprig.TxtFuncMap(),
 	}
@@ -962,20 +802,13 @@ type generated struct {
 }
 
 func generate(i interface{}, opts ...func(o *options)) generated {
+	t := reflect.TypeOf(i)
 	o := newOptions()
 	for _, opt := range opts {
 		opt(o)
 	}
-	t := reflect.TypeOf(i)
-	verifyFields(t, o.exclude.List()...)
-	verifyFields(t, o.nullable.List()...)
-	verifyFields(t, o.required.List()...)
-	verifyFields(t, o.computed.List()...)
-	verifyFields(t, o.computedOnly.List()...)
-	verifyFields(t, o.forceNew.List()...)
-	verifyFields(t, o.suppressDiff.List()...)
-	for k := range o.rename {
-		verifyFields(t, k)
+	if err := o.verify(t); err != nil {
+		panic(err)
 	}
 	return generated{
 		t: t,
@@ -990,6 +823,8 @@ func build(scope string, parser *parser, g ...generated) map[reflect.Type]*optio
 	}
 	for _, gen := range g {
 		funcMaps := []template.FuncMap{
+			reflectFuncs(),
+			optionFuncs(scope == "DataSource", o),
 			funcMap(gen.t, o, scope, parser),
 			sprig.TxtFuncMap(),
 		}

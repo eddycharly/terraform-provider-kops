@@ -1,6 +1,10 @@
 package main
 
-import "k8s.io/apimachinery/pkg/util/sets"
+import (
+	"reflect"
+
+	"k8s.io/apimachinery/pkg/util/sets"
+)
 
 type options struct {
 	noSchema     bool
@@ -94,4 +98,34 @@ func suppressDiff(suppressDiff ...string) func(o *options) {
 	return func(o *options) {
 		o.suppressDiff.Insert(suppressDiff...)
 	}
+}
+
+func (o *options) verify(t reflect.Type) error {
+	if err := verifyFields(t, o.exclude.List()...); err != nil {
+		return err
+	}
+	if err := verifyFields(t, o.nullable.List()...); err != nil {
+		return err
+	}
+	if err := verifyFields(t, o.required.List()...); err != nil {
+		return err
+	}
+	if err := verifyFields(t, o.computed.List()...); err != nil {
+		return err
+	}
+	if err := verifyFields(t, o.computedOnly.List()...); err != nil {
+		return err
+	}
+	if err := verifyFields(t, o.forceNew.List()...); err != nil {
+		return err
+	}
+	if err := verifyFields(t, o.suppressDiff.List()...); err != nil {
+		return err
+	}
+	for k := range o.rename {
+		if err := verifyFields(t, k); err != nil {
+			return err
+		}
+	}
+	return nil
 }
