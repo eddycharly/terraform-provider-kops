@@ -24,7 +24,7 @@ func ResourceKubeDNSConfig() *schema.Resource {
 			"replicas":             OptionalInt(),
 			"provider":             OptionalString(),
 			"server_ip":            OptionalString(),
-			"stub_domains":         OptionalMap(List(String())),
+			"stub_domains":         OptionalComplexMap(List(String())),
 			"upstream_nameservers": OptionalList(String()),
 			"memory_request":       OptionalQuantity(),
 			"cpu_request":          OptionalQuantity(),
@@ -76,20 +76,26 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				if in == nil {
 					return nil
 				}
-				if in, ok := in.(map[string]interface{}); ok {
+				if in, ok := in.([]interface{}); ok {
 					if len(in) > 0 {
 						out := map[string][]string{}
-						for key, in := range in {
-							out[key] = func(in interface{}) []string {
-								if in == nil {
-									return nil
-								}
-								var out []string
-								for _, in := range in.([]interface{}) {
-									out = append(out, string(ExpandString(in)))
-								}
-								return out
-							}(in)
+						for _, in := range in {
+							if in, ok := in.(map[string]interface{}); ok {
+								key := ExpandString(in["key"])
+								value := func(in interface{}) []string {
+									return func(in interface{}) []string {
+										if in == nil {
+											return nil
+										}
+										var out []string
+										for _, in := range in.([]interface{}) {
+											out = append(out, string(ExpandString(in)))
+										}
+										return out
+									}(in)
+								}(in["value"])
+								out[key] = value
+							}
 						}
 						return out
 					}
@@ -219,19 +225,22 @@ func FlattenResourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]inte
 		return FlattenString(string(in))
 	}(in.ServerIP)
 	out["stub_domains"] = func(in map[string][]string) interface{} {
-		return func(in map[string][]string) map[string]interface{} {
+		return func(in map[string][]string) []interface{} {
 			if in == nil {
 				return nil
 			}
-			out := map[string]interface{}{}
+			var out []interface{}
 			for key, in := range in {
-				out[key] = func(in []string) []interface{} {
-					var out []interface{}
-					for _, in := range in {
-						out = append(out, FlattenString(string(in)))
-					}
-					return out
-				}(in)
+				out = append(out, map[string]interface{}{
+					"key": key,
+					"value": func(in []string) []interface{} {
+						var out []interface{}
+						for _, in := range in {
+							out = append(out, FlattenString(string(in)))
+						}
+						return out
+					}(in),
+				})
 			}
 			return out
 		}(in)

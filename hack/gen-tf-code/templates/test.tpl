@@ -42,7 +42,11 @@ nil
 {{- else if isList . -}}
 func() []interface{} { return nil }()
 {{- else if isMap . -}}
+{{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
 func() map[string]interface{} { return nil }()
+{{- else -}}
+func() []interface{} { return nil }()
+{{- end -}}
 {{- else if isDuration . -}}
 ""
 {{- else if isQuantity . -}}
@@ -68,7 +72,11 @@ nil
 {{- else if isList . -}}
 func() []interface{} { return nil }()
 {{- else if isMap . -}}
+{{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
 func() map[string]interface{} { return nil }()
+{{- else -}}
+func() []interface{} { return nil }()
+{{- end -}}
 {{- else if isDuration . -}}
 ""
 {{- else if isQuantity . -}}

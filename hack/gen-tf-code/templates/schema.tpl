@@ -38,7 +38,11 @@ var _ = Schema
 {{- else if isList . -}}
 List({{ template "schemaElem" .Elem }})
 {{- else if isMap . -}}
+{{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
 Map({{ template "schemaElem" .Elem }})
+{{- else -}}
+ComplexMap({{ template "schemaElem" .Elem }})
+{{- end -}}
 {{- else if isDuration . -}}
 Duration()
 {{- else if isQuantity . -}}
@@ -164,6 +168,7 @@ func (in interface{}) {{ .String }} {
 	return out
 }(in)
 {{- else if isMap . -}}
+{{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
 func (in interface{}) map[string]{{ .Elem.String }} {
 	if in == nil {
 		return nil
@@ -179,6 +184,29 @@ func (in interface{}) map[string]{{ .Elem.String }} {
 	}
 	return nil
 }(in)
+{{- else -}}
+func (in interface{}) map[string]{{ .Elem.String }} {
+	if in == nil {
+		return nil
+	}
+	if in, ok := in.([]interface{}); ok {
+		if len(in) > 0 {
+			out := {{ .String }}{}
+			for _, in := range in {
+				if in, ok := in.(map[string]interface{}); ok {
+					key := ExpandString(in["key"])
+					value := func(in interface{}) {{ .Elem.String }} {
+						return {{ template "expand" .Elem }}
+					}(in["value"])
+					out[key] = value
+				}
+			}
+			return out
+		}
+	}
+	return nil
+}(in)
+{{- end -}}
 {{- else if isDuration . -}}
 ExpandDuration(in)
 {{- else if isQuantity . -}}
@@ -241,6 +269,7 @@ func (in {{ .String }}) []interface{} {
 	return out
 }(in)
 {{- else if isMap . -}}
+{{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
 func (in map[string]{{ .Elem.String }}) map[string]interface{} {
 	if in == nil {
 		return nil
@@ -251,6 +280,21 @@ func (in map[string]{{ .Elem.String }}) map[string]interface{} {
 	}
 	return out
 }(in)
+{{- else -}}
+func (in map[string]{{ .Elem.String }}) []interface{} {
+	if in == nil {
+		return nil
+	}
+	var out []interface{}
+	for key, in := range in {
+		out = append(out, map[string]interface{}{
+			"key": key,
+			"value": {{ template "flattenElem" .Elem }},
+		})
+	}
+	return out
+}(in)
+{{- end -}}
 {{- else if isDuration . -}}
 FlattenDuration(in)
 {{- else if isQuantity . -}}
