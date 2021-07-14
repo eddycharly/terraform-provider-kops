@@ -9,4 +9,6 @@ type Provider struct {
 	Openstack *Openstack
 	// Klog contains the klog configuration options
 	Klog *Klog
+	// Mock sets up a cloud mock for integration tests
+	Mock bool
 }

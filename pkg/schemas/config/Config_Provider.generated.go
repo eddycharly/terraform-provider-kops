@@ -15,6 +15,7 @@ func ConfigProvider() *schema.Resource {
 			"aws":         OptionalStruct(ConfigAws()),
 			"openstack":   OptionalStruct(ConfigOpenstack()),
 			"klog":        OptionalStruct(ConfigKlog()),
+			"mock":        OptionalBool(),
 		},
 	}
 
@@ -83,6 +84,9 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				}(in))
 			}(in)
 		}(in["klog"]),
+		Mock: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["mock"]),
 	}
 }
 
@@ -126,6 +130,9 @@ func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
 			}(*in)
 		}(in)
 	}(in.Klog)
+	out["mock"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.Mock)
 }
 
 func FlattenConfigProvider(in config.Provider) map[string]interface{} {

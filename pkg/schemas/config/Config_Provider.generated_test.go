@@ -25,6 +25,7 @@ func TestExpandConfigProvider(t *testing.T) {
 					"aws":         nil,
 					"openstack":   nil,
 					"klog":        nil,
+					"mock":        false,
 				},
 			},
 			want: _default,
@@ -46,6 +47,7 @@ func TestFlattenConfigProviderInto(t *testing.T) {
 		"aws":         nil,
 		"openstack":   nil,
 		"klog":        nil,
+		"mock":        false,
 	}
 	type args struct {
 		in config.Provider
@@ -101,6 +103,17 @@ func TestFlattenConfigProviderInto(t *testing.T) {
 				in: func() config.Provider {
 					subject := config.Provider{}
 					subject.Klog = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Mock - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.Mock = false
 					return subject
 				}(),
 			},
@@ -124,6 +137,7 @@ func TestFlattenConfigProvider(t *testing.T) {
 		"aws":         nil,
 		"openstack":   nil,
 		"klog":        nil,
+		"mock":        false,
 	}
 	type args struct {
 		in config.Provider
@@ -179,6 +193,17 @@ func TestFlattenConfigProvider(t *testing.T) {
 				in: func() config.Provider {
 					subject := config.Provider{}
 					subject.Klog = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Mock - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.Mock = false
 					return subject
 				}(),
 			},

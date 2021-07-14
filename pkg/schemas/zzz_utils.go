@@ -145,7 +145,7 @@ func RequiredMap(elem *schema.Schema) *schema.Schema {
 }
 
 func OptionalMap(elem *schema.Schema) *schema.Schema {
-	return Schema(schema.TypeMap, elem, false, true, false, 0)
+	return Schema(schema.TypeMap, nil, false, true, false, 0)
 }
 
 func ComputedMap(elem *schema.Schema) *schema.Schema {

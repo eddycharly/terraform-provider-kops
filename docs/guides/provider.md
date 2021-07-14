@@ -86,6 +86,7 @@ The following arguments are supported:
 - `aws` - (Optional) - [aws](#aws) - Aws contains the aws configuration options.
 - `openstack` - (Optional) - [openstack](#openstack) - OpenStack contains the openstack configuration options.
 - `klog` - (Optional) - [klog](#klog) - Klog contains the klog configuration options.
+- `mock` - (Optional) - Bool - Mock sets up a cloud mock for integration tests.
 
 ## Nested resources
 
