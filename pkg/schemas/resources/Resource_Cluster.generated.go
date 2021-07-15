@@ -45,7 +45,7 @@ func ResourceCluster() *schema.Resource {
 			"kubernetes_api_access":             OptionalList(String()),
 			"isolate_masters":                   OptionalBool(),
 			"update_policy":                     OptionalString(),
-			"external_policies":                 OptionalMap(List(String())),
+			"external_policies":                 OptionalComplexMap(List(String())),
 			"additional_policies":               OptionalMap(String()),
 			"file_assets":                       OptionalList(kopsschemas.ResourceFileAssetSpec()),
 			"etcd_cluster":                      RequiredList(kopsschemas.ResourceEtcdClusterSpec()),

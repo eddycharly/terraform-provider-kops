@@ -10,8 +10,9 @@ resource "kops_cluster" "cluster" {
     allow_container_registry = true
   }
 
-  external_policies = {
-    node = [
+  external_policies {
+    key = "node"
+    value = [
       "arn:aws:iam::123456789000:policy/test-policy-1",
       "arn:aws:iam::123456789000:policy/test-policy-2"
     ]

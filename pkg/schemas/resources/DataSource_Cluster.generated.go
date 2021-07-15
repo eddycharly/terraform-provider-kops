@@ -45,7 +45,7 @@ func DataSourceCluster() *schema.Resource {
 			"kubernetes_api_access":             ComputedList(String()),
 			"isolate_masters":                   ComputedBool(),
 			"update_policy":                     ComputedString(),
-			"external_policies":                 ComputedMap(List(String())),
+			"external_policies":                 ComputedComplexMap(List(String())),
 			"additional_policies":               ComputedMap(String()),
 			"file_assets":                       ComputedList(kopsschemas.DataSourceFileAssetSpec()),
 			"etcd_cluster":                      ComputedList(kopsschemas.DataSourceEtcdClusterSpec()),

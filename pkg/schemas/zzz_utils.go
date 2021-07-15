@@ -30,6 +30,16 @@ func Nullable(in *schema.Schema) *schema.Schema {
 	)
 }
 
+func ComplexMapElem(in *schema.Schema) *schema.Resource {
+	in.Required = true
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"key":   RequiredString(),
+			"value": in,
+		},
+	}
+}
+
 // Tools
 
 func Schema(t schema.ValueType, elem interface{}, required, optional, computed bool, maxItems int) *schema.Schema {
@@ -145,7 +155,7 @@ func RequiredMap(elem *schema.Schema) *schema.Schema {
 }
 
 func OptionalMap(elem *schema.Schema) *schema.Schema {
-	return Schema(schema.TypeMap, nil, false, true, false, 0)
+	return Schema(schema.TypeMap, elem, false, true, false, 0)
 }
 
 func ComputedMap(elem *schema.Schema) *schema.Schema {
@@ -154,6 +164,16 @@ func ComputedMap(elem *schema.Schema) *schema.Schema {
 
 func OptionalComputedMap(elem *schema.Schema) *schema.Schema {
 	return Schema(schema.TypeMap, elem, false, true, true, 0)
+}
+
+// ComplexMap
+
+func OptionalComplexMap(elem *schema.Schema) *schema.Schema {
+	return Schema(schema.TypeList, ComplexMapElem(elem), false, true, false, 0)
+}
+
+func ComputedComplexMap(elem *schema.Schema) *schema.Schema {
+	return Schema(schema.TypeList, ComplexMapElem(elem), false, true, true, 0)
 }
 
 // Struct

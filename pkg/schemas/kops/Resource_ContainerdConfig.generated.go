@@ -17,7 +17,7 @@ func ResourceContainerdConfig() *schema.Resource {
 			"config_override":  OptionalString(),
 			"log_level":        OptionalString(),
 			"packages":         OptionalStruct(ResourcePackagesConfig()),
-			"registry_mirrors": OptionalMap(List(String())),
+			"registry_mirrors": OptionalComplexMap(List(String())),
 			"root":             OptionalString(),
 			"skip_install":     OptionalBool(),
 			"state":            OptionalString(),
@@ -113,20 +113,26 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				if in == nil {
 					return nil
 				}
-				if in, ok := in.(map[string]interface{}); ok {
+				if in, ok := in.([]interface{}); ok {
 					if len(in) > 0 {
 						out := map[string][]string{}
-						for key, in := range in {
-							out[key] = func(in interface{}) []string {
-								if in == nil {
-									return nil
-								}
-								var out []string
-								for _, in := range in.([]interface{}) {
-									out = append(out, string(ExpandString(in)))
-								}
-								return out
-							}(in)
+						for _, in := range in {
+							if in, ok := in.(map[string]interface{}); ok {
+								key := ExpandString(in["key"])
+								value := func(in interface{}) []string {
+									return func(in interface{}) []string {
+										if in == nil {
+											return nil
+										}
+										var out []string
+										for _, in := range in.([]interface{}) {
+											out = append(out, string(ExpandString(in)))
+										}
+										return out
+									}(in)
+								}(in["value"])
+								out[key] = value
+							}
 						}
 						return out
 					}
@@ -241,19 +247,22 @@ func FlattenResourceContainerdConfigInto(in kops.ContainerdConfig, out map[strin
 		}(in)
 	}(in.Packages)
 	out["registry_mirrors"] = func(in map[string][]string) interface{} {
-		return func(in map[string][]string) map[string]interface{} {
+		return func(in map[string][]string) []interface{} {
 			if in == nil {
 				return nil
 			}
-			out := map[string]interface{}{}
+			var out []interface{}
 			for key, in := range in {
-				out[key] = func(in []string) []interface{} {
-					var out []interface{}
-					for _, in := range in {
-						out = append(out, FlattenString(string(in)))
-					}
-					return out
-				}(in)
+				out = append(out, map[string]interface{}{
+					"key": key,
+					"value": func(in []string) []interface{} {
+						var out []interface{}
+						for _, in := range in {
+							out = append(out, FlattenString(string(in)))
+						}
+						return out
+					}(in),
+				})
 			}
 			return out
 		}(in)
