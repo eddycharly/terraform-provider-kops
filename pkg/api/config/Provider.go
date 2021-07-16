@@ -11,4 +11,6 @@ type Provider struct {
 	Klog *Klog
 	// Mock sets up a cloud mock for integration tests
 	Mock bool
+	// FeatureFlags contains feature flags to enable or disable
+	FeatureFlags []string
 }

@@ -5,6 +5,7 @@ import (
 	"flag"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -19,6 +20,7 @@ import (
 	"k8s.io/kops/cloudmock/aws/mockec2"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/client/simple/vfsclientset"
+	"k8s.io/kops/pkg/featureflag"
 	"k8s.io/kops/pkg/testutils"
 	"k8s.io/kops/upup/pkg/fi/cloudup/awsup"
 	"k8s.io/kops/util/pkg/vfs"
@@ -38,6 +40,9 @@ type options struct {
 func ConfigureProvider(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	providerConfig := configschemas.ExpandConfigProvider(d.Get("").(map[string]interface{}))
 	if err := initKlog(providerConfig.Klog); err != nil {
+		return nil, diag.FromErr(err)
+	}
+	if err := initFeatureFlags(providerConfig.FeatureFlags); err != nil {
 		return nil, diag.FromErr(err)
 	}
 	if err := initAwsCredentials(providerConfig.Aws); err != nil {
@@ -69,18 +74,6 @@ func setEnvVarSimple(name, value string) {
 	if value != "" {
 		os.Setenv(name, value)
 	}
-}
-
-func initKlog(config *config.Klog) error {
-	if config == nil {
-		return nil
-	}
-	flags := flag.NewFlagSet("klog", flag.ExitOnError)
-	if config.Verbosity != nil {
-		flags.Set("v", strconv.Itoa(*config.Verbosity))
-	}
-	klog.InitFlags(flags)
-	return nil
 }
 
 func initAwsCredentials(config *config.Aws) error {
@@ -136,6 +129,26 @@ func initOpenstackCredentials(config *config.Openstack) error {
 	setEnvVarSimple("OS_REGION_NAME", config.RegionName)
 	setEnvVarSimple("OS_APPLICATION_CREDENTIAL_ID", config.ApplicationCredentialId)
 	setEnvVarSimple("OS_APPLICATION_CREDENTIAL_SECRET", config.ApplicationCredentialSecret)
+	return nil
+}
+
+func initKlog(config *config.Klog) error {
+	if config == nil {
+		return nil
+	}
+	flags := flag.NewFlagSet("klog", flag.ExitOnError)
+	if config.Verbosity != nil {
+		flags.Set("v", strconv.Itoa(*config.Verbosity))
+	}
+	klog.InitFlags(flags)
+	return nil
+}
+
+func initFeatureFlags(config []string) error {
+	if config == nil || len(config) == 0 {
+		return nil
+	}
+	featureflag.ParseFlags(strings.Join(config, ","))
 	return nil
 }
 
