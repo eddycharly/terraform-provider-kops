@@ -11,11 +11,12 @@ var _ = Schema
 func ConfigProvider() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"state_store": RequiredString(),
-			"aws":         OptionalStruct(ConfigAws()),
-			"openstack":   OptionalStruct(ConfigOpenstack()),
-			"klog":        OptionalStruct(ConfigKlog()),
-			"mock":        OptionalBool(),
+			"state_store":   RequiredString(),
+			"aws":           OptionalStruct(ConfigAws()),
+			"openstack":     OptionalStruct(ConfigOpenstack()),
+			"klog":          OptionalStruct(ConfigKlog()),
+			"mock":          OptionalBool(),
+			"feature_flags": OptionalList(String()),
 		},
 	}
 
@@ -87,6 +88,18 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 		Mock: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["mock"]),
+		FeatureFlags: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["feature_flags"]),
 	}
 }
 
@@ -133,6 +146,15 @@ func FlattenConfigProviderInto(in config.Provider, out map[string]interface{}) {
 	out["mock"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Mock)
+	out["feature_flags"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.FeatureFlags)
 }
 
 func FlattenConfigProvider(in config.Provider) map[string]interface{} {

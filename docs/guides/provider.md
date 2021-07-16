@@ -87,6 +87,7 @@ The following arguments are supported:
 - `openstack` - (Optional) - [openstack](#openstack) - OpenStack contains the openstack configuration options.
 - `klog` - (Optional) - [klog](#klog) - Klog contains the klog configuration options.
 - `mock` - (Optional) - Bool - Mock sets up a cloud mock for integration tests.
+- `feature_flags` - (Optional) - List(String) - FeatureFlags contains feature flags to enable or disable.
 
 ## Nested resources
 

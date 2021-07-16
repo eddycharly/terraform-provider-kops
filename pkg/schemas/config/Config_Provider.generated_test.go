@@ -21,11 +21,12 @@ func TestExpandConfigProvider(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"state_store": "",
-					"aws":         nil,
-					"openstack":   nil,
-					"klog":        nil,
-					"mock":        false,
+					"state_store":   "",
+					"aws":           nil,
+					"openstack":     nil,
+					"klog":          nil,
+					"mock":          false,
+					"feature_flags": func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -43,11 +44,12 @@ func TestExpandConfigProvider(t *testing.T) {
 
 func TestFlattenConfigProviderInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"state_store": "",
-		"aws":         nil,
-		"openstack":   nil,
-		"klog":        nil,
-		"mock":        false,
+		"state_store":   "",
+		"aws":           nil,
+		"openstack":     nil,
+		"klog":          nil,
+		"mock":          false,
+		"feature_flags": func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in config.Provider
@@ -114,6 +116,17 @@ func TestFlattenConfigProviderInto(t *testing.T) {
 				in: func() config.Provider {
 					subject := config.Provider{}
 					subject.Mock = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "FeatureFlags - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.FeatureFlags = nil
 					return subject
 				}(),
 			},
@@ -133,11 +146,12 @@ func TestFlattenConfigProviderInto(t *testing.T) {
 
 func TestFlattenConfigProvider(t *testing.T) {
 	_default := map[string]interface{}{
-		"state_store": "",
-		"aws":         nil,
-		"openstack":   nil,
-		"klog":        nil,
-		"mock":        false,
+		"state_store":   "",
+		"aws":           nil,
+		"openstack":     nil,
+		"klog":          nil,
+		"mock":          false,
+		"feature_flags": func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in config.Provider
@@ -204,6 +218,17 @@ func TestFlattenConfigProvider(t *testing.T) {
 				in: func() config.Provider {
 					subject := config.Provider{}
 					subject.Mock = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "FeatureFlags - default",
+			args: args{
+				in: func() config.Provider {
+					subject := config.Provider{}
+					subject.FeatureFlags = nil
 					return subject
 				}(),
 			},
