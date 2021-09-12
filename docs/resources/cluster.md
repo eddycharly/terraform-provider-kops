@@ -998,8 +998,8 @@ NodeTerminationHandlerConfig determines the node termination handler configurati
 
 The following arguments are supported:
 
-- `enabled` - (Optional) - Bool - Enabled enables the node termination handler.<br />Default: true.
-- `enable_spot_interruption_draining` - (Optional) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Default: true.
+- `enabled` - (Required) - Bool - Enabled enables the node termination handler.<br />Default: true.
+- `enable_spot_interruption_draining` - (Required) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Default: true.
 - `enable_scheduled_event_draining` - (Optional) - Bool - EnableScheduledEventDraining makes node termination handler drain nodes before the maintenance window starts for an EC2 instance scheduled event.<br />Default: false.
 - `enable_prometheus_metrics` - (Optional) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
 - `enable_sqs_termination_draining` - (Optional) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.
@@ -1017,7 +1017,7 @@ The following arguments are supported:
 
 - `enabled` - (Optional) - Bool - Enabled enables the metrics server.<br />Default: false.
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
-- `insecure` - (Optional) - Bool - Insecure determines if API server will validate metrics server TLS cert.<br />Default: true.
+- `insecure` - (Required) - Bool - Insecure determines if API server will validate metrics server TLS cert.<br />Default: true.
 
 ### cert_manager_config
 
@@ -1296,7 +1296,7 @@ The following arguments are supported:
 - `monitor_aggregation` - (Optional) - String - MonitorAggregation sets the level of packet monitoring. Possible values are "low", "medium", or "maximum".<br />Default: medium.
 - `bpfct_global_tcp_max` - (Optional) - Int - BPFCTGlobalTCPMax is the maximum number of entries in the TCP CT table.<br />Default: 524288.
 - `bpfct_global_any_max` - (Optional) - Int - BPFCTGlobalAnyMax is the maximum number of entries in the non-TCP CT table.<br />Default: 262144.
-- `preallocate_bpf_maps` - (Optional) - Bool - PreallocateBPFMaps reduces the per-packet latency at the expense of up-front memory allocation.<br />Default: true.
+- `preallocate_bpf_maps` - (Required) - Bool - PreallocateBPFMaps reduces the per-packet latency at the expense of up-front memory allocation.<br />Default: true.
 - `sidecar_istio_proxy_image` - (Optional) - String - SidecarIstioProxyImage is the regular expression matching compatible Istio sidecar istio-proxy<br />container image names.<br />Default: cilium/istio_proxy.
 - `cluster_name` - (Optional) - String - ClusterName is the name of the cluster. It is only relevant when building a mesh of clusters.
 - `to_fqdns_dns_reject_response_code` - (Optional) - String - ToFqdnsDNSRejectResponseCode sets the DNS response code for rejecting DNS requests.<br />Possible values are "nameError" or "refused".<br />Default: refused.
@@ -1308,7 +1308,7 @@ The following arguments are supported:
 - `enable_host_reachable_services` - (Optional) - Bool - EnableHostReachableServices configures Cilium to enable services to be<br />reached from the host namespace in addition to pod namespaces.<br />https://docs.cilium.io/en/v1.9/gettingstarted/host-services/<br />Default: false.
 - `enable_node_port` - (Optional) - Bool - EnableNodePort replaces kube-proxy with Cilium's BPF implementation.<br />Requires spec.kubeProxy.enabled be set to false.<br />Default: false.
 - `etcd_managed` - (Optional) - Bool - EtcdManagd installs an additional etcd cluster that is used for Cilium state change.<br />The cluster is operated by cilium-etcd-operator.<br />Default: false.
-- `enable_remote_node_identity` - (Optional) - Bool - EnableRemoteNodeIdentity enables the remote-node-identity added in Cilium 1.7.0.<br />Default: true.
+- `enable_remote_node_identity` - (Required) - Bool - EnableRemoteNodeIdentity enables the remote-node-identity added in Cilium 1.7.0.<br />Default: true.
 - `hubble` - (Optional) - [hubble_spec](#hubble_spec) - Hubble configures the Hubble service on the Cilium agent.
 - `remove_cbr_bridge` - (Optional) - Bool - RemoveCbrBridge is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `restart_pods` - (Optional) - Bool - RestartPods is not implemented and may be removed in the future.<br />Setting this has no effect.
@@ -1564,8 +1564,8 @@ The following arguments are supported:
 - `expander` - (Optional) - String - Expander determines the strategy for which instance group gets expanded.<br />Supported values: least-waste, most-pods, random.<br />Default: least-waste.
 - `balance_similar_node_groups` - (Optional) - Bool - BalanceSimilarNodeGroups makes cluster autoscaler treat similar node groups as one.<br />Default: false.
 - `scale_down_utilization_threshold` - (Optional) - String - ScaleDownUtilizationThreshold determines the utilization threshold for node scale-down.<br />Default: 0.5.
-- `skip_nodes_with_system_pods` - (Optional) - Bool - SkipNodesWithSystemPods makes cluster autoscaler skip scale-down of nodes with non-DaemonSet pods in the kube-system namespace.<br />Default: true.
-- `skip_nodes_with_local_storage` - (Optional) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
+- `skip_nodes_with_system_pods` - (Required) - Bool - SkipNodesWithSystemPods makes cluster autoscaler skip scale-down of nodes with non-DaemonSet pods in the kube-system namespace.<br />Default: true.
+- `skip_nodes_with_local_storage` - (Required) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
 - `new_pod_scale_up_delay` - (Optional) - String - NewPodScaleUpDelay causes cluster autoscaler to ignore unschedulable pods until they are a certain "age", regardless of the scan-interval<br />Default: 0s.
 - `scale_down_delay_after_add` - (Optional) - String - ScaleDownDelayAfterAdd determines the time after scale up that scale down evaluation resumes<br />Default: 10m0s.
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.

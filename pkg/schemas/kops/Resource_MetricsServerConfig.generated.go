@@ -15,7 +15,7 @@ func ResourceMetricsServerConfig() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"enabled":  OptionalBool(),
 			"image":    OptionalString(),
-			"insecure": OptionalBool(),
+			"insecure": RequiredBool(),
 		},
 	}
 
@@ -66,12 +66,6 @@ func ExpandResourceMetricsServerConfig(in map[string]interface{}) kops.MetricsSe
 			}(in)
 		}(in["image"]),
 		Insecure: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil

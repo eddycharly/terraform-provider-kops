@@ -18,8 +18,8 @@ func ResourceClusterAutoscalerConfig() *schema.Resource {
 			"expander":                         OptionalString(),
 			"balance_similar_node_groups":      OptionalBool(),
 			"scale_down_utilization_threshold": OptionalString(),
-			"skip_nodes_with_system_pods":      OptionalBool(),
-			"skip_nodes_with_local_storage":    OptionalBool(),
+			"skip_nodes_with_system_pods":      RequiredBool(),
+			"skip_nodes_with_local_storage":    RequiredBool(),
 			"new_pod_scale_up_delay":           OptionalString(),
 			"scale_down_delay_after_add":       OptionalString(),
 			"image":                            OptionalString(),
@@ -113,12 +113,6 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["scale_down_utilization_threshold"]),
 		SkipNodesWithSystemPods: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
@@ -132,12 +126,6 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 			}(in)
 		}(in["skip_nodes_with_system_pods"]),
 		SkipNodesWithLocalStorage: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
