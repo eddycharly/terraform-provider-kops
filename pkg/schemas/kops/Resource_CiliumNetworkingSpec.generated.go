@@ -73,7 +73,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"monitor_aggregation":               OptionalString(),
 			"bpfct_global_tcp_max":              OptionalInt(),
 			"bpfct_global_any_max":              OptionalInt(),
-			"preallocate_bpf_maps":              OptionalBool(),
+			"preallocate_bpf_maps":              RequiredBool(),
 			"sidecar_istio_proxy_image":         OptionalString(),
 			"cluster_name":                      OptionalString(),
 			"to_fqdns_dns_reject_response_code": OptionalString(),
@@ -85,7 +85,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"enable_host_reachable_services":    OptionalBool(),
 			"enable_node_port":                  OptionalBool(),
 			"etcd_managed":                      OptionalBool(),
-			"enable_remote_node_identity":       OptionalBool(),
+			"enable_remote_node_identity":       RequiredBool(),
 			"hubble":                            OptionalStruct(ResourceHubbleSpec()),
 			"remove_cbr_bridge":                 OptionalBool(),
 			"restart_pods":                      OptionalBool(),
@@ -422,12 +422,6 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 			return bool(ExpandBool(in))
 		}(in["etcd_managed"]),
 		EnableRemoteNodeIdentity: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil

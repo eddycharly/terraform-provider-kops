@@ -14,8 +14,8 @@ var _ = Schema
 func ResourceNodeTerminationHandlerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":                           OptionalBool(),
-			"enable_spot_interruption_draining": OptionalBool(),
+			"enabled":                           RequiredBool(),
+			"enable_spot_interruption_draining": RequiredBool(),
 			"enable_scheduled_event_draining":   OptionalBool(),
 			"enable_prometheus_metrics":         OptionalBool(),
 			"enable_sqs_termination_draining":   OptionalBool(),
@@ -34,12 +34,6 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 	}
 	return kops.NodeTerminationHandlerConfig{
 		Enabled: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
@@ -53,12 +47,6 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 			}(in)
 		}(in["enabled"]),
 		EnableSpotInterruptionDraining: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil

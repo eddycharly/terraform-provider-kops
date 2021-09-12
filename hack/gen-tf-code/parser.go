@@ -10,7 +10,8 @@ import (
 
 type _field struct {
 	reflect.StructField
-	Owner reflect.Type
+	Owner   reflect.Type
+	Default string
 }
 
 type _nested struct {
@@ -19,9 +20,10 @@ type _nested struct {
 }
 
 type _struct struct {
-	doc    string
-	fields map[string]string
-	nested []_nested
+	doc      string
+	fields   map[string]string
+	defaults map[string]string
+	nested   []_nested
 }
 
 func (s _struct) lookup(in string, c map[string]map[string]_struct) string {
@@ -48,8 +50,9 @@ type parser struct {
 
 func (p *parser) parseStruct(pack *packages.Package, typeSpec *ast.TypeSpec, doc string, file *ast.File) _struct {
 	ret := _struct{
-		doc:    doc,
-		fields: make(map[string]string),
+		doc:      doc,
+		fields:   make(map[string]string),
+		defaults: make(map[string]string),
 	}
 	structure, ok := typeSpec.Type.(*ast.StructType)
 	if ok {
@@ -74,6 +77,13 @@ func (p *parser) parseStruct(pack *packages.Package, typeSpec *ast.TypeSpec, doc
 			} else {
 				for _, name := range field.Names {
 					ret.fields[name.Name] = field.Doc.Text()
+					if field.Doc != nil {
+						for _, line := range field.Doc.List {
+							if strings.HasPrefix(line.Text, "// Default:") {
+								ret.defaults[name.Name] = strings.TrimSpace(strings.ReplaceAll(line.Text, "// Default:", ""))
+							}
+						}
+					}
 				}
 			}
 		}

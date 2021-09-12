@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"text/template"
 )
@@ -44,7 +45,23 @@ func reflectFuncs(baseType reflect.Type, mappings map[string]string, parser *par
 	}
 }
 
-func optionFuncs(dataSource bool, optionsMap map[reflect.Type]*options) template.FuncMap {
+func optionFuncs(dataSource bool, optionsMap map[reflect.Type]*options, parser *parser) template.FuncMap {
+	isRequired := func(in _field) bool {
+		req := optionsMap[in.Owner].required.Has(in.Name)
+		if req {
+			return req
+		}
+		// attempt to detect invalid config
+		if !dataSource {
+			pkg := in.Owner.PkgPath()
+			str := in.Owner.Name()
+			fld := in.Name
+			if parser.packs[pkg][str].defaults[fld] == "true" {
+				log.Printf("WARNING: %s/%s/%s is not marked required but it seems to have a non zero value default", pkg, str, fld)
+			}
+		}
+		return false
+	}
 	return template.FuncMap{
 		"needsSchema": func(t reflect.Type) bool {
 			return !optionsMap[t].noSchema
@@ -58,20 +75,18 @@ func optionFuncs(dataSource bool, optionsMap map[reflect.Type]*options) template
 		"isExcluded": func(in _field) bool {
 			return optionsMap[in.Owner].exclude.Has(in.Name)
 		},
-		"isRequired": func(in _field) bool {
-			return optionsMap[in.Owner].required.Has(in.Name)
-		},
+		"isRequired": isRequired,
 		"isOptional": func(in _field) bool {
 			if dataSource {
 				return optionsMap[in.Owner].computed.Has(in.Name)
 			}
-			return !optionsMap[in.Owner].required.Has(in.Name) && !optionsMap[in.Owner].computedOnly.Has(in.Name)
+			return !isRequired(in) && !optionsMap[in.Owner].computedOnly.Has(in.Name)
 		},
 		"isNullable": func(in _field) bool {
 			return optionsMap[in.Owner].nullable.Has(in.Name)
 		},
 		"isComputed": func(in _field) bool {
-			if optionsMap[in.Owner].required.Has(in.Name) {
+			if isRequired(in) {
 				return false
 			}
 			return dataSource || (optionsMap[in.Owner].computed.Has(in.Name) || optionsMap[in.Owner].computedOnly.Has(in.Name))
