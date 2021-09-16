@@ -25,7 +25,7 @@ func ResourceKubeProxyConfig() *schema.Resource {
 			"bind_address":           OptionalString(),
 			"master":                 OptionalString(),
 			"metrics_bind_address":   OptionalString(),
-			"enabled":                OptionalBool(),
+			"enabled":                RequiredBool(),
 			"proxy_mode":             OptionalString(),
 			"ip_vs_exclude_cidr_s":   OptionalList(String()),
 			"ip_vs_min_sync_period":  OptionalDuration(),
@@ -95,12 +95,6 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 			}(in)
 		}(in["metrics_bind_address"]),
 		Enabled: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
