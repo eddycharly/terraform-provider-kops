@@ -730,7 +730,7 @@ The following arguments are supported:
 - `bind_address` - (Optional) - String - BindAddress is IP address for the proxy server to serve on.
 - `master` - (Optional) - String - Master is the address of the Kubernetes API server (overrides any value in kubeconfig).
 - `metrics_bind_address` - (Optional) - String - MetricsBindAddress is the IP address for the metrics server to serve on.
-- `enabled` - (Optional) - Bool - Enabled allows enabling or disabling kube-proxy.
+- `enabled` - (Required) - Bool - Enabled allows enabling or disabling kube-proxy.
 - `proxy_mode` - (Optional) - String - Which proxy mode to use: (userspace, iptables(default), ipvs).
 - `ip_vs_exclude_cidr_s` - (Optional) - List(String) - IPVSExcludeCIDRS is comma-separated list of CIDR's which the ipvs proxier should not touch when cleaning up IPVS rules.
 - `ip_vs_min_sync_period` - (Optional) - Duration - IPVSMinSyncPeriod is the minimum interval of how often the ipvs rules can be refreshed as endpoints and services change (e.g. '5s', '1m', '2h22m').
