@@ -30,4 +30,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GORELEASER_TOKEN }}
         with:
           version: latest
-          args: release --rm-dist
+          args: release --rm-dist --timeout 60m
