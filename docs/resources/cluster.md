@@ -1027,8 +1027,8 @@ CertManagerConfig determines the cert manager configuration.
 
 The following arguments are supported:
 
-- `enabled` - (Optional) - Bool - Enabled enables the cert manager.<br />Default: false.
-- `managed` - (Optional) - Bool - Managed controls if cert-manager is manged and deployed by kOps.<br />The deployment of cert-manager is skipped if this is set to false.
+- `enabled` - (Required) - Bool - Enabled enables the cert manager.<br />Default: false.
+- `managed` - (Required) - Bool - Managed controls if cert-manager is manged and deployed by kOps.<br />The deployment of cert-manager is skipped if this is set to false.
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `default_issuer` - (Optional) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
 
