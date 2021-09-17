@@ -17,6 +17,7 @@ func DataSourceClusterAutoscalerConfig() *schema.Resource {
 			"enabled":                          ComputedBool(),
 			"expander":                         ComputedString(),
 			"balance_similar_node_groups":      ComputedBool(),
+			"aws_use_static_instance_list":     ComputedBool(),
 			"scale_down_utilization_threshold": ComputedString(),
 			"skip_nodes_with_system_pods":      ComputedBool(),
 			"skip_nodes_with_local_storage":    ComputedBool(),
@@ -93,6 +94,25 @@ func ExpandDataSourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clu
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["balance_similar_node_groups"]),
+		AWSUseStaticInstanceList: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["aws_use_static_instance_list"]),
 		ScaleDownUtilizationThreshold: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -279,6 +299,16 @@ func FlattenDataSourceClusterAutoscalerConfigInto(in kops.ClusterAutoscalerConfi
 			}(*in)
 		}(in)
 	}(in.BalanceSimilarNodeGroups)
+	out["aws_use_static_instance_list"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.AWSUseStaticInstanceList)
 	out["scale_down_utilization_threshold"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
