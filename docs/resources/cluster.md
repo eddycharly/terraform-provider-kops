@@ -1563,6 +1563,7 @@ The following arguments are supported:
 - `enabled` - (Optional) - Bool - Enabled enables the cluster autoscaler.<br />Default: false.
 - `expander` - (Optional) - String - Expander determines the strategy for which instance group gets expanded.<br />Supported values: least-waste, most-pods, random.<br />Default: least-waste.
 - `balance_similar_node_groups` - (Optional) - Bool - BalanceSimilarNodeGroups makes cluster autoscaler treat similar node groups as one.<br />Default: false.
+- `aws_use_static_instance_list` - (Optional) - Bool - AWSUseStaticInstanceList makes cluster autoscaler to use statically defined set of AWS EC2 Instance List.<br />Default: false.
 - `scale_down_utilization_threshold` - (Optional) - String - ScaleDownUtilizationThreshold determines the utilization threshold for node scale-down.<br />Default: 0.5.
 - `skip_nodes_with_system_pods` - (Required) - Bool - SkipNodesWithSystemPods makes cluster autoscaler skip scale-down of nodes with non-DaemonSet pods in the kube-system namespace.<br />Default: true.
 - `skip_nodes_with_local_storage` - (Required) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.

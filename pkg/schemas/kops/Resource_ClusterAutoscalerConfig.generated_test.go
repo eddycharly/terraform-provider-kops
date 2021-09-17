@@ -24,6 +24,7 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 					"enabled":                          nil,
 					"expander":                         nil,
 					"balance_similar_node_groups":      nil,
+					"aws_use_static_instance_list":     nil,
 					"scale_down_utilization_threshold": nil,
 					"skip_nodes_with_system_pods":      nil,
 					"skip_nodes_with_local_storage":    nil,
@@ -52,6 +53,7 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 		"enabled":                          nil,
 		"expander":                         nil,
 		"balance_similar_node_groups":      nil,
+		"aws_use_static_instance_list":     nil,
 		"scale_down_utilization_threshold": nil,
 		"skip_nodes_with_system_pods":      nil,
 		"skip_nodes_with_local_storage":    nil,
@@ -104,6 +106,17 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.BalanceSimilarNodeGroups = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AwsUseStaticInstanceList - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.AWSUseStaticInstanceList = nil
 					return subject
 				}(),
 			},
@@ -214,6 +227,7 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 		"enabled":                          nil,
 		"expander":                         nil,
 		"balance_similar_node_groups":      nil,
+		"aws_use_static_instance_list":     nil,
 		"scale_down_utilization_threshold": nil,
 		"skip_nodes_with_system_pods":      nil,
 		"skip_nodes_with_local_storage":    nil,
@@ -266,6 +280,17 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.BalanceSimilarNodeGroups = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AwsUseStaticInstanceList - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.AWSUseStaticInstanceList = nil
 					return subject
 				}(),
 			},
