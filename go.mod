@@ -42,7 +42,7 @@ require (
 	golang.org/x/tools v0.1.6
 	k8s.io/api v0.21.3
 	k8s.io/apimachinery v0.22.1
-	k8s.io/client-go v0.22.0
+	k8s.io/client-go v0.22.2
 	k8s.io/klog v1.0.0
 	k8s.io/kops v1.21.1
 )
