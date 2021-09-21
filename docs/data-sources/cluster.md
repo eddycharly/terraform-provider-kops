@@ -1531,6 +1531,8 @@ ClusterSecrets defines cluster secrets.
 The following arguments are supported:
 
 - `docker_config` - (Sensitive) - (Computed) - String - DockerConfig holds a valid docker config.<br />After creating a dockerconfig secret, a /root/.docker/config.json file will be added to newly created nodes.<br />This file will be used by Kubernetes to authenticate to container registries and will also work when using containerd as container runtime.
+- `cluster_ca_cert` - (Computed) - String
+- `cluster_ca_key` - (Computed) - String
 
 
 
