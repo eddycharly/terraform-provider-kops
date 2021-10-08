@@ -39,7 +39,7 @@ require (
 	github.com/aws/aws-sdk-go v1.40.51
 	github.com/google/go-cmp v0.5.6
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.7.1
-	golang.org/x/tools v0.1.6
+	golang.org/x/tools v0.1.7
 	k8s.io/api v0.21.3
 	k8s.io/apimachinery v0.22.1
 	k8s.io/client-go v0.22.0
