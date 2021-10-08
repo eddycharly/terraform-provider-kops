@@ -61,7 +61,11 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	secrets, err := GetClusterSecrets(secretStore)
+	keyStore, err := clientset.KeyStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	secrets, err := GetClusterSecrets(secretStore, keyStore)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +101,11 @@ func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err != nil {
 		return nil, err
 	}
-	secrets, err = CreateOrUpdateClusterSecrets(secretStore, secrets)
+	keyStore, err := clientset.KeyStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	secrets, err = CreateOrUpdateClusterSecrets(secretStore, keyStore, secrets)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +140,11 @@ func UpdateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err != nil {
 		return nil, err
 	}
-	secrets, err = CreateOrUpdateClusterSecrets(secretStore, secrets)
+	keyStore, err := clientset.KeyStore(kc)
+	if err != nil {
+		return nil, err
+	}
+	secrets, err = CreateOrUpdateClusterSecrets(secretStore, keyStore, secrets)
 	if err != nil {
 		return nil, err
 	}
