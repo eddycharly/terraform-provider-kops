@@ -63,6 +63,7 @@ func DataSourceCluster() *schema.Resource {
 			"external_dns":                      ComputedStruct(kopsschemas.DataSourceExternalDNSConfig()),
 			"ntp":                               ComputedStruct(kopsschemas.DataSourceNTPConfig()),
 			"node_termination_handler":          ComputedStruct(kopsschemas.DataSourceNodeTerminationHandlerConfig()),
+			"node_problem_detector":             ComputedStruct(kopsschemas.DataSourceNodeProblemDetectorConfig()),
 			"metrics_server":                    ComputedStruct(kopsschemas.DataSourceMetricsServerConfig()),
 			"cert_manager":                      ComputedStruct(kopsschemas.DataSourceCertManagerConfig()),
 			"aws_load_balancer_controller":      ComputedStruct(kopsschemas.DataSourceAWSLoadBalancerControllerConfig()),

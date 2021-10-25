@@ -13,6 +13,7 @@ func ResourceClusterSubnetSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name":        RequiredString(),
 			"cidr":        OptionalComputedString(),
+			"ipv6_cidr":   OptionalString(),
 			"zone":        RequiredString(),
 			"region":      OptionalString(),
 			"provider_id": RequiredString(),
@@ -36,6 +37,9 @@ func ExpandResourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubn
 		CIDR: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cidr"]),
+		IPv6CIDR: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["ipv6_cidr"]),
 		Zone: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["zone"]),
@@ -64,6 +68,9 @@ func FlattenResourceClusterSubnetSpecInto(in kops.ClusterSubnetSpec, out map[str
 	out["cidr"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CIDR)
+	out["ipv6_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IPv6CIDR)
 	out["zone"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Zone)

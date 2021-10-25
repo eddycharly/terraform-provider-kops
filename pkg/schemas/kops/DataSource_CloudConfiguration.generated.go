@@ -17,6 +17,7 @@ func DataSourceCloudConfiguration() *schema.Resource {
 			"multizone":                      ComputedBool(),
 			"node_tags":                      ComputedString(),
 			"node_instance_prefix":           ComputedString(),
+			"node_ip_families":               ComputedList(String()),
 			"gce_service_account":            ComputedString(),
 			"disable_security_group_ingress": ComputedBool(),
 			"elb_security_group":             ComputedString(),
@@ -119,6 +120,18 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["node_instance_prefix"]),
+		NodeIPFamilies: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["node_ip_families"]),
 		GCEServiceAccount: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["gce_service_account"]),
@@ -429,6 +442,15 @@ func FlattenDataSourceCloudConfigurationInto(in kops.CloudConfiguration, out map
 			}(*in)
 		}(in)
 	}(in.NodeInstancePrefix)
+	out["node_ip_families"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.NodeIPFamilies)
 	out["gce_service_account"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.GCEServiceAccount)

@@ -23,6 +23,8 @@ func TestExpandDataSourceKubeDNSConfig(t *testing.T) {
 				in: map[string]interface{}{
 					"cache_max_size":       0,
 					"cache_max_concurrent": 0,
+					"tolerations":          func() []interface{} { return nil }(),
+					"affinity":             nil,
 					"core_dns_image":       "",
 					"cpa_image":            "",
 					"domain":               "",
@@ -56,6 +58,8 @@ func TestFlattenDataSourceKubeDNSConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"cache_max_size":       0,
 		"cache_max_concurrent": 0,
+		"tolerations":          func() []interface{} { return nil }(),
+		"affinity":             nil,
 		"core_dns_image":       "",
 		"cpa_image":            "",
 		"domain":               "",
@@ -103,6 +107,28 @@ func TestFlattenDataSourceKubeDNSConfigInto(t *testing.T) {
 				in: func() kops.KubeDNSConfig {
 					subject := kops.KubeDNSConfig{}
 					subject.CacheMaxConcurrent = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Tolerations - default",
+			args: args{
+				in: func() kops.KubeDNSConfig {
+					subject := kops.KubeDNSConfig{}
+					subject.Tolerations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Affinity - default",
+			args: args{
+				in: func() kops.KubeDNSConfig {
+					subject := kops.KubeDNSConfig{}
+					subject.Affinity = nil
 					return subject
 				}(),
 			},
@@ -278,6 +304,8 @@ func TestFlattenDataSourceKubeDNSConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"cache_max_size":       0,
 		"cache_max_concurrent": 0,
+		"tolerations":          func() []interface{} { return nil }(),
+		"affinity":             nil,
 		"core_dns_image":       "",
 		"cpa_image":            "",
 		"domain":               "",
@@ -325,6 +353,28 @@ func TestFlattenDataSourceKubeDNSConfig(t *testing.T) {
 				in: func() kops.KubeDNSConfig {
 					subject := kops.KubeDNSConfig{}
 					subject.CacheMaxConcurrent = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Tolerations - default",
+			args: args{
+				in: func() kops.KubeDNSConfig {
+					subject := kops.KubeDNSConfig{}
+					subject.Tolerations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Affinity - default",
+			args: args{
+				in: func() kops.KubeDNSConfig {
+					subject := kops.KubeDNSConfig{}
+					subject.Affinity = nil
 					return subject
 				}(),
 			},

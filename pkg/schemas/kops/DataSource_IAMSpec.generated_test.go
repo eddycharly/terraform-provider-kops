@@ -21,10 +21,11 @@ func TestExpandDataSourceIAMSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"legacy":                               false,
-					"allow_container_registry":             false,
-					"permissions_boundary":                 nil,
-					"service_account_external_permissions": func() []interface{} { return nil }(),
+					"legacy":                   false,
+					"allow_container_registry": false,
+					"permissions_boundary":     nil,
+					"use_service_account_external_permissions": nil,
+					"service_account_external_permissions":     func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -42,10 +43,11 @@ func TestExpandDataSourceIAMSpec(t *testing.T) {
 
 func TestFlattenDataSourceIAMSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"legacy":                               false,
-		"allow_container_registry":             false,
-		"permissions_boundary":                 nil,
-		"service_account_external_permissions": func() []interface{} { return nil }(),
+		"legacy":                   false,
+		"allow_container_registry": false,
+		"permissions_boundary":     nil,
+		"use_service_account_external_permissions": nil,
+		"service_account_external_permissions":     func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.IAMSpec
@@ -90,6 +92,17 @@ func TestFlattenDataSourceIAMSpecInto(t *testing.T) {
 				in: func() kops.IAMSpec {
 					subject := kops.IAMSpec{}
 					subject.PermissionsBoundary = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "UseServiceAccountExternalPermissions - default",
+			args: args{
+				in: func() kops.IAMSpec {
+					subject := kops.IAMSpec{}
+					subject.UseServiceAccountExternalPermissions = nil
 					return subject
 				}(),
 			},
@@ -120,10 +133,11 @@ func TestFlattenDataSourceIAMSpecInto(t *testing.T) {
 
 func TestFlattenDataSourceIAMSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"legacy":                               false,
-		"allow_container_registry":             false,
-		"permissions_boundary":                 nil,
-		"service_account_external_permissions": func() []interface{} { return nil }(),
+		"legacy":                   false,
+		"allow_container_registry": false,
+		"permissions_boundary":     nil,
+		"use_service_account_external_permissions": nil,
+		"service_account_external_permissions":     func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.IAMSpec
@@ -168,6 +182,17 @@ func TestFlattenDataSourceIAMSpec(t *testing.T) {
 				in: func() kops.IAMSpec {
 					subject := kops.IAMSpec{}
 					subject.PermissionsBoundary = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "UseServiceAccountExternalPermissions - default",
+			args: args{
+				in: func() kops.IAMSpec {
+					subject := kops.IAMSpec{}
+					subject.UseServiceAccountExternalPermissions = nil
 					return subject
 				}(),
 			},

@@ -69,6 +69,7 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					"external_dns":                      nil,
 					"ntp":                               nil,
 					"node_termination_handler":          nil,
+					"node_problem_detector":             nil,
 					"metrics_server":                    nil,
 					"cert_manager":                      nil,
 					"aws_load_balancer_controller":      nil,
@@ -155,6 +156,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		"external_dns":                      nil,
 		"ntp":                               nil,
 		"node_termination_handler":          nil,
+		"node_problem_detector":             nil,
 		"metrics_server":                    nil,
 		"cert_manager":                      nil,
 		"aws_load_balancer_controller":      nil,
@@ -715,6 +717,17 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.NodeTerminationHandler = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeProblemDetector - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.NodeProblemDetector = nil
 					return subject
 				}(),
 			},
@@ -1013,6 +1026,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		"external_dns":                      nil,
 		"ntp":                               nil,
 		"node_termination_handler":          nil,
+		"node_problem_detector":             nil,
 		"metrics_server":                    nil,
 		"cert_manager":                      nil,
 		"aws_load_balancer_controller":      nil,
@@ -1573,6 +1587,17 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.NodeTerminationHandler = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeProblemDetector - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.NodeProblemDetector = nil
 					return subject
 				}(),
 			},

@@ -23,6 +23,7 @@ func TestExpandDataSourceClusterSubnetSpec(t *testing.T) {
 				in: map[string]interface{}{
 					"name":        "",
 					"cidr":        "",
+					"ipv6_cidr":   "",
 					"zone":        "",
 					"region":      "",
 					"provider_id": "",
@@ -48,6 +49,7 @@ func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"name":        "",
 		"cidr":        "",
+		"ipv6_cidr":   "",
 		"zone":        "",
 		"region":      "",
 		"provider_id": "",
@@ -87,6 +89,17 @@ func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
 					subject.CIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6Cidr - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.IPv6CIDR = ""
 					return subject
 				}(),
 			},
@@ -174,6 +187,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"name":        "",
 		"cidr":        "",
+		"ipv6_cidr":   "",
 		"zone":        "",
 		"region":      "",
 		"provider_id": "",
@@ -213,6 +227,17 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
 					subject.CIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6Cidr - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.IPv6CIDR = ""
 					return subject
 				}(),
 			},

@@ -15,6 +15,7 @@ func ResourceNodeLocalDNSConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":             OptionalBool(),
+			"image":               OptionalString(),
 			"local_ip":            OptionalString(),
 			"forward_to_kube_dns": OptionalBool(),
 			"memory_request":      OptionalQuantity(),
@@ -49,6 +50,25 @@ func ExpandResourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalD
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
+		Image: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["image"]),
 		LocalIP: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["local_ip"]),
@@ -123,6 +143,16 @@ func FlattenResourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map[s
 			}(*in)
 		}(in)
 	}(in.Enabled)
+	out["image"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Image)
 	out["local_ip"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.LocalIP)

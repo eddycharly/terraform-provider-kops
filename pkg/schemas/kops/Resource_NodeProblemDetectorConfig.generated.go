@@ -11,26 +11,26 @@ import (
 
 var _ = Schema
 
-func DataSourceNodeLocalDNSConfig() *schema.Resource {
+func ResourceNodeProblemDetectorConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":             ComputedBool(),
-			"image":               ComputedString(),
-			"local_ip":            ComputedString(),
-			"forward_to_kube_dns": ComputedBool(),
-			"memory_request":      ComputedQuantity(),
-			"cpu_request":         ComputedQuantity(),
+			"enabled":        OptionalBool(),
+			"image":          OptionalString(),
+			"memory_request": OptionalQuantity(),
+			"cpu_request":    OptionalQuantity(),
+			"memory_limit":   OptionalQuantity(),
+			"cpu_limit":      OptionalQuantity(),
 		},
 	}
 
 	return res
 }
 
-func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLocalDNSConfig {
+func ExpandResourceNodeProblemDetectorConfig(in map[string]interface{}) kops.NodeProblemDetectorConfig {
 	if in == nil {
-		panic("expand NodeLocalDNSConfig failure, in is nil")
+		panic("expand NodeProblemDetectorConfig failure, in is nil")
 	}
-	return kops.NodeLocalDNSConfig{
+	return kops.NodeProblemDetectorConfig{
 		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -69,28 +69,6 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
-		LocalIP: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["local_ip"]),
-		ForwardToKubeDNS: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["forward_to_kube_dns"]),
 		MemoryRequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
@@ -129,10 +107,48 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
+		MemoryLimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
+		}(in["memory_limit"]),
+		CPULimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
+		}(in["cpu_limit"]),
 	}
 }
 
-func FlattenDataSourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map[string]interface{}) {
+func FlattenResourceNodeProblemDetectorConfigInto(in kops.NodeProblemDetectorConfig, out map[string]interface{}) {
 	out["enabled"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -153,19 +169,6 @@ func FlattenDataSourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map
 			}(*in)
 		}(in)
 	}(in.Image)
-	out["local_ip"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.LocalIP)
-	out["forward_to_kube_dns"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
-		}(in)
-	}(in.ForwardToKubeDNS)
 	out["memory_request"] = func(in *resource.Quantity) interface{} {
 		return func(in *resource.Quantity) interface{} {
 			if in == nil {
@@ -186,10 +189,30 @@ func FlattenDataSourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map
 			}(*in)
 		}(in)
 	}(in.CPURequest)
+	out["memory_limit"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.MemoryLimit)
+	out["cpu_limit"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPULimit)
 }
 
-func FlattenDataSourceNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{} {
+func FlattenResourceNodeProblemDetectorConfig(in kops.NodeProblemDetectorConfig) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourceNodeLocalDNSConfigInto(in, out)
+	FlattenResourceNodeProblemDetectorConfigInto(in, out)
 	return out
 }

@@ -17,6 +17,7 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"image":                                        ComputedString(),
 			"disable_basic_auth":                           ComputedBool(),
+			"log_format":                                   ComputedString(),
 			"log_level":                                    ComputedInt(),
 			"cloud_provider":                               ComputedString(),
 			"secure_port":                                  ComputedInt(),
@@ -149,6 +150,9 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["disable_basic_auth"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
@@ -1405,6 +1409,9 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 			}(*in)
 		}(in)
 	}(in.DisableBasicAuth)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogLevel)

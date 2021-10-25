@@ -23,6 +23,7 @@ func TestExpandDataSourceKubeAPIServerConfig(t *testing.T) {
 				in: map[string]interface{}{
 					"image":                                        "",
 					"disable_basic_auth":                           nil,
+					"log_format":                                   "",
 					"log_level":                                    0,
 					"cloud_provider":                               "",
 					"secure_port":                                  0,
@@ -141,6 +142,7 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"image":                                        "",
 		"disable_basic_auth":                           nil,
+		"log_format":                                   "",
 		"log_level":                                    0,
 		"cloud_provider":                               "",
 		"secure_port":                                  0,
@@ -273,6 +275,17 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
 					subject.DisableBasicAuth = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeAPIServerConfig {
+					subject := kops.KubeAPIServerConfig{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -1383,6 +1396,7 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"image":                                        "",
 		"disable_basic_auth":                           nil,
+		"log_format":                                   "",
 		"log_level":                                    0,
 		"cloud_provider":                               "",
 		"secure_port":                                  0,
@@ -1515,6 +1529,17 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
 					subject.DisableBasicAuth = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeAPIServerConfig {
+					subject := kops.KubeAPIServerConfig{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},

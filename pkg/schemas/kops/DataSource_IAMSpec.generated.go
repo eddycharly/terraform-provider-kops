@@ -13,10 +13,11 @@ var _ = Schema
 func DataSourceIAMSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"legacy":                               ComputedBool(),
-			"allow_container_registry":             ComputedBool(),
-			"permissions_boundary":                 ComputedString(),
-			"service_account_external_permissions": ComputedList(DataSourceServiceAccountExternalPermission()),
+			"legacy":                   ComputedBool(),
+			"allow_container_registry": ComputedBool(),
+			"permissions_boundary":     ComputedString(),
+			"use_service_account_external_permissions": ComputedBool(),
+			"service_account_external_permissions":     ComputedList(DataSourceServiceAccountExternalPermission()),
 		},
 	}
 
@@ -53,6 +54,25 @@ func ExpandDataSourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["permissions_boundary"]),
+		UseServiceAccountExternalPermissions: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["use_service_account_external_permissions"]),
 		ServiceAccountExternalPermissions: func(in interface{}) []kops.ServiceAccountExternalPermission {
 			return func(in interface{}) []kops.ServiceAccountExternalPermission {
 				if in == nil {
@@ -90,6 +110,16 @@ func FlattenDataSourceIAMSpecInto(in kops.IAMSpec, out map[string]interface{}) {
 			}(*in)
 		}(in)
 	}(in.PermissionsBoundary)
+	out["use_service_account_external_permissions"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.UseServiceAccountExternalPermissions)
 	out["service_account_external_permissions"] = func(in []kops.ServiceAccountExternalPermission) interface{} {
 		return func(in []kops.ServiceAccountExternalPermission) []interface{} {
 			var out []interface{}

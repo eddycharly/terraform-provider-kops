@@ -39,6 +39,7 @@ func DataSourceCalicoNetworkingSpec() *schema.Resource {
 			"typha_prometheus_metrics_enabled":   ComputedBool(),
 			"typha_prometheus_metrics_port":      ComputedInt(),
 			"typha_replicas":                     ComputedInt(),
+			"vxlan_mode":                         ComputedString(),
 			"wireguard_enabled":                  ComputedBool(),
 		},
 	}
@@ -94,8 +95,24 @@ func ExpandDataSourceCalicoNetworkingSpec(in map[string]interface{}) kops.Calico
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		CrossSubnet: func(in interface{}) bool {
-			return bool(ExpandBool(in))
+		CrossSubnet: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
 		}(in["cross_subnet"]),
 		EncapsulationMode: func(in interface{}) string {
 			return string(ExpandString(in))
@@ -158,6 +175,9 @@ func ExpandDataSourceCalicoNetworkingSpec(in map[string]interface{}) kops.Calico
 		TyphaReplicas: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["typha_replicas"]),
+		VXLANMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["vxlan_mode"]),
 		WireguardEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["wireguard_enabled"]),
@@ -199,8 +219,15 @@ func FlattenDataSourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out
 			}(*in)
 		}(in)
 	}(in.CPURequest)
-	out["cross_subnet"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
+	out["cross_subnet"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
 	}(in.CrossSubnet)
 	out["encapsulation_mode"] = func(in string) interface{} {
 		return FlattenString(string(in))
@@ -254,6 +281,9 @@ func FlattenDataSourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out
 	out["typha_replicas"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.TyphaReplicas)
+	out["vxlan_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.VXLANMode)
 	out["wireguard_enabled"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.WireguardEnabled)

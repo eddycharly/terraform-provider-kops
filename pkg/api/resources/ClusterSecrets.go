@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"k8s.io/kops/pkg/pki"
 	"k8s.io/kops/upup/pkg/fi"
 )
 
@@ -19,40 +18,42 @@ type ClusterSecrets struct {
 }
 
 func GetClusterSecrets(secretStore fi.SecretStore, keyStore fi.CAStore) (*ClusterSecrets, error) {
-	d, err := secretStore.FindSecret("dockerconfig")
-	if err != nil {
-		return nil, err
-	}
-	c, k, _, err := keyStore.FindKeypair(fi.CertificateIDCA)
-	if err != nil {
-		return nil, err
-	}
-	dockerConfig := ""
-	clusterCaCert := ""
-	clusterCaKey := ""
-	if d != nil {
-		dockerConfig = string(d.Data)
-	}
-	if c != nil {
-		clusterCaCert, err = c.AsString()
-		if err != nil {
-			return nil, err
-		}
-	}
-	if k != nil {
-		clusterCaKey, err = k.AsString()
-		if err != nil {
-			return nil, err
-		}
-	}
-	if dockerConfig == "" && clusterCaCert == "" && clusterCaKey == "" {
-		return nil, nil
-	}
-	return &ClusterSecrets{
-		DockerConfig:  dockerConfig,
-		ClusterCaCert: clusterCaCert,
-		ClusterCaKey:  clusterCaKey,
-	}, nil
+	return nil, nil
+	// TODO
+	// d, err := secretStore.FindSecret("dockerconfig")
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// c, k, _, err := keyStore.FindPrimaryKeypair(fi.CertificateIDCA)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// dockerConfig := ""
+	// clusterCaCert := ""
+	// clusterCaKey := ""
+	// if d != nil {
+	// 	dockerConfig = string(d.Data)
+	// }
+	// if c != nil {
+	// 	clusterCaCert, err = c.AsString()
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// }
+	// if k != nil {
+	// 	clusterCaKey, err = k.AsString()
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// }
+	// if dockerConfig == "" && clusterCaCert == "" && clusterCaKey == "" {
+	// 	return nil, nil
+	// }
+	// return &ClusterSecrets{
+	// 	DockerConfig:  dockerConfig,
+	// 	ClusterCaCert: clusterCaCert,
+	// 	ClusterCaKey:  clusterCaKey,
+	// }, nil
 }
 
 func createOrUpdateClusterSecret(secretStore fi.SecretStore, name string, s string) error {
@@ -84,23 +85,25 @@ func createOrUpdateClusterSecret(secretStore fi.SecretStore, name string, s stri
 }
 
 func createOrUpdateClusterKeypair(keyStore fi.CAStore, c string, k string) error {
-	if c == "" && k == "" {
-		// TODO: how can we delete the certificate ?
-		return nil
-	}
-	privateKey, err := pki.ParsePEMPrivateKey([]byte(k))
-	if err != nil {
-		return fmt.Errorf("error loading private key: %v", err)
-	}
-	cert, err := pki.ParsePEMCertificate([]byte(c))
-	if err != nil {
-		return fmt.Errorf("error loading certificate: %v", err)
-	}
-	err = keyStore.StoreKeypair(fi.CertificateIDCA, cert, privateKey)
-	if err != nil {
-		return fmt.Errorf("error storing user provided keys: %v", err)
-	}
 	return nil
+	// TODO
+	// if c == "" && k == "" {
+	// 	// TODO: how can we delete the certificate ?
+	// 	return nil
+	// }
+	// privateKey, err := pki.ParsePEMPrivateKey([]byte(k))
+	// if err != nil {
+	// 	return fmt.Errorf("error loading private key: %v", err)
+	// }
+	// cert, err := pki.ParsePEMCertificate([]byte(c))
+	// if err != nil {
+	// 	return fmt.Errorf("error loading certificate: %v", err)
+	// }
+	// err = keyStore.StoreKeypair(fi.CertificateIDCA, cert, privateKey)
+	// if err != nil {
+	// 	return fmt.Errorf("error storing user provided keys: %v", err)
+	// }
+	// return nil
 }
 
 func CreateOrUpdateClusterSecrets(secretStore fi.SecretStore, keyStore fi.CAStore, secrets *ClusterSecrets) (*ClusterSecrets, error) {

@@ -63,6 +63,7 @@ func ResourceCluster() *schema.Resource {
 			"external_dns":                      OptionalStruct(kopsschemas.ResourceExternalDNSConfig()),
 			"ntp":                               OptionalStruct(kopsschemas.ResourceNTPConfig()),
 			"node_termination_handler":          OptionalStruct(kopsschemas.ResourceNodeTerminationHandlerConfig()),
+			"node_problem_detector":             OptionalStruct(kopsschemas.ResourceNodeProblemDetectorConfig()),
 			"metrics_server":                    OptionalStruct(kopsschemas.ResourceMetricsServerConfig()),
 			"cert_manager":                      OptionalStruct(kopsschemas.ResourceCertManagerConfig()),
 			"aws_load_balancer_controller":      OptionalStruct(kopsschemas.ResourceAWSLoadBalancerControllerConfig()),

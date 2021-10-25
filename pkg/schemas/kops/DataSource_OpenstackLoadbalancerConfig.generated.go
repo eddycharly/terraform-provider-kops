@@ -13,14 +13,15 @@ var _ = Schema
 func DataSourceOpenstackLoadbalancerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"method":              ComputedString(),
-			"provider":            ComputedString(),
-			"use_octavia":         ComputedBool(),
-			"floating_network":    ComputedString(),
-			"floating_network_id": ComputedString(),
-			"floating_subnet":     ComputedString(),
-			"subnet_id":           ComputedString(),
-			"manage_sec_groups":   ComputedBool(),
+			"method":                  ComputedString(),
+			"provider":                ComputedString(),
+			"use_octavia":             ComputedBool(),
+			"floating_network":        ComputedString(),
+			"floating_network_id":     ComputedString(),
+			"floating_subnet":         ComputedString(),
+			"subnet_id":               ComputedString(),
+			"manage_sec_groups":       ComputedBool(),
+			"enable_ingress_hostname": ComputedBool(),
 		},
 	}
 
@@ -184,6 +185,25 @@ func ExpandDataSourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["manage_sec_groups"]),
+		EnableIngressHostname: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_ingress_hostname"]),
 	}
 }
 
@@ -268,6 +288,16 @@ func FlattenDataSourceOpenstackLoadbalancerConfigInto(in kops.OpenstackLoadbalan
 			}(*in)
 		}(in)
 	}(in.ManageSecGroups)
+	out["enable_ingress_hostname"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableIngressHostname)
 }
 
 func FlattenDataSourceOpenstackLoadbalancerConfig(in kops.OpenstackLoadbalancerConfig) map[string]interface{} {

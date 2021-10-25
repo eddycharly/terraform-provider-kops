@@ -19,7 +19,7 @@ type Config struct {
 	// Kubernetes password
 	KubePassword string
 	// Kubernetes cluster certificate
-	CaCert string
+	CaCerts string
 	// Kubernetes client certificate
 	ClientCert string
 	// Kubernetes client key
@@ -36,7 +36,7 @@ func (s *Config) GetConfig(clientset simple.Clientset, clusterName string, admin
 	s.Namespace = conf.Namespace
 	s.KubeUser = conf.KubeUser
 	s.KubePassword = conf.KubePassword
-	s.CaCert = string(conf.CACert)
+	s.CaCerts = string(conf.CACerts)
 	s.ClientCert = string(conf.ClientCert)
 	s.ClientKey = string(conf.ClientKey)
 	return nil

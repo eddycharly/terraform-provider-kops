@@ -27,6 +27,7 @@ func TestExpandDataSourceOpenstackConfiguration(t *testing.T) {
 					"block_storage":        nil,
 					"insecure_skip_verify": nil,
 					"network":              nil,
+					"metadata":             nil,
 				},
 			},
 			want: _default,
@@ -50,6 +51,7 @@ func TestFlattenDataSourceOpenstackConfigurationInto(t *testing.T) {
 		"block_storage":        nil,
 		"insecure_skip_verify": nil,
 		"network":              nil,
+		"metadata":             nil,
 	}
 	type args struct {
 		in kops.OpenstackConfiguration
@@ -127,6 +129,17 @@ func TestFlattenDataSourceOpenstackConfigurationInto(t *testing.T) {
 				in: func() kops.OpenstackConfiguration {
 					subject := kops.OpenstackConfiguration{}
 					subject.Network = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Metadata - default",
+			args: args{
+				in: func() kops.OpenstackConfiguration {
+					subject := kops.OpenstackConfiguration{}
+					subject.Metadata = nil
 					return subject
 				}(),
 			},
@@ -152,6 +165,7 @@ func TestFlattenDataSourceOpenstackConfiguration(t *testing.T) {
 		"block_storage":        nil,
 		"insecure_skip_verify": nil,
 		"network":              nil,
+		"metadata":             nil,
 	}
 	type args struct {
 		in kops.OpenstackConfiguration
@@ -229,6 +243,17 @@ func TestFlattenDataSourceOpenstackConfiguration(t *testing.T) {
 				in: func() kops.OpenstackConfiguration {
 					subject := kops.OpenstackConfiguration{}
 					subject.Network = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Metadata - default",
+			args: args{
+				in: func() kops.OpenstackConfiguration {
+					subject := kops.OpenstackConfiguration{}
+					subject.Metadata = nil
 					return subject
 				}(),
 			},

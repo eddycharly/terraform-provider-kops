@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"k8s.io/kops/pkg/client/simple"
-	"k8s.io/kops/pkg/commands"
 	"k8s.io/kops/pkg/kubeconfig"
+	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
 func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string, admin *time.Duration, internal bool) (*kubeconfig.KubeconfigBuilder, error) {
@@ -26,7 +26,11 @@ func GetKubeConfigBuilder(clientset simple.Clientset, clusterName string, admin 
 	if admin != nil {
 		duration = *admin
 	}
-	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, &commands.CloudDiscoveryStatusStore{}, duration, "", internal, "", false)
+	cloud, err := cloudup.BuildCloud(cluster)
+	if err != nil {
+		return nil, err
+	}
+	conf, err := kubeconfig.BuildKubecfg(cluster, keyStore, secretStore, cloud, duration, "", internal, "", false)
 	if err != nil {
 		return nil, err
 	}

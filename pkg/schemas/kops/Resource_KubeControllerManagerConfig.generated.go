@@ -16,6 +16,7 @@ func ResourceKubeControllerManagerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                                    OptionalString(),
+			"log_format":                                OptionalString(),
 			"log_level":                                 OptionalInt(),
 			"service_account_private_key_file":          OptionalString(),
 			"image":                                     OptionalString(),
@@ -46,8 +47,10 @@ func ResourceKubeControllerManagerConfig() *schema.Resource {
 			"horizontal_pod_autoscaler_use_rest_clients":          OptionalBool(),
 			"experimental_cluster_signing_duration":               OptionalDuration(),
 			"feature_gates":                                       OptionalMap(String()),
+			"tls_cert_file":                                       OptionalString(),
 			"tls_cipher_suites":                                   OptionalList(String()),
 			"tls_min_version":                                     OptionalString(),
+			"tls_private_key_file":                                OptionalString(),
 			"min_resync_period":                                   OptionalString(),
 			"kube_api_qps":                                        OptionalQuantity(),
 			"kube_api_burst":                                      OptionalInt(),
@@ -78,6 +81,9 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
@@ -526,6 +532,25 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				return nil
 			}(in)
 		}(in["feature_gates"]),
+		TLSCertFile: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["tls_cert_file"]),
 		TLSCipherSuites: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
@@ -541,6 +566,9 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 		TLSMinVersion: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tls_min_version"]),
+		TLSPrivateKeyFile: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["tls_private_key_file"]),
 		MinResyncPeriod: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["min_resync_period"]),
@@ -781,6 +809,9 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 	out["master"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Master)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogLevel)
@@ -1035,6 +1066,16 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			return out
 		}(in)
 	}(in.FeatureGates)
+	out["tls_cert_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.TLSCertFile)
 	out["tls_cipher_suites"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -1047,6 +1088,9 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 	out["tls_min_version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.TLSMinVersion)
+	out["tls_private_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSPrivateKeyFile)
 	out["min_resync_period"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MinResyncPeriod)

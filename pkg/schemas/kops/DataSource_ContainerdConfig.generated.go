@@ -22,6 +22,7 @@ func DataSourceContainerdConfig() *schema.Resource {
 			"skip_install":     ComputedBool(),
 			"state":            ComputedString(),
 			"version":          ComputedString(),
+			"nvidia_gpu":       ComputedStruct(DataSourceNvidiaGPUConfig()),
 		},
 	}
 
@@ -200,6 +201,24 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["version"]),
+		NvidiaGPU: func(in interface{}) *kops.NvidiaGPUConfig {
+			return func(in interface{}) *kops.NvidiaGPUConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.NvidiaGPUConfig) *kops.NvidiaGPUConfig {
+					return &in
+				}(func(in interface{}) kops.NvidiaGPUConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.NvidiaGPUConfig{}
+					}
+					return (ExpandDataSourceNvidiaGPUConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["nvidia_gpu"]),
 	}
 }
 
@@ -300,6 +319,18 @@ func FlattenDataSourceContainerdConfigInto(in kops.ContainerdConfig, out map[str
 			}(*in)
 		}(in)
 	}(in.Version)
+	out["nvidia_gpu"] = func(in *kops.NvidiaGPUConfig) interface{} {
+		return func(in *kops.NvidiaGPUConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NvidiaGPUConfig) interface{} {
+				return func(in kops.NvidiaGPUConfig) []interface{} {
+					return []interface{}{FlattenDataSourceNvidiaGPUConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.NvidiaGPU)
 }
 
 func FlattenDataSourceContainerdConfig(in kops.ContainerdConfig) map[string]interface{} {

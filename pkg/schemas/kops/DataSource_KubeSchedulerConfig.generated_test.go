@@ -22,6 +22,7 @@ func TestExpandDataSourceKubeSchedulerConfig(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"master":                           "",
+					"log_format":                       "",
 					"log_level":                        0,
 					"image":                            "",
 					"leader_election":                  nil,
@@ -34,6 +35,8 @@ func TestExpandDataSourceKubeSchedulerConfig(t *testing.T) {
 					"authorization_kubeconfig":         "",
 					"authorization_always_allow_paths": func() []interface{} { return nil }(),
 					"enable_profiling":                 nil,
+					"tls_cert_file":                    nil,
+					"tls_private_key_file":             "",
 				},
 			},
 			want: _default,
@@ -52,6 +55,7 @@ func TestExpandDataSourceKubeSchedulerConfig(t *testing.T) {
 func TestFlattenDataSourceKubeSchedulerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"master":                           "",
+		"log_format":                       "",
 		"log_level":                        0,
 		"image":                            "",
 		"leader_election":                  nil,
@@ -64,6 +68,8 @@ func TestFlattenDataSourceKubeSchedulerConfigInto(t *testing.T) {
 		"authorization_kubeconfig":         "",
 		"authorization_always_allow_paths": func() []interface{} { return nil }(),
 		"enable_profiling":                 nil,
+		"tls_cert_file":                    nil,
+		"tls_private_key_file":             "",
 	}
 	type args struct {
 		in kops.KubeSchedulerConfig
@@ -86,6 +92,17 @@ func TestFlattenDataSourceKubeSchedulerConfigInto(t *testing.T) {
 				in: func() kops.KubeSchedulerConfig {
 					subject := kops.KubeSchedulerConfig{}
 					subject.Master = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeSchedulerConfig {
+					subject := kops.KubeSchedulerConfig{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -218,6 +235,28 @@ func TestFlattenDataSourceKubeSchedulerConfigInto(t *testing.T) {
 				in: func() kops.KubeSchedulerConfig {
 					subject := kops.KubeSchedulerConfig{}
 					subject.EnableProfiling = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSCertFile - default",
+			args: args{
+				in: func() kops.KubeSchedulerConfig {
+					subject := kops.KubeSchedulerConfig{}
+					subject.TLSCertFile = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSPrivateKeyFile - default",
+			args: args{
+				in: func() kops.KubeSchedulerConfig {
+					subject := kops.KubeSchedulerConfig{}
+					subject.TLSPrivateKeyFile = ""
 					return subject
 				}(),
 			},
@@ -238,6 +277,7 @@ func TestFlattenDataSourceKubeSchedulerConfigInto(t *testing.T) {
 func TestFlattenDataSourceKubeSchedulerConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"master":                           "",
+		"log_format":                       "",
 		"log_level":                        0,
 		"image":                            "",
 		"leader_election":                  nil,
@@ -250,6 +290,8 @@ func TestFlattenDataSourceKubeSchedulerConfig(t *testing.T) {
 		"authorization_kubeconfig":         "",
 		"authorization_always_allow_paths": func() []interface{} { return nil }(),
 		"enable_profiling":                 nil,
+		"tls_cert_file":                    nil,
+		"tls_private_key_file":             "",
 	}
 	type args struct {
 		in kops.KubeSchedulerConfig
@@ -272,6 +314,17 @@ func TestFlattenDataSourceKubeSchedulerConfig(t *testing.T) {
 				in: func() kops.KubeSchedulerConfig {
 					subject := kops.KubeSchedulerConfig{}
 					subject.Master = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeSchedulerConfig {
+					subject := kops.KubeSchedulerConfig{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -404,6 +457,28 @@ func TestFlattenDataSourceKubeSchedulerConfig(t *testing.T) {
 				in: func() kops.KubeSchedulerConfig {
 					subject := kops.KubeSchedulerConfig{}
 					subject.EnableProfiling = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSCertFile - default",
+			args: args{
+				in: func() kops.KubeSchedulerConfig {
+					subject := kops.KubeSchedulerConfig{}
+					subject.TLSCertFile = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSPrivateKeyFile - default",
+			args: args{
+				in: func() kops.KubeSchedulerConfig {
+					subject := kops.KubeSchedulerConfig{}
+					subject.TLSPrivateKeyFile = ""
 					return subject
 				}(),
 			},

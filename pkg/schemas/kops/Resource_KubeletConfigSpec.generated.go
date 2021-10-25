@@ -25,6 +25,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"tls_min_version":                        OptionalString(),
 			"kubeconfig_path":                        OptionalString(),
 			"require_kubeconfig":                     OptionalBool(),
+			"log_format":                             OptionalString(),
 			"log_level":                              OptionalInt(),
 			"pod_manifest_path":                      OptionalString(),
 			"hostname_override":                      OptionalString(),
@@ -99,6 +100,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"container_log_max_size":                 OptionalString(),
 			"container_log_max_files":                OptionalInt(),
 			"enable_cadvisor_json_endpoints":         OptionalBool(),
+			"pod_pids_limit":                         OptionalInt(),
 		},
 	}
 
@@ -186,6 +188,9 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["require_kubeconfig"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
@@ -1117,6 +1122,25 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_cadvisor_json_endpoints"]),
+		PodPidsLimit: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int64 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int64) *int64 {
+					return &in
+				}(int64(ExpandInt(in)))
+			}(in)
+		}(in["pod_pids_limit"]),
 	}
 }
 
@@ -1177,6 +1201,9 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.RequireKubeconfig)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in *int32) interface{} {
 		return func(in *int32) interface{} {
 			if in == nil {
@@ -1729,6 +1756,16 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.EnableCadvisorJsonEndpoints)
+	out["pod_pids_limit"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.PodPidsLimit)
 }
 
 func FlattenResourceKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} {

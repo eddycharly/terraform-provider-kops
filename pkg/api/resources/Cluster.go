@@ -2,14 +2,12 @@ package resources
 
 import (
 	"context"
-	"fmt"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
-	"k8s.io/kops/upup/pkg/fi"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
@@ -45,114 +43,119 @@ func makeKopsCluster(name string, spec kops.ClusterSpec) *kops.Cluster {
 }
 
 func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
-	kc, err := clientset.GetCluster(context.Background(), name)
-	if err != nil {
-		return nil, err
-	}
-	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	pubKeys, err := sshCredentialStore.FindSSHPublicKeys(fi.SecretNameSSHPrimary)
-	if err != nil {
-		return nil, err
-	}
-	secretStore, err := clientset.SecretStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	keyStore, err := clientset.KeyStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	secrets, err := GetClusterSecrets(secretStore, keyStore)
-	if err != nil {
-		return nil, err
-	}
-	cluster := makeCluster(pubKeys[0].Spec.PublicKey, secrets, kc)
-	return cluster, nil
+	return nil, nil
+	// kc, err := clientset.GetCluster(context.Background(), name)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// pubKeys, err := sshCredentialStore.FindSSHPublicKeys(fi.SecretNameSSHPrimary)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// secretStore, err := clientset.SecretStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// keyStore, err := clientset.KeyStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// secrets, err := GetClusterSecrets(secretStore, keyStore)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// cluster := makeCluster(pubKeys[0].Spec.PublicKey, secrets, kc)
+	// return cluster, nil
 }
 
 func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc := makeKopsCluster(name, spec)
-	cloud, err := cloudup.BuildCloud(kc)
-	if err != nil {
-		return nil, err
-	}
-	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
-		return nil, err
-	}
-	kc, err = clientset.CreateCluster(context.Background(), kc)
-	if err != nil {
-		return nil, err
-	}
-	kc, err = clientset.GetCluster(context.Background(), name)
-	if err != nil {
-		return nil, err
-	}
-	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
-		return nil, fmt.Errorf("error adding SSH public key: %v", err)
-	}
-	secretStore, err := clientset.SecretStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	keyStore, err := clientset.KeyStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	secrets, err = CreateOrUpdateClusterSecrets(secretStore, keyStore, secrets)
-	if err != nil {
-		return nil, err
-	}
-	kc, err = clientset.GetCluster(context.Background(), name)
-	if err != nil {
-		return nil, err
-	}
-	return makeCluster(adminSshKey, secrets, kc), nil
+	return nil, nil
+	// TODO
+	// kc := makeKopsCluster(name, spec)
+	// cloud, err := cloudup.BuildCloud(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// if err := cloudup.PerformAssignments(kc, cloud); err != nil {
+	// 	return nil, err
+	// }
+	// kc, err = clientset.CreateCluster(context.Background(), kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// kc, err = clientset.GetCluster(context.Background(), name)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
+	// 	return nil, fmt.Errorf("error adding SSH public key: %v", err)
+	// }
+	// secretStore, err := clientset.SecretStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// keyStore, err := clientset.KeyStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// secrets, err = CreateOrUpdateClusterSecrets(secretStore, keyStore, secrets)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// kc, err = clientset.GetCluster(context.Background(), name)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// return makeCluster(adminSshKey, secrets, kc), nil
 }
 
 func UpdateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc := makeKopsCluster(name, spec)
-	cloud, err := cloudup.BuildCloud(kc)
-	if err != nil {
-		return nil, err
-	}
-	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
-		return nil, err
-	}
-	kc, err = clientset.UpdateCluster(context.Background(), kc, nil)
-	if err != nil {
-		return nil, err
-	}
-	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
-		return nil, fmt.Errorf("error adding SSH public key: %v", err)
-	}
-	secretStore, err := clientset.SecretStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	keyStore, err := clientset.KeyStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	secrets, err = CreateOrUpdateClusterSecrets(secretStore, keyStore, secrets)
-	if err != nil {
-		return nil, err
-	}
-	kc, err = clientset.GetCluster(context.Background(), name)
-	if err != nil {
-		return nil, err
-	}
-	return makeCluster(adminSshKey, secrets, kc), nil
+	return nil, nil
+	// TODO
+	// kc := makeKopsCluster(name, spec)
+	// cloud, err := cloudup.BuildCloud(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// if err := cloudup.PerformAssignments(kc, cloud); err != nil {
+	// 	return nil, err
+	// }
+	// kc, err = clientset.UpdateCluster(context.Background(), kc, nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
+	// 	return nil, fmt.Errorf("error adding SSH public key: %v", err)
+	// }
+	// secretStore, err := clientset.SecretStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// keyStore, err := clientset.KeyStore(kc)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// secrets, err = CreateOrUpdateClusterSecrets(secretStore, keyStore, secrets)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// kc, err = clientset.GetCluster(context.Background(), name)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// return makeCluster(adminSshKey, secrets, kc), nil
 }
 
 func DeleteCluster(name string, clientset simple.Clientset) error {

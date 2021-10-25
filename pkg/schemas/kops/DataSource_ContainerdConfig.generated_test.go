@@ -30,6 +30,7 @@ func TestExpandDataSourceContainerdConfig(t *testing.T) {
 					"skip_install":     false,
 					"state":            nil,
 					"version":          nil,
+					"nvidia_gpu":       nil,
 				},
 			},
 			want: _default,
@@ -56,6 +57,7 @@ func TestFlattenDataSourceContainerdConfigInto(t *testing.T) {
 		"skip_install":     false,
 		"state":            nil,
 		"version":          nil,
+		"nvidia_gpu":       nil,
 	}
 	type args struct {
 		in kops.ContainerdConfig
@@ -166,6 +168,17 @@ func TestFlattenDataSourceContainerdConfigInto(t *testing.T) {
 				in: func() kops.ContainerdConfig {
 					subject := kops.ContainerdConfig{}
 					subject.Version = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NvidiaGPU - default",
+			args: args{
+				in: func() kops.ContainerdConfig {
+					subject := kops.ContainerdConfig{}
+					subject.NvidiaGPU = nil
 					return subject
 				}(),
 			},
@@ -194,6 +207,7 @@ func TestFlattenDataSourceContainerdConfig(t *testing.T) {
 		"skip_install":     false,
 		"state":            nil,
 		"version":          nil,
+		"nvidia_gpu":       nil,
 	}
 	type args struct {
 		in kops.ContainerdConfig
@@ -304,6 +318,17 @@ func TestFlattenDataSourceContainerdConfig(t *testing.T) {
 				in: func() kops.ContainerdConfig {
 					subject := kops.ContainerdConfig{}
 					subject.Version = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NvidiaGPU - default",
+			args: args{
+				in: func() kops.ContainerdConfig {
+					subject := kops.ContainerdConfig{}
+					subject.NvidiaGPU = nil
 					return subject
 				}(),
 			},

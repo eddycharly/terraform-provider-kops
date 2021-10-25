@@ -22,6 +22,7 @@ func TestExpandDataSourceKubeControllerManagerConfig(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"master":                                    "",
+					"log_format":                                "",
 					"log_level":                                 0,
 					"service_account_private_key_file":          "",
 					"image":                                     "",
@@ -52,8 +53,10 @@ func TestExpandDataSourceKubeControllerManagerConfig(t *testing.T) {
 					"horizontal_pod_autoscaler_use_rest_clients":          nil,
 					"experimental_cluster_signing_duration":               nil,
 					"feature_gates":                                       func() map[string]interface{} { return nil }(),
+					"tls_cert_file":                                       nil,
 					"tls_cipher_suites":                                   func() []interface{} { return nil }(),
 					"tls_min_version":                                     "",
+					"tls_private_key_file":                                "",
 					"min_resync_period":                                   "",
 					"kube_api_qps":                                        nil,
 					"kube_api_burst":                                      nil,
@@ -88,6 +91,7 @@ func TestExpandDataSourceKubeControllerManagerConfig(t *testing.T) {
 func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"master":                                    "",
+		"log_format":                                "",
 		"log_level":                                 0,
 		"service_account_private_key_file":          "",
 		"image":                                     "",
@@ -118,8 +122,10 @@ func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 		"horizontal_pod_autoscaler_use_rest_clients":          nil,
 		"experimental_cluster_signing_duration":               nil,
 		"feature_gates":                                       func() map[string]interface{} { return nil }(),
+		"tls_cert_file":                                       nil,
 		"tls_cipher_suites":                                   func() []interface{} { return nil }(),
 		"tls_min_version":                                     "",
+		"tls_private_key_file":                                "",
 		"min_resync_period":                                   "",
 		"kube_api_qps":                                        nil,
 		"kube_api_burst":                                      nil,
@@ -158,6 +164,17 @@ func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
 					subject.Master = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -494,6 +511,17 @@ func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "TLSCertFile - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.TLSCertFile = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "TLSCipherSuites - default",
 			args: args{
 				in: func() kops.KubeControllerManagerConfig {
@@ -510,6 +538,17 @@ func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
 					subject.TLSMinVersion = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSPrivateKeyFile - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.TLSPrivateKeyFile = ""
 					return subject
 				}(),
 			},
@@ -706,6 +745,7 @@ func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 func TestFlattenDataSourceKubeControllerManagerConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"master":                                    "",
+		"log_format":                                "",
 		"log_level":                                 0,
 		"service_account_private_key_file":          "",
 		"image":                                     "",
@@ -736,8 +776,10 @@ func TestFlattenDataSourceKubeControllerManagerConfig(t *testing.T) {
 		"horizontal_pod_autoscaler_use_rest_clients":          nil,
 		"experimental_cluster_signing_duration":               nil,
 		"feature_gates":                                       func() map[string]interface{} { return nil }(),
+		"tls_cert_file":                                       nil,
 		"tls_cipher_suites":                                   func() []interface{} { return nil }(),
 		"tls_min_version":                                     "",
+		"tls_private_key_file":                                "",
 		"min_resync_period":                                   "",
 		"kube_api_qps":                                        nil,
 		"kube_api_burst":                                      nil,
@@ -776,6 +818,17 @@ func TestFlattenDataSourceKubeControllerManagerConfig(t *testing.T) {
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
 					subject.Master = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -1112,6 +1165,17 @@ func TestFlattenDataSourceKubeControllerManagerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "TLSCertFile - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.TLSCertFile = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "TLSCipherSuites - default",
 			args: args{
 				in: func() kops.KubeControllerManagerConfig {
@@ -1128,6 +1192,17 @@ func TestFlattenDataSourceKubeControllerManagerConfig(t *testing.T) {
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
 					subject.TLSMinVersion = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSPrivateKeyFile - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.TLSPrivateKeyFile = ""
 					return subject
 				}(),
 			},

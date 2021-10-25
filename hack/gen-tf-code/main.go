@@ -75,7 +75,7 @@ func build(scope, docs string, parser *parser, g ...generated) {
 		buildSchema(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 		buildTests(gen.t, path.Join("pkg/schemas", mappings[gen.t.PkgPath()]), scope, funcMaps...)
 		if gen.o.doc != nil {
-			buildDoc(gen.t, docs, append(funcMaps, docFuncs(gen.o.doc.header, gen.o.doc.footer, parser, o))...)
+			// buildDoc(gen.t, docs, append(funcMaps, docFuncs(gen.o.doc.header, gen.o.doc.footer, parser, o))...)
 		}
 	}
 }
@@ -293,6 +293,9 @@ func main() {
 		generate(kops.SnapshotControllerConfig{}),
 		generate(kops.ServiceAccountExternalPermission{}),
 		generate(kops.AWSPermission{}),
+		// 1.22
+		generate(kops.NodeProblemDetectorConfig{}),
+		generate(kops.NvidiaGPUConfig{}),
 	)
 	build(
 		"Config",
@@ -451,5 +454,8 @@ func main() {
 		generate(kops.SnapshotControllerConfig{}),
 		generate(kops.ServiceAccountExternalPermission{}),
 		generate(kops.AWSPermission{}),
+		// 1.22
+		generate(kops.NodeProblemDetectorConfig{}),
+		generate(kops.NvidiaGPUConfig{}),
 	)
 }

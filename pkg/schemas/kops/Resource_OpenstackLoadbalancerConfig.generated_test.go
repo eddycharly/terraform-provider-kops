@@ -21,14 +21,15 @@ func TestExpandResourceOpenstackLoadbalancerConfig(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"method":              nil,
-					"provider":            nil,
-					"use_octavia":         nil,
-					"floating_network":    nil,
-					"floating_network_id": nil,
-					"floating_subnet":     nil,
-					"subnet_id":           nil,
-					"manage_sec_groups":   nil,
+					"method":                  nil,
+					"provider":                nil,
+					"use_octavia":             nil,
+					"floating_network":        nil,
+					"floating_network_id":     nil,
+					"floating_subnet":         nil,
+					"subnet_id":               nil,
+					"manage_sec_groups":       nil,
+					"enable_ingress_hostname": nil,
 				},
 			},
 			want: _default,
@@ -46,14 +47,15 @@ func TestExpandResourceOpenstackLoadbalancerConfig(t *testing.T) {
 
 func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"method":              nil,
-		"provider":            nil,
-		"use_octavia":         nil,
-		"floating_network":    nil,
-		"floating_network_id": nil,
-		"floating_subnet":     nil,
-		"subnet_id":           nil,
-		"manage_sec_groups":   nil,
+		"method":                  nil,
+		"provider":                nil,
+		"use_octavia":             nil,
+		"floating_network":        nil,
+		"floating_network_id":     nil,
+		"floating_subnet":         nil,
+		"subnet_id":               nil,
+		"manage_sec_groups":       nil,
+		"enable_ingress_hostname": nil,
 	}
 	type args struct {
 		in kops.OpenstackLoadbalancerConfig
@@ -153,6 +155,17 @@ func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
 					subject.ManageSecGroups = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableIngressHostname - default",
+			args: args{
+				in: func() kops.OpenstackLoadbalancerConfig {
+					subject := kops.OpenstackLoadbalancerConfig{}
+					subject.EnableIngressHostname = nil
 					return subject
 				}(),
 			},
@@ -172,14 +185,15 @@ func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 
 func TestFlattenResourceOpenstackLoadbalancerConfig(t *testing.T) {
 	_default := map[string]interface{}{
-		"method":              nil,
-		"provider":            nil,
-		"use_octavia":         nil,
-		"floating_network":    nil,
-		"floating_network_id": nil,
-		"floating_subnet":     nil,
-		"subnet_id":           nil,
-		"manage_sec_groups":   nil,
+		"method":                  nil,
+		"provider":                nil,
+		"use_octavia":             nil,
+		"floating_network":        nil,
+		"floating_network_id":     nil,
+		"floating_subnet":         nil,
+		"subnet_id":               nil,
+		"manage_sec_groups":       nil,
+		"enable_ingress_hostname": nil,
 	}
 	type args struct {
 		in kops.OpenstackLoadbalancerConfig
@@ -279,6 +293,17 @@ func TestFlattenResourceOpenstackLoadbalancerConfig(t *testing.T) {
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
 					subject.ManageSecGroups = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableIngressHostname - default",
+			args: args{
+				in: func() kops.OpenstackLoadbalancerConfig {
+					subject := kops.OpenstackLoadbalancerConfig{}
+					subject.EnableIngressHostname = nil
 					return subject
 				}(),
 			},

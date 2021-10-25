@@ -13,6 +13,7 @@ func ResourceServiceAccountIssuerDiscoveryConfig() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"discovery_store":          OptionalString(),
 			"enable_aws_oidc_provider": OptionalBool(),
+			"additional_audiences":     OptionalList(String()),
 		},
 	}
 
@@ -30,6 +31,18 @@ func ExpandResourceServiceAccountIssuerDiscoveryConfig(in map[string]interface{}
 		EnableAWSOIDCProvider: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_aws_oidc_provider"]),
+		AdditionalAudiences: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["additional_audiences"]),
 	}
 }
 
@@ -40,6 +53,15 @@ func FlattenResourceServiceAccountIssuerDiscoveryConfigInto(in kops.ServiceAccou
 	out["enable_aws_oidc_provider"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnableAWSOIDCProvider)
+	out["additional_audiences"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AdditionalAudiences)
 }
 
 func FlattenResourceServiceAccountIssuerDiscoveryConfig(in kops.ServiceAccountIssuerDiscoveryConfig) map[string]interface{} {

@@ -23,6 +23,7 @@ func TestExpandDataSourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 				in: map[string]interface{}{
 					"discovery_store":          "",
 					"enable_aws_oidc_provider": false,
+					"additional_audiences":     func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -42,6 +43,7 @@ func TestFlattenDataSourceServiceAccountIssuerDiscoveryConfigInto(t *testing.T) 
 	_default := map[string]interface{}{
 		"discovery_store":          "",
 		"enable_aws_oidc_provider": false,
+		"additional_audiences":     func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ServiceAccountIssuerDiscoveryConfig
@@ -75,6 +77,17 @@ func TestFlattenDataSourceServiceAccountIssuerDiscoveryConfigInto(t *testing.T) 
 				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
 					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
 					subject.EnableAWSOIDCProvider = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalAudiences - default",
+			args: args{
+				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
+					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
+					subject.AdditionalAudiences = nil
 					return subject
 				}(),
 			},
@@ -96,6 +109,7 @@ func TestFlattenDataSourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"discovery_store":          "",
 		"enable_aws_oidc_provider": false,
+		"additional_audiences":     func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ServiceAccountIssuerDiscoveryConfig
@@ -129,6 +143,17 @@ func TestFlattenDataSourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
 					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
 					subject.EnableAWSOIDCProvider = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalAudiences - default",
+			args: args{
+				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
+					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
+					subject.AdditionalAudiences = nil
 					return subject
 				}(),
 			},

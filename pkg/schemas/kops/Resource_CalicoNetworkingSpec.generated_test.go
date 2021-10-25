@@ -30,7 +30,7 @@ func TestExpandResourceCalicoNetworkingSpec(t *testing.T) {
 					"bpf_log_level":                      "",
 					"chain_insert_mode":                  "",
 					"cpu_request":                        nil,
-					"cross_subnet":                       false,
+					"cross_subnet":                       nil,
 					"encapsulation_mode":                 "",
 					"ip_ip_mode":                         "",
 					"ipv4_auto_detection_method":         "",
@@ -46,6 +46,7 @@ func TestExpandResourceCalicoNetworkingSpec(t *testing.T) {
 					"typha_prometheus_metrics_enabled":   false,
 					"typha_prometheus_metrics_port":      0,
 					"typha_replicas":                     0,
+					"vxlan_mode":                         "",
 					"wireguard_enabled":                  false,
 				},
 			},
@@ -73,7 +74,7 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 		"bpf_log_level":                      "",
 		"chain_insert_mode":                  "",
 		"cpu_request":                        nil,
-		"cross_subnet":                       false,
+		"cross_subnet":                       nil,
 		"encapsulation_mode":                 "",
 		"ip_ip_mode":                         "",
 		"ipv4_auto_detection_method":         "",
@@ -89,6 +90,7 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 		"typha_prometheus_metrics_enabled":   false,
 		"typha_prometheus_metrics_port":      0,
 		"typha_replicas":                     0,
+		"vxlan_mode":                         "",
 		"wireguard_enabled":                  false,
 	}
 	type args struct {
@@ -210,7 +212,7 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
-					subject.CrossSubnet = false
+					subject.CrossSubnet = nil
 					return subject
 				}(),
 			},
@@ -376,6 +378,17 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
 					subject.TyphaReplicas = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VXLANMode - default",
+			args: args{
+				in: func() kops.CalicoNetworkingSpec {
+					subject := kops.CalicoNetworkingSpec{}
+					subject.VXLANMode = ""
 					return subject
 				}(),
 			},
@@ -415,7 +428,7 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 		"bpf_log_level":                      "",
 		"chain_insert_mode":                  "",
 		"cpu_request":                        nil,
-		"cross_subnet":                       false,
+		"cross_subnet":                       nil,
 		"encapsulation_mode":                 "",
 		"ip_ip_mode":                         "",
 		"ipv4_auto_detection_method":         "",
@@ -431,6 +444,7 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 		"typha_prometheus_metrics_enabled":   false,
 		"typha_prometheus_metrics_port":      0,
 		"typha_replicas":                     0,
+		"vxlan_mode":                         "",
 		"wireguard_enabled":                  false,
 	}
 	type args struct {
@@ -552,7 +566,7 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 			args: args{
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
-					subject.CrossSubnet = false
+					subject.CrossSubnet = nil
 					return subject
 				}(),
 			},
@@ -718,6 +732,17 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
 					subject.TyphaReplicas = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VXLANMode - default",
+			args: args{
+				in: func() kops.CalicoNetworkingSpec {
+					subject := kops.CalicoNetworkingSpec{}
+					subject.VXLANMode = ""
 					return subject
 				}(),
 			},
