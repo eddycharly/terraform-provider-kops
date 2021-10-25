@@ -376,7 +376,7 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCredits - default",
+			name: "CpuCredits - default",
 			args: args{
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
@@ -946,7 +946,7 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCredits - default",
+			name: "CpuCredits - default",
 			args: args{
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}

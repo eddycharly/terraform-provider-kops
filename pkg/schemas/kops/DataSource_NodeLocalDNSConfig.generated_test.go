@@ -109,7 +109,7 @@ func TestFlattenDataSourceNodeLocalDNSConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.NodeLocalDNSConfig {
 					subject := kops.NodeLocalDNSConfig{}
@@ -199,7 +199,7 @@ func TestFlattenDataSourceNodeLocalDNSConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.NodeLocalDNSConfig {
 					subject := kops.NodeLocalDNSConfig{}

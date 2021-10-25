@@ -382,7 +382,7 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCredits - default",
+			name: "CpuCredits - default",
 			args: args{
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
@@ -988,7 +988,7 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCredits - default",
+			name: "CpuCredits - default",
 			args: args{
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}

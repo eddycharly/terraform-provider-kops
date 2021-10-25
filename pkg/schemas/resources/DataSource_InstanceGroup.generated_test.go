@@ -380,7 +380,7 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCredits - default",
+			name: "CpuCredits - default",
 			args: args{
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
@@ -974,7 +974,7 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCredits - default",
+			name: "CpuCredits - default",
 			args: args{
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}

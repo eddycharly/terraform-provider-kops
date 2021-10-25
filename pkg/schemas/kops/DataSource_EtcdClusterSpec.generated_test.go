@@ -213,7 +213,7 @@ func TestFlattenDataSourceEtcdClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.EtcdClusterSpec {
 					subject := kops.EtcdClusterSpec{}
@@ -399,7 +399,7 @@ func TestFlattenDataSourceEtcdClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.EtcdClusterSpec {
 					subject := kops.EtcdClusterSpec{}

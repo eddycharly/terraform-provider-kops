@@ -148,7 +148,7 @@ func TestFlattenDataSourceNodeTerminationHandlerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.NodeTerminationHandlerConfig {
 					subject := kops.NodeTerminationHandlerConfig{}
@@ -274,7 +274,7 @@ func TestFlattenDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.NodeTerminationHandlerConfig {
 					subject := kops.NodeTerminationHandlerConfig{}
