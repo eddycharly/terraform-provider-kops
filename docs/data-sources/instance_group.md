@@ -253,8 +253,8 @@ The following arguments are supported:
 - `root_dir` - (Computed) - String - RootDir is the directory path for managing kubelet files (volume mounts,etc).
 - `authentication_token_webhook` - (Computed) - Bool - AuthenticationTokenWebhook uses the TokenReview API to determine authentication for bearer tokens.
 - `authentication_token_webhook_cache_ttl` - (Computed) - Duration - AuthenticationTokenWebhook sets the duration to cache responses from the webhook token authenticator. Default is 2m. (default 2m0s).
-- `cpucfs_quota` - (Computed) - Bool - CPUCFSQuota enables CPU CFS quota enforcement for containers that specify CPU limits.
-- `cpucfs_quota_period` - (Computed) - Duration - CPUCFSQuotaPeriod sets CPU CFS quota period value, cpu.cfs_period_us, defaults to Linux Kernel default.
+- `cpu_cfs_quota` - (Computed) - Bool([Nullable](#nullable-arguments)) - CPUCFSQuota enables CPU CFS quota enforcement for containers that specify CPU limits.
+- `cpu_cfs_quota_period` - (Computed) - Duration - CPUCFSQuotaPeriod sets CPU CFS quota period value, cpu.cfs_period_us, defaults to Linux Kernel default.
 - `cpu_manager_policy` - (Computed) - String - CpuManagerPolicy allows for changing the default policy of None to static.
 - `registry_pull_qps` - (Computed) - Int - RegistryPullQPS if > 0, limit registry pull QPS to this value.  If 0, unlimited. (default 5).
 - `registry_burst` - (Computed) - Int - RegistryBurst Maximum size of a bursty pulls, temporarily allows pulls to burst to this number, while still not exceeding registry-qps. Only used if --registry-qps > 0 (default 10).

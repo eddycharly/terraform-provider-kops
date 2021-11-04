@@ -1258,7 +1258,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1269,7 +1269,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2500,7 +2500,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2511,7 +2511,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}

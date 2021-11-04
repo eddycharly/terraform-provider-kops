@@ -30,9 +30,9 @@ func TestExpandDataSourceWeaveNetworkingSpec(t *testing.T) {
 					"cpu_limit":          nil,
 					"net_extra_args":     "",
 					"npc_memory_request": nil,
-					"npccpu_request":     nil,
+					"npc_cpu_request":    nil,
 					"npc_memory_limit":   nil,
-					"npccpu_limit":       nil,
+					"npc_cpu_limit":      nil,
 					"npc_extra_args":     "",
 					"version":            "",
 				},
@@ -61,9 +61,9 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 		"cpu_limit":          nil,
 		"net_extra_args":     "",
 		"npc_memory_request": nil,
-		"npccpu_request":     nil,
+		"npc_cpu_request":    nil,
 		"npc_memory_limit":   nil,
-		"npccpu_limit":       nil,
+		"npc_cpu_limit":      nil,
 		"npc_extra_args":     "",
 		"version":            "",
 	}
@@ -127,7 +127,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -149,7 +149,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -171,7 +171,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCMemoryRequest - default",
+			name: "NpcMemoryRequest - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -182,7 +182,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCCPURequest - default",
+			name: "NpcCpuRequest - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -193,7 +193,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCMemoryLimit - default",
+			name: "NpcMemoryLimit - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -204,7 +204,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCCPULimit - default",
+			name: "NpcCpuLimit - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -215,7 +215,7 @@ func TestFlattenDataSourceWeaveNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCExtraArgs - default",
+			name: "NpcExtraArgs - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -259,9 +259,9 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 		"cpu_limit":          nil,
 		"net_extra_args":     "",
 		"npc_memory_request": nil,
-		"npccpu_request":     nil,
+		"npc_cpu_request":    nil,
 		"npc_memory_limit":   nil,
-		"npccpu_limit":       nil,
+		"npc_cpu_limit":      nil,
 		"npc_extra_args":     "",
 		"version":            "",
 	}
@@ -325,7 +325,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -347,7 +347,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -369,7 +369,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCMemoryRequest - default",
+			name: "NpcMemoryRequest - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -380,7 +380,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCCPURequest - default",
+			name: "NpcCpuRequest - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -391,7 +391,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCMemoryLimit - default",
+			name: "NpcMemoryLimit - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -402,7 +402,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCCPULimit - default",
+			name: "NpcCpuLimit - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
@@ -413,7 +413,7 @@ func TestFlattenDataSourceWeaveNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NPCExtraArgs - default",
+			name: "NpcExtraArgs - default",
 			args: args{
 				in: func() kops.WeaveNetworkingSpec {
 					subject := kops.WeaveNetworkingSpec{}
