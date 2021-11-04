@@ -91,8 +91,8 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"root_dir":                               "",
 					"authentication_token_webhook":           nil,
 					"authentication_token_webhook_cache_ttl": nil,
-					"cpucfs_quota":                           nil,
-					"cpucfs_quota_period":                    nil,
+					"cpu_cfs_quota":                          nil,
+					"cpu_cfs_quota_period":                   nil,
 					"cpu_manager_policy":                     "",
 					"registry_pull_qps":                      nil,
 					"registry_burst":                         nil,
@@ -193,8 +193,8 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"root_dir":                               "",
 		"authentication_token_webhook":           nil,
 		"authentication_token_webhook_cache_ttl": nil,
-		"cpucfs_quota":                           nil,
-		"cpucfs_quota_period":                    nil,
+		"cpu_cfs_quota":                          nil,
+		"cpu_cfs_quota_period":                   nil,
 		"cpu_manager_policy":                     "",
 		"registry_pull_qps":                      nil,
 		"registry_burst":                         nil,
@@ -995,7 +995,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCFSQuota - default",
+			name: "CpuCFSQuota - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
@@ -1006,7 +1006,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCFSQuotaPeriod - default",
+			name: "CpuCFSQuotaPeriod - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
@@ -1243,8 +1243,8 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"root_dir":                               "",
 		"authentication_token_webhook":           nil,
 		"authentication_token_webhook_cache_ttl": nil,
-		"cpucfs_quota":                           nil,
-		"cpucfs_quota_period":                    nil,
+		"cpu_cfs_quota":                          nil,
+		"cpu_cfs_quota_period":                   nil,
 		"cpu_manager_policy":                     "",
 		"registry_pull_qps":                      nil,
 		"registry_burst":                         nil,
@@ -2045,7 +2045,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCFSQuota - default",
+			name: "CpuCFSQuota - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
@@ -2056,7 +2056,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPUCFSQuotaPeriod - default",
+			name: "CpuCFSQuotaPeriod - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}

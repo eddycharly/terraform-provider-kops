@@ -23,9 +23,9 @@ func DataSourceWeaveNetworkingSpec() *schema.Resource {
 			"cpu_limit":          ComputedQuantity(),
 			"net_extra_args":     ComputedString(),
 			"npc_memory_request": ComputedQuantity(),
-			"npccpu_request":     ComputedQuantity(),
+			"npc_cpu_request":    ComputedQuantity(),
 			"npc_memory_limit":   ComputedQuantity(),
-			"npccpu_limit":       ComputedQuantity(),
+			"npc_cpu_limit":      ComputedQuantity(),
 			"npc_extra_args":     ComputedString(),
 			"version":            ComputedString(),
 		},
@@ -212,7 +212,7 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 					return &in
 				}(ExpandQuantity(in))
 			}(in)
-		}(in["npccpu_request"]),
+		}(in["npc_cpu_request"]),
 		NPCMemoryLimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
@@ -250,7 +250,7 @@ func ExpandDataSourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNe
 					return &in
 				}(ExpandQuantity(in))
 			}(in)
-		}(in["npccpu_limit"]),
+		}(in["npc_cpu_limit"]),
 		NPCExtraArgs: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["npc_extra_args"]),
@@ -344,7 +344,7 @@ func FlattenDataSourceWeaveNetworkingSpecInto(in kops.WeaveNetworkingSpec, out m
 			}(*in)
 		}(in)
 	}(in.NPCMemoryRequest)
-	out["npccpu_request"] = func(in *resource.Quantity) interface{} {
+	out["npc_cpu_request"] = func(in *resource.Quantity) interface{} {
 		return func(in *resource.Quantity) interface{} {
 			if in == nil {
 				return nil
@@ -364,7 +364,7 @@ func FlattenDataSourceWeaveNetworkingSpecInto(in kops.WeaveNetworkingSpec, out m
 			}(*in)
 		}(in)
 	}(in.NPCMemoryLimit)
-	out["npccpu_limit"] = func(in *resource.Quantity) interface{} {
+	out["npc_cpu_limit"] = func(in *resource.Quantity) interface{} {
 		return func(in *resource.Quantity) interface{} {
 			if in == nil {
 				return nil

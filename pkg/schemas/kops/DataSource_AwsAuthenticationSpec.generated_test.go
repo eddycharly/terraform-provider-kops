@@ -113,7 +113,7 @@ func TestFlattenDataSourceAwsAuthenticationSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.AwsAuthenticationSpec {
 					subject := kops.AwsAuthenticationSpec{}
@@ -135,7 +135,7 @@ func TestFlattenDataSourceAwsAuthenticationSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.AwsAuthenticationSpec {
 					subject := kops.AwsAuthenticationSpec{}
@@ -227,7 +227,7 @@ func TestFlattenDataSourceAwsAuthenticationSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.AwsAuthenticationSpec {
 					subject := kops.AwsAuthenticationSpec{}
@@ -249,7 +249,7 @@ func TestFlattenDataSourceAwsAuthenticationSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.AwsAuthenticationSpec {
 					subject := kops.AwsAuthenticationSpec{}

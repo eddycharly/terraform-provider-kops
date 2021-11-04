@@ -195,7 +195,7 @@ func TestFlattenDataSourceCalicoNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
@@ -537,7 +537,7 @@ func TestFlattenDataSourceCalicoNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
