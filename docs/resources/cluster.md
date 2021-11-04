@@ -818,8 +818,8 @@ The following arguments are supported:
 - `root_dir` - (Optional) - String - RootDir is the directory path for managing kubelet files (volume mounts,etc).
 - `authentication_token_webhook` - (Optional) - Bool - AuthenticationTokenWebhook uses the TokenReview API to determine authentication for bearer tokens.
 - `authentication_token_webhook_cache_ttl` - (Optional) - Duration - AuthenticationTokenWebhook sets the duration to cache responses from the webhook token authenticator. Default is 2m. (default 2m0s).
-- `cpucfs_quota` - (Optional) - Bool - CPUCFSQuota enables CPU CFS quota enforcement for containers that specify CPU limits.
-- `cpucfs_quota_period` - (Optional) - Duration - CPUCFSQuotaPeriod sets CPU CFS quota period value, cpu.cfs_period_us, defaults to Linux Kernel default.
+- `cpu_cfs_quota` - (Optional) - Bool([Nullable](#nullable-arguments)) - CPUCFSQuota enables CPU CFS quota enforcement for containers that specify CPU limits.
+- `cpu_cfs_quota_period` - (Optional) - Duration - CPUCFSQuotaPeriod sets CPU CFS quota period value, cpu.cfs_period_us, defaults to Linux Kernel default.
 - `cpu_manager_policy` - (Optional) - String - CpuManagerPolicy allows for changing the default policy of None to static.
 - `registry_pull_qps` - (Optional) - Int - RegistryPullQPS if > 0, limit registry pull QPS to this value.  If 0, unlimited. (default 5).
 - `registry_burst` - (Optional) - Int - RegistryBurst Maximum size of a bursty pulls, temporarily allows pulls to burst to this number, while still not exceeding registry-qps. Only used if --registry-qps > 0 (default 10).
@@ -1122,9 +1122,9 @@ The following arguments are supported:
 - `cpu_limit` - (Optional) - Quantity - CPULimit CPU limit of weave container.
 - `net_extra_args` - (Optional) - String - NetExtraArgs are extra arguments that are passed to weave-kube.
 - `npc_memory_request` - (Optional) - Quantity - NPCMemoryRequest memory request of weave npc container. Default 200Mi.
-- `npccpu_request` - (Optional) - Quantity - NPCCPURequest CPU request of weave npc container. Default 50m.
+- `npc_cpu_request` - (Optional) - Quantity - NPCCPURequest CPU request of weave npc container. Default 50m.
 - `npc_memory_limit` - (Optional) - Quantity - NPCMemoryLimit memory limit of weave npc container. Default 200Mi.
-- `npccpu_limit` - (Optional) - Quantity - NPCCPULimit CPU limit of weave npc container.
+- `npc_cpu_limit` - (Optional) - Quantity - NPCCPULimit CPU limit of weave npc container.
 - `npc_extra_args` - (Optional) - String - NPCExtraArgs are extra arguments that are passed to weave-npc.
 - `version` - (Optional) - String - Version specifies the Weave container image tag. The default depends on the kOps version.
 

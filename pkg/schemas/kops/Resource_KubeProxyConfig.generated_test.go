@@ -106,7 +106,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
@@ -117,7 +117,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
@@ -376,7 +376,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
@@ -387,7 +387,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPULimit - default",
+			name: "CpuLimit - default",
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}

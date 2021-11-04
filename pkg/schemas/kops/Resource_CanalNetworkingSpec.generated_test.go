@@ -96,7 +96,7 @@ func TestFlattenResourceCanalNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.CanalNetworkingSpec {
 					subject := kops.CanalNetworkingSpec{}
@@ -306,7 +306,7 @@ func TestFlattenResourceCanalNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.CanalNetworkingSpec {
 					subject := kops.CanalNetworkingSpec{}

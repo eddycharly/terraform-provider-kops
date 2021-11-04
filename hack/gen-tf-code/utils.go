@@ -27,6 +27,8 @@ func fieldName(in string) string {
 	in = strings.ReplaceAll(in, "SAN", "San")
 	in = strings.ReplaceAll(in, "SQS", "Sqs")
 	in = strings.ReplaceAll(in, "AWS", "Aws")
+	in = strings.ReplaceAll(in, "CPU", "Cpu")
+	in = strings.ReplaceAll(in, "NPC", "Npc")
 	return in
 }
 

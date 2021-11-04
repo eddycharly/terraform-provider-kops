@@ -233,7 +233,7 @@ func TestFlattenResourceCiliumNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
@@ -1199,7 +1199,7 @@ func TestFlattenResourceCiliumNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}

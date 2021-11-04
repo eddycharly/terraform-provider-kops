@@ -230,7 +230,7 @@ func TestFlattenResourceKubeDNSConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.KubeDNSConfig {
 					subject := kops.KubeDNSConfig{}
@@ -452,7 +452,7 @@ func TestFlattenResourceKubeDNSConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.KubeDNSConfig {
 					subject := kops.KubeDNSConfig{}

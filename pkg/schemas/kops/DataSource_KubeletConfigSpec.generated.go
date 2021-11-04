@@ -84,8 +84,8 @@ func DataSourceKubeletConfigSpec() *schema.Resource {
 			"root_dir":                               ComputedString(),
 			"authentication_token_webhook":           ComputedBool(),
 			"authentication_token_webhook_cache_ttl": ComputedDuration(),
-			"cpucfs_quota":                           ComputedBool(),
-			"cpucfs_quota_period":                    ComputedDuration(),
+			"cpu_cfs_quota":                          Nullable(ComputedBool()),
+			"cpu_cfs_quota_period":                   ComputedDuration(),
 			"cpu_manager_policy":                     ComputedString(),
 			"registry_pull_qps":                      ComputedInt(),
 			"registry_burst":                         ComputedInt(),
@@ -898,21 +898,23 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			if in == nil {
 				return nil
 			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *bool {
+					return func(in interface{}) *bool {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in bool) *bool {
+							return &in
+						}(bool(ExpandBool(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["cpucfs_quota"]),
+			return nil
+		}(in["cpu_cfs_quota"]),
 		CPUCFSQuotaPeriod: func(in interface{}) *v1.Duration {
 			if in == nil {
 				return nil
@@ -931,7 +933,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 					return &in
 				}(ExpandDuration(in))
 			}(in)
-		}(in["cpucfs_quota_period"]),
+		}(in["cpu_cfs_quota_period"]),
 		CpuManagerPolicy: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cpu_manager_policy"]),
@@ -1602,17 +1604,20 @@ func FlattenDataSourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[s
 			}(*in)
 		}(in)
 	}(in.AuthenticationTokenWebhookCacheTTL)
-	out["cpucfs_quota"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+	out["cpu_cfs_quota"] = func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *bool) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in bool) interface{} {
 				return FlattenBool(bool(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.CPUCFSQuota)
-	out["cpucfs_quota_period"] = func(in *v1.Duration) interface{} {
+	out["cpu_cfs_quota_period"] = func(in *v1.Duration) interface{} {
 		return func(in *v1.Duration) interface{} {
 			if in == nil {
 				return nil

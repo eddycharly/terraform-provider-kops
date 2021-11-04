@@ -200,7 +200,7 @@ func TestFlattenDataSourceClusterAutoscalerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
@@ -374,7 +374,7 @@ func TestFlattenDataSourceClusterAutoscalerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CPURequest - default",
+			name: "CpuRequest - default",
 			args: args{
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
