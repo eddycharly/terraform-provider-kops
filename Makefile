@@ -1,6 +1,6 @@
 PROVIDER_VERSION := "0.0.1"
 OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
-ARCH := $(shell echo `uname -m`)
+ARCH := $(shell arch)
 
 .PHONY: all
 all: clean gen fmt build vet test
