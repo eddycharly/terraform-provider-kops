@@ -1,5 +1,6 @@
 PROVIDER_VERSION := "0.0.1"
 OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
+ARCH := $(shell echo `uname -m`)
 
 .PHONY: all
 all: clean gen fmt build vet test
@@ -45,8 +46,8 @@ vet: fmt
 
 .PHONY: install
 install: all
-	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64
-	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64/terraform-provider-kops
+	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_${ARCH}
+	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_${ARCH}/terraform-provider-kops
 
 # EXAMPLES FOR TERRAFORM < 0.15
 
