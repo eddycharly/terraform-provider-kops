@@ -112,6 +112,7 @@ func TestExpandDataSourceCiliumNetworkingSpec(t *testing.T) {
 					"reconfigure_kubelet":               false,
 					"node_init_bootstrap_file":          "",
 					"cni_bin_path":                      "",
+					"disable_cnp_status_updates":        nil,
 				},
 			},
 			want: _default,
@@ -220,6 +221,7 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 		"reconfigure_kubelet":               false,
 		"node_init_bootstrap_file":          "",
 		"cni_bin_path":                      "",
+		"disable_cnp_status_updates":        nil,
 	}
 	type args struct {
 		in kops.CiliumNetworkingSpec
@@ -1232,6 +1234,17 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.CniBinPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableCNPStatusUpdates - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.DisableCNPStatusUpdates = nil
 					return subject
 				}(),
 			},
@@ -1342,6 +1355,7 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 		"reconfigure_kubelet":               false,
 		"node_init_bootstrap_file":          "",
 		"cni_bin_path":                      "",
+		"disable_cnp_status_updates":        nil,
 	}
 	type args struct {
 		in kops.CiliumNetworkingSpec
@@ -2354,6 +2368,17 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.CniBinPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableCNPStatusUpdates - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.DisableCNPStatusUpdates = nil
 					return subject
 				}(),
 			},

@@ -105,6 +105,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"reconfigure_kubelet":               OptionalBool(),
 			"node_init_bootstrap_file":          OptionalString(),
 			"cni_bin_path":                      OptionalString(),
+			"disable_cnp_status_updates":        OptionalBool(),
 		},
 	}
 
@@ -583,6 +584,25 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		CniBinPath: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cni_bin_path"]),
+		DisableCNPStatusUpdates: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["disable_cnp_status_updates"]),
 	}
 }
 
@@ -966,6 +986,16 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["cni_bin_path"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CniBinPath)
+	out["disable_cnp_status_updates"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.DisableCNPStatusUpdates)
 }
 
 func FlattenResourceCiliumNetworkingSpec(in kops.CiliumNetworkingSpec) map[string]interface{} {

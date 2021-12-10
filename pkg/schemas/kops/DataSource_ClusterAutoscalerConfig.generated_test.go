@@ -33,6 +33,7 @@ func TestExpandDataSourceClusterAutoscalerConfig(t *testing.T) {
 					"image":                            nil,
 					"memory_request":                   nil,
 					"cpu_request":                      nil,
+					"max_node_provision_time":          "",
 				},
 			},
 			want: _default,
@@ -62,6 +63,7 @@ func TestFlattenDataSourceClusterAutoscalerConfigInto(t *testing.T) {
 		"image":                            nil,
 		"memory_request":                   nil,
 		"cpu_request":                      nil,
+		"max_node_provision_time":          "",
 	}
 	type args struct {
 		in kops.ClusterAutoscalerConfig
@@ -205,6 +207,17 @@ func TestFlattenDataSourceClusterAutoscalerConfigInto(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxNodeProvisionTime - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.MaxNodeProvisionTime = ""
 					return subject
 				}(),
 			},
@@ -236,6 +249,7 @@ func TestFlattenDataSourceClusterAutoscalerConfig(t *testing.T) {
 		"image":                            nil,
 		"memory_request":                   nil,
 		"cpu_request":                      nil,
+		"max_node_provision_time":          "",
 	}
 	type args struct {
 		in kops.ClusterAutoscalerConfig
@@ -379,6 +393,17 @@ func TestFlattenDataSourceClusterAutoscalerConfig(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxNodeProvisionTime - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.MaxNodeProvisionTime = ""
 					return subject
 				}(),
 			},

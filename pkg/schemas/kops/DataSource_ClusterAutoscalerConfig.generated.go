@@ -26,6 +26,7 @@ func DataSourceClusterAutoscalerConfig() *schema.Resource {
 			"image":                            ComputedString(),
 			"memory_request":                   ComputedQuantity(),
 			"cpu_request":                      ComputedQuantity(),
+			"max_node_provision_time":          ComputedString(),
 		},
 	}
 
@@ -265,6 +266,9 @@ func ExpandDataSourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clu
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
+		MaxNodeProvisionTime: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["max_node_provision_time"]),
 	}
 }
 
@@ -389,6 +393,9 @@ func FlattenDataSourceClusterAutoscalerConfigInto(in kops.ClusterAutoscalerConfi
 			}(*in)
 		}(in)
 	}(in.CPURequest)
+	out["max_node_provision_time"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MaxNodeProvisionTime)
 }
 
 func FlattenDataSourceClusterAutoscalerConfig(in kops.ClusterAutoscalerConfig) map[string]interface{} {
