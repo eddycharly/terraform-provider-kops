@@ -27,13 +27,13 @@ func ExpandResourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec {
 		panic("expand FileAssetSpec failure, in is nil")
 	}
 	return kops.FileAssetSpec{
-		Name: func(in interface{}) string /**/ {
+		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Path: func(in interface{}) string /**/ {
+		Path: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["path"]),
-		Roles: func(in interface{}) []kops.InstanceGroupRole /**/ {
+		Roles: func(in interface{}) []kops.InstanceGroupRole {
 			return func(in interface{}) []kops.InstanceGroupRole {
 				if in == nil {
 					return nil
@@ -45,10 +45,10 @@ func ExpandResourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec {
 				return out
 			}(in)
 		}(in["roles"]),
-		Content: func(in interface{}) string /**/ {
+		Content: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["content"]),
-		IsBase64: func(in interface{}) bool /**/ {
+		IsBase64: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["is_base64"]),
 	}

@@ -27,7 +27,7 @@ func ExpandResourceMetricsServerConfig(in map[string]interface{}) kops.MetricsSe
 		panic("expand MetricsServerConfig failure, in is nil")
 	}
 	return kops.MetricsServerConfig{
-		Enabled: func(in interface{}) *bool /**/ {
+		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -46,7 +46,7 @@ func ExpandResourceMetricsServerConfig(in map[string]interface{}) kops.MetricsSe
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Image: func(in interface{}) *string /**/ {
+		Image: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -65,7 +65,7 @@ func ExpandResourceMetricsServerConfig(in map[string]interface{}) kops.MetricsSe
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
-		Insecure: func(in interface{}) *bool /**/ {
+		Insecure: func(in interface{}) *bool {
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil

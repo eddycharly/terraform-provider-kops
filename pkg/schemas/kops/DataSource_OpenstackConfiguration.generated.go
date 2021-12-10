@@ -31,7 +31,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 		panic("expand OpenstackConfiguration failure, in is nil")
 	}
 	return kops.OpenstackConfiguration{
-		Loadbalancer: func(in interface{}) *kops.OpenstackLoadbalancerConfig /*k8s.io/kops/pkg/apis/kops*/ {
+		Loadbalancer: func(in interface{}) *kops.OpenstackLoadbalancerConfig {
 			return func(in interface{}) *kops.OpenstackLoadbalancerConfig {
 				if in == nil {
 					return nil
@@ -49,7 +49,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 				}(in))
 			}(in)
 		}(in["loadbalancer"]),
-		Monitor: func(in interface{}) *kops.OpenstackMonitor /*k8s.io/kops/pkg/apis/kops*/ {
+		Monitor: func(in interface{}) *kops.OpenstackMonitor {
 			return func(in interface{}) *kops.OpenstackMonitor {
 				if in == nil {
 					return nil
@@ -67,7 +67,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 				}(in))
 			}(in)
 		}(in["monitor"]),
-		Router: func(in interface{}) *kops.OpenstackRouter /*k8s.io/kops/pkg/apis/kops*/ {
+		Router: func(in interface{}) *kops.OpenstackRouter {
 			return func(in interface{}) *kops.OpenstackRouter {
 				if in == nil {
 					return nil
@@ -85,7 +85,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 				}(in))
 			}(in)
 		}(in["router"]),
-		BlockStorage: func(in interface{}) *kops.OpenstackBlockStorageConfig /*k8s.io/kops/pkg/apis/kops*/ {
+		BlockStorage: func(in interface{}) *kops.OpenstackBlockStorageConfig {
 			return func(in interface{}) *kops.OpenstackBlockStorageConfig {
 				if in == nil {
 					return nil
@@ -103,7 +103,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 				}(in))
 			}(in)
 		}(in["block_storage"]),
-		InsecureSkipVerify: func(in interface{}) *bool /**/ {
+		InsecureSkipVerify: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -122,7 +122,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["insecure_skip_verify"]),
-		Network: func(in interface{}) *kops.OpenstackNetwork /*k8s.io/kops/pkg/apis/kops*/ {
+		Network: func(in interface{}) *kops.OpenstackNetwork {
 			return func(in interface{}) *kops.OpenstackNetwork {
 				if in == nil {
 					return nil
@@ -140,7 +140,7 @@ func ExpandDataSourceOpenstackConfiguration(in map[string]interface{}) kops.Open
 				}(in))
 			}(in)
 		}(in["network"]),
-		Metadata: func(in interface{}) *kops.OpenstackMetadata /*k8s.io/kops/pkg/apis/kops*/ {
+		Metadata: func(in interface{}) *kops.OpenstackMetadata {
 			return func(in interface{}) *kops.OpenstackMetadata {
 				if in == nil {
 					return nil

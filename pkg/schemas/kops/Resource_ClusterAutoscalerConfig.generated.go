@@ -37,7 +37,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 		panic("expand ClusterAutoscalerConfig failure, in is nil")
 	}
 	return kops.ClusterAutoscalerConfig{
-		Enabled: func(in interface{}) *bool /**/ {
+		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -56,7 +56,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Expander: func(in interface{}) *string /**/ {
+		Expander: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -75,7 +75,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["expander"]),
-		BalanceSimilarNodeGroups: func(in interface{}) *bool /**/ {
+		BalanceSimilarNodeGroups: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -94,7 +94,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["balance_similar_node_groups"]),
-		AWSUseStaticInstanceList: func(in interface{}) *bool /**/ {
+		AWSUseStaticInstanceList: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -113,7 +113,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["aws_use_static_instance_list"]),
-		ScaleDownUtilizationThreshold: func(in interface{}) *string /**/ {
+		ScaleDownUtilizationThreshold: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -132,7 +132,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["scale_down_utilization_threshold"]),
-		SkipNodesWithSystemPods: func(in interface{}) *bool /**/ {
+		SkipNodesWithSystemPods: func(in interface{}) *bool {
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
@@ -145,7 +145,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["skip_nodes_with_system_pods"]),
-		SkipNodesWithLocalStorage: func(in interface{}) *bool /**/ {
+		SkipNodesWithLocalStorage: func(in interface{}) *bool {
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
@@ -158,7 +158,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["skip_nodes_with_local_storage"]),
-		NewPodScaleUpDelay: func(in interface{}) *string /**/ {
+		NewPodScaleUpDelay: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -177,7 +177,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["new_pod_scale_up_delay"]),
-		ScaleDownDelayAfterAdd: func(in interface{}) *string /**/ {
+		ScaleDownDelayAfterAdd: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -196,7 +196,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["scale_down_delay_after_add"]),
-		Image: func(in interface{}) *string /**/ {
+		Image: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -215,7 +215,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryRequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -234,7 +234,7 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}

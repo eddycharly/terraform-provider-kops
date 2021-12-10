@@ -32,16 +32,16 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 		panic("expand AwsAuthenticationSpec failure, in is nil")
 	}
 	return kops.AwsAuthenticationSpec{
-		Image: func(in interface{}) string /**/ {
+		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
-		BackendMode: func(in interface{}) string /**/ {
+		BackendMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["backend_mode"]),
-		ClusterID: func(in interface{}) string /**/ {
+		ClusterID: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_id"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryRequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -60,7 +60,7 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -79,7 +79,7 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		MemoryLimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryLimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -98,7 +98,7 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_limit"]),
-		CPULimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPULimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}

@@ -28,7 +28,7 @@ func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 		panic("expand RollingUpdate failure, in is nil")
 	}
 	return kops.RollingUpdate{
-		DrainAndTerminate: func(in interface{}) *bool /**/ {
+		DrainAndTerminate: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -47,7 +47,7 @@ func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["drain_and_terminate"]),
-		MaxUnavailable: func(in interface{}) *intstr.IntOrString /*k8s.io/apimachinery/pkg/util/intstr*/ {
+		MaxUnavailable: func(in interface{}) *intstr.IntOrString {
 			if in == nil {
 				return nil
 			}
@@ -66,7 +66,7 @@ func ExpandResourceRollingUpdate(in map[string]interface{}) kops.RollingUpdate {
 				}(ExpandIntOrString(in))
 			}(in)
 		}(in["max_unavailable"]),
-		MaxSurge: func(in interface{}) *intstr.IntOrString /*k8s.io/apimachinery/pkg/util/intstr*/ {
+		MaxSurge: func(in interface{}) *intstr.IntOrString {
 			if in == nil {
 				return nil
 			}

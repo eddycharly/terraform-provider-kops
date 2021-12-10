@@ -25,13 +25,13 @@ func ExpandDataSourceUserData(in map[string]interface{}) kops.UserData {
 		panic("expand UserData failure, in is nil")
 	}
 	return kops.UserData{
-		Name: func(in interface{}) string /**/ {
+		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Type: func(in interface{}) string /**/ {
+		Type: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["type"]),
-		Content: func(in interface{}) string /**/ {
+		Content: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["content"]),
 	}

@@ -35,13 +35,13 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 		panic("expand LoadBalancerAccessSpec failure, in is nil")
 	}
 	return kops.LoadBalancerAccessSpec{
-		Class: func(in interface{}) kops.LoadBalancerClass /*k8s.io/kops/pkg/apis/kops*/ {
+		Class: func(in interface{}) kops.LoadBalancerClass {
 			return kops.LoadBalancerClass(ExpandString(in))
 		}(in["class"]),
-		Type: func(in interface{}) kops.LoadBalancerType /*k8s.io/kops/pkg/apis/kops*/ {
+		Type: func(in interface{}) kops.LoadBalancerType {
 			return kops.LoadBalancerType(ExpandString(in))
 		}(in["type"]),
-		IdleTimeoutSeconds: func(in interface{}) *int64 /**/ {
+		IdleTimeoutSeconds: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
@@ -60,7 +60,7 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["idle_timeout_seconds"]),
-		SecurityGroupOverride: func(in interface{}) *string /**/ {
+		SecurityGroupOverride: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -79,7 +79,7 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["security_group_override"]),
-		AdditionalSecurityGroups: func(in interface{}) []string /**/ {
+		AdditionalSecurityGroups: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -91,13 +91,13 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				return out
 			}(in)
 		}(in["additional_security_groups"]),
-		UseForInternalApi: func(in interface{}) bool /**/ {
+		UseForInternalApi: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["use_for_internal_api"]),
-		SSLCertificate: func(in interface{}) string /**/ {
+		SSLCertificate: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ssl_certificate"]),
-		SSLPolicy: func(in interface{}) *string /**/ {
+		SSLPolicy: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -116,7 +116,7 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["ssl_policy"]),
-		CrossZoneLoadBalancing: func(in interface{}) *bool /**/ {
+		CrossZoneLoadBalancing: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -135,7 +135,7 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["cross_zone_load_balancing"]),
-		Subnets: func(in interface{}) []kops.LoadBalancerSubnetSpec /**/ {
+		Subnets: func(in interface{}) []kops.LoadBalancerSubnetSpec {
 			return func(in interface{}) []kops.LoadBalancerSubnetSpec {
 				if in == nil {
 					return nil
@@ -152,7 +152,7 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				return out
 			}(in)
 		}(in["subnets"]),
-		AccessLog: func(in interface{}) *kops.AccessLogSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		AccessLog: func(in interface{}) *kops.AccessLogSpec {
 			return func(in interface{}) *kops.AccessLogSpec {
 				if in == nil {
 					return nil

@@ -34,7 +34,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 		panic("expand ContainerdConfig failure, in is nil")
 	}
 	return kops.ContainerdConfig{
-		Address: func(in interface{}) *string /**/ {
+		Address: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -53,7 +53,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["address"]),
-		ConfigOverride: func(in interface{}) *string /**/ {
+		ConfigOverride: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -72,7 +72,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["config_override"]),
-		LogLevel: func(in interface{}) *string /**/ {
+		LogLevel: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -91,7 +91,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["log_level"]),
-		Packages: func(in interface{}) *kops.PackagesConfig /*k8s.io/kops/pkg/apis/kops*/ {
+		Packages: func(in interface{}) *kops.PackagesConfig {
 			return func(in interface{}) *kops.PackagesConfig {
 				if in == nil {
 					return nil
@@ -109,7 +109,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(in))
 			}(in)
 		}(in["packages"]),
-		RegistryMirrors: func(in interface{}) map[string][]string /**/ {
+		RegistryMirrors: func(in interface{}) map[string][]string {
 			return func(in interface{}) map[string][]string {
 				if in == nil {
 					return nil
@@ -141,7 +141,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				return nil
 			}(in)
 		}(in["registry_mirrors"]),
-		Root: func(in interface{}) *string /**/ {
+		Root: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -160,10 +160,10 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["root"]),
-		SkipInstall: func(in interface{}) bool /**/ {
+		SkipInstall: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["skip_install"]),
-		State: func(in interface{}) *string /**/ {
+		State: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -182,7 +182,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["state"]),
-		Version: func(in interface{}) *string /**/ {
+		Version: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -201,7 +201,7 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["version"]),
-		NvidiaGPU: func(in interface{}) *kops.NvidiaGPUConfig /*k8s.io/kops/pkg/apis/kops*/ {
+		NvidiaGPU: func(in interface{}) *kops.NvidiaGPUConfig {
 			return func(in interface{}) *kops.NvidiaGPUConfig {
 				if in == nil {
 					return nil

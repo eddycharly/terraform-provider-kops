@@ -24,7 +24,7 @@ func ExpandDataSourceAuthorizationSpec(in map[string]interface{}) kops.Authoriza
 		panic("expand AuthorizationSpec failure, in is nil")
 	}
 	return kops.AuthorizationSpec{
-		AlwaysAllow: func(in interface{}) *kops.AlwaysAllowAuthorizationSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		AlwaysAllow: func(in interface{}) *kops.AlwaysAllowAuthorizationSpec {
 			return func(in interface{}) *kops.AlwaysAllowAuthorizationSpec {
 				if in == nil {
 					return nil
@@ -42,7 +42,7 @@ func ExpandDataSourceAuthorizationSpec(in map[string]interface{}) kops.Authoriza
 				}(in))
 			}(in)
 		}(in["always_allow"]),
-		RBAC: func(in interface{}) *kops.RBACAuthorizationSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		RBAC: func(in interface{}) *kops.RBACAuthorizationSpec {
 			return func(in interface{}) *kops.RBACAuthorizationSpec {
 				if in == nil {
 					return nil

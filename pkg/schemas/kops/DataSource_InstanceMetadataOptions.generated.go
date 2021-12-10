@@ -26,7 +26,7 @@ func ExpandDataSourceInstanceMetadataOptions(in map[string]interface{}) kops.Ins
 		panic("expand InstanceMetadataOptions failure, in is nil")
 	}
 	return kops.InstanceMetadataOptions{
-		HTTPPutResponseHopLimit: func(in interface{}) *int64 /**/ {
+		HTTPPutResponseHopLimit: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
@@ -45,7 +45,7 @@ func ExpandDataSourceInstanceMetadataOptions(in map[string]interface{}) kops.Ins
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["http_put_response_hop_limit"]),
-		HTTPTokens: func(in interface{}) *string /**/ {
+		HTTPTokens: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}

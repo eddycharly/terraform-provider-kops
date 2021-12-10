@@ -23,7 +23,7 @@ func ExpandDataSourceOpenstackNetwork(in map[string]interface{}) kops.OpenstackN
 		panic("expand OpenstackNetwork failure, in is nil")
 	}
 	return kops.OpenstackNetwork{
-		AvailabilityZoneHints: func(in interface{}) []*string /**/ {
+		AvailabilityZoneHints: func(in interface{}) []*string {
 			return func(in interface{}) []*string {
 				if in == nil {
 					return nil

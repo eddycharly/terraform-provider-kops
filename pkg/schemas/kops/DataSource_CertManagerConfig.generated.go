@@ -28,7 +28,7 @@ func ExpandDataSourceCertManagerConfig(in map[string]interface{}) kops.CertManag
 		panic("expand CertManagerConfig failure, in is nil")
 	}
 	return kops.CertManagerConfig{
-		Enabled: func(in interface{}) *bool /**/ {
+		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -47,7 +47,7 @@ func ExpandDataSourceCertManagerConfig(in map[string]interface{}) kops.CertManag
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Managed: func(in interface{}) *bool /**/ {
+		Managed: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -66,7 +66,7 @@ func ExpandDataSourceCertManagerConfig(in map[string]interface{}) kops.CertManag
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["managed"]),
-		Image: func(in interface{}) *string /**/ {
+		Image: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -85,7 +85,7 @@ func ExpandDataSourceCertManagerConfig(in map[string]interface{}) kops.CertManag
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
-		DefaultIssuer: func(in interface{}) *string /**/ {
+		DefaultIssuer: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}

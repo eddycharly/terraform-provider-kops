@@ -28,7 +28,7 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 		panic("expand OpenstackRouter failure, in is nil")
 	}
 	return kops.OpenstackRouter{
-		ExternalNetwork: func(in interface{}) *string /**/ {
+		ExternalNetwork: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -47,7 +47,7 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["external_network"]),
-		DNSServers: func(in interface{}) *string /**/ {
+		DNSServers: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -66,7 +66,7 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["dns_servers"]),
-		ExternalSubnet: func(in interface{}) *string /**/ {
+		ExternalSubnet: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -85,7 +85,7 @@ func ExpandDataSourceOpenstackRouter(in map[string]interface{}) kops.OpenstackRo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["external_subnet"]),
-		AvailabilityZoneHints: func(in interface{}) []*string /**/ {
+		AvailabilityZoneHints: func(in interface{}) []*string {
 			return func(in interface{}) []*string {
 				if in == nil {
 					return nil

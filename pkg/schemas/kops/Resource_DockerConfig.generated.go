@@ -54,7 +54,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 		panic("expand DockerConfig failure, in is nil")
 	}
 	return kops.DockerConfig{
-		AuthorizationPlugins: func(in interface{}) []string /**/ {
+		AuthorizationPlugins: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -66,7 +66,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["authorization_plugins"]),
-		Bridge: func(in interface{}) *string /**/ {
+		Bridge: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -85,7 +85,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["bridge"]),
-		BridgeIP: func(in interface{}) *string /**/ {
+		BridgeIP: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -104,7 +104,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["bridge_ip"]),
-		DataRoot: func(in interface{}) *string /**/ {
+		DataRoot: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -123,7 +123,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["data_root"]),
-		DefaultUlimit: func(in interface{}) []string /**/ {
+		DefaultUlimit: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -135,7 +135,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["default_ulimit"]),
-		DefaultRuntime: func(in interface{}) *string /**/ {
+		DefaultRuntime: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -154,7 +154,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["default_runtime"]),
-		ExecOpt: func(in interface{}) []string /**/ {
+		ExecOpt: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -166,7 +166,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["exec_opt"]),
-		ExecRoot: func(in interface{}) *string /**/ {
+		ExecRoot: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -185,7 +185,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["exec_root"]),
-		Experimental: func(in interface{}) *bool /**/ {
+		Experimental: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -204,10 +204,10 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["experimental"]),
-		HealthCheck: func(in interface{}) bool /**/ {
+		HealthCheck: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["health_check"]),
-		Hosts: func(in interface{}) []string /**/ {
+		Hosts: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -219,7 +219,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["hosts"]),
-		IPMasq: func(in interface{}) *bool /**/ {
+		IPMasq: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -238,7 +238,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["ip_masq"]),
-		IPTables: func(in interface{}) *bool /**/ {
+		IPTables: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -257,7 +257,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["ip_tables"]),
-		InsecureRegistry: func(in interface{}) *string /**/ {
+		InsecureRegistry: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -276,7 +276,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["insecure_registry"]),
-		InsecureRegistries: func(in interface{}) []string /**/ {
+		InsecureRegistries: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -288,7 +288,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["insecure_registries"]),
-		LiveRestore: func(in interface{}) *bool /**/ {
+		LiveRestore: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -307,7 +307,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["live_restore"]),
-		LogDriver: func(in interface{}) *string /**/ {
+		LogDriver: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -326,7 +326,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["log_driver"]),
-		LogLevel: func(in interface{}) *string /**/ {
+		LogLevel: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -345,7 +345,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["log_level"]),
-		LogOpt: func(in interface{}) []string /**/ {
+		LogOpt: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -357,7 +357,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["log_opt"]),
-		MetricsAddress: func(in interface{}) *string /**/ {
+		MetricsAddress: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -376,7 +376,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["metrics_address"]),
-		MTU: func(in interface{}) *int32 /**/ {
+		MTU: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -395,7 +395,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["mtu"]),
-		Packages: func(in interface{}) *kops.PackagesConfig /*k8s.io/kops/pkg/apis/kops*/ {
+		Packages: func(in interface{}) *kops.PackagesConfig {
 			return func(in interface{}) *kops.PackagesConfig {
 				if in == nil {
 					return nil
@@ -413,7 +413,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(in))
 			}(in)
 		}(in["packages"]),
-		RegistryMirrors: func(in interface{}) []string /**/ {
+		RegistryMirrors: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -425,7 +425,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["registry_mirrors"]),
-		Runtimes: func(in interface{}) []string /**/ {
+		Runtimes: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -437,7 +437,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["runtimes"]),
-		SelinuxEnabled: func(in interface{}) *bool /**/ {
+		SelinuxEnabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -456,10 +456,10 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["selinux_enabled"]),
-		SkipInstall: func(in interface{}) bool /**/ {
+		SkipInstall: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["skip_install"]),
-		Storage: func(in interface{}) *string /**/ {
+		Storage: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -478,7 +478,7 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["storage"]),
-		StorageOpts: func(in interface{}) []string /**/ {
+		StorageOpts: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -490,10 +490,10 @@ func ExpandResourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["storage_opts"]),
-		UserNamespaceRemap: func(in interface{}) string /**/ {
+		UserNamespaceRemap: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["user_namespace_remap"]),
-		Version: func(in interface{}) *string /**/ {
+		Version: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}

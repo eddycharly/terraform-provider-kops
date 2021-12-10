@@ -5,6 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	core "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -24,24 +25,24 @@ func ResourceToleration() *schema.Resource {
 	return res
 }
 
-func ExpandResourceToleration(in map[string]interface{}) v1.Toleration {
+func ExpandResourceToleration(in map[string]interface{}) core.Toleration {
 	if in == nil {
 		panic("expand Toleration failure, in is nil")
 	}
-	return v1.Toleration{
-		Key: func(in interface{}) string /**/ {
+	return core.Toleration{
+		Key: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["key"]),
-		Operator: func(in interface{}) v1.TolerationOperator /*k8s.io/api/core/v1*/ {
+		Operator: func(in interface{}) core.TolerationOperator {
 			return v1.TolerationOperator(ExpandString(in))
 		}(in["operator"]),
-		Value: func(in interface{}) string /**/ {
+		Value: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["value"]),
-		Effect: func(in interface{}) v1.TaintEffect /*k8s.io/api/core/v1*/ {
+		Effect: func(in interface{}) core.TaintEffect {
 			return v1.TaintEffect(ExpandString(in))
 		}(in["effect"]),
-		TolerationSeconds: func(in interface{}) *int64 /**/ {
+		TolerationSeconds: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
@@ -63,17 +64,17 @@ func ExpandResourceToleration(in map[string]interface{}) v1.Toleration {
 	}
 }
 
-func FlattenResourceTolerationInto(in v1.Toleration, out map[string]interface{}) {
+func FlattenResourceTolerationInto(in core.Toleration, out map[string]interface{}) {
 	out["key"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Key)
-	out["operator"] = func(in v1.TolerationOperator) interface{} {
+	out["operator"] = func(in core.TolerationOperator) interface{} {
 		return FlattenString(string(in))
 	}(in.Operator)
 	out["value"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Value)
-	out["effect"] = func(in v1.TaintEffect) interface{} {
+	out["effect"] = func(in core.TaintEffect) interface{} {
 		return FlattenString(string(in))
 	}(in.Effect)
 	out["toleration_seconds"] = func(in *int64) interface{} {
@@ -88,7 +89,7 @@ func FlattenResourceTolerationInto(in v1.Toleration, out map[string]interface{})
 	}(in.TolerationSeconds)
 }
 
-func FlattenResourceToleration(in v1.Toleration) map[string]interface{} {
+func FlattenResourceToleration(in core.Toleration) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenResourceTolerationInto(in, out)
 	return out

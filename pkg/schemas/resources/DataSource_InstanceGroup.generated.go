@@ -92,13 +92,13 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
-		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
 			return kopsschemas.ExpandDataSourceInstanceGroupSpec(in.(map[string]interface{}))
 		}(in),
-		ClusterName: func(in interface{}) string /**/ {
+		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		Name: func(in interface{}) string /**/ {
+		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
 	}

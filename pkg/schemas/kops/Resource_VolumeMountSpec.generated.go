@@ -27,13 +27,13 @@ func ExpandResourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSp
 		panic("expand VolumeMountSpec failure, in is nil")
 	}
 	return kops.VolumeMountSpec{
-		Device: func(in interface{}) string /**/ {
+		Device: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["device"]),
-		Filesystem: func(in interface{}) string /**/ {
+		Filesystem: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["filesystem"]),
-		FormatOptions: func(in interface{}) []string /**/ {
+		FormatOptions: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -45,7 +45,7 @@ func ExpandResourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSp
 				return out
 			}(in)
 		}(in["format_options"]),
-		MountOptions: func(in interface{}) []string /**/ {
+		MountOptions: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -57,7 +57,7 @@ func ExpandResourceVolumeMountSpec(in map[string]interface{}) kops.VolumeMountSp
 				return out
 			}(in)
 		}(in["mount_options"]),
-		Path: func(in interface{}) string /**/ {
+		Path: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["path"]),
 	}

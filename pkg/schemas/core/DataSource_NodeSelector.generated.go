@@ -3,7 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 var _ = Schema
@@ -18,21 +18,21 @@ func DataSourceNodeSelector() *schema.Resource {
 	return res
 }
 
-func ExpandDataSourceNodeSelector(in map[string]interface{}) v1.NodeSelector {
+func ExpandDataSourceNodeSelector(in map[string]interface{}) core.NodeSelector {
 	if in == nil {
 		panic("expand NodeSelector failure, in is nil")
 	}
-	return v1.NodeSelector{
-		NodeSelectorTerms: func(in interface{}) []v1.NodeSelectorTerm /**/ {
-			return func(in interface{}) []v1.NodeSelectorTerm {
+	return core.NodeSelector{
+		NodeSelectorTerms: func(in interface{}) []core.NodeSelectorTerm {
+			return func(in interface{}) []core.NodeSelectorTerm {
 				if in == nil {
 					return nil
 				}
-				var out []v1.NodeSelectorTerm
+				var out []core.NodeSelectorTerm
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) v1.NodeSelectorTerm {
+					out = append(out, func(in interface{}) core.NodeSelectorTerm {
 						if in == nil {
-							return v1.NodeSelectorTerm{}
+							return core.NodeSelectorTerm{}
 						}
 						return (ExpandDataSourceNodeSelectorTerm(in.(map[string]interface{})))
 					}(in))
@@ -43,12 +43,12 @@ func ExpandDataSourceNodeSelector(in map[string]interface{}) v1.NodeSelector {
 	}
 }
 
-func FlattenDataSourceNodeSelectorInto(in v1.NodeSelector, out map[string]interface{}) {
-	out["node_selector_terms"] = func(in []v1.NodeSelectorTerm) interface{} {
-		return func(in []v1.NodeSelectorTerm) []interface{} {
+func FlattenDataSourceNodeSelectorInto(in core.NodeSelector, out map[string]interface{}) {
+	out["node_selector_terms"] = func(in []core.NodeSelectorTerm) interface{} {
+		return func(in []core.NodeSelectorTerm) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in v1.NodeSelectorTerm) interface{} {
+				out = append(out, func(in core.NodeSelectorTerm) interface{} {
 					return FlattenDataSourceNodeSelectorTerm(in)
 				}(in))
 			}
@@ -57,7 +57,7 @@ func FlattenDataSourceNodeSelectorInto(in v1.NodeSelector, out map[string]interf
 	}(in.NodeSelectorTerms)
 }
 
-func FlattenDataSourceNodeSelector(in v1.NodeSelector) map[string]interface{} {
+func FlattenDataSourceNodeSelector(in core.NodeSelector) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenDataSourceNodeSelectorInto(in, out)
 	return out

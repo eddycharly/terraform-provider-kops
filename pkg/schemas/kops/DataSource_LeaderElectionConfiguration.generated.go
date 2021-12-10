@@ -5,7 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -32,7 +32,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 		panic("expand LeaderElectionConfiguration failure, in is nil")
 	}
 	return kops.LeaderElectionConfiguration{
-		LeaderElect: func(in interface{}) *bool /**/ {
+		LeaderElect: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -51,45 +51,45 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["leader_elect"]),
-		LeaderElectLeaseDuration: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
+		LeaderElectLeaseDuration: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["leader_elect_lease_duration"]),
-		LeaderElectRenewDeadlineDuration: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
+		LeaderElectRenewDeadlineDuration: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["leader_elect_renew_deadline_duration"]),
-		LeaderElectResourceLock: func(in interface{}) *string /**/ {
+		LeaderElectResourceLock: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -108,7 +108,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["leader_elect_resource_lock"]),
-		LeaderElectResourceName: func(in interface{}) *string /**/ {
+		LeaderElectResourceName: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -127,7 +127,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["leader_elect_resource_name"]),
-		LeaderElectResourceNamespace: func(in interface{}) *string /**/ {
+		LeaderElectResourceNamespace: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -146,21 +146,21 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["leader_elect_resource_namespace"]),
-		LeaderElectRetryPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
+		LeaderElectRetryPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -179,22 +179,22 @@ func FlattenDataSourceLeaderElectionConfigurationInto(in kops.LeaderElectionConf
 			}(*in)
 		}(in)
 	}(in.LeaderElect)
-	out["leader_elect_lease_duration"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["leader_elect_lease_duration"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.LeaderElectLeaseDuration)
-	out["leader_elect_renew_deadline_duration"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["leader_elect_renew_deadline_duration"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -229,12 +229,12 @@ func FlattenDataSourceLeaderElectionConfigurationInto(in kops.LeaderElectionConf
 			}(*in)
 		}(in)
 	}(in.LeaderElectResourceNamespace)
-	out["leader_elect_retry_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["leader_elect_retry_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

@@ -29,13 +29,13 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 		panic("expand IAMSpec failure, in is nil")
 	}
 	return kops.IAMSpec{
-		Legacy: func(in interface{}) bool /**/ {
+		Legacy: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["legacy"]),
-		AllowContainerRegistry: func(in interface{}) bool /**/ {
+		AllowContainerRegistry: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["allow_container_registry"]),
-		PermissionsBoundary: func(in interface{}) *string /**/ {
+		PermissionsBoundary: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -54,7 +54,7 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["permissions_boundary"]),
-		UseServiceAccountExternalPermissions: func(in interface{}) *bool /**/ {
+		UseServiceAccountExternalPermissions: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -73,7 +73,7 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["use_service_account_external_permissions"]),
-		ServiceAccountExternalPermissions: func(in interface{}) []kops.ServiceAccountExternalPermission /**/ {
+		ServiceAccountExternalPermissions: func(in interface{}) []kops.ServiceAccountExternalPermission {
 			return func(in interface{}) []kops.ServiceAccountExternalPermission {
 				if in == nil {
 					return nil

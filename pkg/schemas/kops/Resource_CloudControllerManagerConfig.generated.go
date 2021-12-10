@@ -35,25 +35,25 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 		panic("expand CloudControllerManagerConfig failure, in is nil")
 	}
 	return kops.CloudControllerManagerConfig{
-		Master: func(in interface{}) string /**/ {
+		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
-		LogLevel: func(in interface{}) int32 /**/ {
+		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
-		Image: func(in interface{}) string /**/ {
+		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
-		CloudProvider: func(in interface{}) string /**/ {
+		CloudProvider: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cloud_provider"]),
-		ClusterName: func(in interface{}) string /**/ {
+		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		ClusterCIDR: func(in interface{}) string /**/ {
+		ClusterCIDR: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_cidr"]),
-		AllocateNodeCIDRs: func(in interface{}) *bool /**/ {
+		AllocateNodeCIDRs: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -72,7 +72,7 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["allocate_node_cidrs"]),
-		ConfigureCloudRoutes: func(in interface{}) *bool /**/ {
+		ConfigureCloudRoutes: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -91,7 +91,7 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["configure_cloud_routes"]),
-		CIDRAllocatorType: func(in interface{}) *string /**/ {
+		CIDRAllocatorType: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -110,7 +110,7 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["cidr_allocator_type"]),
-		LeaderElection: func(in interface{}) *kops.LeaderElectionConfiguration /*k8s.io/kops/pkg/apis/kops*/ {
+		LeaderElection: func(in interface{}) *kops.LeaderElectionConfiguration {
 			return func(in interface{}) *kops.LeaderElectionConfiguration {
 				if in == nil {
 					return nil
@@ -128,7 +128,7 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 				}(in))
 			}(in)
 		}(in["leader_election"]),
-		UseServiceAccountCredentials: func(in interface{}) *bool /**/ {
+		UseServiceAccountCredentials: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}

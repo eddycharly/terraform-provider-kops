@@ -23,7 +23,7 @@ func ExpandResourceCNINetworkingSpec(in map[string]interface{}) kops.CNINetworki
 		panic("expand CNINetworkingSpec failure, in is nil")
 	}
 	return kops.CNINetworkingSpec{
-		UsesSecondaryIP: func(in interface{}) bool /**/ {
+		UsesSecondaryIP: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["uses_secondary_ip"]),
 	}

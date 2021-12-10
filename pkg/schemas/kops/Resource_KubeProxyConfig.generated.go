@@ -5,7 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -45,37 +45,37 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 		panic("expand KubeProxyConfig failure, in is nil")
 	}
 	return kops.KubeProxyConfig{
-		Image: func(in interface{}) string /**/ {
+		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
-		CPURequest: func(in interface{}) string /**/ {
+		CPURequest: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cpu_request"]),
-		CPULimit: func(in interface{}) string /**/ {
+		CPULimit: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cpu_limit"]),
-		MemoryRequest: func(in interface{}) string /**/ {
+		MemoryRequest: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["memory_request"]),
-		MemoryLimit: func(in interface{}) string /**/ {
+		MemoryLimit: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["memory_limit"]),
-		LogLevel: func(in interface{}) int32 /**/ {
+		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
-		ClusterCIDR: func(in interface{}) string /**/ {
+		ClusterCIDR: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_cidr"]),
-		HostnameOverride: func(in interface{}) string /**/ {
+		HostnameOverride: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["hostname_override"]),
-		BindAddress: func(in interface{}) string /**/ {
+		BindAddress: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bind_address"]),
-		Master: func(in interface{}) string /**/ {
+		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
-		MetricsBindAddress: func(in interface{}) *string /**/ {
+		MetricsBindAddress: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -94,7 +94,7 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["metrics_bind_address"]),
-		Enabled: func(in interface{}) *bool /**/ {
+		Enabled: func(in interface{}) *bool {
 			return func(in interface{}) *bool {
 				if in == nil {
 					return nil
@@ -107,10 +107,10 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		ProxyMode: func(in interface{}) string /**/ {
+		ProxyMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["proxy_mode"]),
-		IPVSExcludeCIDRS: func(in interface{}) []string /**/ {
+		IPVSExcludeCIDRS: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -122,26 +122,26 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 				return out
 			}(in)
 		}(in["ip_vs_exclude_cidr_s"]),
-		IPVSMinSyncPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
+		IPVSMinSyncPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["ip_vs_min_sync_period"]),
-		IPVSScheduler: func(in interface{}) *string /**/ {
+		IPVSScheduler: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -160,26 +160,26 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["ip_vs_scheduler"]),
-		IPVSSyncPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
+		IPVSSyncPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["ip_vs_sync_period"]),
-		FeatureGates: func(in interface{}) map[string]string /**/ {
+		FeatureGates: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -196,7 +196,7 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 				return nil
 			}(in)
 		}(in["feature_gates"]),
-		ConntrackMaxPerCore: func(in interface{}) *int32 /**/ {
+		ConntrackMaxPerCore: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -215,7 +215,7 @@ func ExpandResourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyConf
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["conntrack_max_per_core"]),
-		ConntrackMin: func(in interface{}) *int32 /**/ {
+		ConntrackMin: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -300,12 +300,12 @@ func FlattenResourceKubeProxyConfigInto(in kops.KubeProxyConfig, out map[string]
 			return out
 		}(in)
 	}(in.IPVSExcludeCIDRS)
-	out["ip_vs_min_sync_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["ip_vs_min_sync_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -320,12 +320,12 @@ func FlattenResourceKubeProxyConfigInto(in kops.KubeProxyConfig, out map[string]
 			}(*in)
 		}(in)
 	}(in.IPVSScheduler)
-	out["ip_vs_sync_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["ip_vs_sync_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

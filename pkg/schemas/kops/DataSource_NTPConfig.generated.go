@@ -25,7 +25,7 @@ func ExpandDataSourceNTPConfig(in map[string]interface{}) kops.NTPConfig {
 		panic("expand NTPConfig failure, in is nil")
 	}
 	return kops.NTPConfig{
-		Managed: func(in interface{}) *bool /**/ {
+		Managed: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}

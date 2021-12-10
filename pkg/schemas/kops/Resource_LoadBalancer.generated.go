@@ -26,7 +26,7 @@ func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 		panic("expand LoadBalancer failure, in is nil")
 	}
 	return kops.LoadBalancer{
-		LoadBalancerName: func(in interface{}) *string /**/ {
+		LoadBalancerName: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -45,7 +45,7 @@ func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["load_balancer_name"]),
-		TargetGroupARN: func(in interface{}) *string /**/ {
+		TargetGroupARN: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}

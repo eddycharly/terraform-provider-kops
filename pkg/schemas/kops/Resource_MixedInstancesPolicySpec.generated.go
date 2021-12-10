@@ -30,7 +30,7 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 		panic("expand MixedInstancesPolicySpec failure, in is nil")
 	}
 	return kops.MixedInstancesPolicySpec{
-		Instances: func(in interface{}) []string /**/ {
+		Instances: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -42,7 +42,7 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 				return out
 			}(in)
 		}(in["instances"]),
-		OnDemandAllocationStrategy: func(in interface{}) *string /**/ {
+		OnDemandAllocationStrategy: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -61,7 +61,7 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["on_demand_allocation_strategy"]),
-		OnDemandBase: func(in interface{}) *int64 /**/ {
+		OnDemandBase: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
@@ -82,7 +82,7 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			}
 			return nil
 		}(in["on_demand_base"]),
-		OnDemandAboveBase: func(in interface{}) *int64 /**/ {
+		OnDemandAboveBase: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
@@ -103,7 +103,7 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 			}
 			return nil
 		}(in["on_demand_above_base"]),
-		SpotAllocationStrategy: func(in interface{}) *string /**/ {
+		SpotAllocationStrategy: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -122,7 +122,7 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["spot_allocation_strategy"]),
-		SpotInstancePools: func(in interface{}) *int64 /**/ {
+		SpotInstancePools: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}

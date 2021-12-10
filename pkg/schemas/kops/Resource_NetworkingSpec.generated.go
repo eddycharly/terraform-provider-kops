@@ -37,7 +37,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 		panic("expand NetworkingSpec failure, in is nil")
 	}
 	return kops.NetworkingSpec{
-		Classic: func(in interface{}) *kops.ClassicNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Classic: func(in interface{}) *kops.ClassicNetworkingSpec {
 			return func(in interface{}) *kops.ClassicNetworkingSpec {
 				if in == nil {
 					return nil
@@ -55,7 +55,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["classic"]),
-		Kubenet: func(in interface{}) *kops.KubenetNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Kubenet: func(in interface{}) *kops.KubenetNetworkingSpec {
 			return func(in interface{}) *kops.KubenetNetworkingSpec {
 				if in == nil {
 					return nil
@@ -73,7 +73,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["kubenet"]),
-		External: func(in interface{}) *kops.ExternalNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		External: func(in interface{}) *kops.ExternalNetworkingSpec {
 			return func(in interface{}) *kops.ExternalNetworkingSpec {
 				if in == nil {
 					return nil
@@ -91,7 +91,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["external"]),
-		CNI: func(in interface{}) *kops.CNINetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		CNI: func(in interface{}) *kops.CNINetworkingSpec {
 			return func(in interface{}) *kops.CNINetworkingSpec {
 				if in == nil {
 					return nil
@@ -109,7 +109,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["cni"]),
-		Kopeio: func(in interface{}) *kops.KopeioNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Kopeio: func(in interface{}) *kops.KopeioNetworkingSpec {
 			return func(in interface{}) *kops.KopeioNetworkingSpec {
 				if in == nil {
 					return nil
@@ -127,7 +127,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["kopeio"]),
-		Weave: func(in interface{}) *kops.WeaveNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Weave: func(in interface{}) *kops.WeaveNetworkingSpec {
 			return func(in interface{}) *kops.WeaveNetworkingSpec {
 				if in == nil {
 					return nil
@@ -145,7 +145,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["weave"]),
-		Flannel: func(in interface{}) *kops.FlannelNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Flannel: func(in interface{}) *kops.FlannelNetworkingSpec {
 			return func(in interface{}) *kops.FlannelNetworkingSpec {
 				if in == nil {
 					return nil
@@ -163,7 +163,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["flannel"]),
-		Calico: func(in interface{}) *kops.CalicoNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Calico: func(in interface{}) *kops.CalicoNetworkingSpec {
 			return func(in interface{}) *kops.CalicoNetworkingSpec {
 				if in == nil {
 					return nil
@@ -181,7 +181,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["calico"]),
-		Canal: func(in interface{}) *kops.CanalNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Canal: func(in interface{}) *kops.CanalNetworkingSpec {
 			return func(in interface{}) *kops.CanalNetworkingSpec {
 				if in == nil {
 					return nil
@@ -199,7 +199,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["canal"]),
-		Kuberouter: func(in interface{}) *kops.KuberouterNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Kuberouter: func(in interface{}) *kops.KuberouterNetworkingSpec {
 			return func(in interface{}) *kops.KuberouterNetworkingSpec {
 				if in == nil {
 					return nil
@@ -217,7 +217,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["kuberouter"]),
-		Romana: func(in interface{}) *kops.RomanaNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Romana: func(in interface{}) *kops.RomanaNetworkingSpec {
 			return func(in interface{}) *kops.RomanaNetworkingSpec {
 				if in == nil {
 					return nil
@@ -235,7 +235,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["romana"]),
-		AmazonVPC: func(in interface{}) *kops.AmazonVPCNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		AmazonVPC: func(in interface{}) *kops.AmazonVPCNetworkingSpec {
 			return func(in interface{}) *kops.AmazonVPCNetworkingSpec {
 				if in == nil {
 					return nil
@@ -253,7 +253,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["amazon_vpc"]),
-		Cilium: func(in interface{}) *kops.CiliumNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Cilium: func(in interface{}) *kops.CiliumNetworkingSpec {
 			return func(in interface{}) *kops.CiliumNetworkingSpec {
 				if in == nil {
 					return nil
@@ -271,7 +271,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["cilium"]),
-		LyftVPC: func(in interface{}) *kops.LyftVPCNetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		LyftVPC: func(in interface{}) *kops.LyftVPCNetworkingSpec {
 			return func(in interface{}) *kops.LyftVPCNetworkingSpec {
 				if in == nil {
 					return nil
@@ -289,7 +289,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["lyft_vpc"]),
-		GCE: func(in interface{}) *kops.GCENetworkingSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		GCE: func(in interface{}) *kops.GCENetworkingSpec {
 			return func(in interface{}) *kops.GCENetworkingSpec {
 				if in == nil {
 					return nil

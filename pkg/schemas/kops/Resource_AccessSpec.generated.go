@@ -24,7 +24,7 @@ func ExpandResourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 		panic("expand AccessSpec failure, in is nil")
 	}
 	return kops.AccessSpec{
-		DNS: func(in interface{}) *kops.DNSAccessSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		DNS: func(in interface{}) *kops.DNSAccessSpec {
 			return func(in interface{}) *kops.DNSAccessSpec {
 				if in == nil {
 					return nil
@@ -42,7 +42,7 @@ func ExpandResourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				}(in))
 			}(in)
 		}(in["dns"]),
-		LoadBalancer: func(in interface{}) *kops.LoadBalancerAccessSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		LoadBalancer: func(in interface{}) *kops.LoadBalancerAccessSpec {
 			return func(in interface{}) *kops.LoadBalancerAccessSpec {
 				if in == nil {
 					return nil

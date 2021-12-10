@@ -52,31 +52,31 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 		panic("expand CalicoNetworkingSpec failure, in is nil")
 	}
 	return kops.CalicoNetworkingSpec{
-		Registry: func(in interface{}) string /**/ {
+		Registry: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["registry"]),
-		Version: func(in interface{}) string /**/ {
+		Version: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["version"]),
-		AWSSrcDstCheck: func(in interface{}) string /**/ {
+		AWSSrcDstCheck: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["aws_src_dst_check"]),
-		BPFEnabled: func(in interface{}) bool /**/ {
+		BPFEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["bpf_enabled"]),
-		BPFExternalServiceMode: func(in interface{}) string /**/ {
+		BPFExternalServiceMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bpf_external_service_mode"]),
-		BPFKubeProxyIptablesCleanupEnabled: func(in interface{}) bool /**/ {
+		BPFKubeProxyIptablesCleanupEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["bpf_kube_proxy_iptables_cleanup_enabled"]),
-		BPFLogLevel: func(in interface{}) string /**/ {
+		BPFLogLevel: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bpf_log_level"]),
-		ChainInsertMode: func(in interface{}) string /**/ {
+		ChainInsertMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["chain_insert_mode"]),
-		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -95,7 +95,7 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		CrossSubnet: func(in interface{}) *bool /**/ {
+		CrossSubnet: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -114,25 +114,25 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["cross_subnet"]),
-		EncapsulationMode: func(in interface{}) string /**/ {
+		EncapsulationMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["encapsulation_mode"]),
-		IPIPMode: func(in interface{}) string /**/ {
+		IPIPMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ip_ip_mode"]),
-		IPv4AutoDetectionMethod: func(in interface{}) string /**/ {
+		IPv4AutoDetectionMethod: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ipv4_auto_detection_method"]),
-		IPv6AutoDetectionMethod: func(in interface{}) string /**/ {
+		IPv6AutoDetectionMethod: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ipv6_auto_detection_method"]),
-		IptablesBackend: func(in interface{}) string /**/ {
+		IptablesBackend: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["iptables_backend"]),
-		LogSeverityScreen: func(in interface{}) string /**/ {
+		LogSeverityScreen: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["log_severity_screen"]),
-		MTU: func(in interface{}) *int32 /**/ {
+		MTU: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -151,34 +151,34 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["mtu"]),
-		PrometheusMetricsEnabled: func(in interface{}) bool /**/ {
+		PrometheusMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_metrics_enabled"]),
-		PrometheusMetricsPort: func(in interface{}) int32 /**/ {
+		PrometheusMetricsPort: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["prometheus_metrics_port"]),
-		PrometheusGoMetricsEnabled: func(in interface{}) bool /**/ {
+		PrometheusGoMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_go_metrics_enabled"]),
-		PrometheusProcessMetricsEnabled: func(in interface{}) bool /**/ {
+		PrometheusProcessMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_process_metrics_enabled"]),
-		MajorVersion: func(in interface{}) string /**/ {
+		MajorVersion: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["major_version"]),
-		TyphaPrometheusMetricsEnabled: func(in interface{}) bool /**/ {
+		TyphaPrometheusMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["typha_prometheus_metrics_enabled"]),
-		TyphaPrometheusMetricsPort: func(in interface{}) int32 /**/ {
+		TyphaPrometheusMetricsPort: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["typha_prometheus_metrics_port"]),
-		TyphaReplicas: func(in interface{}) int32 /**/ {
+		TyphaReplicas: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["typha_replicas"]),
-		VXLANMode: func(in interface{}) string /**/ {
+		VXLANMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["vxlan_mode"]),
-		WireguardEnabled: func(in interface{}) bool /**/ {
+		WireguardEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["wireguard_enabled"]),
 	}

@@ -27,13 +27,13 @@ func ExpandDataSourceFlannelNetworkingSpec(in map[string]interface{}) kops.Flann
 		panic("expand FlannelNetworkingSpec failure, in is nil")
 	}
 	return kops.FlannelNetworkingSpec{
-		Backend: func(in interface{}) string /**/ {
+		Backend: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["backend"]),
-		DisableTxChecksumOffloading: func(in interface{}) bool /**/ {
+		DisableTxChecksumOffloading: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disable_tx_checksum_offloading"]),
-		IptablesResyncSeconds: func(in interface{}) *int32 /**/ {
+		IptablesResyncSeconds: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}

@@ -40,10 +40,10 @@ func ExpandResourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNetw
 		panic("expand CanalNetworkingSpec failure, in is nil")
 	}
 	return kops.CanalNetworkingSpec{
-		ChainInsertMode: func(in interface{}) string /**/ {
+		ChainInsertMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["chain_insert_mode"]),
-		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -62,22 +62,22 @@ func ExpandResourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		DefaultEndpointToHostAction: func(in interface{}) string /**/ {
+		DefaultEndpointToHostAction: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["default_endpoint_to_host_action"]),
-		DisableFlannelForwardRules: func(in interface{}) bool /**/ {
+		DisableFlannelForwardRules: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disable_flannel_forward_rules"]),
-		DisableTxChecksumOffloading: func(in interface{}) bool /**/ {
+		DisableTxChecksumOffloading: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disable_tx_checksum_offloading"]),
-		IptablesBackend: func(in interface{}) string /**/ {
+		IptablesBackend: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["iptables_backend"]),
-		LogSeveritySys: func(in interface{}) string /**/ {
+		LogSeveritySys: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["log_severity_sys"]),
-		MTU: func(in interface{}) *int32 /**/ {
+		MTU: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -96,25 +96,25 @@ func ExpandResourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNetw
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["mtu"]),
-		PrometheusGoMetricsEnabled: func(in interface{}) bool /**/ {
+		PrometheusGoMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_go_metrics_enabled"]),
-		PrometheusMetricsEnabled: func(in interface{}) bool /**/ {
+		PrometheusMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_metrics_enabled"]),
-		PrometheusMetricsPort: func(in interface{}) int32 /**/ {
+		PrometheusMetricsPort: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["prometheus_metrics_port"]),
-		PrometheusProcessMetricsEnabled: func(in interface{}) bool /**/ {
+		PrometheusProcessMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_process_metrics_enabled"]),
-		TyphaPrometheusMetricsEnabled: func(in interface{}) bool /**/ {
+		TyphaPrometheusMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["typha_prometheus_metrics_enabled"]),
-		TyphaPrometheusMetricsPort: func(in interface{}) int32 /**/ {
+		TyphaPrometheusMetricsPort: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["typha_prometheus_metrics_port"]),
-		TyphaReplicas: func(in interface{}) int32 /**/ {
+		TyphaReplicas: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["typha_replicas"]),
 	}

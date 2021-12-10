@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func TestExpandResourceLabelSelectorRequirement(t *testing.T) {

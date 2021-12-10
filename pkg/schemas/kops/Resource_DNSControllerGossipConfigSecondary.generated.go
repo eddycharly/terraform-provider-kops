@@ -28,7 +28,7 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 		panic("expand DNSControllerGossipConfigSecondary failure, in is nil")
 	}
 	return kops.DNSControllerGossipConfigSecondary{
-		Protocol: func(in interface{}) *string /**/ {
+		Protocol: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -47,7 +47,7 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["protocol"]),
-		Listen: func(in interface{}) *string /**/ {
+		Listen: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -66,7 +66,7 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["listen"]),
-		Secret: func(in interface{}) *string /**/ {
+		Secret: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -85,7 +85,7 @@ func ExpandResourceDNSControllerGossipConfigSecondary(in map[string]interface{})
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["secret"]),
-		Seed: func(in interface{}) *string /**/ {
+		Seed: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}

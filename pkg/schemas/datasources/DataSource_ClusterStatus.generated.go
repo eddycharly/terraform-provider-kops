@@ -27,19 +27,19 @@ func ExpandDataSourceClusterStatus(in map[string]interface{}) datasources.Cluste
 		panic("expand ClusterStatus failure, in is nil")
 	}
 	return datasources.ClusterStatus{
-		ClusterName: func(in interface{}) string /**/ {
+		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		Exists: func(in interface{}) bool /**/ {
+		Exists: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["exists"]),
-		IsValid: func(in interface{}) bool /**/ {
+		IsValid: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["is_valid"]),
-		NeedsUpdate: func(in interface{}) bool /**/ {
+		NeedsUpdate: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["needs_update"]),
-		InstanceGroups: func(in interface{}) []string /**/ {
+		InstanceGroups: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil

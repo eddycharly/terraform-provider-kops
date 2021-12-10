@@ -3,7 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 var _ = Schema
@@ -19,39 +19,39 @@ func ResourceNodeAffinity() *schema.Resource {
 	return res
 }
 
-func ExpandResourceNodeAffinity(in map[string]interface{}) v1.NodeAffinity {
+func ExpandResourceNodeAffinity(in map[string]interface{}) core.NodeAffinity {
 	if in == nil {
 		panic("expand NodeAffinity failure, in is nil")
 	}
-	return v1.NodeAffinity{
-		RequiredDuringSchedulingIgnoredDuringExecution: func(in interface{}) *v1.NodeSelector /*k8s.io/api/core/v1*/ {
-			return func(in interface{}) *v1.NodeSelector {
+	return core.NodeAffinity{
+		RequiredDuringSchedulingIgnoredDuringExecution: func(in interface{}) *core.NodeSelector {
+			return func(in interface{}) *core.NodeSelector {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.NodeSelector) *v1.NodeSelector {
+				return func(in core.NodeSelector) *core.NodeSelector {
 					return &in
-				}(func(in interface{}) v1.NodeSelector {
+				}(func(in interface{}) core.NodeSelector {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.NodeSelector{}
+						return core.NodeSelector{}
 					}
 					return (ExpandResourceNodeSelector(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["required_during_scheduling_ignored_during_execution"]),
-		PreferredDuringSchedulingIgnoredDuringExecution: func(in interface{}) []v1.PreferredSchedulingTerm /**/ {
-			return func(in interface{}) []v1.PreferredSchedulingTerm {
+		PreferredDuringSchedulingIgnoredDuringExecution: func(in interface{}) []core.PreferredSchedulingTerm {
+			return func(in interface{}) []core.PreferredSchedulingTerm {
 				if in == nil {
 					return nil
 				}
-				var out []v1.PreferredSchedulingTerm
+				var out []core.PreferredSchedulingTerm
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) v1.PreferredSchedulingTerm {
+					out = append(out, func(in interface{}) core.PreferredSchedulingTerm {
 						if in == nil {
-							return v1.PreferredSchedulingTerm{}
+							return core.PreferredSchedulingTerm{}
 						}
 						return (ExpandResourcePreferredSchedulingTerm(in.(map[string]interface{})))
 					}(in))
@@ -62,24 +62,24 @@ func ExpandResourceNodeAffinity(in map[string]interface{}) v1.NodeAffinity {
 	}
 }
 
-func FlattenResourceNodeAffinityInto(in v1.NodeAffinity, out map[string]interface{}) {
-	out["required_during_scheduling_ignored_during_execution"] = func(in *v1.NodeSelector) interface{} {
-		return func(in *v1.NodeSelector) interface{} {
+func FlattenResourceNodeAffinityInto(in core.NodeAffinity, out map[string]interface{}) {
+	out["required_during_scheduling_ignored_during_execution"] = func(in *core.NodeSelector) interface{} {
+		return func(in *core.NodeSelector) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.NodeSelector) interface{} {
-				return func(in v1.NodeSelector) []interface{} {
+			return func(in core.NodeSelector) interface{} {
+				return func(in core.NodeSelector) []interface{} {
 					return []interface{}{FlattenResourceNodeSelector(in)}
 				}(in)
 			}(*in)
 		}(in)
 	}(in.RequiredDuringSchedulingIgnoredDuringExecution)
-	out["preferred_during_scheduling_ignored_during_execution"] = func(in []v1.PreferredSchedulingTerm) interface{} {
-		return func(in []v1.PreferredSchedulingTerm) []interface{} {
+	out["preferred_during_scheduling_ignored_during_execution"] = func(in []core.PreferredSchedulingTerm) interface{} {
+		return func(in []core.PreferredSchedulingTerm) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in v1.PreferredSchedulingTerm) interface{} {
+				out = append(out, func(in core.PreferredSchedulingTerm) interface{} {
 					return FlattenResourcePreferredSchedulingTerm(in)
 				}(in))
 			}
@@ -88,7 +88,7 @@ func FlattenResourceNodeAffinityInto(in v1.NodeAffinity, out map[string]interfac
 	}(in.PreferredDuringSchedulingIgnoredDuringExecution)
 }
 
-func FlattenResourceNodeAffinity(in v1.NodeAffinity) map[string]interface{} {
+func FlattenResourceNodeAffinity(in core.NodeAffinity) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenResourceNodeAffinityInto(in, out)
 	return out

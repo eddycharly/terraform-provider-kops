@@ -41,19 +41,19 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 		panic("expand KubeSchedulerConfig failure, in is nil")
 	}
 	return kops.KubeSchedulerConfig{
-		Master: func(in interface{}) string /**/ {
+		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
-		LogFormat: func(in interface{}) string /**/ {
+		LogFormat: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["log_format"]),
-		LogLevel: func(in interface{}) int32 /**/ {
+		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
-		Image: func(in interface{}) string /**/ {
+		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
-		LeaderElection: func(in interface{}) *kops.LeaderElectionConfiguration /*k8s.io/kops/pkg/apis/kops*/ {
+		LeaderElection: func(in interface{}) *kops.LeaderElectionConfiguration {
 			return func(in interface{}) *kops.LeaderElectionConfiguration {
 				if in == nil {
 					return nil
@@ -71,7 +71,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(in))
 			}(in)
 		}(in["leader_election"]),
-		UsePolicyConfigMap: func(in interface{}) *bool /**/ {
+		UsePolicyConfigMap: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -90,7 +90,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["use_policy_config_map"]),
-		FeatureGates: func(in interface{}) map[string]string /**/ {
+		FeatureGates: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -107,7 +107,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				return nil
 			}(in)
 		}(in["feature_gates"]),
-		MaxPersistentVolumes: func(in interface{}) *int32 /**/ {
+		MaxPersistentVolumes: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -126,7 +126,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["max_persistent_volumes"]),
-		Qps: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		Qps: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -145,16 +145,16 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["qps"]),
-		Burst: func(in interface{}) int32 /**/ {
+		Burst: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["burst"]),
-		AuthenticationKubeconfig: func(in interface{}) string /**/ {
+		AuthenticationKubeconfig: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["authentication_kubeconfig"]),
-		AuthorizationKubeconfig: func(in interface{}) string /**/ {
+		AuthorizationKubeconfig: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["authorization_kubeconfig"]),
-		AuthorizationAlwaysAllowPaths: func(in interface{}) []string /**/ {
+		AuthorizationAlwaysAllowPaths: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -166,7 +166,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				return out
 			}(in)
 		}(in["authorization_always_allow_paths"]),
-		EnableProfiling: func(in interface{}) *bool /**/ {
+		EnableProfiling: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -185,7 +185,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_profiling"]),
-		TLSCertFile: func(in interface{}) *string /**/ {
+		TLSCertFile: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -204,7 +204,7 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["tls_cert_file"]),
-		TLSPrivateKeyFile: func(in interface{}) string /**/ {
+		TLSPrivateKeyFile: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tls_private_key_file"]),
 	}

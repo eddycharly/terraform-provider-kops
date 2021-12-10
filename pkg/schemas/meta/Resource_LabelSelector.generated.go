@@ -3,7 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var _ = Schema
@@ -19,12 +19,12 @@ func ResourceLabelSelector() *schema.Resource {
 	return res
 }
 
-func ExpandResourceLabelSelector(in map[string]interface{}) v1.LabelSelector {
+func ExpandResourceLabelSelector(in map[string]interface{}) meta.LabelSelector {
 	if in == nil {
 		panic("expand LabelSelector failure, in is nil")
 	}
-	return v1.LabelSelector{
-		MatchLabels: func(in interface{}) map[string]string /**/ {
+	return meta.LabelSelector{
+		MatchLabels: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -41,16 +41,16 @@ func ExpandResourceLabelSelector(in map[string]interface{}) v1.LabelSelector {
 				return nil
 			}(in)
 		}(in["match_labels"]),
-		MatchExpressions: func(in interface{}) []v1.LabelSelectorRequirement /**/ {
-			return func(in interface{}) []v1.LabelSelectorRequirement {
+		MatchExpressions: func(in interface{}) []meta.LabelSelectorRequirement {
+			return func(in interface{}) []meta.LabelSelectorRequirement {
 				if in == nil {
 					return nil
 				}
-				var out []v1.LabelSelectorRequirement
+				var out []meta.LabelSelectorRequirement
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) v1.LabelSelectorRequirement {
+					out = append(out, func(in interface{}) meta.LabelSelectorRequirement {
 						if in == nil {
-							return v1.LabelSelectorRequirement{}
+							return meta.LabelSelectorRequirement{}
 						}
 						return (ExpandResourceLabelSelectorRequirement(in.(map[string]interface{})))
 					}(in))
@@ -61,7 +61,7 @@ func ExpandResourceLabelSelector(in map[string]interface{}) v1.LabelSelector {
 	}
 }
 
-func FlattenResourceLabelSelectorInto(in v1.LabelSelector, out map[string]interface{}) {
+func FlattenResourceLabelSelectorInto(in meta.LabelSelector, out map[string]interface{}) {
 	out["match_labels"] = func(in map[string]string) interface{} {
 		return func(in map[string]string) map[string]interface{} {
 			if in == nil {
@@ -74,11 +74,11 @@ func FlattenResourceLabelSelectorInto(in v1.LabelSelector, out map[string]interf
 			return out
 		}(in)
 	}(in.MatchLabels)
-	out["match_expressions"] = func(in []v1.LabelSelectorRequirement) interface{} {
-		return func(in []v1.LabelSelectorRequirement) []interface{} {
+	out["match_expressions"] = func(in []meta.LabelSelectorRequirement) interface{} {
+		return func(in []meta.LabelSelectorRequirement) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in v1.LabelSelectorRequirement) interface{} {
+				out = append(out, func(in meta.LabelSelectorRequirement) interface{} {
 					return FlattenResourceLabelSelectorRequirement(in)
 				}(in))
 			}
@@ -87,7 +87,7 @@ func FlattenResourceLabelSelectorInto(in v1.LabelSelector, out map[string]interf
 	}(in.MatchExpressions)
 }
 
-func FlattenResourceLabelSelector(in v1.LabelSelector) map[string]interface{} {
+func FlattenResourceLabelSelector(in meta.LabelSelector) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenResourceLabelSelectorInto(in, out)
 	return out

@@ -24,10 +24,10 @@ func ExpandResourceRomanaNetworkingSpec(in map[string]interface{}) kops.RomanaNe
 		panic("expand RomanaNetworkingSpec failure, in is nil")
 	}
 	return kops.RomanaNetworkingSpec{
-		DaemonServiceIP: func(in interface{}) string /**/ {
+		DaemonServiceIP: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["daemon_service_ip"]),
-		EtcdServiceIP: func(in interface{}) string /**/ {
+		EtcdServiceIP: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["etcd_service_ip"]),
 	}

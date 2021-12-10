@@ -27,10 +27,10 @@ func ExpandResourceValidateOptions(in map[string]interface{}) resources.Validate
 		panic("expand ValidateOptions failure, in is nil")
 	}
 	return resources.ValidateOptions{
-		Skip: func(in interface{}) bool /**/ {
+		Skip: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["skip"]),
-		ValidateOptions: func(in interface{}) utils.ValidateOptions /*github.com/eddycharly/terraform-provider-kops/pkg/api/utils*/ {
+		ValidateOptions: func(in interface{}) utils.ValidateOptions {
 			return utilsschemas.ExpandResourceValidateOptions(in.(map[string]interface{}))
 		}(in),
 	}

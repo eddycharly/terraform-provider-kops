@@ -36,46 +36,46 @@ func ExpandConfigOpenstack(in map[string]interface{}) config.Openstack {
 		panic("expand Openstack failure, in is nil")
 	}
 	return config.Openstack{
-		TenantId: func(in interface{}) string /**/ {
+		TenantId: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tenant_id"]),
-		TenantName: func(in interface{}) string /**/ {
+		TenantName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tenant_name"]),
-		ProjectId: func(in interface{}) string /**/ {
+		ProjectId: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["project_id"]),
-		ProjectName: func(in interface{}) string /**/ {
+		ProjectName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["project_name"]),
-		ProjectDomainId: func(in interface{}) string /**/ {
+		ProjectDomainId: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["project_domain_id"]),
-		ProjectDomainName: func(in interface{}) string /**/ {
+		ProjectDomainName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["project_domain_name"]),
-		DomainId: func(in interface{}) string /**/ {
+		DomainId: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["domain_id"]),
-		DomainName: func(in interface{}) string /**/ {
+		DomainName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["domain_name"]),
-		Username: func(in interface{}) string /**/ {
+		Username: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["username"]),
-		Password: func(in interface{}) string /**/ {
+		Password: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["password"]),
-		AuthUrl: func(in interface{}) string /**/ {
+		AuthUrl: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["auth_url"]),
-		RegionName: func(in interface{}) string /**/ {
+		RegionName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["region_name"]),
-		ApplicationCredentialId: func(in interface{}) string /**/ {
+		ApplicationCredentialId: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["application_credential_id"]),
-		ApplicationCredentialSecret: func(in interface{}) string /**/ {
+		ApplicationCredentialSecret: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["application_credential_secret"]),
 	}

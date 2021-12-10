@@ -24,7 +24,7 @@ func ExpandDataSourceAWSPermission(in map[string]interface{}) kops.AWSPermission
 		panic("expand AWSPermission failure, in is nil")
 	}
 	return kops.AWSPermission{
-		PolicyARNs: func(in interface{}) []string /**/ {
+		PolicyARNs: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -36,7 +36,7 @@ func ExpandDataSourceAWSPermission(in map[string]interface{}) kops.AWSPermission
 				return out
 			}(in)
 		}(in["policy_ar_ns"]),
-		InlinePolicy: func(in interface{}) string /**/ {
+		InlinePolicy: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["inline_policy"]),
 	}

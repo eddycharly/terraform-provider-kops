@@ -39,7 +39,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 		panic("expand WeaveNetworkingSpec failure, in is nil")
 	}
 	return kops.WeaveNetworkingSpec{
-		MTU: func(in interface{}) *int32 /**/ {
+		MTU: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -58,7 +58,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["mtu"]),
-		ConnLimit: func(in interface{}) *int32 /**/ {
+		ConnLimit: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -77,7 +77,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["conn_limit"]),
-		NoMasqLocal: func(in interface{}) *int32 /**/ {
+		NoMasqLocal: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -96,7 +96,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["no_masq_local"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryRequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -115,7 +115,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -134,7 +134,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		MemoryLimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryLimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -153,7 +153,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_limit"]),
-		CPULimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPULimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -172,10 +172,10 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_limit"]),
-		NetExtraArgs: func(in interface{}) string /**/ {
+		NetExtraArgs: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["net_extra_args"]),
-		NPCMemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		NPCMemoryRequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -194,7 +194,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["npc_memory_request"]),
-		NPCCPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		NPCCPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -213,7 +213,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["npc_cpu_request"]),
-		NPCMemoryLimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		NPCMemoryLimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -232,7 +232,7 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["npc_memory_limit"]),
-		NPCCPULimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		NPCCPULimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -251,10 +251,10 @@ func ExpandResourceWeaveNetworkingSpec(in map[string]interface{}) kops.WeaveNetw
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["npc_cpu_limit"]),
-		NPCExtraArgs: func(in interface{}) string /**/ {
+		NPCExtraArgs: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["npc_extra_args"]),
-		Version: func(in interface{}) string /**/ {
+		Version: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["version"]),
 	}

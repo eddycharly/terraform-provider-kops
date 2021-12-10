@@ -27,7 +27,7 @@ func ExpandResourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackMon
 		panic("expand OpenstackMonitor failure, in is nil")
 	}
 	return kops.OpenstackMonitor{
-		Delay: func(in interface{}) *string /**/ {
+		Delay: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -46,7 +46,7 @@ func ExpandResourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackMon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["delay"]),
-		Timeout: func(in interface{}) *string /**/ {
+		Timeout: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -65,7 +65,7 @@ func ExpandResourceOpenstackMonitor(in map[string]interface{}) kops.OpenstackMon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["timeout"]),
-		MaxRetries: func(in interface{}) *int /**/ {
+		MaxRetries: func(in interface{}) *int {
 			if in == nil {
 				return nil
 			}

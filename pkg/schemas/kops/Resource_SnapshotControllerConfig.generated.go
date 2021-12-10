@@ -26,7 +26,7 @@ func ExpandResourceSnapshotControllerConfig(in map[string]interface{}) kops.Snap
 		panic("expand SnapshotControllerConfig failure, in is nil")
 	}
 	return kops.SnapshotControllerConfig{
-		Enabled: func(in interface{}) *bool /**/ {
+		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -45,7 +45,7 @@ func ExpandResourceSnapshotControllerConfig(in map[string]interface{}) kops.Snap
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		InstallDefaultClass: func(in interface{}) bool /**/ {
+		InstallDefaultClass: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["install_default_class"]),
 	}

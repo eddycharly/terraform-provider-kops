@@ -27,7 +27,7 @@ func ExpandResourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDriv
 		panic("expand AWSEBSCSIDriver failure, in is nil")
 	}
 	return kops.AWSEBSCSIDriver{
-		Enabled: func(in interface{}) *bool /**/ {
+		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -46,7 +46,7 @@ func ExpandResourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDriv
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Version: func(in interface{}) *string /**/ {
+		Version: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -65,7 +65,7 @@ func ExpandResourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDriv
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["version"]),
-		VolumeAttachLimit: func(in interface{}) *int /**/ {
+		VolumeAttachLimit: func(in interface{}) *int {
 			if in == nil {
 				return nil
 			}

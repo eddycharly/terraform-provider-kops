@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	core "k8s.io/api/core/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
@@ -115,14 +115,14 @@ func {{ scope }}{{ .Name }}() *schema.Resource {
 
 {{- define "expandElem" -}}
 {{- if isPtr . -}}
-func (in interface{}) {{ .String }} {
+func (in interface{}) {{ qualifiedName . }} {
 	if in == nil {
 		return nil
 	}
 	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 		return nil
 	}
-	return func (in {{ .Elem.String }}) {{ .String }} {
+	return func (in {{ qualifiedName .Elem }}) {{ qualifiedName . }} {
 		return &in
 	}({{ template "expandElem" .Elem }})
 }(in)
@@ -133,9 +133,9 @@ ExpandQuantity(in)
 {{- else if isIntOrString . -}}
 ExpandIntOrString(in)
 {{- else if isStruct . -}}
-func (in interface{}) {{ .String }} {
+func (in interface{}) {{ qualifiedName . }} {
 	if in == nil {
-		return {{ .String }}{}
+		return {{ qualifiedName . }}{}
 	}
 	return ({{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})))
 }(in)
@@ -146,23 +146,23 @@ func (in interface{}) {{ .String }} {
 
 {{- define "expand" -}}
 {{- if isPtr . -}}
-func (in interface{}) {{ .String }} {
+func (in interface{}) {{ qualifiedName . }} {
 	if in == nil {
 		return nil
 	}
 	if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 		return nil
 	}
-	return func (in {{ .Elem.String }}) {{ .String }} {
+	return func (in {{ qualifiedName .Elem }}) {{ qualifiedName . }} {
 		return &in
 	}({{ template "expand" .Elem }})
 }(in)
 {{- else if isList . -}}
-func (in interface{}) {{ .String }} {
+func (in interface{}) {{ qualifiedName . }} {
 	if in == nil {
 		return nil
 	}
-	var out {{ .String }}
+	var out {{ qualifiedName . }}
 	for _, in := range in.([]interface{}) {
 		out = append(out, {{ template "expandElem" .Elem }})
 	}
@@ -170,13 +170,13 @@ func (in interface{}) {{ .String }} {
 }(in)
 {{- else if isMap . -}}
 {{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
-func (in interface{}) map[string]{{ .Elem.String }} {
+func (in interface{}) map[string]{{ qualifiedName .Elem }} {
 	if in == nil {
 		return nil
 	}
 	if in, ok := in.(map[string]interface{}); ok {
 		if len(in) > 0 {
-			out := {{ .String }}{}
+			out := {{ qualifiedName . }}{}
 			for key, in := range in {
 				out[key] = {{ template "expand" .Elem }}
 			}
@@ -186,17 +186,17 @@ func (in interface{}) map[string]{{ .Elem.String }} {
 	return nil
 }(in)
 {{- else -}}
-func (in interface{}) map[string]{{ .Elem.String }} {
+func (in interface{}) map[string]{{ qualifiedName .Elem }} {
 	if in == nil {
 		return nil
 	}
 	if in, ok := in.([]interface{}); ok {
 		if len(in) > 0 {
-			out := {{ .String }}{}
+			out := {{ qualifiedName . }}{}
 			for _, in := range in {
 				if in, ok := in.(map[string]interface{}); ok {
 					key := ExpandString(in["key"])
-					value := func(in interface{}) {{ .Elem.String }} {
+					value := func(in interface{}) {{ qualifiedName .Elem }} {
 						return {{ template "expand" .Elem }}
 					}(in["value"])
 					out[key] = value
@@ -215,9 +215,9 @@ ExpandQuantity(in)
 {{- else if isIntOrString . -}}
 ExpandIntOrString(in)
 {{- else if isStruct . -}}
-func (in interface{}) {{ .String }} {
+func (in interface{}) {{ qualifiedName . }} {
 	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-		return {{ .String }}{}
+		return {{ qualifiedName . }}{}
 	}
 	return ({{ mapping . }}Expand{{ scope }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
 }(in)
@@ -228,11 +228,11 @@ func (in interface{}) {{ .String }} {
 
 {{- define "flattenElem" -}}
 {{- if isPtr . -}}
-func (in {{ .String }}) interface{} {
+func (in {{ qualifiedName . }}) interface{} {
 	if in == nil {
 		return nil
 	}
-	return func (in {{ .Elem.String }}) interface{} {
+	return func (in {{ qualifiedName .Elem }}) interface{} {
 		return {{ template "flattenElem" .Elem }}
 	}(*in)
 }(in)
@@ -243,7 +243,7 @@ FlattenQuantity(in)
 {{- else if isIntOrString . -}}
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
-func (in {{ .String }}) interface{} {
+func (in {{ qualifiedName . }}) interface{} {
 	return {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in)
 }(in)
 {{- else -}}
@@ -253,16 +253,16 @@ func (in {{ .String }}) interface{} {
 
 {{- define "flatten" -}}
 {{- if isPtr . -}}
-func (in {{ .String }}) interface{} {
+func (in {{ qualifiedName . }}) interface{} {
 	if in == nil {
 		return nil
 	}
-	return func (in {{ .Elem.String }}) interface{} {
+	return func (in {{ qualifiedName .Elem }}) interface{} {
 		return {{ template "flatten" .Elem }}
 	}(*in)
 }(in)
 {{- else if isList . -}}
-func (in {{ .String }}) []interface{} {
+func (in {{ qualifiedName . }}) []interface{} {
 	var out []interface{}
 	for _, in := range in {
 		out = append(out, {{ template "flattenElem" .Elem }})
@@ -271,7 +271,7 @@ func (in {{ .String }}) []interface{} {
 }(in)
 {{- else if isMap . -}}
 {{- if or (isBool .Elem) (isInt .Elem) (isString .Elem) (isFloat .Elem) -}}
-func (in map[string]{{ .Elem.String }}) map[string]interface{} {
+func (in map[string]{{ qualifiedName .Elem }}) map[string]interface{} {
 	if in == nil {
 		return nil
 	}
@@ -282,7 +282,7 @@ func (in map[string]{{ .Elem.String }}) map[string]interface{} {
 	return out
 }(in)
 {{- else -}}
-func (in map[string]{{ .Elem.String }}) []interface{} {
+func (in map[string]{{ qualifiedName .Elem }}) []interface{} {
 	if in == nil {
 		return nil
 	}
@@ -303,7 +303,7 @@ FlattenQuantity(in)
 {{- else if isIntOrString . -}}
 FlattenIntOrString(in)
 {{- else if isStruct . -}}
-func (in {{ .String }}) []interface{} {
+func (in {{ qualifiedName . }}) []interface{} {
 	return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}(in) }
 }(in)
 {{- else -}}
@@ -311,14 +311,14 @@ Flatten{{ schemaType . }}({{ schemaType . | lower }}(in))
 {{- end -}}
 {{- end }}
 
-func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
+func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ qualifiedName . }} {
 	if in == nil {
 		panic("expand {{ .Name }} failure, in is nil")
 	}
-	return {{ .String }}{
+	return {{ qualifiedName . }}{
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
-	{{ .Name }}: func (in interface{}) {{ .QualifiedName }} {
+	{{ .Name }}: func (in interface{}) {{ qualifiedName .Type }} {
 		{{- if not .Anonymous -}}
 		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) (not (isNullable .)) }}
 		if in == nil {
@@ -333,7 +333,7 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 			return nil
 		}
 		if in, ok := in.([]interface{}); ok && len(in) == 1 {
-			return func(in interface{}) {{ .Type.String }} {
+			return func(in interface{}) {{ qualifiedName .Type }} {
 				return {{ template "expand" .Type }}
 			}(in[0].(map[string]interface{})["value"])
 		}
@@ -350,13 +350,13 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	}
 }
 
-func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interface{}) {
+func Flatten{{ scope }}{{ .Name }}Into(in {{ qualifiedName . }}, out map[string]interface{}) {
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
 	{{ if .Anonymous -}}
 	{{ mapping .Type }}Flatten{{ scope }}{{ .Type.Name }}Into(in.{{ .Name }}, out)
 	{{- else -}}
-	out[{{ fieldName . | snakecase | quote }}] = func (in {{ .Type.String }}) interface{} {
+	out[{{ fieldName . | snakecase | quote }}] = func (in {{ qualifiedName .Type }}) interface{} {
 		{{ if isNullable . -}}
 		if in == nil {
 			return nil
@@ -371,7 +371,7 @@ func Flatten{{ scope }}{{ .Name }}Into(in {{ .String }}, out map[string]interfac
 	{{- end }}
 }
 
-func Flatten{{ scope }}{{ .Name }}(in {{ .String }}) map[string]interface{} {
+func Flatten{{ scope }}{{ .Name }}(in {{ qualifiedName . }}) map[string]interface{} {
 	out := map[string]interface{}{}
 	Flatten{{ scope }}{{ .Name }}Into(in, out)
 	return out

@@ -6,7 +6,7 @@ import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	coreschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -45,22 +45,22 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 		panic("expand KubeDNSConfig failure, in is nil")
 	}
 	return kops.KubeDNSConfig{
-		CacheMaxSize: func(in interface{}) int /**/ {
+		CacheMaxSize: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["cache_max_size"]),
-		CacheMaxConcurrent: func(in interface{}) int /**/ {
+		CacheMaxConcurrent: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["cache_max_concurrent"]),
-		Tolerations: func(in interface{}) []v1.Toleration /**/ {
-			return func(in interface{}) []v1.Toleration {
+		Tolerations: func(in interface{}) []core.Toleration {
+			return func(in interface{}) []core.Toleration {
 				if in == nil {
 					return nil
 				}
-				var out []v1.Toleration
+				var out []core.Toleration
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) v1.Toleration {
+					out = append(out, func(in interface{}) core.Toleration {
 						if in == nil {
-							return v1.Toleration{}
+							return core.Toleration{}
 						}
 						return (coreschemas.ExpandResourceToleration(in.(map[string]interface{})))
 					}(in))
@@ -68,49 +68,49 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				return out
 			}(in)
 		}(in["tolerations"]),
-		Affinity: func(in interface{}) *v1.Affinity /*k8s.io/api/core/v1*/ {
-			return func(in interface{}) *v1.Affinity {
+		Affinity: func(in interface{}) *core.Affinity {
+			return func(in interface{}) *core.Affinity {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Affinity) *v1.Affinity {
+				return func(in core.Affinity) *core.Affinity {
 					return &in
-				}(func(in interface{}) v1.Affinity {
+				}(func(in interface{}) core.Affinity {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.Affinity{}
+						return core.Affinity{}
 					}
 					return (coreschemas.ExpandResourceAffinity(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["affinity"]),
-		CoreDNSImage: func(in interface{}) string /**/ {
+		CoreDNSImage: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["core_dns_image"]),
-		CPAImage: func(in interface{}) string /**/ {
+		CPAImage: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cpa_image"]),
-		Domain: func(in interface{}) string /**/ {
+		Domain: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["domain"]),
-		ExternalCoreFile: func(in interface{}) string /**/ {
+		ExternalCoreFile: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["external_core_file"]),
-		Image: func(in interface{}) string /**/ {
+		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
-		Replicas: func(in interface{}) int /**/ {
+		Replicas: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["replicas"]),
-		Provider: func(in interface{}) string /**/ {
+		Provider: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["provider"]),
-		ServerIP: func(in interface{}) string /**/ {
+		ServerIP: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["server_ip"]),
-		StubDomains: func(in interface{}) map[string][]string /**/ {
+		StubDomains: func(in interface{}) map[string][]string {
 			return func(in interface{}) map[string][]string {
 				if in == nil {
 					return nil
@@ -142,7 +142,7 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				return nil
 			}(in)
 		}(in["stub_domains"]),
-		UpstreamNameservers: func(in interface{}) []string /**/ {
+		UpstreamNameservers: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -154,7 +154,7 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				return out
 			}(in)
 		}(in["upstream_nameservers"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryRequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -173,7 +173,7 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		CPURequest: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -192,7 +192,7 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		MemoryLimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
+		MemoryLimit: func(in interface{}) *resource.Quantity {
 			if in == nil {
 				return nil
 			}
@@ -211,7 +211,7 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_limit"]),
-		NodeLocalDNS: func(in interface{}) *kops.NodeLocalDNSConfig /*k8s.io/kops/pkg/apis/kops*/ {
+		NodeLocalDNS: func(in interface{}) *kops.NodeLocalDNSConfig {
 			return func(in interface{}) *kops.NodeLocalDNSConfig {
 				if in == nil {
 					return nil
@@ -239,24 +239,24 @@ func FlattenResourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]inte
 	out["cache_max_concurrent"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.CacheMaxConcurrent)
-	out["tolerations"] = func(in []v1.Toleration) interface{} {
-		return func(in []v1.Toleration) []interface{} {
+	out["tolerations"] = func(in []core.Toleration) interface{} {
+		return func(in []core.Toleration) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in v1.Toleration) interface{} {
+				out = append(out, func(in core.Toleration) interface{} {
 					return coreschemas.FlattenResourceToleration(in)
 				}(in))
 			}
 			return out
 		}(in)
 	}(in.Tolerations)
-	out["affinity"] = func(in *v1.Affinity) interface{} {
-		return func(in *v1.Affinity) interface{} {
+	out["affinity"] = func(in *core.Affinity) interface{} {
+		return func(in *core.Affinity) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Affinity) interface{} {
-				return func(in v1.Affinity) []interface{} {
+			return func(in core.Affinity) interface{} {
+				return func(in core.Affinity) []interface{} {
 					return []interface{}{coreschemas.FlattenResourceAffinity(in)}
 				}(in)
 			}(*in)

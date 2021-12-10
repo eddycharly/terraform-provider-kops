@@ -27,7 +27,7 @@ func ExpandResourceAssets(in map[string]interface{}) kops.Assets {
 		panic("expand Assets failure, in is nil")
 	}
 	return kops.Assets{
-		ContainerRegistry: func(in interface{}) *string /**/ {
+		ContainerRegistry: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -46,7 +46,7 @@ func ExpandResourceAssets(in map[string]interface{}) kops.Assets {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["container_registry"]),
-		FileRepository: func(in interface{}) *string /**/ {
+		FileRepository: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -65,7 +65,7 @@ func ExpandResourceAssets(in map[string]interface{}) kops.Assets {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["file_repository"]),
-		ContainerProxy: func(in interface{}) *string /**/ {
+		ContainerProxy: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}

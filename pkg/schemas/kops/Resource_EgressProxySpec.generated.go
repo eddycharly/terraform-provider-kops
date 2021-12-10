@@ -24,7 +24,7 @@ func ExpandResourceEgressProxySpec(in map[string]interface{}) kops.EgressProxySp
 		panic("expand EgressProxySpec failure, in is nil")
 	}
 	return kops.EgressProxySpec{
-		HTTPProxy: func(in interface{}) kops.HTTPProxy /*k8s.io/kops/pkg/apis/kops*/ {
+		HTTPProxy: func(in interface{}) kops.HTTPProxy {
 			return func(in interface{}) kops.HTTPProxy {
 				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return kops.HTTPProxy{}
@@ -32,7 +32,7 @@ func ExpandResourceEgressProxySpec(in map[string]interface{}) kops.EgressProxySp
 				return (ExpandResourceHTTPProxy(in.([]interface{})[0].(map[string]interface{})))
 			}(in)
 		}(in["http_proxy"]),
-		ProxyExcludes: func(in interface{}) string /**/ {
+		ProxyExcludes: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["proxy_excludes"]),
 	}

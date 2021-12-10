@@ -12,28 +12,28 @@ func ExpandDataSourceConfig(in map[string]interface{}) kube.Config {
 		panic("expand Config failure, in is nil")
 	}
 	return kube.Config{
-		Server: func(in interface{}) string /**/ {
+		Server: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["server"]),
-		Context: func(in interface{}) string /**/ {
+		Context: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["context"]),
-		Namespace: func(in interface{}) string /**/ {
+		Namespace: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["namespace"]),
-		KubeUser: func(in interface{}) string /**/ {
+		KubeUser: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["kube_user"]),
-		KubePassword: func(in interface{}) string /**/ {
+		KubePassword: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["kube_password"]),
-		CaCerts: func(in interface{}) string /**/ {
+		CaCerts: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ca_certs"]),
-		ClientCert: func(in interface{}) string /**/ {
+		ClientCert: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["client_cert"]),
-		ClientKey: func(in interface{}) string /**/ {
+		ClientKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["client_key"]),
 	}

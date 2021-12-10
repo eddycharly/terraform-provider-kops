@@ -3,7 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 var _ = Schema
@@ -20,60 +20,60 @@ func DataSourceAffinity() *schema.Resource {
 	return res
 }
 
-func ExpandDataSourceAffinity(in map[string]interface{}) v1.Affinity {
+func ExpandDataSourceAffinity(in map[string]interface{}) core.Affinity {
 	if in == nil {
 		panic("expand Affinity failure, in is nil")
 	}
-	return v1.Affinity{
-		NodeAffinity: func(in interface{}) *v1.NodeAffinity /*k8s.io/api/core/v1*/ {
-			return func(in interface{}) *v1.NodeAffinity {
+	return core.Affinity{
+		NodeAffinity: func(in interface{}) *core.NodeAffinity {
+			return func(in interface{}) *core.NodeAffinity {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.NodeAffinity) *v1.NodeAffinity {
+				return func(in core.NodeAffinity) *core.NodeAffinity {
 					return &in
-				}(func(in interface{}) v1.NodeAffinity {
+				}(func(in interface{}) core.NodeAffinity {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.NodeAffinity{}
+						return core.NodeAffinity{}
 					}
 					return (ExpandDataSourceNodeAffinity(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["node_affinity"]),
-		PodAffinity: func(in interface{}) *v1.PodAffinity /*k8s.io/api/core/v1*/ {
-			return func(in interface{}) *v1.PodAffinity {
+		PodAffinity: func(in interface{}) *core.PodAffinity {
+			return func(in interface{}) *core.PodAffinity {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.PodAffinity) *v1.PodAffinity {
+				return func(in core.PodAffinity) *core.PodAffinity {
 					return &in
-				}(func(in interface{}) v1.PodAffinity {
+				}(func(in interface{}) core.PodAffinity {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.PodAffinity{}
+						return core.PodAffinity{}
 					}
 					return (ExpandDataSourcePodAffinity(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["pod_affinity"]),
-		PodAntiAffinity: func(in interface{}) *v1.PodAntiAffinity /*k8s.io/api/core/v1*/ {
-			return func(in interface{}) *v1.PodAntiAffinity {
+		PodAntiAffinity: func(in interface{}) *core.PodAntiAffinity {
+			return func(in interface{}) *core.PodAntiAffinity {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.PodAntiAffinity) *v1.PodAntiAffinity {
+				return func(in core.PodAntiAffinity) *core.PodAntiAffinity {
 					return &in
-				}(func(in interface{}) v1.PodAntiAffinity {
+				}(func(in interface{}) core.PodAntiAffinity {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.PodAntiAffinity{}
+						return core.PodAntiAffinity{}
 					}
 					return (ExpandDataSourcePodAntiAffinity(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
@@ -82,38 +82,38 @@ func ExpandDataSourceAffinity(in map[string]interface{}) v1.Affinity {
 	}
 }
 
-func FlattenDataSourceAffinityInto(in v1.Affinity, out map[string]interface{}) {
-	out["node_affinity"] = func(in *v1.NodeAffinity) interface{} {
-		return func(in *v1.NodeAffinity) interface{} {
+func FlattenDataSourceAffinityInto(in core.Affinity, out map[string]interface{}) {
+	out["node_affinity"] = func(in *core.NodeAffinity) interface{} {
+		return func(in *core.NodeAffinity) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.NodeAffinity) interface{} {
-				return func(in v1.NodeAffinity) []interface{} {
+			return func(in core.NodeAffinity) interface{} {
+				return func(in core.NodeAffinity) []interface{} {
 					return []interface{}{FlattenDataSourceNodeAffinity(in)}
 				}(in)
 			}(*in)
 		}(in)
 	}(in.NodeAffinity)
-	out["pod_affinity"] = func(in *v1.PodAffinity) interface{} {
-		return func(in *v1.PodAffinity) interface{} {
+	out["pod_affinity"] = func(in *core.PodAffinity) interface{} {
+		return func(in *core.PodAffinity) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.PodAffinity) interface{} {
-				return func(in v1.PodAffinity) []interface{} {
+			return func(in core.PodAffinity) interface{} {
+				return func(in core.PodAffinity) []interface{} {
 					return []interface{}{FlattenDataSourcePodAffinity(in)}
 				}(in)
 			}(*in)
 		}(in)
 	}(in.PodAffinity)
-	out["pod_anti_affinity"] = func(in *v1.PodAntiAffinity) interface{} {
-		return func(in *v1.PodAntiAffinity) interface{} {
+	out["pod_anti_affinity"] = func(in *core.PodAntiAffinity) interface{} {
+		return func(in *core.PodAntiAffinity) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.PodAntiAffinity) interface{} {
-				return func(in v1.PodAntiAffinity) []interface{} {
+			return func(in core.PodAntiAffinity) interface{} {
+				return func(in core.PodAntiAffinity) []interface{} {
 					return []interface{}{FlattenDataSourcePodAntiAffinity(in)}
 				}(in)
 			}(*in)
@@ -121,7 +121,7 @@ func FlattenDataSourceAffinityInto(in v1.Affinity, out map[string]interface{}) {
 	}(in.PodAntiAffinity)
 }
 
-func FlattenDataSourceAffinity(in v1.Affinity) map[string]interface{} {
+func FlattenDataSourceAffinity(in core.Affinity) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenDataSourceAffinityInto(in, out)
 	return out

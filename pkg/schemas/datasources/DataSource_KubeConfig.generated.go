@@ -38,10 +38,10 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 		panic("expand KubeConfig failure, in is nil")
 	}
 	return datasources.KubeConfig{
-		ClusterName: func(in interface{}) string /**/ {
+		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		Admin: func(in interface{}) *time.Duration /*time*/ {
+		Admin: func(in interface{}) *time.Duration {
 			if in == nil {
 				return nil
 			}
@@ -60,10 +60,10 @@ func ExpandDataSourceKubeConfig(in map[string]interface{}) datasources.KubeConfi
 				}(time.Duration(ExpandInt(in)))
 			}(in)
 		}(in["admin"]),
-		Internal: func(in interface{}) bool /**/ {
+		Internal: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["internal"]),
-		Config: func(in interface{}) kube.Config /*github.com/eddycharly/terraform-provider-kops/pkg/api/kube*/ {
+		Config: func(in interface{}) kube.Config {
 			return kubeschemas.ExpandDataSourceConfig(in.(map[string]interface{}))
 		}(in),
 	}

@@ -31,31 +31,31 @@ func ExpandDataSourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSu
 		panic("expand ClusterSubnetSpec failure, in is nil")
 	}
 	return kops.ClusterSubnetSpec{
-		Name: func(in interface{}) string /**/ {
+		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		CIDR: func(in interface{}) string /**/ {
+		CIDR: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cidr"]),
-		IPv6CIDR: func(in interface{}) string /**/ {
+		IPv6CIDR: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["ipv6_cidr"]),
-		Zone: func(in interface{}) string /**/ {
+		Zone: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["zone"]),
-		Region: func(in interface{}) string /**/ {
+		Region: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["region"]),
-		ProviderID: func(in interface{}) string /**/ {
+		ProviderID: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["provider_id"]),
-		Egress: func(in interface{}) string /**/ {
+		Egress: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["egress"]),
-		Type: func(in interface{}) kops.SubnetType /*k8s.io/kops/pkg/apis/kops*/ {
+		Type: func(in interface{}) kops.SubnetType {
 			return kops.SubnetType(ExpandString(in))
 		}(in["type"]),
-		PublicIP: func(in interface{}) string /**/ {
+		PublicIP: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["public_ip"]),
 	}

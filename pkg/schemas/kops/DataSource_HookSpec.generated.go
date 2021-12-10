@@ -30,13 +30,13 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 		panic("expand HookSpec failure, in is nil")
 	}
 	return kops.HookSpec{
-		Name: func(in interface{}) string /**/ {
+		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Disabled: func(in interface{}) bool /**/ {
+		Disabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disabled"]),
-		Roles: func(in interface{}) []kops.InstanceGroupRole /**/ {
+		Roles: func(in interface{}) []kops.InstanceGroupRole {
 			return func(in interface{}) []kops.InstanceGroupRole {
 				if in == nil {
 					return nil
@@ -48,7 +48,7 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 				return out
 			}(in)
 		}(in["roles"]),
-		Requires: func(in interface{}) []string /**/ {
+		Requires: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -60,7 +60,7 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 				return out
 			}(in)
 		}(in["requires"]),
-		Before: func(in interface{}) []string /**/ {
+		Before: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -72,7 +72,7 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 				return out
 			}(in)
 		}(in["before"]),
-		ExecContainer: func(in interface{}) *kops.ExecContainerAction /*k8s.io/kops/pkg/apis/kops*/ {
+		ExecContainer: func(in interface{}) *kops.ExecContainerAction {
 			return func(in interface{}) *kops.ExecContainerAction {
 				if in == nil {
 					return nil
@@ -90,10 +90,10 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 				}(in))
 			}(in)
 		}(in["exec_container"]),
-		Manifest: func(in interface{}) string /**/ {
+		Manifest: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["manifest"]),
-		UseRawManifest: func(in interface{}) bool /**/ {
+		UseRawManifest: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["use_raw_manifest"]),
 	}

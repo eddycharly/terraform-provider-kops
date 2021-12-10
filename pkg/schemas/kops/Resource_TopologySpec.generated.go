@@ -26,13 +26,13 @@ func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 		panic("expand TopologySpec failure, in is nil")
 	}
 	return kops.TopologySpec{
-		Masters: func(in interface{}) string /**/ {
+		Masters: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["masters"]),
-		Nodes: func(in interface{}) string /**/ {
+		Nodes: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["nodes"]),
-		Bastion: func(in interface{}) *kops.BastionSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		Bastion: func(in interface{}) *kops.BastionSpec {
 			return func(in interface{}) *kops.BastionSpec {
 				if in == nil {
 					return nil
@@ -50,7 +50,7 @@ func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				}(in))
 			}(in)
 		}(in["bastion"]),
-		DNS: func(in interface{}) *kops.DNSSpec /*k8s.io/kops/pkg/apis/kops*/ {
+		DNS: func(in interface{}) *kops.DNSSpec {
 			return func(in interface{}) *kops.DNSSpec {
 				if in == nil {
 					return nil

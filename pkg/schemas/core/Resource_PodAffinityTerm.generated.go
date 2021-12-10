@@ -4,6 +4,8 @@ import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	metaschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/meta"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	core "k8s.io/api/core/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var _ = Schema
@@ -21,30 +23,30 @@ func ResourcePodAffinityTerm() *schema.Resource {
 	return res
 }
 
-func ExpandResourcePodAffinityTerm(in map[string]interface{}) v1.PodAffinityTerm {
+func ExpandResourcePodAffinityTerm(in map[string]interface{}) core.PodAffinityTerm {
 	if in == nil {
 		panic("expand PodAffinityTerm failure, in is nil")
 	}
-	return v1.PodAffinityTerm{
-		LabelSelector: func(in interface{}) *v1.LabelSelector /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
-			return func(in interface{}) *v1.LabelSelector {
+	return core.PodAffinityTerm{
+		LabelSelector: func(in interface{}) *meta.LabelSelector {
+			return func(in interface{}) *meta.LabelSelector {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.LabelSelector) *v1.LabelSelector {
+				return func(in meta.LabelSelector) *meta.LabelSelector {
 					return &in
-				}(func(in interface{}) v1.LabelSelector {
+				}(func(in interface{}) meta.LabelSelector {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.LabelSelector{}
+						return meta.LabelSelector{}
 					}
 					return (metaschemas.ExpandResourceLabelSelector(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["label_selector"]),
-		Namespaces: func(in interface{}) []string /**/ {
+		Namespaces: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -56,22 +58,22 @@ func ExpandResourcePodAffinityTerm(in map[string]interface{}) v1.PodAffinityTerm
 				return out
 			}(in)
 		}(in["namespaces"]),
-		TopologyKey: func(in interface{}) string /**/ {
+		TopologyKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["topology_key"]),
-		NamespaceSelector: func(in interface{}) *v1.LabelSelector /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
-			return func(in interface{}) *v1.LabelSelector {
+		NamespaceSelector: func(in interface{}) *meta.LabelSelector {
+			return func(in interface{}) *meta.LabelSelector {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.LabelSelector) *v1.LabelSelector {
+				return func(in meta.LabelSelector) *meta.LabelSelector {
 					return &in
-				}(func(in interface{}) v1.LabelSelector {
+				}(func(in interface{}) meta.LabelSelector {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return v1.LabelSelector{}
+						return meta.LabelSelector{}
 					}
 					return (metaschemas.ExpandResourceLabelSelector(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
@@ -80,14 +82,14 @@ func ExpandResourcePodAffinityTerm(in map[string]interface{}) v1.PodAffinityTerm
 	}
 }
 
-func FlattenResourcePodAffinityTermInto(in v1.PodAffinityTerm, out map[string]interface{}) {
-	out["label_selector"] = func(in *v1.LabelSelector) interface{} {
-		return func(in *v1.LabelSelector) interface{} {
+func FlattenResourcePodAffinityTermInto(in core.PodAffinityTerm, out map[string]interface{}) {
+	out["label_selector"] = func(in *meta.LabelSelector) interface{} {
+		return func(in *meta.LabelSelector) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.LabelSelector) interface{} {
-				return func(in v1.LabelSelector) []interface{} {
+			return func(in meta.LabelSelector) interface{} {
+				return func(in meta.LabelSelector) []interface{} {
 					return []interface{}{metaschemas.FlattenResourceLabelSelector(in)}
 				}(in)
 			}(*in)
@@ -105,13 +107,13 @@ func FlattenResourcePodAffinityTermInto(in v1.PodAffinityTerm, out map[string]in
 	out["topology_key"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.TopologyKey)
-	out["namespace_selector"] = func(in *v1.LabelSelector) interface{} {
-		return func(in *v1.LabelSelector) interface{} {
+	out["namespace_selector"] = func(in *meta.LabelSelector) interface{} {
+		return func(in *meta.LabelSelector) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.LabelSelector) interface{} {
-				return func(in v1.LabelSelector) []interface{} {
+			return func(in meta.LabelSelector) interface{} {
+				return func(in meta.LabelSelector) []interface{} {
 					return []interface{}{metaschemas.FlattenResourceLabelSelector(in)}
 				}(in)
 			}(*in)
@@ -119,7 +121,7 @@ func FlattenResourcePodAffinityTermInto(in v1.PodAffinityTerm, out map[string]in
 	}(in.NamespaceSelector)
 }
 
-func FlattenResourcePodAffinityTerm(in v1.PodAffinityTerm) map[string]interface{} {
+func FlattenResourcePodAffinityTerm(in core.PodAffinityTerm) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenResourcePodAffinityTermInto(in, out)
 	return out

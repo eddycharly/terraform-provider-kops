@@ -104,15 +104,25 @@ func verifyFields(t reflect.Type, fields ...string) error {
 	return nil
 }
 
-func refresh(in reflect.Type) reflect.Type {
+func resolve(in reflect.Type, m map[string]string) string {
 	switch in.Kind() {
 	case reflect.Ptr:
-		return refresh(in.Elem())
+		return "*" + resolve(in.Elem(), m)
 	case reflect.Slice:
-		return reflect.SliceOf(refresh(in.Elem()))
+		return "[]" + resolve(in.Elem(), m)
 	case reflect.Map:
-		return reflect.MapOf(refresh(in.Key()), refresh(in.Elem()))
+		return "map[" + resolve(in.Key(), m) + "]" + resolve(in.Elem(), m)
 	default:
-		return in
+		p := in.PkgPath()
+		if p == "" {
+			return in.String()
+		} else {
+			p, ok := m[p]
+			if ok {
+				return p + "." + in.Name()
+			} else {
+				return in.String()
+			}
+		}
 	}
 }

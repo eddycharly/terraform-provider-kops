@@ -24,10 +24,10 @@ func ExpandDataSourceHTTPProxy(in map[string]interface{}) kops.HTTPProxy {
 		panic("expand HTTPProxy failure, in is nil")
 	}
 	return kops.HTTPProxy{
-		Host: func(in interface{}) string /**/ {
+		Host: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["host"]),
-		Port: func(in interface{}) int /**/ {
+		Port: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["port"]),
 	}

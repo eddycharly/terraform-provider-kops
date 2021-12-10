@@ -32,19 +32,19 @@ func ExpandConfigAws(in map[string]interface{}) config.Aws {
 		panic("expand Aws failure, in is nil")
 	}
 	return config.Aws{
-		Profile: func(in interface{}) string /**/ {
+		Profile: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["profile"]),
-		Region: func(in interface{}) string /**/ {
+		Region: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["region"]),
-		AccessKey: func(in interface{}) string /**/ {
+		AccessKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["access_key"]),
-		SecretKey: func(in interface{}) string /**/ {
+		SecretKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["secret_key"]),
-		AssumeRole: func(in interface{}) *config.AwsAssumeRole /*github.com/eddycharly/terraform-provider-kops/pkg/api/config*/ {
+		AssumeRole: func(in interface{}) *config.AwsAssumeRole {
 			return func(in interface{}) *config.AwsAssumeRole {
 				if in == nil {
 					return nil
@@ -62,19 +62,19 @@ func ExpandConfigAws(in map[string]interface{}) config.Aws {
 				}(in))
 			}(in)
 		}(in["assume_role"]),
-		S3Endpoint: func(in interface{}) string /**/ {
+		S3Endpoint: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["s3_endpoint"]),
-		S3Region: func(in interface{}) string /**/ {
+		S3Region: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["s3_region"]),
-		S3AccessKey: func(in interface{}) string /**/ {
+		S3AccessKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["s3_access_key"]),
-		S3SecretKey: func(in interface{}) string /**/ {
+		S3SecretKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["s3_secret_key"]),
-		SkipRegionCheck: func(in interface{}) bool /**/ {
+		SkipRegionCheck: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["skip_region_check"]),
 	}

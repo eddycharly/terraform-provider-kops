@@ -33,7 +33,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 		panic("expand OpenstackLoadbalancerConfig failure, in is nil")
 	}
 	return kops.OpenstackLoadbalancerConfig{
-		Method: func(in interface{}) *string /**/ {
+		Method: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -52,7 +52,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["method"]),
-		Provider: func(in interface{}) *string /**/ {
+		Provider: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -71,7 +71,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["provider"]),
-		UseOctavia: func(in interface{}) *bool /**/ {
+		UseOctavia: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -90,7 +90,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["use_octavia"]),
-		FloatingNetwork: func(in interface{}) *string /**/ {
+		FloatingNetwork: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -109,7 +109,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["floating_network"]),
-		FloatingNetworkID: func(in interface{}) *string /**/ {
+		FloatingNetworkID: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -128,7 +128,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["floating_network_id"]),
-		FloatingSubnet: func(in interface{}) *string /**/ {
+		FloatingSubnet: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -147,7 +147,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["floating_subnet"]),
-		SubnetID: func(in interface{}) *string /**/ {
+		SubnetID: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -166,7 +166,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["subnet_id"]),
-		ManageSecGroups: func(in interface{}) *bool /**/ {
+		ManageSecGroups: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -185,7 +185,7 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["manage_sec_groups"]),
-		EnableIngressHostname: func(in interface{}) *bool /**/ {
+		EnableIngressHostname: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}

@@ -32,10 +32,10 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 		panic("expand EtcdMemberSpec failure, in is nil")
 	}
 	return kops.EtcdMemberSpec{
-		Name: func(in interface{}) string /**/ {
+		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		InstanceGroup: func(in interface{}) *string /**/ {
+		InstanceGroup: func(in interface{}) *string {
 			return func(in interface{}) *string {
 				if in == nil {
 					return nil
@@ -48,7 +48,7 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["instance_group"]),
-		VolumeType: func(in interface{}) *string /**/ {
+		VolumeType: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -67,7 +67,7 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["volume_type"]),
-		VolumeIops: func(in interface{}) *int32 /**/ {
+		VolumeIops: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -86,7 +86,7 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["volume_iops"]),
-		VolumeThroughput: func(in interface{}) *int32 /**/ {
+		VolumeThroughput: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -105,7 +105,7 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["volume_throughput"]),
-		VolumeSize: func(in interface{}) *int32 /**/ {
+		VolumeSize: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -124,7 +124,7 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["volume_size"]),
-		KmsKeyId: func(in interface{}) *string /**/ {
+		KmsKeyId: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -143,7 +143,7 @@ func ExpandResourceEtcdMemberSpec(in map[string]interface{}) kops.EtcdMemberSpec
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["kms_key_id"]),
-		EncryptedVolume: func(in interface{}) *bool /**/ {
+		EncryptedVolume: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}

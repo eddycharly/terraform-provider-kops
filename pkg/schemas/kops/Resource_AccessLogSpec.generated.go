@@ -25,13 +25,13 @@ func ExpandResourceAccessLogSpec(in map[string]interface{}) kops.AccessLogSpec {
 		panic("expand AccessLogSpec failure, in is nil")
 	}
 	return kops.AccessLogSpec{
-		Interval: func(in interface{}) int /**/ {
+		Interval: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["interval"]),
-		Bucket: func(in interface{}) string /**/ {
+		Bucket: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bucket"]),
-		BucketPrefix: func(in interface{}) string /**/ {
+		BucketPrefix: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bucket_prefix"]),
 	}

@@ -25,13 +25,13 @@ func ExpandResourceServiceAccountIssuerDiscoveryConfig(in map[string]interface{}
 		panic("expand ServiceAccountIssuerDiscoveryConfig failure, in is nil")
 	}
 	return kops.ServiceAccountIssuerDiscoveryConfig{
-		DiscoveryStore: func(in interface{}) string /**/ {
+		DiscoveryStore: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["discovery_store"]),
-		EnableAWSOIDCProvider: func(in interface{}) bool /**/ {
+		EnableAWSOIDCProvider: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_aws_oidc_provider"]),
-		AdditionalAudiences: func(in interface{}) []string /**/ {
+		AdditionalAudiences: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil

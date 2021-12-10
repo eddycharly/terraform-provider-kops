@@ -25,13 +25,13 @@ func ExpandResourceClusterSecrets(in map[string]interface{}) resources.ClusterSe
 		panic("expand ClusterSecrets failure, in is nil")
 	}
 	return resources.ClusterSecrets{
-		DockerConfig: func(in interface{}) string /**/ {
+		DockerConfig: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["docker_config"]),
-		ClusterCaCert: func(in interface{}) string /**/ {
+		ClusterCaCert: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_ca_cert"]),
-		ClusterCaKey: func(in interface{}) string /**/ {
+		ClusterCaKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_ca_key"]),
 	}

@@ -3,6 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	core "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -20,18 +21,18 @@ func DataSourceNodeSelectorRequirement() *schema.Resource {
 	return res
 }
 
-func ExpandDataSourceNodeSelectorRequirement(in map[string]interface{}) v1.NodeSelectorRequirement {
+func ExpandDataSourceNodeSelectorRequirement(in map[string]interface{}) core.NodeSelectorRequirement {
 	if in == nil {
 		panic("expand NodeSelectorRequirement failure, in is nil")
 	}
-	return v1.NodeSelectorRequirement{
-		Key: func(in interface{}) string /**/ {
+	return core.NodeSelectorRequirement{
+		Key: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["key"]),
-		Operator: func(in interface{}) v1.NodeSelectorOperator /*k8s.io/api/core/v1*/ {
+		Operator: func(in interface{}) core.NodeSelectorOperator {
 			return v1.NodeSelectorOperator(ExpandString(in))
 		}(in["operator"]),
-		Values: func(in interface{}) []string /**/ {
+		Values: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -46,11 +47,11 @@ func ExpandDataSourceNodeSelectorRequirement(in map[string]interface{}) v1.NodeS
 	}
 }
 
-func FlattenDataSourceNodeSelectorRequirementInto(in v1.NodeSelectorRequirement, out map[string]interface{}) {
+func FlattenDataSourceNodeSelectorRequirementInto(in core.NodeSelectorRequirement, out map[string]interface{}) {
 	out["key"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Key)
-	out["operator"] = func(in v1.NodeSelectorOperator) interface{} {
+	out["operator"] = func(in core.NodeSelectorOperator) interface{} {
 		return FlattenString(string(in))
 	}(in.Operator)
 	out["values"] = func(in []string) interface{} {
@@ -64,7 +65,7 @@ func FlattenDataSourceNodeSelectorRequirementInto(in v1.NodeSelectorRequirement,
 	}(in.Values)
 }
 
-func FlattenDataSourceNodeSelectorRequirement(in v1.NodeSelectorRequirement) map[string]interface{} {
+func FlattenDataSourceNodeSelectorRequirement(in core.NodeSelectorRequirement) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenDataSourceNodeSelectorRequirementInto(in, out)
 	return out

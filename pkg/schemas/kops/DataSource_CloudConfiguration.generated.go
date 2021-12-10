@@ -44,7 +44,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 		panic("expand CloudConfiguration failure, in is nil")
 	}
 	return kops.CloudConfiguration{
-		ManageStorageClasses: func(in interface{}) *bool /**/ {
+		ManageStorageClasses: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -63,7 +63,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["manage_storage_classes"]),
-		Multizone: func(in interface{}) *bool /**/ {
+		Multizone: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -82,7 +82,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["multizone"]),
-		NodeTags: func(in interface{}) *string /**/ {
+		NodeTags: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -101,7 +101,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["node_tags"]),
-		NodeInstancePrefix: func(in interface{}) *string /**/ {
+		NodeInstancePrefix: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -120,7 +120,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["node_instance_prefix"]),
-		NodeIPFamilies: func(in interface{}) []string /**/ {
+		NodeIPFamilies: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -132,10 +132,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				return out
 			}(in)
 		}(in["node_ip_families"]),
-		GCEServiceAccount: func(in interface{}) string /**/ {
+		GCEServiceAccount: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["gce_service_account"]),
-		DisableSecurityGroupIngress: func(in interface{}) *bool /**/ {
+		DisableSecurityGroupIngress: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -154,7 +154,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["disable_security_group_ingress"]),
-		ElbSecurityGroup: func(in interface{}) *string /**/ {
+		ElbSecurityGroup: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -173,7 +173,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["elb_security_group"]),
-		VSphereUsername: func(in interface{}) *string /**/ {
+		VSphereUsername: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -192,7 +192,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_username"]),
-		VSpherePassword: func(in interface{}) *string /**/ {
+		VSpherePassword: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -211,7 +211,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_password"]),
-		VSphereServer: func(in interface{}) *string /**/ {
+		VSphereServer: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -230,7 +230,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_server"]),
-		VSphereDatacenter: func(in interface{}) *string /**/ {
+		VSphereDatacenter: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -249,7 +249,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_datacenter"]),
-		VSphereResourcePool: func(in interface{}) *string /**/ {
+		VSphereResourcePool: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -268,7 +268,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_resource_pool"]),
-		VSphereDatastore: func(in interface{}) *string /**/ {
+		VSphereDatastore: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -287,7 +287,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_datastore"]),
-		VSphereCoreDNSServer: func(in interface{}) *string /**/ {
+		VSphereCoreDNSServer: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -306,7 +306,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["v_sphere_core_dns_server"]),
-		SpotinstProduct: func(in interface{}) *string /**/ {
+		SpotinstProduct: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -325,7 +325,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["spotinst_product"]),
-		SpotinstOrientation: func(in interface{}) *string /**/ {
+		SpotinstOrientation: func(in interface{}) *string {
 			if in == nil {
 				return nil
 			}
@@ -344,7 +344,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["spotinst_orientation"]),
-		Openstack: func(in interface{}) *kops.OpenstackConfiguration /*k8s.io/kops/pkg/apis/kops*/ {
+		Openstack: func(in interface{}) *kops.OpenstackConfiguration {
 			return func(in interface{}) *kops.OpenstackConfiguration {
 				if in == nil {
 					return nil
@@ -362,7 +362,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(in))
 			}(in)
 		}(in["openstack"]),
-		Azure: func(in interface{}) *kops.AzureConfiguration /*k8s.io/kops/pkg/apis/kops*/ {
+		Azure: func(in interface{}) *kops.AzureConfiguration {
 			return func(in interface{}) *kops.AzureConfiguration {
 				if in == nil {
 					return nil
@@ -380,7 +380,7 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(in))
 			}(in)
 		}(in["azure"]),
-		AWSEBSCSIDriver: func(in interface{}) *kops.AWSEBSCSIDriver /*k8s.io/kops/pkg/apis/kops*/ {
+		AWSEBSCSIDriver: func(in interface{}) *kops.AWSEBSCSIDriver {
 			return func(in interface{}) *kops.AWSEBSCSIDriver {
 				if in == nil {
 					return nil

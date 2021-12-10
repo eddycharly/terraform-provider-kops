@@ -3,7 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 var _ = Schema
@@ -19,18 +19,18 @@ func DataSourceWeightedPodAffinityTerm() *schema.Resource {
 	return res
 }
 
-func ExpandDataSourceWeightedPodAffinityTerm(in map[string]interface{}) v1.WeightedPodAffinityTerm {
+func ExpandDataSourceWeightedPodAffinityTerm(in map[string]interface{}) core.WeightedPodAffinityTerm {
 	if in == nil {
 		panic("expand WeightedPodAffinityTerm failure, in is nil")
 	}
-	return v1.WeightedPodAffinityTerm{
-		Weight: func(in interface{}) int32 /**/ {
+	return core.WeightedPodAffinityTerm{
+		Weight: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["weight"]),
-		PodAffinityTerm: func(in interface{}) v1.PodAffinityTerm /*k8s.io/api/core/v1*/ {
-			return func(in interface{}) v1.PodAffinityTerm {
+		PodAffinityTerm: func(in interface{}) core.PodAffinityTerm {
+			return func(in interface{}) core.PodAffinityTerm {
 				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return v1.PodAffinityTerm{}
+					return core.PodAffinityTerm{}
 				}
 				return (ExpandDataSourcePodAffinityTerm(in.([]interface{})[0].(map[string]interface{})))
 			}(in)
@@ -38,18 +38,18 @@ func ExpandDataSourceWeightedPodAffinityTerm(in map[string]interface{}) v1.Weigh
 	}
 }
 
-func FlattenDataSourceWeightedPodAffinityTermInto(in v1.WeightedPodAffinityTerm, out map[string]interface{}) {
+func FlattenDataSourceWeightedPodAffinityTermInto(in core.WeightedPodAffinityTerm, out map[string]interface{}) {
 	out["weight"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.Weight)
-	out["pod_affinity_term"] = func(in v1.PodAffinityTerm) interface{} {
-		return func(in v1.PodAffinityTerm) []interface{} {
+	out["pod_affinity_term"] = func(in core.PodAffinityTerm) interface{} {
+		return func(in core.PodAffinityTerm) []interface{} {
 			return []interface{}{FlattenDataSourcePodAffinityTerm(in)}
 		}(in)
 	}(in.PodAffinityTerm)
 }
 
-func FlattenDataSourceWeightedPodAffinityTerm(in v1.WeightedPodAffinityTerm) map[string]interface{} {
+func FlattenDataSourceWeightedPodAffinityTerm(in core.WeightedPodAffinityTerm) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenDataSourceWeightedPodAffinityTermInto(in, out)
 	return out

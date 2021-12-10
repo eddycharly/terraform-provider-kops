@@ -3,7 +3,7 @@ package schemas
 import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 var _ = Schema
@@ -19,21 +19,21 @@ func ResourceNodeSelectorTerm() *schema.Resource {
 	return res
 }
 
-func ExpandResourceNodeSelectorTerm(in map[string]interface{}) v1.NodeSelectorTerm {
+func ExpandResourceNodeSelectorTerm(in map[string]interface{}) core.NodeSelectorTerm {
 	if in == nil {
 		panic("expand NodeSelectorTerm failure, in is nil")
 	}
-	return v1.NodeSelectorTerm{
-		MatchExpressions: func(in interface{}) []v1.NodeSelectorRequirement /**/ {
-			return func(in interface{}) []v1.NodeSelectorRequirement {
+	return core.NodeSelectorTerm{
+		MatchExpressions: func(in interface{}) []core.NodeSelectorRequirement {
+			return func(in interface{}) []core.NodeSelectorRequirement {
 				if in == nil {
 					return nil
 				}
-				var out []v1.NodeSelectorRequirement
+				var out []core.NodeSelectorRequirement
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) v1.NodeSelectorRequirement {
+					out = append(out, func(in interface{}) core.NodeSelectorRequirement {
 						if in == nil {
-							return v1.NodeSelectorRequirement{}
+							return core.NodeSelectorRequirement{}
 						}
 						return (ExpandResourceNodeSelectorRequirement(in.(map[string]interface{})))
 					}(in))
@@ -41,16 +41,16 @@ func ExpandResourceNodeSelectorTerm(in map[string]interface{}) v1.NodeSelectorTe
 				return out
 			}(in)
 		}(in["match_expressions"]),
-		MatchFields: func(in interface{}) []v1.NodeSelectorRequirement /**/ {
-			return func(in interface{}) []v1.NodeSelectorRequirement {
+		MatchFields: func(in interface{}) []core.NodeSelectorRequirement {
+			return func(in interface{}) []core.NodeSelectorRequirement {
 				if in == nil {
 					return nil
 				}
-				var out []v1.NodeSelectorRequirement
+				var out []core.NodeSelectorRequirement
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) v1.NodeSelectorRequirement {
+					out = append(out, func(in interface{}) core.NodeSelectorRequirement {
 						if in == nil {
-							return v1.NodeSelectorRequirement{}
+							return core.NodeSelectorRequirement{}
 						}
 						return (ExpandResourceNodeSelectorRequirement(in.(map[string]interface{})))
 					}(in))
@@ -61,23 +61,23 @@ func ExpandResourceNodeSelectorTerm(in map[string]interface{}) v1.NodeSelectorTe
 	}
 }
 
-func FlattenResourceNodeSelectorTermInto(in v1.NodeSelectorTerm, out map[string]interface{}) {
-	out["match_expressions"] = func(in []v1.NodeSelectorRequirement) interface{} {
-		return func(in []v1.NodeSelectorRequirement) []interface{} {
+func FlattenResourceNodeSelectorTermInto(in core.NodeSelectorTerm, out map[string]interface{}) {
+	out["match_expressions"] = func(in []core.NodeSelectorRequirement) interface{} {
+		return func(in []core.NodeSelectorRequirement) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in v1.NodeSelectorRequirement) interface{} {
+				out = append(out, func(in core.NodeSelectorRequirement) interface{} {
 					return FlattenResourceNodeSelectorRequirement(in)
 				}(in))
 			}
 			return out
 		}(in)
 	}(in.MatchExpressions)
-	out["match_fields"] = func(in []v1.NodeSelectorRequirement) interface{} {
-		return func(in []v1.NodeSelectorRequirement) []interface{} {
+	out["match_fields"] = func(in []core.NodeSelectorRequirement) interface{} {
+		return func(in []core.NodeSelectorRequirement) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in v1.NodeSelectorRequirement) interface{} {
+				out = append(out, func(in core.NodeSelectorRequirement) interface{} {
 					return FlattenResourceNodeSelectorRequirement(in)
 				}(in))
 			}
@@ -86,7 +86,7 @@ func FlattenResourceNodeSelectorTermInto(in v1.NodeSelectorTerm, out map[string]
 	}(in.MatchFields)
 }
 
-func FlattenResourceNodeSelectorTerm(in v1.NodeSelectorTerm) map[string]interface{} {
+func FlattenResourceNodeSelectorTerm(in core.NodeSelectorTerm) map[string]interface{} {
 	out := map[string]interface{}{}
 	FlattenResourceNodeSelectorTermInto(in, out)
 	return out

@@ -25,7 +25,7 @@ func ExpandResourceOpenstackMetadata(in map[string]interface{}) kops.OpenstackMe
 		panic("expand OpenstackMetadata failure, in is nil")
 	}
 	return kops.OpenstackMetadata{
-		ConfigDrive: func(in interface{}) *bool /**/ {
+		ConfigDrive: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
