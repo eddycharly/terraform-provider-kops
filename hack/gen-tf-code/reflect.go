@@ -18,7 +18,7 @@ func isInt(in reflect.Type) bool {
 }
 
 func isString(in reflect.Type) bool {
-	return in.Kind() == reflect.String || in.String() == "v1.LabelSelectorOperator"
+	return in.Kind() == reflect.String
 }
 
 func isFloat(in reflect.Type) bool {
@@ -66,7 +66,7 @@ func isValueType(in reflect.Type) bool {
 	case reflect.Slice, reflect.Map:
 		return false
 	case reflect.Struct:
-		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString" || in.String() == "v1.LabelSelectorOperator"
+		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString"
 	default:
 		panic(fmt.Sprintf("unknown kind %v", in.Kind()))
 	}
