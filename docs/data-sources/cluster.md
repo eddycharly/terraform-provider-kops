@@ -1451,6 +1451,7 @@ The following arguments are supported:
 - `reconfigure_kubelet` - (Computed) - Bool - ReconfigureKubelet is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `node_init_bootstrap_file` - (Computed) - String - NodeInitBootstrapFile is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `cni_bin_path` - (Computed) - String - CniBinPath is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `disable_cnp_status_updates` - (Computed) - Bool - Determines if CNP NodeStatus updates will be sent to the Kubernetes api-server.
 
 ### hubble_spec
 
@@ -1720,6 +1721,7 @@ The following arguments are supported:
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `memory_request` - (Computed) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
+- `max_node_provision_time` - (Computed) - String - MaxNodeProvisionTime determines how long CAS will wait for a node to join the cluster.
 
 ### warm_pool_spec
 

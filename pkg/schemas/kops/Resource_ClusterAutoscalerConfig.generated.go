@@ -26,6 +26,7 @@ func ResourceClusterAutoscalerConfig() *schema.Resource {
 			"image":                            OptionalString(),
 			"memory_request":                   OptionalQuantity(),
 			"cpu_request":                      OptionalQuantity(),
+			"max_node_provision_time":          OptionalString(),
 		},
 	}
 
@@ -253,6 +254,9 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
+		MaxNodeProvisionTime: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["max_node_provision_time"]),
 	}
 }
 
@@ -377,6 +381,9 @@ func FlattenResourceClusterAutoscalerConfigInto(in kops.ClusterAutoscalerConfig,
 			}(*in)
 		}(in)
 	}(in.CPURequest)
+	out["max_node_provision_time"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.MaxNodeProvisionTime)
 }
 
 func FlattenResourceClusterAutoscalerConfig(in kops.ClusterAutoscalerConfig) map[string]interface{} {
