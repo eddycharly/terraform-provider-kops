@@ -1,0 +1,121 @@
+package schemas
+
+import (
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	core "k8s.io/api/core/v1"
+)
+
+func TestExpandResourceNodeSelector(t *testing.T) {
+	_default := core.NodeSelector{}
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want core.NodeSelector
+	}{
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"node_selector_terms": func() []interface{} { return nil }(),
+				},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ExpandResourceNodeSelector(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceNodeSelector() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceNodeSelectorInto(t *testing.T) {
+	_default := map[string]interface{}{
+		"node_selector_terms": func() []interface{} { return nil }(),
+	}
+	type args struct {
+		in core.NodeSelector
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: core.NodeSelector{},
+			},
+			want: _default,
+		},
+		{
+			name: "NodeSelectorTerms - default",
+			args: args{
+				in: func() core.NodeSelector {
+					subject := core.NodeSelector{}
+					subject.NodeSelectorTerms = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			FlattenResourceNodeSelectorInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceNodeSelector() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceNodeSelector(t *testing.T) {
+	_default := map[string]interface{}{
+		"node_selector_terms": func() []interface{} { return nil }(),
+	}
+	type args struct {
+		in core.NodeSelector
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: core.NodeSelector{},
+			},
+			want: _default,
+		},
+		{
+			name: "NodeSelectorTerms - default",
+			args: args{
+				in: func() core.NodeSelector {
+					subject := core.NodeSelector{}
+					subject.NodeSelectorTerms = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceNodeSelector(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceNodeSelector() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}

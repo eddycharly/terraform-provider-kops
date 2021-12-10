@@ -16,6 +16,7 @@ func DataSourceExternalDNSConfig() *schema.Resource {
 			"disable":         ComputedBool(),
 			"watch_ingress":   ComputedBool(),
 			"watch_namespace": ComputedString(),
+			"provider":        ComputedString(),
 		},
 	}
 
@@ -52,6 +53,9 @@ func ExpandDataSourceExternalDNSConfig(in map[string]interface{}) kops.ExternalD
 		WatchNamespace: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["watch_namespace"]),
+		Provider: func(in interface{}) kops.ExternalDNSProvider {
+			return kops.ExternalDNSProvider(ExpandString(in))
+		}(in["provider"]),
 	}
 }
 
@@ -72,6 +76,9 @@ func FlattenDataSourceExternalDNSConfigInto(in kops.ExternalDNSConfig, out map[s
 	out["watch_namespace"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.WatchNamespace)
+	out["provider"] = func(in kops.ExternalDNSProvider) interface{} {
+		return FlattenString(string(in))
+	}(in.Provider)
 }
 
 func FlattenDataSourceExternalDNSConfig(in kops.ExternalDNSConfig) map[string]interface{} {

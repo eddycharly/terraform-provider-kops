@@ -5,7 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -57,59 +57,59 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 		Port: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["port"]),
-		Interval: func(in interface{}) *v1.Duration {
+		Interval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["interval"]),
-		Timeout: func(in interface{}) *v1.Duration {
+		Timeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["timeout"]),
-		TokenTTL: func(in interface{}) *v1.Duration {
+		TokenTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -139,32 +139,32 @@ func FlattenDataSourceNodeAuthorizerSpecInto(in kops.NodeAuthorizerSpec, out map
 	out["port"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Port)
-	out["interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.Interval)
-	out["timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.Timeout)
-	out["token_ttl"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["token_ttl"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

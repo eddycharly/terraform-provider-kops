@@ -6,7 +6,7 @@ import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -71,40 +71,40 @@ func ExpandResourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdClusterSp
 		Version: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["version"]),
-		LeaderElectionTimeout: func(in interface{}) *v1.Duration {
+		LeaderElectionTimeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["leader_election_timeout"]),
-		HeartbeatInterval: func(in interface{}) *v1.Duration {
+		HeartbeatInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -216,22 +216,22 @@ func FlattenResourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[string]
 	out["version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Version)
-	out["leader_election_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["leader_election_timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.LeaderElectionTimeout)
-	out["heartbeat_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["heartbeat_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

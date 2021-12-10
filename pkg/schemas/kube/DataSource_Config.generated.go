@@ -27,9 +27,9 @@ func ExpandDataSourceConfig(in map[string]interface{}) kube.Config {
 		KubePassword: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["kube_password"]),
-		CaCert: func(in interface{}) string {
+		CaCerts: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ca_cert"]),
+		}(in["ca_certs"]),
 		ClientCert: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["client_cert"]),
@@ -55,9 +55,9 @@ func FlattenDataSourceConfigInto(in kube.Config, out map[string]interface{}) {
 	out["kube_password"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.KubePassword)
-	out["ca_cert"] = func(in string) interface{} {
+	out["ca_certs"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.CaCert)
+	}(in.CaCerts)
 	out["client_cert"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClientCert)

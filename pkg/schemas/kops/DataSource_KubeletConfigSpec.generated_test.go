@@ -32,6 +32,7 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"tls_min_version":                        "",
 					"kubeconfig_path":                        "",
 					"require_kubeconfig":                     nil,
+					"log_format":                             "",
 					"log_level":                              nil,
 					"pod_manifest_path":                      "",
 					"hostname_override":                      "",
@@ -106,6 +107,7 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"container_log_max_size":                 "",
 					"container_log_max_files":                nil,
 					"enable_cadvisor_json_endpoints":         nil,
+					"pod_pids_limit":                         nil,
 				},
 			},
 			want: _default,
@@ -134,6 +136,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"tls_min_version":                        "",
 		"kubeconfig_path":                        "",
 		"require_kubeconfig":                     nil,
+		"log_format":                             "",
 		"log_level":                              nil,
 		"pod_manifest_path":                      "",
 		"hostname_override":                      "",
@@ -208,6 +211,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"container_log_max_size":                 "",
 		"container_log_max_files":                nil,
 		"enable_cadvisor_json_endpoints":         nil,
+		"pod_pids_limit":                         nil,
 	}
 	type args struct {
 		in kops.KubeletConfigSpec
@@ -340,6 +344,17 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
 					subject.RequireKubeconfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -1154,6 +1169,17 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
 					subject.EnableCadvisorJsonEndpoints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodPidsLimit - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.PodPidsLimit = nil
 					return subject
 				}(),
 			},
@@ -1184,6 +1210,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"tls_min_version":                        "",
 		"kubeconfig_path":                        "",
 		"require_kubeconfig":                     nil,
+		"log_format":                             "",
 		"log_level":                              nil,
 		"pod_manifest_path":                      "",
 		"hostname_override":                      "",
@@ -1258,6 +1285,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"container_log_max_size":                 "",
 		"container_log_max_files":                nil,
 		"enable_cadvisor_json_endpoints":         nil,
+		"pod_pids_limit":                         nil,
 	}
 	type args struct {
 		in kops.KubeletConfigSpec
@@ -1390,6 +1418,17 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
 					subject.RequireKubeconfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.LogFormat = ""
 					return subject
 				}(),
 			},
@@ -2204,6 +2243,17 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
 					subject.EnableCadvisorJsonEndpoints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodPidsLimit - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.PodPidsLimit = nil
 					return subject
 				}(),
 			},

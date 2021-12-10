@@ -31,6 +31,7 @@ func TestExpandResourceLoadBalancerAccessSpec(t *testing.T) {
 					"ssl_policy":                 nil,
 					"cross_zone_load_balancing":  nil,
 					"subnets":                    func() []interface{} { return nil }(),
+					"access_log":                 nil,
 				},
 			},
 			want: _default,
@@ -58,6 +59,7 @@ func TestFlattenResourceLoadBalancerAccessSpecInto(t *testing.T) {
 		"ssl_policy":                 nil,
 		"cross_zone_load_balancing":  nil,
 		"subnets":                    func() []interface{} { return nil }(),
+		"access_log":                 nil,
 	}
 	type args struct {
 		in kops.LoadBalancerAccessSpec
@@ -179,6 +181,17 @@ func TestFlattenResourceLoadBalancerAccessSpecInto(t *testing.T) {
 				in: func() kops.LoadBalancerAccessSpec {
 					subject := kops.LoadBalancerAccessSpec{}
 					subject.Subnets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AccessLog - default",
+			args: args{
+				in: func() kops.LoadBalancerAccessSpec {
+					subject := kops.LoadBalancerAccessSpec{}
+					subject.AccessLog = nil
 					return subject
 				}(),
 			},
@@ -208,6 +221,7 @@ func TestFlattenResourceLoadBalancerAccessSpec(t *testing.T) {
 		"ssl_policy":                 nil,
 		"cross_zone_load_balancing":  nil,
 		"subnets":                    func() []interface{} { return nil }(),
+		"access_log":                 nil,
 	}
 	type args struct {
 		in kops.LoadBalancerAccessSpec
@@ -329,6 +343,17 @@ func TestFlattenResourceLoadBalancerAccessSpec(t *testing.T) {
 				in: func() kops.LoadBalancerAccessSpec {
 					subject := kops.LoadBalancerAccessSpec{}
 					subject.Subnets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AccessLog - default",
+			args: args{
+				in: func() kops.LoadBalancerAccessSpec {
+					subject := kops.LoadBalancerAccessSpec{}
+					subject.AccessLog = nil
 					return subject
 				}(),
 			},

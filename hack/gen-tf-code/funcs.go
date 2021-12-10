@@ -9,6 +9,9 @@ import (
 
 func reflectFuncs(baseType reflect.Type, mappings map[string]string, parser *parser) template.FuncMap {
 	return template.FuncMap{
+		"qualifiedName": func(in reflect.Type) string {
+			return resolve(in, mappings)
+		},
 		"isPtr":         isPtr,
 		"isBool":        isBool,
 		"isInt":         isInt,

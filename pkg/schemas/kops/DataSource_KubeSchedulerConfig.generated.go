@@ -15,6 +15,7 @@ func DataSourceKubeSchedulerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                           ComputedString(),
+			"log_format":                       ComputedString(),
 			"log_level":                        ComputedInt(),
 			"image":                            ComputedString(),
 			"leader_election":                  ComputedStruct(DataSourceLeaderElectionConfiguration()),
@@ -27,6 +28,8 @@ func DataSourceKubeSchedulerConfig() *schema.Resource {
 			"authorization_kubeconfig":         ComputedString(),
 			"authorization_always_allow_paths": ComputedList(String()),
 			"enable_profiling":                 ComputedBool(),
+			"tls_cert_file":                    ComputedString(),
+			"tls_private_key_file":             ComputedString(),
 		},
 	}
 
@@ -41,6 +44,9 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
@@ -179,6 +185,28 @@ func ExpandDataSourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSch
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_profiling"]),
+		TLSCertFile: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["tls_cert_file"]),
+		TLSPrivateKeyFile: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["tls_private_key_file"]),
 	}
 }
 
@@ -186,6 +214,9 @@ func FlattenDataSourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out m
 	out["master"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Master)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogLevel)
@@ -274,6 +305,19 @@ func FlattenDataSourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out m
 			}(*in)
 		}(in)
 	}(in.EnableProfiling)
+	out["tls_cert_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.TLSCertFile)
+	out["tls_private_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSPrivateKeyFile)
 }
 
 func FlattenDataSourceKubeSchedulerConfig(in kops.KubeSchedulerConfig) map[string]interface{} {

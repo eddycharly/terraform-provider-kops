@@ -23,6 +23,7 @@ func ResourceLoadBalancerAccessSpec() *schema.Resource {
 			"ssl_policy":                 OptionalString(),
 			"cross_zone_load_balancing":  OptionalBool(),
 			"subnets":                    OptionalList(ResourceLoadBalancerSubnetSpec()),
+			"access_log":                 OptionalStruct(ResourceAccessLogSpec()),
 		},
 	}
 
@@ -151,6 +152,24 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 				return out
 			}(in)
 		}(in["subnets"]),
+		AccessLog: func(in interface{}) *kops.AccessLogSpec {
+			return func(in interface{}) *kops.AccessLogSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.AccessLogSpec) *kops.AccessLogSpec {
+					return &in
+				}(func(in interface{}) kops.AccessLogSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.AccessLogSpec{}
+					}
+					return (ExpandResourceAccessLogSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["access_log"]),
 	}
 }
 
@@ -227,6 +246,18 @@ func FlattenResourceLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec, o
 			return out
 		}(in)
 	}(in.Subnets)
+	out["access_log"] = func(in *kops.AccessLogSpec) interface{} {
+		return func(in *kops.AccessLogSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AccessLogSpec) interface{} {
+				return func(in kops.AccessLogSpec) []interface{} {
+					return []interface{}{FlattenResourceAccessLogSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AccessLog)
 }
 
 func FlattenResourceLoadBalancerAccessSpec(in kops.LoadBalancerAccessSpec) map[string]interface{} {

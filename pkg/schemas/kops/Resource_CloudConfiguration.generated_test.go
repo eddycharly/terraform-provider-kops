@@ -25,6 +25,7 @@ func TestExpandResourceCloudConfiguration(t *testing.T) {
 					"multizone":                      nil,
 					"node_tags":                      nil,
 					"node_instance_prefix":           nil,
+					"node_ip_families":               func() []interface{} { return nil }(),
 					"gce_service_account":            "",
 					"disable_security_group_ingress": nil,
 					"elb_security_group":             nil,
@@ -61,6 +62,7 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 		"multizone":                      nil,
 		"node_tags":                      nil,
 		"node_instance_prefix":           nil,
+		"node_ip_families":               func() []interface{} { return nil }(),
 		"gce_service_account":            "",
 		"disable_security_group_ingress": nil,
 		"elb_security_group":             nil,
@@ -131,6 +133,17 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.NodeInstancePrefix = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeIpFamilies - default",
+			args: args{
+				in: func() kops.CloudConfiguration {
+					subject := kops.CloudConfiguration{}
+					subject.NodeIPFamilies = nil
 					return subject
 				}(),
 			},
@@ -319,6 +332,7 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 		"multizone":                      nil,
 		"node_tags":                      nil,
 		"node_instance_prefix":           nil,
+		"node_ip_families":               func() []interface{} { return nil }(),
 		"gce_service_account":            "",
 		"disable_security_group_ingress": nil,
 		"elb_security_group":             nil,
@@ -389,6 +403,17 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.NodeInstancePrefix = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeIpFamilies - default",
+			args: args{
+				in: func() kops.CloudConfiguration {
+					subject := kops.CloudConfiguration{}
+					subject.NodeIPFamilies = nil
 					return subject
 				}(),
 			},

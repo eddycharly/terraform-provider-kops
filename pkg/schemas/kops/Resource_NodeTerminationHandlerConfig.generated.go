@@ -17,6 +17,8 @@ func ResourceNodeTerminationHandlerConfig() *schema.Resource {
 			"enabled":                           RequiredBool(),
 			"enable_spot_interruption_draining": RequiredBool(),
 			"enable_scheduled_event_draining":   OptionalBool(),
+			"enable_rebalance_monitoring":       OptionalBool(),
+			"enable_rebalance_draining":         OptionalBool(),
 			"enable_prometheus_metrics":         OptionalBool(),
 			"enable_sqs_termination_draining":   OptionalBool(),
 			"managed_asg_tag":                   OptionalString(),
@@ -78,6 +80,44 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_scheduled_event_draining"]),
+		EnableRebalanceMonitoring: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_rebalance_monitoring"]),
+		EnableRebalanceDraining: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_rebalance_draining"]),
 		EnablePrometheusMetrics: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -207,6 +247,26 @@ func FlattenResourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHand
 			}(*in)
 		}(in)
 	}(in.EnableScheduledEventDraining)
+	out["enable_rebalance_monitoring"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableRebalanceMonitoring)
+	out["enable_rebalance_draining"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableRebalanceDraining)
 	out["enable_prometheus_metrics"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

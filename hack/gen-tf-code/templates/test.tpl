@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	core "k8s.io/api/core/v1"
 	"github.com/google/go-cmp/cmp"
 	{{ range $k, $v := imports -}}
 	{{ $v }} {{ $k | quote }}
@@ -54,7 +56,7 @@ func() []interface{} { return nil }()
 {{- else if isIntOrString . -}}
 ""
 {{- else if isStruct . -}}
-func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ qualifiedName . }}{}) } }()
 {{- else if isInt . -}}
 0
 {{- else if isBool . -}}
@@ -84,7 +86,7 @@ func() []interface{} { return nil }()
 {{- else if isIntOrString . -}}
 ""
 {{- else if isStruct . -}}
-func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ .String }}{}) } }()
+func() []interface{}{ return []interface{}{ {{ mapping . }}Flatten{{ scope }}{{ .Name }}({{ qualifiedName . }}{}) } }()
 {{- else if isInt . -}}
 0
 {{- else if isBool . -}}
@@ -98,14 +100,14 @@ false
 
 {{- define "expandCases" -}}
 {{- $fields := (fields . true) -}}
-_default := {{ $.String }}{}
+_default := {{ qualifiedName $ }}{}
 type args struct {
 	in map[string]interface{}
 }
 tests := []struct {
 	name string
 	args args
-	want {{ .String }}
+	want {{ qualifiedName . }}
 }{
 	{
 		name: "default",
@@ -133,7 +135,7 @@ _default := map[string]interface{}{
 	{{- end }}
 }
 type args struct {
-	in {{ .String }}
+	in {{ qualifiedName . }}
 }
 tests := []struct {
 	name string
@@ -143,7 +145,7 @@ tests := []struct {
 	{
 		name: "default",
 		args: args{
-			in: {{ .String }}{},
+			in: {{ qualifiedName . }}{},
 		},
 		want: _default,
 	},
@@ -153,8 +155,8 @@ tests := []struct {
 	{
 		name: "{{ fieldName . }} - default",
 		args: args{
-			in: func() {{ $.String }}{
-				subject := {{ $.String }}{}
+			in: func() {{ qualifiedName $ }}{
+				subject := {{ qualifiedName $ }}{}
 				subject.{{ .Name }} = {{ template "defaultValue" .Type }}
 				return subject
 			}(),

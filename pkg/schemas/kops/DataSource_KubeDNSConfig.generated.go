@@ -4,7 +4,9 @@ import (
 	"reflect"
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	coreschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/kops/pkg/apis/kops"
 )
@@ -16,6 +18,8 @@ func DataSourceKubeDNSConfig() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"cache_max_size":       ComputedInt(),
 			"cache_max_concurrent": ComputedInt(),
+			"tolerations":          ComputedList(coreschemas.DataSourceToleration()),
+			"affinity":             ComputedStruct(coreschemas.DataSourceAffinity()),
 			"core_dns_image":       ComputedString(),
 			"cpa_image":            ComputedString(),
 			"domain":               ComputedString(),
@@ -47,6 +51,41 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 		CacheMaxConcurrent: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["cache_max_concurrent"]),
+		Tolerations: func(in interface{}) []core.Toleration {
+			return func(in interface{}) []core.Toleration {
+				if in == nil {
+					return nil
+				}
+				var out []core.Toleration
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) core.Toleration {
+						if in == nil {
+							return core.Toleration{}
+						}
+						return (coreschemas.ExpandDataSourceToleration(in.(map[string]interface{})))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["tolerations"]),
+		Affinity: func(in interface{}) *core.Affinity {
+			return func(in interface{}) *core.Affinity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in core.Affinity) *core.Affinity {
+					return &in
+				}(func(in interface{}) core.Affinity {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return core.Affinity{}
+					}
+					return (coreschemas.ExpandDataSourceAffinity(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["affinity"]),
 		CoreDNSImage: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["core_dns_image"]),
@@ -200,6 +239,29 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 	out["cache_max_concurrent"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.CacheMaxConcurrent)
+	out["tolerations"] = func(in []core.Toleration) interface{} {
+		return func(in []core.Toleration) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in core.Toleration) interface{} {
+					return coreschemas.FlattenDataSourceToleration(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Tolerations)
+	out["affinity"] = func(in *core.Affinity) interface{} {
+		return func(in *core.Affinity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in core.Affinity) interface{} {
+				return func(in core.Affinity) []interface{} {
+					return []interface{}{coreschemas.FlattenDataSourceAffinity(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Affinity)
 	out["core_dns_image"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CoreDNSImage)

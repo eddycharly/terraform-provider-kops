@@ -33,7 +33,7 @@ The following arguments are supported:
 - `namespace` - (Computed) - String - Kubernetes namespace.
 - `kube_user` - (Computed) - String - Kubernetes user.
 - `kube_password` - (Sensitive) - (Computed) - String - Kubernetes password.
-- `ca_cert` - (Sensitive) - (Computed) - String - Kubernetes cluster certificate.
+- `ca_certs` - (Computed) - String - Kubernetes cluster certificate.
 - `client_cert` - (Sensitive) - (Computed) - String - Kubernetes client certificate.
 - `client_key` - (Sensitive) - (Computed) - String - Kubernetes client key.
 

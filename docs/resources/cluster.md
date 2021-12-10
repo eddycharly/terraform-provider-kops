@@ -180,6 +180,7 @@ The following arguments are supported:
 - `external_dns` - (Optional) - [external_dns_config](#external_dns_config)
 - `ntp` - (Optional) - [ntp_config](#ntp_config)
 - `node_termination_handler` - (Optional) - [node_termination_handler_config](#node_termination_handler_config) - NodeTerminationHandler determines the node termination handler configuration.
+- `node_problem_detector` - (Optional) - [node_problem_detector_config](#node_problem_detector_config) - NodeProblemDetector determines the node problem detector configuration.
 - `metrics_server` - (Optional) - [metrics_server_config](#metrics_server_config) - MetricsServer determines the metrics server configuration.
 - `cert_manager` - (Optional) - [cert_manager_config](#cert_manager_config) - CertManager determines the metrics server configuration.
 - `aws_load_balancer_controller` - (Optional) - [aws_load_balancer_controller_config](#aws_load_balancer_controller_config) - AWSLoadbalancerControllerConfig determines the AWS LB controller configuration.
@@ -227,7 +228,8 @@ ClusterSubnetSpec defines a subnet.
 The following arguments are supported:
 
 - `name` - (Required) - String - Name is the name of the subnet.
-- `cidr` - (Optional) - (Computed) - String - CIDR is the network cidr of the subnet.
+- `cidr` - (Optional) - (Computed) - String - CIDR is the IPv4 CIDR block assigned to the subnet.
+- `ipv6_cidr` - (Optional) - String - IPv6CIDR is the IPv6 CIDR block assigned to the subnet.
 - `zone` - (Required) - String - Zone is the zone the subnet is in, set for subnets that are zonally scoped.
 - `region` - (Optional) - String - Region is the region the subnet is in, set for subnets that are regionally scoped.
 - `provider_id` - (Required) - String - ProviderID is the cloud provider id for the objects associated with the zone (the subnet on AWS).
@@ -395,6 +397,7 @@ The following arguments are supported:
 - `skip_install` - (Optional) - Bool - SkipInstall prevents kOps from installing and modifying containerd in any way (default "false").
 - `state` - (Optional) - String - State directory for execution state files (default "/run/containerd").
 - `version` - (Optional) - String - Version used to pick the containerd package.
+- `nvidia_gpu` - (Optional) - [nvidia_gpu_config](#nvidia_gpu_config) - NvidiaGPU configures the Nvidia GPU runtime.
 
 ### packages_config
 
@@ -406,6 +409,15 @@ The following arguments are supported:
 - `hash_arm64` - (Optional) - String - HashArm64 overrides the hash for the ARM64 package.
 - `url_amd64` - (Optional) - String - UrlAmd64 overrides the URL for the AMD64 package.
 - `url_arm64` - (Optional) - String - UrlArm64 overrides the URL for the ARM64 package.
+
+### nvidia_gpu_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `driver_package` - (Optional) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-460-server".
+- `enabled` - (Optional) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
 
 ### docker_config
 
@@ -456,6 +468,8 @@ The following arguments are supported:
 
 - `cache_max_size` - (Optional) - Int - CacheMaxSize is the maximum entries to keep in dnsmasq.
 - `cache_max_concurrent` - (Optional) - Int - CacheMaxConcurrent is the maximum number of concurrent queries for dnsmasq.
+- `tolerations` - (Optional) - List([toleration](#toleration)) - Tolerations	are tolerations to apply to the kube-dns deployment.
+- `affinity` - (Optional) - [affinity](#affinity) - Affinity is the kube-dns affinity, uses the same syntax as kubectl's affinity.
 - `core_dns_image` - (Optional) - String - CoreDNSImage is used to override the default image used for CoreDNS.
 - `cpa_image` - (Optional) - String - CPAImage is used to override the default image used for Cluster Proportional Autoscaler.
 - `domain` - (Optional) - String - Domain is the dns domain.
@@ -471,6 +485,156 @@ The following arguments are supported:
 - `memory_limit` - (Optional) - Quantity - MemoryLimit specifies the memory limit of each dns container in the cluster. Default 170m.
 - `node_local_dns` - (Optional) - [node_local_dns_config](#node_local_dns_config) - NodeLocalDNS specifies the configuration for the node-local-dns addon.
 
+### toleration
+
+The pod this Toleration is attached to tolerates any taint that matches<br />the triple <key,value,effect> using the matching operator <operator>.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `key` - (Optional) - String - Key is the taint key that the toleration applies to. Empty means match all taint keys.<br />If the key is empty, operator must be Exists; this combination means to match all values and all keys.<br />+optional.
+- `operator` - (Optional) - String - Operator represents a key's relationship to the value.<br />Valid operators are Exists and Equal. Defaults to Equal.<br />Exists is equivalent to wildcard for value, so that a pod can<br />tolerate all taints of a particular category.<br />+optional.
+- `value` - (Optional) - String - Value is the taint value the toleration matches to.<br />If the operator is Exists, the value should be empty, otherwise just a regular string.<br />+optional.
+- `effect` - (Optional) - String - Effect indicates the taint effect to match. Empty means match all taint effects.<br />When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.<br />+optional.
+- `toleration_seconds` - (Optional) - Int - TolerationSeconds represents the period of time the toleration (which must be<br />of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,<br />it is not set, which means tolerate the taint forever (do not evict). Zero and<br />negative values will be treated as 0 (evict immediately) by the system.<br />+optional.
+
+### affinity
+
+Affinity is a group of affinity scheduling rules.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `node_affinity` - (Optional) - [node_affinity](#node_affinity) - Describes node affinity scheduling rules for the pod.<br />+optional.
+- `pod_affinity` - (Optional) - [pod_affinity](#pod_affinity) - Describes pod affinity scheduling rules (e.g. co-locate this pod in the same node, zone, etc. as some other pod(s)).<br />+optional.
+- `pod_anti_affinity` - (Optional) - [pod_anti_affinity](#pod_anti_affinity) - Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).<br />+optional.
+
+### node_affinity
+
+Node affinity is a group of node affinity scheduling rules.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `required_during_scheduling_ignored_during_execution` - (Optional) - [node_selector](#node_selector) - If the affinity requirements specified by this field are not met at<br />scheduling time, the pod will not be scheduled onto the node.<br />If the affinity requirements specified by this field cease to be met<br />at some point during pod execution (e.g. due to an update), the system<br />may or may not try to eventually evict the pod from its node.<br />+optional.
+- `preferred_during_scheduling_ignored_during_execution` - (Optional) - List([preferred_scheduling_term](#preferred_scheduling_term)) - The scheduler will prefer to schedule pods to nodes that satisfy<br />the affinity expressions specified by this field, but it may choose<br />a node that violates one or more of the expressions. The node that is<br />most preferred is the one with the greatest sum of weights, i.e.<br />for each node that meets all of the scheduling requirements (resource<br />request, requiredDuringScheduling affinity expressions, etc.),<br />compute a sum by iterating through the elements of this field and adding<br />"weight" to the sum if the node matches the corresponding matchExpressions; the<br />node(s) with the highest sum are the most preferred.<br />+optional.
+
+### node_selector
+
+A node selector represents the union of the results of one or more label queries<br />over a set of nodes; that is, it represents the OR of the selectors represented<br />by the node selector terms.<br />+structType=atomic.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `node_selector_terms` - (Optional) - List([node_selector_term](#node_selector_term)) - Required. A list of node selector terms. The terms are ORed.
+
+### node_selector_term
+
+A null or empty node selector term matches no objects. The requirements of<br />them are ANDed.<br />The TopologySelectorTerm type implements a subset of the NodeSelectorTerm.<br />+structType=atomic.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `match_expressions` - (Optional) - List([node_selector_requirement](#node_selector_requirement)) - A list of node selector requirements by node's labels.<br />+optional.
+- `match_fields` - (Optional) - List([node_selector_requirement](#node_selector_requirement)) - A list of node selector requirements by node's fields.<br />+optional.
+
+### node_selector_requirement
+
+A node selector requirement is a selector that contains values, a key, and an operator<br />that relates the key and values.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `key` - (Optional) - String - The label key that the selector applies to.
+- `operator` - (Optional) - String - Represents a key's relationship to a set of values.<br />Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.
+- `values` - (Optional) - List(String) - An array of string values. If the operator is In or NotIn,<br />the values array must be non-empty. If the operator is Exists or DoesNotExist,<br />the values array must be empty. If the operator is Gt or Lt, the values<br />array must have a single element, which will be interpreted as an integer.<br />This array is replaced during a strategic merge patch.<br />+optional.
+
+### preferred_scheduling_term
+
+An empty preferred scheduling term matches all objects with implicit weight 0<br />(i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `weight` - (Optional) - Int - Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100.
+- `preference` - (Optional) - [node_selector_term](#node_selector_term) - A node selector term, associated with the corresponding weight.
+
+### pod_affinity
+
+Pod affinity is a group of inter pod affinity scheduling rules.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `required_during_scheduling_ignored_during_execution` - (Optional) - List([pod_affinity_term](#pod_affinity_term)) - If the affinity requirements specified by this field are not met at<br />scheduling time, the pod will not be scheduled onto the node.<br />If the affinity requirements specified by this field cease to be met<br />at some point during pod execution (e.g. due to a pod label update), the<br />system may or may not try to eventually evict the pod from its node.<br />When there are multiple elements, the lists of nodes corresponding to each<br />podAffinityTerm are intersected, i.e. all terms must be satisfied.<br />+optional.
+- `preferred_during_scheduling_ignored_during_execution` - (Optional) - List([weighted_pod_affinity_term](#weighted_pod_affinity_term)) - The scheduler will prefer to schedule pods to nodes that satisfy<br />the affinity expressions specified by this field, but it may choose<br />a node that violates one or more of the expressions. The node that is<br />most preferred is the one with the greatest sum of weights, i.e.<br />for each node that meets all of the scheduling requirements (resource<br />request, requiredDuringScheduling affinity expressions, etc.),<br />compute a sum by iterating through the elements of this field and adding<br />"weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the<br />node(s) with the highest sum are the most preferred.<br />+optional.
+
+### pod_affinity_term
+
+Defines a set of pods (namely those matching the labelSelector<br />relative to the given namespace(s)) that this pod should be<br />co-located (affinity) or not co-located (anti-affinity) with,<br />where co-located is defined as running on a node whose value of<br />the label with key <topologyKey> matches that of any node on which<br />a pod of the set of pods is running.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `label_selector` - (Optional) - [label_selector](#label_selector) - A label query over a set of resources, in this case pods.<br />+optional.
+- `namespaces` - (Optional) - List(String) - namespaces specifies a static list of namespace names that the term applies to.<br />The term is applied to the union of the namespaces listed in this field<br />and the ones selected by namespaceSelector.<br />null or empty namespaces list and null namespaceSelector means "this pod's namespace"<br />+optional.
+- `topology_key` - (Optional) - String - This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching<br />the labelSelector in the specified namespaces, where co-located is defined as running on a node<br />whose value of the label with key topologyKey matches that of any node on which any of the<br />selected pods is running.<br />Empty topologyKey is not allowed.
+- `namespace_selector` - (Optional) - [label_selector](#label_selector) - A label query over the set of namespaces that the term applies to.<br />The term is applied to the union of the namespaces selected by this field<br />and the ones listed in the namespaces field.<br />null selector and null or empty namespaces list means "this pod's namespace".<br />An empty selector ({}) matches all namespaces.<br />This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.<br />+optional.
+
+### label_selector
+
+A label selector is a label query over a set of resources. The result of matchLabels and<br />matchExpressions are ANDed. An empty label selector matches all objects. A null<br />label selector matches no objects.<br />+structType=atomic.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `match_labels` - (Optional) - Map(String) - matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels<br />map is equivalent to an element of matchExpressions, whose key field is "key", the<br />operator is "In", and the values array contains only "value". The requirements are ANDed.<br />+optional.
+- `match_expressions` - (Optional) - List([label_selector_requirement](#label_selector_requirement)) - matchExpressions is a list of label selector requirements. The requirements are ANDed.<br />+optional.
+
+### label_selector_requirement
+
+A label selector requirement is a selector that contains values, a key, and an operator that<br />relates the key and values.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `key` - (Optional) - String - key is the label key that the selector applies to.<br />+patchMergeKey=key<br />+patchStrategy=merge.
+- `operator` - (Optional) - String - operator represents a key's relationship to a set of values.<br />Valid operators are In, NotIn, Exists and DoesNotExist.
+- `values` - (Optional) - List(String) - values is an array of string values. If the operator is In or NotIn,<br />the values array must be non-empty. If the operator is Exists or DoesNotExist,<br />the values array must be empty. This array is replaced during a strategic<br />merge patch.<br />+optional.
+
+### weighted_pod_affinity_term
+
+The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s).
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `weight` - (Optional) - Int - weight associated with matching the corresponding podAffinityTerm,<br />in the range 1-100.
+- `pod_affinity_term` - (Optional) - [pod_affinity_term](#pod_affinity_term) - Required. A pod affinity term, associated with the corresponding weight.
+
+### pod_anti_affinity
+
+Pod anti affinity is a group of inter pod anti affinity scheduling rules.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `required_during_scheduling_ignored_during_execution` - (Optional) - List([pod_affinity_term](#pod_affinity_term)) - If the anti-affinity requirements specified by this field are not met at<br />scheduling time, the pod will not be scheduled onto the node.<br />If the anti-affinity requirements specified by this field cease to be met<br />at some point during pod execution (e.g. due to a pod label update), the<br />system may or may not try to eventually evict the pod from its node.<br />When there are multiple elements, the lists of nodes corresponding to each<br />podAffinityTerm are intersected, i.e. all terms must be satisfied.<br />+optional.
+- `preferred_during_scheduling_ignored_during_execution` - (Optional) - List([weighted_pod_affinity_term](#weighted_pod_affinity_term)) - The scheduler will prefer to schedule pods to nodes that satisfy<br />the anti-affinity expressions specified by this field, but it may choose<br />a node that violates one or more of the expressions. The node that is<br />most preferred is the one with the greatest sum of weights, i.e.<br />for each node that meets all of the scheduling requirements (resource<br />request, requiredDuringScheduling anti-affinity expressions, etc.),<br />compute a sum by iterating through the elements of this field and adding<br />"weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the<br />node(s) with the highest sum are the most preferred.<br />+optional.
+
 ### node_local_dns_config
 
 NodeLocalDNSConfig are options of the node-local-dns.
@@ -480,6 +644,7 @@ NodeLocalDNSConfig are options of the node-local-dns.
 The following arguments are supported:
 
 - `enabled` - (Optional) - Bool - Enabled activates the node-local-dns addon.
+- `image` - (Optional) - String - Image overrides the default docker image used for node-local-dns addon.
 - `local_ip` - (Optional) - String - Local listen IP address. It can be any IP in the 169.254.20.0/16 space or any other IP address that can be guaranteed to not collide with any existing IP.
 - `forward_to_kube_dns` - (Optional) - Bool - If enabled, nodelocal dns will use kubedns as a default upstream.
 - `memory_request` - (Optional) - Quantity - MemoryRequest specifies the memory requests of each node-local-dns container in the daemonset. Default 5Mi.
@@ -495,6 +660,7 @@ The following arguments are supported:
 
 - `image` - (Optional) - String - Image is the docker container used.
 - `disable_basic_auth` - (Optional) - Bool - DisableBasicAuth removes the --basic-auth-file flag.
+- `log_format` - (Optional) - String - LogFormat is the logging format of the api.<br />Supported values: text, json.<br />Default: text.
 - `log_level` - (Optional) - Int - LogLevel is the logging level of the api.
 - `cloud_provider` - (Optional) - String - CloudProvider is the name of the cloudProvider we are using, aws, gce etcd.
 - `secure_port` - (Optional) - Int - SecurePort is the port the kube runs on.
@@ -604,6 +770,7 @@ KubeControllerManagerConfig is the configuration for the controller.
 The following arguments are supported:
 
 - `master` - (Optional) - String - Master is the url for the kube api master.
+- `log_format` - (Optional) - String - LogFormat is the logging format of the controler manager.<br />Supported values: text, json.<br />Default: text.
 - `log_level` - (Optional) - Int - LogLevel is the defined logLevel.
 - `service_account_private_key_file` - (Optional) - String - ServiceAccountPrivateKeyFile is the location of the private key for service account token signing.
 - `image` - (Optional) - String - Image is the docker image to use.
@@ -634,8 +801,10 @@ The following arguments are supported:
 - `horizontal_pod_autoscaler_use_rest_clients` - (Optional) - Bool - HorizontalPodAutoscalerUseRestClients determines if the new-style clients<br />should be used if support for custom metrics is enabled.
 - `experimental_cluster_signing_duration` - (Optional) - Duration - ExperimentalClusterSigningDuration is the duration that determines<br />the length of duration that the signed certificates will be given. (default 8760h0m0s).
 - `feature_gates` - (Optional) - Map(String) - FeatureGates is set of key=value pairs that describe feature gates for alpha/experimental features.
+- `tls_cert_file` - (Optional) - String - TLSCertFile is the file containing the TLS server certificate.
 - `tls_cipher_suites` - (Optional) - List(String) - TLSCipherSuites indicates the allowed TLS cipher suite.
 - `tls_min_version` - (Optional) - String - TLSMinVersion indicates the minimum TLS version allowed.
+- `tls_private_key_file` - (Optional) - String - TLSPrivateKeyFile is the file containing the private key for the TLS server certificate.
 - `min_resync_period` - (Optional) - String - MinResyncPeriod indicates the resync period in reflectors.<br />The resync period will be random between MinResyncPeriod and 2*MinResyncPeriod. (default 12h0m0s).
 - `kube_api_qps` - (Optional) - Quantity - KubeAPIQPS QPS to use while talking with kubernetes apiserver. (default 20).
 - `kube_api_burst` - (Optional) - Int - KubeAPIBurst Burst to use while talking with kubernetes apiserver. (default 30).
@@ -698,6 +867,7 @@ KubeSchedulerConfig is the configuration for the kube-scheduler.
 The following arguments are supported:
 
 - `master` - (Optional) - String - Master is a url to the kube master.
+- `log_format` - (Optional) - String - LogFormat is the logging format of the scheduler.<br />Supported values: text, json.<br />Default: text.
 - `log_level` - (Optional) - Int - LogLevel is the logging level.
 - `image` - (Optional) - String - Image is the docker image to use.
 - `leader_election` - (Optional) - [leader_election_configuration](#leader_election_configuration) - LeaderElection defines the configuration of leader election client.
@@ -710,6 +880,8 @@ The following arguments are supported:
 - `authorization_kubeconfig` - (Optional) - String - AuthorizationKubeconfig is the path to an Authorization Kubeconfig.
 - `authorization_always_allow_paths` - (Optional) - List(String) - AuthorizationAlwaysAllowPaths is the list of HTTP paths to skip during authorization.
 - `enable_profiling` - (Optional) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
+- `tls_cert_file` - (Optional) - String - TLSCertFile is the file containing the TLS server certificate.
+- `tls_private_key_file` - (Optional) - String - TLSPrivateKeyFile is the file containing the private key for the TLS server certificate.
 
 ### kube_proxy_config
 
@@ -759,6 +931,7 @@ The following arguments are supported:
 - `tls_min_version` - (Optional) - String - TLSMinVersion indicates the minimum TLS version allowed.
 - `kubeconfig_path` - (Optional) - String - KubeconfigPath is the path of kubeconfig for the kubelet.
 - `require_kubeconfig` - (Optional) - Bool - RequireKubeconfig indicates a kubeconfig is required.
+- `log_format` - (Optional) - String - LogFormat is the logging format of the kubelet.<br />Supported values: text, json.<br />Default: text.
 - `log_level` - (Optional) - Int - LogLevel is the logging level of the kubelet.
 - `pod_manifest_path` - (Optional) - String - config is the path to the config file or directory of files.
 - `hostname_override` - (Optional) - String - HostnameOverride is the hostname used to identify the kubelet instead of the actual hostname.
@@ -833,6 +1006,7 @@ The following arguments are supported:
 - `container_log_max_size` - (Optional) - String - ContainerLogMaxSize is the maximum size (e.g. 10Mi) of container log file before it is rotated.
 - `container_log_max_files` - (Optional) - Int - ContainerLogMaxFiles is the maximum number of container log files that can be present for a container. The number must be >= 2.
 - `enable_cadvisor_json_endpoints` - (Optional) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
+- `pod_pids_limit` - (Optional) - Int - PodPidsLimit is the maximum number of pids in any pod.
 
 ### cloud_configuration
 
@@ -846,6 +1020,7 @@ The following arguments are supported:
 - `multizone` - (Optional) - Bool - GCE cloud-config options.
 - `node_tags` - (Optional) - String
 - `node_instance_prefix` - (Optional) - String
+- `node_ip_families` - (Optional) - List(String) - NodeIPFamilies controls the IP families reported for each node (AWS only).
 - `gce_service_account` - (Optional) - String - GCEServiceAccount specifies the service account with which the GCE VM runs.
 - `disable_security_group_ingress` - (Optional) - Bool - AWS cloud-config options.
 - `elb_security_group` - (Optional) - String
@@ -876,6 +1051,7 @@ The following arguments are supported:
 - `block_storage` - (Optional) - [openstack_block_storage_config](#openstack_block_storage_config)
 - `insecure_skip_verify` - (Optional) - Bool
 - `network` - (Optional) - [openstack_network](#openstack_network)
+- `metadata` - (Optional) - [openstack_metadata](#openstack_metadata)
 
 ### openstack_loadbalancer_config
 
@@ -893,6 +1069,7 @@ The following arguments are supported:
 - `floating_subnet` - (Optional) - String
 - `subnet_id` - (Optional) - String
 - `manage_sec_groups` - (Optional) - Bool
+- `enable_ingress_hostname` - (Optional) - Bool
 
 ### openstack_monitor
 
@@ -942,6 +1119,16 @@ The following arguments are supported:
 
 - `availability_zone_hints` - (Optional) - List(String)
 
+### openstack_metadata
+
+OpenstackMetadata defines config for metadata service related settings.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `config_drive` - (Optional) - Bool - ConfigDrive specifies to use config drive for retrieving user data instead of the metadata service when launching instances.
+
 ### azure_configuration
 
 AzureConfiguration defines Azure specific cluster configuration.
@@ -979,6 +1166,7 @@ The following arguments are supported:
 - `disable` - (Optional) - Bool - Disable indicates we do not wish to run the dns-controller addon.
 - `watch_ingress` - (Optional) - Bool - WatchIngress indicates you want the dns-controller to watch and create dns entries for ingress resources.
 - `watch_namespace` - (Optional) - String - WatchNamespace is namespace to watch, defaults to all (use to control whom can creates dns entries).
+- `provider` - (Optional) - String - Provider determines which implementation of ExternalDNS to use.<br />'dns-controller' will use kOps DNS Controller.<br />'external-dns' will use kubernetes-sigs/external-dns.
 
 ### ntp_config
 
@@ -1001,11 +1189,28 @@ The following arguments are supported:
 - `enabled` - (Required) - Bool - Enabled enables the node termination handler.<br />Default: true.
 - `enable_spot_interruption_draining` - (Required) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Default: true.
 - `enable_scheduled_event_draining` - (Optional) - Bool - EnableScheduledEventDraining makes node termination handler drain nodes before the maintenance window starts for an EC2 instance scheduled event.<br />Default: false.
+- `enable_rebalance_monitoring` - (Optional) - Bool - EnableRebalanceMonitoring makes node termination handler cordon nodes when the rebalance recommendation notice is received<br />Default: false.
+- `enable_rebalance_draining` - (Optional) - Bool - EnableRebalanceDraining makes node termination handler drain nodes when the rebalance recommendation notice is received<br />Default: false.
 - `enable_prometheus_metrics` - (Optional) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
 - `enable_sqs_termination_draining` - (Optional) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.
 - `managed_asg_tag` - (Optional) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on.
 - `memory_request` - (Optional) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
+
+### node_problem_detector_config
+
+NodeProblemDetector determines the node problem detector configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Optional) - Bool - Enabled enables the NodeProblemDetector.<br />Default: false.
+- `image` - (Optional) - String - Image is the NodeProblemDetector docker container used.
+- `memory_request` - (Optional) - Quantity - MemoryRequest of NodeProblemDetector container.<br />Default: 80Mi.
+- `cpu_request` - (Optional) - Quantity - CPURequest of NodeProblemDetector container.<br />Default: 10m.
+- `memory_limit` - (Optional) - Quantity - MemoryLimit of NodeProblemDetector container.<br />Default: 80Mi.
+- `cpu_limit` - (Optional) - Quantity - CPULimit of NodeProblemDetector container.<br />Default: 10m.
 
 ### metrics_server_config
 
@@ -1137,7 +1342,7 @@ FlannelNetworkingSpec declares that we want Flannel networking.
 The following arguments are supported:
 
 - `backend` - (Optional) - String - Backend is the backend overlay type we want to use (vxlan or udp).
-- `disable_tx_checksum_offloading` - (Optional) - Bool - DisableTxChecksumOffloading is deprecated as of kops 1.19 and has no effect.
+- `disable_tx_checksum_offloading` - (Optional) - Bool - DisableTxChecksumOffloading is deprecated as of kOps 1.19 and has no effect.
 - `iptables_resync_seconds` - (Optional) - Int - IptablesResyncSeconds sets resync period for iptables rules, in seconds.
 
 ### calico_networking_spec
@@ -1150,16 +1355,16 @@ The following arguments are supported:
 
 - `registry` - (Optional) - String - Version overrides the Calico container image registry.
 - `version` - (Optional) - String - Version overrides the Calico container image tag.
-- `aws_src_dst_check` - (Optional) - String - AWSSrcDstCheck enables/disables ENI source/destination checks (AWS only)<br />Options: DoNothing (default), Enable, or Disable.
+- `aws_src_dst_check` - (Optional) - String - AWSSrcDstCheck enables/disables ENI source/destination checks (AWS only)<br />Options: Disable (default), Enable, or DoNothing.
 - `bpf_enabled` - (Optional) - Bool - BPFEnabled enables the eBPF dataplane mode.
 - `bpf_external_service_mode` - (Optional) - String - BPFExternalServiceMode controls how traffic from outside the cluster to NodePorts and ClusterIPs is handled.<br />In Tunnel mode, packet is tunneled from the ingress host to the host with the backing pod and back again.<br />In DSR mode, traffic is tunneled to the host with the backing pod and then returned directly;<br />this requires a network that allows direct return.<br />Default: Tunnel (other options: DSR).
 - `bpf_kube_proxy_iptables_cleanup_enabled` - (Optional) - Bool - BPFKubeProxyIptablesCleanupEnabled controls whether Felix will clean up the iptables rules<br />created by the Kubernetes kube-proxy; should only be enabled if kube-proxy is not running.
 - `bpf_log_level` - (Optional) - String - BPFLogLevel controls the log level used by the BPF programs. The logs are emitted<br />to the BPF trace pipe, accessible with the command tc exec BPF debug.<br />Default: Off (other options: Info, Debug).
 - `chain_insert_mode` - (Optional) - String - ChainInsertMode controls whether Felix inserts rules to the top of iptables chains, or<br />appends to the bottom. Leaving the default option is safest to prevent accidentally<br />breaking connectivity. Default: 'insert' (other options: 'append').
 - `cpu_request` - (Optional) - Quantity - CPURequest CPU request of Calico container. Default: 100m.
-- `cross_subnet` - (Optional) - Bool - CrossSubnet enables Calico's cross-subnet mode when set to true.
+- `cross_subnet` - (Optional) - Bool - CrossSubnet is deprecated as of kOps 1.22 and has no effect.
 - `encapsulation_mode` - (Optional) - String - EncapsulationMode specifies the network packet encapsulation protocol for Calico to use,<br />employing such encapsulation at the necessary scope per the related CrossSubnet field. In<br />"ipip" mode, Calico will use IP-in-IP encapsulation as needed. In "vxlan" mode, Calico will<br />encapsulate packets as needed using the VXLAN scheme.<br />Options: ipip (default) or vxlan.
-- `ip_ip_mode` - (Optional) - String - IPIPMode is the encapsulation mode to use for the default Calico IPv4 pool created at start<br />up, determining when to use IP-in-IP encapsulation, conveyed to the "calico-node" daemon<br />container via the CALICO_IPV4POOL_IPIP environment variable.
+- `ip_ip_mode` - (Optional) - String - IPIPMode determines when to use IP-in-IP encapsulation for the default Calico IPv4 pool.<br />It is conveyed to the "calico-node" daemon container via the CALICO_IPV4POOL_IPIP<br />environment variable. EncapsulationMode must be set to "ipip".<br />Options: "CrossSubnet", "Always", or "Never".<br />Default: "CrossSubnet" if EncapsulationMode is "ipip", "Never" otherwise.
 - `ipv4_auto_detection_method` - (Optional) - String - IPv4AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
 - `ipv6_auto_detection_method` - (Optional) - String - IPv6AutoDetectionMethod configures how Calico chooses the IP address used to route<br />between nodes.  This should be set when the host has multiple interfaces<br />and it is important to select the interface used.<br />Options: "first-found" (default), "can-reach=DESTINATION",<br />"interface=INTERFACE-REGEX", or "skip-interface=INTERFACE-REGEX".
 - `iptables_backend` - (Optional) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
@@ -1173,6 +1378,7 @@ The following arguments are supported:
 - `typha_prometheus_metrics_enabled` - (Optional) - Bool - TyphaPrometheusMetricsEnabled enables Prometheus metrics collection from Typha<br />(default: false).
 - `typha_prometheus_metrics_port` - (Optional) - Int - TyphaPrometheusMetricsPort is the TCP port the typha Prometheus metrics server<br />should bind to (default: 9093).
 - `typha_replicas` - (Optional) - Int - TyphaReplicas is the number of replicas of Typha to deploy.
+- `vxlan_mode` - (Optional) - String - VXLANMode determines when to use VXLAN encapsulation for the default Calico IPv4 pool.<br />It is conveyed to the "calico-node" daemon container via the CALICO_IPV4POOL_VXLAN<br />environment variable. EncapsulationMode must be set to "vxlan".<br />Options: "CrossSubnet", "Always", or "Never".<br />Default: "CrossSubnet" if EncapsulationMode is "vxlan", "Never" otherwise.
 - `wireguard_enabled` - (Optional) - Bool - WireguardEnabled enables WireGuard encryption for all on-the-wire pod-to-pod traffic<br />(default: false).
 
 ### canal_networking_spec
@@ -1187,7 +1393,7 @@ The following arguments are supported:
 - `cpu_request` - (Optional) - Quantity - CPURequest CPU request of Canal container. Default: 100m.
 - `default_endpoint_to_host_action` - (Optional) - String - DefaultEndpointToHostAction allows users to configure the default behaviour<br />for traffic between pod to host after calico rules have been processed.<br />Default: ACCEPT (other options: DROP, RETURN).
 - `disable_flannel_forward_rules` - (Optional) - Bool - DisableFlannelForwardRules configures Flannel to NOT add the<br />default ACCEPT traffic rules to the iptables FORWARD chain.
-- `disable_tx_checksum_offloading` - (Optional) - Bool - DisableTxChecksumOffloading is deprecated as of kops 1.19 and has no effect.
+- `disable_tx_checksum_offloading` - (Optional) - Bool - DisableTxChecksumOffloading is deprecated as of kOps 1.19 and has no effect.
 - `iptables_backend` - (Optional) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
 - `log_severity_sys` - (Optional) - String - LogSeveritySys the severity to set for logs which are sent to syslog<br />Default: INFO (other options: DEBUG, WARNING, ERROR, CRITICAL, NONE).
 - `mtu` - (Optional) - Int - MTU to be set in the cni-network-config (default: 1500).
@@ -1208,7 +1414,7 @@ This resource has no attributes.
 
 ### romana_networking_spec
 
-RomanaNetworkingSpec declares that we want Romana networking<br />Romana is deprecated as of kops 1.18 and removed as of kops 1.19.
+RomanaNetworkingSpec declares that we want Romana networking<br />Romana is deprecated as of kOps 1.18 and removed as of kOps 1.19.
 
 #### Argument Reference
 
@@ -1225,8 +1431,8 @@ AmazonVPCNetworkingSpec declares that we want Amazon VPC CNI networking.
 
 The following arguments are supported:
 
-- `image_name` - (Optional) - String - The container image name to use.
-- `init_image_name` - (Optional) - String - The init container image name to use.
+- `image_name` - (Optional) - String - ImageName is the container image name to use.
+- `init_image_name` - (Optional) - String - InitImageName is the init container image name to use.
 - `env` - (Optional) - List([env_var](#env_var)) - Env is a list of environment variables to set in the container.
 
 ### cilium_networking_spec
@@ -1252,13 +1458,20 @@ The following arguments are supported:
 - `debug_verbose` - (Optional) - List(String) - DebugVerbose is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `device` - (Optional) - String - Device is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `disable_conntrack` - (Optional) - Bool - DisableConntrack is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `disable_endpoint_crd` - (Optional) - Bool - DisableEndpointCRD disables usage of CiliumEndpoint CRD.<br />Default: false.
 - `disable_ipv4` - (Optional) - Bool - DisableIpv4 is deprecated: Use EnableIpv4 instead.<br />Setting this flag has no effect.
 - `disable_k_8s_services` - (Optional) - Bool - DisableK8sServices is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `enable_policy` - (Optional) - String - EnablePolicy specifies the policy enforcement mode.<br />"default": Follows Kubernetes policy enforcement.<br />"always": Cilium restricts all traffic if no policy is in place.<br />"never": Cilium allows all traffic regardless of policies in place.<br />If unspecified, "default" policy mode will be used.
+- `enable_l7_proxy` - (Optional) - Bool - EnableL7Proxy enables L7 proxy for L7 policy enforcement.<br />Default: true.
+- `enable_bpf_masquerade` - (Optional) - Bool - EnableBPFMasquerade enables masquerading packets from endpoints leaving the host with BPF instead of iptables.<br />Default: false.
+- `enable_endpoint_health_checking` - (Optional) - Bool - EnableEndpointHealthChecking enables connectivity health checking between virtual endpoints.<br />Default: true.
 - `enable_tracing` - (Optional) - Bool - EnableTracing is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `enable_prometheus_metrics` - (Optional) - Bool - EnablePrometheusMetrics enables the Cilium "/metrics" endpoint for both the agent and the operator.
 - `enable_encryption` - (Optional) - Bool - EnableEncryption enables Cilium Encryption.<br />Default: false.
+- `encryption_type` - (Optional) - String - EncryptionType specifies Cilium Encryption method ("ipsec", "wireguard").<br />Default: ipsec.
 - `envoy_log` - (Optional) - String - EnvoyLog is not implemented and may be removed in the future.<br />Setting this has no effect.
+- `identity_allocation_mode` - (Optional) - String - IdentityAllocationMode specifies in which backend identities are stored ("crd", "kvstore").<br />Default: crd.
+- `identity_change_grace_period` - (Optional) - String - IdentityChangeGracePeriod specifies the duration to wait before using a changed identity.<br />Default: 5s.
 - `ipv4_cluster_cidr_mask_size` - (Optional) - Int - Ipv4ClusterCIDRMaskSize is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `ipv4_node` - (Optional) - String - Ipv4Node is not implemented and may be removed in the future.<br />Setting this has no effect.
 - `ipv4_range` - (Optional) - String - Ipv4Range is not implemented and may be removed in the future.<br />Setting this has no effect.
@@ -1296,6 +1509,12 @@ The following arguments are supported:
 - `monitor_aggregation` - (Optional) - String - MonitorAggregation sets the level of packet monitoring. Possible values are "low", "medium", or "maximum".<br />Default: medium.
 - `bpfct_global_tcp_max` - (Optional) - Int - BPFCTGlobalTCPMax is the maximum number of entries in the TCP CT table.<br />Default: 524288.
 - `bpfct_global_any_max` - (Optional) - Int - BPFCTGlobalAnyMax is the maximum number of entries in the non-TCP CT table.<br />Default: 262144.
+- `bpflb_algorithm` - (Optional) - String - BPFLBAlgorithm is the load balancing algorithm ("random", "maglev").<br />Default: random.
+- `bpflb_maglev_table_size` - (Optional) - String - BPFLBMaglevTableSize is the per service backend table size when going with Maglev (parameter M).<br />Default: 16381.
+- `bpfnat_global_max` - (Optional) - Int - BPFNATGlobalMax is the the maximum number of entries in the BPF NAT table.<br />Default: 524288.
+- `bpf_neigh_global_max` - (Optional) - Int - BPFNeighGlobalMax is the the maximum number of entries in the BPF Neighbor table.<br />Default: 524288.
+- `bpf_policy_map_max` - (Optional) - Int - BPFPolicyMapMax is the maximum number of entries in endpoint policy map.<br />Default: 16384.
+- `bpflb_map_max` - (Optional) - Int - BPFLBMapMax is the maximum number of entries in bpf lb service, backend and affinity maps.<br />Default: 65536.
 - `preallocate_bpf_maps` - (Required) - Bool - PreallocateBPFMaps reduces the per-packet latency at the expense of up-front memory allocation.<br />Default: true.
 - `sidecar_istio_proxy_image` - (Optional) - String - SidecarIstioProxyImage is the regular expression matching compatible Istio sidecar istio-proxy<br />container image names.<br />Default: cilium/istio_proxy.
 - `cluster_name` - (Optional) - String - ClusterName is the name of the cluster. It is only relevant when building a mesh of clusters.
@@ -1378,6 +1597,7 @@ The following arguments are supported:
 - `ssl_policy` - (Optional) - String - SSLPolicy allows you to overwrite the LB listener's Security Policy.
 - `cross_zone_load_balancing` - (Optional) - Bool - CrossZoneLoadBalancing allows you to enable the cross zone load balancing.
 - `subnets` - (Optional) - List([load_balancer_subnet_spec](#load_balancer_subnet_spec)) - Subnets allows you to specify the subnets that must be used for the load balancer.
+- `access_log` - (Optional) - [access_log_spec](#access_log_spec) - AccessLog is the configuration of access logs.
 
 ### load_balancer_subnet_spec
 
@@ -1390,6 +1610,16 @@ The following arguments are supported:
 - `name` - (Optional) - String - Name specifies the name of the cluster subnet.
 - `private_ipv4_address` - (Optional) - String - PrivateIPv4Address specifies the private IPv4 address to use for a NLB.
 - `allocation_id` - (Optional) - String - AllocationID specifies the Elastic IP Allocation ID for use by a NLB.
+
+### access_log_spec
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `interval` - (Optional) - Int - Interval is the publishing interval in minutes. This parameter is only used with classic load balancer.
+- `bucket` - (Optional) - String - Bucket is the S3 bucket name to store the logs in.
+- `bucket_prefix` - (Optional) - String - BucketPrefix is the S3 bucket prefix. Logs are stored in the root if not configured.
 
 ### authentication_spec
 
@@ -1517,6 +1747,7 @@ The following arguments are supported:
 - `legacy` - (Optional) - Bool - TODO: remove Legacy in next APIVersion.
 - `allow_container_registry` - (Optional) - Bool
 - `permissions_boundary` - (Optional) - String
+- `use_service_account_external_permissions` - (Optional) - Bool - UseServiceAccountExternalPermissions determines if managed ServiceAccounts will use external permissions directly.<br />If this is set to false, ServiceAccounts will assume external permissions from the instances they run on.
 - `service_account_external_permissions` - (Optional) - List([service_account_external_permission](#service_account_external_permission)) - ServiceAccountExternalPermissions defines the relatinship between Kubernetes ServiceAccounts and permissions with external resources.
 
 ### service_account_external_permission
@@ -1593,6 +1824,7 @@ The following arguments are supported:
 
 - `discovery_store` - (Optional) - String - DiscoveryStore is the VFS path to where OIDC Issuer Discovery metadata is stored.
 - `enable_aws_oidc_provider` - (Optional) - Bool - EnableAWSOIDCProvider will provision an AWS OIDC provider that trusts the ServiceAccount Issuer.
+- `additional_audiences` - (Optional) - List(String) - AdditionalAudiences adds user defined audiences to the provisioned AWS OIDC provider.
 
 ### snapshot_controller_config
 
@@ -1614,8 +1846,6 @@ ClusterSecrets defines cluster secrets.
 The following arguments are supported:
 
 - `docker_config` - (Optional) - (Sensitive) - String - DockerConfig holds a valid docker config.<br />After creating a dockerconfig secret, a /root/.docker/config.json file will be added to newly created nodes.<br />This file will be used by Kubernetes to authenticate to container registries and will also work when using containerd as container runtime.
-- `cluster_ca_cert` - (Optional) - (Sensitive) - String
-- `cluster_ca_key` - (Optional) - (Sensitive) - String
 
 
 ## Import

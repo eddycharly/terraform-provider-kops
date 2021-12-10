@@ -5,7 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -25,6 +25,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"tls_min_version":                        OptionalString(),
 			"kubeconfig_path":                        OptionalString(),
 			"require_kubeconfig":                     OptionalBool(),
+			"log_format":                             OptionalString(),
 			"log_level":                              OptionalInt(),
 			"pod_manifest_path":                      OptionalString(),
 			"hostname_override":                      OptionalString(),
@@ -99,6 +100,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"container_log_max_size":                 OptionalString(),
 			"container_log_max_files":                OptionalInt(),
 			"enable_cadvisor_json_endpoints":         OptionalBool(),
+			"pod_pids_limit":                         OptionalInt(),
 		},
 	}
 
@@ -186,6 +188,9 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["require_kubeconfig"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
@@ -290,21 +295,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["register_node"]),
-		NodeStatusUpdateFrequency: func(in interface{}) *v1.Duration {
+		NodeStatusUpdateFrequency: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -590,21 +595,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["image_gc_low_threshold_percent"]),
-		ImagePullProgressDeadline: func(in interface{}) *v1.Duration {
+		ImagePullProgressDeadline: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -634,21 +639,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 		EvictionSoftGracePeriod: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["eviction_soft_grace_period"]),
-		EvictionPressureTransitionPeriod: func(in interface{}) *v1.Duration {
+		EvictionPressureTransitionPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -734,40 +739,40 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 		EnforceNodeAllocatable: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["enforce_node_allocatable"]),
-		RuntimeRequestTimeout: func(in interface{}) *v1.Duration {
+		RuntimeRequestTimeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["runtime_request_timeout"]),
-		VolumeStatsAggPeriod: func(in interface{}) *v1.Duration {
+		VolumeStatsAggPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -815,21 +820,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				return out
 			}(in)
 		}(in["allowed_unsafe_sysctls"]),
-		StreamingConnectionIdleTimeout: func(in interface{}) *v1.Duration {
+		StreamingConnectionIdleTimeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -875,21 +880,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["authentication_token_webhook"]),
-		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration {
+		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -915,21 +920,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 			}
 			return nil
 		}(in["cpu_cfs_quota"]),
-		CPUCFSQuotaPeriod: func(in interface{}) *v1.Duration {
+		CPUCFSQuotaPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -1019,21 +1024,21 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 		CgroupDriver: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cgroup_driver"]),
-		HousekeepingInterval: func(in interface{}) *v1.Duration {
+		HousekeepingInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -1117,6 +1122,25 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_cadvisor_json_endpoints"]),
+		PodPidsLimit: func(in interface{}) *int64 {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int64 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int64) *int64 {
+					return &in
+				}(int64(ExpandInt(in)))
+			}(in)
+		}(in["pod_pids_limit"]),
 	}
 }
 
@@ -1177,6 +1201,9 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.RequireKubeconfig)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in *int32) interface{} {
 		return func(in *int32) interface{} {
 			if in == nil {
@@ -1236,12 +1263,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.RegisterNode)
-	out["node_status_update_frequency"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["node_status_update_frequency"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1414,12 +1441,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.ImageGCLowThresholdPercent)
-	out["image_pull_progress_deadline"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["image_pull_progress_deadline"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1440,12 +1467,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 	out["eviction_soft_grace_period"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EvictionSoftGracePeriod)
-	out["eviction_pressure_transition_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["eviction_pressure_transition_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1513,22 +1540,22 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 	out["enforce_node_allocatable"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EnforceNodeAllocatable)
-	out["runtime_request_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["runtime_request_timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.RuntimeRequestTimeout)
-	out["volume_stats_agg_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["volume_stats_agg_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1561,12 +1588,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			return out
 		}(in)
 	}(in.AllowedUnsafeSysctls)
-	out["streaming_connection_idle_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["streaming_connection_idle_timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1594,12 +1621,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.AuthenticationTokenWebhook)
-	out["authentication_token_webhook_cache_ttl"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["authentication_token_webhook_cache_ttl"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1617,12 +1644,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)}}
 	}(in.CPUCFSQuota)
-	out["cpu_cfs_quota_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["cpu_cfs_quota_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1676,12 +1703,12 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 	out["cgroup_driver"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.CgroupDriver)
-	out["housekeeping_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["housekeeping_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1729,6 +1756,16 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.EnableCadvisorJsonEndpoints)
+	out["pod_pids_limit"] = func(in *int64) interface{} {
+		return func(in *int64) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int64) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.PodPidsLimit)
 }
 
 func FlattenResourceKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} {

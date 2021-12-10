@@ -9,7 +9,6 @@ import (
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
-	"k8s.io/kops/upup/pkg/fi"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
@@ -53,7 +52,7 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	pubKeys, err := sshCredentialStore.FindSSHPublicKeys(fi.SecretNameSSHPrimary)
+	pubKeys, err := sshCredentialStore.FindSSHPublicKeys()
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +93,7 @@ func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err != nil {
 		return nil, err
 	}
-	if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
+	if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
 		return nil, fmt.Errorf("error adding SSH public key: %v", err)
 	}
 	secretStore, err := clientset.SecretStore(kc)
@@ -133,7 +132,7 @@ func UpdateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err != nil {
 		return nil, err
 	}
-	if err = sshCredentialStore.AddSSHPublicKey(fi.SecretNameSSHPrimary, []byte(adminSshKey)); err != nil {
+	if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
 		return nil, fmt.Errorf("error adding SSH public key: %v", err)
 	}
 	secretStore, err := clientset.SecretStore(kc)

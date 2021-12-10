@@ -5,7 +5,7 @@ import (
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var _ = Schema
@@ -15,59 +15,59 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 		panic("expand RollingUpdateOptions failure, in is nil")
 	}
 	return utils.RollingUpdateOptions{
-		MasterInterval: func(in interface{}) *v1.Duration {
+		MasterInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["master_interval"]),
-		NodeInterval: func(in interface{}) *v1.Duration {
+		NodeInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_interval"]),
-		BastionInterval: func(in interface{}) *v1.Duration {
+		BastionInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -78,40 +78,40 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 		FailOnValidate: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["fail_on_validate"]),
-		PostDrainDelay: func(in interface{}) *v1.Duration {
+		PostDrainDelay: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["post_drain_delay"]),
-		ValidationTimeout: func(in interface{}) *v1.Duration {
+		ValidationTimeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -145,32 +145,32 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 }
 
 func FlattenResourceRollingUpdateOptionsInto(in utils.RollingUpdateOptions, out map[string]interface{}) {
-	out["master_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["master_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.MasterInterval)
-	out["node_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["node_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.NodeInterval)
-	out["bastion_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["bastion_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -181,22 +181,22 @@ func FlattenResourceRollingUpdateOptionsInto(in utils.RollingUpdateOptions, out 
 	out["fail_on_validate"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.FailOnValidate)
-	out["post_drain_delay"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["post_drain_delay"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.PostDrainDelay)
-	out["validation_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["validation_timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

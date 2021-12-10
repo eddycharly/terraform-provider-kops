@@ -61,6 +61,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"external_dns":                      ComputedStruct(DataSourceExternalDNSConfig()),
 			"ntp":                               ComputedStruct(DataSourceNTPConfig()),
 			"node_termination_handler":          ComputedStruct(DataSourceNodeTerminationHandlerConfig()),
+			"node_problem_detector":             ComputedStruct(DataSourceNodeProblemDetectorConfig()),
 			"metrics_server":                    ComputedStruct(DataSourceMetricsServerConfig()),
 			"cert_manager":                      ComputedStruct(DataSourceCertManagerConfig()),
 			"aws_load_balancer_controller":      ComputedStruct(DataSourceAWSLoadBalancerControllerConfig()),
@@ -689,6 +690,24 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["node_termination_handler"]),
+		NodeProblemDetector: func(in interface{}) *kops.NodeProblemDetectorConfig {
+			return func(in interface{}) *kops.NodeProblemDetectorConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.NodeProblemDetectorConfig) *kops.NodeProblemDetectorConfig {
+					return &in
+				}(func(in interface{}) kops.NodeProblemDetectorConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.NodeProblemDetectorConfig{}
+					}
+					return (ExpandDataSourceNodeProblemDetectorConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["node_problem_detector"]),
 		MetricsServer: func(in interface{}) *kops.MetricsServerConfig {
 			return func(in interface{}) *kops.MetricsServerConfig {
 				if in == nil {
@@ -1462,6 +1481,18 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.NodeTerminationHandler)
+	out["node_problem_detector"] = func(in *kops.NodeProblemDetectorConfig) interface{} {
+		return func(in *kops.NodeProblemDetectorConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.NodeProblemDetectorConfig) interface{} {
+				return func(in kops.NodeProblemDetectorConfig) []interface{} {
+					return []interface{}{FlattenDataSourceNodeProblemDetectorConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.NodeProblemDetector)
 	out["metrics_server"] = func(in *kops.MetricsServerConfig) interface{} {
 		return func(in *kops.MetricsServerConfig) interface{} {
 			if in == nil {

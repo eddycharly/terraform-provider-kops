@@ -109,7 +109,7 @@ VolumeSpec defined the spec for an additional volume attached to the instance gr
 
 The following arguments are supported:
 
-- `delete_on_termination` - (Computed) - Bool - DeleteOnTermination configures volume retention policy upon instance termination.<br />The volume is deleted by default. Cluster deletion does not remove retained volumes.<br />NOTE: This setting applies only to the Launch Configuration and does not affect Launch Templates.
+- `delete_on_termination` - (Computed) - Bool - DeleteOnTermination configures volume retention policy upon instance termination.<br />The volume is deleted by default. Cluster deletion does not remove retained volumes.
 - `device` - (Computed) - String - Device is an optional device name of the block device.
 - `encrypted` - (Computed) - Bool - Encrypted indicates you want to encrypt the volume.
 - `iops` - (Computed) - Int - Iops is the provisioned IOPS for the volume when the volume type is io1, io2 or gp3 (AWS only).
@@ -194,6 +194,7 @@ The following arguments are supported:
 - `tls_min_version` - (Computed) - String - TLSMinVersion indicates the minimum TLS version allowed.
 - `kubeconfig_path` - (Computed) - String - KubeconfigPath is the path of kubeconfig for the kubelet.
 - `require_kubeconfig` - (Computed) - Bool - RequireKubeconfig indicates a kubeconfig is required.
+- `log_format` - (Computed) - String - LogFormat is the logging format of the kubelet.<br />Supported values: text, json.<br />Default: text.
 - `log_level` - (Computed) - Int - LogLevel is the logging level of the kubelet.
 - `pod_manifest_path` - (Computed) - String - config is the path to the config file or directory of files.
 - `hostname_override` - (Computed) - String - HostnameOverride is the hostname used to identify the kubelet instead of the actual hostname.
@@ -268,6 +269,7 @@ The following arguments are supported:
 - `container_log_max_size` - (Computed) - String - ContainerLogMaxSize is the maximum size (e.g. 10Mi) of container log file before it is rotated.
 - `container_log_max_files` - (Computed) - Int - ContainerLogMaxFiles is the maximum number of container log files that can be present for a container. The number must be >= 2.
 - `enable_cadvisor_json_endpoints` - (Computed) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
+- `pod_pids_limit` - (Computed) - Int - PodPidsLimit is the maximum number of pids in any pod.
 
 ### mixed_instances_policy_spec
 

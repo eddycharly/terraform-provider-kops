@@ -5,7 +5,7 @@ import (
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var _ = Schema
@@ -15,40 +15,40 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 		panic("expand ValidateOptions failure, in is nil")
 	}
 	return utils.ValidateOptions{
-		Timeout: func(in interface{}) *v1.Duration {
+		Timeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["timeout"]),
-		PollInterval: func(in interface{}) *v1.Duration {
+		PollInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -57,22 +57,22 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 }
 
 func FlattenResourceValidateOptionsInto(in utils.ValidateOptions, out map[string]interface{}) {
-	out["timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.Timeout)
-	out["poll_interval"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["poll_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

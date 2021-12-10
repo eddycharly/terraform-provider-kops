@@ -24,6 +24,8 @@ func TestExpandDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 					"enabled":                           nil,
 					"enable_spot_interruption_draining": nil,
 					"enable_scheduled_event_draining":   nil,
+					"enable_rebalance_monitoring":       nil,
+					"enable_rebalance_draining":         nil,
 					"enable_prometheus_metrics":         nil,
 					"enable_sqs_termination_draining":   nil,
 					"managed_asg_tag":                   nil,
@@ -49,6 +51,8 @@ func TestFlattenDataSourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		"enabled":                           nil,
 		"enable_spot_interruption_draining": nil,
 		"enable_scheduled_event_draining":   nil,
+		"enable_rebalance_monitoring":       nil,
+		"enable_rebalance_draining":         nil,
 		"enable_prometheus_metrics":         nil,
 		"enable_sqs_termination_draining":   nil,
 		"managed_asg_tag":                   nil,
@@ -98,6 +102,28 @@ func TestFlattenDataSourceNodeTerminationHandlerConfigInto(t *testing.T) {
 				in: func() kops.NodeTerminationHandlerConfig {
 					subject := kops.NodeTerminationHandlerConfig{}
 					subject.EnableScheduledEventDraining = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableRebalanceMonitoring - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.EnableRebalanceMonitoring = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableRebalanceDraining - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.EnableRebalanceDraining = nil
 					return subject
 				}(),
 			},
@@ -175,6 +201,8 @@ func TestFlattenDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 		"enabled":                           nil,
 		"enable_spot_interruption_draining": nil,
 		"enable_scheduled_event_draining":   nil,
+		"enable_rebalance_monitoring":       nil,
+		"enable_rebalance_draining":         nil,
 		"enable_prometheus_metrics":         nil,
 		"enable_sqs_termination_draining":   nil,
 		"managed_asg_tag":                   nil,
@@ -224,6 +252,28 @@ func TestFlattenDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 				in: func() kops.NodeTerminationHandlerConfig {
 					subject := kops.NodeTerminationHandlerConfig{}
 					subject.EnableScheduledEventDraining = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableRebalanceMonitoring - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.EnableRebalanceMonitoring = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableRebalanceDraining - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.EnableRebalanceDraining = nil
 					return subject
 				}(),
 			},

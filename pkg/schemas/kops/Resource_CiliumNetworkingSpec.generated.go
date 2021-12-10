@@ -29,13 +29,20 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"debug_verbose":                     OptionalList(String()),
 			"device":                            OptionalString(),
 			"disable_conntrack":                 OptionalBool(),
+			"disable_endpoint_crd":              OptionalBool(),
 			"disable_ipv4":                      OptionalBool(),
 			"disable_k_8s_services":             OptionalBool(),
 			"enable_policy":                     OptionalString(),
+			"enable_l7_proxy":                   OptionalBool(),
+			"enable_bpf_masquerade":             OptionalBool(),
+			"enable_endpoint_health_checking":   OptionalBool(),
 			"enable_tracing":                    OptionalBool(),
 			"enable_prometheus_metrics":         OptionalBool(),
 			"enable_encryption":                 OptionalBool(),
+			"encryption_type":                   OptionalString(),
 			"envoy_log":                         OptionalString(),
+			"identity_allocation_mode":          OptionalString(),
+			"identity_change_grace_period":      OptionalString(),
 			"ipv4_cluster_cidr_mask_size":       OptionalInt(),
 			"ipv4_node":                         OptionalString(),
 			"ipv4_range":                        OptionalString(),
@@ -73,6 +80,12 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"monitor_aggregation":               OptionalString(),
 			"bpfct_global_tcp_max":              OptionalInt(),
 			"bpfct_global_any_max":              OptionalInt(),
+			"bpflb_algorithm":                   OptionalString(),
+			"bpflb_maglev_table_size":           OptionalString(),
+			"bpfnat_global_max":                 OptionalInt(),
+			"bpf_neigh_global_max":              OptionalInt(),
+			"bpf_policy_map_max":                OptionalInt(),
+			"bpflb_map_max":                     OptionalInt(),
 			"preallocate_bpf_maps":              RequiredBool(),
 			"sidecar_istio_proxy_image":         OptionalString(),
 			"cluster_name":                      OptionalString(),
@@ -221,6 +234,9 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		DisableConntrack: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disable_conntrack"]),
+		DisableEndpointCRD: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["disable_endpoint_crd"]),
 		DisableIpv4: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disable_ipv4"]),
@@ -230,6 +246,63 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		EnablePolicy: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["enable_policy"]),
+		EnableL7Proxy: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_l7_proxy"]),
+		EnableBPFMasquerade: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_bpf_masquerade"]),
+		EnableEndpointHealthChecking: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_endpoint_health_checking"]),
 		EnableTracing: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_tracing"]),
@@ -239,9 +312,18 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		EnableEncryption: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_encryption"]),
+		EncryptionType: func(in interface{}) kops.CiliumEncryptionType {
+			return kops.CiliumEncryptionType(ExpandString(in))
+		}(in["encryption_type"]),
 		EnvoyLog: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["envoy_log"]),
+		IdentityAllocationMode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["identity_allocation_mode"]),
+		IdentityChangeGracePeriod: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["identity_change_grace_period"]),
 		Ipv4ClusterCIDRMaskSize: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["ipv4_cluster_cidr_mask_size"]),
@@ -337,8 +419,24 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		LogstashProbeTimer: func(in interface{}) uint32 {
 			return uint32(ExpandInt(in))
 		}(in["logstash_probe_timer"]),
-		DisableMasquerade: func(in interface{}) bool {
-			return bool(ExpandBool(in))
+		DisableMasquerade: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
 		}(in["disable_masquerade"]),
 		Nat46Range: func(in interface{}) string {
 			return string(ExpandString(in))
@@ -385,6 +483,24 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		BPFCTGlobalAnyMax: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["bpfct_global_any_max"]),
+		BPFLBAlgorithm: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["bpflb_algorithm"]),
+		BPFLBMaglevTableSize: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["bpflb_maglev_table_size"]),
+		BPFNATGlobalMax: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["bpfnat_global_max"]),
+		BPFNeighGlobalMax: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["bpf_neigh_global_max"]),
+		BPFPolicyMapMax: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["bpf_policy_map_max"]),
+		BPFLBMapMax: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["bpflb_map_max"]),
 		PreallocateBPFMaps: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["preallocate_bpf_maps"]),
@@ -557,6 +673,9 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["disable_conntrack"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableConntrack)
+	out["disable_endpoint_crd"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.DisableEndpointCRD)
 	out["disable_ipv4"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableIpv4)
@@ -566,6 +685,36 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["enable_policy"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EnablePolicy)
+	out["enable_l7_proxy"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableL7Proxy)
+	out["enable_bpf_masquerade"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableBPFMasquerade)
+	out["enable_endpoint_health_checking"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableEndpointHealthChecking)
 	out["enable_tracing"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnableTracing)
@@ -575,9 +724,18 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["enable_encryption"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnableEncryption)
+	out["encryption_type"] = func(in kops.CiliumEncryptionType) interface{} {
+		return FlattenString(string(in))
+	}(in.EncryptionType)
 	out["envoy_log"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EnvoyLog)
+	out["identity_allocation_mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IdentityAllocationMode)
+	out["identity_change_grace_period"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.IdentityChangeGracePeriod)
 	out["ipv4_cluster_cidr_mask_size"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Ipv4ClusterCIDRMaskSize)
@@ -662,8 +820,15 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["logstash_probe_timer"] = func(in uint32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogstashProbeTimer)
-	out["disable_masquerade"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
+	out["disable_masquerade"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
 	}(in.DisableMasquerade)
 	out["nat46_range"] = func(in string) interface{} {
 		return FlattenString(string(in))
@@ -710,6 +875,24 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["bpfct_global_any_max"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.BPFCTGlobalAnyMax)
+	out["bpflb_algorithm"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BPFLBAlgorithm)
+	out["bpflb_maglev_table_size"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.BPFLBMaglevTableSize)
+	out["bpfnat_global_max"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.BPFNATGlobalMax)
+	out["bpf_neigh_global_max"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.BPFNeighGlobalMax)
+	out["bpf_policy_map_max"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.BPFPolicyMapMax)
+	out["bpflb_map_max"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.BPFLBMapMax)
 	out["preallocate_bpf_maps"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.PreallocateBPFMaps)

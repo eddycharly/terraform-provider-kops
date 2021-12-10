@@ -29,7 +29,7 @@ func TestExpandDataSourceKubeConfig(t *testing.T) {
 					"namespace":     "",
 					"kube_user":     "",
 					"kube_password": "",
-					"ca_cert":       "",
+					"ca_certs":      "",
 					"client_cert":   "",
 					"client_key":    "",
 				},
@@ -57,7 +57,7 @@ func TestFlattenDataSourceKubeConfigInto(t *testing.T) {
 		"namespace":     "",
 		"kube_user":     "",
 		"kube_password": "",
-		"ca_cert":       "",
+		"ca_certs":      "",
 		"client_cert":   "",
 		"client_key":    "",
 	}
@@ -165,11 +165,11 @@ func TestFlattenDataSourceKubeConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CaCert - default",
+			name: "CaCerts - default",
 			args: args{
 				in: func() datasources.KubeConfig {
 					subject := datasources.KubeConfig{}
-					subject.CaCert = ""
+					subject.CaCerts = ""
 					return subject
 				}(),
 			},
@@ -219,7 +219,7 @@ func TestFlattenDataSourceKubeConfig(t *testing.T) {
 		"namespace":     "",
 		"kube_user":     "",
 		"kube_password": "",
-		"ca_cert":       "",
+		"ca_certs":      "",
 		"client_cert":   "",
 		"client_key":    "",
 	}
@@ -327,11 +327,11 @@ func TestFlattenDataSourceKubeConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "CaCert - default",
+			name: "CaCerts - default",
 			args: args{
 				in: func() datasources.KubeConfig {
 					subject := datasources.KubeConfig{}
-					subject.CaCert = ""
+					subject.CaCerts = ""
 					return subject
 				}(),
 			},

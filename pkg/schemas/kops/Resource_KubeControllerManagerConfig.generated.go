@@ -6,7 +6,7 @@ import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -16,6 +16,7 @@ func ResourceKubeControllerManagerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                                    OptionalString(),
+			"log_format":                                OptionalString(),
 			"log_level":                                 OptionalInt(),
 			"service_account_private_key_file":          OptionalString(),
 			"image":                                     OptionalString(),
@@ -46,8 +47,10 @@ func ResourceKubeControllerManagerConfig() *schema.Resource {
 			"horizontal_pod_autoscaler_use_rest_clients":          OptionalBool(),
 			"experimental_cluster_signing_duration":               OptionalDuration(),
 			"feature_gates":                                       OptionalMap(String()),
+			"tls_cert_file":                                       OptionalString(),
 			"tls_cipher_suites":                                   OptionalList(String()),
 			"tls_min_version":                                     OptionalString(),
+			"tls_private_key_file":                                OptionalString(),
 			"min_resync_period":                                   OptionalString(),
 			"kube_api_qps":                                        OptionalQuantity(),
 			"kube_api_burst":                                      OptionalInt(),
@@ -78,6 +81,9 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
@@ -205,21 +211,21 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(in))
 			}(in)
 		}(in["leader_election"]),
-		AttachDetachReconcileSyncPeriod: func(in interface{}) *v1.Duration {
+		AttachDetachReconcileSyncPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -262,59 +268,59 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["terminated_pod_gc_threshold"]),
-		NodeMonitorPeriod: func(in interface{}) *v1.Duration {
+		NodeMonitorPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_monitor_period"]),
-		NodeMonitorGracePeriod: func(in interface{}) *v1.Duration {
+		NodeMonitorGracePeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_monitor_grace_period"]),
-		PodEvictionTimeout: func(in interface{}) *v1.Duration {
+		PodEvictionTimeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -338,116 +344,116 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["use_service_account_credentials"]),
-		HorizontalPodAutoscalerSyncPeriod: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerSyncPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_sync_period"]),
-		HorizontalPodAutoscalerDownscaleDelay: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerDownscaleDelay: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_downscale_delay"]),
-		HorizontalPodAutoscalerDownscaleStabilization: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerDownscaleStabilization: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_downscale_stabilization"]),
-		HorizontalPodAutoscalerUpscaleDelay: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerUpscaleDelay: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_upscale_delay"]),
-		HorizontalPodAutoscalerInitialReadinessDelay: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerInitialReadinessDelay: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_initial_readiness_delay"]),
-		HorizontalPodAutoscalerCPUInitializationPeriod: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerCPUInitializationPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -490,21 +496,21 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["horizontal_pod_autoscaler_use_rest_clients"]),
-		ExperimentalClusterSigningDuration: func(in interface{}) *v1.Duration {
+		ExperimentalClusterSigningDuration: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -526,6 +532,25 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				return nil
 			}(in)
 		}(in["feature_gates"]),
+		TLSCertFile: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["tls_cert_file"]),
 		TLSCipherSuites: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
@@ -541,6 +566,9 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 		TLSMinVersion: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tls_min_version"]),
+		TLSPrivateKeyFile: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["tls_private_key_file"]),
 		MinResyncPeriod: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["min_resync_period"]),
@@ -781,6 +809,9 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 	out["master"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Master)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogLevel)
@@ -863,12 +894,12 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			}(*in)
 		}(in)
 	}(in.LeaderElection)
-	out["attach_detach_reconcile_sync_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["attach_detach_reconcile_sync_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -893,32 +924,32 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			}(*in)
 		}(in)
 	}(in.TerminatedPodGCThreshold)
-	out["node_monitor_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["node_monitor_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.NodeMonitorPeriod)
-	out["node_monitor_grace_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["node_monitor_grace_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.NodeMonitorGracePeriod)
-	out["pod_eviction_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["pod_eviction_timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -933,62 +964,62 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			}(*in)
 		}(in)
 	}(in.UseServiceAccountCredentials)
-	out["horizontal_pod_autoscaler_sync_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["horizontal_pod_autoscaler_sync_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerSyncPeriod)
-	out["horizontal_pod_autoscaler_downscale_delay"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["horizontal_pod_autoscaler_downscale_delay"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerDownscaleDelay)
-	out["horizontal_pod_autoscaler_downscale_stabilization"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["horizontal_pod_autoscaler_downscale_stabilization"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerDownscaleStabilization)
-	out["horizontal_pod_autoscaler_upscale_delay"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["horizontal_pod_autoscaler_upscale_delay"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerUpscaleDelay)
-	out["horizontal_pod_autoscaler_initial_readiness_delay"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["horizontal_pod_autoscaler_initial_readiness_delay"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerInitialReadinessDelay)
-	out["horizontal_pod_autoscaler_cpu_initialization_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["horizontal_pod_autoscaler_cpu_initialization_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1013,12 +1044,12 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			}(*in)
 		}(in)
 	}(in.HorizontalPodAutoscalerUseRestClients)
-	out["experimental_cluster_signing_duration"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["experimental_cluster_signing_duration"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1035,6 +1066,16 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			return out
 		}(in)
 	}(in.FeatureGates)
+	out["tls_cert_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.TLSCertFile)
 	out["tls_cipher_suites"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -1047,6 +1088,9 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 	out["tls_min_version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.TLSMinVersion)
+	out["tls_private_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSPrivateKeyFile)
 	out["min_resync_period"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MinResyncPeriod)

@@ -15,6 +15,7 @@ func ResourceKubeSchedulerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"master":                           OptionalString(),
+			"log_format":                       OptionalString(),
 			"log_level":                        OptionalInt(),
 			"image":                            OptionalString(),
 			"leader_election":                  OptionalStruct(ResourceLeaderElectionConfiguration()),
@@ -27,6 +28,8 @@ func ResourceKubeSchedulerConfig() *schema.Resource {
 			"authorization_kubeconfig":         OptionalString(),
 			"authorization_always_allow_paths": OptionalList(String()),
 			"enable_profiling":                 OptionalBool(),
+			"tls_cert_file":                    OptionalString(),
+			"tls_private_key_file":             OptionalString(),
 		},
 	}
 
@@ -41,6 +44,9 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 		Master: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["master"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
@@ -179,6 +185,28 @@ func ExpandResourceKubeSchedulerConfig(in map[string]interface{}) kops.KubeSched
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_profiling"]),
+		TLSCertFile: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["tls_cert_file"]),
+		TLSPrivateKeyFile: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["tls_private_key_file"]),
 	}
 }
 
@@ -186,6 +214,9 @@ func FlattenResourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out map
 	out["master"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Master)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogLevel)
@@ -274,6 +305,19 @@ func FlattenResourceKubeSchedulerConfigInto(in kops.KubeSchedulerConfig, out map
 			}(*in)
 		}(in)
 	}(in.EnableProfiling)
+	out["tls_cert_file"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.TLSCertFile)
+	out["tls_private_key_file"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.TLSPrivateKeyFile)
 }
 
 func FlattenResourceKubeSchedulerConfig(in kops.KubeSchedulerConfig) map[string]interface{} {

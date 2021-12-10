@@ -5,7 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -128,21 +128,21 @@ func ExpandDataSourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyCo
 				return out
 			}(in)
 		}(in["ip_vs_exclude_cidr_s"]),
-		IPVSMinSyncPeriod: func(in interface{}) *v1.Duration {
+		IPVSMinSyncPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -166,21 +166,21 @@ func ExpandDataSourceKubeProxyConfig(in map[string]interface{}) kops.KubeProxyCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["ip_vs_scheduler"]),
-		IPVSSyncPeriod: func(in interface{}) *v1.Duration {
+		IPVSSyncPeriod: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -306,12 +306,12 @@ func FlattenDataSourceKubeProxyConfigInto(in kops.KubeProxyConfig, out map[strin
 			return out
 		}(in)
 	}(in.IPVSExcludeCIDRS)
-	out["ip_vs_min_sync_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["ip_vs_min_sync_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -326,12 +326,12 @@ func FlattenDataSourceKubeProxyConfigInto(in kops.KubeProxyConfig, out map[strin
 			}(*in)
 		}(in)
 	}(in.IPVSScheduler)
-	out["ip_vs_sync_period"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["ip_vs_sync_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

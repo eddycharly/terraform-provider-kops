@@ -6,7 +6,7 @@ import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -17,6 +17,7 @@ func ResourceKubeAPIServerConfig() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"image":                                        OptionalString(),
 			"disable_basic_auth":                           OptionalBool(),
+			"log_format":                                   OptionalString(),
 			"log_level":                                    OptionalInt(),
 			"cloud_provider":                               OptionalString(),
 			"secure_port":                                  OptionalInt(),
@@ -149,6 +150,9 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["disable_basic_auth"]),
+		LogFormat: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["log_format"]),
 		LogLevel: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
@@ -763,21 +767,21 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_webhook_batch_max_size"]),
-		AuditWebhookBatchMaxWait: func(in interface{}) *v1.Duration {
+		AuditWebhookBatchMaxWait: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -842,21 +846,21 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 		AuditWebhookConfigFile: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["audit_webhook_config_file"]),
-		AuditWebhookInitialBackoff: func(in interface{}) *v1.Duration {
+		AuditWebhookInitialBackoff: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -883,21 +887,21 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["authentication_token_webhook_config_file"]),
-		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration {
+		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -940,40 +944,40 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["authorization_webhook_config_file"]),
-		AuthorizationWebhookCacheAuthorizedTTL: func(in interface{}) *v1.Duration {
+		AuthorizationWebhookCacheAuthorizedTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
 		}(in["authorization_webhook_cache_authorized_ttl"]),
-		AuthorizationWebhookCacheUnauthorizedTTL: func(in interface{}) *v1.Duration {
+		AuthorizationWebhookCacheUnauthorizedTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -1147,21 +1151,21 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["etcd_quorum_read"]),
-		RequestTimeout: func(in interface{}) *v1.Duration {
+		RequestTimeout: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -1281,21 +1285,21 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 		MemoryLimit: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["memory_limit"]),
-		EventTTL: func(in interface{}) *v1.Duration {
+		EventTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *v1.Duration {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in v1.Duration) *v1.Duration {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
 				}(ExpandDuration(in))
 			}(in)
@@ -1405,6 +1409,9 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 			}(*in)
 		}(in)
 	}(in.DisableBasicAuth)
+	out["log_format"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.LogFormat)
 	out["log_level"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.LogLevel)
@@ -1790,12 +1797,12 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 			}(*in)
 		}(in)
 	}(in.AuditWebhookBatchMaxSize)
-	out["audit_webhook_batch_max_wait"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["audit_webhook_batch_max_wait"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1833,12 +1840,12 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 	out["audit_webhook_config_file"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.AuditWebhookConfigFile)
-	out["audit_webhook_initial_backoff"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["audit_webhook_initial_backoff"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1856,12 +1863,12 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 			}(*in)
 		}(in)
 	}(in.AuthenticationTokenWebhookConfigFile)
-	out["authentication_token_webhook_cache_ttl"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["authentication_token_webhook_cache_ttl"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -1886,22 +1893,22 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 			}(*in)
 		}(in)
 	}(in.AuthorizationWebhookConfigFile)
-	out["authorization_webhook_cache_authorized_ttl"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["authorization_webhook_cache_authorized_ttl"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.AuthorizationWebhookCacheAuthorizedTTL)
-	out["authorization_webhook_cache_unauthorized_ttl"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["authorization_webhook_cache_unauthorized_ttl"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -2013,12 +2020,12 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 			}(*in)
 		}(in)
 	}(in.EtcdQuorumRead)
-	out["request_timeout"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["request_timeout"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)
@@ -2096,12 +2103,12 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 	out["memory_limit"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MemoryLimit)
-	out["event_ttl"] = func(in *v1.Duration) interface{} {
-		return func(in *v1.Duration) interface{} {
+	out["event_ttl"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in v1.Duration) interface{} {
+			return func(in meta.Duration) interface{} {
 				return FlattenDuration(in)
 			}(*in)
 		}(in)

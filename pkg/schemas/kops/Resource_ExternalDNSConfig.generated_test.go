@@ -24,6 +24,7 @@ func TestExpandResourceExternalDNSConfig(t *testing.T) {
 					"disable":         false,
 					"watch_ingress":   nil,
 					"watch_namespace": "",
+					"provider":        "",
 				},
 			},
 			want: _default,
@@ -44,6 +45,7 @@ func TestFlattenResourceExternalDNSConfigInto(t *testing.T) {
 		"disable":         false,
 		"watch_ingress":   nil,
 		"watch_namespace": "",
+		"provider":        "",
 	}
 	type args struct {
 		in kops.ExternalDNSConfig
@@ -88,6 +90,17 @@ func TestFlattenResourceExternalDNSConfigInto(t *testing.T) {
 				in: func() kops.ExternalDNSConfig {
 					subject := kops.ExternalDNSConfig{}
 					subject.WatchNamespace = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Provider - default",
+			args: args{
+				in: func() kops.ExternalDNSConfig {
+					subject := kops.ExternalDNSConfig{}
+					subject.Provider = ""
 					return subject
 				}(),
 			},
@@ -110,6 +123,7 @@ func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 		"disable":         false,
 		"watch_ingress":   nil,
 		"watch_namespace": "",
+		"provider":        "",
 	}
 	type args struct {
 		in kops.ExternalDNSConfig
@@ -154,6 +168,17 @@ func TestFlattenResourceExternalDNSConfig(t *testing.T) {
 				in: func() kops.ExternalDNSConfig {
 					subject := kops.ExternalDNSConfig{}
 					subject.WatchNamespace = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Provider - default",
+			args: args{
+				in: func() kops.ExternalDNSConfig {
+					subject := kops.ExternalDNSConfig{}
+					subject.Provider = ""
 					return subject
 				}(),
 			},

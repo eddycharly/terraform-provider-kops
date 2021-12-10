@@ -18,7 +18,7 @@ func isInt(in reflect.Type) bool {
 }
 
 func isString(in reflect.Type) bool {
-	return in.Kind() == reflect.String
+	return in.Kind() == reflect.String || in.String() == "v1.LabelSelectorOperator"
 }
 
 func isFloat(in reflect.Type) bool {
@@ -29,32 +29,32 @@ func isFloat(in reflect.Type) bool {
 	return false
 }
 
-func isSlice(t reflect.Type) bool {
-	return t.Kind() == reflect.Slice
+func isSlice(in reflect.Type) bool {
+	return in.Kind() == reflect.Slice
 }
 
-func isStruct(t reflect.Type) bool {
-	return t.Kind() == reflect.Struct
+func isStruct(in reflect.Type) bool {
+	return in.Kind() == reflect.Struct
 }
 
-func isMap(t reflect.Type) bool {
-	return t.Kind() == reflect.Map
+func isMap(in reflect.Type) bool {
+	return in.Kind() == reflect.Map
 }
 
-func isDuration(t reflect.Type) bool {
-	return t.Kind() == reflect.Struct && t.String() == "v1.Duration"
+func isDuration(in reflect.Type) bool {
+	return in.Kind() == reflect.Struct && in.String() == "v1.Duration"
 }
 
-func isQuantity(t reflect.Type) bool {
-	return t.Kind() == reflect.Struct && t.String() == "resource.Quantity"
+func isQuantity(in reflect.Type) bool {
+	return in.Kind() == reflect.Struct && in.String() == "resource.Quantity"
 }
 
-func isIntOrString(t reflect.Type) bool {
-	return t.Kind() == reflect.Struct && t.String() == "intstr.IntOrString"
+func isIntOrString(in reflect.Type) bool {
+	return in.Kind() == reflect.Struct && in.String() == "intstr.IntOrString"
 }
 
-func isPtr(t reflect.Type) bool {
-	return t.Kind() == reflect.Ptr
+func isPtr(in reflect.Type) bool {
+	return in.Kind() == reflect.Ptr
 }
 
 func isValueType(in reflect.Type) bool {
@@ -66,7 +66,7 @@ func isValueType(in reflect.Type) bool {
 	case reflect.Slice, reflect.Map:
 		return false
 	case reflect.Struct:
-		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString"
+		return in.String() == "v1.Duration" || in.String() == "resource.Quantity" || in.String() == "intstr.IntOrString" || in.String() == "v1.LabelSelectorOperator"
 	default:
 		panic(fmt.Sprintf("unknown kind %v", in.Kind()))
 	}
@@ -102,4 +102,27 @@ func verifyFields(t reflect.Type, fields ...string) error {
 		}
 	}
 	return nil
+}
+
+func resolve(in reflect.Type, m map[string]string) string {
+	switch in.Kind() {
+	case reflect.Ptr:
+		return "*" + resolve(in.Elem(), m)
+	case reflect.Slice:
+		return "[]" + resolve(in.Elem(), m)
+	case reflect.Map:
+		return "map[" + resolve(in.Key(), m) + "]" + resolve(in.Elem(), m)
+	default:
+		p := in.PkgPath()
+		if p == "" {
+			return in.String()
+		} else {
+			p, ok := m[p]
+			if ok {
+				return p + "." + in.Name()
+			} else {
+				return in.String()
+			}
+		}
+	}
 }

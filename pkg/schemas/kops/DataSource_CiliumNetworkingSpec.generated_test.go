@@ -36,13 +36,20 @@ func TestExpandDataSourceCiliumNetworkingSpec(t *testing.T) {
 					"debug_verbose":                     func() []interface{} { return nil }(),
 					"device":                            "",
 					"disable_conntrack":                 false,
+					"disable_endpoint_crd":              false,
 					"disable_ipv4":                      false,
 					"disable_k_8s_services":             false,
 					"enable_policy":                     "",
+					"enable_l7_proxy":                   nil,
+					"enable_bpf_masquerade":             nil,
+					"enable_endpoint_health_checking":   nil,
 					"enable_tracing":                    false,
 					"enable_prometheus_metrics":         false,
 					"enable_encryption":                 false,
+					"encryption_type":                   "",
 					"envoy_log":                         "",
+					"identity_allocation_mode":          "",
+					"identity_change_grace_period":      "",
 					"ipv4_cluster_cidr_mask_size":       0,
 					"ipv4_node":                         "",
 					"ipv4_range":                        "",
@@ -64,7 +71,7 @@ func TestExpandDataSourceCiliumNetworkingSpec(t *testing.T) {
 					"logstash":                          false,
 					"logstash_agent":                    "",
 					"logstash_probe_timer":              0,
-					"disable_masquerade":                false,
+					"disable_masquerade":                nil,
 					"nat46_range":                       "",
 					"pprof":                             false,
 					"prefilter_device":                  "",
@@ -80,6 +87,12 @@ func TestExpandDataSourceCiliumNetworkingSpec(t *testing.T) {
 					"monitor_aggregation":               "",
 					"bpfct_global_tcp_max":              0,
 					"bpfct_global_any_max":              0,
+					"bpflb_algorithm":                   "",
+					"bpflb_maglev_table_size":           "",
+					"bpfnat_global_max":                 0,
+					"bpf_neigh_global_max":              0,
+					"bpf_policy_map_max":                0,
+					"bpflb_map_max":                     0,
 					"preallocate_bpf_maps":              false,
 					"sidecar_istio_proxy_image":         "",
 					"cluster_name":                      "",
@@ -131,13 +144,20 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 		"debug_verbose":                     func() []interface{} { return nil }(),
 		"device":                            "",
 		"disable_conntrack":                 false,
+		"disable_endpoint_crd":              false,
 		"disable_ipv4":                      false,
 		"disable_k_8s_services":             false,
 		"enable_policy":                     "",
+		"enable_l7_proxy":                   nil,
+		"enable_bpf_masquerade":             nil,
+		"enable_endpoint_health_checking":   nil,
 		"enable_tracing":                    false,
 		"enable_prometheus_metrics":         false,
 		"enable_encryption":                 false,
+		"encryption_type":                   "",
 		"envoy_log":                         "",
+		"identity_allocation_mode":          "",
+		"identity_change_grace_period":      "",
 		"ipv4_cluster_cidr_mask_size":       0,
 		"ipv4_node":                         "",
 		"ipv4_range":                        "",
@@ -159,7 +179,7 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 		"logstash":                          false,
 		"logstash_agent":                    "",
 		"logstash_probe_timer":              0,
-		"disable_masquerade":                false,
+		"disable_masquerade":                nil,
 		"nat46_range":                       "",
 		"pprof":                             false,
 		"prefilter_device":                  "",
@@ -175,6 +195,12 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 		"monitor_aggregation":               "",
 		"bpfct_global_tcp_max":              0,
 		"bpfct_global_any_max":              0,
+		"bpflb_algorithm":                   "",
+		"bpflb_maglev_table_size":           "",
+		"bpfnat_global_max":                 0,
+		"bpf_neigh_global_max":              0,
+		"bpf_policy_map_max":                0,
+		"bpflb_map_max":                     0,
 		"preallocate_bpf_maps":              false,
 		"sidecar_istio_proxy_image":         "",
 		"cluster_name":                      "",
@@ -376,6 +402,17 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "DisableEndpointCRD - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.DisableEndpointCRD = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "DisableIpv4 - default",
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
@@ -403,6 +440,39 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.EnablePolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableL7Proxy - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EnableL7Proxy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableBPFMasquerade - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EnableBPFMasquerade = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableEndpointHealthChecking - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EnableEndpointHealthChecking = nil
 					return subject
 				}(),
 			},
@@ -442,11 +512,44 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "EncryptionType - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EncryptionType = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "EnvoyLog - default",
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.EnvoyLog = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityAllocationMode - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.IdentityAllocationMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityChangeGracePeriod - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.IdentityChangeGracePeriod = ""
 					return subject
 				}(),
 			},
@@ -688,7 +791,7 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
-					subject.DisableMasquerade = false
+					subject.DisableMasquerade = nil
 					return subject
 				}(),
 			},
@@ -854,6 +957,72 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.BPFCTGlobalAnyMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBAlgorithm - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFLBAlgorithm = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMaglevTableSize - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFLBMaglevTableSize = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNATGlobalMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFNATGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNeighGlobalMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFNeighGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFPolicyMapMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFPolicyMapMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMapMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFLBMapMax = 0
 					return subject
 				}(),
 			},
@@ -1097,13 +1266,20 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 		"debug_verbose":                     func() []interface{} { return nil }(),
 		"device":                            "",
 		"disable_conntrack":                 false,
+		"disable_endpoint_crd":              false,
 		"disable_ipv4":                      false,
 		"disable_k_8s_services":             false,
 		"enable_policy":                     "",
+		"enable_l7_proxy":                   nil,
+		"enable_bpf_masquerade":             nil,
+		"enable_endpoint_health_checking":   nil,
 		"enable_tracing":                    false,
 		"enable_prometheus_metrics":         false,
 		"enable_encryption":                 false,
+		"encryption_type":                   "",
 		"envoy_log":                         "",
+		"identity_allocation_mode":          "",
+		"identity_change_grace_period":      "",
 		"ipv4_cluster_cidr_mask_size":       0,
 		"ipv4_node":                         "",
 		"ipv4_range":                        "",
@@ -1125,7 +1301,7 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 		"logstash":                          false,
 		"logstash_agent":                    "",
 		"logstash_probe_timer":              0,
-		"disable_masquerade":                false,
+		"disable_masquerade":                nil,
 		"nat46_range":                       "",
 		"pprof":                             false,
 		"prefilter_device":                  "",
@@ -1141,6 +1317,12 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 		"monitor_aggregation":               "",
 		"bpfct_global_tcp_max":              0,
 		"bpfct_global_any_max":              0,
+		"bpflb_algorithm":                   "",
+		"bpflb_maglev_table_size":           "",
+		"bpfnat_global_max":                 0,
+		"bpf_neigh_global_max":              0,
+		"bpf_policy_map_max":                0,
+		"bpflb_map_max":                     0,
 		"preallocate_bpf_maps":              false,
 		"sidecar_istio_proxy_image":         "",
 		"cluster_name":                      "",
@@ -1342,6 +1524,17 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "DisableEndpointCRD - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.DisableEndpointCRD = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "DisableIpv4 - default",
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
@@ -1369,6 +1562,39 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.EnablePolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableL7Proxy - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EnableL7Proxy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableBPFMasquerade - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EnableBPFMasquerade = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableEndpointHealthChecking - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EnableEndpointHealthChecking = nil
 					return subject
 				}(),
 			},
@@ -1408,11 +1634,44 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "EncryptionType - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.EncryptionType = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "EnvoyLog - default",
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.EnvoyLog = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityAllocationMode - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.IdentityAllocationMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityChangeGracePeriod - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.IdentityChangeGracePeriod = ""
 					return subject
 				}(),
 			},
@@ -1654,7 +1913,7 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 			args: args{
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
-					subject.DisableMasquerade = false
+					subject.DisableMasquerade = nil
 					return subject
 				}(),
 			},
@@ -1820,6 +2079,72 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.BPFCTGlobalAnyMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBAlgorithm - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFLBAlgorithm = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMaglevTableSize - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFLBMaglevTableSize = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNATGlobalMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFNATGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNeighGlobalMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFNeighGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFPolicyMapMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFPolicyMapMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMapMax - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.BPFLBMapMax = 0
 					return subject
 				}(),
 			},
