@@ -11,9 +11,7 @@ var _ = Schema
 func ResourceClusterSecrets() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"docker_config":   Sensitive(OptionalString()),
-			"cluster_ca_cert": Sensitive(OptionalString()),
-			"cluster_ca_key":  Sensitive(OptionalString()),
+			"docker_config": Sensitive(OptionalString()),
 		},
 	}
 
