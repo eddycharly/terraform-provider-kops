@@ -28,7 +28,7 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 		panic("expand GossipConfig failure, in is nil")
 	}
 	return kops.GossipConfig{
-		Protocol: func(in interface{}) *string {
+		Protocol: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -47,7 +47,7 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["protocol"]),
-		Listen: func(in interface{}) *string {
+		Listen: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -66,7 +66,7 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["listen"]),
-		Secret: func(in interface{}) *string {
+		Secret: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -85,7 +85,7 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["secret"]),
-		Secondary: func(in interface{}) *kops.GossipConfigSecondary {
+		Secondary: func(in interface{}) *kops.GossipConfigSecondary /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.GossipConfigSecondary {
 				if in == nil {
 					return nil

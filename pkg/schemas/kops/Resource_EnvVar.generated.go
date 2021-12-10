@@ -24,10 +24,10 @@ func ExpandResourceEnvVar(in map[string]interface{}) kops.EnvVar {
 		panic("expand EnvVar failure, in is nil")
 	}
 	return kops.EnvVar{
-		Name: func(in interface{}) string {
+		Name: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Value: func(in interface{}) string {
+		Value: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["value"]),
 	}

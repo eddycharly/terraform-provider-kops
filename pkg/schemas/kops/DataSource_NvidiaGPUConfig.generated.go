@@ -26,10 +26,10 @@ func ExpandDataSourceNvidiaGPUConfig(in map[string]interface{}) kops.NvidiaGPUCo
 		panic("expand NvidiaGPUConfig failure, in is nil")
 	}
 	return kops.NvidiaGPUConfig{
-		DriverPackage: func(in interface{}) string {
+		DriverPackage: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["driver_package"]),
-		Enabled: func(in interface{}) *bool {
+		Enabled: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}

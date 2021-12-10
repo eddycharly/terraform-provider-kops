@@ -27,7 +27,7 @@ func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipC
 		panic("expand GossipConfigSecondary failure, in is nil")
 	}
 	return kops.GossipConfigSecondary{
-		Protocol: func(in interface{}) *string {
+		Protocol: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -46,7 +46,7 @@ func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipC
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["protocol"]),
-		Listen: func(in interface{}) *string {
+		Listen: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -65,7 +65,7 @@ func ExpandResourceGossipConfigSecondary(in map[string]interface{}) kops.GossipC
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["listen"]),
-		Secret: func(in interface{}) *string {
+		Secret: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}

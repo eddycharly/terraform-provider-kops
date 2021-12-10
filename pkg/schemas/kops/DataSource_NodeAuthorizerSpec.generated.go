@@ -33,10 +33,10 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 		panic("expand NodeAuthorizerSpec failure, in is nil")
 	}
 	return kops.NodeAuthorizerSpec{
-		Authorizer: func(in interface{}) string {
+		Authorizer: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["authorizer"]),
-		Features: func(in interface{}) []string {
+		Features: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -48,16 +48,16 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 				return out
 			}(in)
 		}(in["features"]),
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		NodeURL: func(in interface{}) string {
+		NodeURL: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["node_url"]),
-		Port: func(in interface{}) int {
+		Port: func(in interface{}) int /**/ {
 			return int(ExpandInt(in))
 		}(in["port"]),
-		Interval: func(in interface{}) *v1.Duration {
+		Interval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -76,7 +76,7 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 				}(ExpandDuration(in))
 			}(in)
 		}(in["interval"]),
-		Timeout: func(in interface{}) *v1.Duration {
+		Timeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -95,7 +95,7 @@ func ExpandDataSourceNodeAuthorizerSpec(in map[string]interface{}) kops.NodeAuth
 				}(ExpandDuration(in))
 			}(in)
 		}(in["timeout"]),
-		TokenTTL: func(in interface{}) *v1.Duration {
+		TokenTTL: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}

@@ -30,7 +30,7 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 		panic("expand OpenstackBlockStorageConfig failure, in is nil")
 	}
 	return kops.OpenstackBlockStorageConfig{
-		Version: func(in interface{}) *string {
+		Version: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -49,7 +49,7 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["version"]),
-		IgnoreAZ: func(in interface{}) *bool {
+		IgnoreAZ: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -68,7 +68,7 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["ignore_az"]),
-		OverrideAZ: func(in interface{}) *string {
+		OverrideAZ: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -87,7 +87,7 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["override_az"]),
-		CreateStorageClass: func(in interface{}) *bool {
+		CreateStorageClass: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -106,10 +106,10 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["create_storage_class"]),
-		CSIPluginImage: func(in interface{}) string {
+		CSIPluginImage: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["csi_plugin_image"]),
-		CSITopologySupport: func(in interface{}) *bool {
+		CSITopologySupport: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}

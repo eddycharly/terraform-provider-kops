@@ -31,7 +31,7 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 		panic("expand NodeLocalDNSConfig failure, in is nil")
 	}
 	return kops.NodeLocalDNSConfig{
-		Enabled: func(in interface{}) *bool {
+		Enabled: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -50,7 +50,7 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Image: func(in interface{}) *string {
+		Image: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -69,10 +69,10 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
-		LocalIP: func(in interface{}) string {
+		LocalIP: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["local_ip"]),
-		ForwardToKubeDNS: func(in interface{}) *bool {
+		ForwardToKubeDNS: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -91,7 +91,7 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["forward_to_kube_dns"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
+		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -110,7 +110,7 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
+		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}

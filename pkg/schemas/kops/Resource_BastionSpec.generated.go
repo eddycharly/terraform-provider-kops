@@ -27,10 +27,10 @@ func ExpandResourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 		panic("expand BastionSpec failure, in is nil")
 	}
 	return kops.BastionSpec{
-		BastionPublicName: func(in interface{}) string {
+		BastionPublicName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["bastion_public_name"]),
-		IdleTimeoutSeconds: func(in interface{}) *int64 {
+		IdleTimeoutSeconds: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -49,7 +49,7 @@ func ExpandResourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["idle_timeout_seconds"]),
-		LoadBalancer: func(in interface{}) *kops.BastionLoadBalancerSpec {
+		LoadBalancer: func(in interface{}) *kops.BastionLoadBalancerSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.BastionLoadBalancerSpec {
 				if in == nil {
 					return nil

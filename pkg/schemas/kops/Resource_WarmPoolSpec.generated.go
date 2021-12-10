@@ -27,10 +27,10 @@ func ExpandResourceWarmPoolSpec(in map[string]interface{}) kops.WarmPoolSpec {
 		panic("expand WarmPoolSpec failure, in is nil")
 	}
 	return kops.WarmPoolSpec{
-		MinSize: func(in interface{}) int64 {
+		MinSize: func(in interface{}) int64 /**/ {
 			return int64(ExpandInt(in))
 		}(in["min_size"]),
-		MaxSize: func(in interface{}) *int64 {
+		MaxSize: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -49,7 +49,7 @@ func ExpandResourceWarmPoolSpec(in map[string]interface{}) kops.WarmPoolSpec {
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["max_size"]),
-		EnableLifecycleHook: func(in interface{}) bool {
+		EnableLifecycleHook: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["enable_lifecycle_hook"]),
 	}

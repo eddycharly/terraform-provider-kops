@@ -23,7 +23,7 @@ func ExpandDataSourceLyftVPCNetworkingSpec(in map[string]interface{}) kops.LyftV
 		panic("expand LyftVPCNetworkingSpec failure, in is nil")
 	}
 	return kops.LyftVPCNetworkingSpec{
-		SubnetTags: func(in interface{}) map[string]string {
+		SubnetTags: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil

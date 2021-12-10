@@ -23,7 +23,7 @@ func ExpandResourceAddonSpec(in map[string]interface{}) kops.AddonSpec {
 		panic("expand AddonSpec failure, in is nil")
 	}
 	return kops.AddonSpec{
-		Manifest: func(in interface{}) string {
+		Manifest: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["manifest"]),
 	}

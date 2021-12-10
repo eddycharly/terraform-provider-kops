@@ -28,13 +28,13 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 		panic("expand ClusterUpdater failure, in is nil")
 	}
 	return resources.ClusterUpdater{
-		Revision: func(in interface{}) int {
+		Revision: func(in interface{}) int /**/ {
 			return int(ExpandInt(in))
 		}(in["revision"]),
-		ClusterName: func(in interface{}) string {
+		ClusterName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		Keepers: func(in interface{}) map[string]string {
+		Keepers: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -51,7 +51,7 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 				return nil
 			}(in)
 		}(in["keepers"]),
-		Apply: func(in interface{}) resources.ApplyOptions {
+		Apply: func(in interface{}) resources.ApplyOptions /*github.com/eddycharly/terraform-provider-kops/pkg/api/resources*/ {
 			return func(in interface{}) resources.ApplyOptions {
 				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return resources.ApplyOptions{}
@@ -59,7 +59,7 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 				return (ExpandResourceApplyOptions(in.([]interface{})[0].(map[string]interface{})))
 			}(in)
 		}(in["apply"]),
-		RollingUpdate: func(in interface{}) resources.RollingUpdateOptions {
+		RollingUpdate: func(in interface{}) resources.RollingUpdateOptions /*github.com/eddycharly/terraform-provider-kops/pkg/api/resources*/ {
 			return func(in interface{}) resources.RollingUpdateOptions {
 				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return resources.RollingUpdateOptions{}
@@ -67,7 +67,7 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 				return (ExpandResourceRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
 			}(in)
 		}(in["rolling_update"]),
-		Validate: func(in interface{}) resources.ValidateOptions {
+		Validate: func(in interface{}) resources.ValidateOptions /*github.com/eddycharly/terraform-provider-kops/pkg/api/resources*/ {
 			return func(in interface{}) resources.ValidateOptions {
 				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 					return resources.ValidateOptions{}

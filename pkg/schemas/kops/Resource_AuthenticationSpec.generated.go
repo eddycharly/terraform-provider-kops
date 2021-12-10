@@ -24,7 +24,7 @@ func ExpandResourceAuthenticationSpec(in map[string]interface{}) kops.Authentica
 		panic("expand AuthenticationSpec failure, in is nil")
 	}
 	return kops.AuthenticationSpec{
-		Kopeio: func(in interface{}) *kops.KopeioAuthenticationSpec {
+		Kopeio: func(in interface{}) *kops.KopeioAuthenticationSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.KopeioAuthenticationSpec {
 				if in == nil {
 					return nil
@@ -42,7 +42,7 @@ func ExpandResourceAuthenticationSpec(in map[string]interface{}) kops.Authentica
 				}(in))
 			}(in)
 		}(in["kopeio"]),
-		Aws: func(in interface{}) *kops.AwsAuthenticationSpec {
+		Aws: func(in interface{}) *kops.AwsAuthenticationSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.AwsAuthenticationSpec {
 				if in == nil {
 					return nil

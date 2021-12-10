@@ -23,7 +23,7 @@ func ExpandConfigKlog(in map[string]interface{}) config.Klog {
 		panic("expand Klog failure, in is nil")
 	}
 	return config.Klog{
-		Verbosity: func(in interface{}) *int {
+		Verbosity: func(in interface{}) *int /**/ {
 			if in == nil {
 				return nil
 			}

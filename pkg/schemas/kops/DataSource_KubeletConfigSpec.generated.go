@@ -112,10 +112,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 		panic("expand KubeletConfigSpec failure, in is nil")
 	}
 	return kops.KubeletConfigSpec{
-		APIServers: func(in interface{}) string {
+		APIServers: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["api_servers"]),
-		AnonymousAuth: func(in interface{}) *bool {
+		AnonymousAuth: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -136,22 +136,22 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}
 			return nil
 		}(in["anonymous_auth"]),
-		AuthorizationMode: func(in interface{}) string {
+		AuthorizationMode: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["authorization_mode"]),
-		BootstrapKubeconfig: func(in interface{}) string {
+		BootstrapKubeconfig: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["bootstrap_kubeconfig"]),
-		ClientCAFile: func(in interface{}) string {
+		ClientCAFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["client_ca_file"]),
-		TLSCertFile: func(in interface{}) string {
+		TLSCertFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_cert_file"]),
-		TLSPrivateKeyFile: func(in interface{}) string {
+		TLSPrivateKeyFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_private_key_file"]),
-		TLSCipherSuites: func(in interface{}) []string {
+		TLSCipherSuites: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -163,13 +163,13 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return out
 			}(in)
 		}(in["tls_cipher_suites"]),
-		TLSMinVersion: func(in interface{}) string {
+		TLSMinVersion: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_min_version"]),
-		KubeconfigPath: func(in interface{}) string {
+		KubeconfigPath: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["kubeconfig_path"]),
-		RequireKubeconfig: func(in interface{}) *bool {
+		RequireKubeconfig: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -188,10 +188,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["require_kubeconfig"]),
-		LogFormat: func(in interface{}) string {
+		LogFormat: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["log_format"]),
-		LogLevel: func(in interface{}) *int32 {
+		LogLevel: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -210,16 +210,16 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["log_level"]),
-		PodManifestPath: func(in interface{}) string {
+		PodManifestPath: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["pod_manifest_path"]),
-		HostnameOverride: func(in interface{}) string {
+		HostnameOverride: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["hostname_override"]),
-		PodInfraContainerImage: func(in interface{}) string {
+		PodInfraContainerImage: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["pod_infra_container_image"]),
-		SeccompProfileRoot: func(in interface{}) *string {
+		SeccompProfileRoot: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -238,7 +238,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["seccomp_profile_root"]),
-		AllowPrivileged: func(in interface{}) *bool {
+		AllowPrivileged: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -257,7 +257,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["allow_privileged"]),
-		EnableDebuggingHandlers: func(in interface{}) *bool {
+		EnableDebuggingHandlers: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -276,7 +276,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_debugging_handlers"]),
-		RegisterNode: func(in interface{}) *bool {
+		RegisterNode: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -295,7 +295,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["register_node"]),
-		NodeStatusUpdateFrequency: func(in interface{}) *v1.Duration {
+		NodeStatusUpdateFrequency: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -314,25 +314,25 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_status_update_frequency"]),
-		ClusterDomain: func(in interface{}) string {
+		ClusterDomain: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cluster_domain"]),
-		ClusterDNS: func(in interface{}) string {
+		ClusterDNS: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cluster_dns"]),
-		NetworkPluginName: func(in interface{}) string {
+		NetworkPluginName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["network_plugin_name"]),
-		CloudProvider: func(in interface{}) string {
+		CloudProvider: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cloud_provider"]),
-		KubeletCgroups: func(in interface{}) string {
+		KubeletCgroups: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["kubelet_cgroups"]),
-		RuntimeCgroups: func(in interface{}) string {
+		RuntimeCgroups: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["runtime_cgroups"]),
-		ReadOnlyPort: func(in interface{}) *int32 {
+		ReadOnlyPort: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -351,13 +351,13 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["read_only_port"]),
-		SystemCgroups: func(in interface{}) string {
+		SystemCgroups: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["system_cgroups"]),
-		CgroupRoot: func(in interface{}) string {
+		CgroupRoot: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cgroup_root"]),
-		ConfigureCBR0: func(in interface{}) *bool {
+		ConfigureCBR0: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -376,10 +376,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["configure_cbr0"]),
-		HairpinMode: func(in interface{}) string {
+		HairpinMode: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["hairpin_mode"]),
-		BabysitDaemons: func(in interface{}) *bool {
+		BabysitDaemons: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -398,7 +398,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["babysit_daemons"]),
-		MaxPods: func(in interface{}) *int32 {
+		MaxPods: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -417,13 +417,13 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["max_pods"]),
-		NvidiaGPUs: func(in interface{}) int32 {
+		NvidiaGPUs: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["nvidia_gp_us"]),
-		PodCIDR: func(in interface{}) string {
+		PodCIDR: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["pod_cidr"]),
-		ResolverConfig: func(in interface{}) *string {
+		ResolverConfig: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -442,7 +442,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["resolver_config"]),
-		ReconcileCIDR: func(in interface{}) *bool {
+		ReconcileCIDR: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -461,7 +461,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["reconcile_cidr"]),
-		RegisterSchedulable: func(in interface{}) *bool {
+		RegisterSchedulable: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -480,7 +480,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["register_schedulable"]),
-		SerializeImagePulls: func(in interface{}) *bool {
+		SerializeImagePulls: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -499,7 +499,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["serialize_image_pulls"]),
-		NodeLabels: func(in interface{}) map[string]string {
+		NodeLabels: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -516,10 +516,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return nil
 			}(in)
 		}(in["node_labels"]),
-		NonMasqueradeCIDR: func(in interface{}) string {
+		NonMasqueradeCIDR: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["non_masquerade_cidr"]),
-		EnableCustomMetrics: func(in interface{}) *bool {
+		EnableCustomMetrics: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -538,7 +538,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_custom_metrics"]),
-		NetworkPluginMTU: func(in interface{}) *int32 {
+		NetworkPluginMTU: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -557,7 +557,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["network_plugin_mtu"]),
-		ImageGCHighThresholdPercent: func(in interface{}) *int32 {
+		ImageGCHighThresholdPercent: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -576,7 +576,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["image_gc_high_threshold_percent"]),
-		ImageGCLowThresholdPercent: func(in interface{}) *int32 {
+		ImageGCLowThresholdPercent: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -595,7 +595,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["image_gc_low_threshold_percent"]),
-		ImagePullProgressDeadline: func(in interface{}) *v1.Duration {
+		ImagePullProgressDeadline: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -614,7 +614,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["image_pull_progress_deadline"]),
-		EvictionHard: func(in interface{}) *string {
+		EvictionHard: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -633,13 +633,13 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["eviction_hard"]),
-		EvictionSoft: func(in interface{}) string {
+		EvictionSoft: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["eviction_soft"]),
-		EvictionSoftGracePeriod: func(in interface{}) string {
+		EvictionSoftGracePeriod: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["eviction_soft_grace_period"]),
-		EvictionPressureTransitionPeriod: func(in interface{}) *v1.Duration {
+		EvictionPressureTransitionPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -658,16 +658,16 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["eviction_pressure_transition_period"]),
-		EvictionMaxPodGracePeriod: func(in interface{}) int32 {
+		EvictionMaxPodGracePeriod: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["eviction_max_pod_grace_period"]),
-		EvictionMinimumReclaim: func(in interface{}) string {
+		EvictionMinimumReclaim: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["eviction_minimum_reclaim"]),
-		VolumePluginDirectory: func(in interface{}) string {
+		VolumePluginDirectory: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["volume_plugin_directory"]),
-		Taints: func(in interface{}) []string {
+		Taints: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -679,7 +679,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return out
 			}(in)
 		}(in["taints"]),
-		FeatureGates: func(in interface{}) map[string]string {
+		FeatureGates: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -696,7 +696,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return nil
 			}(in)
 		}(in["feature_gates"]),
-		KubeReserved: func(in interface{}) map[string]string {
+		KubeReserved: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -713,10 +713,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return nil
 			}(in)
 		}(in["kube_reserved"]),
-		KubeReservedCgroup: func(in interface{}) string {
+		KubeReservedCgroup: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["kube_reserved_cgroup"]),
-		SystemReserved: func(in interface{}) map[string]string {
+		SystemReserved: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -733,13 +733,13 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return nil
 			}(in)
 		}(in["system_reserved"]),
-		SystemReservedCgroup: func(in interface{}) string {
+		SystemReservedCgroup: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["system_reserved_cgroup"]),
-		EnforceNodeAllocatable: func(in interface{}) string {
+		EnforceNodeAllocatable: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["enforce_node_allocatable"]),
-		RuntimeRequestTimeout: func(in interface{}) *v1.Duration {
+		RuntimeRequestTimeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -758,7 +758,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["runtime_request_timeout"]),
-		VolumeStatsAggPeriod: func(in interface{}) *v1.Duration {
+		VolumeStatsAggPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -777,7 +777,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["volume_stats_agg_period"]),
-		FailSwapOn: func(in interface{}) *bool {
+		FailSwapOn: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -796,7 +796,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["fail_swap_on"]),
-		ExperimentalAllowedUnsafeSysctls: func(in interface{}) []string {
+		ExperimentalAllowedUnsafeSysctls: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -808,7 +808,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return out
 			}(in)
 		}(in["experimental_allowed_unsafe_sysctls"]),
-		AllowedUnsafeSysctls: func(in interface{}) []string {
+		AllowedUnsafeSysctls: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -820,7 +820,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return out
 			}(in)
 		}(in["allowed_unsafe_sysctls"]),
-		StreamingConnectionIdleTimeout: func(in interface{}) *v1.Duration {
+		StreamingConnectionIdleTimeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -839,7 +839,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["streaming_connection_idle_timeout"]),
-		DockerDisableSharedPID: func(in interface{}) *bool {
+		DockerDisableSharedPID: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -858,10 +858,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["docker_disable_shared_pid"]),
-		RootDir: func(in interface{}) string {
+		RootDir: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["root_dir"]),
-		AuthenticationTokenWebhook: func(in interface{}) *bool {
+		AuthenticationTokenWebhook: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -880,7 +880,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["authentication_token_webhook"]),
-		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration {
+		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -899,7 +899,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["authentication_token_webhook_cache_ttl"]),
-		CPUCFSQuota: func(in interface{}) *bool {
+		CPUCFSQuota: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -920,7 +920,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 			}
 			return nil
 		}(in["cpu_cfs_quota"]),
-		CPUCFSQuotaPeriod: func(in interface{}) *v1.Duration {
+		CPUCFSQuotaPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -939,10 +939,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["cpu_cfs_quota_period"]),
-		CpuManagerPolicy: func(in interface{}) string {
+		CpuManagerPolicy: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cpu_manager_policy"]),
-		RegistryPullQPS: func(in interface{}) *int32 {
+		RegistryPullQPS: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -961,7 +961,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["registry_pull_qps"]),
-		RegistryBurst: func(in interface{}) *int32 {
+		RegistryBurst: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -980,10 +980,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["registry_burst"]),
-		TopologyManagerPolicy: func(in interface{}) string {
+		TopologyManagerPolicy: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["topology_manager_policy"]),
-		RotateCertificates: func(in interface{}) *bool {
+		RotateCertificates: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1002,7 +1002,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["rotate_certificates"]),
-		ProtectKernelDefaults: func(in interface{}) *bool {
+		ProtectKernelDefaults: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1021,10 +1021,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["protect_kernel_defaults"]),
-		CgroupDriver: func(in interface{}) string {
+		CgroupDriver: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cgroup_driver"]),
-		HousekeepingInterval: func(in interface{}) *v1.Duration {
+		HousekeepingInterval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -1043,7 +1043,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(ExpandDuration(in))
 			}(in)
 		}(in["housekeeping_interval"]),
-		EventQPS: func(in interface{}) *int32 {
+		EventQPS: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1062,7 +1062,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["event_qps"]),
-		EventBurst: func(in interface{}) *int32 {
+		EventBurst: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1081,10 +1081,10 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["event_burst"]),
-		ContainerLogMaxSize: func(in interface{}) string {
+		ContainerLogMaxSize: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["container_log_max_size"]),
-		ContainerLogMaxFiles: func(in interface{}) *int32 {
+		ContainerLogMaxFiles: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1103,7 +1103,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["container_log_max_files"]),
-		EnableCadvisorJsonEndpoints: func(in interface{}) *bool {
+		EnableCadvisorJsonEndpoints: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1122,7 +1122,7 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_cadvisor_json_endpoints"]),
-		PodPidsLimit: func(in interface{}) *int64 {
+		PodPidsLimit: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}

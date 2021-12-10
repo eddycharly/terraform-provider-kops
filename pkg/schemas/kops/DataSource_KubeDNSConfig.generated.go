@@ -4,9 +4,10 @@ import (
 	"reflect"
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	coreschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/core"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -17,8 +18,8 @@ func DataSourceKubeDNSConfig() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"cache_max_size":       ComputedInt(),
 			"cache_max_concurrent": ComputedInt(),
-			"tolerations":          ComputedList(schemas.DataSourceToleration()),
-			"affinity":             ComputedStruct(schemas.DataSourceAffinity()),
+			"tolerations":          ComputedList(coreschemas.DataSourceToleration()),
+			"affinity":             ComputedStruct(coreschemas.DataSourceAffinity()),
 			"core_dns_image":       ComputedString(),
 			"cpa_image":            ComputedString(),
 			"domain":               ComputedString(),
@@ -44,13 +45,13 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 		panic("expand KubeDNSConfig failure, in is nil")
 	}
 	return kops.KubeDNSConfig{
-		CacheMaxSize: func(in interface{}) int {
+		CacheMaxSize: func(in interface{}) int /**/ {
 			return int(ExpandInt(in))
 		}(in["cache_max_size"]),
-		CacheMaxConcurrent: func(in interface{}) int {
+		CacheMaxConcurrent: func(in interface{}) int /**/ {
 			return int(ExpandInt(in))
 		}(in["cache_max_concurrent"]),
-		Tolerations: func(in interface{}) []v1.Toleration {
+		Tolerations: func(in interface{}) []v1.Toleration /**/ {
 			return func(in interface{}) []v1.Toleration {
 				if in == nil {
 					return nil
@@ -61,13 +62,13 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 						if in == nil {
 							return v1.Toleration{}
 						}
-						return (schemas.ExpandDataSourceToleration(in.(map[string]interface{})))
+						return (coreschemas.ExpandDataSourceToleration(in.(map[string]interface{})))
 					}(in))
 				}
 				return out
 			}(in)
 		}(in["tolerations"]),
-		Affinity: func(in interface{}) *v1.Affinity {
+		Affinity: func(in interface{}) *v1.Affinity /*k8s.io/api/core/v1*/ {
 			return func(in interface{}) *v1.Affinity {
 				if in == nil {
 					return nil
@@ -81,35 +82,35 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return v1.Affinity{}
 					}
-					return (schemas.ExpandDataSourceAffinity(in.([]interface{})[0].(map[string]interface{})))
+					return (coreschemas.ExpandDataSourceAffinity(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["affinity"]),
-		CoreDNSImage: func(in interface{}) string {
+		CoreDNSImage: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["core_dns_image"]),
-		CPAImage: func(in interface{}) string {
+		CPAImage: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cpa_image"]),
-		Domain: func(in interface{}) string {
+		Domain: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["domain"]),
-		ExternalCoreFile: func(in interface{}) string {
+		ExternalCoreFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["external_core_file"]),
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		Replicas: func(in interface{}) int {
+		Replicas: func(in interface{}) int /**/ {
 			return int(ExpandInt(in))
 		}(in["replicas"]),
-		Provider: func(in interface{}) string {
+		Provider: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["provider"]),
-		ServerIP: func(in interface{}) string {
+		ServerIP: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["server_ip"]),
-		StubDomains: func(in interface{}) map[string][]string {
+		StubDomains: func(in interface{}) map[string][]string /**/ {
 			return func(in interface{}) map[string][]string {
 				if in == nil {
 					return nil
@@ -141,7 +142,7 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				return nil
 			}(in)
 		}(in["stub_domains"]),
-		UpstreamNameservers: func(in interface{}) []string {
+		UpstreamNameservers: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -153,7 +154,7 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				return out
 			}(in)
 		}(in["upstream_nameservers"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
+		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -172,7 +173,7 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
+		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -191,7 +192,7 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		MemoryLimit: func(in interface{}) *resource.Quantity {
+		MemoryLimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -210,7 +211,7 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_limit"]),
-		NodeLocalDNS: func(in interface{}) *kops.NodeLocalDNSConfig {
+		NodeLocalDNS: func(in interface{}) *kops.NodeLocalDNSConfig /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.NodeLocalDNSConfig {
 				if in == nil {
 					return nil
@@ -243,7 +244,7 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 			var out []interface{}
 			for _, in := range in {
 				out = append(out, func(in v1.Toleration) interface{} {
-					return schemas.FlattenDataSourceToleration(in)
+					return coreschemas.FlattenDataSourceToleration(in)
 				}(in))
 			}
 			return out
@@ -256,7 +257,7 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 			}
 			return func(in v1.Affinity) interface{} {
 				return func(in v1.Affinity) []interface{} {
-					return []interface{}{schemas.FlattenDataSourceAffinity(in)}
+					return []interface{}{coreschemas.FlattenDataSourceAffinity(in)}
 				}(in)
 			}(*in)
 		}(in)

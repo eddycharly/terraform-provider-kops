@@ -13,6 +13,8 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -23,6 +25,8 @@ var mappings = map[string]string{
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources":   "resources",
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/utils":       "utils",
 	"k8s.io/kops/pkg/apis/kops":                                         "kops",
+	"k8s.io/api/core/v1":                                                "core",
+	"k8s.io/apimachinery/pkg/apis/meta/v1":                              "meta",
 }
 
 func buildDoc(t reflect.Type, p string, funcMaps ...template.FuncMap) {
@@ -296,6 +300,21 @@ func main() {
 		// 1.22
 		generate(kops.NodeProblemDetectorConfig{}),
 		generate(kops.NvidiaGPUConfig{}),
+		generate(kops.AccessLogSpec{}),
+		generate(kops.OpenstackMetadata{}),
+		generate(corev1.Toleration{}),
+		generate(corev1.Affinity{}),
+		generate(corev1.NodeAffinity{}),
+		generate(corev1.PodAffinity{}),
+		generate(corev1.PodAntiAffinity{}),
+		generate(corev1.PodAffinityTerm{}),
+		generate(corev1.WeightedPodAffinityTerm{}),
+		generate(corev1.PreferredSchedulingTerm{}),
+		generate(corev1.NodeSelector{}),
+		generate(corev1.NodeSelectorTerm{}),
+		generate(corev1.NodeSelectorRequirement{}),
+		generate(metav1.LabelSelector{}),
+		generate(metav1.LabelSelectorRequirement{}),
 	)
 	build(
 		"Config",
@@ -457,5 +476,20 @@ func main() {
 		// 1.22
 		generate(kops.NodeProblemDetectorConfig{}),
 		generate(kops.NvidiaGPUConfig{}),
+		generate(kops.AccessLogSpec{}),
+		generate(kops.OpenstackMetadata{}),
+		generate(corev1.Toleration{}),
+		generate(corev1.Affinity{}),
+		generate(corev1.NodeAffinity{}),
+		generate(corev1.PodAffinity{}),
+		generate(corev1.PodAntiAffinity{}),
+		generate(corev1.PodAffinityTerm{}),
+		generate(corev1.WeightedPodAffinityTerm{}),
+		generate(corev1.PreferredSchedulingTerm{}),
+		generate(corev1.NodeSelector{}),
+		generate(corev1.NodeSelectorTerm{}),
+		generate(corev1.NodeSelectorRequirement{}),
+		generate(metav1.LabelSelector{}),
+		generate(metav1.LabelSelectorRequirement{}),
 	)
 }

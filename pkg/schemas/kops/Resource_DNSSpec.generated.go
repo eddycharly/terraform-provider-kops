@@ -23,7 +23,7 @@ func ExpandResourceDNSSpec(in map[string]interface{}) kops.DNSSpec {
 		panic("expand DNSSpec failure, in is nil")
 	}
 	return kops.DNSSpec{
-		Type: func(in interface{}) kops.DNSType {
+		Type: func(in interface{}) kops.DNSType /*k8s.io/kops/pkg/apis/kops*/ {
 			return kops.DNSType(ExpandString(in))
 		}(in["type"]),
 	}

@@ -35,7 +35,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 		panic("expand NodeTerminationHandlerConfig failure, in is nil")
 	}
 	return kops.NodeTerminationHandlerConfig{
-		Enabled: func(in interface{}) *bool {
+		Enabled: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -54,7 +54,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		EnableSpotInterruptionDraining: func(in interface{}) *bool {
+		EnableSpotInterruptionDraining: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -73,7 +73,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_spot_interruption_draining"]),
-		EnableScheduledEventDraining: func(in interface{}) *bool {
+		EnableScheduledEventDraining: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -92,7 +92,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_scheduled_event_draining"]),
-		EnableRebalanceMonitoring: func(in interface{}) *bool {
+		EnableRebalanceMonitoring: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -111,7 +111,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_rebalance_monitoring"]),
-		EnableRebalanceDraining: func(in interface{}) *bool {
+		EnableRebalanceDraining: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -130,7 +130,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_rebalance_draining"]),
-		EnablePrometheusMetrics: func(in interface{}) *bool {
+		EnablePrometheusMetrics: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -149,7 +149,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_prometheus_metrics"]),
-		EnableSQSTerminationDraining: func(in interface{}) *bool {
+		EnableSQSTerminationDraining: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -168,7 +168,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_sqs_termination_draining"]),
-		ManagedASGTag: func(in interface{}) *string {
+		ManagedASGTag: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -187,7 +187,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["managed_asg_tag"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
+		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -206,7 +206,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
+		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}

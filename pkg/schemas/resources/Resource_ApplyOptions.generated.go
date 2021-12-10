@@ -24,10 +24,10 @@ func ExpandResourceApplyOptions(in map[string]interface{}) resources.ApplyOption
 		panic("expand ApplyOptions failure, in is nil")
 	}
 	return resources.ApplyOptions{
-		Skip: func(in interface{}) bool {
+		Skip: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["skip"]),
-		AllowKopsDowngrade: func(in interface{}) bool {
+		AllowKopsDowngrade: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["allow_kops_downgrade"]),
 	}

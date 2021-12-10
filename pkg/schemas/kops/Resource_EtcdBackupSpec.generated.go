@@ -24,10 +24,10 @@ func ExpandResourceEtcdBackupSpec(in map[string]interface{}) kops.EtcdBackupSpec
 		panic("expand EtcdBackupSpec failure, in is nil")
 	}
 	return kops.EtcdBackupSpec{
-		BackupStore: func(in interface{}) string {
+		BackupStore: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["backup_store"]),
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
 	}

@@ -26,7 +26,7 @@ func ExpandResourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
 		panic("expand HubbleSpec failure, in is nil")
 	}
 	return kops.HubbleSpec{
-		Enabled: func(in interface{}) *bool {
+		Enabled: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -45,7 +45,7 @@ func ExpandResourceHubbleSpec(in map[string]interface{}) kops.HubbleSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Metrics: func(in interface{}) []string {
+		Metrics: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil

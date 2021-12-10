@@ -28,10 +28,10 @@ func ExpandDataSourceExternalDNSConfig(in map[string]interface{}) kops.ExternalD
 		panic("expand ExternalDNSConfig failure, in is nil")
 	}
 	return kops.ExternalDNSConfig{
-		Disable: func(in interface{}) bool {
+		Disable: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["disable"]),
-		WatchIngress: func(in interface{}) *bool {
+		WatchIngress: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -50,10 +50,10 @@ func ExpandDataSourceExternalDNSConfig(in map[string]interface{}) kops.ExternalD
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["watch_ingress"]),
-		WatchNamespace: func(in interface{}) string {
+		WatchNamespace: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["watch_namespace"]),
-		Provider: func(in interface{}) kops.ExternalDNSProvider {
+		Provider: func(in interface{}) kops.ExternalDNSProvider /*k8s.io/kops/pkg/apis/kops*/ {
 			return kops.ExternalDNSProvider(ExpandString(in))
 		}(in["provider"]),
 	}

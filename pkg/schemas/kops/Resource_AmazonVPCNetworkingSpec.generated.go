@@ -25,13 +25,13 @@ func ExpandResourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Amazo
 		panic("expand AmazonVPCNetworkingSpec failure, in is nil")
 	}
 	return kops.AmazonVPCNetworkingSpec{
-		ImageName: func(in interface{}) string {
+		ImageName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image_name"]),
-		InitImageName: func(in interface{}) string {
+		InitImageName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["init_image_name"]),
-		Env: func(in interface{}) []kops.EnvVar {
+		Env: func(in interface{}) []kops.EnvVar /**/ {
 			return func(in interface{}) []kops.EnvVar {
 				if in == nil {
 					return nil

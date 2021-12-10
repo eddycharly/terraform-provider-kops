@@ -32,7 +32,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 		panic("expand LeaderElectionConfiguration failure, in is nil")
 	}
 	return kops.LeaderElectionConfiguration{
-		LeaderElect: func(in interface{}) *bool {
+		LeaderElect: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -51,7 +51,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["leader_elect"]),
-		LeaderElectLeaseDuration: func(in interface{}) *v1.Duration {
+		LeaderElectLeaseDuration: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -70,7 +70,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(ExpandDuration(in))
 			}(in)
 		}(in["leader_elect_lease_duration"]),
-		LeaderElectRenewDeadlineDuration: func(in interface{}) *v1.Duration {
+		LeaderElectRenewDeadlineDuration: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -89,7 +89,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(ExpandDuration(in))
 			}(in)
 		}(in["leader_elect_renew_deadline_duration"]),
-		LeaderElectResourceLock: func(in interface{}) *string {
+		LeaderElectResourceLock: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -108,7 +108,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["leader_elect_resource_lock"]),
-		LeaderElectResourceName: func(in interface{}) *string {
+		LeaderElectResourceName: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -127,7 +127,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["leader_elect_resource_name"]),
-		LeaderElectResourceNamespace: func(in interface{}) *string {
+		LeaderElectResourceNamespace: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -146,7 +146,7 @@ func ExpandDataSourceLeaderElectionConfiguration(in map[string]interface{}) kops
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["leader_elect_resource_namespace"]),
-		LeaderElectRetryPeriod: func(in interface{}) *v1.Duration {
+		LeaderElectRetryPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}

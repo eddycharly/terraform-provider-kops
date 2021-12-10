@@ -27,10 +27,10 @@ func ExpandDataSourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.Load
 		panic("expand LoadBalancerSubnetSpec failure, in is nil")
 	}
 	return kops.LoadBalancerSubnetSpec{
-		Name: func(in interface{}) string {
+		Name: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["name"]),
-		PrivateIPv4Address: func(in interface{}) *string {
+		PrivateIPv4Address: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -49,7 +49,7 @@ func ExpandDataSourceLoadBalancerSubnetSpec(in map[string]interface{}) kops.Load
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["private_ipv4_address"]),
-		AllocationID: func(in interface{}) *string {
+		AllocationID: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}

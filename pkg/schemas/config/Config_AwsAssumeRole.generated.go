@@ -23,7 +23,7 @@ func ExpandConfigAwsAssumeRole(in map[string]interface{}) config.AwsAssumeRole {
 		panic("expand AwsAssumeRole failure, in is nil")
 	}
 	return config.AwsAssumeRole{
-		RoleArn: func(in interface{}) string {
+		RoleArn: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["role_arn"]),
 	}

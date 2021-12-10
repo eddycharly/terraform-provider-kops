@@ -78,31 +78,31 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 		panic("expand KubeControllerManagerConfig failure, in is nil")
 	}
 	return kops.KubeControllerManagerConfig{
-		Master: func(in interface{}) string {
+		Master: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["master"]),
-		LogFormat: func(in interface{}) string {
+		LogFormat: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["log_format"]),
-		LogLevel: func(in interface{}) int32 {
+		LogLevel: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
-		ServiceAccountPrivateKeyFile: func(in interface{}) string {
+		ServiceAccountPrivateKeyFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["service_account_private_key_file"]),
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		CloudProvider: func(in interface{}) string {
+		CloudProvider: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cloud_provider"]),
-		ClusterName: func(in interface{}) string {
+		ClusterName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		ClusterCIDR: func(in interface{}) string {
+		ClusterCIDR: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cluster_cidr"]),
-		AllocateNodeCIDRs: func(in interface{}) *bool {
+		AllocateNodeCIDRs: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -121,7 +121,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["allocate_node_cidrs"]),
-		NodeCIDRMaskSize: func(in interface{}) *int32 {
+		NodeCIDRMaskSize: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -140,7 +140,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["node_cidr_mask_size"]),
-		ConfigureCloudRoutes: func(in interface{}) *bool {
+		ConfigureCloudRoutes: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -159,7 +159,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["configure_cloud_routes"]),
-		Controllers: func(in interface{}) []string {
+		Controllers: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -171,7 +171,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				return out
 			}(in)
 		}(in["controllers"]),
-		CIDRAllocatorType: func(in interface{}) *string {
+		CIDRAllocatorType: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -190,10 +190,10 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["cidr_allocator_type"]),
-		RootCAFile: func(in interface{}) string {
+		RootCAFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["root_ca_file"]),
-		LeaderElection: func(in interface{}) *kops.LeaderElectionConfiguration {
+		LeaderElection: func(in interface{}) *kops.LeaderElectionConfiguration /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.LeaderElectionConfiguration {
 				if in == nil {
 					return nil
@@ -211,7 +211,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(in))
 			}(in)
 		}(in["leader_election"]),
-		AttachDetachReconcileSyncPeriod: func(in interface{}) *v1.Duration {
+		AttachDetachReconcileSyncPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -230,7 +230,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["attach_detach_reconcile_sync_period"]),
-		DisableAttachDetachReconcileSync: func(in interface{}) *bool {
+		DisableAttachDetachReconcileSync: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -249,7 +249,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["disable_attach_detach_reconcile_sync"]),
-		TerminatedPodGCThreshold: func(in interface{}) *int32 {
+		TerminatedPodGCThreshold: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -268,7 +268,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["terminated_pod_gc_threshold"]),
-		NodeMonitorPeriod: func(in interface{}) *v1.Duration {
+		NodeMonitorPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -287,7 +287,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_monitor_period"]),
-		NodeMonitorGracePeriod: func(in interface{}) *v1.Duration {
+		NodeMonitorGracePeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -306,7 +306,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_monitor_grace_period"]),
-		PodEvictionTimeout: func(in interface{}) *v1.Duration {
+		PodEvictionTimeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -325,7 +325,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["pod_eviction_timeout"]),
-		UseServiceAccountCredentials: func(in interface{}) *bool {
+		UseServiceAccountCredentials: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -344,7 +344,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["use_service_account_credentials"]),
-		HorizontalPodAutoscalerSyncPeriod: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerSyncPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -363,7 +363,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_sync_period"]),
-		HorizontalPodAutoscalerDownscaleDelay: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerDownscaleDelay: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -382,7 +382,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_downscale_delay"]),
-		HorizontalPodAutoscalerDownscaleStabilization: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerDownscaleStabilization: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -401,7 +401,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_downscale_stabilization"]),
-		HorizontalPodAutoscalerUpscaleDelay: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerUpscaleDelay: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -420,7 +420,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_upscale_delay"]),
-		HorizontalPodAutoscalerInitialReadinessDelay: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerInitialReadinessDelay: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -439,7 +439,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_initial_readiness_delay"]),
-		HorizontalPodAutoscalerCPUInitializationPeriod: func(in interface{}) *v1.Duration {
+		HorizontalPodAutoscalerCPUInitializationPeriod: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -458,7 +458,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_cpu_initialization_period"]),
-		HorizontalPodAutoscalerTolerance: func(in interface{}) *resource.Quantity {
+		HorizontalPodAutoscalerTolerance: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -477,7 +477,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["horizontal_pod_autoscaler_tolerance"]),
-		HorizontalPodAutoscalerUseRestClients: func(in interface{}) *bool {
+		HorizontalPodAutoscalerUseRestClients: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -496,7 +496,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["horizontal_pod_autoscaler_use_rest_clients"]),
-		ExperimentalClusterSigningDuration: func(in interface{}) *v1.Duration {
+		ExperimentalClusterSigningDuration: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -515,7 +515,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandDuration(in))
 			}(in)
 		}(in["experimental_cluster_signing_duration"]),
-		FeatureGates: func(in interface{}) map[string]string {
+		FeatureGates: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -532,7 +532,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				return nil
 			}(in)
 		}(in["feature_gates"]),
-		TLSCertFile: func(in interface{}) *string {
+		TLSCertFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -551,7 +551,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["tls_cert_file"]),
-		TLSCipherSuites: func(in interface{}) []string {
+		TLSCipherSuites: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -563,16 +563,16 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				return out
 			}(in)
 		}(in["tls_cipher_suites"]),
-		TLSMinVersion: func(in interface{}) string {
+		TLSMinVersion: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_min_version"]),
-		TLSPrivateKeyFile: func(in interface{}) string {
+		TLSPrivateKeyFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_private_key_file"]),
-		MinResyncPeriod: func(in interface{}) string {
+		MinResyncPeriod: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["min_resync_period"]),
-		KubeAPIQPS: func(in interface{}) *resource.Quantity {
+		KubeAPIQPS: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -591,7 +591,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["kube_api_qps"]),
-		KubeAPIBurst: func(in interface{}) *int32 {
+		KubeAPIBurst: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -610,7 +610,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["kube_api_burst"]),
-		ConcurrentDeploymentSyncs: func(in interface{}) *int32 {
+		ConcurrentDeploymentSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -629,7 +629,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_deployment_syncs"]),
-		ConcurrentEndpointSyncs: func(in interface{}) *int32 {
+		ConcurrentEndpointSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -648,7 +648,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_endpoint_syncs"]),
-		ConcurrentNamespaceSyncs: func(in interface{}) *int32 {
+		ConcurrentNamespaceSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -667,7 +667,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_namespace_syncs"]),
-		ConcurrentReplicasetSyncs: func(in interface{}) *int32 {
+		ConcurrentReplicasetSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -686,7 +686,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_replicaset_syncs"]),
-		ConcurrentServiceSyncs: func(in interface{}) *int32 {
+		ConcurrentServiceSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -705,7 +705,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_service_syncs"]),
-		ConcurrentResourceQuotaSyncs: func(in interface{}) *int32 {
+		ConcurrentResourceQuotaSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -724,7 +724,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_resource_quota_syncs"]),
-		ConcurrentServiceaccountTokenSyncs: func(in interface{}) *int32 {
+		ConcurrentServiceaccountTokenSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -743,7 +743,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_serviceaccount_token_syncs"]),
-		ConcurrentRcSyncs: func(in interface{}) *int32 {
+		ConcurrentRcSyncs: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -762,13 +762,13 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_rc_syncs"]),
-		AuthenticationKubeconfig: func(in interface{}) string {
+		AuthenticationKubeconfig: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["authentication_kubeconfig"]),
-		AuthorizationKubeconfig: func(in interface{}) string {
+		AuthorizationKubeconfig: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["authorization_kubeconfig"]),
-		AuthorizationAlwaysAllowPaths: func(in interface{}) []string {
+		AuthorizationAlwaysAllowPaths: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -780,10 +780,10 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				return out
 			}(in)
 		}(in["authorization_always_allow_paths"]),
-		ExternalCloudVolumePlugin: func(in interface{}) string {
+		ExternalCloudVolumePlugin: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["external_cloud_volume_plugin"]),
-		EnableProfiling: func(in interface{}) *bool {
+		EnableProfiling: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}

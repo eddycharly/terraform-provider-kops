@@ -23,7 +23,7 @@ func ExpandDataSourceBastionLoadBalancerSpec(in map[string]interface{}) kops.Bas
 		panic("expand BastionLoadBalancerSpec failure, in is nil")
 	}
 	return kops.BastionLoadBalancerSpec{
-		AdditionalSecurityGroups: func(in interface{}) []string {
+		AdditionalSecurityGroups: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil

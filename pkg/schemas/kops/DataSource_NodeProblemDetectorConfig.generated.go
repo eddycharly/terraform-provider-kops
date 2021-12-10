@@ -31,7 +31,7 @@ func ExpandDataSourceNodeProblemDetectorConfig(in map[string]interface{}) kops.N
 		panic("expand NodeProblemDetectorConfig failure, in is nil")
 	}
 	return kops.NodeProblemDetectorConfig{
-		Enabled: func(in interface{}) *bool {
+		Enabled: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -50,7 +50,7 @@ func ExpandDataSourceNodeProblemDetectorConfig(in map[string]interface{}) kops.N
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Image: func(in interface{}) *string {
+		Image: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -69,7 +69,7 @@ func ExpandDataSourceNodeProblemDetectorConfig(in map[string]interface{}) kops.N
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["image"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
+		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -88,7 +88,7 @@ func ExpandDataSourceNodeProblemDetectorConfig(in map[string]interface{}) kops.N
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
+		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -107,7 +107,7 @@ func ExpandDataSourceNodeProblemDetectorConfig(in map[string]interface{}) kops.N
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		MemoryLimit: func(in interface{}) *resource.Quantity {
+		MemoryLimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -126,7 +126,7 @@ func ExpandDataSourceNodeProblemDetectorConfig(in map[string]interface{}) kops.N
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_limit"]),
-		CPULimit: func(in interface{}) *resource.Quantity {
+		CPULimit: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}

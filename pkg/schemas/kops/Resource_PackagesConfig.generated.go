@@ -28,7 +28,7 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 		panic("expand PackagesConfig failure, in is nil")
 	}
 	return kops.PackagesConfig{
-		HashAmd64: func(in interface{}) *string {
+		HashAmd64: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -47,7 +47,7 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["hash_amd64"]),
-		HashArm64: func(in interface{}) *string {
+		HashArm64: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -66,7 +66,7 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["hash_arm64"]),
-		UrlAmd64: func(in interface{}) *string {
+		UrlAmd64: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -85,7 +85,7 @@ func ExpandResourcePackagesConfig(in map[string]interface{}) kops.PackagesConfig
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["url_amd64"]),
-		UrlArm64: func(in interface{}) *string {
+		UrlArm64: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}

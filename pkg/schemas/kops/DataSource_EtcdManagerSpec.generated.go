@@ -28,10 +28,10 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 		panic("expand EtcdManagerSpec failure, in is nil")
 	}
 	return kops.EtcdManagerSpec{
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		Env: func(in interface{}) []kops.EnvVar {
+		Env: func(in interface{}) []kops.EnvVar /**/ {
 			return func(in interface{}) []kops.EnvVar {
 				if in == nil {
 					return nil
@@ -48,7 +48,7 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 				return out
 			}(in)
 		}(in["env"]),
-		DiscoveryPollInterval: func(in interface{}) *string {
+		DiscoveryPollInterval: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -67,7 +67,7 @@ func ExpandDataSourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManager
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["discovery_poll_interval"]),
-		LogLevel: func(in interface{}) *int32 {
+		LogLevel: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}

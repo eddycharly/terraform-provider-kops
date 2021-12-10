@@ -15,7 +15,7 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 		panic("expand ValidateOptions failure, in is nil")
 	}
 	return utils.ValidateOptions{
-		Timeout: func(in interface{}) *v1.Duration {
+		Timeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -34,7 +34,7 @@ func ExpandResourceValidateOptions(in map[string]interface{}) utils.ValidateOpti
 				}(ExpandDuration(in))
 			}(in)
 		}(in["timeout"]),
-		PollInterval: func(in interface{}) *v1.Duration {
+		PollInterval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}

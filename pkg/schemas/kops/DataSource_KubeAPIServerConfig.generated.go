@@ -128,10 +128,10 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 		panic("expand KubeAPIServerConfig failure, in is nil")
 	}
 	return kops.KubeAPIServerConfig{
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		DisableBasicAuth: func(in interface{}) *bool {
+		DisableBasicAuth: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -150,31 +150,31 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["disable_basic_auth"]),
-		LogFormat: func(in interface{}) string {
+		LogFormat: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["log_format"]),
-		LogLevel: func(in interface{}) int32 {
+		LogLevel: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["log_level"]),
-		CloudProvider: func(in interface{}) string {
+		CloudProvider: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cloud_provider"]),
-		SecurePort: func(in interface{}) int32 {
+		SecurePort: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["secure_port"]),
-		InsecurePort: func(in interface{}) int32 {
+		InsecurePort: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["insecure_port"]),
-		Address: func(in interface{}) string {
+		Address: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["address"]),
-		BindAddress: func(in interface{}) string {
+		BindAddress: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["bind_address"]),
-		InsecureBindAddress: func(in interface{}) string {
+		InsecureBindAddress: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["insecure_bind_address"]),
-		EnableBootstrapAuthToken: func(in interface{}) *bool {
+		EnableBootstrapAuthToken: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -193,7 +193,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_bootstrap_auth_token"]),
-		EnableAggregatorRouting: func(in interface{}) *bool {
+		EnableAggregatorRouting: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -212,7 +212,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_aggregator_routing"]),
-		AdmissionControl: func(in interface{}) []string {
+		AdmissionControl: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -224,7 +224,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["admission_control"]),
-		AppendAdmissionPlugins: func(in interface{}) []string {
+		AppendAdmissionPlugins: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -236,7 +236,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["append_admission_plugins"]),
-		EnableAdmissionPlugins: func(in interface{}) []string {
+		EnableAdmissionPlugins: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -248,7 +248,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["enable_admission_plugins"]),
-		DisableAdmissionPlugins: func(in interface{}) []string {
+		DisableAdmissionPlugins: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -260,16 +260,16 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["disable_admission_plugins"]),
-		AdmissionControlConfigFile: func(in interface{}) string {
+		AdmissionControlConfigFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["admission_control_config_file"]),
-		ServiceClusterIPRange: func(in interface{}) string {
+		ServiceClusterIPRange: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["service_cluster_ip_range"]),
-		ServiceNodePortRange: func(in interface{}) string {
+		ServiceNodePortRange: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["service_node_port_range"]),
-		EtcdServers: func(in interface{}) []string {
+		EtcdServers: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -281,7 +281,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["etcd_servers"]),
-		EtcdServersOverrides: func(in interface{}) []string {
+		EtcdServersOverrides: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -293,28 +293,28 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["etcd_servers_overrides"]),
-		EtcdCAFile: func(in interface{}) string {
+		EtcdCAFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["etcd_ca_file"]),
-		EtcdCertFile: func(in interface{}) string {
+		EtcdCertFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["etcd_cert_file"]),
-		EtcdKeyFile: func(in interface{}) string {
+		EtcdKeyFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["etcd_key_file"]),
-		BasicAuthFile: func(in interface{}) string {
+		BasicAuthFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["basic_auth_file"]),
-		ClientCAFile: func(in interface{}) string {
+		ClientCAFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["client_ca_file"]),
-		TLSCertFile: func(in interface{}) string {
+		TLSCertFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_cert_file"]),
-		TLSPrivateKeyFile: func(in interface{}) string {
+		TLSPrivateKeyFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_private_key_file"]),
-		TLSCipherSuites: func(in interface{}) []string {
+		TLSCipherSuites: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -326,13 +326,13 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["tls_cipher_suites"]),
-		TLSMinVersion: func(in interface{}) string {
+		TLSMinVersion: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tls_min_version"]),
-		TokenAuthFile: func(in interface{}) string {
+		TokenAuthFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["token_auth_file"]),
-		AllowPrivileged: func(in interface{}) *bool {
+		AllowPrivileged: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -351,7 +351,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["allow_privileged"]),
-		APIServerCount: func(in interface{}) *int32 {
+		APIServerCount: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -370,7 +370,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["api_server_count"]),
-		RuntimeConfig: func(in interface{}) map[string]string {
+		RuntimeConfig: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -387,16 +387,16 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return nil
 			}(in)
 		}(in["runtime_config"]),
-		KubeletClientCertificate: func(in interface{}) string {
+		KubeletClientCertificate: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["kubelet_client_certificate"]),
-		KubeletCertificateAuthority: func(in interface{}) string {
+		KubeletCertificateAuthority: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["kubelet_certificate_authority"]),
-		KubeletClientKey: func(in interface{}) string {
+		KubeletClientKey: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["kubelet_client_key"]),
-		AnonymousAuth: func(in interface{}) *bool {
+		AnonymousAuth: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -417,7 +417,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 			}
 			return nil
 		}(in["anonymous_auth"]),
-		KubeletPreferredAddressTypes: func(in interface{}) []string {
+		KubeletPreferredAddressTypes: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -429,7 +429,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["kubelet_preferred_address_types"]),
-		StorageBackend: func(in interface{}) *string {
+		StorageBackend: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -448,7 +448,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["storage_backend"]),
-		OIDCUsernameClaim: func(in interface{}) *string {
+		OIDCUsernameClaim: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -467,7 +467,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidc_username_claim"]),
-		OIDCUsernamePrefix: func(in interface{}) *string {
+		OIDCUsernamePrefix: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -486,7 +486,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidc_username_prefix"]),
-		OIDCGroupsClaim: func(in interface{}) *string {
+		OIDCGroupsClaim: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -505,7 +505,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidc_groups_claim"]),
-		OIDCGroupsPrefix: func(in interface{}) *string {
+		OIDCGroupsPrefix: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -524,7 +524,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidc_groups_prefix"]),
-		OIDCIssuerURL: func(in interface{}) *string {
+		OIDCIssuerURL: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -543,7 +543,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidc_issuer_url"]),
-		OIDCClientID: func(in interface{}) *string {
+		OIDCClientID: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -562,7 +562,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidc_client_id"]),
-		OIDCRequiredClaim: func(in interface{}) []string {
+		OIDCRequiredClaim: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -574,7 +574,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["oidc_required_claim"]),
-		OIDCCAFile: func(in interface{}) *string {
+		OIDCCAFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -593,7 +593,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["oidcca_file"]),
-		ProxyClientCertFile: func(in interface{}) *string {
+		ProxyClientCertFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -612,7 +612,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["proxy_client_cert_file"]),
-		ProxyClientKeyFile: func(in interface{}) *string {
+		ProxyClientKeyFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -631,7 +631,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["proxy_client_key_file"]),
-		AuditLogFormat: func(in interface{}) *string {
+		AuditLogFormat: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -650,7 +650,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["audit_log_format"]),
-		AuditLogPath: func(in interface{}) *string {
+		AuditLogPath: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -669,7 +669,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["audit_log_path"]),
-		AuditLogMaxAge: func(in interface{}) *int32 {
+		AuditLogMaxAge: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -688,7 +688,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_log_max_age"]),
-		AuditLogMaxBackups: func(in interface{}) *int32 {
+		AuditLogMaxBackups: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -707,7 +707,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_log_max_backups"]),
-		AuditLogMaxSize: func(in interface{}) *int32 {
+		AuditLogMaxSize: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -726,10 +726,10 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_log_max_size"]),
-		AuditPolicyFile: func(in interface{}) string {
+		AuditPolicyFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["audit_policy_file"]),
-		AuditWebhookBatchBufferSize: func(in interface{}) *int32 {
+		AuditWebhookBatchBufferSize: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -748,7 +748,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_webhook_batch_buffer_size"]),
-		AuditWebhookBatchMaxSize: func(in interface{}) *int32 {
+		AuditWebhookBatchMaxSize: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -767,7 +767,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_webhook_batch_max_size"]),
-		AuditWebhookBatchMaxWait: func(in interface{}) *v1.Duration {
+		AuditWebhookBatchMaxWait: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -786,7 +786,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["audit_webhook_batch_max_wait"]),
-		AuditWebhookBatchThrottleBurst: func(in interface{}) *int32 {
+		AuditWebhookBatchThrottleBurst: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -805,7 +805,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["audit_webhook_batch_throttle_burst"]),
-		AuditWebhookBatchThrottleEnable: func(in interface{}) *bool {
+		AuditWebhookBatchThrottleEnable: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -824,7 +824,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["audit_webhook_batch_throttle_enable"]),
-		AuditWebhookBatchThrottleQps: func(in interface{}) *resource.Quantity {
+		AuditWebhookBatchThrottleQps: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -843,10 +843,10 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["audit_webhook_batch_throttle_qps"]),
-		AuditWebhookConfigFile: func(in interface{}) string {
+		AuditWebhookConfigFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["audit_webhook_config_file"]),
-		AuditWebhookInitialBackoff: func(in interface{}) *v1.Duration {
+		AuditWebhookInitialBackoff: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -865,10 +865,10 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["audit_webhook_initial_backoff"]),
-		AuditWebhookMode: func(in interface{}) string {
+		AuditWebhookMode: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["audit_webhook_mode"]),
-		AuthenticationTokenWebhookConfigFile: func(in interface{}) *string {
+		AuthenticationTokenWebhookConfigFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -887,7 +887,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["authentication_token_webhook_config_file"]),
-		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration {
+		AuthenticationTokenWebhookCacheTTL: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -906,7 +906,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["authentication_token_webhook_cache_ttl"]),
-		AuthorizationMode: func(in interface{}) *string {
+		AuthorizationMode: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -925,7 +925,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["authorization_mode"]),
-		AuthorizationWebhookConfigFile: func(in interface{}) *string {
+		AuthorizationWebhookConfigFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -944,7 +944,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["authorization_webhook_config_file"]),
-		AuthorizationWebhookCacheAuthorizedTTL: func(in interface{}) *v1.Duration {
+		AuthorizationWebhookCacheAuthorizedTTL: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -963,7 +963,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["authorization_webhook_cache_authorized_ttl"]),
-		AuthorizationWebhookCacheUnauthorizedTTL: func(in interface{}) *v1.Duration {
+		AuthorizationWebhookCacheUnauthorizedTTL: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -982,7 +982,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["authorization_webhook_cache_unauthorized_ttl"]),
-		AuthorizationRBACSuperUser: func(in interface{}) *string {
+		AuthorizationRBACSuperUser: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1001,7 +1001,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["authorization_rbac_super_user"]),
-		EncryptionProviderConfig: func(in interface{}) *string {
+		EncryptionProviderConfig: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1020,7 +1020,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["encryption_provider_config"]),
-		ExperimentalEncryptionProviderConfig: func(in interface{}) *string {
+		ExperimentalEncryptionProviderConfig: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1039,7 +1039,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["experimental_encryption_provider_config"]),
-		RequestheaderUsernameHeaders: func(in interface{}) []string {
+		RequestheaderUsernameHeaders: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1051,7 +1051,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["requestheader_username_headers"]),
-		RequestheaderGroupHeaders: func(in interface{}) []string {
+		RequestheaderGroupHeaders: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1063,7 +1063,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["requestheader_group_headers"]),
-		RequestheaderExtraHeaderPrefixes: func(in interface{}) []string {
+		RequestheaderExtraHeaderPrefixes: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1075,10 +1075,10 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["requestheader_extra_header_prefixes"]),
-		RequestheaderClientCAFile: func(in interface{}) string {
+		RequestheaderClientCAFile: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["requestheader_client_ca_file"]),
-		RequestheaderAllowedNames: func(in interface{}) []string {
+		RequestheaderAllowedNames: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1090,7 +1090,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["requestheader_allowed_names"]),
-		FeatureGates: func(in interface{}) map[string]string {
+		FeatureGates: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil
@@ -1107,13 +1107,13 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return nil
 			}(in)
 		}(in["feature_gates"]),
-		MaxRequestsInflight: func(in interface{}) int32 {
+		MaxRequestsInflight: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["max_requests_inflight"]),
-		MaxMutatingRequestsInflight: func(in interface{}) int32 {
+		MaxMutatingRequestsInflight: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["max_mutating_requests_inflight"]),
-		HTTP2MaxStreamsPerConnection: func(in interface{}) *int32 {
+		HTTP2MaxStreamsPerConnection: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1132,7 +1132,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["http2_max_streams_per_connection"]),
-		EtcdQuorumRead: func(in interface{}) *bool {
+		EtcdQuorumRead: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1151,7 +1151,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["etcd_quorum_read"]),
-		RequestTimeout: func(in interface{}) *v1.Duration {
+		RequestTimeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -1170,7 +1170,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["request_timeout"]),
-		MinRequestTimeout: func(in interface{}) *int32 {
+		MinRequestTimeout: func(in interface{}) *int32 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1189,10 +1189,10 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["min_request_timeout"]),
-		TargetRamMb: func(in interface{}) int32 {
+		TargetRamMb: func(in interface{}) int32 /**/ {
 			return int32(ExpandInt(in))
 		}(in["target_ram_mb"]),
-		ServiceAccountKeyFile: func(in interface{}) []string {
+		ServiceAccountKeyFile: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1204,7 +1204,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["service_account_key_file"]),
-		ServiceAccountSigningKeyFile: func(in interface{}) *string {
+		ServiceAccountSigningKeyFile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1223,7 +1223,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["service_account_signing_key_file"]),
-		ServiceAccountIssuer: func(in interface{}) *string {
+		ServiceAccountIssuer: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1242,7 +1242,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["service_account_issuer"]),
-		ServiceAccountJWKSURI: func(in interface{}) *string {
+		ServiceAccountJWKSURI: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1261,7 +1261,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["service_account_jwksuri"]),
-		APIAudiences: func(in interface{}) []string {
+		APIAudiences: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1273,19 +1273,19 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["api_audiences"]),
-		CPURequest: func(in interface{}) string {
+		CPURequest: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cpu_request"]),
-		CPULimit: func(in interface{}) string {
+		CPULimit: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["cpu_limit"]),
-		MemoryRequest: func(in interface{}) string {
+		MemoryRequest: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["memory_request"]),
-		MemoryLimit: func(in interface{}) string {
+		MemoryLimit: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["memory_limit"]),
-		EventTTL: func(in interface{}) *v1.Duration {
+		EventTTL: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -1304,7 +1304,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(ExpandDuration(in))
 			}(in)
 		}(in["event_ttl"]),
-		AuditDynamicConfiguration: func(in interface{}) *bool {
+		AuditDynamicConfiguration: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1323,7 +1323,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["audit_dynamic_configuration"]),
-		EnableProfiling: func(in interface{}) *bool {
+		EnableProfiling: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1342,7 +1342,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_profiling"]),
-		CorsAllowedOrigins: func(in interface{}) []string {
+		CorsAllowedOrigins: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -1354,7 +1354,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["cors_allowed_origins"]),
-		DefaultNotReadyTolerationSeconds: func(in interface{}) *int64 {
+		DefaultNotReadyTolerationSeconds: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -1373,7 +1373,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["default_not_ready_toleration_seconds"]),
-		DefaultUnreachableTolerationSeconds: func(in interface{}) *int64 {
+		DefaultUnreachableTolerationSeconds: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}

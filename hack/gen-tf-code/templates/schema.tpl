@@ -7,7 +7,7 @@ import (
 	"time"
 
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
@@ -318,7 +318,7 @@ func Expand{{ scope }}{{ .Name }}(in map[string]interface{}) {{ .String }} {
 	return {{ .String }}{
 	{{- range (fields . false) }}
 	{{- if not (isExcluded .) }}
-	{{ .Name }}: func (in interface{}) {{ .Type.String }} {
+	{{ .Name }}: func (in interface{}) {{ .QualifiedName }} {
 		{{- if not .Anonymous -}}
 		{{- if and (isPtr .Type) (isValueType .Type) (not (isRequired .)) (not (isNullable .)) }}
 		if in == nil {

@@ -28,10 +28,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 		panic("expand Provider failure, in is nil")
 	}
 	return config.Provider{
-		StateStore: func(in interface{}) string {
+		StateStore: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["state_store"]),
-		Aws: func(in interface{}) *config.Aws {
+		Aws: func(in interface{}) *config.Aws /*github.com/eddycharly/terraform-provider-kops/pkg/api/config*/ {
 			return func(in interface{}) *config.Aws {
 				if in == nil {
 					return nil
@@ -49,7 +49,7 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				}(in))
 			}(in)
 		}(in["aws"]),
-		Openstack: func(in interface{}) *config.Openstack {
+		Openstack: func(in interface{}) *config.Openstack /*github.com/eddycharly/terraform-provider-kops/pkg/api/config*/ {
 			return func(in interface{}) *config.Openstack {
 				if in == nil {
 					return nil
@@ -67,7 +67,7 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				}(in))
 			}(in)
 		}(in["openstack"]),
-		Klog: func(in interface{}) *config.Klog {
+		Klog: func(in interface{}) *config.Klog /*github.com/eddycharly/terraform-provider-kops/pkg/api/config*/ {
 			return func(in interface{}) *config.Klog {
 				if in == nil {
 					return nil
@@ -85,10 +85,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				}(in))
 			}(in)
 		}(in["klog"]),
-		Mock: func(in interface{}) bool {
+		Mock: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["mock"]),
-		FeatureFlags: func(in interface{}) []string {
+		FeatureFlags: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil

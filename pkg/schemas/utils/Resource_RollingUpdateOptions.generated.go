@@ -15,7 +15,7 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 		panic("expand RollingUpdateOptions failure, in is nil")
 	}
 	return utils.RollingUpdateOptions{
-		MasterInterval: func(in interface{}) *v1.Duration {
+		MasterInterval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -34,7 +34,7 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(ExpandDuration(in))
 			}(in)
 		}(in["master_interval"]),
-		NodeInterval: func(in interface{}) *v1.Duration {
+		NodeInterval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -53,7 +53,7 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(ExpandDuration(in))
 			}(in)
 		}(in["node_interval"]),
-		BastionInterval: func(in interface{}) *v1.Duration {
+		BastionInterval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -72,13 +72,13 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(ExpandDuration(in))
 			}(in)
 		}(in["bastion_interval"]),
-		FailOnDrainError: func(in interface{}) bool {
+		FailOnDrainError: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["fail_on_drain_error"]),
-		FailOnValidate: func(in interface{}) bool {
+		FailOnValidate: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["fail_on_validate"]),
-		PostDrainDelay: func(in interface{}) *v1.Duration {
+		PostDrainDelay: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -97,7 +97,7 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(ExpandDuration(in))
 			}(in)
 		}(in["post_drain_delay"]),
-		ValidationTimeout: func(in interface{}) *v1.Duration {
+		ValidationTimeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -116,7 +116,7 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(ExpandDuration(in))
 			}(in)
 		}(in["validation_timeout"]),
-		ValidateCount: func(in interface{}) *int {
+		ValidateCount: func(in interface{}) *int /**/ {
 			if in == nil {
 				return nil
 			}
@@ -135,10 +135,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 				}(int(ExpandInt(in)))
 			}(in)
 		}(in["validate_count"]),
-		CloudOnly: func(in interface{}) bool {
+		CloudOnly: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["cloud_only"]),
-		Force: func(in interface{}) bool {
+		Force: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["force"]),
 	}

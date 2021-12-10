@@ -118,16 +118,16 @@ func ExpandDataSourceCluster(in map[string]interface{}) resources.Cluster {
 		panic("expand Cluster failure, in is nil")
 	}
 	return resources.Cluster{
-		ClusterSpec: func(in interface{}) kops.ClusterSpec {
+		ClusterSpec: func(in interface{}) kops.ClusterSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return kopsschemas.ExpandDataSourceClusterSpec(in.(map[string]interface{}))
 		}(in),
-		Name: func(in interface{}) string {
+		Name: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["name"]),
-		AdminSshKey: func(in interface{}) string {
+		AdminSshKey: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["admin_ssh_key"]),
-		Secrets: func(in interface{}) *resources.ClusterSecrets {
+		Secrets: func(in interface{}) *resources.ClusterSecrets /*github.com/eddycharly/terraform-provider-kops/pkg/api/resources*/ {
 			return func(in interface{}) *resources.ClusterSecrets {
 				if in == nil {
 					return nil

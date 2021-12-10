@@ -35,10 +35,10 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) resources.Rol
 		panic("expand RollingUpdateOptions failure, in is nil")
 	}
 	return resources.RollingUpdateOptions{
-		Skip: func(in interface{}) bool {
+		Skip: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["skip"]),
-		RollingUpdateOptions: func(in interface{}) utils.RollingUpdateOptions {
+		RollingUpdateOptions: func(in interface{}) utils.RollingUpdateOptions /*github.com/eddycharly/terraform-provider-kops/pkg/api/utils*/ {
 			return utilsschemas.ExpandResourceRollingUpdateOptions(in.(map[string]interface{}))
 		}(in),
 	}

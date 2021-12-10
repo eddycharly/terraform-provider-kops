@@ -25,13 +25,13 @@ func ExpandResourceServiceAccountExternalPermission(in map[string]interface{}) k
 		panic("expand ServiceAccountExternalPermission failure, in is nil")
 	}
 	return kops.ServiceAccountExternalPermission{
-		Name: func(in interface{}) string {
+		Name: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Namespace: func(in interface{}) string {
+		Namespace: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["namespace"]),
-		AWS: func(in interface{}) *kops.AWSPermission {
+		AWS: func(in interface{}) *kops.AWSPermission /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.AWSPermission {
 				if in == nil {
 					return nil

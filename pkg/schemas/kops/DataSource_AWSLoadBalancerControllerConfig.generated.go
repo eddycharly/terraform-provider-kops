@@ -26,7 +26,7 @@ func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) 
 		panic("expand AWSLoadBalancerControllerConfig failure, in is nil")
 	}
 	return kops.AWSLoadBalancerControllerConfig{
-		Enabled: func(in interface{}) *bool {
+		Enabled: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -45,7 +45,7 @@ func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) 
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enabled"]),
-		Version: func(in interface{}) *string {
+		Version: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}

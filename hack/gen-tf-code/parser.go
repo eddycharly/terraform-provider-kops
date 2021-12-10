@@ -14,6 +14,11 @@ type _field struct {
 	Default string
 }
 
+func (f *_field) QualifiedName() string {
+	t := refresh(f.Type)
+	return f.Type.String() + "/*" + t.PkgPath() + "*/"
+}
+
 type _nested struct {
 	pack       string
 	structName string

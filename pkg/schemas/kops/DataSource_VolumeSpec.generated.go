@@ -32,7 +32,7 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 		panic("expand VolumeSpec failure, in is nil")
 	}
 	return kops.VolumeSpec{
-		DeleteOnTermination: func(in interface{}) *bool {
+		DeleteOnTermination: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -51,10 +51,10 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["delete_on_termination"]),
-		Device: func(in interface{}) string {
+		Device: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["device"]),
-		Encrypted: func(in interface{}) *bool {
+		Encrypted: func(in interface{}) *bool /**/ {
 			if in == nil {
 				return nil
 			}
@@ -73,7 +73,7 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["encrypted"]),
-		Iops: func(in interface{}) *int64 {
+		Iops: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -92,7 +92,7 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["iops"]),
-		Throughput: func(in interface{}) *int64 {
+		Throughput: func(in interface{}) *int64 /**/ {
 			if in == nil {
 				return nil
 			}
@@ -111,7 +111,7 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["throughput"]),
-		Key: func(in interface{}) *string {
+		Key: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}
@@ -130,10 +130,10 @@ func ExpandDataSourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["key"]),
-		Size: func(in interface{}) int64 {
+		Size: func(in interface{}) int64 /**/ {
 			return int64(ExpandInt(in))
 		}(in["size"]),
-		Type: func(in interface{}) string {
+		Type: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["type"]),
 	}

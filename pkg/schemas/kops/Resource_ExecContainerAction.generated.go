@@ -25,10 +25,10 @@ func ExpandResourceExecContainerAction(in map[string]interface{}) kops.ExecConta
 		panic("expand ExecContainerAction failure, in is nil")
 	}
 	return kops.ExecContainerAction{
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		Command: func(in interface{}) []string {
+		Command: func(in interface{}) []string /**/ {
 			return func(in interface{}) []string {
 				if in == nil {
 					return nil
@@ -40,7 +40,7 @@ func ExpandResourceExecContainerAction(in map[string]interface{}) kops.ExecConta
 				return out
 			}(in)
 		}(in["command"]),
-		Environment: func(in interface{}) map[string]string {
+		Environment: func(in interface{}) map[string]string /**/ {
 			return func(in interface{}) map[string]string {
 				if in == nil {
 					return nil

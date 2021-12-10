@@ -25,7 +25,7 @@ func ExpandDataSourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSp
 		panic("expand IAMProfileSpec failure, in is nil")
 	}
 	return kops.IAMProfileSpec{
-		Profile: func(in interface{}) *string {
+		Profile: func(in interface{}) *string /**/ {
 			if in == nil {
 				return nil
 			}

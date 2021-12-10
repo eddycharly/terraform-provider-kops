@@ -23,7 +23,7 @@ func ExpandResourceIAMProfileSpec(in map[string]interface{}) kops.IAMProfileSpec
 		panic("expand IAMProfileSpec failure, in is nil")
 	}
 	return kops.IAMProfileSpec{
-		Profile: func(in interface{}) *string {
+		Profile: func(in interface{}) *string /**/ {
 			return func(in interface{}) *string {
 				if in == nil {
 					return nil

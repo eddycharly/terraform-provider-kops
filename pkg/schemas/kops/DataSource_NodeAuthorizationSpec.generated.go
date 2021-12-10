@@ -23,7 +23,7 @@ func ExpandDataSourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeA
 		panic("expand NodeAuthorizationSpec failure, in is nil")
 	}
 	return kops.NodeAuthorizationSpec{
-		NodeAuthorizer: func(in interface{}) *kops.NodeAuthorizerSpec {
+		NodeAuthorizer: func(in interface{}) *kops.NodeAuthorizerSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.NodeAuthorizerSpec {
 				if in == nil {
 					return nil

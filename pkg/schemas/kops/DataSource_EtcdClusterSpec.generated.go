@@ -39,13 +39,13 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 		panic("expand EtcdClusterSpec failure, in is nil")
 	}
 	return kops.EtcdClusterSpec{
-		Name: func(in interface{}) string {
+		Name: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Provider: func(in interface{}) kops.EtcdProviderType {
+		Provider: func(in interface{}) kops.EtcdProviderType /*k8s.io/kops/pkg/apis/kops*/ {
 			return kops.EtcdProviderType(ExpandString(in))
 		}(in["provider"]),
-		Members: func(in interface{}) []kops.EtcdMemberSpec {
+		Members: func(in interface{}) []kops.EtcdMemberSpec /**/ {
 			return func(in interface{}) []kops.EtcdMemberSpec {
 				if in == nil {
 					return nil
@@ -62,16 +62,16 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				return out
 			}(in)
 		}(in["member"]),
-		EnableEtcdTLS: func(in interface{}) bool {
+		EnableEtcdTLS: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["enable_etcd_tls"]),
-		EnableTLSAuth: func(in interface{}) bool {
+		EnableTLSAuth: func(in interface{}) bool /**/ {
 			return bool(ExpandBool(in))
 		}(in["enable_tls_auth"]),
-		Version: func(in interface{}) string {
+		Version: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["version"]),
-		LeaderElectionTimeout: func(in interface{}) *v1.Duration {
+		LeaderElectionTimeout: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -90,7 +90,7 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				}(ExpandDuration(in))
 			}(in)
 		}(in["leader_election_timeout"]),
-		HeartbeatInterval: func(in interface{}) *v1.Duration {
+		HeartbeatInterval: func(in interface{}) *v1.Duration /*k8s.io/apimachinery/pkg/apis/meta/v1*/ {
 			if in == nil {
 				return nil
 			}
@@ -109,10 +109,10 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				}(ExpandDuration(in))
 			}(in)
 		}(in["heartbeat_interval"]),
-		Image: func(in interface{}) string {
+		Image: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["image"]),
-		Backups: func(in interface{}) *kops.EtcdBackupSpec {
+		Backups: func(in interface{}) *kops.EtcdBackupSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.EtcdBackupSpec {
 				if in == nil {
 					return nil
@@ -130,7 +130,7 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				}(in))
 			}(in)
 		}(in["backups"]),
-		Manager: func(in interface{}) *kops.EtcdManagerSpec {
+		Manager: func(in interface{}) *kops.EtcdManagerSpec /*k8s.io/kops/pkg/apis/kops*/ {
 			return func(in interface{}) *kops.EtcdManagerSpec {
 				if in == nil {
 					return nil
@@ -148,7 +148,7 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				}(in))
 			}(in)
 		}(in["manager"]),
-		MemoryRequest: func(in interface{}) *resource.Quantity {
+		MemoryRequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}
@@ -167,7 +167,7 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["memory_request"]),
-		CPURequest: func(in interface{}) *resource.Quantity {
+		CPURequest: func(in interface{}) *resource.Quantity /*k8s.io/apimachinery/pkg/api/resource*/ {
 			if in == nil {
 				return nil
 			}

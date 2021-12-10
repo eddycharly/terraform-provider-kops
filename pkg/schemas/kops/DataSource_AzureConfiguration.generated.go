@@ -27,19 +27,19 @@ func ExpandDataSourceAzureConfiguration(in map[string]interface{}) kops.AzureCon
 		panic("expand AzureConfiguration failure, in is nil")
 	}
 	return kops.AzureConfiguration{
-		SubscriptionID: func(in interface{}) string {
+		SubscriptionID: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["subscription_id"]),
-		TenantID: func(in interface{}) string {
+		TenantID: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["tenant_id"]),
-		ResourceGroupName: func(in interface{}) string {
+		ResourceGroupName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["resource_group_name"]),
-		RouteTableName: func(in interface{}) string {
+		RouteTableName: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["route_table_name"]),
-		AdminUser: func(in interface{}) string {
+		AdminUser: func(in interface{}) string /**/ {
 			return string(ExpandString(in))
 		}(in["admin_user"]),
 	}
