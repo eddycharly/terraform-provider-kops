@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func TestExpandResourceLabelSelectorRequirement(t *testing.T) {
-	_default := v1.LabelSelectorRequirement{}
+	_default := meta.LabelSelectorRequirement{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.LabelSelectorRequirement
+		want meta.LabelSelectorRequirement
 	}{
 		{
 			name: "default",
@@ -46,7 +46,7 @@ func TestFlattenResourceLabelSelectorRequirementInto(t *testing.T) {
 		"values":   func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.LabelSelectorRequirement
+		in meta.LabelSelectorRequirement
 	}
 	tests := []struct {
 		name string
@@ -56,15 +56,15 @@ func TestFlattenResourceLabelSelectorRequirementInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.LabelSelectorRequirement{},
+				in: meta.LabelSelectorRequirement{},
 			},
 			want: _default,
 		},
 		{
 			name: "Key - default",
 			args: args{
-				in: func() v1.LabelSelectorRequirement {
-					subject := v1.LabelSelectorRequirement{}
+				in: func() meta.LabelSelectorRequirement {
+					subject := meta.LabelSelectorRequirement{}
 					subject.Key = ""
 					return subject
 				}(),
@@ -74,8 +74,8 @@ func TestFlattenResourceLabelSelectorRequirementInto(t *testing.T) {
 		{
 			name: "Operator - default",
 			args: args{
-				in: func() v1.LabelSelectorRequirement {
-					subject := v1.LabelSelectorRequirement{}
+				in: func() meta.LabelSelectorRequirement {
+					subject := meta.LabelSelectorRequirement{}
 					subject.Operator = ""
 					return subject
 				}(),
@@ -85,8 +85,8 @@ func TestFlattenResourceLabelSelectorRequirementInto(t *testing.T) {
 		{
 			name: "Values - default",
 			args: args{
-				in: func() v1.LabelSelectorRequirement {
-					subject := v1.LabelSelectorRequirement{}
+				in: func() meta.LabelSelectorRequirement {
+					subject := meta.LabelSelectorRequirement{}
 					subject.Values = nil
 					return subject
 				}(),
@@ -112,7 +112,7 @@ func TestFlattenResourceLabelSelectorRequirement(t *testing.T) {
 		"values":   func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.LabelSelectorRequirement
+		in meta.LabelSelectorRequirement
 	}
 	tests := []struct {
 		name string
@@ -122,15 +122,15 @@ func TestFlattenResourceLabelSelectorRequirement(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.LabelSelectorRequirement{},
+				in: meta.LabelSelectorRequirement{},
 			},
 			want: _default,
 		},
 		{
 			name: "Key - default",
 			args: args{
-				in: func() v1.LabelSelectorRequirement {
-					subject := v1.LabelSelectorRequirement{}
+				in: func() meta.LabelSelectorRequirement {
+					subject := meta.LabelSelectorRequirement{}
 					subject.Key = ""
 					return subject
 				}(),
@@ -140,8 +140,8 @@ func TestFlattenResourceLabelSelectorRequirement(t *testing.T) {
 		{
 			name: "Operator - default",
 			args: args{
-				in: func() v1.LabelSelectorRequirement {
-					subject := v1.LabelSelectorRequirement{}
+				in: func() meta.LabelSelectorRequirement {
+					subject := meta.LabelSelectorRequirement{}
 					subject.Operator = ""
 					return subject
 				}(),
@@ -151,8 +151,8 @@ func TestFlattenResourceLabelSelectorRequirement(t *testing.T) {
 		{
 			name: "Values - default",
 			args: args{
-				in: func() v1.LabelSelectorRequirement {
-					subject := v1.LabelSelectorRequirement{}
+				in: func() meta.LabelSelectorRequirement {
+					subject := meta.LabelSelectorRequirement{}
 					subject.Values = nil
 					return subject
 				}(),

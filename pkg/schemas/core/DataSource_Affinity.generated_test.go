@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandDataSourceAffinity(t *testing.T) {
-	_default := v1.Affinity{}
+	_default := core.Affinity{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.Affinity
+		want core.Affinity
 	}{
 		{
 			name: "default",
@@ -46,7 +46,7 @@ func TestFlattenDataSourceAffinityInto(t *testing.T) {
 		"pod_anti_affinity": nil,
 	}
 	type args struct {
-		in v1.Affinity
+		in core.Affinity
 	}
 	tests := []struct {
 		name string
@@ -56,15 +56,15 @@ func TestFlattenDataSourceAffinityInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.Affinity{},
+				in: core.Affinity{},
 			},
 			want: _default,
 		},
 		{
 			name: "NodeAffinity - default",
 			args: args{
-				in: func() v1.Affinity {
-					subject := v1.Affinity{}
+				in: func() core.Affinity {
+					subject := core.Affinity{}
 					subject.NodeAffinity = nil
 					return subject
 				}(),
@@ -74,8 +74,8 @@ func TestFlattenDataSourceAffinityInto(t *testing.T) {
 		{
 			name: "PodAffinity - default",
 			args: args{
-				in: func() v1.Affinity {
-					subject := v1.Affinity{}
+				in: func() core.Affinity {
+					subject := core.Affinity{}
 					subject.PodAffinity = nil
 					return subject
 				}(),
@@ -85,8 +85,8 @@ func TestFlattenDataSourceAffinityInto(t *testing.T) {
 		{
 			name: "PodAntiAffinity - default",
 			args: args{
-				in: func() v1.Affinity {
-					subject := v1.Affinity{}
+				in: func() core.Affinity {
+					subject := core.Affinity{}
 					subject.PodAntiAffinity = nil
 					return subject
 				}(),
@@ -112,7 +112,7 @@ func TestFlattenDataSourceAffinity(t *testing.T) {
 		"pod_anti_affinity": nil,
 	}
 	type args struct {
-		in v1.Affinity
+		in core.Affinity
 	}
 	tests := []struct {
 		name string
@@ -122,15 +122,15 @@ func TestFlattenDataSourceAffinity(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.Affinity{},
+				in: core.Affinity{},
 			},
 			want: _default,
 		},
 		{
 			name: "NodeAffinity - default",
 			args: args{
-				in: func() v1.Affinity {
-					subject := v1.Affinity{}
+				in: func() core.Affinity {
+					subject := core.Affinity{}
 					subject.NodeAffinity = nil
 					return subject
 				}(),
@@ -140,8 +140,8 @@ func TestFlattenDataSourceAffinity(t *testing.T) {
 		{
 			name: "PodAffinity - default",
 			args: args{
-				in: func() v1.Affinity {
-					subject := v1.Affinity{}
+				in: func() core.Affinity {
+					subject := core.Affinity{}
 					subject.PodAffinity = nil
 					return subject
 				}(),
@@ -151,8 +151,8 @@ func TestFlattenDataSourceAffinity(t *testing.T) {
 		{
 			name: "PodAntiAffinity - default",
 			args: args{
-				in: func() v1.Affinity {
-					subject := v1.Affinity{}
+				in: func() core.Affinity {
+					subject := core.Affinity{}
 					subject.PodAntiAffinity = nil
 					return subject
 				}(),

@@ -4,25 +4,26 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	core "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 )
 
 func TestExpandDataSourceWeightedPodAffinityTerm(t *testing.T) {
-	_default := v1.WeightedPodAffinityTerm{}
+	_default := core.WeightedPodAffinityTerm{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.WeightedPodAffinityTerm
+		want core.WeightedPodAffinityTerm
 	}{
 		{
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
 					"weight":            0,
-					"pod_affinity_term": func() []interface{} { return []interface{}{FlattenDataSourcePodAffinityTerm(v1.PodAffinityTerm{})} }(),
+					"pod_affinity_term": func() []interface{} { return []interface{}{FlattenDataSourcePodAffinityTerm(core.PodAffinityTerm{})} }(),
 				},
 			},
 			want: _default,
@@ -41,10 +42,10 @@ func TestExpandDataSourceWeightedPodAffinityTerm(t *testing.T) {
 func TestFlattenDataSourceWeightedPodAffinityTermInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"weight":            0,
-		"pod_affinity_term": func() []interface{} { return []interface{}{FlattenDataSourcePodAffinityTerm(v1.PodAffinityTerm{})} }(),
+		"pod_affinity_term": func() []interface{} { return []interface{}{FlattenDataSourcePodAffinityTerm(core.PodAffinityTerm{})} }(),
 	}
 	type args struct {
-		in v1.WeightedPodAffinityTerm
+		in core.WeightedPodAffinityTerm
 	}
 	tests := []struct {
 		name string
@@ -54,15 +55,15 @@ func TestFlattenDataSourceWeightedPodAffinityTermInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.WeightedPodAffinityTerm{},
+				in: core.WeightedPodAffinityTerm{},
 			},
 			want: _default,
 		},
 		{
 			name: "Weight - default",
 			args: args{
-				in: func() v1.WeightedPodAffinityTerm {
-					subject := v1.WeightedPodAffinityTerm{}
+				in: func() core.WeightedPodAffinityTerm {
+					subject := core.WeightedPodAffinityTerm{}
 					subject.Weight = 0
 					return subject
 				}(),
@@ -72,8 +73,8 @@ func TestFlattenDataSourceWeightedPodAffinityTermInto(t *testing.T) {
 		{
 			name: "PodAffinityTerm - default",
 			args: args{
-				in: func() v1.WeightedPodAffinityTerm {
-					subject := v1.WeightedPodAffinityTerm{}
+				in: func() core.WeightedPodAffinityTerm {
+					subject := core.WeightedPodAffinityTerm{}
 					subject.PodAffinityTerm = v1.PodAffinityTerm{}
 					return subject
 				}(),
@@ -95,10 +96,10 @@ func TestFlattenDataSourceWeightedPodAffinityTermInto(t *testing.T) {
 func TestFlattenDataSourceWeightedPodAffinityTerm(t *testing.T) {
 	_default := map[string]interface{}{
 		"weight":            0,
-		"pod_affinity_term": func() []interface{} { return []interface{}{FlattenDataSourcePodAffinityTerm(v1.PodAffinityTerm{})} }(),
+		"pod_affinity_term": func() []interface{} { return []interface{}{FlattenDataSourcePodAffinityTerm(core.PodAffinityTerm{})} }(),
 	}
 	type args struct {
-		in v1.WeightedPodAffinityTerm
+		in core.WeightedPodAffinityTerm
 	}
 	tests := []struct {
 		name string
@@ -108,15 +109,15 @@ func TestFlattenDataSourceWeightedPodAffinityTerm(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.WeightedPodAffinityTerm{},
+				in: core.WeightedPodAffinityTerm{},
 			},
 			want: _default,
 		},
 		{
 			name: "Weight - default",
 			args: args{
-				in: func() v1.WeightedPodAffinityTerm {
-					subject := v1.WeightedPodAffinityTerm{}
+				in: func() core.WeightedPodAffinityTerm {
+					subject := core.WeightedPodAffinityTerm{}
 					subject.Weight = 0
 					return subject
 				}(),
@@ -126,8 +127,8 @@ func TestFlattenDataSourceWeightedPodAffinityTerm(t *testing.T) {
 		{
 			name: "PodAffinityTerm - default",
 			args: args{
-				in: func() v1.WeightedPodAffinityTerm {
-					subject := v1.WeightedPodAffinityTerm{}
+				in: func() core.WeightedPodAffinityTerm {
+					subject := core.WeightedPodAffinityTerm{}
 					subject.PodAffinityTerm = v1.PodAffinityTerm{}
 					return subject
 				}(),

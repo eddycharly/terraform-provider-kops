@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandResourceNodeAffinity(t *testing.T) {
-	_default := v1.NodeAffinity{}
+	_default := core.NodeAffinity{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.NodeAffinity
+		want core.NodeAffinity
 	}{
 		{
 			name: "default",
@@ -44,7 +44,7 @@ func TestFlattenResourceNodeAffinityInto(t *testing.T) {
 		"preferred_during_scheduling_ignored_during_execution": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeAffinity
+		in core.NodeAffinity
 	}
 	tests := []struct {
 		name string
@@ -54,15 +54,15 @@ func TestFlattenResourceNodeAffinityInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeAffinity{},
+				in: core.NodeAffinity{},
 			},
 			want: _default,
 		},
 		{
 			name: "RequiredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.NodeAffinity {
-					subject := v1.NodeAffinity{}
+				in: func() core.NodeAffinity {
+					subject := core.NodeAffinity{}
 					subject.RequiredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
@@ -72,8 +72,8 @@ func TestFlattenResourceNodeAffinityInto(t *testing.T) {
 		{
 			name: "PreferredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.NodeAffinity {
-					subject := v1.NodeAffinity{}
+				in: func() core.NodeAffinity {
+					subject := core.NodeAffinity{}
 					subject.PreferredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
@@ -98,7 +98,7 @@ func TestFlattenResourceNodeAffinity(t *testing.T) {
 		"preferred_during_scheduling_ignored_during_execution": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeAffinity
+		in core.NodeAffinity
 	}
 	tests := []struct {
 		name string
@@ -108,15 +108,15 @@ func TestFlattenResourceNodeAffinity(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeAffinity{},
+				in: core.NodeAffinity{},
 			},
 			want: _default,
 		},
 		{
 			name: "RequiredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.NodeAffinity {
-					subject := v1.NodeAffinity{}
+				in: func() core.NodeAffinity {
+					subject := core.NodeAffinity{}
 					subject.RequiredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenResourceNodeAffinity(t *testing.T) {
 		{
 			name: "PreferredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.NodeAffinity {
-					subject := v1.NodeAffinity{}
+				in: func() core.NodeAffinity {
+					subject := core.NodeAffinity{}
 					subject.PreferredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),

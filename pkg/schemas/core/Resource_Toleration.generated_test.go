@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandResourceToleration(t *testing.T) {
-	_default := v1.Toleration{}
+	_default := core.Toleration{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.Toleration
+		want core.Toleration
 	}{
 		{
 			name: "default",
@@ -50,7 +50,7 @@ func TestFlattenResourceTolerationInto(t *testing.T) {
 		"toleration_seconds": nil,
 	}
 	type args struct {
-		in v1.Toleration
+		in core.Toleration
 	}
 	tests := []struct {
 		name string
@@ -60,15 +60,15 @@ func TestFlattenResourceTolerationInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.Toleration{},
+				in: core.Toleration{},
 			},
 			want: _default,
 		},
 		{
 			name: "Key - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Key = ""
 					return subject
 				}(),
@@ -78,8 +78,8 @@ func TestFlattenResourceTolerationInto(t *testing.T) {
 		{
 			name: "Operator - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Operator = ""
 					return subject
 				}(),
@@ -89,8 +89,8 @@ func TestFlattenResourceTolerationInto(t *testing.T) {
 		{
 			name: "Value - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Value = ""
 					return subject
 				}(),
@@ -100,8 +100,8 @@ func TestFlattenResourceTolerationInto(t *testing.T) {
 		{
 			name: "Effect - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Effect = ""
 					return subject
 				}(),
@@ -111,8 +111,8 @@ func TestFlattenResourceTolerationInto(t *testing.T) {
 		{
 			name: "TolerationSeconds - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.TolerationSeconds = nil
 					return subject
 				}(),
@@ -140,7 +140,7 @@ func TestFlattenResourceToleration(t *testing.T) {
 		"toleration_seconds": nil,
 	}
 	type args struct {
-		in v1.Toleration
+		in core.Toleration
 	}
 	tests := []struct {
 		name string
@@ -150,15 +150,15 @@ func TestFlattenResourceToleration(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.Toleration{},
+				in: core.Toleration{},
 			},
 			want: _default,
 		},
 		{
 			name: "Key - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Key = ""
 					return subject
 				}(),
@@ -168,8 +168,8 @@ func TestFlattenResourceToleration(t *testing.T) {
 		{
 			name: "Operator - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Operator = ""
 					return subject
 				}(),
@@ -179,8 +179,8 @@ func TestFlattenResourceToleration(t *testing.T) {
 		{
 			name: "Value - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Value = ""
 					return subject
 				}(),
@@ -190,8 +190,8 @@ func TestFlattenResourceToleration(t *testing.T) {
 		{
 			name: "Effect - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.Effect = ""
 					return subject
 				}(),
@@ -201,8 +201,8 @@ func TestFlattenResourceToleration(t *testing.T) {
 		{
 			name: "TolerationSeconds - default",
 			args: args{
-				in: func() v1.Toleration {
-					subject := v1.Toleration{}
+				in: func() core.Toleration {
+					subject := core.Toleration{}
 					subject.TolerationSeconds = nil
 					return subject
 				}(),

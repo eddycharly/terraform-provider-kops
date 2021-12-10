@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandDataSourceNodeSelector(t *testing.T) {
-	_default := v1.NodeSelector{}
+	_default := core.NodeSelector{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.NodeSelector
+		want core.NodeSelector
 	}{
 		{
 			name: "default",
@@ -42,7 +42,7 @@ func TestFlattenDataSourceNodeSelectorInto(t *testing.T) {
 		"node_selector_terms": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeSelector
+		in core.NodeSelector
 	}
 	tests := []struct {
 		name string
@@ -52,15 +52,15 @@ func TestFlattenDataSourceNodeSelectorInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeSelector{},
+				in: core.NodeSelector{},
 			},
 			want: _default,
 		},
 		{
 			name: "NodeSelectorTerms - default",
 			args: args{
-				in: func() v1.NodeSelector {
-					subject := v1.NodeSelector{}
+				in: func() core.NodeSelector {
+					subject := core.NodeSelector{}
 					subject.NodeSelectorTerms = nil
 					return subject
 				}(),
@@ -84,7 +84,7 @@ func TestFlattenDataSourceNodeSelector(t *testing.T) {
 		"node_selector_terms": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeSelector
+		in core.NodeSelector
 	}
 	tests := []struct {
 		name string
@@ -94,15 +94,15 @@ func TestFlattenDataSourceNodeSelector(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeSelector{},
+				in: core.NodeSelector{},
 			},
 			want: _default,
 		},
 		{
 			name: "NodeSelectorTerms - default",
 			args: args{
-				in: func() v1.NodeSelector {
-					subject := v1.NodeSelector{}
+				in: func() core.NodeSelector {
+					subject := core.NodeSelector{}
 					subject.NodeSelectorTerms = nil
 					return subject
 				}(),

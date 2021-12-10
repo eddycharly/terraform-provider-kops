@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandResourceNodeSelectorTerm(t *testing.T) {
-	_default := v1.NodeSelectorTerm{}
+	_default := core.NodeSelectorTerm{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.NodeSelectorTerm
+		want core.NodeSelectorTerm
 	}{
 		{
 			name: "default",
@@ -44,7 +44,7 @@ func TestFlattenResourceNodeSelectorTermInto(t *testing.T) {
 		"match_fields":      func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeSelectorTerm
+		in core.NodeSelectorTerm
 	}
 	tests := []struct {
 		name string
@@ -54,15 +54,15 @@ func TestFlattenResourceNodeSelectorTermInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeSelectorTerm{},
+				in: core.NodeSelectorTerm{},
 			},
 			want: _default,
 		},
 		{
 			name: "MatchExpressions - default",
 			args: args{
-				in: func() v1.NodeSelectorTerm {
-					subject := v1.NodeSelectorTerm{}
+				in: func() core.NodeSelectorTerm {
+					subject := core.NodeSelectorTerm{}
 					subject.MatchExpressions = nil
 					return subject
 				}(),
@@ -72,8 +72,8 @@ func TestFlattenResourceNodeSelectorTermInto(t *testing.T) {
 		{
 			name: "MatchFields - default",
 			args: args{
-				in: func() v1.NodeSelectorTerm {
-					subject := v1.NodeSelectorTerm{}
+				in: func() core.NodeSelectorTerm {
+					subject := core.NodeSelectorTerm{}
 					subject.MatchFields = nil
 					return subject
 				}(),
@@ -98,7 +98,7 @@ func TestFlattenResourceNodeSelectorTerm(t *testing.T) {
 		"match_fields":      func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeSelectorTerm
+		in core.NodeSelectorTerm
 	}
 	tests := []struct {
 		name string
@@ -108,15 +108,15 @@ func TestFlattenResourceNodeSelectorTerm(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeSelectorTerm{},
+				in: core.NodeSelectorTerm{},
 			},
 			want: _default,
 		},
 		{
 			name: "MatchExpressions - default",
 			args: args{
-				in: func() v1.NodeSelectorTerm {
-					subject := v1.NodeSelectorTerm{}
+				in: func() core.NodeSelectorTerm {
+					subject := core.NodeSelectorTerm{}
 					subject.MatchExpressions = nil
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenResourceNodeSelectorTerm(t *testing.T) {
 		{
 			name: "MatchFields - default",
 			args: args{
-				in: func() v1.NodeSelectorTerm {
-					subject := v1.NodeSelectorTerm{}
+				in: func() core.NodeSelectorTerm {
+					subject := core.NodeSelectorTerm{}
 					subject.MatchFields = nil
 					return subject
 				}(),

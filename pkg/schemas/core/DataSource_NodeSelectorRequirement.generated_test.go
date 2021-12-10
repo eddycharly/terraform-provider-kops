@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandDataSourceNodeSelectorRequirement(t *testing.T) {
-	_default := v1.NodeSelectorRequirement{}
+	_default := core.NodeSelectorRequirement{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.NodeSelectorRequirement
+		want core.NodeSelectorRequirement
 	}{
 		{
 			name: "default",
@@ -46,7 +46,7 @@ func TestFlattenDataSourceNodeSelectorRequirementInto(t *testing.T) {
 		"values":   func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeSelectorRequirement
+		in core.NodeSelectorRequirement
 	}
 	tests := []struct {
 		name string
@@ -56,15 +56,15 @@ func TestFlattenDataSourceNodeSelectorRequirementInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeSelectorRequirement{},
+				in: core.NodeSelectorRequirement{},
 			},
 			want: _default,
 		},
 		{
 			name: "Key - default",
 			args: args{
-				in: func() v1.NodeSelectorRequirement {
-					subject := v1.NodeSelectorRequirement{}
+				in: func() core.NodeSelectorRequirement {
+					subject := core.NodeSelectorRequirement{}
 					subject.Key = ""
 					return subject
 				}(),
@@ -74,8 +74,8 @@ func TestFlattenDataSourceNodeSelectorRequirementInto(t *testing.T) {
 		{
 			name: "Operator - default",
 			args: args{
-				in: func() v1.NodeSelectorRequirement {
-					subject := v1.NodeSelectorRequirement{}
+				in: func() core.NodeSelectorRequirement {
+					subject := core.NodeSelectorRequirement{}
 					subject.Operator = ""
 					return subject
 				}(),
@@ -85,8 +85,8 @@ func TestFlattenDataSourceNodeSelectorRequirementInto(t *testing.T) {
 		{
 			name: "Values - default",
 			args: args{
-				in: func() v1.NodeSelectorRequirement {
-					subject := v1.NodeSelectorRequirement{}
+				in: func() core.NodeSelectorRequirement {
+					subject := core.NodeSelectorRequirement{}
 					subject.Values = nil
 					return subject
 				}(),
@@ -112,7 +112,7 @@ func TestFlattenDataSourceNodeSelectorRequirement(t *testing.T) {
 		"values":   func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.NodeSelectorRequirement
+		in core.NodeSelectorRequirement
 	}
 	tests := []struct {
 		name string
@@ -122,15 +122,15 @@ func TestFlattenDataSourceNodeSelectorRequirement(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.NodeSelectorRequirement{},
+				in: core.NodeSelectorRequirement{},
 			},
 			want: _default,
 		},
 		{
 			name: "Key - default",
 			args: args{
-				in: func() v1.NodeSelectorRequirement {
-					subject := v1.NodeSelectorRequirement{}
+				in: func() core.NodeSelectorRequirement {
+					subject := core.NodeSelectorRequirement{}
 					subject.Key = ""
 					return subject
 				}(),
@@ -140,8 +140,8 @@ func TestFlattenDataSourceNodeSelectorRequirement(t *testing.T) {
 		{
 			name: "Operator - default",
 			args: args{
-				in: func() v1.NodeSelectorRequirement {
-					subject := v1.NodeSelectorRequirement{}
+				in: func() core.NodeSelectorRequirement {
+					subject := core.NodeSelectorRequirement{}
 					subject.Operator = ""
 					return subject
 				}(),
@@ -151,8 +151,8 @@ func TestFlattenDataSourceNodeSelectorRequirement(t *testing.T) {
 		{
 			name: "Values - default",
 			args: args{
-				in: func() v1.NodeSelectorRequirement {
-					subject := v1.NodeSelectorRequirement{}
+				in: func() core.NodeSelectorRequirement {
+					subject := core.NodeSelectorRequirement{}
 					subject.Values = nil
 					return subject
 				}(),

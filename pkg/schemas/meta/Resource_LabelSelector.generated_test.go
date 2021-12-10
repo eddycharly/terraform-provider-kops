@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func TestExpandResourceLabelSelector(t *testing.T) {
-	_default := v1.LabelSelector{}
+	_default := meta.LabelSelector{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.LabelSelector
+		want meta.LabelSelector
 	}{
 		{
 			name: "default",
@@ -44,7 +44,7 @@ func TestFlattenResourceLabelSelectorInto(t *testing.T) {
 		"match_expressions": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.LabelSelector
+		in meta.LabelSelector
 	}
 	tests := []struct {
 		name string
@@ -54,15 +54,15 @@ func TestFlattenResourceLabelSelectorInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.LabelSelector{},
+				in: meta.LabelSelector{},
 			},
 			want: _default,
 		},
 		{
 			name: "MatchLabels - default",
 			args: args{
-				in: func() v1.LabelSelector {
-					subject := v1.LabelSelector{}
+				in: func() meta.LabelSelector {
+					subject := meta.LabelSelector{}
 					subject.MatchLabels = nil
 					return subject
 				}(),
@@ -72,8 +72,8 @@ func TestFlattenResourceLabelSelectorInto(t *testing.T) {
 		{
 			name: "MatchExpressions - default",
 			args: args{
-				in: func() v1.LabelSelector {
-					subject := v1.LabelSelector{}
+				in: func() meta.LabelSelector {
+					subject := meta.LabelSelector{}
 					subject.MatchExpressions = nil
 					return subject
 				}(),
@@ -98,7 +98,7 @@ func TestFlattenResourceLabelSelector(t *testing.T) {
 		"match_expressions": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.LabelSelector
+		in meta.LabelSelector
 	}
 	tests := []struct {
 		name string
@@ -108,15 +108,15 @@ func TestFlattenResourceLabelSelector(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.LabelSelector{},
+				in: meta.LabelSelector{},
 			},
 			want: _default,
 		},
 		{
 			name: "MatchLabels - default",
 			args: args{
-				in: func() v1.LabelSelector {
-					subject := v1.LabelSelector{}
+				in: func() meta.LabelSelector {
+					subject := meta.LabelSelector{}
 					subject.MatchLabels = nil
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenResourceLabelSelector(t *testing.T) {
 		{
 			name: "MatchExpressions - default",
 			args: args{
-				in: func() v1.LabelSelector {
-					subject := v1.LabelSelector{}
+				in: func() meta.LabelSelector {
+					subject := meta.LabelSelector{}
 					subject.MatchExpressions = nil
 					return subject
 				}(),

@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandDataSourcePodAffinityTerm(t *testing.T) {
-	_default := v1.PodAffinityTerm{}
+	_default := core.PodAffinityTerm{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.PodAffinityTerm
+		want core.PodAffinityTerm
 	}{
 		{
 			name: "default",
@@ -48,7 +48,7 @@ func TestFlattenDataSourcePodAffinityTermInto(t *testing.T) {
 		"namespace_selector": nil,
 	}
 	type args struct {
-		in v1.PodAffinityTerm
+		in core.PodAffinityTerm
 	}
 	tests := []struct {
 		name string
@@ -58,15 +58,15 @@ func TestFlattenDataSourcePodAffinityTermInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.PodAffinityTerm{},
+				in: core.PodAffinityTerm{},
 			},
 			want: _default,
 		},
 		{
 			name: "LabelSelector - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.LabelSelector = nil
 					return subject
 				}(),
@@ -76,8 +76,8 @@ func TestFlattenDataSourcePodAffinityTermInto(t *testing.T) {
 		{
 			name: "Namespaces - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.Namespaces = nil
 					return subject
 				}(),
@@ -87,8 +87,8 @@ func TestFlattenDataSourcePodAffinityTermInto(t *testing.T) {
 		{
 			name: "TopologyKey - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.TopologyKey = ""
 					return subject
 				}(),
@@ -98,8 +98,8 @@ func TestFlattenDataSourcePodAffinityTermInto(t *testing.T) {
 		{
 			name: "NamespaceSelector - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.NamespaceSelector = nil
 					return subject
 				}(),
@@ -126,7 +126,7 @@ func TestFlattenDataSourcePodAffinityTerm(t *testing.T) {
 		"namespace_selector": nil,
 	}
 	type args struct {
-		in v1.PodAffinityTerm
+		in core.PodAffinityTerm
 	}
 	tests := []struct {
 		name string
@@ -136,15 +136,15 @@ func TestFlattenDataSourcePodAffinityTerm(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.PodAffinityTerm{},
+				in: core.PodAffinityTerm{},
 			},
 			want: _default,
 		},
 		{
 			name: "LabelSelector - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.LabelSelector = nil
 					return subject
 				}(),
@@ -154,8 +154,8 @@ func TestFlattenDataSourcePodAffinityTerm(t *testing.T) {
 		{
 			name: "Namespaces - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.Namespaces = nil
 					return subject
 				}(),
@@ -165,8 +165,8 @@ func TestFlattenDataSourcePodAffinityTerm(t *testing.T) {
 		{
 			name: "TopologyKey - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.TopologyKey = ""
 					return subject
 				}(),
@@ -176,8 +176,8 @@ func TestFlattenDataSourcePodAffinityTerm(t *testing.T) {
 		{
 			name: "NamespaceSelector - default",
 			args: args{
-				in: func() v1.PodAffinityTerm {
-					subject := v1.PodAffinityTerm{}
+				in: func() core.PodAffinityTerm {
+					subject := core.PodAffinityTerm{}
 					subject.NamespaceSelector = nil
 					return subject
 				}(),

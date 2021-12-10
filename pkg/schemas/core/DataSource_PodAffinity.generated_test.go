@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 )
 
 func TestExpandDataSourcePodAffinity(t *testing.T) {
-	_default := v1.PodAffinity{}
+	_default := core.PodAffinity{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want v1.PodAffinity
+		want core.PodAffinity
 	}{
 		{
 			name: "default",
@@ -44,7 +44,7 @@ func TestFlattenDataSourcePodAffinityInto(t *testing.T) {
 		"preferred_during_scheduling_ignored_during_execution": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.PodAffinity
+		in core.PodAffinity
 	}
 	tests := []struct {
 		name string
@@ -54,15 +54,15 @@ func TestFlattenDataSourcePodAffinityInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.PodAffinity{},
+				in: core.PodAffinity{},
 			},
 			want: _default,
 		},
 		{
 			name: "RequiredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.PodAffinity {
-					subject := v1.PodAffinity{}
+				in: func() core.PodAffinity {
+					subject := core.PodAffinity{}
 					subject.RequiredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
@@ -72,8 +72,8 @@ func TestFlattenDataSourcePodAffinityInto(t *testing.T) {
 		{
 			name: "PreferredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.PodAffinity {
-					subject := v1.PodAffinity{}
+				in: func() core.PodAffinity {
+					subject := core.PodAffinity{}
 					subject.PreferredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
@@ -98,7 +98,7 @@ func TestFlattenDataSourcePodAffinity(t *testing.T) {
 		"preferred_during_scheduling_ignored_during_execution": func() []interface{} { return nil }(),
 	}
 	type args struct {
-		in v1.PodAffinity
+		in core.PodAffinity
 	}
 	tests := []struct {
 		name string
@@ -108,15 +108,15 @@ func TestFlattenDataSourcePodAffinity(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: v1.PodAffinity{},
+				in: core.PodAffinity{},
 			},
 			want: _default,
 		},
 		{
 			name: "RequiredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.PodAffinity {
-					subject := v1.PodAffinity{}
+				in: func() core.PodAffinity {
+					subject := core.PodAffinity{}
 					subject.RequiredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenDataSourcePodAffinity(t *testing.T) {
 		{
 			name: "PreferredDuringSchedulingIgnoredDuringExecution - default",
 			args: args{
-				in: func() v1.PodAffinity {
-					subject := v1.PodAffinity{}
+				in: func() core.PodAffinity {
+					subject := core.PodAffinity{}
 					subject.PreferredDuringSchedulingIgnoredDuringExecution = nil
 					return subject
 				}(),
