@@ -340,7 +340,7 @@ func main() {
 		),
 		generate(kube.Config{},
 			noSchema(),
-			sensitive("KubeBearerToken", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
+			sensitive("KubeUser", "KubePassword", "CaCert", "ClientCert", "ClientKey"),
 		),
 		generate(kops.ClusterSpec{},
 			exclude("GossipConfig", "DNSControllerGossipConfig", "Target"),
