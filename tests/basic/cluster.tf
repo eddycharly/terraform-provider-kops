@@ -6,6 +6,14 @@ resource "kops_cluster" "cluster" {
   dns_zone           = local.dnsZone
   network_id         = local.vpcId
 
+  api {
+    dns {}
+  }
+
+  authorization {
+    rbac {}
+  }
+
   iam {
     allow_container_registry = true
   }
