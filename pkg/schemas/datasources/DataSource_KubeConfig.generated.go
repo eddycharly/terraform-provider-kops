@@ -22,7 +22,7 @@ func DataSourceKubeConfig() *schema.Resource {
 			"server":        ComputedString(),
 			"context":       ComputedString(),
 			"namespace":     ComputedString(),
-			"kube_user":     ComputedString(),
+			"kube_user":     Sensitive(ComputedString()),
 			"kube_password": Sensitive(ComputedString()),
 			"ca_cert":       Sensitive(ComputedString()),
 			"client_cert":   Sensitive(ComputedString()),

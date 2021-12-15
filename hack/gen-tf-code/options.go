@@ -116,6 +116,9 @@ func doc(header, footer string) func(o *options) {
 }
 
 func (o *options) verify(t reflect.Type) error {
+	if err := verifyFields(t, o.sensitive.List()...); err != nil {
+		return err
+	}
 	if err := verifyFields(t, o.exclude.List()...); err != nil {
 		return err
 	}
