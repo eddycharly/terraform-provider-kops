@@ -121,6 +121,7 @@ func main() {
 		),
 		generate(resources.ClusterSecrets{},
 			sensitive("DockerConfig", "ClusterCaCert", "ClusterCaKey"),
+			computed("ClusterCaCert", "ClusterCaKey"),
 		),
 		generate(resources.ValidateOptions{}),
 		generate(utils.ValidateOptions{},
