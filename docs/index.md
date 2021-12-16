@@ -296,8 +296,8 @@ and running the `terraform import` command:
     }
 
     resource "kops_instance_group" "ig-0" {
-      cluster_namename  = "ig-0"
-      name              = "cluster.example.com"
+      cluster_name = "cluster.example.com"
+      name         = "ig-0"
       
       // ....
     }
@@ -317,5 +317,5 @@ and running the `terraform import` command:
 To retrieve the `kubeconfig` file for the cluster, run the following command:
 
 ```shell
-kops export kubecfg --name cluster.example.com --state s3://cluster.example.com
+kops export kubecfg --admin --name cluster.example.com --state s3://cluster.example.com
 ```

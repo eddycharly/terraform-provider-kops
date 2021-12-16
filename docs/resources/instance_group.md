@@ -396,8 +396,8 @@ and running the `terraform import` command:
     }
 
     resource "kops_instance_group" "ig-0" {
-      cluster_namename  = "ig-0"
-      name              = "cluster.example.com"
+      cluster_name = "cluster.example.com"
+      name         = "ig-0"
       
       // ....
     }
