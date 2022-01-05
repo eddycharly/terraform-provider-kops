@@ -68,7 +68,11 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	cluster := makeCluster(pubKeys[0].Spec.PublicKey, secrets, kc)
+	adminSshKey := ""
+	if len(pubKeys) > 0 {
+		adminSshKey = pubKeys[0].Spec.PublicKey
+	}
+	cluster := makeCluster(adminSshKey, secrets, kc)
 	return cluster, nil
 }
 
@@ -89,12 +93,14 @@ func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err != nil {
 		return nil, err
 	}
-	sshCredentialStore, err := clientset.SSHCredentialStore(kc)
-	if err != nil {
-		return nil, err
-	}
-	if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
-		return nil, fmt.Errorf("error adding SSH public key: %v", err)
+	if adminSshKey != "" {
+		sshCredentialStore, err := clientset.SSHCredentialStore(kc)
+		if err != nil {
+			return nil, err
+		}
+		if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
+			return nil, fmt.Errorf("error adding SSH public key: %v", err)
+		}
 	}
 	secretStore, err := clientset.SecretStore(kc)
 	if err != nil {
@@ -132,8 +138,18 @@ func UpdateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err != nil {
 		return nil, err
 	}
-	if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
-		return nil, fmt.Errorf("error adding SSH public key: %v", err)
+	if adminSshKey != "" {
+		if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
+			return nil, fmt.Errorf("error adding SSH public key: %v", err)
+		}
+	} else {
+		if pubKeys, err := sshCredentialStore.FindSSHPublicKeys(); err != nil {
+			return nil, fmt.Errorf("error listing SSH public keys: %v", err)
+		} else if len(pubKeys) > 0 {
+			if err = sshCredentialStore.DeleteSSHCredential(); err != nil {
+				return nil, fmt.Errorf("error deleting SSH public key: %v", err)
+			}
+		}
 	}
 	secretStore, err := clientset.SecretStore(kc)
 	if err != nil {
