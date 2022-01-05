@@ -87,7 +87,7 @@ func ResourceCluster() *schema.Resource {
 			"snapshot_controller":               OptionalStruct(kopsschemas.ResourceSnapshotControllerConfig()),
 			"revision":                          ComputedInt(),
 			"name":                              ForceNew(RequiredString()),
-			"admin_ssh_key":                     Sensitive(RequiredString()),
+			"admin_ssh_key":                     Sensitive(OptionalString()),
 			"secrets":                           OptionalStruct(ResourceClusterSecrets()),
 		},
 	}

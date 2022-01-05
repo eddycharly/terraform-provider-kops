@@ -102,7 +102,7 @@ func main() {
 		parser,
 		generate(resources.Cluster{},
 			version(2),
-			required("Name", "AdminSshKey"),
+			required("Name"),
 			computedOnly("Revision"),
 			sensitive("AdminSshKey"),
 			forceNew("Name"),
