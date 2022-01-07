@@ -13,36 +13,40 @@ var _ = Schema
 func DataSourceDockerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"authorization_plugins": ComputedList(String()),
-			"bridge":                ComputedString(),
-			"bridge_ip":             ComputedString(),
-			"data_root":             ComputedString(),
-			"default_ulimit":        ComputedList(String()),
-			"default_runtime":       ComputedString(),
-			"exec_opt":              ComputedList(String()),
-			"exec_root":             ComputedString(),
-			"experimental":          ComputedBool(),
-			"health_check":          ComputedBool(),
-			"hosts":                 ComputedList(String()),
-			"ip_masq":               ComputedBool(),
-			"ip_tables":             ComputedBool(),
-			"insecure_registry":     ComputedString(),
-			"insecure_registries":   ComputedList(String()),
-			"live_restore":          ComputedBool(),
-			"log_driver":            ComputedString(),
-			"log_level":             ComputedString(),
-			"log_opt":               ComputedList(String()),
-			"metrics_address":       ComputedString(),
-			"mtu":                   ComputedInt(),
-			"packages":              ComputedStruct(DataSourcePackagesConfig()),
-			"registry_mirrors":      ComputedList(String()),
-			"runtimes":              ComputedList(String()),
-			"selinux_enabled":       ComputedBool(),
-			"skip_install":          ComputedBool(),
-			"storage":               ComputedString(),
-			"storage_opts":          ComputedList(String()),
-			"user_namespace_remap":  ComputedString(),
-			"version":               ComputedString(),
+			"authorization_plugins":    ComputedList(String()),
+			"bridge":                   ComputedString(),
+			"bridge_ip":                ComputedString(),
+			"data_root":                ComputedString(),
+			"default_ulimit":           ComputedList(String()),
+			"default_runtime":          ComputedString(),
+			"dns":                      ComputedList(String()),
+			"exec_opt":                 ComputedList(String()),
+			"exec_root":                ComputedString(),
+			"experimental":             ComputedBool(),
+			"health_check":             ComputedBool(),
+			"hosts":                    ComputedList(String()),
+			"ip_masq":                  ComputedBool(),
+			"ip_tables":                ComputedBool(),
+			"insecure_registry":        ComputedString(),
+			"insecure_registries":      ComputedList(String()),
+			"live_restore":             ComputedBool(),
+			"log_driver":               ComputedString(),
+			"log_level":                ComputedString(),
+			"log_opt":                  ComputedList(String()),
+			"max_concurrent_downloads": ComputedInt(),
+			"max_concurrent_uploads":   ComputedInt(),
+			"max_download_attempts":    ComputedInt(),
+			"metrics_address":          ComputedString(),
+			"mtu":                      ComputedInt(),
+			"packages":                 ComputedStruct(DataSourcePackagesConfig()),
+			"registry_mirrors":         ComputedList(String()),
+			"runtimes":                 ComputedList(String()),
+			"selinux_enabled":          ComputedBool(),
+			"skip_install":             ComputedBool(),
+			"storage":                  ComputedString(),
+			"storage_opts":             ComputedList(String()),
+			"user_namespace_remap":     ComputedString(),
+			"version":                  ComputedString(),
 		},
 	}
 
@@ -154,6 +158,18 @@ func ExpandDataSourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["default_runtime"]),
+		DNS: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["dns"]),
 		ExecOpt: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
@@ -357,6 +373,63 @@ func ExpandDataSourceDockerConfig(in map[string]interface{}) kops.DockerConfig {
 				return out
 			}(in)
 		}(in["log_opt"]),
+		MaxConcurrentDownloads: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["max_concurrent_downloads"]),
+		MaxConcurrentUploads: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["max_concurrent_uploads"]),
+		MaxDownloadAttempts: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
+		}(in["max_download_attempts"]),
 		MetricsAddress: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -574,6 +647,15 @@ func FlattenDataSourceDockerConfigInto(in kops.DockerConfig, out map[string]inte
 			}(*in)
 		}(in)
 	}(in.DefaultRuntime)
+	out["dns"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.DNS)
 	out["exec_opt"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -693,6 +775,36 @@ func FlattenDataSourceDockerConfigInto(in kops.DockerConfig, out map[string]inte
 			return out
 		}(in)
 	}(in.LogOpt)
+	out["max_concurrent_downloads"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MaxConcurrentDownloads)
+	out["max_concurrent_uploads"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MaxConcurrentUploads)
+	out["max_download_attempts"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
+	}(in.MaxDownloadAttempts)
 	out["metrics_address"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {

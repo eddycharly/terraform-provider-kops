@@ -21,36 +21,40 @@ func TestExpandResourceDockerConfig(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"authorization_plugins": func() []interface{} { return nil }(),
-					"bridge":                nil,
-					"bridge_ip":             nil,
-					"data_root":             nil,
-					"default_ulimit":        func() []interface{} { return nil }(),
-					"default_runtime":       nil,
-					"exec_opt":              func() []interface{} { return nil }(),
-					"exec_root":             nil,
-					"experimental":          nil,
-					"health_check":          false,
-					"hosts":                 func() []interface{} { return nil }(),
-					"ip_masq":               nil,
-					"ip_tables":             nil,
-					"insecure_registry":     nil,
-					"insecure_registries":   func() []interface{} { return nil }(),
-					"live_restore":          nil,
-					"log_driver":            nil,
-					"log_level":             nil,
-					"log_opt":               func() []interface{} { return nil }(),
-					"metrics_address":       nil,
-					"mtu":                   nil,
-					"packages":              nil,
-					"registry_mirrors":      func() []interface{} { return nil }(),
-					"runtimes":              func() []interface{} { return nil }(),
-					"selinux_enabled":       nil,
-					"skip_install":          false,
-					"storage":               nil,
-					"storage_opts":          func() []interface{} { return nil }(),
-					"user_namespace_remap":  "",
-					"version":               nil,
+					"authorization_plugins":    func() []interface{} { return nil }(),
+					"bridge":                   nil,
+					"bridge_ip":                nil,
+					"data_root":                nil,
+					"default_ulimit":           func() []interface{} { return nil }(),
+					"default_runtime":          nil,
+					"dns":                      func() []interface{} { return nil }(),
+					"exec_opt":                 func() []interface{} { return nil }(),
+					"exec_root":                nil,
+					"experimental":             nil,
+					"health_check":             false,
+					"hosts":                    func() []interface{} { return nil }(),
+					"ip_masq":                  nil,
+					"ip_tables":                nil,
+					"insecure_registry":        nil,
+					"insecure_registries":      func() []interface{} { return nil }(),
+					"live_restore":             nil,
+					"log_driver":               nil,
+					"log_level":                nil,
+					"log_opt":                  func() []interface{} { return nil }(),
+					"max_concurrent_downloads": nil,
+					"max_concurrent_uploads":   nil,
+					"max_download_attempts":    nil,
+					"metrics_address":          nil,
+					"mtu":                      nil,
+					"packages":                 nil,
+					"registry_mirrors":         func() []interface{} { return nil }(),
+					"runtimes":                 func() []interface{} { return nil }(),
+					"selinux_enabled":          nil,
+					"skip_install":             false,
+					"storage":                  nil,
+					"storage_opts":             func() []interface{} { return nil }(),
+					"user_namespace_remap":     "",
+					"version":                  nil,
 				},
 			},
 			want: _default,
@@ -68,36 +72,40 @@ func TestExpandResourceDockerConfig(t *testing.T) {
 
 func TestFlattenResourceDockerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"authorization_plugins": func() []interface{} { return nil }(),
-		"bridge":                nil,
-		"bridge_ip":             nil,
-		"data_root":             nil,
-		"default_ulimit":        func() []interface{} { return nil }(),
-		"default_runtime":       nil,
-		"exec_opt":              func() []interface{} { return nil }(),
-		"exec_root":             nil,
-		"experimental":          nil,
-		"health_check":          false,
-		"hosts":                 func() []interface{} { return nil }(),
-		"ip_masq":               nil,
-		"ip_tables":             nil,
-		"insecure_registry":     nil,
-		"insecure_registries":   func() []interface{} { return nil }(),
-		"live_restore":          nil,
-		"log_driver":            nil,
-		"log_level":             nil,
-		"log_opt":               func() []interface{} { return nil }(),
-		"metrics_address":       nil,
-		"mtu":                   nil,
-		"packages":              nil,
-		"registry_mirrors":      func() []interface{} { return nil }(),
-		"runtimes":              func() []interface{} { return nil }(),
-		"selinux_enabled":       nil,
-		"skip_install":          false,
-		"storage":               nil,
-		"storage_opts":          func() []interface{} { return nil }(),
-		"user_namespace_remap":  "",
-		"version":               nil,
+		"authorization_plugins":    func() []interface{} { return nil }(),
+		"bridge":                   nil,
+		"bridge_ip":                nil,
+		"data_root":                nil,
+		"default_ulimit":           func() []interface{} { return nil }(),
+		"default_runtime":          nil,
+		"dns":                      func() []interface{} { return nil }(),
+		"exec_opt":                 func() []interface{} { return nil }(),
+		"exec_root":                nil,
+		"experimental":             nil,
+		"health_check":             false,
+		"hosts":                    func() []interface{} { return nil }(),
+		"ip_masq":                  nil,
+		"ip_tables":                nil,
+		"insecure_registry":        nil,
+		"insecure_registries":      func() []interface{} { return nil }(),
+		"live_restore":             nil,
+		"log_driver":               nil,
+		"log_level":                nil,
+		"log_opt":                  func() []interface{} { return nil }(),
+		"max_concurrent_downloads": nil,
+		"max_concurrent_uploads":   nil,
+		"max_download_attempts":    nil,
+		"metrics_address":          nil,
+		"mtu":                      nil,
+		"packages":                 nil,
+		"registry_mirrors":         func() []interface{} { return nil }(),
+		"runtimes":                 func() []interface{} { return nil }(),
+		"selinux_enabled":          nil,
+		"skip_install":             false,
+		"storage":                  nil,
+		"storage_opts":             func() []interface{} { return nil }(),
+		"user_namespace_remap":     "",
+		"version":                  nil,
 	}
 	type args struct {
 		in kops.DockerConfig
@@ -175,6 +183,17 @@ func TestFlattenResourceDockerConfigInto(t *testing.T) {
 				in: func() kops.DockerConfig {
 					subject := kops.DockerConfig{}
 					subject.DefaultRuntime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Dns - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.DNS = nil
 					return subject
 				}(),
 			},
@@ -318,6 +337,39 @@ func TestFlattenResourceDockerConfigInto(t *testing.T) {
 				in: func() kops.DockerConfig {
 					subject := kops.DockerConfig{}
 					subject.LogOpt = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxConcurrentDownloads - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.MaxConcurrentDownloads = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxConcurrentUploads - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.MaxConcurrentUploads = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxDownloadAttempts - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.MaxDownloadAttempts = nil
 					return subject
 				}(),
 			},
@@ -458,36 +510,40 @@ func TestFlattenResourceDockerConfigInto(t *testing.T) {
 
 func TestFlattenResourceDockerConfig(t *testing.T) {
 	_default := map[string]interface{}{
-		"authorization_plugins": func() []interface{} { return nil }(),
-		"bridge":                nil,
-		"bridge_ip":             nil,
-		"data_root":             nil,
-		"default_ulimit":        func() []interface{} { return nil }(),
-		"default_runtime":       nil,
-		"exec_opt":              func() []interface{} { return nil }(),
-		"exec_root":             nil,
-		"experimental":          nil,
-		"health_check":          false,
-		"hosts":                 func() []interface{} { return nil }(),
-		"ip_masq":               nil,
-		"ip_tables":             nil,
-		"insecure_registry":     nil,
-		"insecure_registries":   func() []interface{} { return nil }(),
-		"live_restore":          nil,
-		"log_driver":            nil,
-		"log_level":             nil,
-		"log_opt":               func() []interface{} { return nil }(),
-		"metrics_address":       nil,
-		"mtu":                   nil,
-		"packages":              nil,
-		"registry_mirrors":      func() []interface{} { return nil }(),
-		"runtimes":              func() []interface{} { return nil }(),
-		"selinux_enabled":       nil,
-		"skip_install":          false,
-		"storage":               nil,
-		"storage_opts":          func() []interface{} { return nil }(),
-		"user_namespace_remap":  "",
-		"version":               nil,
+		"authorization_plugins":    func() []interface{} { return nil }(),
+		"bridge":                   nil,
+		"bridge_ip":                nil,
+		"data_root":                nil,
+		"default_ulimit":           func() []interface{} { return nil }(),
+		"default_runtime":          nil,
+		"dns":                      func() []interface{} { return nil }(),
+		"exec_opt":                 func() []interface{} { return nil }(),
+		"exec_root":                nil,
+		"experimental":             nil,
+		"health_check":             false,
+		"hosts":                    func() []interface{} { return nil }(),
+		"ip_masq":                  nil,
+		"ip_tables":                nil,
+		"insecure_registry":        nil,
+		"insecure_registries":      func() []interface{} { return nil }(),
+		"live_restore":             nil,
+		"log_driver":               nil,
+		"log_level":                nil,
+		"log_opt":                  func() []interface{} { return nil }(),
+		"max_concurrent_downloads": nil,
+		"max_concurrent_uploads":   nil,
+		"max_download_attempts":    nil,
+		"metrics_address":          nil,
+		"mtu":                      nil,
+		"packages":                 nil,
+		"registry_mirrors":         func() []interface{} { return nil }(),
+		"runtimes":                 func() []interface{} { return nil }(),
+		"selinux_enabled":          nil,
+		"skip_install":             false,
+		"storage":                  nil,
+		"storage_opts":             func() []interface{} { return nil }(),
+		"user_namespace_remap":     "",
+		"version":                  nil,
 	}
 	type args struct {
 		in kops.DockerConfig
@@ -565,6 +621,17 @@ func TestFlattenResourceDockerConfig(t *testing.T) {
 				in: func() kops.DockerConfig {
 					subject := kops.DockerConfig{}
 					subject.DefaultRuntime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Dns - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.DNS = nil
 					return subject
 				}(),
 			},
@@ -708,6 +775,39 @@ func TestFlattenResourceDockerConfig(t *testing.T) {
 				in: func() kops.DockerConfig {
 					subject := kops.DockerConfig{}
 					subject.LogOpt = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxConcurrentDownloads - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.MaxConcurrentDownloads = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxConcurrentUploads - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.MaxConcurrentUploads = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxDownloadAttempts - default",
+			args: args{
+				in: func() kops.DockerConfig {
+					subject := kops.DockerConfig{}
+					subject.MaxDownloadAttempts = nil
 					return subject
 				}(),
 			},
