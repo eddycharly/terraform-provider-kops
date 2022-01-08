@@ -350,6 +350,7 @@ The following arguments are supported:
 - `data_root` - (Computed) - String - DataRoot is the root directory of persistent docker state (default "/var/lib/docker").
 - `default_ulimit` - (Computed) - List(String) - DefaultUlimit is the ulimits for containers.
 - `default_runtime` - (Computed) - String - DefaultRuntime is the default OCI runtime for containers (default "runc").
+- `dns` - (Computed) - List(String) - DNS is the IP address of the DNS server.
 - `exec_opt` - (Computed) - List(String) - ExecOpt is a series of options passed to the runtime.
 - `exec_root` - (Computed) - String - ExecRoot is the root directory for execution state files (default "/var/run/docker").
 - `experimental` - (Computed) - Bool - Experimental features permits enabling new features such as dockerd metrics.
@@ -363,6 +364,9 @@ The following arguments are supported:
 - `log_driver` - (Computed) - String - LogDriver is the default driver for container logs (default "json-file").
 - `log_level` - (Computed) - String - LogLevel is the logging level ("debug", "info", "warn", "error", "fatal") (default "info").
 - `log_opt` - (Computed) - List(String) - Logopt is a series of options given to the log driver options for containers.
+- `max_concurrent_downloads` - (Computed) - Int - MaxConcurrentDownloads sets the max concurrent downloads for each pull.
+- `max_concurrent_uploads` - (Computed) - Int - MaxConcurrentUploads sets the max concurrent uploads for each push.
+- `max_download_attempts` - (Computed) - Int - MaxDownloadAttempts sets the max download attempts for each pull.
 - `metrics_address` - (Computed) - String - Metrics address is the endpoint to serve with Prometheus format metrics.
 - `mtu` - (Computed) - Int - MTU is the containers network MTU.
 - `packages` - (Computed) - [packages_config](#packages_config) - Packages overrides the URL and hash for the packages.
