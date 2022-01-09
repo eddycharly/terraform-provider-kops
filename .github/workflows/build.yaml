@@ -6,10 +6,6 @@ on:
       - "*"
     tags-ignore:
       - "*"
-  pull_request:
-    types:
-      - opened
-      - reopened
 
 jobs:
   build-tf-0-13:
