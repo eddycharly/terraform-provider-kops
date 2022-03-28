@@ -83,7 +83,7 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"assets":                            nil,
 					"iam":                               nil,
 					"encryption_config":                 nil,
-					"disable_subnet_tags":               false,
+					"tag_subnets":                       nil,
 					"use_host_certificates":             nil,
 					"sysctl_parameters":                 func() []interface{} { return nil }(),
 					"rolling_update":                    nil,
@@ -91,6 +91,7 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
+					"pod_identity_webhook":              nil,
 					"name":                              "",
 					"admin_ssh_key":                     "",
 					"secrets":                           nil,
@@ -173,7 +174,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"disable_subnet_tags":               false,
+		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
@@ -181,6 +182,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"pod_identity_webhook":              nil,
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
@@ -883,11 +885,11 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableSubnetTags - default",
+			name: "TagSubnets - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.DisableSubnetTags = false
+					subject.TagSubnets = nil
 					return subject
 				}(),
 			},
@@ -965,6 +967,17 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},
@@ -1079,7 +1092,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"disable_subnet_tags":               false,
+		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
@@ -1087,6 +1100,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"pod_identity_webhook":              nil,
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
@@ -1789,11 +1803,11 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableSubnetTags - default",
+			name: "TagSubnets - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.DisableSubnetTags = false
+					subject.TagSubnets = nil
 					return subject
 				}(),
 			},
@@ -1871,6 +1885,17 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},

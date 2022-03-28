@@ -134,14 +134,14 @@ integration-reset:
 
 .PHONY: integration-basic
 integration-basic: integration-reset
-	@terraform init 									./tests/basic
-	@terraform validate 							./tests/basic
-	@terraform plan 									./tests/basic
-	@terraform apply  -auto-approve 	./tests/basic
+	@terraform -chdir=./tests/basic init
+	@terraform -chdir=./tests/basic validate
+	@terraform -chdir=./tests/basic plan
+	@terraform -chdir=./tests/basic apply  -auto-approve
 
 .PHONY: integration-external-policies
 integration-external-policies: integration-reset
-	@terraform init 									./tests/external-policies
-	@terraform validate 							./tests/external-policies
-	@terraform plan 									./tests/external-policies
-	@terraform apply  -auto-approve 	./tests/external-policies
+	@terraform -chdir=./tests/external-policies init
+	@terraform -chdir=./tests/external-policies validate
+	@terraform -chdir=./tests/external-policies plan
+	@terraform -chdir=./tests/external-policies apply  -auto-approve

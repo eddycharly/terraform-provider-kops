@@ -30,6 +30,7 @@ func TestExpandResourceOpenstackLoadbalancerConfig(t *testing.T) {
 					"subnet_id":               nil,
 					"manage_sec_groups":       nil,
 					"enable_ingress_hostname": nil,
+					"ingress_hostname_suffix": nil,
 				},
 			},
 			want: _default,
@@ -56,6 +57,7 @@ func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 		"subnet_id":               nil,
 		"manage_sec_groups":       nil,
 		"enable_ingress_hostname": nil,
+		"ingress_hostname_suffix": nil,
 	}
 	type args struct {
 		in kops.OpenstackLoadbalancerConfig
@@ -166,6 +168,17 @@ func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
 					subject.EnableIngressHostname = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IngressHostnameSuffix - default",
+			args: args{
+				in: func() kops.OpenstackLoadbalancerConfig {
+					subject := kops.OpenstackLoadbalancerConfig{}
+					subject.IngressHostnameSuffix = nil
 					return subject
 				}(),
 			},
@@ -194,6 +207,7 @@ func TestFlattenResourceOpenstackLoadbalancerConfig(t *testing.T) {
 		"subnet_id":               nil,
 		"manage_sec_groups":       nil,
 		"enable_ingress_hostname": nil,
+		"ingress_hostname_suffix": nil,
 	}
 	type args struct {
 		in kops.OpenstackLoadbalancerConfig
@@ -304,6 +318,17 @@ func TestFlattenResourceOpenstackLoadbalancerConfig(t *testing.T) {
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
 					subject.EnableIngressHostname = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IngressHostnameSuffix - default",
+			args: args{
+				in: func() kops.OpenstackLoadbalancerConfig {
+					subject := kops.OpenstackLoadbalancerConfig{}
+					subject.IngressHostnameSuffix = nil
 					return subject
 				}(),
 			},

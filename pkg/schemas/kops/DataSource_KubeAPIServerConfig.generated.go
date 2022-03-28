@@ -107,10 +107,10 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"service_account_issuer":                       ComputedString(),
 			"service_account_jwksuri":                      ComputedString(),
 			"api_audiences":                                ComputedList(String()),
-			"cpu_request":                                  ComputedString(),
-			"cpu_limit":                                    ComputedString(),
-			"memory_request":                               ComputedString(),
-			"memory_limit":                                 ComputedString(),
+			"cpu_request":                                  ComputedQuantity(),
+			"cpu_limit":                                    ComputedQuantity(),
+			"memory_request":                               ComputedQuantity(),
+			"memory_limit":                                 ComputedQuantity(),
 			"event_ttl":                                    ComputedDuration(),
 			"audit_dynamic_configuration":                  ComputedBool(),
 			"enable_profiling":                             ComputedBool(),
@@ -1189,7 +1189,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["min_request_timeout"]),
-		TargetRamMb: func(in interface{}) int32 {
+		TargetRamMB: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["target_ram_mb"]),
 		ServiceAccountKeyFile: func(in interface{}) []string {
@@ -1273,17 +1273,81 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 				return out
 			}(in)
 		}(in["api_audiences"]),
-		CPURequest: func(in interface{}) string {
-			return string(ExpandString(in))
+		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
 		}(in["cpu_request"]),
-		CPULimit: func(in interface{}) string {
-			return string(ExpandString(in))
+		CPULimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
 		}(in["cpu_limit"]),
-		MemoryRequest: func(in interface{}) string {
-			return string(ExpandString(in))
+		MemoryRequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
 		}(in["memory_request"]),
-		MemoryLimit: func(in interface{}) string {
-			return string(ExpandString(in))
+		MemoryLimit: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
 		}(in["memory_limit"]),
 		EventTTL: func(in interface{}) *meta.Duration {
 			if in == nil {
@@ -2042,7 +2106,7 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 	}(in.MinRequestTimeout)
 	out["target_ram_mb"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
-	}(in.TargetRamMb)
+	}(in.TargetRamMB)
 	out["service_account_key_file"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -2091,17 +2155,45 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 			return out
 		}(in)
 	}(in.APIAudiences)
-	out["cpu_request"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
 	}(in.CPURequest)
-	out["cpu_limit"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["cpu_limit"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
 	}(in.CPULimit)
-	out["memory_request"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["memory_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
 	}(in.MemoryRequest)
-	out["memory_limit"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["memory_limit"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
 	}(in.MemoryLimit)
 	out["event_ttl"] = func(in *meta.Duration) interface{} {
 		return func(in *meta.Duration) interface{} {

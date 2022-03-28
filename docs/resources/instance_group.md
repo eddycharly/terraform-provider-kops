@@ -92,10 +92,9 @@ The following arguments are supported:
 - `machine_type` - (Required) - String - MachineType is the instance class.
 - `root_volume_size` - (Optional) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
 - `root_volume_type` - (Optional) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
-- `root_volume_iops` - (Optional) - Int - RootVolumeIops is the provisioned IOPS when the volume type is io1, io2 or gp3 (AWS only).
+- `root_volume_iops` - (Optional) - Int - RootVolumeIOPS is the provisioned IOPS when the volume type is io1, io2 or gp3 (AWS only).
 - `root_volume_throughput` - (Optional) - Int - RootVolumeThroughput is the volume throughput in MBps when the volume type is gp3 (AWS only).
 - `root_volume_optimization` - (Optional) - Bool - RootVolumeOptimization enables EBS optimization for an instance.
-- `root_volume_delete_on_termination` - (Optional) - Bool - RootVolumeDeleteOnTermination is deprecated as of kOps 1.21 and has no effect.
 - `root_volume_encryption` - (Optional) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
 - `root_volume_encryption_key` - (Optional) - String - RootVolumeEncryptionKey provides the key identifier for root volume encryption.
 - `volumes` - (Optional) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this instance group.
@@ -146,7 +145,7 @@ The following arguments are supported:
 - `delete_on_termination` - (Optional) - Bool - DeleteOnTermination configures volume retention policy upon instance termination.<br />The volume is deleted by default. Cluster deletion does not remove retained volumes.
 - `device` - (Required) - String - Device is an optional device name of the block device.
 - `encrypted` - (Optional) - Bool - Encrypted indicates you want to encrypt the volume.
-- `iops` - (Optional) - Int - Iops is the provisioned IOPS for the volume when the volume type is io1, io2 or gp3 (AWS only).
+- `iops` - (Optional) - Int - IOPS is the provisioned IOPS for the volume when the volume type is io1, io2 or gp3 (AWS only).
 - `throughput` - (Optional) - Int - Throughput is the volume throughput in MBps when the volume type is gp3 (AWS only).
 - `key` - (Optional) - String - Key is the encryption key identifier for the volume.
 - `size` - (Optional) - Int - Size is the size of the volume in GB.
@@ -175,7 +174,7 @@ HookSpec is a definition hook.
 The following arguments are supported:
 
 - `name` - (Required) - String - Name is an optional name for the hook, otherwise the name is kops-hook-<index>.
-- `disabled` - (Optional) - Bool - Disabled indicates if you want the unit switched off.
+- `enabled` - (Optional) - Bool - Enabled indicates if you want the unit switched on. Default: true.
 - `roles` - (Optional) - List(String) - Roles is an optional list of roles the hook should be rolled out to, defaults to all.
 - `requires` - (Optional) - List(String) - Requires is a series of systemd units the action requires.
 - `before` - (Optional) - List(String) - Before is a series of systemd units which this hook must run before.
@@ -273,6 +272,7 @@ The following arguments are supported:
 - `volume_plugin_directory` - (Optional) - String - The full path of the directory in which to search for additional third party volume plugins (this path must be writeable, dependent on your choice of OS).
 - `taints` - (Optional) - List(String) - Taints to add when registering a node in the cluster.
 - `feature_gates` - (Optional) - Map(String) - FeatureGates is set of key=value pairs that describe feature gates for alpha/experimental features.
+- `kernel_memcg_notification` - (Optional) - Bool - Integrate with the kernel memcg notification to determine if memory eviction thresholds are crossed rather than polling.
 - `kube_reserved` - (Optional) - Map(String) - Resource reservation for kubernetes system daemons like the kubelet, container runtime, node problem detector, etc.
 - `kube_reserved_cgroup` - (Optional) - String - Control group for kube daemons.
 - `system_reserved` - (Optional) - Map(String) - Capture resource reservation for OS system daemons like sshd, udev, etc.
@@ -304,6 +304,8 @@ The following arguments are supported:
 - `container_log_max_files` - (Optional) - Int - ContainerLogMaxFiles is the maximum number of container log files that can be present for a container. The number must be >= 2.
 - `enable_cadvisor_json_endpoints` - (Optional) - Bool - EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 - `pod_pids_limit` - (Optional) - Int - PodPidsLimit is the maximum number of pids in any pod.
+- `shutdown_grace_period` - (Optional) - Duration - ShutdownGracePeriod specifies the total duration that the node should delay the shutdown by.<br />Default: 30s.
+- `shutdown_grace_period_critical_pods` - (Optional) - Duration - ShutdownGracePeriodCriticalPods specifies the duration used to terminate critical pods during a node shutdown.<br />Default: 10s.
 
 ### mixed_instances_policy_spec
 

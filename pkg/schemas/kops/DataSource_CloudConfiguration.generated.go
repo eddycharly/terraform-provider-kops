@@ -21,18 +21,12 @@ func DataSourceCloudConfiguration() *schema.Resource {
 			"gce_service_account":            ComputedString(),
 			"disable_security_group_ingress": ComputedBool(),
 			"elb_security_group":             ComputedString(),
-			"v_sphere_username":              ComputedString(),
-			"v_sphere_password":              ComputedString(),
-			"v_sphere_server":                ComputedString(),
-			"v_sphere_datacenter":            ComputedString(),
-			"v_sphere_resource_pool":         ComputedString(),
-			"v_sphere_datastore":             ComputedString(),
-			"v_sphere_core_dns_server":       ComputedString(),
 			"spotinst_product":               ComputedString(),
 			"spotinst_orientation":           ComputedString(),
 			"openstack":                      ComputedStruct(DataSourceOpenstackConfiguration()),
 			"azure":                          ComputedStruct(DataSourceAzureConfiguration()),
 			"aws_ebs_csi_driver":             ComputedStruct(DataSourceAWSEBSCSIDriver()),
+			"gcp_pd_csi_driver":              ComputedStruct(DataSourceGCPPDCSIDriver()),
 		},
 	}
 
@@ -173,139 +167,6 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["elb_security_group"]),
-		VSphereUsername: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_username"]),
-		VSpherePassword: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_password"]),
-		VSphereServer: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_server"]),
-		VSphereDatacenter: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_datacenter"]),
-		VSphereResourcePool: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_resource_pool"]),
-		VSphereDatastore: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_datastore"]),
-		VSphereCoreDNSServer: func(in interface{}) *string {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *string {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in string) *string {
-					return &in
-				}(string(ExpandString(in)))
-			}(in)
-		}(in["v_sphere_core_dns_server"]),
 		SpotinstProduct: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -398,6 +259,24 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				}(in))
 			}(in)
 		}(in["aws_ebs_csi_driver"]),
+		GCPPDCSIDriver: func(in interface{}) *kops.GCPPDCSIDriver {
+			return func(in interface{}) *kops.GCPPDCSIDriver {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.GCPPDCSIDriver) *kops.GCPPDCSIDriver {
+					return &in
+				}(func(in interface{}) kops.GCPPDCSIDriver {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.GCPPDCSIDriver{}
+					}
+					return (ExpandDataSourceGCPPDCSIDriver(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["gcp_pd_csi_driver"]),
 	}
 }
 
@@ -474,76 +353,6 @@ func FlattenDataSourceCloudConfigurationInto(in kops.CloudConfiguration, out map
 			}(*in)
 		}(in)
 	}(in.ElbSecurityGroup)
-	out["v_sphere_username"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSphereUsername)
-	out["v_sphere_password"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSpherePassword)
-	out["v_sphere_server"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSphereServer)
-	out["v_sphere_datacenter"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSphereDatacenter)
-	out["v_sphere_resource_pool"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSphereResourcePool)
-	out["v_sphere_datastore"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSphereDatastore)
-	out["v_sphere_core_dns_server"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
-			}(*in)
-		}(in)
-	}(in.VSphereCoreDNSServer)
 	out["spotinst_product"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
@@ -600,6 +409,18 @@ func FlattenDataSourceCloudConfigurationInto(in kops.CloudConfiguration, out map
 			}(*in)
 		}(in)
 	}(in.AWSEBSCSIDriver)
+	out["gcp_pd_csi_driver"] = func(in *kops.GCPPDCSIDriver) interface{} {
+		return func(in *kops.GCPPDCSIDriver) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.GCPPDCSIDriver) interface{} {
+				return func(in kops.GCPPDCSIDriver) []interface{} {
+					return []interface{}{FlattenDataSourceGCPPDCSIDriver(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.GCPPDCSIDriver)
 }
 
 func FlattenDataSourceCloudConfiguration(in kops.CloudConfiguration) map[string]interface{} {

@@ -16,6 +16,7 @@ func ResourceCalicoNetworkingSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"registry":                  OptionalString(),
 			"version":                   OptionalString(),
+			"allow_ip_forwarding":       OptionalBool(),
 			"aws_src_dst_check":         OptionalString(),
 			"bpf_enabled":               OptionalBool(),
 			"bpf_external_service_mode": OptionalString(),
@@ -35,7 +36,6 @@ func ResourceCalicoNetworkingSpec() *schema.Resource {
 			"prometheus_metrics_port":            OptionalInt(),
 			"prometheus_go_metrics_enabled":      OptionalBool(),
 			"prometheus_process_metrics_enabled": OptionalBool(),
-			"major_version":                      OptionalString(),
 			"typha_prometheus_metrics_enabled":   OptionalBool(),
 			"typha_prometheus_metrics_port":      OptionalInt(),
 			"typha_replicas":                     OptionalInt(),
@@ -58,6 +58,9 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 		Version: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["version"]),
+		AllowIPForwarding: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["allow_ip_forwarding"]),
 		AWSSrcDstCheck: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["aws_src_dst_check"]),
@@ -163,9 +166,6 @@ func ExpandResourceCalicoNetworkingSpec(in map[string]interface{}) kops.CalicoNe
 		PrometheusProcessMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["prometheus_process_metrics_enabled"]),
-		MajorVersion: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["major_version"]),
 		TyphaPrometheusMetricsEnabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["typha_prometheus_metrics_enabled"]),
@@ -191,6 +191,9 @@ func FlattenResourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out m
 	out["version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Version)
+	out["allow_ip_forwarding"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.AllowIPForwarding)
 	out["aws_src_dst_check"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.AWSSrcDstCheck)
@@ -269,9 +272,6 @@ func FlattenResourceCalicoNetworkingSpecInto(in kops.CalicoNetworkingSpec, out m
 	out["prometheus_process_metrics_enabled"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.PrometheusProcessMetricsEnabled)
-	out["major_version"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.MajorVersion)
 	out["typha_prometheus_metrics_enabled"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.TyphaPrometheusMetricsEnabled)

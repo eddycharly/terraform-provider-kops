@@ -12,6 +12,7 @@ func DataSourceBastionLoadBalancerSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"additional_security_groups": ComputedList(String()),
+			"type":                       ComputedString(),
 		},
 	}
 
@@ -35,6 +36,9 @@ func ExpandDataSourceBastionLoadBalancerSpec(in map[string]interface{}) kops.Bas
 				return out
 			}(in)
 		}(in["additional_security_groups"]),
+		Type: func(in interface{}) kops.LoadBalancerType {
+			return kops.LoadBalancerType(ExpandString(in))
+		}(in["type"]),
 	}
 }
 
@@ -48,6 +52,9 @@ func FlattenDataSourceBastionLoadBalancerSpecInto(in kops.BastionLoadBalancerSpe
 			return out
 		}(in)
 	}(in.AdditionalSecurityGroups)
+	out["type"] = func(in kops.LoadBalancerType) interface{} {
+		return FlattenString(string(in))
+	}(in.Type)
 }
 
 func FlattenDataSourceBastionLoadBalancerSpec(in kops.BastionLoadBalancerSpec) map[string]interface{} {

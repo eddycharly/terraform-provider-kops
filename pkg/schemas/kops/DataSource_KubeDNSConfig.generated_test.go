@@ -29,8 +29,6 @@ func TestExpandDataSourceKubeDNSConfig(t *testing.T) {
 					"cpa_image":            "",
 					"domain":               "",
 					"external_core_file":   "",
-					"image":                "",
-					"replicas":             0,
 					"provider":             "",
 					"server_ip":            "",
 					"stub_domains":         func() []interface{} { return nil }(),
@@ -64,8 +62,6 @@ func TestFlattenDataSourceKubeDNSConfigInto(t *testing.T) {
 		"cpa_image":            "",
 		"domain":               "",
 		"external_core_file":   "",
-		"image":                "",
-		"replicas":             0,
 		"provider":             "",
 		"server_ip":            "",
 		"stub_domains":         func() []interface{} { return nil }(),
@@ -173,28 +169,6 @@ func TestFlattenDataSourceKubeDNSConfigInto(t *testing.T) {
 				in: func() kops.KubeDNSConfig {
 					subject := kops.KubeDNSConfig{}
 					subject.ExternalCoreFile = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Image - default",
-			args: args{
-				in: func() kops.KubeDNSConfig {
-					subject := kops.KubeDNSConfig{}
-					subject.Image = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Replicas - default",
-			args: args{
-				in: func() kops.KubeDNSConfig {
-					subject := kops.KubeDNSConfig{}
-					subject.Replicas = 0
 					return subject
 				}(),
 			},
@@ -310,8 +284,6 @@ func TestFlattenDataSourceKubeDNSConfig(t *testing.T) {
 		"cpa_image":            "",
 		"domain":               "",
 		"external_core_file":   "",
-		"image":                "",
-		"replicas":             0,
 		"provider":             "",
 		"server_ip":            "",
 		"stub_domains":         func() []interface{} { return nil }(),
@@ -419,28 +391,6 @@ func TestFlattenDataSourceKubeDNSConfig(t *testing.T) {
 				in: func() kops.KubeDNSConfig {
 					subject := kops.KubeDNSConfig{}
 					subject.ExternalCoreFile = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Image - default",
-			args: args{
-				in: func() kops.KubeDNSConfig {
-					subject := kops.KubeDNSConfig{}
-					subject.Image = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Replicas - default",
-			args: args{
-				in: func() kops.KubeDNSConfig {
-					subject := kops.KubeDNSConfig{}
-					subject.Replicas = 0
 					return subject
 				}(),
 			},

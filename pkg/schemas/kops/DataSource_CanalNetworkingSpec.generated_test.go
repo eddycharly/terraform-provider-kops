@@ -24,8 +24,7 @@ func TestExpandDataSourceCanalNetworkingSpec(t *testing.T) {
 					"chain_insert_mode":                  "",
 					"cpu_request":                        nil,
 					"default_endpoint_to_host_action":    "",
-					"disable_flannel_forward_rules":      false,
-					"disable_tx_checksum_offloading":     false,
+					"flanneld_iptables_forward_rules":    nil,
 					"iptables_backend":                   "",
 					"log_severity_sys":                   "",
 					"mtu":                                nil,
@@ -56,8 +55,7 @@ func TestFlattenDataSourceCanalNetworkingSpecInto(t *testing.T) {
 		"chain_insert_mode":                  "",
 		"cpu_request":                        nil,
 		"default_endpoint_to_host_action":    "",
-		"disable_flannel_forward_rules":      false,
-		"disable_tx_checksum_offloading":     false,
+		"flanneld_iptables_forward_rules":    nil,
 		"iptables_backend":                   "",
 		"log_severity_sys":                   "",
 		"mtu":                                nil,
@@ -118,22 +116,11 @@ func TestFlattenDataSourceCanalNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableFlannelForwardRules - default",
+			name: "FlanneldIptablesForwardRules - default",
 			args: args{
 				in: func() kops.CanalNetworkingSpec {
 					subject := kops.CanalNetworkingSpec{}
-					subject.DisableFlannelForwardRules = false
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "DisableTxChecksumOffloading - default",
-			args: args{
-				in: func() kops.CanalNetworkingSpec {
-					subject := kops.CanalNetworkingSpec{}
-					subject.DisableTxChecksumOffloading = false
+					subject.FlanneldIptablesForwardRules = nil
 					return subject
 				}(),
 			},
@@ -266,8 +253,7 @@ func TestFlattenDataSourceCanalNetworkingSpec(t *testing.T) {
 		"chain_insert_mode":                  "",
 		"cpu_request":                        nil,
 		"default_endpoint_to_host_action":    "",
-		"disable_flannel_forward_rules":      false,
-		"disable_tx_checksum_offloading":     false,
+		"flanneld_iptables_forward_rules":    nil,
 		"iptables_backend":                   "",
 		"log_severity_sys":                   "",
 		"mtu":                                nil,
@@ -328,22 +314,11 @@ func TestFlattenDataSourceCanalNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableFlannelForwardRules - default",
+			name: "FlanneldIptablesForwardRules - default",
 			args: args{
 				in: func() kops.CanalNetworkingSpec {
 					subject := kops.CanalNetworkingSpec{}
-					subject.DisableFlannelForwardRules = false
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "DisableTxChecksumOffloading - default",
-			args: args{
-				in: func() kops.CanalNetworkingSpec {
-					subject := kops.CanalNetworkingSpec{}
-					subject.DisableTxChecksumOffloading = false
+					subject.FlanneldIptablesForwardRules = nil
 					return subject
 				}(),
 			},

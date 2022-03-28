@@ -22,6 +22,7 @@ func ResourceOpenstackLoadbalancerConfig() *schema.Resource {
 			"subnet_id":               OptionalString(),
 			"manage_sec_groups":       OptionalBool(),
 			"enable_ingress_hostname": OptionalBool(),
+			"ingress_hostname_suffix": OptionalString(),
 		},
 	}
 
@@ -204,6 +205,25 @@ func ExpandResourceOpenstackLoadbalancerConfig(in map[string]interface{}) kops.O
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_ingress_hostname"]),
+		IngressHostnameSuffix: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["ingress_hostname_suffix"]),
 	}
 }
 
@@ -298,6 +318,16 @@ func FlattenResourceOpenstackLoadbalancerConfigInto(in kops.OpenstackLoadbalance
 			}(*in)
 		}(in)
 	}(in.EnableIngressHostname)
+	out["ingress_hostname_suffix"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.IngressHostnameSuffix)
 }
 
 func FlattenResourceOpenstackLoadbalancerConfig(in kops.OpenstackLoadbalancerConfig) map[string]interface{} {

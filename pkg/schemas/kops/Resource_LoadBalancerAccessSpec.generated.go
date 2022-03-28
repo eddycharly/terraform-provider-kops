@@ -91,7 +91,7 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 				return out
 			}(in)
 		}(in["additional_security_groups"]),
-		UseForInternalApi: func(in interface{}) bool {
+		UseForInternalAPI: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["use_for_internal_api"]),
 		SSLCertificate: func(in interface{}) string {
@@ -211,7 +211,7 @@ func FlattenResourceLoadBalancerAccessSpecInto(in kops.LoadBalancerAccessSpec, o
 	}(in.AdditionalSecurityGroups)
 	out["use_for_internal_api"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
-	}(in.UseForInternalApi)
+	}(in.UseForInternalAPI)
 	out["ssl_certificate"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.SSLCertificate)

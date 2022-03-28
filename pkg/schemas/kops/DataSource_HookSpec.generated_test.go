@@ -22,7 +22,7 @@ func TestExpandDataSourceHookSpec(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"name":             "",
-					"disabled":         false,
+					"enabled":          nil,
 					"roles":            func() []interface{} { return nil }(),
 					"requires":         func() []interface{} { return nil }(),
 					"before":           func() []interface{} { return nil }(),
@@ -47,7 +47,7 @@ func TestExpandDataSourceHookSpec(t *testing.T) {
 func TestFlattenDataSourceHookSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"name":             "",
-		"disabled":         false,
+		"enabled":          nil,
 		"roles":            func() []interface{} { return nil }(),
 		"requires":         func() []interface{} { return nil }(),
 		"before":           func() []interface{} { return nil }(),
@@ -82,11 +82,11 @@ func TestFlattenDataSourceHookSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Disabled - default",
+			name: "Enabled - default",
 			args: args{
 				in: func() kops.HookSpec {
 					subject := kops.HookSpec{}
-					subject.Disabled = false
+					subject.Enabled = nil
 					return subject
 				}(),
 			},
@@ -173,7 +173,7 @@ func TestFlattenDataSourceHookSpecInto(t *testing.T) {
 func TestFlattenDataSourceHookSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"name":             "",
-		"disabled":         false,
+		"enabled":          nil,
 		"roles":            func() []interface{} { return nil }(),
 		"requires":         func() []interface{} { return nil }(),
 		"before":           func() []interface{} { return nil }(),
@@ -208,11 +208,11 @@ func TestFlattenDataSourceHookSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Disabled - default",
+			name: "Enabled - default",
 			args: args{
 				in: func() kops.HookSpec {
 					subject := kops.HookSpec{}
-					subject.Disabled = false
+					subject.Enabled = nil
 					return subject
 				}(),
 			},

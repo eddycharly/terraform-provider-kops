@@ -23,6 +23,7 @@ func TestExpandResourceCalicoNetworkingSpec(t *testing.T) {
 				in: map[string]interface{}{
 					"registry":                  "",
 					"version":                   "",
+					"allow_ip_forwarding":       false,
 					"aws_src_dst_check":         "",
 					"bpf_enabled":               false,
 					"bpf_external_service_mode": "",
@@ -42,7 +43,6 @@ func TestExpandResourceCalicoNetworkingSpec(t *testing.T) {
 					"prometheus_metrics_port":            0,
 					"prometheus_go_metrics_enabled":      false,
 					"prometheus_process_metrics_enabled": false,
-					"major_version":                      "",
 					"typha_prometheus_metrics_enabled":   false,
 					"typha_prometheus_metrics_port":      0,
 					"typha_replicas":                     0,
@@ -67,6 +67,7 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"registry":                  "",
 		"version":                   "",
+		"allow_ip_forwarding":       false,
 		"aws_src_dst_check":         "",
 		"bpf_enabled":               false,
 		"bpf_external_service_mode": "",
@@ -86,7 +87,6 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 		"prometheus_metrics_port":            0,
 		"prometheus_go_metrics_enabled":      false,
 		"prometheus_process_metrics_enabled": false,
-		"major_version":                      "",
 		"typha_prometheus_metrics_enabled":   false,
 		"typha_prometheus_metrics_port":      0,
 		"typha_replicas":                     0,
@@ -125,6 +125,17 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
 					subject.Version = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowIpForwarding - default",
+			args: args{
+				in: func() kops.CalicoNetworkingSpec {
+					subject := kops.CalicoNetworkingSpec{}
+					subject.AllowIPForwarding = false
 					return subject
 				}(),
 			},
@@ -334,17 +345,6 @@ func TestFlattenResourceCalicoNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
 					subject.PrometheusProcessMetricsEnabled = false
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MajorVersion - default",
-			args: args{
-				in: func() kops.CalicoNetworkingSpec {
-					subject := kops.CalicoNetworkingSpec{}
-					subject.MajorVersion = ""
 					return subject
 				}(),
 			},
@@ -421,6 +421,7 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"registry":                  "",
 		"version":                   "",
+		"allow_ip_forwarding":       false,
 		"aws_src_dst_check":         "",
 		"bpf_enabled":               false,
 		"bpf_external_service_mode": "",
@@ -440,7 +441,6 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 		"prometheus_metrics_port":            0,
 		"prometheus_go_metrics_enabled":      false,
 		"prometheus_process_metrics_enabled": false,
-		"major_version":                      "",
 		"typha_prometheus_metrics_enabled":   false,
 		"typha_prometheus_metrics_port":      0,
 		"typha_replicas":                     0,
@@ -479,6 +479,17 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
 					subject.Version = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowIpForwarding - default",
+			args: args{
+				in: func() kops.CalicoNetworkingSpec {
+					subject := kops.CalicoNetworkingSpec{}
+					subject.AllowIPForwarding = false
 					return subject
 				}(),
 			},
@@ -688,17 +699,6 @@ func TestFlattenResourceCalicoNetworkingSpec(t *testing.T) {
 				in: func() kops.CalicoNetworkingSpec {
 					subject := kops.CalicoNetworkingSpec{}
 					subject.PrometheusProcessMetricsEnabled = false
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MajorVersion - default",
-			args: args{
-				in: func() kops.CalicoNetworkingSpec {
-					subject := kops.CalicoNetworkingSpec{}
-					subject.MajorVersion = ""
 					return subject
 				}(),
 			},

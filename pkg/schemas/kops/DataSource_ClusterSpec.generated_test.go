@@ -83,7 +83,7 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					"assets":                            nil,
 					"iam":                               nil,
 					"encryption_config":                 nil,
-					"disable_subnet_tags":               false,
+					"tag_subnets":                       nil,
 					"use_host_certificates":             nil,
 					"sysctl_parameters":                 func() []interface{} { return nil }(),
 					"rolling_update":                    nil,
@@ -91,6 +91,7 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
+					"pod_identity_webhook":              nil,
 				},
 			},
 			want: _default,
@@ -170,7 +171,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"disable_subnet_tags":               false,
+		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
@@ -178,6 +179,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"pod_identity_webhook":              nil,
 	}
 	type args struct {
 		in kops.ClusterSpec
@@ -877,11 +879,11 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableSubnetTags - default",
+			name: "TagSubnets - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.DisableSubnetTags = false
+					subject.TagSubnets = nil
 					return subject
 				}(),
 			},
@@ -959,6 +961,17 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},
@@ -1040,7 +1053,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"disable_subnet_tags":               false,
+		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
@@ -1048,6 +1061,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"pod_identity_webhook":              nil,
 	}
 	type args struct {
 		in kops.ClusterSpec
@@ -1747,11 +1761,11 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableSubnetTags - default",
+			name: "TagSubnets - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.DisableSubnetTags = false
+					subject.TagSubnets = nil
 					return subject
 				}(),
 			},
@@ -1829,6 +1843,17 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},

@@ -32,6 +32,7 @@ func TestExpandDataSourceCloudControllerManagerConfig(t *testing.T) {
 					"cidr_allocator_type":             nil,
 					"leader_election":                 nil,
 					"use_service_account_credentials": nil,
+					"enable_leader_migration":         nil,
 				},
 			},
 			want: _default,
@@ -60,6 +61,7 @@ func TestFlattenDataSourceCloudControllerManagerConfigInto(t *testing.T) {
 		"cidr_allocator_type":             nil,
 		"leader_election":                 nil,
 		"use_service_account_credentials": nil,
+		"enable_leader_migration":         nil,
 	}
 	type args struct {
 		in kops.CloudControllerManagerConfig
@@ -192,6 +194,17 @@ func TestFlattenDataSourceCloudControllerManagerConfigInto(t *testing.T) {
 				in: func() kops.CloudControllerManagerConfig {
 					subject := kops.CloudControllerManagerConfig{}
 					subject.UseServiceAccountCredentials = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableLeaderMigration - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.EnableLeaderMigration = nil
 					return subject
 				}(),
 			},
@@ -222,6 +235,7 @@ func TestFlattenDataSourceCloudControllerManagerConfig(t *testing.T) {
 		"cidr_allocator_type":             nil,
 		"leader_election":                 nil,
 		"use_service_account_credentials": nil,
+		"enable_leader_migration":         nil,
 	}
 	type args struct {
 		in kops.CloudControllerManagerConfig
@@ -354,6 +368,17 @@ func TestFlattenDataSourceCloudControllerManagerConfig(t *testing.T) {
 				in: func() kops.CloudControllerManagerConfig {
 					subject := kops.CloudControllerManagerConfig{}
 					subject.UseServiceAccountCredentials = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableLeaderMigration - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.EnableLeaderMigration = nil
 					return subject
 				}(),
 			},

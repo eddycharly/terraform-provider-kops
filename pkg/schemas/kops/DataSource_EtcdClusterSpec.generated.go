@@ -18,8 +18,6 @@ func DataSourceEtcdClusterSpec() *schema.Resource {
 			"name":                    ComputedString(),
 			"provider":                ComputedString(),
 			"member":                  ComputedList(DataSourceEtcdMemberSpec()),
-			"enable_etcd_tls":         ComputedBool(),
-			"enable_tls_auth":         ComputedBool(),
 			"version":                 ComputedString(),
 			"leader_election_timeout": ComputedDuration(),
 			"heartbeat_interval":      ComputedDuration(),
@@ -62,12 +60,6 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				return out
 			}(in)
 		}(in["member"]),
-		EnableEtcdTLS: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_etcd_tls"]),
-		EnableTLSAuth: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_tls_auth"]),
 		Version: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["version"]),
@@ -207,12 +199,6 @@ func FlattenDataSourceEtcdClusterSpecInto(in kops.EtcdClusterSpec, out map[strin
 			return out
 		}(in)
 	}(in.Members)
-	out["enable_etcd_tls"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableEtcdTLS)
-	out["enable_tls_auth"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableTLSAuth)
 	out["version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Version)

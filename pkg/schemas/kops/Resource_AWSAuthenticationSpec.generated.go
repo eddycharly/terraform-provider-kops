@@ -11,27 +11,28 @@ import (
 
 var _ = Schema
 
-func DataSourceAwsAuthenticationSpec() *schema.Resource {
+func ResourceAWSAuthenticationSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"image":          ComputedString(),
-			"backend_mode":   ComputedString(),
-			"cluster_id":     ComputedString(),
-			"memory_request": ComputedQuantity(),
-			"cpu_request":    ComputedQuantity(),
-			"memory_limit":   ComputedQuantity(),
-			"cpu_limit":      ComputedQuantity(),
+			"image":             OptionalString(),
+			"backend_mode":      OptionalString(),
+			"cluster_id":        OptionalString(),
+			"memory_request":    OptionalQuantity(),
+			"cpu_request":       OptionalQuantity(),
+			"memory_limit":      OptionalQuantity(),
+			"cpu_limit":         OptionalQuantity(),
+			"identity_mappings": OptionalList(ResourceAWSAuthenticationIdentityMappingSpec()),
 		},
 	}
 
 	return res
 }
 
-func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAuthenticationSpec {
+func ExpandResourceAWSAuthenticationSpec(in map[string]interface{}) kops.AWSAuthenticationSpec {
 	if in == nil {
-		panic("expand AwsAuthenticationSpec failure, in is nil")
+		panic("expand AWSAuthenticationSpec failure, in is nil")
 	}
-	return kops.AwsAuthenticationSpec{
+	return kops.AWSAuthenticationSpec{
 		Image: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["image"]),
@@ -117,10 +118,27 @@ func ExpandDataSourceAwsAuthenticationSpec(in map[string]interface{}) kops.AwsAu
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_limit"]),
+		IdentityMappings: func(in interface{}) []kops.AWSAuthenticationIdentityMappingSpec {
+			return func(in interface{}) []kops.AWSAuthenticationIdentityMappingSpec {
+				if in == nil {
+					return nil
+				}
+				var out []kops.AWSAuthenticationIdentityMappingSpec
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) kops.AWSAuthenticationIdentityMappingSpec {
+						if in == nil {
+							return kops.AWSAuthenticationIdentityMappingSpec{}
+						}
+						return (ExpandResourceAWSAuthenticationIdentityMappingSpec(in.(map[string]interface{})))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["identity_mappings"]),
 	}
 }
 
-func FlattenDataSourceAwsAuthenticationSpecInto(in kops.AwsAuthenticationSpec, out map[string]interface{}) {
+func FlattenResourceAWSAuthenticationSpecInto(in kops.AWSAuthenticationSpec, out map[string]interface{}) {
 	out["image"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Image)
@@ -170,10 +188,21 @@ func FlattenDataSourceAwsAuthenticationSpecInto(in kops.AwsAuthenticationSpec, o
 			}(*in)
 		}(in)
 	}(in.CPULimit)
+	out["identity_mappings"] = func(in []kops.AWSAuthenticationIdentityMappingSpec) interface{} {
+		return func(in []kops.AWSAuthenticationIdentityMappingSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.AWSAuthenticationIdentityMappingSpec) interface{} {
+					return FlattenResourceAWSAuthenticationIdentityMappingSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.IdentityMappings)
 }
 
-func FlattenDataSourceAwsAuthenticationSpec(in kops.AwsAuthenticationSpec) map[string]interface{} {
+func FlattenResourceAWSAuthenticationSpec(in kops.AWSAuthenticationSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourceAwsAuthenticationSpecInto(in, out)
+	FlattenResourceAWSAuthenticationSpecInto(in, out)
 	return out
 }

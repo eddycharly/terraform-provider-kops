@@ -83,7 +83,7 @@ func TestExpandResourceCluster(t *testing.T) {
 					"assets":                            nil,
 					"iam":                               nil,
 					"encryption_config":                 nil,
-					"disable_subnet_tags":               false,
+					"tag_subnets":                       nil,
 					"use_host_certificates":             nil,
 					"sysctl_parameters":                 func() []interface{} { return nil }(),
 					"rolling_update":                    nil,
@@ -91,6 +91,7 @@ func TestExpandResourceCluster(t *testing.T) {
 					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
+					"pod_identity_webhook":              nil,
 					"revision":                          0,
 					"name":                              "",
 					"admin_ssh_key":                     "",
@@ -174,7 +175,7 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"disable_subnet_tags":               false,
+		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
@@ -182,6 +183,7 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"pod_identity_webhook":              nil,
 		"revision":                          0,
 		"name":                              "",
 		"admin_ssh_key":                     "",
@@ -885,11 +887,11 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableSubnetTags - default",
+			name: "TagSubnets - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.DisableSubnetTags = false
+					subject.TagSubnets = nil
 					return subject
 				}(),
 			},
@@ -967,6 +969,17 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},
@@ -1092,7 +1105,7 @@ func TestFlattenResourceCluster(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"disable_subnet_tags":               false,
+		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
@@ -1100,6 +1113,7 @@ func TestFlattenResourceCluster(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"pod_identity_webhook":              nil,
 		"revision":                          0,
 		"name":                              "",
 		"admin_ssh_key":                     "",
@@ -1803,11 +1817,11 @@ func TestFlattenResourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DisableSubnetTags - default",
+			name: "TagSubnets - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.DisableSubnetTags = false
+					subject.TagSubnets = nil
 					return subject
 				}(),
 			},
@@ -1885,6 +1899,17 @@ func TestFlattenResourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},

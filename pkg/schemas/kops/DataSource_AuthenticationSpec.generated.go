@@ -12,7 +12,7 @@ func DataSourceAuthenticationSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"kopeio": ComputedStruct(DataSourceKopeioAuthenticationSpec()),
-			"aws":    ComputedStruct(DataSourceAwsAuthenticationSpec()),
+			"aws":    ComputedStruct(DataSourceAWSAuthenticationSpec()),
 		},
 	}
 
@@ -42,21 +42,21 @@ func ExpandDataSourceAuthenticationSpec(in map[string]interface{}) kops.Authenti
 				}(in))
 			}(in)
 		}(in["kopeio"]),
-		Aws: func(in interface{}) *kops.AwsAuthenticationSpec {
-			return func(in interface{}) *kops.AwsAuthenticationSpec {
+		AWS: func(in interface{}) *kops.AWSAuthenticationSpec {
+			return func(in interface{}) *kops.AWSAuthenticationSpec {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in kops.AwsAuthenticationSpec) *kops.AwsAuthenticationSpec {
+				return func(in kops.AWSAuthenticationSpec) *kops.AWSAuthenticationSpec {
 					return &in
-				}(func(in interface{}) kops.AwsAuthenticationSpec {
+				}(func(in interface{}) kops.AWSAuthenticationSpec {
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AwsAuthenticationSpec{}
+						return kops.AWSAuthenticationSpec{}
 					}
-					return (ExpandDataSourceAwsAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceAWSAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["aws"]),
@@ -76,18 +76,18 @@ func FlattenDataSourceAuthenticationSpecInto(in kops.AuthenticationSpec, out map
 			}(*in)
 		}(in)
 	}(in.Kopeio)
-	out["aws"] = func(in *kops.AwsAuthenticationSpec) interface{} {
-		return func(in *kops.AwsAuthenticationSpec) interface{} {
+	out["aws"] = func(in *kops.AWSAuthenticationSpec) interface{} {
+		return func(in *kops.AWSAuthenticationSpec) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in kops.AwsAuthenticationSpec) interface{} {
-				return func(in kops.AwsAuthenticationSpec) []interface{} {
-					return []interface{}{FlattenDataSourceAwsAuthenticationSpec(in)}
+			return func(in kops.AWSAuthenticationSpec) interface{} {
+				return func(in kops.AWSAuthenticationSpec) []interface{} {
+					return []interface{}{FlattenDataSourceAWSAuthenticationSpec(in)}
 				}(in)
 			}(*in)
 		}(in)
-	}(in.Aws)
+	}(in.AWS)
 }
 
 func FlattenDataSourceAuthenticationSpec(in kops.AuthenticationSpec) map[string]interface{} {

@@ -21,9 +21,9 @@ func TestExpandDataSourceAmazonVPCNetworkingSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"image_name":      "",
-					"init_image_name": "",
-					"env":             func() []interface{} { return nil }(),
+					"image":      "",
+					"init_image": "",
+					"env":        func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -41,9 +41,9 @@ func TestExpandDataSourceAmazonVPCNetworkingSpec(t *testing.T) {
 
 func TestFlattenDataSourceAmazonVPCNetworkingSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"image_name":      "",
-		"init_image_name": "",
-		"env":             func() []interface{} { return nil }(),
+		"image":      "",
+		"init_image": "",
+		"env":        func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.AmazonVPCNetworkingSpec
@@ -61,22 +61,22 @@ func TestFlattenDataSourceAmazonVPCNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ImageName - default",
+			name: "Image - default",
 			args: args{
 				in: func() kops.AmazonVPCNetworkingSpec {
 					subject := kops.AmazonVPCNetworkingSpec{}
-					subject.ImageName = ""
+					subject.Image = ""
 					return subject
 				}(),
 			},
 			want: _default,
 		},
 		{
-			name: "InitImageName - default",
+			name: "InitImage - default",
 			args: args{
 				in: func() kops.AmazonVPCNetworkingSpec {
 					subject := kops.AmazonVPCNetworkingSpec{}
-					subject.InitImageName = ""
+					subject.InitImage = ""
 					return subject
 				}(),
 			},
@@ -107,9 +107,9 @@ func TestFlattenDataSourceAmazonVPCNetworkingSpecInto(t *testing.T) {
 
 func TestFlattenDataSourceAmazonVPCNetworkingSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"image_name":      "",
-		"init_image_name": "",
-		"env":             func() []interface{} { return nil }(),
+		"image":      "",
+		"init_image": "",
+		"env":        func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.AmazonVPCNetworkingSpec
@@ -127,22 +127,22 @@ func TestFlattenDataSourceAmazonVPCNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ImageName - default",
+			name: "Image - default",
 			args: args{
 				in: func() kops.AmazonVPCNetworkingSpec {
 					subject := kops.AmazonVPCNetworkingSpec{}
-					subject.ImageName = ""
+					subject.Image = ""
 					return subject
 				}(),
 			},
 			want: _default,
 		},
 		{
-			name: "InitImageName - default",
+			name: "InitImage - default",
 			args: args{
 				in: func() kops.AmazonVPCNetworkingSpec {
 					subject := kops.AmazonVPCNetworkingSpec{}
-					subject.InitImageName = ""
+					subject.InitImage = ""
 					return subject
 				}(),
 			},

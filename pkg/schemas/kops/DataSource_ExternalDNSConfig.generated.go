@@ -13,7 +13,6 @@ var _ = Schema
 func DataSourceExternalDNSConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"disable":         ComputedBool(),
 			"watch_ingress":   ComputedBool(),
 			"watch_namespace": ComputedString(),
 			"provider":        ComputedString(),
@@ -28,9 +27,6 @@ func ExpandDataSourceExternalDNSConfig(in map[string]interface{}) kops.ExternalD
 		panic("expand ExternalDNSConfig failure, in is nil")
 	}
 	return kops.ExternalDNSConfig{
-		Disable: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable"]),
 		WatchIngress: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -60,9 +56,6 @@ func ExpandDataSourceExternalDNSConfig(in map[string]interface{}) kops.ExternalD
 }
 
 func FlattenDataSourceExternalDNSConfigInto(in kops.ExternalDNSConfig, out map[string]interface{}) {
-	out["disable"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Disable)
 	out["watch_ingress"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
