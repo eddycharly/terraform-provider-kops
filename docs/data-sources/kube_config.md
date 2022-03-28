@@ -17,7 +17,7 @@ provider "kubectl" {
   password               = data.kops_kube_config.kube_config.kube_password
   client_certificate     = data.kops_kube_config.kube_config.client_cert
   client_key             = data.kops_kube_config.kube_config.client_key
-  cluster_ca_certificate = data.kops_kube_config.kube_config.ca_cert
+  cluster_ca_certificate = data.kops_kube_config.kube_config.ca_certs
 }
 ```
 
