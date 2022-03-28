@@ -40,10 +40,11 @@ require (
 	github.com/aws/aws-sdk-go v1.43.26
 	github.com/google/go-cmp v0.5.7
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.12.0
+	github.com/smartystreets/assertions v1.2.0 // indirect
 	golang.org/x/tools v0.1.10
-	k8s.io/api v0.22.5
-	k8s.io/apimachinery v0.22.5
-	k8s.io/client-go v0.22.5
+	k8s.io/api v0.23.1
+	k8s.io/apimachinery v0.23.1
+	k8s.io/client-go v0.23.1
 	k8s.io/klog v1.0.0
-	k8s.io/kops v1.22.4
+	k8s.io/kops v1.23.0
 )
