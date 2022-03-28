@@ -21,7 +21,9 @@ func TestExpandDataSourceClusterSecrets(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"docker_config": "",
+					"docker_config":   "",
+					"cluster_ca_cert": "",
+					"cluster_ca_key":  "",
 				},
 			},
 			want: _default,
@@ -39,7 +41,9 @@ func TestExpandDataSourceClusterSecrets(t *testing.T) {
 
 func TestFlattenDataSourceClusterSecretsInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"docker_config": "",
+		"docker_config":   "",
+		"cluster_ca_cert": "",
+		"cluster_ca_key":  "",
 	}
 	type args struct {
 		in resources.ClusterSecrets
@@ -67,6 +71,28 @@ func TestFlattenDataSourceClusterSecretsInto(t *testing.T) {
 			},
 			want: _default,
 		},
+		{
+			name: "ClusterCaCert - default",
+			args: args{
+				in: func() resources.ClusterSecrets {
+					subject := resources.ClusterSecrets{}
+					subject.ClusterCaCert = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterCaKey - default",
+			args: args{
+				in: func() resources.ClusterSecrets {
+					subject := resources.ClusterSecrets{}
+					subject.ClusterCaKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -81,7 +107,9 @@ func TestFlattenDataSourceClusterSecretsInto(t *testing.T) {
 
 func TestFlattenDataSourceClusterSecrets(t *testing.T) {
 	_default := map[string]interface{}{
-		"docker_config": "",
+		"docker_config":   "",
+		"cluster_ca_cert": "",
+		"cluster_ca_key":  "",
 	}
 	type args struct {
 		in resources.ClusterSecrets
@@ -104,6 +132,28 @@ func TestFlattenDataSourceClusterSecrets(t *testing.T) {
 				in: func() resources.ClusterSecrets {
 					subject := resources.ClusterSecrets{}
 					subject.DockerConfig = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterCaCert - default",
+			args: args{
+				in: func() resources.ClusterSecrets {
+					subject := resources.ClusterSecrets{}
+					subject.ClusterCaCert = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterCaKey - default",
+			args: args{
+				in: func() resources.ClusterSecrets {
+					subject := resources.ClusterSecrets{}
+					subject.ClusterCaKey = ""
 					return subject
 				}(),
 			},
