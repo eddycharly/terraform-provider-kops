@@ -17,8 +17,12 @@ clean:
 	@rm -rf ./docs/provider-config/*.md
 	@rm -rf ./docs/resources/*.md
 
+.PHONY: install-goimports
+install-goimports:
+	go install golang.org/x/tools/cmd/goimports@latest
+
 .PHONY: gen-tf-code
-gen-tf-code: clean
+gen-tf-code: clean install-goimports
 	@go run ./hack/gen-tf-code/...
 	@go fmt ./pkg/schemas/...
 	@~/go/bin/goimports -w ./pkg/schemas
