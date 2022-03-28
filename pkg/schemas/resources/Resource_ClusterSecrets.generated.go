@@ -11,7 +11,9 @@ var _ = Schema
 func ResourceClusterSecrets() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"docker_config": Sensitive(OptionalString()),
+			"docker_config":   Sensitive(OptionalString()),
+			"cluster_ca_cert": Sensitive(OptionalComputedString()),
+			"cluster_ca_key":  Sensitive(OptionalComputedString()),
 		},
 	}
 
@@ -26,6 +28,12 @@ func ExpandResourceClusterSecrets(in map[string]interface{}) resources.ClusterSe
 		DockerConfig: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["docker_config"]),
+		ClusterCaCert: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cluster_ca_cert"]),
+		ClusterCaKey: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cluster_ca_key"]),
 	}
 }
 
@@ -33,6 +41,12 @@ func FlattenResourceClusterSecretsInto(in resources.ClusterSecrets, out map[stri
 	out["docker_config"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.DockerConfig)
+	out["cluster_ca_cert"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterCaCert)
+	out["cluster_ca_key"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterCaKey)
 }
 
 func FlattenResourceClusterSecrets(in resources.ClusterSecrets) map[string]interface{} {

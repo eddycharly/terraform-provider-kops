@@ -19,13 +19,15 @@ clean:
 
 .PHONY: install-goimports
 install-goimports:
+ifeq (, $(shell which goimports))
 	go install golang.org/x/tools/cmd/goimports@latest
+endif
 
 .PHONY: gen-tf-code
 gen-tf-code: clean install-goimports
 	@go run ./hack/gen-tf-code/...
 	@go fmt ./pkg/schemas/...
-	@~/go/bin/goimports -w ./pkg/schemas
+	@goimports -w ./pkg/schemas
 
 .PHONY: gen
 gen: gen-tf-code
