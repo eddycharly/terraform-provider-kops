@@ -29,7 +29,7 @@ jobs:
         with:
           go-version: 1.16
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: /home/runner/go/pkg/mod
@@ -54,7 +54,7 @@ jobs:
         with:
           go-version: 1.16
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: /home/runner/go/pkg/mod
@@ -79,7 +79,7 @@ jobs:
         with:
           go-version: 1.16
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: /home/runner/go/pkg/mod
@@ -104,7 +104,7 @@ jobs:
         with:
           go-version: 1.16
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: /home/runner/go/pkg/mod
@@ -129,7 +129,7 @@ jobs:
         with:
           go-version: 1.16
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: /home/runner/go/pkg/mod
