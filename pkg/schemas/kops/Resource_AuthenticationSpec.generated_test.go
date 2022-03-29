@@ -74,7 +74,7 @@ func TestFlattenResourceAuthenticationSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.AuthenticationSpec {
 					subject := kops.AuthenticationSpec{}
-					subject.Aws = nil
+					subject.AWS = nil
 					return subject
 				}(),
 			},
@@ -128,7 +128,7 @@ func TestFlattenResourceAuthenticationSpec(t *testing.T) {
 			args: args{
 				in: func() kops.AuthenticationSpec {
 					subject := kops.AuthenticationSpec{}
-					subject.Aws = nil
+					subject.AWS = nil
 					return subject
 				}(),
 			},

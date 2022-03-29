@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"reflect"
+
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -12,7 +14,7 @@ func ResourceHookSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"name":             RequiredString(),
-			"disabled":         OptionalBool(),
+			"enabled":          OptionalBool(),
 			"roles":            OptionalList(String()),
 			"requires":         OptionalList(String()),
 			"before":           OptionalList(String()),
@@ -33,9 +35,25 @@ func ExpandResourceHookSpec(in map[string]interface{}) kops.HookSpec {
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
-		Disabled: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disabled"]),
+		Enabled: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enabled"]),
 		Roles: func(in interface{}) []kops.InstanceGroupRole {
 			return func(in interface{}) []kops.InstanceGroupRole {
 				if in == nil {
@@ -103,9 +121,16 @@ func FlattenResourceHookSpecInto(in kops.HookSpec, out map[string]interface{}) {
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
-	out["disabled"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Disabled)
+	out["enabled"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.Enabled)
 	out["roles"] = func(in []kops.InstanceGroupRole) interface{} {
 		return func(in []kops.InstanceGroupRole) []interface{} {
 			var out []interface{}

@@ -14,98 +14,50 @@ var _ = Schema
 func DataSourceCiliumNetworkingSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"version":                           ComputedString(),
-			"memory_request":                    ComputedQuantity(),
-			"cpu_request":                       ComputedQuantity(),
-			"access_log":                        ComputedString(),
-			"agent_labels":                      ComputedList(String()),
-			"agent_prometheus_port":             ComputedInt(),
-			"allow_localhost":                   ComputedString(),
-			"auto_ipv6_node_routes":             ComputedBool(),
-			"bpf_root":                          ComputedString(),
-			"container_runtime":                 ComputedList(String()),
-			"container_runtime_endpoint":        ComputedMap(String()),
-			"debug":                             ComputedBool(),
-			"debug_verbose":                     ComputedList(String()),
-			"device":                            ComputedString(),
-			"disable_conntrack":                 ComputedBool(),
-			"disable_endpoint_crd":              ComputedBool(),
-			"disable_ipv4":                      ComputedBool(),
-			"disable_k_8s_services":             ComputedBool(),
-			"enable_policy":                     ComputedString(),
-			"enable_l7_proxy":                   ComputedBool(),
-			"enable_bpf_masquerade":             ComputedBool(),
-			"enable_endpoint_health_checking":   ComputedBool(),
-			"enable_tracing":                    ComputedBool(),
-			"enable_prometheus_metrics":         ComputedBool(),
-			"enable_encryption":                 ComputedBool(),
-			"encryption_type":                   ComputedString(),
-			"envoy_log":                         ComputedString(),
-			"identity_allocation_mode":          ComputedString(),
-			"identity_change_grace_period":      ComputedString(),
-			"ipv4_cluster_cidr_mask_size":       ComputedInt(),
-			"ipv4_node":                         ComputedString(),
-			"ipv4_range":                        ComputedString(),
-			"ipv4_service_range":                ComputedString(),
-			"ipv6_cluster_alloc_cidr":           ComputedString(),
-			"ipv6_node":                         ComputedString(),
-			"ipv6_range":                        ComputedString(),
-			"ipv6_service_range":                ComputedString(),
-			"k_8s_api_server":                   ComputedString(),
-			"k_8s_kubeconfig_path":              ComputedString(),
-			"keep_bpf_templates":                ComputedBool(),
-			"keep_config":                       ComputedBool(),
-			"label_prefix_file":                 ComputedString(),
-			"labels":                            ComputedList(String()),
-			"lb":                                ComputedString(),
-			"lib_dir":                           ComputedString(),
-			"log_drivers":                       ComputedList(String()),
-			"log_opt":                           ComputedMap(String()),
-			"logstash":                          ComputedBool(),
-			"logstash_agent":                    ComputedString(),
-			"logstash_probe_timer":              ComputedInt(),
-			"disable_masquerade":                ComputedBool(),
-			"nat46_range":                       ComputedString(),
-			"pprof":                             ComputedBool(),
-			"prefilter_device":                  ComputedString(),
-			"prometheus_serve_addr":             ComputedString(),
-			"restore":                           ComputedBool(),
-			"single_cluster_route":              ComputedBool(),
-			"socket_path":                       ComputedString(),
-			"state_dir":                         ComputedString(),
-			"trace_payload_len":                 ComputedInt(),
-			"tunnel":                            ComputedString(),
-			"enable_ipv6":                       ComputedBool(),
-			"enable_ipv4":                       ComputedBool(),
-			"monitor_aggregation":               ComputedString(),
-			"bpfct_global_tcp_max":              ComputedInt(),
-			"bpfct_global_any_max":              ComputedInt(),
-			"bpflb_algorithm":                   ComputedString(),
-			"bpflb_maglev_table_size":           ComputedString(),
-			"bpfnat_global_max":                 ComputedInt(),
-			"bpf_neigh_global_max":              ComputedInt(),
-			"bpf_policy_map_max":                ComputedInt(),
-			"bpflb_map_max":                     ComputedInt(),
-			"preallocate_bpf_maps":              ComputedBool(),
-			"sidecar_istio_proxy_image":         ComputedString(),
-			"cluster_name":                      ComputedString(),
-			"to_fqdns_dns_reject_response_code": ComputedString(),
-			"to_fqdns_enable_poller":            ComputedBool(),
-			"container_runtime_labels":          ComputedString(),
-			"ipam":                              ComputedString(),
-			"ip_tables_rules_noinstall":         ComputedBool(),
-			"auto_direct_node_routes":           ComputedBool(),
-			"enable_host_reachable_services":    ComputedBool(),
-			"enable_node_port":                  ComputedBool(),
-			"etcd_managed":                      ComputedBool(),
-			"enable_remote_node_identity":       ComputedBool(),
-			"hubble":                            ComputedStruct(DataSourceHubbleSpec()),
-			"remove_cbr_bridge":                 ComputedBool(),
-			"restart_pods":                      ComputedBool(),
-			"reconfigure_kubelet":               ComputedBool(),
-			"node_init_bootstrap_file":          ComputedString(),
-			"cni_bin_path":                      ComputedString(),
-			"disable_cnp_status_updates":        ComputedBool(),
+			"version":                            ComputedString(),
+			"memory_request":                     ComputedQuantity(),
+			"cpu_request":                        ComputedQuantity(),
+			"agent_prometheus_port":              ComputedInt(),
+			"chaining_mode":                      ComputedString(),
+			"debug":                              ComputedBool(),
+			"disable_endpoint_crd":               ComputedBool(),
+			"enable_policy":                      ComputedString(),
+			"enable_l7_proxy":                    ComputedBool(),
+			"enable_bpf_masquerade":              ComputedBool(),
+			"enable_endpoint_health_checking":    ComputedBool(),
+			"enable_prometheus_metrics":          ComputedBool(),
+			"enable_encryption":                  ComputedBool(),
+			"encryption_type":                    ComputedString(),
+			"identity_allocation_mode":           ComputedString(),
+			"identity_change_grace_period":       ComputedString(),
+			"masquerade":                         ComputedBool(),
+			"agent_pod_annotations":              ComputedMap(String()),
+			"tunnel":                             ComputedString(),
+			"monitor_aggregation":                ComputedString(),
+			"bpfct_global_tcp_max":               ComputedInt(),
+			"bpfct_global_any_max":               ComputedInt(),
+			"bpflb_algorithm":                    ComputedString(),
+			"bpflb_maglev_table_size":            ComputedString(),
+			"bpfnat_global_max":                  ComputedInt(),
+			"bpf_neigh_global_max":               ComputedInt(),
+			"bpf_policy_map_max":                 ComputedInt(),
+			"bpflb_map_max":                      ComputedInt(),
+			"bpflb_sock_host_ns_only":            ComputedBool(),
+			"preallocate_bpf_maps":               ComputedBool(),
+			"sidecar_istio_proxy_image":          ComputedString(),
+			"cluster_name":                       ComputedString(),
+			"to_fqd_ns_dns_reject_response_code": ComputedString(),
+			"to_fqd_ns_enable_poller":            ComputedBool(),
+			"ip_am":                              ComputedString(),
+			"install_iptables_rules":             ComputedBool(),
+			"auto_direct_node_routes":            ComputedBool(),
+			"enable_host_reachable_services":     ComputedBool(),
+			"enable_node_port":                   ComputedBool(),
+			"etcd_managed":                       ComputedBool(),
+			"enable_remote_node_identity":        ComputedBool(),
+			"hubble":                             ComputedStruct(DataSourceHubbleSpec()),
+			"disable_cnp_status_updates":         ComputedBool(),
+			"enable_service_topology":            ComputedBool(),
 		},
 	}
 
@@ -158,92 +110,18 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
-		AccessLog: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["access_log"]),
-		AgentLabels: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["agent_labels"]),
 		AgentPrometheusPort: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["agent_prometheus_port"]),
-		AllowLocalhost: func(in interface{}) string {
+		ChainingMode: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["allow_localhost"]),
-		AutoIpv6NodeRoutes: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["auto_ipv6_node_routes"]),
-		BPFRoot: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["bpf_root"]),
-		ContainerRuntime: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["container_runtime"]),
-		ContainerRuntimeEndpoint: func(in interface{}) map[string]string {
-			return func(in interface{}) map[string]string {
-				if in == nil {
-					return nil
-				}
-				if in, ok := in.(map[string]interface{}); ok {
-					if len(in) > 0 {
-						out := map[string]string{}
-						for key, in := range in {
-							out[key] = string(ExpandString(in))
-						}
-						return out
-					}
-				}
-				return nil
-			}(in)
-		}(in["container_runtime_endpoint"]),
+		}(in["chaining_mode"]),
 		Debug: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["debug"]),
-		DebugVerbose: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["debug_verbose"]),
-		Device: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["device"]),
-		DisableConntrack: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_conntrack"]),
 		DisableEndpointCRD: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["disable_endpoint_crd"]),
-		DisableIpv4: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_ipv4"]),
-		DisableK8sServices: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_k_8s_services"]),
 		EnablePolicy: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["enable_policy"]),
@@ -304,9 +182,6 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_endpoint_health_checking"]),
-		EnableTracing: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_tracing"]),
 		EnablePrometheusMetrics: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enable_prometheus_metrics"]),
@@ -316,111 +191,13 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 		EncryptionType: func(in interface{}) kops.CiliumEncryptionType {
 			return kops.CiliumEncryptionType(ExpandString(in))
 		}(in["encryption_type"]),
-		EnvoyLog: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["envoy_log"]),
 		IdentityAllocationMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["identity_allocation_mode"]),
 		IdentityChangeGracePeriod: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["identity_change_grace_period"]),
-		Ipv4ClusterCIDRMaskSize: func(in interface{}) int {
-			return int(ExpandInt(in))
-		}(in["ipv4_cluster_cidr_mask_size"]),
-		Ipv4Node: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv4_node"]),
-		Ipv4Range: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv4_range"]),
-		Ipv4ServiceRange: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv4_service_range"]),
-		Ipv6ClusterAllocCidr: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv6_cluster_alloc_cidr"]),
-		Ipv6Node: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv6_node"]),
-		Ipv6Range: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv6_range"]),
-		Ipv6ServiceRange: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipv6_service_range"]),
-		K8sAPIServer: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["k_8s_api_server"]),
-		K8sKubeconfigPath: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["k_8s_kubeconfig_path"]),
-		KeepBPFTemplates: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["keep_bpf_templates"]),
-		KeepConfig: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["keep_config"]),
-		LabelPrefixFile: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["label_prefix_file"]),
-		Labels: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["labels"]),
-		LB: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["lb"]),
-		LibDir: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["lib_dir"]),
-		LogDrivers: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["log_drivers"]),
-		LogOpt: func(in interface{}) map[string]string {
-			return func(in interface{}) map[string]string {
-				if in == nil {
-					return nil
-				}
-				if in, ok := in.(map[string]interface{}); ok {
-					if len(in) > 0 {
-						out := map[string]string{}
-						for key, in := range in {
-							out[key] = string(ExpandString(in))
-						}
-						return out
-					}
-				}
-				return nil
-			}(in)
-		}(in["log_opt"]),
-		Logstash: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["logstash"]),
-		LogstashAgent: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["logstash_agent"]),
-		LogstashProbeTimer: func(in interface{}) uint32 {
-			return uint32(ExpandInt(in))
-		}(in["logstash_probe_timer"]),
-		DisableMasquerade: func(in interface{}) *bool {
+		Masquerade: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
@@ -438,43 +215,27 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 					return &in
 				}(bool(ExpandBool(in)))
 			}(in)
-		}(in["disable_masquerade"]),
-		Nat46Range: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["nat46_range"]),
-		Pprof: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["pprof"]),
-		PrefilterDevice: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["prefilter_device"]),
-		PrometheusServeAddr: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["prometheus_serve_addr"]),
-		Restore: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["restore"]),
-		SingleClusterRoute: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["single_cluster_route"]),
-		SocketPath: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["socket_path"]),
-		StateDir: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["state_dir"]),
-		TracePayloadLen: func(in interface{}) int {
-			return int(ExpandInt(in))
-		}(in["trace_payload_len"]),
+		}(in["masquerade"]),
+		AgentPodAnnotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["agent_pod_annotations"]),
 		Tunnel: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tunnel"]),
-		EnableIpv6: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_ipv6"]),
-		EnableIpv4: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["enable_ipv4"]),
 		MonitorAggregation: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["monitor_aggregation"]),
@@ -502,6 +263,9 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 		BPFLBMapMax: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["bpflb_map_max"]),
+		BPFLBSockHostNSOnly: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["bpflb_sock_host_ns_only"]),
 		PreallocateBPFMaps: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["preallocate_bpf_maps"]),
@@ -511,21 +275,34 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
-		ToFqdnsDNSRejectResponseCode: func(in interface{}) string {
+		ToFQDNsDNSRejectResponseCode: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["to_fqdns_dns_reject_response_code"]),
-		ToFqdnsEnablePoller: func(in interface{}) bool {
+		}(in["to_fqd_ns_dns_reject_response_code"]),
+		ToFQDNsEnablePoller: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["to_fqdns_enable_poller"]),
-		ContainerRuntimeLabels: func(in interface{}) string {
+		}(in["to_fqd_ns_enable_poller"]),
+		IPAM: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["container_runtime_labels"]),
-		Ipam: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["ipam"]),
-		IPTablesRulesNoinstall: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["ip_tables_rules_noinstall"]),
+		}(in["ip_am"]),
+		InstallIptablesRules: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["install_iptables_rules"]),
 		AutoDirectNodeRoutes: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["auto_direct_node_routes"]),
@@ -575,21 +352,6 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 				}(in))
 			}(in)
 		}(in["hubble"]),
-		RemoveCbrBridge: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["remove_cbr_bridge"]),
-		RestartPods: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["restart_pods"]),
-		ReconfigureKubelet: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["reconfigure_kubelet"]),
-		NodeInitBootstrapFile: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["node_init_bootstrap_file"]),
-		CniBinPath: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["cni_bin_path"]),
 		DisableCNPStatusUpdates: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -609,6 +371,9 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["disable_cnp_status_updates"]),
+		EnableServiceTopology: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["enable_service_topology"]),
 	}
 }
 
@@ -636,78 +401,18 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 			}(*in)
 		}(in)
 	}(in.CPURequest)
-	out["access_log"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.AccessLog)
-	out["agent_labels"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.AgentLabels)
 	out["agent_prometheus_port"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.AgentPrometheusPort)
-	out["allow_localhost"] = func(in string) interface{} {
+	out["chaining_mode"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.AllowLocalhost)
-	out["auto_ipv6_node_routes"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.AutoIpv6NodeRoutes)
-	out["bpf_root"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.BPFRoot)
-	out["container_runtime"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.ContainerRuntime)
-	out["container_runtime_endpoint"] = func(in map[string]string) interface{} {
-		return func(in map[string]string) map[string]interface{} {
-			if in == nil {
-				return nil
-			}
-			out := map[string]interface{}{}
-			for key, in := range in {
-				out[key] = FlattenString(string(in))
-			}
-			return out
-		}(in)
-	}(in.ContainerRuntimeEndpoint)
+	}(in.ChainingMode)
 	out["debug"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Debug)
-	out["debug_verbose"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.DebugVerbose)
-	out["device"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Device)
-	out["disable_conntrack"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableConntrack)
 	out["disable_endpoint_crd"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.DisableEndpointCRD)
-	out["disable_ipv4"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableIpv4)
-	out["disable_k_8s_services"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableK8sServices)
 	out["enable_policy"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.EnablePolicy)
@@ -741,9 +446,6 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 			}(*in)
 		}(in)
 	}(in.EnableEndpointHealthChecking)
-	out["enable_tracing"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableTracing)
 	out["enable_prometheus_metrics"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.EnablePrometheusMetrics)
@@ -753,79 +455,23 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 	out["encryption_type"] = func(in kops.CiliumEncryptionType) interface{} {
 		return FlattenString(string(in))
 	}(in.EncryptionType)
-	out["envoy_log"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.EnvoyLog)
 	out["identity_allocation_mode"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IdentityAllocationMode)
 	out["identity_change_grace_period"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IdentityChangeGracePeriod)
-	out["ipv4_cluster_cidr_mask_size"] = func(in int) interface{} {
-		return FlattenInt(int(in))
-	}(in.Ipv4ClusterCIDRMaskSize)
-	out["ipv4_node"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv4Node)
-	out["ipv4_range"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv4Range)
-	out["ipv4_service_range"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv4ServiceRange)
-	out["ipv6_cluster_alloc_cidr"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv6ClusterAllocCidr)
-	out["ipv6_node"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv6Node)
-	out["ipv6_range"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv6Range)
-	out["ipv6_service_range"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipv6ServiceRange)
-	out["k_8s_api_server"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.K8sAPIServer)
-	out["k_8s_kubeconfig_path"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.K8sKubeconfigPath)
-	out["keep_bpf_templates"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.KeepBPFTemplates)
-	out["keep_config"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.KeepConfig)
-	out["label_prefix_file"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.LabelPrefixFile)
-	out["labels"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
+	out["masquerade"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
 			}
-			return out
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
 		}(in)
-	}(in.Labels)
-	out["lb"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.LB)
-	out["lib_dir"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.LibDir)
-	out["log_drivers"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.LogDrivers)
-	out["log_opt"] = func(in map[string]string) interface{} {
+	}(in.Masquerade)
+	out["agent_pod_annotations"] = func(in map[string]string) interface{} {
 		return func(in map[string]string) map[string]interface{} {
 			if in == nil {
 				return nil
@@ -836,62 +482,10 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 			}
 			return out
 		}(in)
-	}(in.LogOpt)
-	out["logstash"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Logstash)
-	out["logstash_agent"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.LogstashAgent)
-	out["logstash_probe_timer"] = func(in uint32) interface{} {
-		return FlattenInt(int(in))
-	}(in.LogstashProbeTimer)
-	out["disable_masquerade"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
-		}(in)
-	}(in.DisableMasquerade)
-	out["nat46_range"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Nat46Range)
-	out["pprof"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Pprof)
-	out["prefilter_device"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.PrefilterDevice)
-	out["prometheus_serve_addr"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.PrometheusServeAddr)
-	out["restore"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.Restore)
-	out["single_cluster_route"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.SingleClusterRoute)
-	out["socket_path"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.SocketPath)
-	out["state_dir"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.StateDir)
-	out["trace_payload_len"] = func(in int) interface{} {
-		return FlattenInt(int(in))
-	}(in.TracePayloadLen)
+	}(in.AgentPodAnnotations)
 	out["tunnel"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Tunnel)
-	out["enable_ipv6"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableIpv6)
-	out["enable_ipv4"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.EnableIpv4)
 	out["monitor_aggregation"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MonitorAggregation)
@@ -919,6 +513,9 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 	out["bpflb_map_max"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.BPFLBMapMax)
+	out["bpflb_sock_host_ns_only"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.BPFLBSockHostNSOnly)
 	out["preallocate_bpf_maps"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.PreallocateBPFMaps)
@@ -928,21 +525,25 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
-	out["to_fqdns_dns_reject_response_code"] = func(in string) interface{} {
+	out["to_fqd_ns_dns_reject_response_code"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.ToFqdnsDNSRejectResponseCode)
-	out["to_fqdns_enable_poller"] = func(in bool) interface{} {
+	}(in.ToFQDNsDNSRejectResponseCode)
+	out["to_fqd_ns_enable_poller"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
-	}(in.ToFqdnsEnablePoller)
-	out["container_runtime_labels"] = func(in string) interface{} {
+	}(in.ToFQDNsEnablePoller)
+	out["ip_am"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.ContainerRuntimeLabels)
-	out["ipam"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Ipam)
-	out["ip_tables_rules_noinstall"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.IPTablesRulesNoinstall)
+	}(in.IPAM)
+	out["install_iptables_rules"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.InstallIptablesRules)
 	out["auto_direct_node_routes"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.AutoDirectNodeRoutes)
@@ -977,21 +578,6 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 			}(*in)
 		}(in)
 	}(in.Hubble)
-	out["remove_cbr_bridge"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.RemoveCbrBridge)
-	out["restart_pods"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.RestartPods)
-	out["reconfigure_kubelet"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.ReconfigureKubelet)
-	out["node_init_bootstrap_file"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.NodeInitBootstrapFile)
-	out["cni_bin_path"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.CniBinPath)
 	out["disable_cnp_status_updates"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -1002,6 +588,9 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 			}(*in)
 		}(in)
 	}(in.DisableCNPStatusUpdates)
+	out["enable_service_topology"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableServiceTopology)
 }
 
 func FlattenDataSourceCiliumNetworkingSpec(in kops.CiliumNetworkingSpec) map[string]interface{} {

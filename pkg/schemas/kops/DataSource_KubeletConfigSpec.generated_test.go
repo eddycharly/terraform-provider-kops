@@ -77,6 +77,7 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"volume_plugin_directory":                "",
 					"taints":                                 func() []interface{} { return nil }(),
 					"feature_gates":                          func() map[string]interface{} { return nil }(),
+					"kernel_memcg_notification":              nil,
 					"kube_reserved":                          func() map[string]interface{} { return nil }(),
 					"kube_reserved_cgroup":                   "",
 					"system_reserved":                        func() map[string]interface{} { return nil }(),
@@ -108,6 +109,8 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"container_log_max_files":                nil,
 					"enable_cadvisor_json_endpoints":         nil,
 					"pod_pids_limit":                         nil,
+					"shutdown_grace_period":                  nil,
+					"shutdown_grace_period_critical_pods":    nil,
 				},
 			},
 			want: _default,
@@ -181,6 +184,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"volume_plugin_directory":                "",
 		"taints":                                 func() []interface{} { return nil }(),
 		"feature_gates":                          func() map[string]interface{} { return nil }(),
+		"kernel_memcg_notification":              nil,
 		"kube_reserved":                          func() map[string]interface{} { return nil }(),
 		"kube_reserved_cgroup":                   "",
 		"system_reserved":                        func() map[string]interface{} { return nil }(),
@@ -212,6 +216,8 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"container_log_max_files":                nil,
 		"enable_cadvisor_json_endpoints":         nil,
 		"pod_pids_limit":                         nil,
+		"shutdown_grace_period":                  nil,
+		"shutdown_grace_period_critical_pods":    nil,
 	}
 	type args struct {
 		in kops.KubeletConfigSpec
@@ -845,6 +851,17 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "KernelMemcgNotification - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.KernelMemcgNotification = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "KubeReserved - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
@@ -1180,6 +1197,28 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
 					subject.PodPidsLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriod - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.ShutdownGracePeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriodCriticalPods - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.ShutdownGracePeriodCriticalPods = nil
 					return subject
 				}(),
 			},
@@ -1255,6 +1294,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"volume_plugin_directory":                "",
 		"taints":                                 func() []interface{} { return nil }(),
 		"feature_gates":                          func() map[string]interface{} { return nil }(),
+		"kernel_memcg_notification":              nil,
 		"kube_reserved":                          func() map[string]interface{} { return nil }(),
 		"kube_reserved_cgroup":                   "",
 		"system_reserved":                        func() map[string]interface{} { return nil }(),
@@ -1286,6 +1326,8 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"container_log_max_files":                nil,
 		"enable_cadvisor_json_endpoints":         nil,
 		"pod_pids_limit":                         nil,
+		"shutdown_grace_period":                  nil,
+		"shutdown_grace_period_critical_pods":    nil,
 	}
 	type args struct {
 		in kops.KubeletConfigSpec
@@ -1919,6 +1961,17 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "KernelMemcgNotification - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.KernelMemcgNotification = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "KubeReserved - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
@@ -2254,6 +2307,28 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
 					subject.PodPidsLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriod - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.ShutdownGracePeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriodCriticalPods - default",
+			args: args{
+				in: func() kops.KubeletConfigSpec {
+					subject := kops.KubeletConfigSpec{}
+					subject.ShutdownGracePeriodCriticalPods = nil
 					return subject
 				}(),
 			},

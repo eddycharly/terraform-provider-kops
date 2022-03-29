@@ -73,7 +73,7 @@ func ExpandResourceVolumeSpec(in map[string]interface{}) kops.VolumeSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["encrypted"]),
-		Iops: func(in interface{}) *int64 {
+		IOPS: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
 			}
@@ -172,7 +172,7 @@ func FlattenResourceVolumeSpecInto(in kops.VolumeSpec, out map[string]interface{
 				return FlattenInt(int(in))
 			}(*in)
 		}(in)
-	}(in.Iops)
+	}(in.IOPS)
 	out["throughput"] = func(in *int64) interface{} {
 		return func(in *int64) interface{} {
 			if in == nil {

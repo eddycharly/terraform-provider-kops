@@ -21,7 +21,7 @@ func TestExpandResourceBastionSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"bastion_public_name":  "",
+					"public_name":          "",
 					"idle_timeout_seconds": nil,
 					"load_balancer":        nil,
 				},
@@ -41,7 +41,7 @@ func TestExpandResourceBastionSpec(t *testing.T) {
 
 func TestFlattenResourceBastionSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"bastion_public_name":  "",
+		"public_name":          "",
 		"idle_timeout_seconds": nil,
 		"load_balancer":        nil,
 	}
@@ -61,11 +61,11 @@ func TestFlattenResourceBastionSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "BastionPublicName - default",
+			name: "PublicName - default",
 			args: args{
 				in: func() kops.BastionSpec {
 					subject := kops.BastionSpec{}
-					subject.BastionPublicName = ""
+					subject.PublicName = ""
 					return subject
 				}(),
 			},
@@ -107,7 +107,7 @@ func TestFlattenResourceBastionSpecInto(t *testing.T) {
 
 func TestFlattenResourceBastionSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"bastion_public_name":  "",
+		"public_name":          "",
 		"idle_timeout_seconds": nil,
 		"load_balancer":        nil,
 	}
@@ -127,11 +127,11 @@ func TestFlattenResourceBastionSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "BastionPublicName - default",
+			name: "PublicName - default",
 			args: args{
 				in: func() kops.BastionSpec {
 					subject := kops.BastionSpec{}
-					subject.BastionPublicName = ""
+					subject.PublicName = ""
 					return subject
 				}(),
 			},

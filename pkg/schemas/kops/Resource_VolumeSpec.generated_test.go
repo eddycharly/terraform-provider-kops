@@ -104,11 +104,11 @@ func TestFlattenResourceVolumeSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Iops - default",
+			name: "IOPS - default",
 			args: args{
 				in: func() kops.VolumeSpec {
 					subject := kops.VolumeSpec{}
-					subject.Iops = nil
+					subject.IOPS = nil
 					return subject
 				}(),
 			},
@@ -230,11 +230,11 @@ func TestFlattenResourceVolumeSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Iops - default",
+			name: "IOPS - default",
 			args: args{
 				in: func() kops.VolumeSpec {
 					subject := kops.VolumeSpec{}
-					subject.Iops = nil
+					subject.IOPS = nil
 					return subject
 				}(),
 			},

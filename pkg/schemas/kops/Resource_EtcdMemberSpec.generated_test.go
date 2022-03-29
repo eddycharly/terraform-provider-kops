@@ -104,11 +104,11 @@ func TestFlattenResourceEtcdMemberSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "VolumeIops - default",
+			name: "VolumeIOPS - default",
 			args: args{
 				in: func() kops.EtcdMemberSpec {
 					subject := kops.EtcdMemberSpec{}
-					subject.VolumeIops = nil
+					subject.VolumeIOPS = nil
 					return subject
 				}(),
 			},
@@ -137,11 +137,11 @@ func TestFlattenResourceEtcdMemberSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "KmsKeyId - default",
+			name: "KmsKeyID - default",
 			args: args{
 				in: func() kops.EtcdMemberSpec {
 					subject := kops.EtcdMemberSpec{}
-					subject.KmsKeyId = nil
+					subject.KmsKeyID = nil
 					return subject
 				}(),
 			},
@@ -230,11 +230,11 @@ func TestFlattenResourceEtcdMemberSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "VolumeIops - default",
+			name: "VolumeIOPS - default",
 			args: args{
 				in: func() kops.EtcdMemberSpec {
 					subject := kops.EtcdMemberSpec{}
-					subject.VolumeIops = nil
+					subject.VolumeIOPS = nil
 					return subject
 				}(),
 			},
@@ -263,11 +263,11 @@ func TestFlattenResourceEtcdMemberSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "KmsKeyId - default",
+			name: "KmsKeyID - default",
 			args: args{
 				in: func() kops.EtcdMemberSpec {
 					subject := kops.EtcdMemberSpec{}
-					subject.KmsKeyId = nil
+					subject.KmsKeyID = nil
 					return subject
 				}(),
 			},

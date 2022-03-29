@@ -11,9 +11,9 @@ var _ = Schema
 func DataSourceAmazonVPCNetworkingSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"image_name":      ComputedString(),
-			"init_image_name": ComputedString(),
-			"env":             ComputedList(DataSourceEnvVar()),
+			"image":      ComputedString(),
+			"init_image": ComputedString(),
+			"env":        ComputedList(DataSourceEnvVar()),
 		},
 	}
 
@@ -25,12 +25,12 @@ func ExpandDataSourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Ama
 		panic("expand AmazonVPCNetworkingSpec failure, in is nil")
 	}
 	return kops.AmazonVPCNetworkingSpec{
-		ImageName: func(in interface{}) string {
+		Image: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["image_name"]),
-		InitImageName: func(in interface{}) string {
+		}(in["image"]),
+		InitImage: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["init_image_name"]),
+		}(in["init_image"]),
 		Env: func(in interface{}) []kops.EnvVar {
 			return func(in interface{}) []kops.EnvVar {
 				if in == nil {
@@ -52,12 +52,12 @@ func ExpandDataSourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Ama
 }
 
 func FlattenDataSourceAmazonVPCNetworkingSpecInto(in kops.AmazonVPCNetworkingSpec, out map[string]interface{}) {
-	out["image_name"] = func(in string) interface{} {
+	out["image"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.ImageName)
-	out["init_image_name"] = func(in string) interface{} {
+	}(in.Image)
+	out["init_image"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.InitImageName)
+	}(in.InitImage)
 	out["env"] = func(in []kops.EnvVar) interface{} {
 		return func(in []kops.EnvVar) []interface{} {
 			var out []interface{}

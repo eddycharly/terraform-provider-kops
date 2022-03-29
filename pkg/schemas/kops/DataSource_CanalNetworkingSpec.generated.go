@@ -17,8 +17,7 @@ func DataSourceCanalNetworkingSpec() *schema.Resource {
 			"chain_insert_mode":                  ComputedString(),
 			"cpu_request":                        ComputedQuantity(),
 			"default_endpoint_to_host_action":    ComputedString(),
-			"disable_flannel_forward_rules":      ComputedBool(),
-			"disable_tx_checksum_offloading":     ComputedBool(),
+			"flanneld_iptables_forward_rules":    ComputedBool(),
 			"iptables_backend":                   ComputedString(),
 			"log_severity_sys":                   ComputedString(),
 			"mtu":                                ComputedInt(),
@@ -65,12 +64,25 @@ func ExpandDataSourceCanalNetworkingSpec(in map[string]interface{}) kops.CanalNe
 		DefaultEndpointToHostAction: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["default_endpoint_to_host_action"]),
-		DisableFlannelForwardRules: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_flannel_forward_rules"]),
-		DisableTxChecksumOffloading: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_tx_checksum_offloading"]),
+		FlanneldIptablesForwardRules: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["flanneld_iptables_forward_rules"]),
 		IptablesBackend: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["iptables_backend"]),
@@ -137,12 +149,16 @@ func FlattenDataSourceCanalNetworkingSpecInto(in kops.CanalNetworkingSpec, out m
 	out["default_endpoint_to_host_action"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.DefaultEndpointToHostAction)
-	out["disable_flannel_forward_rules"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableFlannelForwardRules)
-	out["disable_tx_checksum_offloading"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableTxChecksumOffloading)
+	out["flanneld_iptables_forward_rules"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.FlanneldIptablesForwardRules)
 	out["iptables_backend"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IptablesBackend)

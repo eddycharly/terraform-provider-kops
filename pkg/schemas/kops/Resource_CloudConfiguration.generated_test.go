@@ -29,18 +29,12 @@ func TestExpandResourceCloudConfiguration(t *testing.T) {
 					"gce_service_account":            "",
 					"disable_security_group_ingress": nil,
 					"elb_security_group":             nil,
-					"v_sphere_username":              nil,
-					"v_sphere_password":              nil,
-					"v_sphere_server":                nil,
-					"v_sphere_datacenter":            nil,
-					"v_sphere_resource_pool":         nil,
-					"v_sphere_datastore":             nil,
-					"v_sphere_core_dns_server":       nil,
 					"spotinst_product":               nil,
 					"spotinst_orientation":           nil,
 					"openstack":                      nil,
 					"azure":                          nil,
 					"aws_ebs_csi_driver":             nil,
+					"gcp_pd_csi_driver":              nil,
 				},
 			},
 			want: _default,
@@ -66,18 +60,12 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 		"gce_service_account":            "",
 		"disable_security_group_ingress": nil,
 		"elb_security_group":             nil,
-		"v_sphere_username":              nil,
-		"v_sphere_password":              nil,
-		"v_sphere_server":                nil,
-		"v_sphere_datacenter":            nil,
-		"v_sphere_resource_pool":         nil,
-		"v_sphere_datastore":             nil,
-		"v_sphere_core_dns_server":       nil,
 		"spotinst_product":               nil,
 		"spotinst_orientation":           nil,
 		"openstack":                      nil,
 		"azure":                          nil,
 		"aws_ebs_csi_driver":             nil,
+		"gcp_pd_csi_driver":              nil,
 	}
 	type args struct {
 		in kops.CloudConfiguration
@@ -183,83 +171,6 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "VSphereUsername - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereUsername = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSpherePassword - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSpherePassword = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereServer - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereServer = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereDatacenter - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereDatacenter = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereResourcePool - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereResourcePool = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereDatastore - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereDatastore = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereCoreDnsServer - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereCoreDNSServer = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SpotinstProduct - default",
 			args: args{
 				in: func() kops.CloudConfiguration {
@@ -309,6 +220,17 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.AWSEBSCSIDriver = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GcpPDCsiDriver - default",
+			args: args{
+				in: func() kops.CloudConfiguration {
+					subject := kops.CloudConfiguration{}
+					subject.GCPPDCSIDriver = nil
 					return subject
 				}(),
 			},
@@ -336,18 +258,12 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 		"gce_service_account":            "",
 		"disable_security_group_ingress": nil,
 		"elb_security_group":             nil,
-		"v_sphere_username":              nil,
-		"v_sphere_password":              nil,
-		"v_sphere_server":                nil,
-		"v_sphere_datacenter":            nil,
-		"v_sphere_resource_pool":         nil,
-		"v_sphere_datastore":             nil,
-		"v_sphere_core_dns_server":       nil,
 		"spotinst_product":               nil,
 		"spotinst_orientation":           nil,
 		"openstack":                      nil,
 		"azure":                          nil,
 		"aws_ebs_csi_driver":             nil,
+		"gcp_pd_csi_driver":              nil,
 	}
 	type args struct {
 		in kops.CloudConfiguration
@@ -453,83 +369,6 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "VSphereUsername - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereUsername = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSpherePassword - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSpherePassword = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereServer - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereServer = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereDatacenter - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereDatacenter = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereResourcePool - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereResourcePool = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereDatastore - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereDatastore = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "VSphereCoreDnsServer - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.VSphereCoreDNSServer = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SpotinstProduct - default",
 			args: args{
 				in: func() kops.CloudConfiguration {
@@ -579,6 +418,17 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.AWSEBSCSIDriver = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GcpPDCsiDriver - default",
+			args: args{
+				in: func() kops.CloudConfiguration {
+					subject := kops.CloudConfiguration{}
+					subject.GCPPDCSIDriver = nil
 					return subject
 				}(),
 			},

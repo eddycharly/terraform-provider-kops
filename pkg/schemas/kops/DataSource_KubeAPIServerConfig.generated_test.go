@@ -113,10 +113,10 @@ func TestExpandDataSourceKubeAPIServerConfig(t *testing.T) {
 					"service_account_issuer":                       nil,
 					"service_account_jwksuri":                      nil,
 					"api_audiences":                                func() []interface{} { return nil }(),
-					"cpu_request":                                  "",
-					"cpu_limit":                                    "",
-					"memory_request":                               "",
-					"memory_limit":                                 "",
+					"cpu_request":                                  nil,
+					"cpu_limit":                                    nil,
+					"memory_request":                               nil,
+					"memory_limit":                                 nil,
 					"event_ttl":                                    nil,
 					"audit_dynamic_configuration":                  nil,
 					"enable_profiling":                             nil,
@@ -232,10 +232,10 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 		"service_account_issuer":                       nil,
 		"service_account_jwksuri":                      nil,
 		"api_audiences":                                func() []interface{} { return nil }(),
-		"cpu_request":                                  "",
-		"cpu_limit":                                    "",
-		"memory_request":                               "",
-		"memory_limit":                                 "",
+		"cpu_request":                                  nil,
+		"cpu_limit":                                    nil,
+		"memory_request":                               nil,
+		"memory_limit":                                 nil,
 		"event_ttl":                                    nil,
 		"audit_dynamic_configuration":                  nil,
 		"enable_profiling":                             nil,
@@ -1205,11 +1205,11 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TargetRamMb - default",
+			name: "TargetRamMB - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.TargetRamMb = 0
+					subject.TargetRamMB = 0
 					return subject
 				}(),
 			},
@@ -1275,7 +1275,7 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.CPURequest = ""
+					subject.CPURequest = nil
 					return subject
 				}(),
 			},
@@ -1286,7 +1286,7 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.CPULimit = ""
+					subject.CPULimit = nil
 					return subject
 				}(),
 			},
@@ -1297,7 +1297,7 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.MemoryRequest = ""
+					subject.MemoryRequest = nil
 					return subject
 				}(),
 			},
@@ -1308,7 +1308,7 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.MemoryLimit = ""
+					subject.MemoryLimit = nil
 					return subject
 				}(),
 			},
@@ -1486,10 +1486,10 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 		"service_account_issuer":                       nil,
 		"service_account_jwksuri":                      nil,
 		"api_audiences":                                func() []interface{} { return nil }(),
-		"cpu_request":                                  "",
-		"cpu_limit":                                    "",
-		"memory_request":                               "",
-		"memory_limit":                                 "",
+		"cpu_request":                                  nil,
+		"cpu_limit":                                    nil,
+		"memory_request":                               nil,
+		"memory_limit":                                 nil,
 		"event_ttl":                                    nil,
 		"audit_dynamic_configuration":                  nil,
 		"enable_profiling":                             nil,
@@ -2459,11 +2459,11 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TargetRamMb - default",
+			name: "TargetRamMB - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.TargetRamMb = 0
+					subject.TargetRamMB = 0
 					return subject
 				}(),
 			},
@@ -2529,7 +2529,7 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.CPURequest = ""
+					subject.CPURequest = nil
 					return subject
 				}(),
 			},
@@ -2540,7 +2540,7 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.CPULimit = ""
+					subject.CPULimit = nil
 					return subject
 				}(),
 			},
@@ -2551,7 +2551,7 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.MemoryRequest = ""
+					subject.MemoryRequest = nil
 					return subject
 				}(),
 			},
@@ -2562,7 +2562,7 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.MemoryLimit = ""
+					subject.MemoryLimit = nil
 					return subject
 				}(),
 			},

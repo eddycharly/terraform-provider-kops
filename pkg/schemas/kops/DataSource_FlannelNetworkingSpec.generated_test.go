@@ -21,9 +21,8 @@ func TestExpandDataSourceFlannelNetworkingSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"backend":                        "",
-					"disable_tx_checksum_offloading": false,
-					"iptables_resync_seconds":        nil,
+					"backend":                 "",
+					"iptables_resync_seconds": nil,
 				},
 			},
 			want: _default,
@@ -41,9 +40,8 @@ func TestExpandDataSourceFlannelNetworkingSpec(t *testing.T) {
 
 func TestFlattenDataSourceFlannelNetworkingSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"backend":                        "",
-		"disable_tx_checksum_offloading": false,
-		"iptables_resync_seconds":        nil,
+		"backend":                 "",
+		"iptables_resync_seconds": nil,
 	}
 	type args struct {
 		in kops.FlannelNetworkingSpec
@@ -66,17 +64,6 @@ func TestFlattenDataSourceFlannelNetworkingSpecInto(t *testing.T) {
 				in: func() kops.FlannelNetworkingSpec {
 					subject := kops.FlannelNetworkingSpec{}
 					subject.Backend = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "DisableTxChecksumOffloading - default",
-			args: args{
-				in: func() kops.FlannelNetworkingSpec {
-					subject := kops.FlannelNetworkingSpec{}
-					subject.DisableTxChecksumOffloading = false
 					return subject
 				}(),
 			},
@@ -107,9 +94,8 @@ func TestFlattenDataSourceFlannelNetworkingSpecInto(t *testing.T) {
 
 func TestFlattenDataSourceFlannelNetworkingSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"backend":                        "",
-		"disable_tx_checksum_offloading": false,
-		"iptables_resync_seconds":        nil,
+		"backend":                 "",
+		"iptables_resync_seconds": nil,
 	}
 	type args struct {
 		in kops.FlannelNetworkingSpec
@@ -132,17 +118,6 @@ func TestFlattenDataSourceFlannelNetworkingSpec(t *testing.T) {
 				in: func() kops.FlannelNetworkingSpec {
 					subject := kops.FlannelNetworkingSpec{}
 					subject.Backend = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "DisableTxChecksumOffloading - default",
-			args: args{
-				in: func() kops.FlannelNetworkingSpec {
-					subject := kops.FlannelNetworkingSpec{}
-					subject.DisableTxChecksumOffloading = false
 					return subject
 				}(),
 			},

@@ -24,8 +24,6 @@ func DataSourceKubeDNSConfig() *schema.Resource {
 			"cpa_image":            ComputedString(),
 			"domain":               ComputedString(),
 			"external_core_file":   ComputedString(),
-			"image":                ComputedString(),
-			"replicas":             ComputedInt(),
 			"provider":             ComputedString(),
 			"server_ip":            ComputedString(),
 			"stub_domains":         ComputedComplexMap(List(String())),
@@ -98,12 +96,6 @@ func ExpandDataSourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig
 		ExternalCoreFile: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["external_core_file"]),
-		Image: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["image"]),
-		Replicas: func(in interface{}) int {
-			return int(ExpandInt(in))
-		}(in["replicas"]),
 		Provider: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["provider"]),
@@ -274,12 +266,6 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 	out["external_core_file"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ExternalCoreFile)
-	out["image"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Image)
-	out["replicas"] = func(in int) interface{} {
-		return FlattenInt(int(in))
-	}(in.Replicas)
 	out["provider"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Provider)

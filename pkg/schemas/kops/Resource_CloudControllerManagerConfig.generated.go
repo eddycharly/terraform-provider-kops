@@ -24,6 +24,7 @@ func ResourceCloudControllerManagerConfig() *schema.Resource {
 			"cidr_allocator_type":             OptionalString(),
 			"leader_election":                 OptionalStruct(ResourceLeaderElectionConfiguration()),
 			"use_service_account_credentials": OptionalBool(),
+			"enable_leader_migration":         OptionalBool(),
 		},
 	}
 
@@ -147,6 +148,25 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["use_service_account_credentials"]),
+		EnableLeaderMigration: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_leader_migration"]),
 	}
 }
 
@@ -221,6 +241,16 @@ func FlattenResourceCloudControllerManagerConfigInto(in kops.CloudControllerMana
 			}(*in)
 		}(in)
 	}(in.UseServiceAccountCredentials)
+	out["enable_leader_migration"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableLeaderMigration)
 }
 
 func FlattenResourceCloudControllerManagerConfig(in kops.CloudControllerManagerConfig) map[string]interface{} {

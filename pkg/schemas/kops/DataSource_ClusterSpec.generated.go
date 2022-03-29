@@ -75,7 +75,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"assets":                            ComputedStruct(DataSourceAssets()),
 			"iam":                               ComputedStruct(DataSourceIAMSpec()),
 			"encryption_config":                 ComputedBool(),
-			"disable_subnet_tags":               ComputedBool(),
+			"tag_subnets":                       ComputedBool(),
 			"use_host_certificates":             ComputedBool(),
 			"sysctl_parameters":                 ComputedList(String()),
 			"rolling_update":                    ComputedStruct(DataSourceRollingUpdate()),
@@ -83,6 +83,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"warm_pool":                         ComputedStruct(DataSourceWarmPoolSpec()),
 			"service_account_issuer_discovery":  ComputedStruct(DataSourceServiceAccountIssuerDiscoveryConfig()),
 			"snapshot_controller":               ComputedStruct(DataSourceSnapshotControllerConfig()),
+			"pod_identity_webhook":              ComputedStruct(DataSourcePodIdentityWebhookConfig()),
 		},
 	}
 
@@ -941,9 +942,25 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["encryption_config"]),
-		DisableSubnetTags: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_subnet_tags"]),
+		TagSubnets: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["tag_subnets"]),
 		UseHostCertificates: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -1065,6 +1082,24 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["snapshot_controller"]),
+		PodIdentityWebhook: func(in interface{}) *kops.PodIdentityWebhookConfig {
+			return func(in interface{}) *kops.PodIdentityWebhookConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.PodIdentityWebhookConfig) *kops.PodIdentityWebhookConfig {
+					return &in
+				}(func(in interface{}) kops.PodIdentityWebhookConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.PodIdentityWebhookConfig{}
+					}
+					return (ExpandDataSourcePodIdentityWebhookConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["pod_identity_webhook"]),
 	}
 }
 
@@ -1646,9 +1681,16 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.EncryptionConfig)
-	out["disable_subnet_tags"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableSubnetTags)
+	out["tag_subnets"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.TagSubnets)
 	out["use_host_certificates"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -1728,6 +1770,18 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.SnapshotController)
+	out["pod_identity_webhook"] = func(in *kops.PodIdentityWebhookConfig) interface{} {
+		return func(in *kops.PodIdentityWebhookConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.PodIdentityWebhookConfig) interface{} {
+				return func(in kops.PodIdentityWebhookConfig) []interface{} {
+					return []interface{}{FlattenDataSourcePodIdentityWebhookConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.PodIdentityWebhook)
 }
 
 func FlattenDataSourceClusterSpec(in kops.ClusterSpec) map[string]interface{} {

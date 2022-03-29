@@ -24,8 +24,6 @@ func TestExpandDataSourceEtcdClusterSpec(t *testing.T) {
 					"name":                    "",
 					"provider":                "",
 					"member":                  func() []interface{} { return nil }(),
-					"enable_etcd_tls":         false,
-					"enable_tls_auth":         false,
 					"version":                 "",
 					"leader_election_timeout": nil,
 					"heartbeat_interval":      nil,
@@ -54,8 +52,6 @@ func TestFlattenDataSourceEtcdClusterSpecInto(t *testing.T) {
 		"name":                    "",
 		"provider":                "",
 		"member":                  func() []interface{} { return nil }(),
-		"enable_etcd_tls":         false,
-		"enable_tls_auth":         false,
 		"version":                 "",
 		"leader_election_timeout": nil,
 		"heartbeat_interval":      nil,
@@ -108,28 +104,6 @@ func TestFlattenDataSourceEtcdClusterSpecInto(t *testing.T) {
 				in: func() kops.EtcdClusterSpec {
 					subject := kops.EtcdClusterSpec{}
 					subject.Members = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "EnableEtcdTLS - default",
-			args: args{
-				in: func() kops.EtcdClusterSpec {
-					subject := kops.EtcdClusterSpec{}
-					subject.EnableEtcdTLS = false
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "EnableTLSAuth - default",
-			args: args{
-				in: func() kops.EtcdClusterSpec {
-					subject := kops.EtcdClusterSpec{}
-					subject.EnableTLSAuth = false
 					return subject
 				}(),
 			},
@@ -240,8 +214,6 @@ func TestFlattenDataSourceEtcdClusterSpec(t *testing.T) {
 		"name":                    "",
 		"provider":                "",
 		"member":                  func() []interface{} { return nil }(),
-		"enable_etcd_tls":         false,
-		"enable_tls_auth":         false,
 		"version":                 "",
 		"leader_election_timeout": nil,
 		"heartbeat_interval":      nil,
@@ -294,28 +266,6 @@ func TestFlattenDataSourceEtcdClusterSpec(t *testing.T) {
 				in: func() kops.EtcdClusterSpec {
 					subject := kops.EtcdClusterSpec{}
 					subject.Members = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "EnableEtcdTLS - default",
-			args: args{
-				in: func() kops.EtcdClusterSpec {
-					subject := kops.EtcdClusterSpec{}
-					subject.EnableEtcdTLS = false
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "EnableTLSAuth - default",
-			args: args{
-				in: func() kops.EtcdClusterSpec {
-					subject := kops.EtcdClusterSpec{}
-					subject.EnableTLSAuth = false
 					return subject
 				}(),
 			},

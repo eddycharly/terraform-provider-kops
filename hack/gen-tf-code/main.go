@@ -124,7 +124,7 @@ func main() {
 			noSchema(),
 		),
 		generate(resources.ClusterSecrets{},
-			sensitive("DockerConfig" , "ClusterCaCert", "ClusterCaKey"),
+			sensitive("DockerConfig", "ClusterCaCert", "ClusterCaKey"),
 			computed("ClusterCaCert", "ClusterCaKey"),
 		),
 		generate(resources.ValidateOptions{}),
@@ -190,7 +190,7 @@ func main() {
 		generate(kops.Assets{}),
 		generate(kops.IAMSpec{}),
 		generate(kops.KopeioAuthenticationSpec{}),
-		generate(kops.AwsAuthenticationSpec{}),
+		generate(kops.AWSAuthenticationSpec{}),
 		generate(kops.AlwaysAllowAuthorizationSpec{}),
 		generate(kops.RBACAuthorizationSpec{}),
 		generate(kops.NodeAuthorizerSpec{}),
@@ -226,7 +226,7 @@ func main() {
 			required("Masters", "Nodes", "DNS"),
 		),
 		generate(kops.BastionSpec{},
-			required("BastionPublicName"),
+			required("PublicName"),
 		),
 		generate(kops.BastionLoadBalancerSpec{},
 			required("AdditionalSecurityGroups"),
@@ -316,6 +316,10 @@ func main() {
 		generate(corev1.NodeSelectorRequirement{}),
 		generate(metav1.LabelSelector{}),
 		generate(metav1.LabelSelectorRequirement{}),
+		// 1.23
+		generate(kops.GCPPDCSIDriver{}),
+		generate(kops.AWSAuthenticationIdentityMappingSpec{}),
+		generate(kops.PodIdentityWebhookConfig{}),
 	)
 	build(
 		"Config",
@@ -401,7 +405,7 @@ func main() {
 		generate(kops.DNSAccessSpec{}),
 		generate(kops.LoadBalancerAccessSpec{}),
 		generate(kops.KopeioAuthenticationSpec{}),
-		generate(kops.AwsAuthenticationSpec{}),
+		generate(kops.AWSAuthenticationSpec{}),
 		generate(kops.OpenstackConfiguration{}),
 		generate(kops.LeaderElectionConfiguration{}),
 		generate(kops.AuthorizationSpec{}),
@@ -492,5 +496,9 @@ func main() {
 		generate(corev1.NodeSelectorRequirement{}),
 		generate(metav1.LabelSelector{}),
 		generate(metav1.LabelSelectorRequirement{}),
+		// 1.23
+		generate(kops.GCPPDCSIDriver{}),
+		generate(kops.AWSAuthenticationIdentityMappingSpec{}),
+		generate(kops.PodIdentityWebhookConfig{}),
 	)
 }

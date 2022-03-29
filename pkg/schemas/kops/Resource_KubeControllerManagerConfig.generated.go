@@ -67,6 +67,7 @@ func ResourceKubeControllerManagerConfig() *schema.Resource {
 			"authorization_always_allow_paths":                    OptionalList(String()),
 			"external_cloud_volume_plugin":                        OptionalString(),
 			"enable_profiling":                                    OptionalBool(),
+			"enable_leader_migration":                             OptionalBool(),
 		},
 	}
 
@@ -743,7 +744,7 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(int32(ExpandInt(in)))
 			}(in)
 		}(in["concurrent_serviceaccount_token_syncs"]),
-		ConcurrentRcSyncs: func(in interface{}) *int32 {
+		ConcurrentRCSyncs: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -802,6 +803,25 @@ func ExpandResourceKubeControllerManagerConfig(in map[string]interface{}) kops.K
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_profiling"]),
+		EnableLeaderMigration: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["enable_leader_migration"]),
 	}
 }
 
@@ -1193,7 +1213,7 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 				return FlattenInt(int(in))
 			}(*in)
 		}(in)
-	}(in.ConcurrentRcSyncs)
+	}(in.ConcurrentRCSyncs)
 	out["authentication_kubeconfig"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.AuthenticationKubeconfig)
@@ -1222,6 +1242,16 @@ func FlattenResourceKubeControllerManagerConfigInto(in kops.KubeControllerManage
 			}(*in)
 		}(in)
 	}(in.EnableProfiling)
+	out["enable_leader_migration"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.EnableLeaderMigration)
 }
 
 func FlattenResourceKubeControllerManagerConfig(in kops.KubeControllerManagerConfig) map[string]interface{} {

@@ -136,7 +136,7 @@ func TestFlattenDataSourceLoadBalancerAccessSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.LoadBalancerAccessSpec {
 					subject := kops.LoadBalancerAccessSpec{}
-					subject.UseForInternalApi = false
+					subject.UseForInternalAPI = false
 					return subject
 				}(),
 			},
@@ -298,7 +298,7 @@ func TestFlattenDataSourceLoadBalancerAccessSpec(t *testing.T) {
 			args: args{
 				in: func() kops.LoadBalancerAccessSpec {
 					subject := kops.LoadBalancerAccessSpec{}
-					subject.UseForInternalApi = false
+					subject.UseForInternalAPI = false
 					return subject
 				}(),
 			},

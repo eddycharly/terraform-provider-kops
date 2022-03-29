@@ -118,7 +118,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["root_volume_type"]),
-		RootVolumeIops: func(in interface{}) *int32 {
+		RootVolumeIOPS: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
 			}
@@ -175,25 +175,6 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["root_volume_optimization"]),
-		RootVolumeDeleteOnTermination: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["root_volume_delete_on_termination"]),
 		RootVolumeEncryption: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -813,7 +794,7 @@ func FlattenDataSourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[s
 				return FlattenInt(int(in))
 			}(*in)
 		}(in)
-	}(in.RootVolumeIops)
+	}(in.RootVolumeIOPS)
 	out["root_volume_throughput"] = func(in *int32) interface{} {
 		return func(in *int32) interface{} {
 			if in == nil {
@@ -834,16 +815,6 @@ func FlattenDataSourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[s
 			}(*in)
 		}(in)
 	}(in.RootVolumeOptimization)
-	out["root_volume_delete_on_termination"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
-		}(in)
-	}(in.RootVolumeDeleteOnTermination)
 	out["root_volume_encryption"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {

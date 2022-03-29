@@ -73,6 +73,7 @@ func TestExpandResourceKubeControllerManagerConfig(t *testing.T) {
 					"authorization_always_allow_paths":                    func() []interface{} { return nil }(),
 					"external_cloud_volume_plugin":                        "",
 					"enable_profiling":                                    nil,
+					"enable_leader_migration":                             nil,
 				},
 			},
 			want: _default,
@@ -142,6 +143,7 @@ func TestFlattenResourceKubeControllerManagerConfigInto(t *testing.T) {
 		"authorization_always_allow_paths":                    func() []interface{} { return nil }(),
 		"external_cloud_volume_plugin":                        "",
 		"enable_profiling":                                    nil,
+		"enable_leader_migration":                             nil,
 	}
 	type args struct {
 		in kops.KubeControllerManagerConfig
@@ -665,11 +667,11 @@ func TestFlattenResourceKubeControllerManagerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ConcurrentRcSyncs - default",
+			name: "ConcurrentRCSyncs - default",
 			args: args{
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
-					subject.ConcurrentRcSyncs = nil
+					subject.ConcurrentRCSyncs = nil
 					return subject
 				}(),
 			},
@@ -725,6 +727,17 @@ func TestFlattenResourceKubeControllerManagerConfigInto(t *testing.T) {
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
 					subject.EnableProfiling = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableLeaderMigration - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.EnableLeaderMigration = nil
 					return subject
 				}(),
 			},
@@ -796,6 +809,7 @@ func TestFlattenResourceKubeControllerManagerConfig(t *testing.T) {
 		"authorization_always_allow_paths":                    func() []interface{} { return nil }(),
 		"external_cloud_volume_plugin":                        "",
 		"enable_profiling":                                    nil,
+		"enable_leader_migration":                             nil,
 	}
 	type args struct {
 		in kops.KubeControllerManagerConfig
@@ -1319,11 +1333,11 @@ func TestFlattenResourceKubeControllerManagerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ConcurrentRcSyncs - default",
+			name: "ConcurrentRCSyncs - default",
 			args: args{
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
-					subject.ConcurrentRcSyncs = nil
+					subject.ConcurrentRCSyncs = nil
 					return subject
 				}(),
 			},
@@ -1379,6 +1393,17 @@ func TestFlattenResourceKubeControllerManagerConfig(t *testing.T) {
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
 					subject.EnableProfiling = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableLeaderMigration - default",
+			args: args{
+				in: func() kops.KubeControllerManagerConfig {
+					subject := kops.KubeControllerManagerConfig{}
+					subject.EnableLeaderMigration = nil
 					return subject
 				}(),
 			},

@@ -70,6 +70,7 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"volume_plugin_directory":                OptionalString(),
 			"taints":                                 OptionalList(String()),
 			"feature_gates":                          OptionalMap(String()),
+			"kernel_memcg_notification":              OptionalBool(),
 			"kube_reserved":                          OptionalMap(String()),
 			"kube_reserved_cgroup":                   OptionalString(),
 			"system_reserved":                        OptionalMap(String()),
@@ -101,6 +102,8 @@ func ResourceKubeletConfigSpec() *schema.Resource {
 			"container_log_max_files":                OptionalInt(),
 			"enable_cadvisor_json_endpoints":         OptionalBool(),
 			"pod_pids_limit":                         OptionalInt(),
+			"shutdown_grace_period":                  OptionalDuration(),
+			"shutdown_grace_period_critical_pods":    OptionalDuration(),
 		},
 	}
 
@@ -696,6 +699,25 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				return nil
 			}(in)
 		}(in["feature_gates"]),
+		KernelMemcgNotification: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["kernel_memcg_notification"]),
 		KubeReserved: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
 				if in == nil {
@@ -1141,6 +1163,44 @@ func ExpandResourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletConf
 				}(int64(ExpandInt(in)))
 			}(in)
 		}(in["pod_pids_limit"]),
+		ShutdownGracePeriod: func(in interface{}) *meta.Duration {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *meta.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in meta.Duration) *meta.Duration {
+					return &in
+				}(ExpandDuration(in))
+			}(in)
+		}(in["shutdown_grace_period"]),
+		ShutdownGracePeriodCriticalPods: func(in interface{}) *meta.Duration {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *meta.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in meta.Duration) *meta.Duration {
+					return &in
+				}(ExpandDuration(in))
+			}(in)
+		}(in["shutdown_grace_period_critical_pods"]),
 	}
 }
 
@@ -1507,6 +1567,16 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			return out
 		}(in)
 	}(in.FeatureGates)
+	out["kernel_memcg_notification"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.KernelMemcgNotification)
 	out["kube_reserved"] = func(in map[string]string) interface{} {
 		return func(in map[string]string) map[string]interface{} {
 			if in == nil {
@@ -1766,6 +1836,26 @@ func FlattenResourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.PodPidsLimit)
+	out["shutdown_grace_period"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in meta.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.ShutdownGracePeriod)
+	out["shutdown_grace_period_critical_pods"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in meta.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.ShutdownGracePeriodCriticalPods)
 }
 
 func FlattenResourceKubeletConfigSpec(in kops.KubeletConfigSpec) map[string]interface{} {

@@ -22,19 +22,19 @@ func TestExpandResourceKubeProxyConfig(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"image":                  "",
-					"cpu_request":            "",
-					"cpu_limit":              "",
-					"memory_request":         "",
-					"memory_limit":           "",
+					"cpu_request":            nil,
+					"cpu_limit":              nil,
+					"memory_request":         nil,
+					"memory_limit":           nil,
 					"log_level":              0,
-					"cluster_cidr":           "",
+					"cluster_cidr":           nil,
 					"hostname_override":      "",
 					"bind_address":           "",
 					"master":                 "",
 					"metrics_bind_address":   nil,
 					"enabled":                nil,
 					"proxy_mode":             "",
-					"ip_vs_exclude_cidr_s":   func() []interface{} { return nil }(),
+					"ip_vs_exclude_cidrs":    func() []interface{} { return nil }(),
 					"ip_vs_min_sync_period":  nil,
 					"ip_vs_scheduler":        nil,
 					"ip_vs_sync_period":      nil,
@@ -59,19 +59,19 @@ func TestExpandResourceKubeProxyConfig(t *testing.T) {
 func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"image":                  "",
-		"cpu_request":            "",
-		"cpu_limit":              "",
-		"memory_request":         "",
-		"memory_limit":           "",
+		"cpu_request":            nil,
+		"cpu_limit":              nil,
+		"memory_request":         nil,
+		"memory_limit":           nil,
 		"log_level":              0,
-		"cluster_cidr":           "",
+		"cluster_cidr":           nil,
 		"hostname_override":      "",
 		"bind_address":           "",
 		"master":                 "",
 		"metrics_bind_address":   nil,
 		"enabled":                nil,
 		"proxy_mode":             "",
-		"ip_vs_exclude_cidr_s":   func() []interface{} { return nil }(),
+		"ip_vs_exclude_cidrs":    func() []interface{} { return nil }(),
 		"ip_vs_min_sync_period":  nil,
 		"ip_vs_scheduler":        nil,
 		"ip_vs_sync_period":      nil,
@@ -110,7 +110,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.CPURequest = ""
+					subject.CPURequest = nil
 					return subject
 				}(),
 			},
@@ -121,7 +121,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.CPULimit = ""
+					subject.CPULimit = nil
 					return subject
 				}(),
 			},
@@ -132,7 +132,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.MemoryRequest = ""
+					subject.MemoryRequest = nil
 					return subject
 				}(),
 			},
@@ -143,7 +143,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.MemoryLimit = ""
+					subject.MemoryLimit = nil
 					return subject
 				}(),
 			},
@@ -165,7 +165,7 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.ClusterCIDR = ""
+					subject.ClusterCIDR = nil
 					return subject
 				}(),
 			},
@@ -238,11 +238,11 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "IpVSExcludeCidrS - default",
+			name: "IpVSExcludeCidrs - default",
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.IPVSExcludeCIDRS = nil
+					subject.IPVSExcludeCIDRs = nil
 					return subject
 				}(),
 			},
@@ -329,19 +329,19 @@ func TestFlattenResourceKubeProxyConfigInto(t *testing.T) {
 func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"image":                  "",
-		"cpu_request":            "",
-		"cpu_limit":              "",
-		"memory_request":         "",
-		"memory_limit":           "",
+		"cpu_request":            nil,
+		"cpu_limit":              nil,
+		"memory_request":         nil,
+		"memory_limit":           nil,
 		"log_level":              0,
-		"cluster_cidr":           "",
+		"cluster_cidr":           nil,
 		"hostname_override":      "",
 		"bind_address":           "",
 		"master":                 "",
 		"metrics_bind_address":   nil,
 		"enabled":                nil,
 		"proxy_mode":             "",
-		"ip_vs_exclude_cidr_s":   func() []interface{} { return nil }(),
+		"ip_vs_exclude_cidrs":    func() []interface{} { return nil }(),
 		"ip_vs_min_sync_period":  nil,
 		"ip_vs_scheduler":        nil,
 		"ip_vs_sync_period":      nil,
@@ -380,7 +380,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.CPURequest = ""
+					subject.CPURequest = nil
 					return subject
 				}(),
 			},
@@ -391,7 +391,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.CPULimit = ""
+					subject.CPULimit = nil
 					return subject
 				}(),
 			},
@@ -402,7 +402,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.MemoryRequest = ""
+					subject.MemoryRequest = nil
 					return subject
 				}(),
 			},
@@ -413,7 +413,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.MemoryLimit = ""
+					subject.MemoryLimit = nil
 					return subject
 				}(),
 			},
@@ -435,7 +435,7 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.ClusterCIDR = ""
+					subject.ClusterCIDR = nil
 					return subject
 				}(),
 			},
@@ -508,11 +508,11 @@ func TestFlattenResourceKubeProxyConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "IpVSExcludeCidrS - default",
+			name: "IpVSExcludeCidrs - default",
 			args: args{
 				in: func() kops.KubeProxyConfig {
 					subject := kops.KubeProxyConfig{}
-					subject.IPVSExcludeCIDRS = nil
+					subject.IPVSExcludeCIDRs = nil
 					return subject
 				}(),
 			},

@@ -13,9 +13,8 @@ var _ = Schema
 func ResourceFlannelNetworkingSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"backend":                        OptionalString(),
-			"disable_tx_checksum_offloading": OptionalBool(),
-			"iptables_resync_seconds":        OptionalInt(),
+			"backend":                 OptionalString(),
+			"iptables_resync_seconds": OptionalInt(),
 		},
 	}
 
@@ -30,9 +29,6 @@ func ExpandResourceFlannelNetworkingSpec(in map[string]interface{}) kops.Flannel
 		Backend: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["backend"]),
-		DisableTxChecksumOffloading: func(in interface{}) bool {
-			return bool(ExpandBool(in))
-		}(in["disable_tx_checksum_offloading"]),
 		IptablesResyncSeconds: func(in interface{}) *int32 {
 			if in == nil {
 				return nil
@@ -59,9 +55,6 @@ func FlattenResourceFlannelNetworkingSpecInto(in kops.FlannelNetworkingSpec, out
 	out["backend"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Backend)
-	out["disable_tx_checksum_offloading"] = func(in bool) interface{} {
-		return FlattenBool(bool(in))
-	}(in.DisableTxChecksumOffloading)
 	out["iptables_resync_seconds"] = func(in *int32) interface{} {
 		return func(in *int32) interface{} {
 			if in == nil {
