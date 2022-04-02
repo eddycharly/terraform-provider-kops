@@ -14,50 +14,50 @@ var _ = Schema
 func ResourceCiliumNetworkingSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"version":                            OptionalString(),
-			"memory_request":                     OptionalQuantity(),
-			"cpu_request":                        OptionalQuantity(),
-			"agent_prometheus_port":              OptionalInt(),
-			"chaining_mode":                      OptionalString(),
-			"debug":                              OptionalBool(),
-			"disable_endpoint_crd":               OptionalBool(),
-			"enable_policy":                      OptionalString(),
-			"enable_l7_proxy":                    OptionalBool(),
-			"enable_bpf_masquerade":              OptionalBool(),
-			"enable_endpoint_health_checking":    OptionalBool(),
-			"enable_prometheus_metrics":          OptionalBool(),
-			"enable_encryption":                  OptionalBool(),
-			"encryption_type":                    OptionalString(),
-			"identity_allocation_mode":           OptionalString(),
-			"identity_change_grace_period":       OptionalString(),
-			"masquerade":                         OptionalBool(),
-			"agent_pod_annotations":              OptionalMap(String()),
-			"tunnel":                             OptionalString(),
-			"monitor_aggregation":                OptionalString(),
-			"bpfct_global_tcp_max":               OptionalInt(),
-			"bpfct_global_any_max":               OptionalInt(),
-			"bpflb_algorithm":                    OptionalString(),
-			"bpflb_maglev_table_size":            OptionalString(),
-			"bpfnat_global_max":                  OptionalInt(),
-			"bpf_neigh_global_max":               OptionalInt(),
-			"bpf_policy_map_max":                 OptionalInt(),
-			"bpflb_map_max":                      OptionalInt(),
-			"bpflb_sock_host_ns_only":            OptionalBool(),
-			"preallocate_bpf_maps":               RequiredBool(),
-			"sidecar_istio_proxy_image":          OptionalString(),
-			"cluster_name":                       OptionalString(),
-			"to_fqd_ns_dns_reject_response_code": OptionalString(),
-			"to_fqd_ns_enable_poller":            OptionalBool(),
-			"ip_am":                              OptionalString(),
-			"install_iptables_rules":             OptionalBool(),
-			"auto_direct_node_routes":            OptionalBool(),
-			"enable_host_reachable_services":     OptionalBool(),
-			"enable_node_port":                   OptionalBool(),
-			"etcd_managed":                       OptionalBool(),
-			"enable_remote_node_identity":        RequiredBool(),
-			"hubble":                             OptionalStruct(ResourceHubbleSpec()),
-			"disable_cnp_status_updates":         OptionalBool(),
-			"enable_service_topology":            OptionalBool(),
+			"version":                           OptionalString(),
+			"memory_request":                    OptionalQuantity(),
+			"cpu_request":                       OptionalQuantity(),
+			"agent_prometheus_port":             OptionalInt(),
+			"chaining_mode":                     OptionalString(),
+			"debug":                             OptionalBool(),
+			"disable_endpoint_crd":              OptionalBool(),
+			"enable_policy":                     OptionalString(),
+			"enable_l7_proxy":                   OptionalBool(),
+			"enable_bpf_masquerade":             OptionalBool(),
+			"enable_endpoint_health_checking":   OptionalBool(),
+			"enable_prometheus_metrics":         OptionalBool(),
+			"enable_encryption":                 OptionalBool(),
+			"encryption_type":                   OptionalString(),
+			"identity_allocation_mode":          OptionalString(),
+			"identity_change_grace_period":      OptionalString(),
+			"masquerade":                        OptionalBool(),
+			"agent_pod_annotations":             OptionalMap(String()),
+			"tunnel":                            OptionalString(),
+			"monitor_aggregation":               OptionalString(),
+			"bpfct_global_tcp_max":              OptionalInt(),
+			"bpfct_global_any_max":              OptionalInt(),
+			"bpflb_algorithm":                   OptionalString(),
+			"bpflb_maglev_table_size":           OptionalString(),
+			"bpfnat_global_max":                 OptionalInt(),
+			"bpf_neigh_global_max":              OptionalInt(),
+			"bpf_policy_map_max":                OptionalInt(),
+			"bpflb_map_max":                     OptionalInt(),
+			"bpflb_sock_host_ns_only":           OptionalBool(),
+			"preallocate_bpf_maps":              RequiredBool(),
+			"sidecar_istio_proxy_image":         OptionalString(),
+			"cluster_name":                      OptionalString(),
+			"to_fqdns_dns_reject_response_code": OptionalString(),
+			"to_fqdns_enable_poller":            OptionalBool(),
+			"ipam":                              OptionalString(),
+			"install_iptables_rules":            OptionalBool(),
+			"auto_direct_node_routes":           OptionalBool(),
+			"enable_host_reachable_services":    OptionalBool(),
+			"enable_node_port":                  OptionalBool(),
+			"etcd_managed":                      OptionalBool(),
+			"enable_remote_node_identity":       RequiredBool(),
+			"hubble":                            OptionalStruct(ResourceHubbleSpec()),
+			"disable_cnp_status_updates":        OptionalBool(),
+			"enable_service_topology":           OptionalBool(),
 		},
 	}
 
@@ -277,13 +277,13 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 		}(in["cluster_name"]),
 		ToFQDNsDNSRejectResponseCode: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["to_fqd_ns_dns_reject_response_code"]),
+		}(in["to_fqdns_dns_reject_response_code"]),
 		ToFQDNsEnablePoller: func(in interface{}) bool {
 			return bool(ExpandBool(in))
-		}(in["to_fqd_ns_enable_poller"]),
+		}(in["to_fqdns_enable_poller"]),
 		IPAM: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["ip_am"]),
+		}(in["ipam"]),
 		InstallIptablesRules: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -519,13 +519,13 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
-	out["to_fqd_ns_dns_reject_response_code"] = func(in string) interface{} {
+	out["to_fqdns_dns_reject_response_code"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ToFQDNsDNSRejectResponseCode)
-	out["to_fqd_ns_enable_poller"] = func(in bool) interface{} {
+	out["to_fqdns_enable_poller"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.ToFQDNsEnablePoller)
-	out["ip_am"] = func(in string) interface{} {
+	out["ipam"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.IPAM)
 	out["install_iptables_rules"] = func(in *bool) interface{} {
