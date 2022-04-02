@@ -137,11 +137,11 @@ integration-basic: integration-reset
 	@terraform -chdir=./tests/basic init
 	@terraform -chdir=./tests/basic validate
 	@terraform -chdir=./tests/basic plan
-	@terraform -chdir=./tests/basic apply  -auto-approve
+	@terraform -chdir=./tests/basic apply -auto-approve
 
 .PHONY: integration-external-policies
 integration-external-policies: integration-reset
 	@terraform -chdir=./tests/external-policies init
 	@terraform -chdir=./tests/external-policies validate
 	@terraform -chdir=./tests/external-policies plan
-	@terraform -chdir=./tests/external-policies apply  -auto-approve
+	@terraform -chdir=./tests/external-policies apply -auto-approve
