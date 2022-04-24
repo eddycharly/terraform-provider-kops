@@ -1777,6 +1777,7 @@ The following arguments are supported:
 - `memory_request` - (Optional) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
 - `max_node_provision_time` - (Optional) - String - MaxNodeProvisionTime determines how long CAS will wait for a node to join the cluster.
+- `pod_annotations` - (Optional) - Map(String) - PodAnnotations are the annotations added to cluster autoscaler pods when they are created.<br />Default: none.
 
 ### warm_pool_spec
 
