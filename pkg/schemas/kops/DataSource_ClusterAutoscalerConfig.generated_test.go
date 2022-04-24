@@ -34,6 +34,7 @@ func TestExpandDataSourceClusterAutoscalerConfig(t *testing.T) {
 					"memory_request":                   nil,
 					"cpu_request":                      nil,
 					"max_node_provision_time":          "",
+					"pod_annotations":                  func() map[string]interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -64,6 +65,7 @@ func TestFlattenDataSourceClusterAutoscalerConfigInto(t *testing.T) {
 		"memory_request":                   nil,
 		"cpu_request":                      nil,
 		"max_node_provision_time":          "",
+		"pod_annotations":                  func() map[string]interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ClusterAutoscalerConfig
@@ -218,6 +220,17 @@ func TestFlattenDataSourceClusterAutoscalerConfigInto(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.MaxNodeProvisionTime = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodAnnotations - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.PodAnnotations = nil
 					return subject
 				}(),
 			},
@@ -250,6 +263,7 @@ func TestFlattenDataSourceClusterAutoscalerConfig(t *testing.T) {
 		"memory_request":                   nil,
 		"cpu_request":                      nil,
 		"max_node_provision_time":          "",
+		"pod_annotations":                  func() map[string]interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ClusterAutoscalerConfig
@@ -404,6 +418,17 @@ func TestFlattenDataSourceClusterAutoscalerConfig(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.MaxNodeProvisionTime = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodAnnotations - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.PodAnnotations = nil
 					return subject
 				}(),
 			},

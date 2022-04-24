@@ -27,6 +27,7 @@ func ResourceClusterAutoscalerConfig() *schema.Resource {
 			"memory_request":                   OptionalQuantity(),
 			"cpu_request":                      OptionalQuantity(),
 			"max_node_provision_time":          OptionalString(),
+			"pod_annotations":                  OptionalMap(String()),
 		},
 	}
 
@@ -257,6 +258,23 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 		MaxNodeProvisionTime: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["max_node_provision_time"]),
+		PodAnnotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["pod_annotations"]),
 	}
 }
 
@@ -384,6 +402,18 @@ func FlattenResourceClusterAutoscalerConfigInto(in kops.ClusterAutoscalerConfig,
 	out["max_node_provision_time"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MaxNodeProvisionTime)
+	out["pod_annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.PodAnnotations)
 }
 
 func FlattenResourceClusterAutoscalerConfig(in kops.ClusterAutoscalerConfig) map[string]interface{} {
