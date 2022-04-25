@@ -12,114 +12,18 @@ on:
       - reopened
 
 jobs:
-  build-tf-0-13:
+  build:
+    strategy:
+      fail-fast: true
+      matrix:
+        tf-version: [0.15.5, 1.0.11, 1.1.9]
     runs-on: ubuntu-latest
     steps:
       - name: Install goimports
         run: go get golang.org/x/tools/cmd/goimports
       - name: Install terraform
         run: |
-          TERRAFORM_VERSION=0.13.7
-          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          sudo mv terraform /usr/local/bin
-          rm *
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: /home/runner/go/pkg/mod
-          key: go-mod
-      - name: Build install and validate against examples
-        run: |
-          make examples
-  build-tf-0-14:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install goimports
-        run: go get golang.org/x/tools/cmd/goimports
-      - name: Install terraform
-        run: |
-          TERRAFORM_VERSION=0.14.11
-          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          sudo mv terraform /usr/local/bin
-          rm *
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: /home/runner/go/pkg/mod
-          key: go-mod
-      - name: Build install and validate against examples
-        run: |
-          make examples
-  build-tf-0-15:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install goimports
-        run: go get golang.org/x/tools/cmd/goimports
-      - name: Install terraform
-        run: |
-          TERRAFORM_VERSION=0.15.5
-          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          sudo mv terraform /usr/local/bin
-          rm *
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: /home/runner/go/pkg/mod
-          key: go-mod
-      - name: Build install and validate against examples
-        run: |
-          make examples-15
-  build-tf-1-0:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install goimports
-        run: go get golang.org/x/tools/cmd/goimports
-      - name: Install terraform
-        run: |
-          TERRAFORM_VERSION=1.0.11
-          curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-          sudo mv terraform /usr/local/bin
-          rm *
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: /home/runner/go/pkg/mod
-          key: go-mod
-      - name: Build install and validate against examples
-        run: |
-          make examples-15
-  build-tf-1-1:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install goimports
-        run: go get golang.org/x/tools/cmd/goimports
-      - name: Install terraform
-        run: |
-          TERRAFORM_VERSION=1.1.3
+          TERRAFORM_VERSION=${{ matrix.tf-version }}
           curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
           unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
           sudo mv terraform /usr/local/bin
