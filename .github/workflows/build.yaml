@@ -40,4 +40,4 @@ jobs:
           key: go-mod
       - name: Build install and validate against examples
         run: |
-          make examples-15
+          make examples
