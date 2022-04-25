@@ -13,7 +13,7 @@ var _ = Schema
 func DataSourceBastionSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"public_name":          ComputedString(),
+			"bastion_public_name":  ComputedString(),
 			"idle_timeout_seconds": ComputedInt(),
 			"load_balancer":        ComputedStruct(DataSourceBastionLoadBalancerSpec()),
 		},
@@ -29,7 +29,7 @@ func ExpandDataSourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 	return kops.BastionSpec{
 		PublicName: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["public_name"]),
+		}(in["bastion_public_name"]),
 		IdleTimeoutSeconds: func(in interface{}) *int64 {
 			if in == nil {
 				return nil
@@ -71,7 +71,7 @@ func ExpandDataSourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 }
 
 func FlattenDataSourceBastionSpecInto(in kops.BastionSpec, out map[string]interface{}) {
-	out["public_name"] = func(in string) interface{} {
+	out["bastion_public_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.PublicName)
 	out["idle_timeout_seconds"] = func(in *int64) interface{} {

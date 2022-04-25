@@ -172,7 +172,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `public_name` - (Computed) - String - PublicName is the domain name for the bastion load balancer.
+- `bastion_public_name` - (Computed) - String - PublicName is the domain name for the bastion load balancer.
 - `idle_timeout_seconds` - (Computed) - Int - IdleTimeoutSeconds is the bastion's load balancer idle timeout.
 - `load_balancer` - (Computed) - [bastion_load_balancer_spec](#bastion_load_balancer_spec) - LoadBalancer contains settings for the load balancer fronting bastion instances.
 
@@ -1401,9 +1401,9 @@ The following arguments are supported:
 - `preallocate_bpf_maps` - (Computed) - Bool - PreallocateBPFMaps reduces the per-packet latency at the expense of up-front memory allocation.<br />Default: true.
 - `sidecar_istio_proxy_image` - (Computed) - String - SidecarIstioProxyImage is the regular expression matching compatible Istio sidecar istio-proxy<br />container image names.<br />Default: cilium/istio_proxy.
 - `cluster_name` - (Computed) - String - ClusterName is the name of the cluster. It is only relevant when building a mesh of clusters.
-- `to_fqd_ns_dns_reject_response_code` - (Computed) - String - ToFQDNsDNSRejectResponseCode sets the DNS response code for rejecting DNS requests.<br />Possible values are "nameError" or "refused".<br />Default: refused.
-- `to_fqd_ns_enable_poller` - (Computed) - Bool - ToFQDNsEnablePoller replaces the DNS proxy-based implementation of FQDN policies<br />with the less powerful legacy implementation.<br />Default: false.
-- `ip_am` - (Computed) - String - IPAM specifies the IP address allocation mode to use.<br />Possible values are "crd" and "eni".<br />"eni" will use AWS native networking for pods. Eni requires masquerade to be set to false.<br />"crd" will use CRDs for controlling IP address management.<br />"hostscope" will use hostscope IPAM mode.<br />"kubernetes" will use addersing based on node pod CIDR.<br />Default: "kubernetes".
+- `to_fqdns_dns_reject_response_code` - (Computed) - String - ToFQDNsDNSRejectResponseCode sets the DNS response code for rejecting DNS requests.<br />Possible values are "nameError" or "refused".<br />Default: refused.
+- `to_fqdns_enable_poller` - (Computed) - Bool - ToFQDNsEnablePoller replaces the DNS proxy-based implementation of FQDN policies<br />with the less powerful legacy implementation.<br />Default: false.
+- `ipam` - (Computed) - String - IPAM specifies the IP address allocation mode to use.<br />Possible values are "crd" and "eni".<br />"eni" will use AWS native networking for pods. Eni requires masquerade to be set to false.<br />"crd" will use CRDs for controlling IP address management.<br />"hostscope" will use hostscope IPAM mode.<br />"kubernetes" will use addersing based on node pod CIDR.<br />Default: "kubernetes".
 - `install_iptables_rules` - (Computed) - Bool - InstallIptablesRules enables installing the base IPTables rules used for masquerading and kube-proxy.<br />Default: true.
 - `auto_direct_node_routes` - (Computed) - Bool - AutoDirectNodeRoutes adds automatic L2 routing between nodes.<br />Default: false.
 - `enable_host_reachable_services` - (Computed) - Bool - EnableHostReachableServices configures Cilium to enable services to be<br />reached from the host namespace in addition to pod namespaces.<br />https://docs.cilium.io/en/v1.9/gettingstarted/host-services/<br />Default: false.
@@ -1694,6 +1694,7 @@ The following arguments are supported:
 - `memory_request` - (Computed) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
 - `max_node_provision_time` - (Computed) - String - MaxNodeProvisionTime determines how long CAS will wait for a node to join the cluster.
+- `pod_annotations` - (Computed) - Map(String) - PodAnnotations are the annotations added to cluster autoscaler pods when they are created.<br />Default: none.
 
 ### warm_pool_spec
 

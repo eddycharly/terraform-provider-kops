@@ -17,6 +17,7 @@ func toSnakeCase(str string) string {
 }
 
 func fieldName(in string) string {
+	in = strings.ReplaceAll(in, "IPAM", "Ipam")
 	in = strings.ReplaceAll(in, "EBS", "Ebs")
 	in = strings.ReplaceAll(in, "CSI", "Csi")
 	in = strings.ReplaceAll(in, "CIDR", "Cidr")
@@ -30,6 +31,7 @@ func fieldName(in string) string {
 	in = strings.ReplaceAll(in, "CPU", "Cpu")
 	in = strings.ReplaceAll(in, "NPC", "Npc")
 	in = strings.ReplaceAll(in, "GCP", "Gcp")
+	in = strings.ReplaceAll(in, "FQDN", "Fqdn")
 	return in
 }
 
