@@ -18,7 +18,7 @@ resource "kops_cluster" "cluster" {
     masters = "private"
     nodes   = "private"
     bastion {
-      public_name = "bastion.${local.clusterName}"
+      bastion_public_name = "bastion.${local.clusterName}"
       load_balancer {
         additional_security_groups = local.bastionSecurityGroups
       }
