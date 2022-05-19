@@ -100,12 +100,6 @@ func sensitive(sensitive ...string) func(o *options) {
 	}
 }
 
-func suppressDiff(suppressDiff ...string) func(o *options) {
-	return func(o *options) {
-		o.suppressDiff.Insert(suppressDiff...)
-	}
-}
-
 func doc(header, footer string) func(o *options) {
 	return func(o *options) {
 		o.doc = &optionsDoc{

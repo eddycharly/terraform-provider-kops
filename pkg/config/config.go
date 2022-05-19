@@ -95,7 +95,11 @@ func initAwsCredentials(config *config.Aws) error {
 		os.Setenv("AWS_PROFILE", config.Profile)
 	}
 	if config.AssumeRole != nil {
-		svc := sts.New(session.New())
+		ses, err := session.NewSession()
+		if err != nil {
+			return err
+		}
+		svc := sts.New(ses)
 		input := &sts.AssumeRoleInput{
 			RoleArn:         aws.String(config.AssumeRole.RoleArn),
 			RoleSessionName: aws.String("TF-PROVIDER-KOPS"),
@@ -138,20 +142,23 @@ func initKlog(config *config.Klog) error {
 	}
 	flags := flag.NewFlagSet("klog", flag.ExitOnError)
 	if config.Verbosity != nil {
-		flags.Set("v", strconv.Itoa(*config.Verbosity))
+		if err := flags.Set("v", strconv.Itoa(*config.Verbosity)); err != nil {
+			return err
+		}
 	}
 	klog.InitFlags(flags)
 	return nil
 }
 
 func initFeatureFlags(config []string) error {
-	if config == nil || len(config) == 0 {
+	if len(config) == 0 {
 		return nil
 	}
 	featureflag.ParseFlags(strings.Join(config, ","))
 	return nil
 }
 
+// nolint
 func initMock() {
 	h := &testutils.IntegrationTestHarness{}
 
