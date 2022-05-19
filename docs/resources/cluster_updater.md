@@ -106,6 +106,7 @@ The following arguments are supported:
 
 - `skip` - (Optional) - Bool - Skip allows skipping cluster apply.
 - `allow_kops_downgrade` - (Optional) - Bool - AllowKopsDowngrade permits applying with a kops version older than what was last used to apply to the cluster.
+- `lifecycle_overrides` - (Optional) - Map(String) - LifecycleOverrides is passed in to override the lifecycle for one of more tasks.<br />The key value is the task name such as InternetGateway and the value is the fi.Lifecycle<br />that is re-mapped.
 
 ### rolling_update_options
 
