@@ -23,6 +23,7 @@ func TestExpandResourceApplyOptions(t *testing.T) {
 				in: map[string]interface{}{
 					"skip":                 false,
 					"allow_kops_downgrade": false,
+					"lifecycle_overrides":  func() map[string]interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -42,6 +43,7 @@ func TestFlattenResourceApplyOptionsInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"skip":                 false,
 		"allow_kops_downgrade": false,
+		"lifecycle_overrides":  func() map[string]interface{} { return nil }(),
 	}
 	type args struct {
 		in resources.ApplyOptions
@@ -75,6 +77,17 @@ func TestFlattenResourceApplyOptionsInto(t *testing.T) {
 				in: func() resources.ApplyOptions {
 					subject := resources.ApplyOptions{}
 					subject.AllowKopsDowngrade = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LifecycleOverrides - default",
+			args: args{
+				in: func() resources.ApplyOptions {
+					subject := resources.ApplyOptions{}
+					subject.LifecycleOverrides = nil
 					return subject
 				}(),
 			},
@@ -96,6 +109,7 @@ func TestFlattenResourceApplyOptions(t *testing.T) {
 	_default := map[string]interface{}{
 		"skip":                 false,
 		"allow_kops_downgrade": false,
+		"lifecycle_overrides":  func() map[string]interface{} { return nil }(),
 	}
 	type args struct {
 		in resources.ApplyOptions
@@ -129,6 +143,17 @@ func TestFlattenResourceApplyOptions(t *testing.T) {
 				in: func() resources.ApplyOptions {
 					subject := resources.ApplyOptions{}
 					subject.AllowKopsDowngrade = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LifecycleOverrides - default",
+			args: args{
+				in: func() resources.ApplyOptions {
+					subject := resources.ApplyOptions{}
+					subject.LifecycleOverrides = nil
 					return subject
 				}(),
 			},
