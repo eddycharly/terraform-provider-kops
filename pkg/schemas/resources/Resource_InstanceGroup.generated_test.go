@@ -65,9 +65,11 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 					"instance_metadata":              nil,
 					"update_policy":                  nil,
 					"warm_pool":                      nil,
-					"revision":                       0,
+					"labels":                         func() map[string]interface{} { return nil }(),
+					"annotations":                    func() map[string]interface{} { return nil }(),
 					"cluster_name":                   "",
 					"name":                           "",
+					"revision":                       0,
 				},
 			},
 			want: _default,
@@ -129,9 +131,11 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
-		"revision":                       0,
+		"labels":                         func() map[string]interface{} { return nil }(),
+		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
 		"name":                           "",
+		"revision":                       0,
 	}
 	type args struct {
 		in resources.InstanceGroup
@@ -633,11 +637,22 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Revision - default",
+			name: "Labels - default",
 			args: args{
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
-					subject.Revision = 0
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
@@ -660,6 +675,17 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Revision - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Revision = 0
 					return subject
 				}(),
 			},
@@ -723,9 +749,11 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
-		"revision":                       0,
+		"labels":                         func() map[string]interface{} { return nil }(),
+		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
 		"name":                           "",
+		"revision":                       0,
 	}
 	type args struct {
 		in resources.InstanceGroup
@@ -1227,11 +1255,22 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Revision - default",
+			name: "Labels - default",
 			args: args{
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
-					subject.Revision = 0
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
@@ -1254,6 +1293,17 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Revision - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Revision = 0
 					return subject
 				}(),
 			},

@@ -95,6 +95,8 @@ The following arguments are supported:
 - `instance_metadata` - (Computed) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 - `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
 - `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool specifies a pool of pre-warmed instances for later use (AWS only).
+- `labels` - (Computed) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
+- `annotations` - (Computed) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
 - `name` - (Required) - String - Name defines the instance group name.
 

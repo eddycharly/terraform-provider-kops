@@ -92,10 +92,12 @@ func TestExpandResourceCluster(t *testing.T) {
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
 					"pod_identity_webhook":              nil,
-					"revision":                          0,
+					"labels":                            func() map[string]interface{} { return nil }(),
+					"annotations":                       func() map[string]interface{} { return nil }(),
 					"name":                              "",
 					"admin_ssh_key":                     "",
 					"secrets":                           nil,
+					"revision":                          0,
 				},
 			},
 			want: _default,
@@ -184,10 +186,12 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
 		"pod_identity_webhook":              nil,
-		"revision":                          0,
+		"labels":                            func() map[string]interface{} { return nil }(),
+		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
+		"revision":                          0,
 	}
 	type args struct {
 		in resources.Cluster
@@ -986,11 +990,22 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Revision - default",
+			name: "Labels - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.Revision = 0
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
@@ -1024,6 +1039,17 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Secrets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Revision - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Revision = 0
 					return subject
 				}(),
 			},
@@ -1114,10 +1140,12 @@ func TestFlattenResourceCluster(t *testing.T) {
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
 		"pod_identity_webhook":              nil,
-		"revision":                          0,
+		"labels":                            func() map[string]interface{} { return nil }(),
+		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
+		"revision":                          0,
 	}
 	type args struct {
 		in resources.Cluster
@@ -1916,11 +1944,22 @@ func TestFlattenResourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Revision - default",
+			name: "Labels - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.Revision = 0
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
@@ -1954,6 +1993,17 @@ func TestFlattenResourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Secrets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Revision - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Revision = 0
 					return subject
 				}(),
 			},

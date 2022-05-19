@@ -65,6 +65,8 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 					"instance_metadata":              nil,
 					"update_policy":                  nil,
 					"warm_pool":                      nil,
+					"labels":                         func() map[string]interface{} { return nil }(),
+					"annotations":                    func() map[string]interface{} { return nil }(),
 					"cluster_name":                   "",
 					"name":                           "",
 				},
@@ -128,6 +130,8 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"labels":                         func() map[string]interface{} { return nil }(),
+		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
 		"name":                           "",
 	}
@@ -625,6 +629,28 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Labels - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
@@ -710,6 +736,8 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"labels":                         func() map[string]interface{} { return nil }(),
+		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
 		"name":                           "",
 	}
@@ -1207,6 +1235,28 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Labels - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},

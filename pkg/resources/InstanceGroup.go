@@ -31,7 +31,7 @@ func InstanceGroup() *schema.Resource {
 
 func InstanceGroupCreate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
-	if instanceGroup, err := resources.CreateInstanceGroup(in.ClusterName, in.Name, in.InstanceGroupSpec, config.Clientset(m)); err != nil {
+	if instanceGroup, err := resources.CreateInstanceGroup(in.ClusterName, in.Name, in.Labels, in.Annotations, in.InstanceGroupSpec, config.Clientset(m)); err != nil {
 		return diag.FromErr(err)
 	} else {
 		d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))
@@ -41,7 +41,7 @@ func InstanceGroupCreate(c context.Context, d *schema.ResourceData, m interface{
 
 func InstanceGroupUpdate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceInstanceGroup(d.Get("").(map[string]interface{}))
-	if instanceGroup, err := resources.UpdateInstanceGroup(in.ClusterName, in.Name, in.InstanceGroupSpec, config.Clientset(m)); err != nil {
+	if instanceGroup, err := resources.UpdateInstanceGroup(in.ClusterName, in.Name, in.Labels, in.Annotations, in.InstanceGroupSpec, config.Clientset(m)); err != nil {
 		return diag.FromErr(err)
 	} else {
 		d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))

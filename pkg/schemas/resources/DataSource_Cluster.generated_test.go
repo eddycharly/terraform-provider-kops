@@ -92,6 +92,8 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
 					"pod_identity_webhook":              nil,
+					"labels":                            func() map[string]interface{} { return nil }(),
+					"annotations":                       func() map[string]interface{} { return nil }(),
 					"name":                              "",
 					"admin_ssh_key":                     "",
 					"secrets":                           nil,
@@ -183,6 +185,8 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
 		"pod_identity_webhook":              nil,
+		"labels":                            func() map[string]interface{} { return nil }(),
+		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
@@ -978,6 +982,28 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.PodIdentityWebhook = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Labels - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
@@ -1101,6 +1127,8 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
 		"pod_identity_webhook":              nil,
+		"labels":                            func() map[string]interface{} { return nil }(),
+		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
@@ -1896,6 +1924,28 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.PodIdentityWebhook = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Labels - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Annotations - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Annotations = nil
 					return subject
 				}(),
 			},
