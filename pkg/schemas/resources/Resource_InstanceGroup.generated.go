@@ -59,9 +59,11 @@ func ResourceInstanceGroup() *schema.Resource {
 			"instance_metadata":              OptionalStruct(kopsschemas.ResourceInstanceMetadataOptions()),
 			"update_policy":                  OptionalString(),
 			"warm_pool":                      OptionalStruct(kopsschemas.ResourceWarmPoolSpec()),
-			"revision":                       ComputedInt(),
+			"labels":                         OptionalMap(String()),
+			"annotations":                    OptionalMap(String()),
 			"cluster_name":                   ForceNew(RequiredString()),
 			"name":                           ForceNew(RequiredString()),
+			"revision":                       ComputedInt(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -95,29 +97,87 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
 			return kopsschemas.ExpandResourceInstanceGroupSpec(in.(map[string]interface{}))
 		}(in),
-		Revision: func(in interface{}) int {
-			return int(ExpandInt(in))
-		}(in["revision"]),
+		Labels: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["labels"]),
+		Annotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["annotations"]),
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
+		Revision: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["revision"]),
 	}
 }
 
 func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
 	kopsschemas.FlattenResourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
-	out["revision"] = func(in int) interface{} {
-		return FlattenInt(int(in))
-	}(in.Revision)
+	out["labels"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Labels)
+	out["annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Annotations)
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
+	out["revision"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Revision)
 }
 
 func FlattenResourceInstanceGroup(in resources.InstanceGroup) map[string]interface{} {
