@@ -11,7 +11,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
-	"k8s.io/kops/pkg/cloudinstances"
 	"k8s.io/kops/pkg/instancegroups"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
@@ -194,10 +193,6 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 	err = d.AdjustNeedUpdate(groups)
 	if err != nil {
 		return err
-	}
-	var l []*cloudinstances.CloudInstanceGroup
-	for _, v := range groups {
-		l = append(l, v)
 	}
 	needUpdate := false
 	for _, group := range groups {

@@ -97,7 +97,7 @@ func CreateCluster(name string, labels map[string]string, annotations map[string
 	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
 		return nil, err
 	}
-	kc, err = clientset.CreateCluster(context.Background(), kc)
+	_, err = clientset.CreateCluster(context.Background(), kc)
 	if err != nil {
 		return nil, err
 	}
@@ -203,10 +203,6 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 		clusterResources[k] = resource
 	}
 	if len(clusterResources) != 0 {
-		var l []*resources.Resource
-		for _, v := range clusterResources {
-			l = append(l, v)
-		}
 		err = ops.DeleteResources(cloud, clusterResources)
 		if err != nil {
 			return err

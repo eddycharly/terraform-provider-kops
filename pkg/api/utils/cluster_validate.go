@@ -9,7 +9,6 @@ import (
 	"github.com/eddycharly/terraform-provider-kops/pkg/validation"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
 	kopsValidation "k8s.io/kops/pkg/validation"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
@@ -35,11 +34,7 @@ func makeValidator(clientset simple.Clientset, clusterName string) (kopsValidati
 	if err != nil {
 		return nil, fmt.Errorf("cannot get InstanceGroups for %q: %v", kc.ObjectMeta.Name, err)
 	}
-	var instanceGroups []kops.InstanceGroup
-	for _, ig := range list.Items {
-		instanceGroups = append(instanceGroups, ig)
-	}
-	if len(instanceGroups) == 0 {
+	if len(list.Items) == 0 {
 		return nil, fmt.Errorf("no InstanceGroup objects found")
 	}
 	configBuilder, err := GetKubeConfigBuilder(clientset, clusterName, nil, false)
