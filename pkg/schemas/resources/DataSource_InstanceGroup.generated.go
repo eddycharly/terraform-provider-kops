@@ -59,6 +59,8 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"instance_metadata":              ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
 			"update_policy":                  ComputedString(),
 			"warm_pool":                      ComputedStruct(kopsschemas.DataSourceWarmPoolSpec()),
+			"labels":                         ComputedMap(String()),
+			"annotations":                    ComputedMap(String()),
 			"cluster_name":                   RequiredString(),
 			"name":                           RequiredString(),
 		},
@@ -94,6 +96,40 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
 			return kopsschemas.ExpandDataSourceInstanceGroupSpec(in.(map[string]interface{}))
 		}(in),
+		Labels: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["labels"]),
+		Annotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["annotations"]),
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
@@ -105,6 +141,30 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 
 func FlattenDataSourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
 	kopsschemas.FlattenDataSourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
+	out["labels"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Labels)
+	out["annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Annotations)
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)

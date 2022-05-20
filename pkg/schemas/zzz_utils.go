@@ -15,7 +15,7 @@ import (
 func CustomizeDiffRevision(_ context.Context, d *schema.ResourceDiff, m interface{}) error {
 	// If anything changes, increment the revision
 	if len(d.GetChangedKeysPrefix("")) > 0 {
-		d.SetNew("revision", d.Get("revision").(int)+1)
+		return d.SetNew("revision", d.Get("revision").(int)+1)
 	}
 	return nil
 }

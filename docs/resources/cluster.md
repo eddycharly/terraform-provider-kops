@@ -203,10 +203,12 @@ The following arguments are supported:
 - `service_account_issuer_discovery` - (Optional) - [service_account_issuer_discovery_config](#service_account_issuer_discovery_config) - ServiceAccountIssuerDiscovery configures the OIDC Issuer for ServiceAccounts.
 - `snapshot_controller` - (Optional) - [snapshot_controller_config](#snapshot_controller_config) - SnapshotController defines the CSI Snapshot Controller configuration.
 - `pod_identity_webhook` - (Optional) - [pod_identity_webhook_config](#pod_identity_webhook_config) - PodIdentityWebhook determines the EKS Pod Identity Webhook configuration.
-- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `labels` - (Optional) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
+- `annotations` - (Optional) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `name` - (Required) - (Force new) - String - Name defines the cluster name.
 - `admin_ssh_key` - (Optional) - (Sensitive) - String - AdminSshKey defines the cluster admin ssh key.
 - `secrets` - (Optional) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.
+- `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
 
 ## Nested resources
 

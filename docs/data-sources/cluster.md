@@ -121,6 +121,8 @@ The following arguments are supported:
 - `service_account_issuer_discovery` - (Computed) - [service_account_issuer_discovery_config](#service_account_issuer_discovery_config) - ServiceAccountIssuerDiscovery configures the OIDC Issuer for ServiceAccounts.
 - `snapshot_controller` - (Computed) - [snapshot_controller_config](#snapshot_controller_config) - SnapshotController defines the CSI Snapshot Controller configuration.
 - `pod_identity_webhook` - (Computed) - [pod_identity_webhook_config](#pod_identity_webhook_config) - PodIdentityWebhook determines the EKS Pod Identity Webhook configuration.
+- `labels` - (Computed) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
+- `annotations` - (Computed) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `name` - (Required) - String - Name defines the cluster name.
 - `admin_ssh_key` - (Computed) - String - AdminSshKey defines the cluster admin ssh key.
 - `secrets` - (Computed) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.

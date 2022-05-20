@@ -15,29 +15,41 @@ import (
 // Cluster defines the configuration for a cluster
 type Cluster struct {
 	kops.ClusterSpec
-	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
-	Revision int
+	// Map of string keys and values that can be used to organize and categorize
+	// (scope and select) objects. May match selectors of replication controllers
+	// and services.
+	Labels map[string]string
+	// Annotations is an unstructured key value map stored with a resource that may be
+	// set by external tools to store and retrieve arbitrary metadata. They are not
+	// queryable and should be preserved when modifying objects.
+	Annotations map[string]string
 	// Name defines the cluster name
 	Name string
 	// AdminSshKey defines the cluster admin ssh key
 	AdminSshKey string
 	// Secrets defines the cluster secret
 	Secrets *ClusterSecrets
+	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
+	Revision int
 }
 
 func makeCluster(adminSshKey string, secrets *ClusterSecrets, cluster *kops.Cluster) *Cluster {
 	return &Cluster{
 		ClusterSpec: cluster.Spec,
+		Labels:      cluster.Labels,
+		Annotations: cluster.Annotations,
 		Name:        cluster.ObjectMeta.Name,
 		AdminSshKey: adminSshKey,
 		Secrets:     secrets,
 	}
 }
 
-func makeKopsCluster(name string, spec kops.ClusterSpec) *kops.Cluster {
+func makeKopsCluster(name string, labels map[string]string, annotations map[string]string, spec kops.ClusterSpec) *kops.Cluster {
 	return &kops.Cluster{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: name,
+			Name:        name,
+			Labels:      labels,
+			Annotations: annotations,
 		},
 		Spec: spec,
 	}
@@ -76,8 +88,8 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	return cluster, nil
 }
 
-func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc := makeKopsCluster(name, spec)
+func CreateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+	kc := makeKopsCluster(name, labels, annotations, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
 		return nil, err
@@ -85,7 +97,7 @@ func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
 		return nil, err
 	}
-	kc, err = clientset.CreateCluster(context.Background(), kc)
+	_, err = clientset.CreateCluster(context.Background(), kc)
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +133,8 @@ func CreateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.
 	return makeCluster(adminSshKey, secrets, kc), nil
 }
 
-func UpdateCluster(name, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
-	kc := makeKopsCluster(name, spec)
+func UpdateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+	kc := makeKopsCluster(name, labels, annotations, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
 		return nil, err
@@ -191,10 +203,6 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 		clusterResources[k] = resource
 	}
 	if len(clusterResources) != 0 {
-		var l []*resources.Resource
-		for _, v := range clusterResources {
-			l = append(l, v)
-		}
 		err = ops.DeleteResources(cloud, clusterResources)
 		if err != nil {
 			return err

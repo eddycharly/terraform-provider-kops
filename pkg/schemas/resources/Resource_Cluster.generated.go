@@ -86,10 +86,12 @@ func ResourceCluster() *schema.Resource {
 			"service_account_issuer_discovery":  OptionalStruct(kopsschemas.ResourceServiceAccountIssuerDiscoveryConfig()),
 			"snapshot_controller":               OptionalStruct(kopsschemas.ResourceSnapshotControllerConfig()),
 			"pod_identity_webhook":              OptionalStruct(kopsschemas.ResourcePodIdentityWebhookConfig()),
-			"revision":                          ComputedInt(),
+			"labels":                            OptionalMap(String()),
+			"annotations":                       OptionalMap(String()),
 			"name":                              ForceNew(RequiredString()),
 			"admin_ssh_key":                     Sensitive(OptionalString()),
 			"secrets":                           OptionalStruct(ResourceClusterSecrets()),
+			"revision":                          ComputedInt(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -123,9 +125,40 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		ClusterSpec: func(in interface{}) kops.ClusterSpec {
 			return kopsschemas.ExpandResourceClusterSpec(in.(map[string]interface{}))
 		}(in),
-		Revision: func(in interface{}) int {
-			return int(ExpandInt(in))
-		}(in["revision"]),
+		Labels: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["labels"]),
+		Annotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["annotations"]),
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
@@ -150,14 +183,38 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 				}(in))
 			}(in)
 		}(in["secrets"]),
+		Revision: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["revision"]),
 	}
 }
 
 func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}) {
 	kopsschemas.FlattenResourceClusterSpecInto(in.ClusterSpec, out)
-	out["revision"] = func(in int) interface{} {
-		return FlattenInt(int(in))
-	}(in.Revision)
+	out["labels"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Labels)
+	out["annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.Annotations)
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
@@ -176,6 +233,9 @@ func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}
 			}(*in)
 		}(in)
 	}(in.Secrets)
+	out["revision"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Revision)
 }
 
 func FlattenResourceCluster(in resources.Cluster) map[string]interface{} {
