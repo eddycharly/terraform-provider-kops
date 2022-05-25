@@ -28,9 +28,13 @@ type InstanceGroup struct {
 }
 
 func makeInstanceGroup(clusterName string, instanceGroup *kops.InstanceGroup) *InstanceGroup {
+	labels := instanceGroup.Labels
+	if labels != nil {
+		delete(labels, kops.LabelClusterName)
+	}
 	return &InstanceGroup{
 		InstanceGroupSpec: instanceGroup.Spec,
-		Labels:            instanceGroup.Labels,
+		Labels:            labels,
 		Annotations:       instanceGroup.Annotations,
 		ClusterName:       clusterName,
 		Name:              instanceGroup.ObjectMeta.Name,
