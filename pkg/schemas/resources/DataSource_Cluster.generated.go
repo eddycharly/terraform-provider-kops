@@ -77,7 +77,7 @@ func DataSourceCluster() *schema.Resource {
 			"assets":                            ComputedStruct(kopsschemas.DataSourceAssets()),
 			"iam":                               ComputedStruct(kopsschemas.DataSourceIAMSpec()),
 			"encryption_config":                 ComputedBool(),
-			"tag_subnets":                       ComputedBool(),
+			"tag_subnets":                       Nullable(ComputedBool()),
 			"use_host_certificates":             ComputedBool(),
 			"sysctl_parameters":                 ComputedList(String()),
 			"rolling_update":                    ComputedStruct(kopsschemas.DataSourceRollingUpdate()),

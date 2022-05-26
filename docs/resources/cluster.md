@@ -194,7 +194,7 @@ The following arguments are supported:
 - `assets` - (Optional) - [assets](#assets) - Assets is alternative locations for files and containers; the API under construction, will remove this comment once this API is fully functional.
 - `iam` - (Optional) - (Computed) - [iam_spec](#iam_spec) - IAM field adds control over the IAM security policies applied to resources.
 - `encryption_config` - (Optional) - Bool - EncryptionConfig controls if encryption is enabled.
-- `tag_subnets` - (Optional) - Bool - TagSubnets controls if tags are added to subnets to enable use by load balancers (AWS only). Default: true.
+- `tag_subnets` - (Optional) - Bool([Nullable](#nullable-arguments)) - TagSubnets controls if tags are added to subnets to enable use by load balancers (AWS only). Default: true.
 - `use_host_certificates` - (Optional) - Bool - UseHostCertificates will mount /etc/ssl/certs to inside needed containers.<br />This is needed if some APIs do have self-signed certs.
 - `sysctl_parameters` - (Optional) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Optional) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.

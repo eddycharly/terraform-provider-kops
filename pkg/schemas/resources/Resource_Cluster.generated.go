@@ -77,7 +77,7 @@ func ResourceCluster() *schema.Resource {
 			"assets":                            OptionalStruct(kopsschemas.ResourceAssets()),
 			"iam":                               OptionalComputedStruct(kopsschemas.ResourceIAMSpec()),
 			"encryption_config":                 OptionalBool(),
-			"tag_subnets":                       OptionalBool(),
+			"tag_subnets":                       Nullable(OptionalBool()),
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
 			"rolling_update":                    OptionalStruct(kopsschemas.ResourceRollingUpdate()),
