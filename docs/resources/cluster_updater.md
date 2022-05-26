@@ -90,6 +90,7 @@ resource "kops_cluster_updater" "updater" {
 
 The following arguments are supported:
 - `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `provider_version` - (Computed) - String - ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes.
 - `cluster_name` - (Required) - String - ClusterName is the target cluster name.
 - `keepers` - (Optional) - Map(String) - Keepers contains arbitrary strings used to update the resource when one changes.
 - `apply` - (Optional) - [apply_options](#apply_options) - Apply holds cluster apply options.

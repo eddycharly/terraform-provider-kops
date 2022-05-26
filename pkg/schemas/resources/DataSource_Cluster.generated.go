@@ -91,6 +91,7 @@ func DataSourceCluster() *schema.Resource {
 			"name":                              RequiredString(),
 			"admin_ssh_key":                     ComputedString(),
 			"secrets":                           ComputedStruct(DataSourceClusterSecrets()),
+			"provider_version":                  ComputedString(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -182,6 +183,9 @@ func ExpandDataSourceCluster(in map[string]interface{}) resources.Cluster {
 				}(in))
 			}(in)
 		}(in["secrets"]),
+		ProviderVersion: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["provider_version"]),
 	}
 }
 
@@ -229,6 +233,9 @@ func FlattenDataSourceClusterInto(in resources.Cluster, out map[string]interface
 			}(*in)
 		}(in)
 	}(in.Secrets)
+	out["provider_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ProviderVersion)
 }
 
 func FlattenDataSourceCluster(in resources.Cluster) map[string]interface{} {

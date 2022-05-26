@@ -98,6 +98,7 @@ func TestExpandResourceCluster(t *testing.T) {
 					"admin_ssh_key":                     "",
 					"secrets":                           nil,
 					"revision":                          0,
+					"provider_version":                  "",
 				},
 			},
 			want: _default,
@@ -192,6 +193,7 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
 		"revision":                          0,
+		"provider_version":                  "",
 	}
 	type args struct {
 		in resources.Cluster
@@ -1050,6 +1052,17 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Revision = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},
@@ -1146,6 +1159,7 @@ func TestFlattenResourceCluster(t *testing.T) {
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
 		"revision":                          0,
+		"provider_version":                  "",
 	}
 	type args struct {
 		in resources.Cluster
@@ -2004,6 +2018,17 @@ func TestFlattenResourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Revision = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},

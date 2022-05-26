@@ -10,13 +10,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func ClusterUpdater() *schema.Resource {
+func ClusterUpdater(providerVersion string) *schema.Resource {
 	return &schema.Resource{
 		CreateWithoutTimeout: ClusterUpdaterCreateOrUpdate,
 		ReadContext:          schema.NoopContext,
 		UpdateWithoutTimeout: ClusterUpdaterCreateOrUpdate,
 		DeleteWithoutTimeout: ClusterUpdaterDelete,
-		CustomizeDiff:        schemas.CustomizeDiffRevision,
+		CustomizeDiff:        schemas.CustomizeDiffRevision(providerVersion),
 		Schema:               resourcesschema.ResourceClusterUpdater().Schema,
 	}
 }

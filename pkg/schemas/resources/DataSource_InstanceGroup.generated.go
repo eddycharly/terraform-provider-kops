@@ -63,6 +63,7 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"annotations":                    ComputedMap(String()),
 			"cluster_name":                   RequiredString(),
 			"name":                           RequiredString(),
+			"provider_version":               ComputedString(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -136,6 +137,9 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 		Name: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["name"]),
+		ProviderVersion: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["provider_version"]),
 	}
 }
 
@@ -171,6 +175,9 @@ func FlattenDataSourceInstanceGroupInto(in resources.InstanceGroup, out map[stri
 	out["name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Name)
+	out["provider_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ProviderVersion)
 }
 
 func FlattenDataSourceInstanceGroup(in resources.InstanceGroup) map[string]interface{} {

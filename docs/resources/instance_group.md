@@ -133,6 +133,7 @@ The following arguments are supported:
 - `cluster_name` - (Required) - (Force new) - String - ClusterName defines the cluster name the instance group belongs to.
 - `name` - (Required) - (Force new) - String - Name defines the instance group name.
 - `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `provider_version` - (Computed) - String - ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes.
 
 ## Nested resources
 

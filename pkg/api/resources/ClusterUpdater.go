@@ -9,6 +9,8 @@ import (
 type ClusterUpdater struct {
 	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
 	Revision int
+	// ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes
+	ProviderVersion string
 	// ClusterName is the target cluster name
 	ClusterName string
 	// Keepers contains arbitrary strings used to update the resource when one changes

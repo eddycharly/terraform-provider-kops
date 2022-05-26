@@ -92,6 +92,7 @@ func ResourceCluster() *schema.Resource {
 			"admin_ssh_key":                     Sensitive(OptionalString()),
 			"secrets":                           OptionalStruct(ResourceClusterSecrets()),
 			"revision":                          ComputedInt(),
+			"provider_version":                  ComputedString(),
 		},
 	}
 	res.SchemaVersion = 3
@@ -194,6 +195,9 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		Revision: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["revision"]),
+		ProviderVersion: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["provider_version"]),
 	}
 }
 
@@ -244,6 +248,9 @@ func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}
 	out["revision"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Revision)
+	out["provider_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ProviderVersion)
 }
 
 func FlattenResourceCluster(in resources.Cluster) map[string]interface{} {

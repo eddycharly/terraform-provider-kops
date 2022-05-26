@@ -126,6 +126,7 @@ The following arguments are supported:
 - `name` - (Required) - String - Name defines the cluster name.
 - `admin_ssh_key` - (Computed) - String - AdminSshKey defines the cluster admin ssh key.
 - `secrets` - (Computed) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.
+- `provider_version` - (Computed) - String - ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes.
 
 ## Nested resources
 

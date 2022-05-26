@@ -97,6 +97,7 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"name":                              "",
 					"admin_ssh_key":                     "",
 					"secrets":                           nil,
+					"provider_version":                  "",
 				},
 			},
 			want: _default,
@@ -190,6 +191,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
+		"provider_version":                  "",
 	}
 	type args struct {
 		in resources.Cluster
@@ -1037,6 +1039,17 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Secrets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},
@@ -1132,6 +1145,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"name":                              "",
 		"admin_ssh_key":                     "",
 		"secrets":                           nil,
+		"provider_version":                  "",
 	}
 	type args struct {
 		in resources.Cluster
@@ -1979,6 +1993,17 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Secrets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},

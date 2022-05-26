@@ -99,6 +99,7 @@ The following arguments are supported:
 - `annotations` - (Computed) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.
 - `name` - (Required) - String - Name defines the instance group name.
+- `provider_version` - (Computed) - String - ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes.
 
 ## Nested resources
 

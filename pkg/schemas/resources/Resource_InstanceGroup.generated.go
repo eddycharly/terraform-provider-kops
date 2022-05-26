@@ -64,6 +64,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"cluster_name":                   ForceNew(RequiredString()),
 			"name":                           ForceNew(RequiredString()),
 			"revision":                       ComputedInt(),
+			"provider_version":               ComputedString(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -140,6 +141,9 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		Revision: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["revision"]),
+		ProviderVersion: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["provider_version"]),
 	}
 }
 
@@ -178,6 +182,9 @@ func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string
 	out["revision"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Revision)
+	out["provider_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ProviderVersion)
 }
 
 func FlattenResourceInstanceGroup(in resources.InstanceGroup) map[string]interface{} {

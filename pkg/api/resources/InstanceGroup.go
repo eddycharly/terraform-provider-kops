@@ -25,6 +25,8 @@ type InstanceGroup struct {
 	Name string
 	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
 	Revision int
+	// ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes
+	ProviderVersion string
 }
 
 func makeInstanceGroup(clusterName string, instanceGroup *kops.InstanceGroup) *InstanceGroup {

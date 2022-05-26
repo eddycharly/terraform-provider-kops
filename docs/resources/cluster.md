@@ -209,6 +209,7 @@ The following arguments are supported:
 - `admin_ssh_key` - (Optional) - (Sensitive) - String - AdminSshKey defines the cluster admin ssh key.
 - `secrets` - (Optional) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.
 - `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `provider_version` - (Computed) - String - ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes.
 
 ## Nested resources
 

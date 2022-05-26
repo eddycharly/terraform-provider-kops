@@ -69,6 +69,7 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 					"annotations":                    func() map[string]interface{} { return nil }(),
 					"cluster_name":                   "",
 					"name":                           "",
+					"provider_version":               "",
 				},
 			},
 			want: _default,
@@ -134,6 +135,7 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
 		"name":                           "",
+		"provider_version":               "",
 	}
 	type args struct {
 		in resources.InstanceGroup
@@ -673,6 +675,17 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},
@@ -740,6 +753,7 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
 		"name":                           "",
+		"provider_version":               "",
 	}
 	type args struct {
 		in resources.InstanceGroup
@@ -1279,6 +1293,17 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Name = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},

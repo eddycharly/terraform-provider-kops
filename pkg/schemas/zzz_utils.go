@@ -12,12 +12,18 @@ import (
 
 // Diff
 
-func CustomizeDiffRevision(_ context.Context, d *schema.ResourceDiff, m interface{}) error {
-	// If anything changes, increment the revision
-	if len(d.GetChangedKeysPrefix("")) > 0 {
-		return d.SetNew("revision", d.Get("revision").(int)+1)
+func CustomizeDiffRevision(providerVersion string) func(_ context.Context, d *schema.ResourceDiff, m interface{}) error {
+	return func(_ context.Context, d *schema.ResourceDiff, m interface{}) error {
+		existingVersion := d.Get("provider_version").(string)
+		// If anything changes, increment the revision
+		if len(d.GetChangedKeysPrefix("")) > 0 || existingVersion != providerVersion {
+			if err := d.SetNew("provider_version", providerVersion); err != nil {
+				return err
+			}
+			return d.SetNew("revision", d.Get("revision").(int)+1)
+		}
+		return nil
 	}
-	return nil
 }
 
 func Nullable(in *schema.Schema) *schema.Schema {

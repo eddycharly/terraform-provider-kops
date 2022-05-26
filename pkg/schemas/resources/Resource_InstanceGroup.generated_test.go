@@ -70,6 +70,7 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 					"cluster_name":                   "",
 					"name":                           "",
 					"revision":                       0,
+					"provider_version":               "",
 				},
 			},
 			want: _default,
@@ -136,6 +137,7 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 		"cluster_name":                   "",
 		"name":                           "",
 		"revision":                       0,
+		"provider_version":               "",
 	}
 	type args struct {
 		in resources.InstanceGroup
@@ -686,6 +688,17 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Revision = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},
@@ -754,6 +767,7 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 		"cluster_name":                   "",
 		"name":                           "",
 		"revision":                       0,
+		"provider_version":               "",
 	}
 	type args struct {
 		in resources.InstanceGroup
@@ -1304,6 +1318,17 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Revision = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},

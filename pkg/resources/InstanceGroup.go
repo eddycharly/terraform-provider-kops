@@ -14,15 +14,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func InstanceGroup() *schema.Resource {
+func InstanceGroup(providerVersion string) *schema.Resource {
 	res := resourcesschema.ResourceInstanceGroup()
 	return &schema.Resource{
 		CreateContext:  InstanceGroupCreate,
 		ReadContext:    InstanceGroupRead,
 		UpdateContext:  InstanceGroupUpdate,
 		DeleteContext:  InstanceGroupDelete,
-		CustomizeDiff:  schemas.CustomizeDiffRevision,
-		Importer:       &schema.ResourceImporter{StateContext: InstanceGroupImport},
+		CustomizeDiff:  schemas.CustomizeDiffRevision(providerVersion),
+		Importer:       &schema.ResourceImporter{StateContext: InstanceGroupImport(providerVersion)},
 		Schema:         res.Schema,
 		SchemaVersion:  res.SchemaVersion,
 		StateUpgraders: res.StateUpgraders,
@@ -56,7 +56,11 @@ func InstanceGroupRead(_ context.Context, d *schema.ResourceData, m interface{})
 	} else {
 		flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
 		for key, value := range flattened {
-			if key != "revision" {
+			switch key {
+			case "revision":
+			case "provider_version":
+				continue
+			default:
 				if err := d.Set(key, value); err != nil {
 					return diag.FromErr(err)
 				}
@@ -74,21 +78,26 @@ func InstanceGroupDelete(_ context.Context, d *schema.ResourceData, m interface{
 	return nil
 }
 
-func InstanceGroupImport(_ context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
-	if parts := strings.Split(d.Id(), "/"); len(parts) != 2 {
-		return []*schema.ResourceData{}, fmt.Errorf("Unexpected id format: %s. Please use 'cluster name/instance group name' format.", d.Id())
-	} else {
-		if instanceGroup, err := resources.GetInstanceGroup(parts[0], parts[1], config.Clientset(m)); err != nil {
-			return []*schema.ResourceData{}, err
+func InstanceGroupImport(providerVersion string) func(_ context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+	return func(_ context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+		if parts := strings.Split(d.Id(), "/"); len(parts) != 2 {
+			return []*schema.ResourceData{}, fmt.Errorf("Unexpected id format: %s. Please use 'cluster name/instance group name' format.", d.Id())
 		} else {
-			flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
-			for key, value := range flattened {
-				if err := d.Set(key, value); err != nil {
+			if instanceGroup, err := resources.GetInstanceGroup(parts[0], parts[1], config.Clientset(m)); err != nil {
+				return []*schema.ResourceData{}, err
+			} else {
+				flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
+				for key, value := range flattened {
+					if err := d.Set(key, value); err != nil {
+						return []*schema.ResourceData{}, err
+					}
+				}
+				d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))
+				if err := d.Set("provider_version", providerVersion); err != nil {
 					return []*schema.ResourceData{}, err
 				}
 			}
-			d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))
 		}
+		return []*schema.ResourceData{d}, nil
 	}
-	return []*schema.ResourceData{d}, nil
 }

@@ -31,6 +31,8 @@ type Cluster struct {
 	Secrets *ClusterSecrets
 	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
 	Revision int
+	// ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes
+	ProviderVersion string
 }
 
 func makeCluster(adminSshKey string, secrets *ClusterSecrets, cluster *kops.Cluster) *Cluster {

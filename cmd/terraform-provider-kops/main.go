@@ -5,6 +5,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
 
+var (
+	version = "dev"
+)
+
 func main() {
-	plugin.Serve(&plugin.ServeOpts{ProviderFunc: provider.NewProvider})
+	plugin.Serve(&plugin.ServeOpts{ProviderFunc: provider.NewProvider(version)})
 }
