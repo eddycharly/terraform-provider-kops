@@ -14,9 +14,9 @@ import (
 func Cluster(providerVersion string) *schema.Resource {
 	res := resourcesschema.ResourceCluster()
 	return &schema.Resource{
-		CreateContext:  ClusterCreate(providerVersion),
+		CreateContext:  ClusterCreate,
 		ReadContext:    ClusterRead,
-		UpdateContext:  ClusterUpdate(providerVersion),
+		UpdateContext:  ClusterUpdate,
 		DeleteContext:  ClusterDelete,
 		CustomizeDiff:  schemas.CustomizeDiffRevision(providerVersion),
 		Schema:         res.Schema,
@@ -28,27 +28,23 @@ func Cluster(providerVersion string) *schema.Resource {
 	}
 }
 
-func ClusterCreate(providerVersion string) func(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	return func(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-		in := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
-		if cluster, err := resources.CreateCluster(in.Name, in.Labels, in.Annotations, in.AdminSshKey, in.Secrets, in.ClusterSpec, config.Clientset(m)); err != nil {
-			return diag.FromErr(err)
-		} else {
-			d.SetId(cluster.Name)
-			return ClusterRead(c, d, m)
-		}
+func ClusterCreate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	in := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
+	if cluster, err := resources.CreateCluster(in.Name, in.Labels, in.Annotations, in.AdminSshKey, in.Secrets, in.ClusterSpec, config.Clientset(m)); err != nil {
+		return diag.FromErr(err)
+	} else {
+		d.SetId(cluster.Name)
+		return ClusterRead(c, d, m)
 	}
 }
 
-func ClusterUpdate(providerVersion string) func(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	return func(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-		in := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
-		if cluster, err := resources.UpdateCluster(in.Name, in.Labels, in.Annotations, in.AdminSshKey, in.Secrets, in.ClusterSpec, config.Clientset(m)); err != nil {
-			return diag.FromErr(err)
-		} else {
-			d.SetId(cluster.Name)
-			return ClusterRead(c, d, m)
-		}
+func ClusterUpdate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	in := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
+	if cluster, err := resources.UpdateCluster(in.Name, in.Labels, in.Annotations, in.AdminSshKey, in.Secrets, in.ClusterSpec, config.Clientset(m)); err != nil {
+		return diag.FromErr(err)
+	} else {
+		d.SetId(cluster.Name)
+		return ClusterRead(c, d, m)
 	}
 }
 
@@ -92,7 +88,9 @@ func ClusterImport(providerVersion string) func(_ context.Context, d *schema.Res
 				switch key {
 				case "revision":
 				case "provider_version":
-					continue
+					if err := d.Set(key, providerVersion); err != nil {
+						return []*schema.ResourceData{}, err
+					}
 				default:
 					if err := d.Set(key, value); err != nil {
 						return []*schema.ResourceData{}, err

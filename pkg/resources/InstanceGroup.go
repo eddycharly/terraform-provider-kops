@@ -88,14 +88,19 @@ func InstanceGroupImport(providerVersion string) func(_ context.Context, d *sche
 			} else {
 				flattened := resourcesschema.FlattenResourceInstanceGroup(*instanceGroup)
 				for key, value := range flattened {
-					if err := d.Set(key, value); err != nil {
-						return []*schema.ResourceData{}, err
+					switch key {
+					case "revision":
+					case "provider_version":
+						if err := d.Set(key, providerVersion); err != nil {
+							return []*schema.ResourceData{}, err
+						}
+					default:
+						if err := d.Set(key, value); err != nil {
+							return []*schema.ResourceData{}, err
+						}
 					}
 				}
 				d.SetId(fmt.Sprintf("%s/%s", instanceGroup.ClusterName, instanceGroup.Name))
-				if err := d.Set("provider_version", providerVersion); err != nil {
-					return []*schema.ResourceData{}, err
-				}
 			}
 		}
 		return []*schema.ResourceData{d}, nil
