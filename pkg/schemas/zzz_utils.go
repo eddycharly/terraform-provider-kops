@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/eddycharly/terraform-provider-kops/pkg/version"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -16,6 +17,13 @@ func CustomizeDiffRevision(_ context.Context, d *schema.ResourceDiff, m interfac
 	// If anything changes, increment the revision
 	if len(d.GetChangedKeysPrefix("")) > 0 {
 		return d.SetNew("revision", d.Get("revision").(int)+1)
+	}
+	return nil
+}
+
+func CustomizeDiffVersion(_ context.Context, d *schema.ResourceDiff, m interface{}) error {
+	if d.Get("provider_version").(string) != version.BuildVersion {
+		return d.SetNew("provider_version", version.BuildVersion)
 	}
 	return nil
 }

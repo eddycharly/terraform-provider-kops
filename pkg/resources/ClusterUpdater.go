@@ -16,8 +16,16 @@ func ClusterUpdater() *schema.Resource {
 		ReadContext:          schema.NoopContext,
 		UpdateWithoutTimeout: ClusterUpdaterCreateOrUpdate,
 		DeleteWithoutTimeout: ClusterUpdaterDelete,
-		CustomizeDiff:        schemas.CustomizeDiffRevision,
-		Schema:               resourcesschema.ResourceClusterUpdater().Schema,
+		CustomizeDiff: func(c context.Context, d *schema.ResourceDiff, m interface{}) error {
+			if err := schemas.CustomizeDiffRevision(c, d, m); err != nil {
+				return err
+			}
+			if err := schemas.CustomizeDiffVersion(c, d, m); err != nil {
+				return err
+			}
+			return nil
+		},
+		Schema: resourcesschema.ResourceClusterUpdater().Schema,
 	}
 }
 

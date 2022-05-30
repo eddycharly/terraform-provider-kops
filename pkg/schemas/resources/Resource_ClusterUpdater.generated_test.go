@@ -21,10 +21,11 @@ func TestExpandResourceClusterUpdater(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"revision":     0,
-					"cluster_name": "",
-					"keepers":      func() map[string]interface{} { return nil }(),
-					"apply":        func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
+					"revision":         0,
+					"provider_version": "",
+					"cluster_name":     "",
+					"keepers":          func() map[string]interface{} { return nil }(),
+					"apply":            func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
 					"rolling_update": func() []interface{} {
 						return []interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
 					}(),
@@ -48,10 +49,11 @@ func TestExpandResourceClusterUpdater(t *testing.T) {
 
 func TestFlattenResourceClusterUpdaterInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"revision":     0,
-		"cluster_name": "",
-		"keepers":      func() map[string]interface{} { return nil }(),
-		"apply":        func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
+		"revision":         0,
+		"provider_version": "",
+		"cluster_name":     "",
+		"keepers":          func() map[string]interface{} { return nil }(),
+		"apply":            func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
 		"rolling_update": func() []interface{} {
 			return []interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
 		}(),
@@ -80,6 +82,17 @@ func TestFlattenResourceClusterUpdaterInto(t *testing.T) {
 				in: func() resources.ClusterUpdater {
 					subject := resources.ClusterUpdater{}
 					subject.Revision = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.ClusterUpdater {
+					subject := resources.ClusterUpdater{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},
@@ -154,10 +167,11 @@ func TestFlattenResourceClusterUpdaterInto(t *testing.T) {
 
 func TestFlattenResourceClusterUpdater(t *testing.T) {
 	_default := map[string]interface{}{
-		"revision":     0,
-		"cluster_name": "",
-		"keepers":      func() map[string]interface{} { return nil }(),
-		"apply":        func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
+		"revision":         0,
+		"provider_version": "",
+		"cluster_name":     "",
+		"keepers":          func() map[string]interface{} { return nil }(),
+		"apply":            func() []interface{} { return []interface{}{FlattenResourceApplyOptions(resources.ApplyOptions{})} }(),
 		"rolling_update": func() []interface{} {
 			return []interface{}{FlattenResourceRollingUpdateOptions(resources.RollingUpdateOptions{})}
 		}(),
@@ -186,6 +200,17 @@ func TestFlattenResourceClusterUpdater(t *testing.T) {
 				in: func() resources.ClusterUpdater {
 					subject := resources.ClusterUpdater{}
 					subject.Revision = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProviderVersion - default",
+			args: args{
+				in: func() resources.ClusterUpdater {
+					subject := resources.ClusterUpdater{}
+					subject.ProviderVersion = ""
 					return subject
 				}(),
 			},
