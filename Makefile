@@ -34,7 +34,7 @@ gen: gen-tf-code
 
 .PHONY: build
 build: gen
-	@CGO_ENABLED=0 go build -ldflags="-s -w" ./cmd/terraform-provider-kops
+	@CGO_ENABLED=0 go build -ldflags="-s -w -X 'github.com/eddycharly/terraform-provider-kops/pkg/version.BuildVersion=v${PROVIDER_VERSION}'" ./cmd/terraform-provider-kops
 
 .PHONY: fmt
 fmt: build

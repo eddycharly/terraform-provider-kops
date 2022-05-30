@@ -86,3 +86,25 @@ resource "kops_instance_group" "node-0" {
   machine_type = local.nodeType
   subnets      = ["private-0"]
 }
+
+resource "kops_cluster_updater" "updater" {
+  cluster_name = kops_cluster.cluster.id
+
+  keepers = {
+    cluster  = kops_cluster.cluster.revision
+    master-0 = kops_instance_group.master-0.revision
+    node-0   = kops_instance_group.node-0.revision
+  }
+
+  apply {
+    skip = true
+  }
+
+  rolling_update {
+    skip = true
+  }
+
+  validate {
+    skip = true
+  }
+}

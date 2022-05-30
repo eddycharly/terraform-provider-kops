@@ -54,9 +54,9 @@ resource "kops_cluster_updater" "updater" {
   cluster_name        = kops_cluster.cluster.name
 
   keepers = {
-    cluster  = kops_cluster.cluster.revision,
-    master-0 = kops_instance_group.master-0.revision,
-    master-1 = kops_instance_group.master-1.revision,
+    cluster  = kops_cluster.cluster.revision
+    master-0 = kops_instance_group.master-0.revision
+    master-1 = kops_instance_group.master-1.revision
     master-2 = kops_instance_group.master-2.revision
     // ...
   }
@@ -90,6 +90,7 @@ resource "kops_cluster_updater" "updater" {
 
 The following arguments are supported:
 - `revision` - (Computed) - Int - Revision is incremented every time the resource changes, this is useful for triggering cluster updater.
+- `provider_version` - (Computed) - String - ProviderVersion is set to the currently running provider version, this will trigger cluster updater on version changes.
 - `cluster_name` - (Required) - String - ClusterName is the target cluster name.
 - `keepers` - (Optional) - Map(String) - Keepers contains arbitrary strings used to update the resource when one changes.
 - `apply` - (Optional) - [apply_options](#apply_options) - Apply holds cluster apply options.

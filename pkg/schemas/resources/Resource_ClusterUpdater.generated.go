@@ -11,12 +11,13 @@ var _ = Schema
 func ResourceClusterUpdater() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"revision":       ComputedInt(),
-			"cluster_name":   RequiredString(),
-			"keepers":        OptionalMap(String()),
-			"apply":          OptionalStruct(ResourceApplyOptions()),
-			"rolling_update": OptionalStruct(ResourceRollingUpdateOptions()),
-			"validate":       OptionalStruct(ResourceValidateOptions()),
+			"revision":         ComputedInt(),
+			"provider_version": ComputedString(),
+			"cluster_name":     RequiredString(),
+			"keepers":          OptionalMap(String()),
+			"apply":            OptionalStruct(ResourceApplyOptions()),
+			"rolling_update":   OptionalStruct(ResourceRollingUpdateOptions()),
+			"validate":         OptionalStruct(ResourceValidateOptions()),
 		},
 	}
 
@@ -31,6 +32,9 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 		Revision: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["revision"]),
+		ProviderVersion: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["provider_version"]),
 		ClusterName: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_name"]),
@@ -82,6 +86,9 @@ func FlattenResourceClusterUpdaterInto(in resources.ClusterUpdater, out map[stri
 	out["revision"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Revision)
+	out["provider_version"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ProviderVersion)
 	out["cluster_name"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterName)

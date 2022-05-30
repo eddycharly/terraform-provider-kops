@@ -117,7 +117,7 @@ func main() {
 		),
 		generate(resources.ClusterUpdater{},
 			required("ClusterName"),
-			computedOnly("Revision"),
+			computedOnly("Revision", "ProviderVersion"),
 			doc(resourceClusterUpdaterHeader, ""),
 		),
 		generate(utils.RollingUpdateOptions{},
