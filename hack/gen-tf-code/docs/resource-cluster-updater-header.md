@@ -52,9 +52,9 @@ resource "kops_cluster_updater" "updater" {
   cluster_name        = kops_cluster.cluster.name
 
   keepers = {
-    cluster  = kops_cluster.cluster.revision,
-    master-0 = kops_instance_group.master-0.revision,
-    master-1 = kops_instance_group.master-1.revision,
+    cluster  = kops_cluster.cluster.revision
+    master-0 = kops_instance_group.master-0.revision
+    master-1 = kops_instance_group.master-1.revision
     master-2 = kops_instance_group.master-2.revision
     // ...
   }
