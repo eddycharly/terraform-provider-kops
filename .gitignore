@@ -1,11 +1,14 @@
 .DS_Store
-.terraform
+.ssl
+.vscode
+
+.terraform/
+store/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+
 crash.log
-
-/terraform-provider-kops
-*.tfstate
-*.tfstate.backup
-
 terraform.log
 
-store/
+/terraform-provider-kops
