@@ -5,6 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -21,10 +22,12 @@ func DataSourceCloudControllerManagerConfig() *schema.Resource {
 			"cluster_cidr":                    ComputedString(),
 			"allocate_node_cidrs":             ComputedBool(),
 			"configure_cloud_routes":          ComputedBool(),
+			"controllers":                     ComputedList(String()),
 			"cidr_allocator_type":             ComputedString(),
 			"leader_election":                 ComputedStruct(DataSourceLeaderElectionConfiguration()),
 			"use_service_account_credentials": ComputedBool(),
 			"enable_leader_migration":         ComputedBool(),
+			"cpu_request":                     ComputedQuantity(),
 		},
 	}
 
@@ -92,6 +95,18 @@ func ExpandDataSourceCloudControllerManagerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["configure_cloud_routes"]),
+		Controllers: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["controllers"]),
 		CIDRAllocatorType: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -167,6 +182,25 @@ func ExpandDataSourceCloudControllerManagerConfig(in map[string]interface{}) kop
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_leader_migration"]),
+		CPURequest: func(in interface{}) *resource.Quantity {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *resource.Quantity {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in resource.Quantity) *resource.Quantity {
+					return &in
+				}(ExpandQuantity(in))
+			}(in)
+		}(in["cpu_request"]),
 	}
 }
 
@@ -209,6 +243,15 @@ func FlattenDataSourceCloudControllerManagerConfigInto(in kops.CloudControllerMa
 			}(*in)
 		}(in)
 	}(in.ConfigureCloudRoutes)
+	out["controllers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Controllers)
 	out["cidr_allocator_type"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
@@ -251,6 +294,16 @@ func FlattenDataSourceCloudControllerManagerConfigInto(in kops.CloudControllerMa
 			}(*in)
 		}(in)
 	}(in.EnableLeaderMigration)
+	out["cpu_request"] = func(in *resource.Quantity) interface{} {
+		return func(in *resource.Quantity) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in resource.Quantity) interface{} {
+				return FlattenQuantity(in)
+			}(*in)
+		}(in)
+	}(in.CPURequest)
 }
 
 func FlattenDataSourceCloudControllerManagerConfig(in kops.CloudControllerManagerConfig) map[string]interface{} {

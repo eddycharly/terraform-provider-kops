@@ -29,10 +29,12 @@ func TestExpandResourceCloudControllerManagerConfig(t *testing.T) {
 					"cluster_cidr":                    "",
 					"allocate_node_cidrs":             nil,
 					"configure_cloud_routes":          nil,
+					"controllers":                     func() []interface{} { return nil }(),
 					"cidr_allocator_type":             nil,
 					"leader_election":                 nil,
 					"use_service_account_credentials": nil,
 					"enable_leader_migration":         nil,
+					"cpu_request":                     nil,
 				},
 			},
 			want: _default,
@@ -58,10 +60,12 @@ func TestFlattenResourceCloudControllerManagerConfigInto(t *testing.T) {
 		"cluster_cidr":                    "",
 		"allocate_node_cidrs":             nil,
 		"configure_cloud_routes":          nil,
+		"controllers":                     func() []interface{} { return nil }(),
 		"cidr_allocator_type":             nil,
 		"leader_election":                 nil,
 		"use_service_account_credentials": nil,
 		"enable_leader_migration":         nil,
+		"cpu_request":                     nil,
 	}
 	type args struct {
 		in kops.CloudControllerManagerConfig
@@ -167,6 +171,17 @@ func TestFlattenResourceCloudControllerManagerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "Controllers - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.Controllers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "CidrAllocatorType - default",
 			args: args{
 				in: func() kops.CloudControllerManagerConfig {
@@ -205,6 +220,17 @@ func TestFlattenResourceCloudControllerManagerConfigInto(t *testing.T) {
 				in: func() kops.CloudControllerManagerConfig {
 					subject := kops.CloudControllerManagerConfig{}
 					subject.EnableLeaderMigration = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.CPURequest = nil
 					return subject
 				}(),
 			},
@@ -232,10 +258,12 @@ func TestFlattenResourceCloudControllerManagerConfig(t *testing.T) {
 		"cluster_cidr":                    "",
 		"allocate_node_cidrs":             nil,
 		"configure_cloud_routes":          nil,
+		"controllers":                     func() []interface{} { return nil }(),
 		"cidr_allocator_type":             nil,
 		"leader_election":                 nil,
 		"use_service_account_credentials": nil,
 		"enable_leader_migration":         nil,
+		"cpu_request":                     nil,
 	}
 	type args struct {
 		in kops.CloudControllerManagerConfig
@@ -341,6 +369,17 @@ func TestFlattenResourceCloudControllerManagerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "Controllers - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.Controllers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "CidrAllocatorType - default",
 			args: args{
 				in: func() kops.CloudControllerManagerConfig {
@@ -379,6 +418,17 @@ func TestFlattenResourceCloudControllerManagerConfig(t *testing.T) {
 				in: func() kops.CloudControllerManagerConfig {
 					subject := kops.CloudControllerManagerConfig{}
 					subject.EnableLeaderMigration = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.CPURequest = nil
 					return subject
 				}(),
 			},

@@ -37,8 +37,13 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		ConfigBase: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["config_base"]),
-		CloudProvider: func(in interface{}) string {
-			return string(ExpandString(in))
+		CloudProvider: func(in interface{}) kops.CloudProviderSpec {
+			return func(in interface{}) kops.CloudProviderSpec {
+				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+					return kops.CloudProviderSpec{}
+				}
+				return (ExpandResourceCloudProviderSpec(in.([]interface{})[0].(map[string]interface{})))
+			}(in)
 		}(in["cloud_provider"]),
 		ContainerRuntime: func(in interface{}) string {
 			return string(ExpandString(in))
@@ -1003,6 +1008,24 @@ func ExpandResourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["snapshot_controller"]),
+		Karpenter: func(in interface{}) *kops.KarpenterConfig {
+			return func(in interface{}) *kops.KarpenterConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.KarpenterConfig) *kops.KarpenterConfig {
+					return &in
+				}(func(in interface{}) kops.KarpenterConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.KarpenterConfig{}
+					}
+					return (ExpandResourceKarpenterConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["karpenter"]),
 		PodIdentityWebhook: func(in interface{}) *kops.PodIdentityWebhookConfig {
 			return func(in interface{}) *kops.PodIdentityWebhookConfig {
 				if in == nil {
@@ -1042,8 +1065,10 @@ func FlattenResourceClusterSpecInto(in kops.ClusterSpec, out map[string]interfac
 	out["config_base"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ConfigBase)
-	out["cloud_provider"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["cloud_provider"] = func(in kops.CloudProviderSpec) interface{} {
+		return func(in kops.CloudProviderSpec) []interface{} {
+			return []interface{}{FlattenResourceCloudProviderSpec(in)}
+		}(in)
 	}(in.CloudProvider)
 	out["container_runtime"] = func(in string) interface{} {
 		return FlattenString(string(in))
@@ -1694,6 +1719,18 @@ func FlattenResourceClusterSpecInto(in kops.ClusterSpec, out map[string]interfac
 			}(*in)
 		}(in)
 	}(in.SnapshotController)
+	out["karpenter"] = func(in *kops.KarpenterConfig) interface{} {
+		return func(in *kops.KarpenterConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KarpenterConfig) interface{} {
+				return func(in kops.KarpenterConfig) []interface{} {
+					return []interface{}{FlattenResourceKarpenterConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Karpenter)
 	out["pod_identity_webhook"] = func(in *kops.PodIdentityWebhookConfig) interface{} {
 		return func(in *kops.PodIdentityWebhookConfig) interface{} {
 			if in == nil {

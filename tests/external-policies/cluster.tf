@@ -1,10 +1,13 @@
 resource "kops_cluster" "cluster" {
   name               = local.clusterName
   admin_ssh_key      = file("${path.module}/../id_rsa.pub")
-  cloud_provider     = "aws"
   kubernetes_version = "1.19.12"
   dns_zone           = local.dnsZone
   network_id         = local.vpcId
+
+  cloud_provider {
+    aws {}
+  }
 
   api {
     dns {}

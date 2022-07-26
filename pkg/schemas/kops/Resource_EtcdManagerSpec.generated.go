@@ -5,6 +5,7 @@ import (
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -15,7 +16,8 @@ func ResourceEtcdManagerSpec() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"image":                   OptionalString(),
 			"env":                     OptionalList(ResourceEnvVar()),
-			"discovery_poll_interval": OptionalString(),
+			"backup_interval":         OptionalDuration(),
+			"discovery_poll_interval": OptionalDuration(),
 			"log_level":               OptionalInt(),
 		},
 	}
@@ -48,23 +50,42 @@ func ExpandResourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSp
 				return out
 			}(in)
 		}(in["env"]),
-		DiscoveryPollInterval: func(in interface{}) *string {
+		BackupInterval: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
 			}
 			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
 				return nil
 			}
-			return func(in interface{}) *string {
+			return func(in interface{}) *meta.Duration {
 				if in == nil {
 					return nil
 				}
 				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
 					return nil
 				}
-				return func(in string) *string {
+				return func(in meta.Duration) *meta.Duration {
 					return &in
-				}(string(ExpandString(in)))
+				}(ExpandDuration(in))
+			}(in)
+		}(in["backup_interval"]),
+		DiscoveryPollInterval: func(in interface{}) *meta.Duration {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *meta.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in meta.Duration) *meta.Duration {
+					return &in
+				}(ExpandDuration(in))
 			}(in)
 		}(in["discovery_poll_interval"]),
 		LogLevel: func(in interface{}) *int32 {
@@ -104,13 +125,23 @@ func FlattenResourceEtcdManagerSpecInto(in kops.EtcdManagerSpec, out map[string]
 			return out
 		}(in)
 	}(in.Env)
-	out["discovery_poll_interval"] = func(in *string) interface{} {
-		return func(in *string) interface{} {
+	out["backup_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
 			if in == nil {
 				return nil
 			}
-			return func(in string) interface{} {
-				return FlattenString(string(in))
+			return func(in meta.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.BackupInterval)
+	out["discovery_poll_interval"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in meta.Duration) interface{} {
+				return FlattenDuration(in)
 			}(*in)
 		}(in)
 	}(in.DiscoveryPollInterval)

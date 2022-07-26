@@ -18,6 +18,7 @@ func DataSourceCiliumNetworkingSpec() *schema.Resource {
 			"memory_request":                    ComputedQuantity(),
 			"cpu_request":                       ComputedQuantity(),
 			"agent_prometheus_port":             ComputedInt(),
+			"metrics":                           ComputedList(String()),
 			"chaining_mode":                     ComputedString(),
 			"debug":                             ComputedBool(),
 			"disable_endpoint_crd":              ComputedBool(),
@@ -113,6 +114,18 @@ func ExpandDataSourceCiliumNetworkingSpec(in map[string]interface{}) kops.Cilium
 		AgentPrometheusPort: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["agent_prometheus_port"]),
+		Metrics: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["metrics"]),
 		ChainingMode: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["chaining_mode"]),
@@ -404,6 +417,15 @@ func FlattenDataSourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out
 	out["agent_prometheus_port"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.AgentPrometheusPort)
+	out["metrics"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Metrics)
 	out["chaining_mode"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ChainingMode)

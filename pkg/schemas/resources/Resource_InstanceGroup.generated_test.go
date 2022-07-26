@@ -21,6 +21,7 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
+					"manager":                        "",
 					"role":                           "",
 					"image":                          "",
 					"min_size":                       nil,
@@ -65,6 +66,10 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 					"instance_metadata":              nil,
 					"update_policy":                  nil,
 					"warm_pool":                      nil,
+					"containerd":                     nil,
+					"packages":                       func() []interface{} { return nil }(),
+					"guest_accelerators":             func() []interface{} { return nil }(),
+					"max_instance_lifetime":          nil,
 					"labels":                         func() map[string]interface{} { return nil }(),
 					"annotations":                    func() map[string]interface{} { return nil }(),
 					"cluster_name":                   "",
@@ -87,6 +92,7 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 
 func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 	_default := map[string]interface{}{
+		"manager":                        "",
 		"role":                           "",
 		"image":                          "",
 		"min_size":                       nil,
@@ -131,6 +137,10 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"containerd":                     nil,
+		"packages":                       func() []interface{} { return nil }(),
+		"guest_accelerators":             func() []interface{} { return nil }(),
+		"max_instance_lifetime":          nil,
 		"labels":                         func() map[string]interface{} { return nil }(),
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
@@ -149,6 +159,17 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 			name: "default",
 			args: args{
 				in: resources.InstanceGroup{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manager - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Manager = ""
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -631,6 +652,50 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Containerd - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Containerd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Packages - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Packages = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GuestAccelerators - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.GuestAccelerators = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxInstanceLifetime - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.MaxInstanceLifetime = nil
 					return subject
 				}(),
 			},
@@ -705,6 +770,7 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 
 func TestFlattenResourceInstanceGroup(t *testing.T) {
 	_default := map[string]interface{}{
+		"manager":                        "",
 		"role":                           "",
 		"image":                          "",
 		"min_size":                       nil,
@@ -749,6 +815,10 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"containerd":                     nil,
+		"packages":                       func() []interface{} { return nil }(),
+		"guest_accelerators":             func() []interface{} { return nil }(),
+		"max_instance_lifetime":          nil,
 		"labels":                         func() map[string]interface{} { return nil }(),
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
@@ -767,6 +837,17 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 			name: "default",
 			args: args{
 				in: resources.InstanceGroup{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manager - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Manager = ""
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -1249,6 +1330,50 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Containerd - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Containerd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Packages - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Packages = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GuestAccelerators - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.GuestAccelerators = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxInstanceLifetime - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.MaxInstanceLifetime = nil
 					return subject
 				}(),
 			},

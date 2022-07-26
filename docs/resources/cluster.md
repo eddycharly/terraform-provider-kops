@@ -8,10 +8,13 @@ Provides a kOps cluster resource.
 resource "kops_cluster" "cluster" {
   name                 = "cluster.example.com"
   admin_ssh_key        = file("path to ssh public key file")
-  cloud_provider       = "aws"
   kubernetes_version   = "stable"
   dns_zone             = "example.com"
   network_id           = "net-0"
+
+  cloud_provider {
+    aws {}
+  }
 
   iam {
     allow_container_registry = true
@@ -135,7 +138,7 @@ The following arguments are supported:
 - `channel` - (Optional) - String - The Channel we are following.
 - `addons` - (Optional) - List([addon_spec](#addon_spec)) - Additional addons that should be installed on the cluster.
 - `config_base` - (Optional) - (Computed) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different than the location where the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).
-- `cloud_provider` - (Required) - String - The CloudProvider to use (aws or gce).
+- `cloud_provider` - (Required) - [cloud_provider_spec](#cloud_provider_spec) - CloudProvider configures the cloud provider to use.
 - `container_runtime` - (Optional) - String - Container runtime to use for Kubernetes.
 - `kubernetes_version` - (Optional) - String - The version of kubernetes to install (optional, and can be a "spec" like stable).
 - `subnet` - (Required) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Configuration of subnets we are targeting.
@@ -202,6 +205,7 @@ The following arguments are supported:
 - `warm_pool` - (Optional) - [warm_pool_spec](#warm_pool_spec) - WarmPool defines the default warm pool settings for instance groups (AWS only).
 - `service_account_issuer_discovery` - (Optional) - [service_account_issuer_discovery_config](#service_account_issuer_discovery_config) - ServiceAccountIssuerDiscovery configures the OIDC Issuer for ServiceAccounts.
 - `snapshot_controller` - (Optional) - [snapshot_controller_config](#snapshot_controller_config) - SnapshotController defines the CSI Snapshot Controller configuration.
+- `karpenter` - (Optional) - [karpenter_config](#karpenter_config) - Karpenter defines the Karpenter configuration.
 - `pod_identity_webhook` - (Optional) - [pod_identity_webhook_config](#pod_identity_webhook_config) - PodIdentityWebhook determines the EKS Pod Identity Webhook configuration.
 - `labels` - (Optional) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
 - `annotations` - (Optional) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
@@ -222,6 +226,156 @@ The following arguments are supported:
 
 - `manifest` - (Required) - String - Manifest is a path to the manifest that defines the addon.
 
+### cloud_provider_spec
+
+CloudProviderSpec configures the cloud provider to use.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `aws` - (Optional) - [aws_spec](#aws_spec) - AWS configures the AWS cloud provider.
+- `azure` - (Optional) - [azure_spec](#azure_spec) - Azure configures the Azure cloud provider.
+- `do` - (Optional) - [do_spec](#do_spec) - DO configures the Digital Ocean cloud provider.
+- `gce` - (Optional) - [gce_spec](#gce_spec) - GCE configures the GCE cloud provider.
+- `hetzner` - (Optional) - [hetzner_spec](#hetzner_spec) - Hetzner configures the Hetzner cloud provider.
+- `openstack` - (Optional) - [openstack_spec](#openstack_spec) - Openstack configures the Openstack cloud provider.
+
+### aws_spec
+
+AWSSpec configures the AWS cloud provider.
+
+
+This resource has no attributes.
+
+### azure_spec
+
+AzureSpec defines Azure specific cluster configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `subscription_id` - (Optional) - String - SubscriptionID specifies the subscription used for the cluster installation.
+- `tenant_id` - (Optional) - String - TenantID is the ID of the tenant that the cluster is deployed in.
+- `resource_group_name` - (Optional) - String - ResourceGroupName specifies the name of the resource group<br />where the cluster is built.<br />If this is empty, kops will create a new resource group<br />whose name is same as the cluster name. If this is not<br />empty, kops will not create a new resource group, and<br />it will just reuse the existing resource group of the name.<br />This follows the model that kops takes for AWS VPC.
+- `route_table_name` - (Optional) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
+- `admin_user` - (Optional) - String - AdminUser specifies the admin user of VMs.
+
+### do_spec
+
+DOSpec configures the Digital Ocean cloud provider.
+
+
+This resource has no attributes.
+
+### gce_spec
+
+GCESpec configures the GCE cloud provider.
+
+
+This resource has no attributes.
+
+### hetzner_spec
+
+HetznerSpec configures the Hetzner cloud provider.
+
+
+This resource has no attributes.
+
+### openstack_spec
+
+OpenstackSpec defines cloud config elements for the openstack cloud provider.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `loadbalancer` - (Optional) - [openstack_loadbalancer_config](#openstack_loadbalancer_config)
+- `monitor` - (Optional) - [openstack_monitor](#openstack_monitor)
+- `router` - (Optional) - [openstack_router](#openstack_router)
+- `block_storage` - (Optional) - [openstack_block_storage_config](#openstack_block_storage_config)
+- `insecure_skip_verify` - (Optional) - Bool
+- `network` - (Optional) - [openstack_network](#openstack_network)
+- `metadata` - (Optional) - [openstack_metadata](#openstack_metadata)
+
+### openstack_loadbalancer_config
+
+OpenstackLoadbalancerConfig defines the config for a neutron loadbalancer.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `method` - (Optional) - String
+- `provider` - (Optional) - String
+- `use_octavia` - (Optional) - Bool
+- `floating_network` - (Optional) - String
+- `floating_network_id` - (Optional) - String
+- `floating_subnet` - (Optional) - String
+- `subnet_id` - (Optional) - String
+- `manage_sec_groups` - (Optional) - Bool
+- `enable_ingress_hostname` - (Optional) - Bool
+- `ingress_hostname_suffix` - (Optional) - String
+
+### openstack_monitor
+
+OpenstackMonitor defines the config for a health monitor.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `delay` - (Optional) - String
+- `timeout` - (Optional) - String
+- `max_retries` - (Optional) - Int
+
+### openstack_router
+
+OpenstackRouter defines the config for a router.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `external_network` - (Optional) - String
+- `dns_servers` - (Optional) - String
+- `external_subnet` - (Optional) - String
+- `availability_zone_hints` - (Optional) - List(String)
+
+### openstack_block_storage_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `version` - (Optional) - String
+- `ignore_az` - (Optional) - Bool
+- `override_az` - (Optional) - String
+- `create_storage_class` - (Optional) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
+- `csi_plugin_image` - (Optional) - String
+- `csi_topology_support` - (Optional) - Bool
+
+### openstack_network
+
+OpenstackNetwork defines the config for a network.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `availability_zone_hints` - (Optional) - List(String)
+
+### openstack_metadata
+
+OpenstackMetadata defines config for metadata service related settings.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `config_drive` - (Optional) - Bool - ConfigDrive specifies to use config drive for retrieving user data instead of the metadata service when launching instances.
+
 ### cluster_subnet_spec
 
 ClusterSubnetSpec defines a subnet.
@@ -239,6 +393,16 @@ The following arguments are supported:
 - `egress` - (Optional) - String - Egress defines the method of traffic egress for this subnet.
 - `type` - (Required) - String - Type define which one if the internal types (public, utility, private) the network is.
 - `public_ip` - (Optional) - String - PublicIP to attach to NatGateway.
+- `additional_routes` - (Optional) - List([route_spec](#route_spec)) - AdditionalRoutes to attach to the subnet's route table.
+
+### route_spec
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `cidr` - (Optional) - String - CIDR destination of the route.
+- `target` - (Optional) - String - Target of the route.
 
 ### topology_spec
 
@@ -309,6 +473,7 @@ The following arguments are supported:
 - `roles` - (Optional) - List(String) - Roles is a list of roles the file asset should be applied, defaults to all.
 - `content` - (Required) - String - Content is the contents of the file.
 - `is_base64` - (Optional) - Bool - IsBase64 indicates the contents is base64 encoded.
+- `mode` - (Optional) - String - Mode is this file's mode and permission bits.
 
 ### etcd_cluster_spec
 
@@ -368,7 +533,8 @@ The following arguments are supported:
 
 - `image` - (Optional) - String - Image is the etcd manager image to use.
 - `env` - (Optional) - List([env_var](#env_var)) - Env allows users to pass in env variables to the etcd-manager container.<br />Variables starting with ETCD_ will be further passed down to the etcd process.<br />This allows etcd setting to be overwriten. No config validation is done.<br />A list of etcd config ENV vars can be found at https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/configuration.md.
-- `discovery_poll_interval` - (Optional) - String - DiscoveryPollInterval which is used for discovering other cluster members. The default is 60 seconds.
+- `backup_interval` - (Optional) - Duration - BackupInterval which is used for backups. The default is 15 minutes.
+- `discovery_poll_interval` - (Optional) - Duration - DiscoveryPollInterval which is used for discovering other cluster members. The default is 60 seconds.
 - `log_level` - (Optional) - Int - LogLevel allows the klog library verbose log level to be set for etcd-manager. The default is 6.<br />https://github.com/google/glog#verbose-logging.
 
 ### env_var
@@ -418,7 +584,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `driver_package` - (Optional) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-460-server".
+- `driver_package` - (Optional) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-510-server".
 - `enabled` - (Optional) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
 
 ### docker_config
@@ -590,9 +756,9 @@ Defines a set of pods (namely those matching the labelSelector<br />relative to 
 The following arguments are supported:
 
 - `label_selector` - (Optional) - [label_selector](#label_selector) - A label query over a set of resources, in this case pods.<br />+optional.
-- `namespaces` - (Optional) - List(String) - namespaces specifies a static list of namespace names that the term applies to.<br />The term is applied to the union of the namespaces listed in this field<br />and the ones selected by namespaceSelector.<br />null or empty namespaces list and null namespaceSelector means "this pod's namespace"<br />+optional.
+- `namespaces` - (Optional) - List(String) - namespaces specifies a static list of namespace names that the term applies to.<br />The term is applied to the union of the namespaces listed in this field<br />and the ones selected by namespaceSelector.<br />null or empty namespaces list and null namespaceSelector means "this pod's namespace".<br />+optional.
 - `topology_key` - (Optional) - String - This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching<br />the labelSelector in the specified namespaces, where co-located is defined as running on a node<br />whose value of the label with key topologyKey matches that of any node on which any of the<br />selected pods is running.<br />Empty topologyKey is not allowed.
-- `namespace_selector` - (Optional) - [label_selector](#label_selector) - A label query over the set of namespaces that the term applies to.<br />The term is applied to the union of the namespaces selected by this field<br />and the ones listed in the namespaces field.<br />null selector and null or empty namespaces list means "this pod's namespace".<br />An empty selector ({}) matches all namespaces.<br />This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.<br />+optional.
+- `namespace_selector` - (Optional) - [label_selector](#label_selector) - A label query over the set of namespaces that the term applies to.<br />The term is applied to the union of the namespaces selected by this field<br />and the ones listed in the namespaces field.<br />null selector and null or empty namespaces list means "this pod's namespace".<br />An empty selector ({}) matches all namespaces.<br />+optional.
 
 ### label_selector
 
@@ -653,6 +819,7 @@ The following arguments are supported:
 - `forward_to_kube_dns` - (Optional) - Bool - If enabled, nodelocal dns will use kubedns as a default upstream.
 - `memory_request` - (Optional) - Quantity - MemoryRequest specifies the memory requests of each node-local-dns container in the daemonset. Default 5Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest specifies the cpu requests of each node-local-dns container in the daemonset. Default 25m.
+- `pod_annotations` - (Optional) - Map(String) - PodAnnotations makes possible to add additional annotations to node-local-dns.<br />Default: none.
 
 ### kube_api_server_config
 
@@ -670,6 +837,7 @@ The following arguments are supported:
 - `secure_port` - (Optional) - Int - SecurePort is the port the kube runs on.
 - `insecure_port` - (Optional) - Int - InsecurePort is the port the insecure api runs.
 - `address` - (Optional) - String - Address is the binding address for the kube api: Deprecated - use insecure-bind-address and bind-address.
+- `advertise_address` - (Optional) - String - AdvertiseAddress is the IP address on which to advertise the apiserver to members of the cluster.
 - `bind_address` - (Optional) - String - BindAddress is the binding address for the secure kubernetes API.
 - `insecure_bind_address` - (Optional) - String - InsecureBindAddress is the binding address for the InsecurePort for the insecure kubernetes API.
 - `enable_bootstrap_auth_token` - (Optional) - Bool - EnableBootstrapAuthToken enables 'bootstrap.kubernetes.io/token' in the 'kube-system' namespace to be used for TLS bootstrapping authentication.
@@ -859,10 +1027,12 @@ The following arguments are supported:
 - `cluster_cidr` - (Optional) - String - ClusterCIDR is CIDR Range for Pods in cluster.
 - `allocate_node_cidrs` - (Optional) - Bool - AllocateNodeCIDRs enables CIDRs for Pods to be allocated and, if<br />ConfigureCloudRoutes is true, to be set on the cloud provider.
 - `configure_cloud_routes` - (Optional) - Bool - ConfigureCloudRoutes enables CIDRs allocated with to be configured on the cloud provider.
+- `controllers` - (Optional) - List(String) - Controllers is a list of controllers to enable on the controller-manager.
 - `cidr_allocator_type` - (Optional) - String - CIDRAllocatorType specifies the type of CIDR allocator to use.
 - `leader_election` - (Optional) - [leader_election_configuration](#leader_election_configuration) - LeaderElection defines the configuration of leader election client.
 - `use_service_account_credentials` - (Optional) - Bool - UseServiceAccountCredentials controls whether we use individual service account credentials for each controller.
 - `enable_leader_migration` - (Optional) - Bool - EnableLeaderMigration enables controller leader migration.
+- `cpu_request` - (Optional) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 200m.
 
 ### kube_scheduler_config
 
@@ -1035,117 +1205,8 @@ The following arguments are supported:
 - `elb_security_group` - (Optional) - String
 - `spotinst_product` - (Optional) - String - Spotinst cloud-config specs.
 - `spotinst_orientation` - (Optional) - String
-- `openstack` - (Optional) - [openstack_configuration](#openstack_configuration) - Openstack cloud-config options.
-- `azure` - (Optional) - [azure_configuration](#azure_configuration) - Azure cloud-config options.
 - `aws_ebs_csi_driver` - (Optional) - [aws_ebs_csi_driver](#aws_ebs_csi_driver) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 - `gcp_pd_csi_driver` - (Optional) - [gcp_pd_csi_driver](#gcp_pd_csi_driver) - GCPPDCSIDriver is the config for the GCP PD CSI driver.
-
-### openstack_configuration
-
-OpenstackConfiguration defines cloud config elements for the openstack cloud provider.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `loadbalancer` - (Optional) - [openstack_loadbalancer_config](#openstack_loadbalancer_config)
-- `monitor` - (Optional) - [openstack_monitor](#openstack_monitor)
-- `router` - (Optional) - [openstack_router](#openstack_router)
-- `block_storage` - (Optional) - [openstack_block_storage_config](#openstack_block_storage_config)
-- `insecure_skip_verify` - (Optional) - Bool
-- `network` - (Optional) - [openstack_network](#openstack_network)
-- `metadata` - (Optional) - [openstack_metadata](#openstack_metadata)
-
-### openstack_loadbalancer_config
-
-OpenstackLoadbalancerConfig defines the config for a neutron loadbalancer.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `method` - (Optional) - String
-- `provider` - (Optional) - String
-- `use_octavia` - (Optional) - Bool
-- `floating_network` - (Optional) - String
-- `floating_network_id` - (Optional) - String
-- `floating_subnet` - (Optional) - String
-- `subnet_id` - (Optional) - String
-- `manage_sec_groups` - (Optional) - Bool
-- `enable_ingress_hostname` - (Optional) - Bool
-- `ingress_hostname_suffix` - (Optional) - String
-
-### openstack_monitor
-
-OpenstackMonitor defines the config for a health monitor.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `delay` - (Optional) - String
-- `timeout` - (Optional) - String
-- `max_retries` - (Optional) - Int
-
-### openstack_router
-
-OpenstackRouter defines the config for a router.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `external_network` - (Optional) - String
-- `dns_servers` - (Optional) - String
-- `external_subnet` - (Optional) - String
-- `availability_zone_hints` - (Optional) - List(String)
-
-### openstack_block_storage_config
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `version` - (Optional) - String
-- `ignore_az` - (Optional) - Bool
-- `override_az` - (Optional) - String
-- `create_storage_class` - (Optional) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
-- `csi_plugin_image` - (Optional) - String
-- `csi_topology_support` - (Optional) - Bool
-
-### openstack_network
-
-OpenstackNetwork defines the config for a network.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `availability_zone_hints` - (Optional) - List(String)
-
-### openstack_metadata
-
-OpenstackMetadata defines config for metadata service related settings.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `config_drive` - (Optional) - Bool - ConfigDrive specifies to use config drive for retrieving user data instead of the metadata service when launching instances.
-
-### azure_configuration
-
-AzureConfiguration defines Azure specific cluster configuration.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `subscription_id` - (Optional) - String - SubscriptionID specifies the subscription used for the cluster installation.
-- `tenant_id` - (Optional) - String - TenantID is the ID of the tenant that the cluster is deployed in.
-- `resource_group_name` - (Optional) - String - ResourceGroupName specifies the name of the resource group<br />where the cluster is built.<br />If this is empty, kops will create a new resource group<br />whose name is same as the cluster name. If this is not<br />empty, kops will not create a new resource group, and<br />it will just reuse the existing resource group of the name.<br />This follows the model that kops takes for AWS VPC.
-- `route_table_name` - (Optional) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
-- `admin_user` - (Optional) - String - AdminUser specifies the admin user of VMs.
 
 ### aws_ebs_csi_driver
 
@@ -1158,6 +1219,7 @@ The following arguments are supported:
 - `enabled` - (Optional) - Bool - Enabled enables the AWS EBS CSI driver<br />Default: false.
 - `version` - (Optional) - String - Version is the container image tag used.<br />Default: The latest stable release which is compatible with your Kubernetes version.
 - `volume_attach_limit` - (Optional) - Int - VolumeAttachLimit is the maximum number of volumes attachable per node.<br />If specified, the limit applies to all nodes.<br />If not specified, the value is approximated from the instance type.<br />Default: -.
+- `pod_annotations` - (Optional) - Map(String) - PodAnnotations are the annotations added to AWS EBS CSI node and controller Pods.<br />Default: none.
 
 ### gcp_pd_csi_driver
 
@@ -1206,9 +1268,11 @@ The following arguments are supported:
 - `enable_rebalance_draining` - (Optional) - Bool - EnableRebalanceDraining makes node termination handler drain nodes when the rebalance recommendation notice is received<br />Default: false.
 - `enable_prometheus_metrics` - (Optional) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
 - `enable_sqs_termination_draining` - (Optional) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.
+- `exclude_from_load_balancers` - (Optional) - Bool - ExcludeFromLoadBalancers makes node termination handler will mark for exclusion from load balancers before node are cordoned.<br />Default: true.
 - `managed_asg_tag` - (Optional) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on.
 - `memory_request` - (Optional) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
+- `version` - (Optional) - String - Version is the container image tag used.
 
 ### node_problem_detector_config
 
@@ -1249,6 +1313,7 @@ The following arguments are supported:
 - `managed` - (Required) - Bool - Managed controls if cert-manager is manged and deployed by kOps.<br />The deployment of cert-manager is skipped if this is set to false.
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `default_issuer` - (Optional) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
+- `nameservers` - (Optional) - List(String) - nameservers is a list of nameserver IP addresses to use instead of the pod defaults.<br />Default: none.
 
 ### aws_load_balancer_controller_config
 
@@ -1260,6 +1325,9 @@ The following arguments are supported:
 
 - `enabled` - (Optional) - Bool - Enabled enables the loadbalancer controller.<br />Default: false.
 - `version` - (Optional) - String - Version is the container image tag used.
+- `enable_waf` - (Optional) - Bool - EnableWAF specifies whether the controller can use WAFs (Classic Regional).<br />Default: false.
+- `enable_wa_fv2` - (Optional) - Bool - EnableWAFv2 specifies whether the controller can use WAFs (V2).<br />Default: false.
+- `enable_shield` - (Optional) - Bool - EnableShield specifies whether the controller can enable Shield Advanced.<br />Default: false.
 
 ### networking_spec
 
@@ -1458,6 +1526,7 @@ The following arguments are supported:
 - `memory_request` - (Optional) - Quantity - MemoryRequest memory request of Cilium agent + operator container. (default: 128Mi).
 - `cpu_request` - (Optional) - Quantity - CPURequest CPU request of Cilium agent + operator container. (default: 25m).
 - `agent_prometheus_port` - (Optional) - Int - AgentPrometheusPort is the port to listen to for Prometheus metrics.<br />Defaults to 9090.
+- `metrics` - (Optional) - List(String) - Metrics is a list of metrics to add or remove from the default list of metrics the agent exposes.
 - `chaining_mode` - (Optional) - String - ChainingMode allows using Cilium in combination with other CNI plugins.<br />With Cilium CNI chaining, the base network connectivity and IP address management is managed<br />by the non-Cilium CNI plugin, but Cilium attaches eBPF programs to the network devices created<br />by the non-Cilium plugin to provide L3/L4 network visibility, policy enforcement and other advanced features.<br />Default: none.
 - `debug` - (Optional) - Bool - Debug runs Cilium in debug mode.
 - `disable_endpoint_crd` - (Optional) - Bool - DisableEndpointCRD disables usage of CiliumEndpoint CRD.<br />Default: false.
@@ -1814,6 +1883,14 @@ The following arguments are supported:
 - `enabled` - (Optional) - Bool - Enabled enables the CSI Snapshot Controller.
 - `install_default_class` - (Optional) - Bool - InstallDefaultClass will install the default VolumeSnapshotClass.
 
+### karpenter_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Optional) - Bool
+
 ### pod_identity_webhook_config
 
 PodIdentityWebhookConfig configures an EKS Pod Identity Webhook.
@@ -1823,6 +1900,7 @@ PodIdentityWebhookConfig configures an EKS Pod Identity Webhook.
 The following arguments are supported:
 
 - `enabled` - (Optional) - Bool
+- `replicas` - (Optional) - Int
 
 ### cluster_secrets
 

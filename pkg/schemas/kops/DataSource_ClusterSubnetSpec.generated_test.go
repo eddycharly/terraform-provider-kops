@@ -21,15 +21,16 @@ func TestExpandDataSourceClusterSubnetSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"name":        "",
-					"cidr":        "",
-					"ipv6_cidr":   "",
-					"zone":        "",
-					"region":      "",
-					"provider_id": "",
-					"egress":      "",
-					"type":        "",
-					"public_ip":   "",
+					"name":              "",
+					"cidr":              "",
+					"ipv6_cidr":         "",
+					"zone":              "",
+					"region":            "",
+					"provider_id":       "",
+					"egress":            "",
+					"type":              "",
+					"public_ip":         "",
+					"additional_routes": func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -47,15 +48,16 @@ func TestExpandDataSourceClusterSubnetSpec(t *testing.T) {
 
 func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"name":        "",
-		"cidr":        "",
-		"ipv6_cidr":   "",
-		"zone":        "",
-		"region":      "",
-		"provider_id": "",
-		"egress":      "",
-		"type":        "",
-		"public_ip":   "",
+		"name":              "",
+		"cidr":              "",
+		"ipv6_cidr":         "",
+		"zone":              "",
+		"region":            "",
+		"provider_id":       "",
+		"egress":            "",
+		"type":              "",
+		"public_ip":         "",
+		"additional_routes": func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ClusterSubnetSpec
@@ -166,6 +168,17 @@ func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
 					subject.PublicIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalRoutes - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.AdditionalRoutes = nil
 					return subject
 				}(),
 			},
@@ -185,15 +198,16 @@ func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 
 func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"name":        "",
-		"cidr":        "",
-		"ipv6_cidr":   "",
-		"zone":        "",
-		"region":      "",
-		"provider_id": "",
-		"egress":      "",
-		"type":        "",
-		"public_ip":   "",
+		"name":              "",
+		"cidr":              "",
+		"ipv6_cidr":         "",
+		"zone":              "",
+		"region":            "",
+		"provider_id":       "",
+		"egress":            "",
+		"type":              "",
+		"public_ip":         "",
+		"additional_routes": func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ClusterSubnetSpec
@@ -304,6 +318,17 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
 					subject.PublicIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalRoutes - default",
+			args: args{
+				in: func() kops.ClusterSubnetSpec {
+					subject := kops.ClusterSubnetSpec{}
+					subject.AdditionalRoutes = nil
 					return subject
 				}(),
 			},

@@ -17,6 +17,7 @@ func ResourceCertManagerConfig() *schema.Resource {
 			"managed":        RequiredBool(),
 			"image":          OptionalString(),
 			"default_issuer": OptionalString(),
+			"nameservers":    OptionalList(String()),
 		},
 	}
 
@@ -92,6 +93,18 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["default_issuer"]),
+		Nameservers: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["nameservers"]),
 	}
 }
 
@@ -136,6 +149,15 @@ func FlattenResourceCertManagerConfigInto(in kops.CertManagerConfig, out map[str
 			}(*in)
 		}(in)
 	}(in.DefaultIssuer)
+	out["nameservers"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Nameservers)
 }
 
 func FlattenResourceCertManagerConfig(in kops.CertManagerConfig) map[string]interface{} {

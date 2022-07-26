@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandResourceAzureConfiguration(t *testing.T) {
-	_default := kops.AzureConfiguration{}
+func TestExpandDataSourceAzureSpec(t *testing.T) {
+	_default := kops.AzureSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.AzureConfiguration
+		want kops.AzureSpec
 	}{
 		{
 			name: "default",
@@ -33,15 +33,15 @@ func TestExpandResourceAzureConfiguration(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandResourceAzureConfiguration(tt.args.in)
+			got := ExpandDataSourceAzureSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandResourceAzureConfiguration() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandDataSourceAzureSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
+func TestFlattenDataSourceAzureSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"subscription_id":     "",
 		"tenant_id":           "",
@@ -50,7 +50,7 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 		"admin_user":          "",
 	}
 	type args struct {
-		in kops.AzureConfiguration
+		in kops.AzureSpec
 	}
 	tests := []struct {
 		name string
@@ -60,15 +60,15 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.AzureConfiguration{},
+				in: kops.AzureSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "SubscriptionID - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.SubscriptionID = ""
 					return subject
 				}(),
@@ -78,8 +78,8 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 		{
 			name: "TenantID - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.TenantID = ""
 					return subject
 				}(),
@@ -89,8 +89,8 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 		{
 			name: "ResourceGroupName - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.ResourceGroupName = ""
 					return subject
 				}(),
@@ -100,8 +100,8 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 		{
 			name: "RouteTableName - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.RouteTableName = ""
 					return subject
 				}(),
@@ -111,8 +111,8 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 		{
 			name: "AdminUser - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.AdminUser = ""
 					return subject
 				}(),
@@ -123,15 +123,15 @@ func TestFlattenResourceAzureConfigurationInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenResourceAzureConfigurationInto(tt.args.in, got)
+			FlattenDataSourceAzureSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceAzureConfiguration() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourceAzureSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceAzureConfiguration(t *testing.T) {
+func TestFlattenDataSourceAzureSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"subscription_id":     "",
 		"tenant_id":           "",
@@ -140,7 +140,7 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 		"admin_user":          "",
 	}
 	type args struct {
-		in kops.AzureConfiguration
+		in kops.AzureSpec
 	}
 	tests := []struct {
 		name string
@@ -150,15 +150,15 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.AzureConfiguration{},
+				in: kops.AzureSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "SubscriptionID - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.SubscriptionID = ""
 					return subject
 				}(),
@@ -168,8 +168,8 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 		{
 			name: "TenantID - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.TenantID = ""
 					return subject
 				}(),
@@ -179,8 +179,8 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 		{
 			name: "ResourceGroupName - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.ResourceGroupName = ""
 					return subject
 				}(),
@@ -190,8 +190,8 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 		{
 			name: "RouteTableName - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.RouteTableName = ""
 					return subject
 				}(),
@@ -201,8 +201,8 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 		{
 			name: "AdminUser - default",
 			args: args{
-				in: func() kops.AzureConfiguration {
-					subject := kops.AzureConfiguration{}
+				in: func() kops.AzureSpec {
+					subject := kops.AzureSpec{}
 					subject.AdminUser = ""
 					return subject
 				}(),
@@ -212,9 +212,9 @@ func TestFlattenResourceAzureConfiguration(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenResourceAzureConfiguration(tt.args.in)
+			got := FlattenDataSourceAzureSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceAzureConfiguration() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourceAzureSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

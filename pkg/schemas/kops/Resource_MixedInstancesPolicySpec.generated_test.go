@@ -22,6 +22,7 @@ func TestExpandResourceMixedInstancesPolicySpec(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"instances":                     func() []interface{} { return nil }(),
+					"instance_requirements":         nil,
 					"on_demand_allocation_strategy": nil,
 					"on_demand_base":                nil,
 					"on_demand_above_base":          nil,
@@ -45,6 +46,7 @@ func TestExpandResourceMixedInstancesPolicySpec(t *testing.T) {
 func TestFlattenResourceMixedInstancesPolicySpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"instances":                     func() []interface{} { return nil }(),
+		"instance_requirements":         nil,
 		"on_demand_allocation_strategy": nil,
 		"on_demand_base":                nil,
 		"on_demand_above_base":          nil,
@@ -72,6 +74,17 @@ func TestFlattenResourceMixedInstancesPolicySpecInto(t *testing.T) {
 				in: func() kops.MixedInstancesPolicySpec {
 					subject := kops.MixedInstancesPolicySpec{}
 					subject.Instances = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstanceRequirements - default",
+			args: args{
+				in: func() kops.MixedInstancesPolicySpec {
+					subject := kops.MixedInstancesPolicySpec{}
+					subject.InstanceRequirements = nil
 					return subject
 				}(),
 			},
@@ -147,6 +160,7 @@ func TestFlattenResourceMixedInstancesPolicySpecInto(t *testing.T) {
 func TestFlattenResourceMixedInstancesPolicySpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"instances":                     func() []interface{} { return nil }(),
+		"instance_requirements":         nil,
 		"on_demand_allocation_strategy": nil,
 		"on_demand_base":                nil,
 		"on_demand_above_base":          nil,
@@ -174,6 +188,17 @@ func TestFlattenResourceMixedInstancesPolicySpec(t *testing.T) {
 				in: func() kops.MixedInstancesPolicySpec {
 					subject := kops.MixedInstancesPolicySpec{}
 					subject.Instances = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstanceRequirements - default",
+			args: args{
+				in: func() kops.MixedInstancesPolicySpec {
+					subject := kops.MixedInstancesPolicySpec{}
+					subject.InstanceRequirements = nil
 					return subject
 				}(),
 			},

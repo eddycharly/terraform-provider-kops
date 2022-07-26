@@ -1,0 +1,221 @@
+package schemas
+
+import (
+	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"k8s.io/kops/pkg/apis/kops"
+)
+
+var _ = Schema
+
+func ResourceCloudProviderSpec() *schema.Resource {
+	res := &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"aws":       OptionalStruct(ResourceAWSSpec()),
+			"azure":     OptionalStruct(ResourceAzureSpec()),
+			"do":        OptionalStruct(ResourceDOSpec()),
+			"gce":       OptionalStruct(ResourceGCESpec()),
+			"hetzner":   OptionalStruct(ResourceHetznerSpec()),
+			"openstack": OptionalStruct(ResourceOpenstackSpec()),
+		},
+	}
+
+	return res
+}
+
+func ExpandResourceCloudProviderSpec(in map[string]interface{}) kops.CloudProviderSpec {
+	if in == nil {
+		panic("expand CloudProviderSpec failure, in is nil")
+	}
+	return kops.CloudProviderSpec{
+		AWS: func(in interface{}) *kops.AWSSpec {
+			return func(in interface{}) *kops.AWSSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.AWSSpec) *kops.AWSSpec {
+					return &in
+				}(func(in interface{}) kops.AWSSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.AWSSpec{}
+					}
+					return (ExpandResourceAWSSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["aws"]),
+		Azure: func(in interface{}) *kops.AzureSpec {
+			return func(in interface{}) *kops.AzureSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.AzureSpec) *kops.AzureSpec {
+					return &in
+				}(func(in interface{}) kops.AzureSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.AzureSpec{}
+					}
+					return (ExpandResourceAzureSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["azure"]),
+		DO: func(in interface{}) *kops.DOSpec {
+			return func(in interface{}) *kops.DOSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.DOSpec) *kops.DOSpec {
+					return &in
+				}(func(in interface{}) kops.DOSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.DOSpec{}
+					}
+					return (ExpandResourceDOSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["do"]),
+		GCE: func(in interface{}) *kops.GCESpec {
+			return func(in interface{}) *kops.GCESpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.GCESpec) *kops.GCESpec {
+					return &in
+				}(func(in interface{}) kops.GCESpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.GCESpec{}
+					}
+					return (ExpandResourceGCESpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["gce"]),
+		Hetzner: func(in interface{}) *kops.HetznerSpec {
+			return func(in interface{}) *kops.HetznerSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.HetznerSpec) *kops.HetznerSpec {
+					return &in
+				}(func(in interface{}) kops.HetznerSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.HetznerSpec{}
+					}
+					return (ExpandResourceHetznerSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["hetzner"]),
+		Openstack: func(in interface{}) *kops.OpenstackSpec {
+			return func(in interface{}) *kops.OpenstackSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.OpenstackSpec) *kops.OpenstackSpec {
+					return &in
+				}(func(in interface{}) kops.OpenstackSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.OpenstackSpec{}
+					}
+					return (ExpandResourceOpenstackSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["openstack"]),
+	}
+}
+
+func FlattenResourceCloudProviderSpecInto(in kops.CloudProviderSpec, out map[string]interface{}) {
+	out["aws"] = func(in *kops.AWSSpec) interface{} {
+		return func(in *kops.AWSSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AWSSpec) interface{} {
+				return func(in kops.AWSSpec) []interface{} {
+					return []interface{}{FlattenResourceAWSSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.AWS)
+	out["azure"] = func(in *kops.AzureSpec) interface{} {
+		return func(in *kops.AzureSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.AzureSpec) interface{} {
+				return func(in kops.AzureSpec) []interface{} {
+					return []interface{}{FlattenResourceAzureSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Azure)
+	out["do"] = func(in *kops.DOSpec) interface{} {
+		return func(in *kops.DOSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.DOSpec) interface{} {
+				return func(in kops.DOSpec) []interface{} {
+					return []interface{}{FlattenResourceDOSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.DO)
+	out["gce"] = func(in *kops.GCESpec) interface{} {
+		return func(in *kops.GCESpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.GCESpec) interface{} {
+				return func(in kops.GCESpec) []interface{} {
+					return []interface{}{FlattenResourceGCESpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.GCE)
+	out["hetzner"] = func(in *kops.HetznerSpec) interface{} {
+		return func(in *kops.HetznerSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.HetznerSpec) interface{} {
+				return func(in kops.HetznerSpec) []interface{} {
+					return []interface{}{FlattenResourceHetznerSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Hetzner)
+	out["openstack"] = func(in *kops.OpenstackSpec) interface{} {
+		return func(in *kops.OpenstackSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.OpenstackSpec) interface{} {
+				return func(in kops.OpenstackSpec) []interface{} {
+					return []interface{}{FlattenResourceOpenstackSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Openstack)
+}
+
+func FlattenResourceCloudProviderSpec(in kops.CloudProviderSpec) map[string]interface{} {
+	out := map[string]interface{}{}
+	FlattenResourceCloudProviderSpecInto(in, out)
+	return out
+}

@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -14,6 +15,9 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 		panic("expand InstanceGroupSpec failure, in is nil")
 	}
 	return kops.InstanceGroupSpec{
+		Manager: func(in interface{}) kops.InstanceManager {
+			return kops.InstanceManager(ExpandString(in))
+		}(in["manager"]),
 		Role: func(in interface{}) kops.InstanceGroupRole {
 			return kops.InstanceGroupRole(ExpandString(in))
 		}(in["role"]),
@@ -710,10 +714,79 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(in))
 			}(in)
 		}(in["warm_pool"]),
+		Containerd: func(in interface{}) *kops.ContainerdConfig {
+			return func(in interface{}) *kops.ContainerdConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.ContainerdConfig) *kops.ContainerdConfig {
+					return &in
+				}(func(in interface{}) kops.ContainerdConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.ContainerdConfig{}
+					}
+					return (ExpandResourceContainerdConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["containerd"]),
+		Packages: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["packages"]),
+		GuestAccelerators: func(in interface{}) []kops.AcceleratorConfig {
+			return func(in interface{}) []kops.AcceleratorConfig {
+				if in == nil {
+					return nil
+				}
+				var out []kops.AcceleratorConfig
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) kops.AcceleratorConfig {
+						if in == nil {
+							return kops.AcceleratorConfig{}
+						}
+						return (ExpandResourceAcceleratorConfig(in.(map[string]interface{})))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["guest_accelerators"]),
+		MaxInstanceLifetime: func(in interface{}) *meta.Duration {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *meta.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in meta.Duration) *meta.Duration {
+					return &in
+				}(ExpandDuration(in))
+			}(in)
+		}(in["max_instance_lifetime"]),
 	}
 }
 
 func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[string]interface{}) {
+	out["manager"] = func(in kops.InstanceManager) interface{} {
+		return FlattenString(string(in))
+	}(in.Manager)
 	out["role"] = func(in kops.InstanceGroupRole) interface{} {
 		return FlattenString(string(in))
 	}(in.Role)
@@ -1142,6 +1215,48 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.WarmPool)
+	out["containerd"] = func(in *kops.ContainerdConfig) interface{} {
+		return func(in *kops.ContainerdConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ContainerdConfig) interface{} {
+				return func(in kops.ContainerdConfig) []interface{} {
+					return []interface{}{FlattenResourceContainerdConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Containerd)
+	out["packages"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.Packages)
+	out["guest_accelerators"] = func(in []kops.AcceleratorConfig) interface{} {
+		return func(in []kops.AcceleratorConfig) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.AcceleratorConfig) interface{} {
+					return FlattenResourceAcceleratorConfig(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.GuestAccelerators)
+	out["max_instance_lifetime"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in meta.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.MaxInstanceLifetime)
 }
 
 func FlattenResourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {

@@ -8,25 +8,25 @@ import (
 
 var _ = Schema
 
-func ResourceAzureConfiguration() *schema.Resource {
+func DataSourceAzureSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"subscription_id":     OptionalString(),
-			"tenant_id":           OptionalString(),
-			"resource_group_name": OptionalString(),
-			"route_table_name":    OptionalString(),
-			"admin_user":          OptionalString(),
+			"subscription_id":     ComputedString(),
+			"tenant_id":           ComputedString(),
+			"resource_group_name": ComputedString(),
+			"route_table_name":    ComputedString(),
+			"admin_user":          ComputedString(),
 		},
 	}
 
 	return res
 }
 
-func ExpandResourceAzureConfiguration(in map[string]interface{}) kops.AzureConfiguration {
+func ExpandDataSourceAzureSpec(in map[string]interface{}) kops.AzureSpec {
 	if in == nil {
-		panic("expand AzureConfiguration failure, in is nil")
+		panic("expand AzureSpec failure, in is nil")
 	}
-	return kops.AzureConfiguration{
+	return kops.AzureSpec{
 		SubscriptionID: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["subscription_id"]),
@@ -45,7 +45,7 @@ func ExpandResourceAzureConfiguration(in map[string]interface{}) kops.AzureConfi
 	}
 }
 
-func FlattenResourceAzureConfigurationInto(in kops.AzureConfiguration, out map[string]interface{}) {
+func FlattenDataSourceAzureSpecInto(in kops.AzureSpec, out map[string]interface{}) {
 	out["subscription_id"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.SubscriptionID)
@@ -63,8 +63,8 @@ func FlattenResourceAzureConfigurationInto(in kops.AzureConfiguration, out map[s
 	}(in.AdminUser)
 }
 
-func FlattenResourceAzureConfiguration(in kops.AzureConfiguration) map[string]interface{} {
+func FlattenDataSourceAzureSpec(in kops.AzureSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenResourceAzureConfigurationInto(in, out)
+	FlattenDataSourceAzureSpecInto(in, out)
 	return out
 }

@@ -26,6 +26,7 @@ func TestExpandResourceFileAssetSpec(t *testing.T) {
 					"roles":     func() []interface{} { return nil }(),
 					"content":   "",
 					"is_base64": false,
+					"mode":      "",
 				},
 			},
 			want: _default,
@@ -48,6 +49,7 @@ func TestFlattenResourceFileAssetSpecInto(t *testing.T) {
 		"roles":     func() []interface{} { return nil }(),
 		"content":   "",
 		"is_base64": false,
+		"mode":      "",
 	}
 	type args struct {
 		in kops.FileAssetSpec
@@ -114,6 +116,17 @@ func TestFlattenResourceFileAssetSpecInto(t *testing.T) {
 				in: func() kops.FileAssetSpec {
 					subject := kops.FileAssetSpec{}
 					subject.IsBase64 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Mode - default",
+			args: args{
+				in: func() kops.FileAssetSpec {
+					subject := kops.FileAssetSpec{}
+					subject.Mode = ""
 					return subject
 				}(),
 			},
@@ -138,6 +151,7 @@ func TestFlattenResourceFileAssetSpec(t *testing.T) {
 		"roles":     func() []interface{} { return nil }(),
 		"content":   "",
 		"is_base64": false,
+		"mode":      "",
 	}
 	type args struct {
 		in kops.FileAssetSpec
@@ -204,6 +218,17 @@ func TestFlattenResourceFileAssetSpec(t *testing.T) {
 				in: func() kops.FileAssetSpec {
 					subject := kops.FileAssetSpec{}
 					subject.IsBase64 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Mode - default",
+			args: args{
+				in: func() kops.FileAssetSpec {
+					subject := kops.FileAssetSpec{}
+					subject.Mode = ""
 					return subject
 				}(),
 			},

@@ -18,7 +18,7 @@ func DataSourceCluster() *schema.Resource {
 			"channel":                           ComputedString(),
 			"addons":                            ComputedList(kopsschemas.DataSourceAddonSpec()),
 			"config_base":                       ComputedString(),
-			"cloud_provider":                    ComputedString(),
+			"cloud_provider":                    ComputedStruct(kopsschemas.DataSourceCloudProviderSpec()),
 			"container_runtime":                 ComputedString(),
 			"kubernetes_version":                ComputedString(),
 			"subnet":                            ComputedList(kopsschemas.DataSourceClusterSubnetSpec()),
@@ -85,6 +85,7 @@ func DataSourceCluster() *schema.Resource {
 			"warm_pool":                         ComputedStruct(kopsschemas.DataSourceWarmPoolSpec()),
 			"service_account_issuer_discovery":  ComputedStruct(kopsschemas.DataSourceServiceAccountIssuerDiscoveryConfig()),
 			"snapshot_controller":               ComputedStruct(kopsschemas.DataSourceSnapshotControllerConfig()),
+			"karpenter":                         ComputedStruct(kopsschemas.DataSourceKarpenterConfig()),
 			"pod_identity_webhook":              ComputedStruct(kopsschemas.DataSourcePodIdentityWebhookConfig()),
 			"labels":                            ComputedMap(String()),
 			"annotations":                       ComputedMap(String()),
@@ -93,7 +94,7 @@ func DataSourceCluster() *schema.Resource {
 			"secrets":                           ComputedStruct(DataSourceClusterSecrets()),
 		},
 	}
-	res.SchemaVersion = 2
+	res.SchemaVersion = 4
 	res.StateUpgraders = []schema.StateUpgrader{
 		{
 			Type: res.CoreConfigSchema().ImpliedType(),
@@ -111,6 +112,22 @@ func DataSourceCluster() *schema.Resource {
 				return ret, nil
 			},
 			Version: 1,
+		}, {
+			Type: res.CoreConfigSchema().ImpliedType(),
+			Upgrade: func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+				ret := FlattenDataSourceCluster(ExpandDataSourceCluster(rawState))
+				ret["id"] = rawState["id"]
+				return ret, nil
+			},
+			Version: 2,
+		}, {
+			Type: res.CoreConfigSchema().ImpliedType(),
+			Upgrade: func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+				ret := FlattenDataSourceCluster(ExpandDataSourceCluster(rawState))
+				ret["id"] = rawState["id"]
+				return ret, nil
+			},
+			Version: 3,
 		},
 	}
 	return res

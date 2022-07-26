@@ -84,6 +84,7 @@ resource "kops_cluster" "cluster" {
 ## Argument Reference
 
 The following arguments are supported:
+- `manager` - (Optional) - String - Manager determines what is managing the node lifecycle.
 - `role` - (Required) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.
@@ -128,6 +129,10 @@ The following arguments are supported:
 - `instance_metadata` - (Optional) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 - `update_policy` - (Optional) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
 - `warm_pool` - (Optional) - [warm_pool_spec](#warm_pool_spec) - WarmPool specifies a pool of pre-warmed instances for later use (AWS only).
+- `containerd` - (Optional) - [containerd_config](#containerd_config) - Containerd specifies override configuration for instance group.
+- `packages` - (Optional) - List(String) - Packages specifies additional packages to be installed.
+- `guest_accelerators` - (Optional) - List([accelerator_config](#accelerator_config)) - GuestAccelerators configures additional accelerators.
+- `max_instance_lifetime` - (Optional) - Duration - MaxInstanceLifetime to the maximum amount of time, in seconds, that an instance can be in service.<br />Value expected must be in form of duration ("ms", "s", "m", "h").
 - `labels` - (Optional) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
 - `annotations` - (Optional) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `cluster_name` - (Required) - (Force new) - String - ClusterName defines the cluster name the instance group belongs to.
@@ -209,6 +214,7 @@ The following arguments are supported:
 - `roles` - (Optional) - List(String) - Roles is a list of roles the file asset should be applied, defaults to all.
 - `content` - (Required) - String - Content is the contents of the file.
 - `is_base64` - (Optional) - Bool - IsBase64 indicates the contents is base64 encoded.
+- `mode` - (Optional) - String - Mode is this file's mode and permission bits.
 
 ### kubelet_config_spec
 
@@ -318,11 +324,32 @@ MixedInstancesPolicySpec defines the specification for an autoscaling group back
 The following arguments are supported:
 
 - `instances` - (Optional) - List(String) - Instances is a list of instance types which we are willing to run in the EC2 fleet.
+- `instance_requirements` - (Optional) - [instance_requirements_spec](#instance_requirements_spec) - InstanceRequirements is a list of requirements for any instance type we are willing to run in the EC2 fleet.
 - `on_demand_allocation_strategy` - (Optional) - String - OnDemandAllocationStrategy indicates how to allocate instance types to fulfill On-Demand capacity.
 - `on_demand_base` - (Optional) - Int([Nullable](#nullable-arguments)) - OnDemandBase is the minimum amount of the Auto Scaling group's capacity that must be<br />fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.
 - `on_demand_above_base` - (Optional) - Int([Nullable](#nullable-arguments)) - OnDemandAboveBase controls the percentages of On-Demand Instances and Spot Instances for your<br />additional capacity beyond OnDemandBase. The range is 0–100. The default value is 100. If you<br />leave this parameter set to 100, the percentages are 100% for On-Demand Instances and 0% for<br />Spot Instances.
 - `spot_allocation_strategy` - (Optional) - String - SpotAllocationStrategy diversifies your Spot capacity across multiple instance types to<br />find the best pricing. Higher Spot availability may result from a larger number of<br />instance types to choose from.
 - `spot_instance_pools` - (Optional) - Int - SpotInstancePools is the number of Spot pools to use to allocate your Spot capacity (defaults to 2)<br />pools are determined from the different instance types in the Overrides array of LaunchTemplate.
+
+### instance_requirements_spec
+
+InstanceRequirementsSpec is a list of requirements for any instance type we are willing to run in the EC2 fleet.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `cpu` - (Optional) - [min_max_spec](#min_max_spec)
+- `memory` - (Optional) - [min_max_spec](#min_max_spec)
+
+### min_max_spec
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `max` - (Optional) - Quantity
+- `min` - (Optional) - Quantity
 
 ### user_data
 
@@ -387,6 +414,56 @@ The following arguments are supported:
 - `min_size` - (Optional) - Int - MinSize is the minimum size of the warm pool.
 - `max_size` - (Optional) - Int - MaxSize is the maximum size of the warm pool. The desired size of the instance group<br />is subtracted from this number to determine the desired size of the warm pool<br />(unless the resulting number is smaller than MinSize).<br />The default is the instance group's MaxSize.
 - `enable_lifecycle_hook` - (Optional) - Bool - EnableLifecyleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
+
+### containerd_config
+
+ContainerdConfig is the configuration for containerd.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `address` - (Optional) - String - Address of containerd's GRPC server (default "/run/containerd/containerd.sock").
+- `config_override` - (Optional) - String - ConfigOverride is the complete containerd config file provided by the user.
+- `log_level` - (Optional) - String - LogLevel controls the logging details [trace, debug, info, warn, error, fatal, panic] (default "info").
+- `packages` - (Optional) - [packages_config](#packages_config) - Packages overrides the URL and hash for the packages.
+- `registry_mirrors` - (Optional) - Map(List(String)) - RegistryMirrors is list of image registries.
+- `root` - (Optional) - String - Root directory for persistent data (default "/var/lib/containerd").
+- `skip_install` - (Optional) - Bool - SkipInstall prevents kOps from installing and modifying containerd in any way (default "false").
+- `state` - (Optional) - String - State directory for execution state files (default "/run/containerd").
+- `version` - (Optional) - String - Version used to pick the containerd package.
+- `nvidia_gpu` - (Optional) - [nvidia_gpu_config](#nvidia_gpu_config) - NvidiaGPU configures the Nvidia GPU runtime.
+
+### packages_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `hash_amd64` - (Optional) - String - HashAmd64 overrides the hash for the AMD64 package.
+- `hash_arm64` - (Optional) - String - HashArm64 overrides the hash for the ARM64 package.
+- `url_amd64` - (Optional) - String - UrlAmd64 overrides the URL for the AMD64 package.
+- `url_arm64` - (Optional) - String - UrlArm64 overrides the URL for the ARM64 package.
+
+### nvidia_gpu_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `driver_package` - (Optional) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-510-server".
+- `enabled` - (Optional) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
+
+### accelerator_config
+
+AcceleratorConfig defines an accelerator config.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `accelerator_count` - (Optional) - Int
+- `accelerator_type` - (Optional) - String
 
 
 ## Import

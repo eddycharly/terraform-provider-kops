@@ -4,7 +4,9 @@ import (
 	"testing"
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
+	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
 	"github.com/google/go-cmp/cmp"
+	"k8s.io/kops/pkg/apis/kops"
 )
 
 func TestExpandDataSourceCluster(t *testing.T) {
@@ -21,10 +23,12 @@ func TestExpandDataSourceCluster(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"channel":                           "",
-					"addons":                            func() []interface{} { return nil }(),
-					"config_base":                       "",
-					"cloud_provider":                    "",
+					"channel":     "",
+					"addons":      func() []interface{} { return nil }(),
+					"config_base": "",
+					"cloud_provider": func() []interface{} {
+						return []interface{}{kopsschemas.FlattenDataSourceCloudProviderSpec(kops.CloudProviderSpec{})}
+					}(),
 					"container_runtime":                 "",
 					"kubernetes_version":                "",
 					"subnet":                            func() []interface{} { return nil }(),
@@ -91,6 +95,7 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
+					"karpenter":                         nil,
 					"pod_identity_webhook":              nil,
 					"labels":                            func() map[string]interface{} { return nil }(),
 					"annotations":                       func() map[string]interface{} { return nil }(),
@@ -114,10 +119,12 @@ func TestExpandDataSourceCluster(t *testing.T) {
 
 func TestFlattenDataSourceClusterInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"channel":                           "",
-		"addons":                            func() []interface{} { return nil }(),
-		"config_base":                       "",
-		"cloud_provider":                    "",
+		"channel":     "",
+		"addons":      func() []interface{} { return nil }(),
+		"config_base": "",
+		"cloud_provider": func() []interface{} {
+			return []interface{}{kopsschemas.FlattenDataSourceCloudProviderSpec(kops.CloudProviderSpec{})}
+		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
 		"subnet":                            func() []interface{} { return nil }(),
@@ -184,6 +191,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"karpenter":                         nil,
 		"pod_identity_webhook":              nil,
 		"labels":                            func() map[string]interface{} { return nil }(),
 		"annotations":                       func() map[string]interface{} { return nil }(),
@@ -244,7 +252,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.CloudProvider = ""
+					subject.CloudProvider = kops.CloudProviderSpec{}
 					return subject
 				}(),
 			},
@@ -971,6 +979,17 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Karpenter - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Karpenter = nil
 					return subject
 				}(),
 			},
@@ -1056,10 +1075,12 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 
 func TestFlattenDataSourceCluster(t *testing.T) {
 	_default := map[string]interface{}{
-		"channel":                           "",
-		"addons":                            func() []interface{} { return nil }(),
-		"config_base":                       "",
-		"cloud_provider":                    "",
+		"channel":     "",
+		"addons":      func() []interface{} { return nil }(),
+		"config_base": "",
+		"cloud_provider": func() []interface{} {
+			return []interface{}{kopsschemas.FlattenDataSourceCloudProviderSpec(kops.CloudProviderSpec{})}
+		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
 		"subnet":                            func() []interface{} { return nil }(),
@@ -1126,6 +1147,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"karpenter":                         nil,
 		"pod_identity_webhook":              nil,
 		"labels":                            func() map[string]interface{} { return nil }(),
 		"annotations":                       func() map[string]interface{} { return nil }(),
@@ -1186,7 +1208,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.CloudProvider = ""
+					subject.CloudProvider = kops.CloudProviderSpec{}
 					return subject
 				}(),
 			},
@@ -1913,6 +1935,17 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Karpenter - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.Karpenter = nil
 					return subject
 				}(),
 			},

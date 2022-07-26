@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandResourceOpenstackConfiguration(t *testing.T) {
-	_default := kops.OpenstackConfiguration{}
+func TestExpandResourceOpenstackSpec(t *testing.T) {
+	_default := kops.OpenstackSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.OpenstackConfiguration
+		want kops.OpenstackSpec
 	}{
 		{
 			name: "default",
@@ -35,15 +35,15 @@ func TestExpandResourceOpenstackConfiguration(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandResourceOpenstackConfiguration(tt.args.in)
+			got := ExpandResourceOpenstackSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandResourceOpenstackConfiguration() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandResourceOpenstackSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
+func TestFlattenResourceOpenstackSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"loadbalancer":         nil,
 		"monitor":              nil,
@@ -54,7 +54,7 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		"metadata":             nil,
 	}
 	type args struct {
-		in kops.OpenstackConfiguration
+		in kops.OpenstackSpec
 	}
 	tests := []struct {
 		name string
@@ -64,15 +64,15 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.OpenstackConfiguration{},
+				in: kops.OpenstackSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Loadbalancer - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Loadbalancer = nil
 					return subject
 				}(),
@@ -82,8 +82,8 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "Monitor - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Monitor = nil
 					return subject
 				}(),
@@ -93,8 +93,8 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "Router - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Router = nil
 					return subject
 				}(),
@@ -104,8 +104,8 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "BlockStorage - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.BlockStorage = nil
 					return subject
 				}(),
@@ -115,8 +115,8 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "InsecureSkipVerify - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.InsecureSkipVerify = nil
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "Network - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Network = nil
 					return subject
 				}(),
@@ -137,8 +137,8 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 		{
 			name: "Metadata - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Metadata = nil
 					return subject
 				}(),
@@ -149,15 +149,15 @@ func TestFlattenResourceOpenstackConfigurationInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenResourceOpenstackConfigurationInto(tt.args.in, got)
+			FlattenResourceOpenstackSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceOpenstackConfiguration() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceOpenstackSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
+func TestFlattenResourceOpenstackSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"loadbalancer":         nil,
 		"monitor":              nil,
@@ -168,7 +168,7 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		"metadata":             nil,
 	}
 	type args struct {
-		in kops.OpenstackConfiguration
+		in kops.OpenstackSpec
 	}
 	tests := []struct {
 		name string
@@ -178,15 +178,15 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.OpenstackConfiguration{},
+				in: kops.OpenstackSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Loadbalancer - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Loadbalancer = nil
 					return subject
 				}(),
@@ -196,8 +196,8 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "Monitor - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Monitor = nil
 					return subject
 				}(),
@@ -207,8 +207,8 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "Router - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Router = nil
 					return subject
 				}(),
@@ -218,8 +218,8 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "BlockStorage - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.BlockStorage = nil
 					return subject
 				}(),
@@ -229,8 +229,8 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "InsecureSkipVerify - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.InsecureSkipVerify = nil
 					return subject
 				}(),
@@ -240,8 +240,8 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "Network - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Network = nil
 					return subject
 				}(),
@@ -251,8 +251,8 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 		{
 			name: "Metadata - default",
 			args: args{
-				in: func() kops.OpenstackConfiguration {
-					subject := kops.OpenstackConfiguration{}
+				in: func() kops.OpenstackSpec {
+					subject := kops.OpenstackSpec{}
 					subject.Metadata = nil
 					return subject
 				}(),
@@ -262,9 +262,9 @@ func TestFlattenResourceOpenstackConfiguration(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenResourceOpenstackConfiguration(tt.args.in)
+			got := FlattenResourceOpenstackSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceOpenstackConfiguration() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceOpenstackSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

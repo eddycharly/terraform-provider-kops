@@ -27,8 +27,9 @@ func TestExpandDataSourceKubeAPIServerConfig(t *testing.T) {
 					"log_level":                                    0,
 					"cloud_provider":                               "",
 					"secure_port":                                  0,
-					"insecure_port":                                0,
+					"insecure_port":                                nil,
 					"address":                                      "",
+					"advertise_address":                            "",
 					"bind_address":                                 "",
 					"insecure_bind_address":                        "",
 					"enable_bootstrap_auth_token":                  nil,
@@ -146,8 +147,9 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 		"log_level":                                    0,
 		"cloud_provider":                               "",
 		"secure_port":                                  0,
-		"insecure_port":                                0,
+		"insecure_port":                                nil,
 		"address":                                      "",
+		"advertise_address":                            "",
 		"bind_address":                                 "",
 		"insecure_bind_address":                        "",
 		"enable_bootstrap_auth_token":                  nil,
@@ -329,7 +331,7 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.InsecurePort = 0
+					subject.InsecurePort = nil
 					return subject
 				}(),
 			},
@@ -341,6 +343,17 @@ func TestFlattenDataSourceKubeAPIServerConfigInto(t *testing.T) {
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
 					subject.Address = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdvertiseAddress - default",
+			args: args{
+				in: func() kops.KubeAPIServerConfig {
+					subject := kops.KubeAPIServerConfig{}
+					subject.AdvertiseAddress = ""
 					return subject
 				}(),
 			},
@@ -1400,8 +1413,9 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 		"log_level":                                    0,
 		"cloud_provider":                               "",
 		"secure_port":                                  0,
-		"insecure_port":                                0,
+		"insecure_port":                                nil,
 		"address":                                      "",
+		"advertise_address":                            "",
 		"bind_address":                                 "",
 		"insecure_bind_address":                        "",
 		"enable_bootstrap_auth_token":                  nil,
@@ -1583,7 +1597,7 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
-					subject.InsecurePort = 0
+					subject.InsecurePort = nil
 					return subject
 				}(),
 			},
@@ -1595,6 +1609,17 @@ func TestFlattenDataSourceKubeAPIServerConfig(t *testing.T) {
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
 					subject.Address = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdvertiseAddress - default",
+			args: args{
+				in: func() kops.KubeAPIServerConfig {
+					subject := kops.KubeAPIServerConfig{}
+					subject.AdvertiseAddress = ""
 					return subject
 				}(),
 			},

@@ -16,6 +16,7 @@ func DataSourceAWSEBSCSIDriver() *schema.Resource {
 			"enabled":             ComputedBool(),
 			"version":             ComputedString(),
 			"volume_attach_limit": ComputedInt(),
+			"pod_annotations":     ComputedMap(String()),
 		},
 	}
 
@@ -84,6 +85,23 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 				}(int(ExpandInt(in)))
 			}(in)
 		}(in["volume_attach_limit"]),
+		PodAnnotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["pod_annotations"]),
 	}
 }
 
@@ -118,6 +136,18 @@ func FlattenDataSourceAWSEBSCSIDriverInto(in kops.AWSEBSCSIDriver, out map[strin
 			}(*in)
 		}(in)
 	}(in.VolumeAttachLimit)
+	out["pod_annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.PodAnnotations)
 }
 
 func FlattenDataSourceAWSEBSCSIDriver(in kops.AWSEBSCSIDriver) map[string]interface{} {

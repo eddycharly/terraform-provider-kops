@@ -323,8 +323,24 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 		ClusterDNS: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_dns"]),
-		NetworkPluginName: func(in interface{}) string {
-			return string(ExpandString(in))
+		NetworkPluginName: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
 		}(in["network_plugin_name"]),
 		CloudProvider: func(in interface{}) string {
 			return string(ExpandString(in))
@@ -519,8 +535,24 @@ func ExpandDataSourceKubeletConfigSpec(in map[string]interface{}) kops.KubeletCo
 				return nil
 			}(in)
 		}(in["node_labels"]),
-		NonMasqueradeCIDR: func(in interface{}) string {
-			return string(ExpandString(in))
+		NonMasqueradeCIDR: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
 		}(in["non_masquerade_cidr"]),
 		EnableCustomMetrics: func(in interface{}) *bool {
 			if in == nil {
@@ -1339,8 +1371,15 @@ func FlattenDataSourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[s
 	out["cluster_dns"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterDNS)
-	out["network_plugin_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["network_plugin_name"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
 	}(in.NetworkPluginName)
 	out["cloud_provider"] = func(in string) interface{} {
 		return FlattenString(string(in))
@@ -1458,8 +1497,15 @@ func FlattenDataSourceKubeletConfigSpecInto(in kops.KubeletConfigSpec, out map[s
 			return out
 		}(in)
 	}(in.NodeLabels)
-	out["non_masquerade_cidr"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["non_masquerade_cidr"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
 	}(in.NonMasqueradeCIDR)
 	out["enable_custom_metrics"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {

@@ -28,9 +28,11 @@ func TestExpandDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 					"enable_rebalance_draining":         nil,
 					"enable_prometheus_metrics":         nil,
 					"enable_sqs_termination_draining":   nil,
+					"exclude_from_load_balancers":       nil,
 					"managed_asg_tag":                   nil,
 					"memory_request":                    nil,
 					"cpu_request":                       nil,
+					"version":                           nil,
 				},
 			},
 			want: _default,
@@ -55,9 +57,11 @@ func TestFlattenDataSourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		"enable_rebalance_draining":         nil,
 		"enable_prometheus_metrics":         nil,
 		"enable_sqs_termination_draining":   nil,
+		"exclude_from_load_balancers":       nil,
 		"managed_asg_tag":                   nil,
 		"memory_request":                    nil,
 		"cpu_request":                       nil,
+		"version":                           nil,
 	}
 	type args struct {
 		in kops.NodeTerminationHandlerConfig
@@ -152,6 +156,17 @@ func TestFlattenDataSourceNodeTerminationHandlerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "ExcludeFromLoadBalancers - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.ExcludeFromLoadBalancers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "ManagedASGTag - default",
 			args: args{
 				in: func() kops.NodeTerminationHandlerConfig {
@@ -179,6 +194,17 @@ func TestFlattenDataSourceNodeTerminationHandlerConfigInto(t *testing.T) {
 				in: func() kops.NodeTerminationHandlerConfig {
 					subject := kops.NodeTerminationHandlerConfig{}
 					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.Version = nil
 					return subject
 				}(),
 			},
@@ -205,9 +231,11 @@ func TestFlattenDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 		"enable_rebalance_draining":         nil,
 		"enable_prometheus_metrics":         nil,
 		"enable_sqs_termination_draining":   nil,
+		"exclude_from_load_balancers":       nil,
 		"managed_asg_tag":                   nil,
 		"memory_request":                    nil,
 		"cpu_request":                       nil,
+		"version":                           nil,
 	}
 	type args struct {
 		in kops.NodeTerminationHandlerConfig
@@ -302,6 +330,17 @@ func TestFlattenDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "ExcludeFromLoadBalancers - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.ExcludeFromLoadBalancers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "ManagedASGTag - default",
 			args: args{
 				in: func() kops.NodeTerminationHandlerConfig {
@@ -329,6 +368,17 @@ func TestFlattenDataSourceNodeTerminationHandlerConfig(t *testing.T) {
 				in: func() kops.NodeTerminationHandlerConfig {
 					subject := kops.NodeTerminationHandlerConfig{}
 					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kops.NodeTerminationHandlerConfig {
+					subject := kops.NodeTerminationHandlerConfig{}
+					subject.Version = nil
 					return subject
 				}(),
 			},

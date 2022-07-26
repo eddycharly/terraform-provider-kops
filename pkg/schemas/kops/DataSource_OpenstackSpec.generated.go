@@ -10,27 +10,27 @@ import (
 
 var _ = Schema
 
-func ResourceOpenstackConfiguration() *schema.Resource {
+func DataSourceOpenstackSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"loadbalancer":         OptionalStruct(ResourceOpenstackLoadbalancerConfig()),
-			"monitor":              OptionalStruct(ResourceOpenstackMonitor()),
-			"router":               OptionalStruct(ResourceOpenstackRouter()),
-			"block_storage":        OptionalStruct(ResourceOpenstackBlockStorageConfig()),
-			"insecure_skip_verify": OptionalBool(),
-			"network":              OptionalStruct(ResourceOpenstackNetwork()),
-			"metadata":             OptionalStruct(ResourceOpenstackMetadata()),
+			"loadbalancer":         ComputedStruct(DataSourceOpenstackLoadbalancerConfig()),
+			"monitor":              ComputedStruct(DataSourceOpenstackMonitor()),
+			"router":               ComputedStruct(DataSourceOpenstackRouter()),
+			"block_storage":        ComputedStruct(DataSourceOpenstackBlockStorageConfig()),
+			"insecure_skip_verify": ComputedBool(),
+			"network":              ComputedStruct(DataSourceOpenstackNetwork()),
+			"metadata":             ComputedStruct(DataSourceOpenstackMetadata()),
 		},
 	}
 
 	return res
 }
 
-func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.OpenstackConfiguration {
+func ExpandDataSourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 	if in == nil {
-		panic("expand OpenstackConfiguration failure, in is nil")
+		panic("expand OpenstackSpec failure, in is nil")
 	}
-	return kops.OpenstackConfiguration{
+	return kops.OpenstackSpec{
 		Loadbalancer: func(in interface{}) *kops.OpenstackLoadbalancerConfig {
 			return func(in interface{}) *kops.OpenstackLoadbalancerConfig {
 				if in == nil {
@@ -45,7 +45,7 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackLoadbalancerConfig{}
 					}
-					return (ExpandResourceOpenstackLoadbalancerConfig(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceOpenstackLoadbalancerConfig(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["loadbalancer"]),
@@ -63,7 +63,7 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackMonitor{}
 					}
-					return (ExpandResourceOpenstackMonitor(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceOpenstackMonitor(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["monitor"]),
@@ -81,7 +81,7 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackRouter{}
 					}
-					return (ExpandResourceOpenstackRouter(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceOpenstackRouter(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["router"]),
@@ -99,7 +99,7 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackBlockStorageConfig{}
 					}
-					return (ExpandResourceOpenstackBlockStorageConfig(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceOpenstackBlockStorageConfig(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["block_storage"]),
@@ -136,7 +136,7 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackNetwork{}
 					}
-					return (ExpandResourceOpenstackNetwork(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceOpenstackNetwork(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["network"]),
@@ -154,14 +154,14 @@ func ExpandResourceOpenstackConfiguration(in map[string]interface{}) kops.Openst
 					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
 						return kops.OpenstackMetadata{}
 					}
-					return (ExpandResourceOpenstackMetadata(in.([]interface{})[0].(map[string]interface{})))
+					return (ExpandDataSourceOpenstackMetadata(in.([]interface{})[0].(map[string]interface{})))
 				}(in))
 			}(in)
 		}(in["metadata"]),
 	}
 }
 
-func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, out map[string]interface{}) {
+func FlattenDataSourceOpenstackSpecInto(in kops.OpenstackSpec, out map[string]interface{}) {
 	out["loadbalancer"] = func(in *kops.OpenstackLoadbalancerConfig) interface{} {
 		return func(in *kops.OpenstackLoadbalancerConfig) interface{} {
 			if in == nil {
@@ -169,7 +169,7 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}
 			return func(in kops.OpenstackLoadbalancerConfig) interface{} {
 				return func(in kops.OpenstackLoadbalancerConfig) []interface{} {
-					return []interface{}{FlattenResourceOpenstackLoadbalancerConfig(in)}
+					return []interface{}{FlattenDataSourceOpenstackLoadbalancerConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -181,7 +181,7 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}
 			return func(in kops.OpenstackMonitor) interface{} {
 				return func(in kops.OpenstackMonitor) []interface{} {
-					return []interface{}{FlattenResourceOpenstackMonitor(in)}
+					return []interface{}{FlattenDataSourceOpenstackMonitor(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -193,7 +193,7 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}
 			return func(in kops.OpenstackRouter) interface{} {
 				return func(in kops.OpenstackRouter) []interface{} {
-					return []interface{}{FlattenResourceOpenstackRouter(in)}
+					return []interface{}{FlattenDataSourceOpenstackRouter(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -205,7 +205,7 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}
 			return func(in kops.OpenstackBlockStorageConfig) interface{} {
 				return func(in kops.OpenstackBlockStorageConfig) []interface{} {
-					return []interface{}{FlattenResourceOpenstackBlockStorageConfig(in)}
+					return []interface{}{FlattenDataSourceOpenstackBlockStorageConfig(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -227,7 +227,7 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}
 			return func(in kops.OpenstackNetwork) interface{} {
 				return func(in kops.OpenstackNetwork) []interface{} {
-					return []interface{}{FlattenResourceOpenstackNetwork(in)}
+					return []interface{}{FlattenDataSourceOpenstackNetwork(in)}
 				}(in)
 			}(*in)
 		}(in)
@@ -239,15 +239,15 @@ func FlattenResourceOpenstackConfigurationInto(in kops.OpenstackConfiguration, o
 			}
 			return func(in kops.OpenstackMetadata) interface{} {
 				return func(in kops.OpenstackMetadata) []interface{} {
-					return []interface{}{FlattenResourceOpenstackMetadata(in)}
+					return []interface{}{FlattenDataSourceOpenstackMetadata(in)}
 				}(in)
 			}(*in)
 		}(in)
 	}(in.Metadata)
 }
 
-func FlattenResourceOpenstackConfiguration(in kops.OpenstackConfiguration) map[string]interface{} {
+func FlattenDataSourceOpenstackSpec(in kops.OpenstackSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenResourceOpenstackConfigurationInto(in, out)
+	FlattenDataSourceOpenstackSpecInto(in, out)
 	return out
 }

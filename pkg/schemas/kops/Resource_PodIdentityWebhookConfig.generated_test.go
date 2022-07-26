@@ -21,7 +21,8 @@ func TestExpandResourcePodIdentityWebhookConfig(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"enabled": false,
+					"enabled":  false,
+					"replicas": 0,
 				},
 			},
 			want: _default,
@@ -39,7 +40,8 @@ func TestExpandResourcePodIdentityWebhookConfig(t *testing.T) {
 
 func TestFlattenResourcePodIdentityWebhookConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"enabled": false,
+		"enabled":  false,
+		"replicas": 0,
 	}
 	type args struct {
 		in kops.PodIdentityWebhookConfig
@@ -67,6 +69,17 @@ func TestFlattenResourcePodIdentityWebhookConfigInto(t *testing.T) {
 			},
 			want: _default,
 		},
+		{
+			name: "Replicas - default",
+			args: args{
+				in: func() kops.PodIdentityWebhookConfig {
+					subject := kops.PodIdentityWebhookConfig{}
+					subject.Replicas = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -81,7 +94,8 @@ func TestFlattenResourcePodIdentityWebhookConfigInto(t *testing.T) {
 
 func TestFlattenResourcePodIdentityWebhookConfig(t *testing.T) {
 	_default := map[string]interface{}{
-		"enabled": false,
+		"enabled":  false,
+		"replicas": 0,
 	}
 	type args struct {
 		in kops.PodIdentityWebhookConfig
@@ -104,6 +118,17 @@ func TestFlattenResourcePodIdentityWebhookConfig(t *testing.T) {
 				in: func() kops.PodIdentityWebhookConfig {
 					subject := kops.PodIdentityWebhookConfig{}
 					subject.Enabled = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Replicas - default",
+			args: args{
+				in: func() kops.PodIdentityWebhookConfig {
+					subject := kops.PodIdentityWebhookConfig{}
+					subject.Replicas = 0
 					return subject
 				}(),
 			},

@@ -21,8 +21,11 @@ func TestExpandDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"enabled": nil,
-					"version": nil,
+					"enabled":       nil,
+					"version":       nil,
+					"enable_waf":    false,
+					"enable_wa_fv2": false,
+					"enable_shield": false,
 				},
 			},
 			want: _default,
@@ -40,8 +43,11 @@ func TestExpandDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 
 func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"enabled": nil,
-		"version": nil,
+		"enabled":       nil,
+		"version":       nil,
+		"enable_waf":    false,
+		"enable_wa_fv2": false,
+		"enable_shield": false,
 	}
 	type args struct {
 		in kops.AWSLoadBalancerControllerConfig
@@ -75,6 +81,39 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 				in: func() kops.AWSLoadBalancerControllerConfig {
 					subject := kops.AWSLoadBalancerControllerConfig{}
 					subject.Version = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableWAF - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.EnableWAF = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableWAFv2 - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.EnableWAFv2 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableShield - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.EnableShield = false
 					return subject
 				}(),
 			},
@@ -94,8 +133,11 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 
 func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 	_default := map[string]interface{}{
-		"enabled": nil,
-		"version": nil,
+		"enabled":       nil,
+		"version":       nil,
+		"enable_waf":    false,
+		"enable_wa_fv2": false,
+		"enable_shield": false,
 	}
 	type args struct {
 		in kops.AWSLoadBalancerControllerConfig
@@ -129,6 +171,39 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 				in: func() kops.AWSLoadBalancerControllerConfig {
 					subject := kops.AWSLoadBalancerControllerConfig{}
 					subject.Version = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableWAF - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.EnableWAF = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableWAFv2 - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.EnableWAFv2 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableShield - default",
+			args: args{
+				in: func() kops.AWSLoadBalancerControllerConfig {
+					subject := kops.AWSLoadBalancerControllerConfig{}
+					subject.EnableShield = false
 					return subject
 				}(),
 			},

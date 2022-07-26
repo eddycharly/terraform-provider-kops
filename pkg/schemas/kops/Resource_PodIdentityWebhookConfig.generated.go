@@ -11,7 +11,8 @@ var _ = Schema
 func ResourcePodIdentityWebhookConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": OptionalBool(),
+			"enabled":  OptionalBool(),
+			"replicas": OptionalInt(),
 		},
 	}
 
@@ -26,6 +27,9 @@ func ExpandResourcePodIdentityWebhookConfig(in map[string]interface{}) kops.PodI
 		Enabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enabled"]),
+		Replicas: func(in interface{}) int {
+			return int(ExpandInt(in))
+		}(in["replicas"]),
 	}
 }
 
@@ -33,6 +37,9 @@ func FlattenResourcePodIdentityWebhookConfigInto(in kops.PodIdentityWebhookConfi
 	out["enabled"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Enabled)
+	out["replicas"] = func(in int) interface{} {
+		return FlattenInt(int(in))
+	}(in.Replicas)
 }
 
 func FlattenResourcePodIdentityWebhookConfig(in kops.PodIdentityWebhookConfig) map[string]interface{} {
