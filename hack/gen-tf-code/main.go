@@ -178,7 +178,6 @@ func main() {
 		),
 		generate(kops.CloudConfiguration{}),
 		generate(kops.ExternalDNSConfig{}),
-		// generate(kops.OpenstackConfiguration{}),
 		generate(kops.OpenstackLoadbalancerConfig{}),
 		generate(kops.OpenstackMonitor{}),
 		generate(kops.OpenstackRouter{}),
@@ -283,7 +282,6 @@ func main() {
 		generate(kops.RollingUpdate{}),
 		// 1.20
 		generate(resources.RollingUpdateOptions{}),
-		// generate(kops.AzureConfiguration{}),
 		generate(kops.AWSEBSCSIDriver{}),
 		generate(kops.NTPConfig{}),
 		generate(kops.CertManagerConfig{},
@@ -422,7 +420,6 @@ func main() {
 		generate(kops.LoadBalancerAccessSpec{}),
 		generate(kops.KopeioAuthenticationSpec{}),
 		generate(kops.AWSAuthenticationSpec{}),
-		// generate(kops.OpenstackConfiguration{}),
 		generate(kops.LeaderElectionConfiguration{}),
 		generate(kops.AuthorizationSpec{}),
 		generate(kops.NodeAuthorizationSpec{}),
@@ -481,7 +478,6 @@ func main() {
 		generate(kops.RollingUpdate{}),
 		generate(kops.ExecContainerAction{}),
 		// 1.20
-		// generate(kops.AzureConfiguration{}),
 		generate(kops.AWSEBSCSIDriver{}),
 		generate(kops.NTPConfig{}),
 		generate(kops.CertManagerConfig{}),
