@@ -25,6 +25,7 @@ func TestExpandResourceCiliumNetworkingSpec(t *testing.T) {
 					"memory_request":                    nil,
 					"cpu_request":                       nil,
 					"agent_prometheus_port":             0,
+					"metrics":                           func() []interface{} { return nil }(),
 					"chaining_mode":                     "",
 					"debug":                             false,
 					"disable_endpoint_crd":              false,
@@ -86,6 +87,7 @@ func TestFlattenResourceCiliumNetworkingSpecInto(t *testing.T) {
 		"memory_request":                    nil,
 		"cpu_request":                       nil,
 		"agent_prometheus_port":             0,
+		"metrics":                           func() []interface{} { return nil }(),
 		"chaining_mode":                     "",
 		"debug":                             false,
 		"disable_endpoint_crd":              false,
@@ -181,6 +183,17 @@ func TestFlattenResourceCiliumNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.AgentPrometheusPort = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Metrics - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.Metrics = nil
 					return subject
 				}(),
 			},
@@ -644,6 +657,7 @@ func TestFlattenResourceCiliumNetworkingSpec(t *testing.T) {
 		"memory_request":                    nil,
 		"cpu_request":                       nil,
 		"agent_prometheus_port":             0,
+		"metrics":                           func() []interface{} { return nil }(),
 		"chaining_mode":                     "",
 		"debug":                             false,
 		"disable_endpoint_crd":              false,
@@ -739,6 +753,17 @@ func TestFlattenResourceCiliumNetworkingSpec(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.AgentPrometheusPort = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Metrics - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.Metrics = nil
 					return subject
 				}(),
 			},

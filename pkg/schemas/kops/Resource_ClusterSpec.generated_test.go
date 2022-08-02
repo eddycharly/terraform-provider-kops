@@ -24,7 +24,7 @@ func TestExpandResourceClusterSpec(t *testing.T) {
 					"channel":                           "",
 					"addons":                            func() []interface{} { return nil }(),
 					"config_base":                       "",
-					"cloud_provider":                    "",
+					"cloud_provider":                    func() []interface{} { return []interface{}{FlattenResourceCloudProviderSpec(kops.CloudProviderSpec{})} }(),
 					"container_runtime":                 "",
 					"kubernetes_version":                "",
 					"subnet":                            func() []interface{} { return nil }(),
@@ -91,6 +91,7 @@ func TestExpandResourceClusterSpec(t *testing.T) {
 					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
+					"karpenter":                         nil,
 					"pod_identity_webhook":              nil,
 				},
 			},
@@ -112,7 +113,7 @@ func TestFlattenResourceClusterSpecInto(t *testing.T) {
 		"channel":                           "",
 		"addons":                            func() []interface{} { return nil }(),
 		"config_base":                       "",
-		"cloud_provider":                    "",
+		"cloud_provider":                    func() []interface{} { return []interface{}{FlattenResourceCloudProviderSpec(kops.CloudProviderSpec{})} }(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
 		"subnet":                            func() []interface{} { return nil }(),
@@ -179,6 +180,7 @@ func TestFlattenResourceClusterSpecInto(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"karpenter":                         nil,
 		"pod_identity_webhook":              nil,
 	}
 	type args struct {
@@ -234,7 +236,7 @@ func TestFlattenResourceClusterSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.CloudProvider = ""
+					subject.CloudProvider = kops.CloudProviderSpec{}
 					return subject
 				}(),
 			},
@@ -961,6 +963,17 @@ func TestFlattenResourceClusterSpecInto(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Karpenter - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.Karpenter = nil
 					return subject
 				}(),
 			},
@@ -994,7 +1007,7 @@ func TestFlattenResourceClusterSpec(t *testing.T) {
 		"channel":                           "",
 		"addons":                            func() []interface{} { return nil }(),
 		"config_base":                       "",
-		"cloud_provider":                    "",
+		"cloud_provider":                    func() []interface{} { return []interface{}{FlattenResourceCloudProviderSpec(kops.CloudProviderSpec{})} }(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
 		"subnet":                            func() []interface{} { return nil }(),
@@ -1061,6 +1074,7 @@ func TestFlattenResourceClusterSpec(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"karpenter":                         nil,
 		"pod_identity_webhook":              nil,
 	}
 	type args struct {
@@ -1116,7 +1130,7 @@ func TestFlattenResourceClusterSpec(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.CloudProvider = ""
+					subject.CloudProvider = kops.CloudProviderSpec{}
 					return subject
 				}(),
 			},
@@ -1843,6 +1857,17 @@ func TestFlattenResourceClusterSpec(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Karpenter - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.Karpenter = nil
 					return subject
 				}(),
 			},

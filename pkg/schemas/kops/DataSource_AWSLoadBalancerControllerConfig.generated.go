@@ -13,8 +13,11 @@ var _ = Schema
 func DataSourceAWSLoadBalancerControllerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": ComputedBool(),
-			"version": ComputedString(),
+			"enabled":       ComputedBool(),
+			"version":       ComputedString(),
+			"enable_waf":    ComputedBool(),
+			"enable_wa_fv2": ComputedBool(),
+			"enable_shield": ComputedBool(),
 		},
 	}
 
@@ -64,6 +67,15 @@ func ExpandDataSourceAWSLoadBalancerControllerConfig(in map[string]interface{}) 
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["version"]),
+		EnableWAF: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["enable_waf"]),
+		EnableWAFv2: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["enable_wa_fv2"]),
+		EnableShield: func(in interface{}) bool {
+			return bool(ExpandBool(in))
+		}(in["enable_shield"]),
 	}
 }
 
@@ -88,6 +100,15 @@ func FlattenDataSourceAWSLoadBalancerControllerConfigInto(in kops.AWSLoadBalance
 			}(*in)
 		}(in)
 	}(in.Version)
+	out["enable_waf"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableWAF)
+	out["enable_wa_fv2"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableWAFv2)
+	out["enable_shield"] = func(in bool) interface{} {
+		return FlattenBool(bool(in))
+	}(in.EnableShield)
 }
 
 func FlattenDataSourceAWSLoadBalancerControllerConfig(in kops.AWSLoadBalancerControllerConfig) map[string]interface{} {

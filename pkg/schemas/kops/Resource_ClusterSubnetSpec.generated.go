@@ -11,15 +11,16 @@ var _ = Schema
 func ResourceClusterSubnetSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"name":        RequiredString(),
-			"cidr":        OptionalComputedString(),
-			"ipv6_cidr":   OptionalString(),
-			"zone":        RequiredString(),
-			"region":      OptionalString(),
-			"provider_id": RequiredString(),
-			"egress":      OptionalString(),
-			"type":        RequiredString(),
-			"public_ip":   OptionalString(),
+			"name":              RequiredString(),
+			"cidr":              OptionalComputedString(),
+			"ipv6_cidr":         OptionalString(),
+			"zone":              RequiredString(),
+			"region":            OptionalString(),
+			"provider_id":       RequiredString(),
+			"egress":            OptionalString(),
+			"type":              RequiredString(),
+			"public_ip":         OptionalString(),
+			"additional_routes": OptionalList(ResourceRouteSpec()),
 		},
 	}
 
@@ -58,6 +59,23 @@ func ExpandResourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubn
 		PublicIP: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["public_ip"]),
+		AdditionalRoutes: func(in interface{}) []kops.RouteSpec {
+			return func(in interface{}) []kops.RouteSpec {
+				if in == nil {
+					return nil
+				}
+				var out []kops.RouteSpec
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) kops.RouteSpec {
+						if in == nil {
+							return kops.RouteSpec{}
+						}
+						return (ExpandResourceRouteSpec(in.(map[string]interface{})))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["additional_routes"]),
 	}
 }
 
@@ -89,6 +107,17 @@ func FlattenResourceClusterSubnetSpecInto(in kops.ClusterSubnetSpec, out map[str
 	out["public_ip"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.PublicIP)
+	out["additional_routes"] = func(in []kops.RouteSpec) interface{} {
+		return func(in []kops.RouteSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.RouteSpec) interface{} {
+					return FlattenResourceRouteSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.AdditionalRoutes)
 }
 
 func FlattenResourceClusterSubnetSpec(in kops.ClusterSubnetSpec) map[string]interface{} {

@@ -15,6 +15,7 @@ var _ = Schema
 func DataSourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"manager":                        ComputedString(),
 			"role":                           ComputedString(),
 			"image":                          ComputedString(),
 			"min_size":                       ComputedInt(),
@@ -59,6 +60,10 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"instance_metadata":              ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
 			"update_policy":                  ComputedString(),
 			"warm_pool":                      ComputedStruct(kopsschemas.DataSourceWarmPoolSpec()),
+			"containerd":                     ComputedStruct(kopsschemas.DataSourceContainerdConfig()),
+			"packages":                       ComputedList(String()),
+			"guest_accelerators":             ComputedList(kopsschemas.DataSourceAcceleratorConfig()),
+			"max_instance_lifetime":          ComputedDuration(),
 			"labels":                         ComputedMap(String()),
 			"annotations":                    ComputedMap(String()),
 			"cluster_name":                   RequiredString(),

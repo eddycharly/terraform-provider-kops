@@ -44,7 +44,7 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"node_status_update_frequency":           nil,
 					"cluster_domain":                         "",
 					"cluster_dns":                            "",
-					"network_plugin_name":                    "",
+					"network_plugin_name":                    nil,
 					"cloud_provider":                         "",
 					"kubelet_cgroups":                        "",
 					"runtime_cgroups":                        "",
@@ -62,7 +62,7 @@ func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
 					"register_schedulable":                   nil,
 					"serialize_image_pulls":                  nil,
 					"node_labels":                            func() map[string]interface{} { return nil }(),
-					"non_masquerade_cidr":                    "",
+					"non_masquerade_cidr":                    nil,
 					"enable_custom_metrics":                  nil,
 					"network_plugin_mtu":                     nil,
 					"image_gc_high_threshold_percent":        nil,
@@ -151,7 +151,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"node_status_update_frequency":           nil,
 		"cluster_domain":                         "",
 		"cluster_dns":                            "",
-		"network_plugin_name":                    "",
+		"network_plugin_name":                    nil,
 		"cloud_provider":                         "",
 		"kubelet_cgroups":                        "",
 		"runtime_cgroups":                        "",
@@ -169,7 +169,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 		"register_schedulable":                   nil,
 		"serialize_image_pulls":                  nil,
 		"node_labels":                            func() map[string]interface{} { return nil }(),
-		"non_masquerade_cidr":                    "",
+		"non_masquerade_cidr":                    nil,
 		"enable_custom_metrics":                  nil,
 		"network_plugin_mtu":                     nil,
 		"image_gc_high_threshold_percent":        nil,
@@ -492,7 +492,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
-					subject.NetworkPluginName = ""
+					subject.NetworkPluginName = nil
 					return subject
 				}(),
 			},
@@ -690,7 +690,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
-					subject.NonMasqueradeCIDR = ""
+					subject.NonMasqueradeCIDR = nil
 					return subject
 				}(),
 			},
@@ -1261,7 +1261,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"node_status_update_frequency":           nil,
 		"cluster_domain":                         "",
 		"cluster_dns":                            "",
-		"network_plugin_name":                    "",
+		"network_plugin_name":                    nil,
 		"cloud_provider":                         "",
 		"kubelet_cgroups":                        "",
 		"runtime_cgroups":                        "",
@@ -1279,7 +1279,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 		"register_schedulable":                   nil,
 		"serialize_image_pulls":                  nil,
 		"node_labels":                            func() map[string]interface{} { return nil }(),
-		"non_masquerade_cidr":                    "",
+		"non_masquerade_cidr":                    nil,
 		"enable_custom_metrics":                  nil,
 		"network_plugin_mtu":                     nil,
 		"image_gc_high_threshold_percent":        nil,
@@ -1602,7 +1602,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
-					subject.NetworkPluginName = ""
+					subject.NetworkPluginName = nil
 					return subject
 				}(),
 			},
@@ -1800,7 +1800,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
-					subject.NonMasqueradeCIDR = ""
+					subject.NonMasqueradeCIDR = nil
 					return subject
 				}(),
 			},

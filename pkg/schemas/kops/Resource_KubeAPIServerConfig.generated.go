@@ -23,6 +23,7 @@ func ResourceKubeAPIServerConfig() *schema.Resource {
 			"secure_port":                                  OptionalInt(),
 			"insecure_port":                                OptionalInt(),
 			"address":                                      OptionalString(),
+			"advertise_address":                            OptionalString(),
 			"bind_address":                                 OptionalString(),
 			"insecure_bind_address":                        OptionalString(),
 			"enable_bootstrap_auth_token":                  OptionalBool(),
@@ -162,12 +163,31 @@ func ExpandResourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPISe
 		SecurePort: func(in interface{}) int32 {
 			return int32(ExpandInt(in))
 		}(in["secure_port"]),
-		InsecurePort: func(in interface{}) int32 {
-			return int32(ExpandInt(in))
+		InsecurePort: func(in interface{}) *int32 {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *int32 {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in int32) *int32 {
+					return &in
+				}(int32(ExpandInt(in)))
+			}(in)
 		}(in["insecure_port"]),
 		Address: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["address"]),
+		AdvertiseAddress: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["advertise_address"]),
 		BindAddress: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["bind_address"]),
@@ -1485,12 +1505,22 @@ func FlattenResourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out map
 	out["secure_port"] = func(in int32) interface{} {
 		return FlattenInt(int(in))
 	}(in.SecurePort)
-	out["insecure_port"] = func(in int32) interface{} {
-		return FlattenInt(int(in))
+	out["insecure_port"] = func(in *int32) interface{} {
+		return func(in *int32) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in int32) interface{} {
+				return FlattenInt(int(in))
+			}(*in)
+		}(in)
 	}(in.InsecurePort)
 	out["address"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Address)
+	out["advertise_address"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.AdvertiseAddress)
 	out["bind_address"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.BindAddress)

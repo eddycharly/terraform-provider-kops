@@ -15,6 +15,7 @@ var _ = Schema
 func ResourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"manager":                        OptionalString(),
 			"role":                           RequiredString(),
 			"image":                          OptionalComputedString(),
 			"min_size":                       RequiredInt(),
@@ -59,6 +60,10 @@ func ResourceInstanceGroup() *schema.Resource {
 			"instance_metadata":              OptionalStruct(kopsschemas.ResourceInstanceMetadataOptions()),
 			"update_policy":                  OptionalString(),
 			"warm_pool":                      OptionalStruct(kopsschemas.ResourceWarmPoolSpec()),
+			"containerd":                     OptionalStruct(kopsschemas.ResourceContainerdConfig()),
+			"packages":                       OptionalList(String()),
+			"guest_accelerators":             OptionalList(kopsschemas.ResourceAcceleratorConfig()),
+			"max_instance_lifetime":          OptionalDuration(),
 			"labels":                         OptionalMap(String()),
 			"annotations":                    OptionalMap(String()),
 			"cluster_name":                   ForceNew(RequiredString()),

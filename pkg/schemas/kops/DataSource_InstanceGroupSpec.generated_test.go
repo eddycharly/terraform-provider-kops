@@ -21,6 +21,7 @@ func TestExpandDataSourceInstanceGroupSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
+					"manager":                        "",
 					"role":                           "",
 					"image":                          "",
 					"min_size":                       nil,
@@ -65,6 +66,10 @@ func TestExpandDataSourceInstanceGroupSpec(t *testing.T) {
 					"instance_metadata":              nil,
 					"update_policy":                  nil,
 					"warm_pool":                      nil,
+					"containerd":                     nil,
+					"packages":                       func() []interface{} { return nil }(),
+					"guest_accelerators":             func() []interface{} { return nil }(),
+					"max_instance_lifetime":          nil,
 				},
 			},
 			want: _default,
@@ -82,6 +87,7 @@ func TestExpandDataSourceInstanceGroupSpec(t *testing.T) {
 
 func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
+		"manager":                        "",
 		"role":                           "",
 		"image":                          "",
 		"min_size":                       nil,
@@ -126,6 +132,10 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"containerd":                     nil,
+		"packages":                       func() []interface{} { return nil }(),
+		"guest_accelerators":             func() []interface{} { return nil }(),
+		"max_instance_lifetime":          nil,
 	}
 	type args struct {
 		in kops.InstanceGroupSpec
@@ -139,6 +149,17 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.InstanceGroupSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manager - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.Manager = ""
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -621,6 +642,50 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Containerd - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.Containerd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Packages - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.Packages = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GuestAccelerators - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.GuestAccelerators = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxInstanceLifetime - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.MaxInstanceLifetime = nil
 					return subject
 				}(),
 			},
@@ -640,6 +705,7 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 
 func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 	_default := map[string]interface{}{
+		"manager":                        "",
 		"role":                           "",
 		"image":                          "",
 		"min_size":                       nil,
@@ -684,6 +750,10 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"containerd":                     nil,
+		"packages":                       func() []interface{} { return nil }(),
+		"guest_accelerators":             func() []interface{} { return nil }(),
+		"max_instance_lifetime":          nil,
 	}
 	type args struct {
 		in kops.InstanceGroupSpec
@@ -697,6 +767,17 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.InstanceGroupSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manager - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.Manager = ""
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -1179,6 +1260,50 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Containerd - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.Containerd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Packages - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.Packages = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GuestAccelerators - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.GuestAccelerators = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxInstanceLifetime - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.MaxInstanceLifetime = nil
 					return subject
 				}(),
 			},

@@ -18,7 +18,7 @@ func ResourceCluster() *schema.Resource {
 			"channel":                           OptionalString(),
 			"addons":                            OptionalList(kopsschemas.ResourceAddonSpec()),
 			"config_base":                       OptionalComputedString(),
-			"cloud_provider":                    RequiredString(),
+			"cloud_provider":                    RequiredStruct(kopsschemas.ResourceCloudProviderSpec()),
 			"container_runtime":                 OptionalString(),
 			"kubernetes_version":                OptionalString(),
 			"subnet":                            RequiredList(kopsschemas.ResourceClusterSubnetSpec()),
@@ -85,6 +85,7 @@ func ResourceCluster() *schema.Resource {
 			"warm_pool":                         OptionalStruct(kopsschemas.ResourceWarmPoolSpec()),
 			"service_account_issuer_discovery":  OptionalStruct(kopsschemas.ResourceServiceAccountIssuerDiscoveryConfig()),
 			"snapshot_controller":               OptionalStruct(kopsschemas.ResourceSnapshotControllerConfig()),
+			"karpenter":                         OptionalStruct(kopsschemas.ResourceKarpenterConfig()),
 			"pod_identity_webhook":              OptionalStruct(kopsschemas.ResourcePodIdentityWebhookConfig()),
 			"labels":                            OptionalMap(String()),
 			"annotations":                       OptionalMap(String()),
@@ -94,7 +95,7 @@ func ResourceCluster() *schema.Resource {
 			"revision":                          ComputedInt(),
 		},
 	}
-	res.SchemaVersion = 3
+	res.SchemaVersion = 4
 	res.StateUpgraders = []schema.StateUpgrader{
 		{
 			Type: res.CoreConfigSchema().ImpliedType(),
@@ -120,6 +121,14 @@ func ResourceCluster() *schema.Resource {
 				return ret, nil
 			},
 			Version: 2,
+		}, {
+			Type: res.CoreConfigSchema().ImpliedType(),
+			Upgrade: func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+				ret := FlattenResourceCluster(ExpandResourceCluster(rawState))
+				ret["id"] = rawState["id"]
+				return ret, nil
+			},
+			Version: 3,
 		},
 	}
 	return res

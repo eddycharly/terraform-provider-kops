@@ -23,6 +23,7 @@ func TestExpandDataSourceEtcdManagerSpec(t *testing.T) {
 				in: map[string]interface{}{
 					"image":                   "",
 					"env":                     func() []interface{} { return nil }(),
+					"backup_interval":         nil,
 					"discovery_poll_interval": nil,
 					"log_level":               nil,
 				},
@@ -44,6 +45,7 @@ func TestFlattenDataSourceEtcdManagerSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"image":                   "",
 		"env":                     func() []interface{} { return nil }(),
+		"backup_interval":         nil,
 		"discovery_poll_interval": nil,
 		"log_level":               nil,
 	}
@@ -79,6 +81,17 @@ func TestFlattenDataSourceEtcdManagerSpecInto(t *testing.T) {
 				in: func() kops.EtcdManagerSpec {
 					subject := kops.EtcdManagerSpec{}
 					subject.Env = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BackupInterval - default",
+			args: args{
+				in: func() kops.EtcdManagerSpec {
+					subject := kops.EtcdManagerSpec{}
+					subject.BackupInterval = nil
 					return subject
 				}(),
 			},
@@ -122,6 +135,7 @@ func TestFlattenDataSourceEtcdManagerSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"image":                   "",
 		"env":                     func() []interface{} { return nil }(),
+		"backup_interval":         nil,
 		"discovery_poll_interval": nil,
 		"log_level":               nil,
 	}
@@ -157,6 +171,17 @@ func TestFlattenDataSourceEtcdManagerSpec(t *testing.T) {
 				in: func() kops.EtcdManagerSpec {
 					subject := kops.EtcdManagerSpec{}
 					subject.Env = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BackupInterval - default",
+			args: args{
+				in: func() kops.EtcdManagerSpec {
+					subject := kops.EtcdManagerSpec{}
+					subject.BackupInterval = nil
 					return subject
 				}(),
 			},

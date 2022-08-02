@@ -6,10 +6,13 @@ Provides a kOps cluster resource.
 resource "kops_cluster" "cluster" {
   name                 = "cluster.example.com"
   admin_ssh_key        = file("path to ssh public key file")
-  cloud_provider       = "aws"
   kubernetes_version   = "stable"
   dns_zone             = "example.com"
   network_id           = "net-0"
+
+  cloud_provider {
+    aws {}
+  }
 
   iam {
     allow_container_registry = true

@@ -21,9 +21,11 @@ func ResourceNodeTerminationHandlerConfig() *schema.Resource {
 			"enable_rebalance_draining":         OptionalBool(),
 			"enable_prometheus_metrics":         OptionalBool(),
 			"enable_sqs_termination_draining":   OptionalBool(),
+			"exclude_from_load_balancers":       OptionalBool(),
 			"managed_asg_tag":                   OptionalString(),
 			"memory_request":                    OptionalQuantity(),
 			"cpu_request":                       OptionalQuantity(),
+			"version":                           OptionalString(),
 		},
 	}
 
@@ -156,6 +158,25 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["enable_sqs_termination_draining"]),
+		ExcludeFromLoadBalancers: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["exclude_from_load_balancers"]),
 		ManagedASGTag: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -213,6 +234,25 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
+		Version: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["version"]),
 	}
 }
 
@@ -287,6 +327,16 @@ func FlattenResourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHand
 			}(*in)
 		}(in)
 	}(in.EnableSQSTerminationDraining)
+	out["exclude_from_load_balancers"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.ExcludeFromLoadBalancers)
 	out["managed_asg_tag"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
@@ -317,6 +367,16 @@ func FlattenResourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHand
 			}(*in)
 		}(in)
 	}(in.CPURequest)
+	out["version"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.Version)
 }
 
 func FlattenResourceNodeTerminationHandlerConfig(in kops.NodeTerminationHandlerConfig) map[string]interface{} {

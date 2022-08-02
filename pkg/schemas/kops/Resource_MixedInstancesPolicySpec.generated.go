@@ -14,6 +14,7 @@ func ResourceMixedInstancesPolicySpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"instances":                     OptionalList(String()),
+			"instance_requirements":         OptionalStruct(ResourceInstanceRequirementsSpec()),
 			"on_demand_allocation_strategy": OptionalString(),
 			"on_demand_base":                Nullable(OptionalInt()),
 			"on_demand_above_base":          Nullable(OptionalInt()),
@@ -42,6 +43,24 @@ func ExpandResourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mixe
 				return out
 			}(in)
 		}(in["instances"]),
+		InstanceRequirements: func(in interface{}) *kops.InstanceRequirementsSpec {
+			return func(in interface{}) *kops.InstanceRequirementsSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.InstanceRequirementsSpec) *kops.InstanceRequirementsSpec {
+					return &in
+				}(func(in interface{}) kops.InstanceRequirementsSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.InstanceRequirementsSpec{}
+					}
+					return (ExpandResourceInstanceRequirementsSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["instance_requirements"]),
 		OnDemandAllocationStrategy: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -154,6 +173,18 @@ func FlattenResourceMixedInstancesPolicySpecInto(in kops.MixedInstancesPolicySpe
 			return out
 		}(in)
 	}(in.Instances)
+	out["instance_requirements"] = func(in *kops.InstanceRequirementsSpec) interface{} {
+		return func(in *kops.InstanceRequirementsSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.InstanceRequirementsSpec) interface{} {
+				return func(in kops.InstanceRequirementsSpec) []interface{} {
+					return []interface{}{FlattenResourceInstanceRequirementsSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.InstanceRequirements)
 	out["on_demand_allocation_strategy"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {

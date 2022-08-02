@@ -20,6 +20,7 @@ func DataSourceNodeLocalDNSConfig() *schema.Resource {
 			"forward_to_kube_dns": ComputedBool(),
 			"memory_request":      ComputedQuantity(),
 			"cpu_request":         ComputedQuantity(),
+			"pod_annotations":     ComputedMap(String()),
 		},
 	}
 
@@ -129,6 +130,23 @@ func ExpandDataSourceNodeLocalDNSConfig(in map[string]interface{}) kops.NodeLoca
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
+		PodAnnotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["pod_annotations"]),
 	}
 }
 
@@ -186,6 +204,18 @@ func FlattenDataSourceNodeLocalDNSConfigInto(in kops.NodeLocalDNSConfig, out map
 			}(*in)
 		}(in)
 	}(in.CPURequest)
+	out["pod_annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.PodAnnotations)
 }
 
 func FlattenDataSourceNodeLocalDNSConfig(in kops.NodeLocalDNSConfig) map[string]interface{} {

@@ -14,6 +14,7 @@ func DataSourceMixedInstancesPolicySpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"instances":                     ComputedList(String()),
+			"instance_requirements":         ComputedStruct(DataSourceInstanceRequirementsSpec()),
 			"on_demand_allocation_strategy": ComputedString(),
 			"on_demand_base":                Nullable(ComputedInt()),
 			"on_demand_above_base":          Nullable(ComputedInt()),
@@ -42,6 +43,24 @@ func ExpandDataSourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mi
 				return out
 			}(in)
 		}(in["instances"]),
+		InstanceRequirements: func(in interface{}) *kops.InstanceRequirementsSpec {
+			return func(in interface{}) *kops.InstanceRequirementsSpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.InstanceRequirementsSpec) *kops.InstanceRequirementsSpec {
+					return &in
+				}(func(in interface{}) kops.InstanceRequirementsSpec {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.InstanceRequirementsSpec{}
+					}
+					return (ExpandDataSourceInstanceRequirementsSpec(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["instance_requirements"]),
 		OnDemandAllocationStrategy: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -154,6 +173,18 @@ func FlattenDataSourceMixedInstancesPolicySpecInto(in kops.MixedInstancesPolicyS
 			return out
 		}(in)
 	}(in.Instances)
+	out["instance_requirements"] = func(in *kops.InstanceRequirementsSpec) interface{} {
+		return func(in *kops.InstanceRequirementsSpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.InstanceRequirementsSpec) interface{} {
+				return func(in kops.InstanceRequirementsSpec) []interface{} {
+					return []interface{}{FlattenDataSourceInstanceRequirementsSpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.InstanceRequirements)
 	out["on_demand_allocation_strategy"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {

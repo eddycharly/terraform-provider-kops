@@ -21,10 +21,12 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"channel":                           "",
-					"addons":                            func() []interface{} { return nil }(),
-					"config_base":                       "",
-					"cloud_provider":                    "",
+					"channel":     "",
+					"addons":      func() []interface{} { return nil }(),
+					"config_base": "",
+					"cloud_provider": func() []interface{} {
+						return []interface{}{FlattenDataSourceCloudProviderSpec(kops.CloudProviderSpec{})}
+					}(),
 					"container_runtime":                 "",
 					"kubernetes_version":                "",
 					"subnet":                            func() []interface{} { return nil }(),
@@ -91,6 +93,7 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
+					"karpenter":                         nil,
 					"pod_identity_webhook":              nil,
 				},
 			},
@@ -109,10 +112,12 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 
 func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"channel":                           "",
-		"addons":                            func() []interface{} { return nil }(),
-		"config_base":                       "",
-		"cloud_provider":                    "",
+		"channel":     "",
+		"addons":      func() []interface{} { return nil }(),
+		"config_base": "",
+		"cloud_provider": func() []interface{} {
+			return []interface{}{FlattenDataSourceCloudProviderSpec(kops.CloudProviderSpec{})}
+		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
 		"subnet":                            func() []interface{} { return nil }(),
@@ -179,6 +184,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"karpenter":                         nil,
 		"pod_identity_webhook":              nil,
 	}
 	type args struct {
@@ -234,7 +240,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.CloudProvider = ""
+					subject.CloudProvider = kops.CloudProviderSpec{}
 					return subject
 				}(),
 			},
@@ -961,6 +967,17 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Karpenter - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.Karpenter = nil
 					return subject
 				}(),
 			},
@@ -991,10 +1008,12 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 
 func TestFlattenDataSourceClusterSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"channel":                           "",
-		"addons":                            func() []interface{} { return nil }(),
-		"config_base":                       "",
-		"cloud_provider":                    "",
+		"channel":     "",
+		"addons":      func() []interface{} { return nil }(),
+		"config_base": "",
+		"cloud_provider": func() []interface{} {
+			return []interface{}{FlattenDataSourceCloudProviderSpec(kops.CloudProviderSpec{})}
+		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
 		"subnet":                            func() []interface{} { return nil }(),
@@ -1061,6 +1080,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
+		"karpenter":                         nil,
 		"pod_identity_webhook":              nil,
 	}
 	type args struct {
@@ -1116,7 +1136,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.CloudProvider = ""
+					subject.CloudProvider = kops.CloudProviderSpec{}
 					return subject
 				}(),
 			},
@@ -1843,6 +1863,17 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SnapshotController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Karpenter - default",
+			args: args{
+				in: func() kops.ClusterSpec {
+					subject := kops.ClusterSpec{}
+					subject.Karpenter = nil
 					return subject
 				}(),
 			},

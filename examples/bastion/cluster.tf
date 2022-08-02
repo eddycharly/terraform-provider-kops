@@ -1,10 +1,13 @@
 resource "kops_cluster" "cluster" {
   name               = local.clusterName
   admin_ssh_key      = file("${path.module}/../dummy_ssh.pub")
-  cloud_provider     = "aws"
   kubernetes_version = "stable"
   dns_zone           = local.dnsZone
   network_id         = local.vpcId
+
+  cloud_provider {
+    aws {}
+  }
 
   iam {
     allow_container_registry = true

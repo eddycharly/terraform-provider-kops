@@ -25,6 +25,7 @@ func TestExpandDataSourceCertManagerConfig(t *testing.T) {
 					"managed":        nil,
 					"image":          nil,
 					"default_issuer": nil,
+					"nameservers":    func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -46,6 +47,7 @@ func TestFlattenDataSourceCertManagerConfigInto(t *testing.T) {
 		"managed":        nil,
 		"image":          nil,
 		"default_issuer": nil,
+		"nameservers":    func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.CertManagerConfig
@@ -101,6 +103,17 @@ func TestFlattenDataSourceCertManagerConfigInto(t *testing.T) {
 				in: func() kops.CertManagerConfig {
 					subject := kops.CertManagerConfig{}
 					subject.DefaultIssuer = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Nameservers - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.Nameservers = nil
 					return subject
 				}(),
 			},
@@ -124,6 +137,7 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 		"managed":        nil,
 		"image":          nil,
 		"default_issuer": nil,
+		"nameservers":    func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.CertManagerConfig
@@ -179,6 +193,17 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 				in: func() kops.CertManagerConfig {
 					subject := kops.CertManagerConfig{}
 					subject.DefaultIssuer = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Nameservers - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.Nameservers = nil
 					return subject
 				}(),
 			},

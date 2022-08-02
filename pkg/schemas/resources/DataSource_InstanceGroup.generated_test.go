@@ -21,6 +21,7 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
+					"manager":                        "",
 					"role":                           "",
 					"image":                          "",
 					"min_size":                       nil,
@@ -65,6 +66,10 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 					"instance_metadata":              nil,
 					"update_policy":                  nil,
 					"warm_pool":                      nil,
+					"containerd":                     nil,
+					"packages":                       func() []interface{} { return nil }(),
+					"guest_accelerators":             func() []interface{} { return nil }(),
+					"max_instance_lifetime":          nil,
 					"labels":                         func() map[string]interface{} { return nil }(),
 					"annotations":                    func() map[string]interface{} { return nil }(),
 					"cluster_name":                   "",
@@ -86,6 +91,7 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 
 func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 	_default := map[string]interface{}{
+		"manager":                        "",
 		"role":                           "",
 		"image":                          "",
 		"min_size":                       nil,
@@ -130,6 +136,10 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"containerd":                     nil,
+		"packages":                       func() []interface{} { return nil }(),
+		"guest_accelerators":             func() []interface{} { return nil }(),
+		"max_instance_lifetime":          nil,
 		"labels":                         func() map[string]interface{} { return nil }(),
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
@@ -147,6 +157,17 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 			name: "default",
 			args: args{
 				in: resources.InstanceGroup{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manager - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Manager = ""
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -629,6 +650,50 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Containerd - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Containerd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Packages - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Packages = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GuestAccelerators - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.GuestAccelerators = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxInstanceLifetime - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.MaxInstanceLifetime = nil
 					return subject
 				}(),
 			},
@@ -692,6 +757,7 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 
 func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 	_default := map[string]interface{}{
+		"manager":                        "",
 		"role":                           "",
 		"image":                          "",
 		"min_size":                       nil,
@@ -736,6 +802,10 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 		"instance_metadata":              nil,
 		"update_policy":                  nil,
 		"warm_pool":                      nil,
+		"containerd":                     nil,
+		"packages":                       func() []interface{} { return nil }(),
+		"guest_accelerators":             func() []interface{} { return nil }(),
+		"max_instance_lifetime":          nil,
 		"labels":                         func() map[string]interface{} { return nil }(),
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
@@ -753,6 +823,17 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 			name: "default",
 			args: args{
 				in: resources.InstanceGroup{},
+			},
+			want: _default,
+		},
+		{
+			name: "Manager - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Manager = ""
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -1235,6 +1316,50 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.WarmPool = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Containerd - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Containerd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Packages - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.Packages = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GuestAccelerators - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.GuestAccelerators = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxInstanceLifetime - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.MaxInstanceLifetime = nil
 					return subject
 				}(),
 			},

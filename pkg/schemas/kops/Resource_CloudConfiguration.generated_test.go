@@ -31,8 +31,6 @@ func TestExpandResourceCloudConfiguration(t *testing.T) {
 					"elb_security_group":             nil,
 					"spotinst_product":               nil,
 					"spotinst_orientation":           nil,
-					"openstack":                      nil,
-					"azure":                          nil,
 					"aws_ebs_csi_driver":             nil,
 					"gcp_pd_csi_driver":              nil,
 				},
@@ -62,8 +60,6 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 		"elb_security_group":             nil,
 		"spotinst_product":               nil,
 		"spotinst_orientation":           nil,
-		"openstack":                      nil,
-		"azure":                          nil,
 		"aws_ebs_csi_driver":             nil,
 		"gcp_pd_csi_driver":              nil,
 	}
@@ -187,28 +183,6 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.SpotinstOrientation = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Openstack - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.Openstack = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Azure - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.Azure = nil
 					return subject
 				}(),
 			},
@@ -260,8 +234,6 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 		"elb_security_group":             nil,
 		"spotinst_product":               nil,
 		"spotinst_orientation":           nil,
-		"openstack":                      nil,
-		"azure":                          nil,
 		"aws_ebs_csi_driver":             nil,
 		"gcp_pd_csi_driver":              nil,
 	}
@@ -385,28 +357,6 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.SpotinstOrientation = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Openstack - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.Openstack = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Azure - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.Azure = nil
 					return subject
 				}(),
 			},

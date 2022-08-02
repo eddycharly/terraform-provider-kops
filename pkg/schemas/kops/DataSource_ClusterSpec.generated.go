@@ -16,7 +16,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"channel":                           ComputedString(),
 			"addons":                            ComputedList(DataSourceAddonSpec()),
 			"config_base":                       ComputedString(),
-			"cloud_provider":                    ComputedString(),
+			"cloud_provider":                    ComputedStruct(DataSourceCloudProviderSpec()),
 			"container_runtime":                 ComputedString(),
 			"kubernetes_version":                ComputedString(),
 			"subnet":                            ComputedList(DataSourceClusterSubnetSpec()),
@@ -83,6 +83,7 @@ func DataSourceClusterSpec() *schema.Resource {
 			"warm_pool":                         ComputedStruct(DataSourceWarmPoolSpec()),
 			"service_account_issuer_discovery":  ComputedStruct(DataSourceServiceAccountIssuerDiscoveryConfig()),
 			"snapshot_controller":               ComputedStruct(DataSourceSnapshotControllerConfig()),
+			"karpenter":                         ComputedStruct(DataSourceKarpenterConfig()),
 			"pod_identity_webhook":              ComputedStruct(DataSourcePodIdentityWebhookConfig()),
 		},
 	}
@@ -118,8 +119,13 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		ConfigBase: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["config_base"]),
-		CloudProvider: func(in interface{}) string {
-			return string(ExpandString(in))
+		CloudProvider: func(in interface{}) kops.CloudProviderSpec {
+			return func(in interface{}) kops.CloudProviderSpec {
+				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+					return kops.CloudProviderSpec{}
+				}
+				return (ExpandDataSourceCloudProviderSpec(in.([]interface{})[0].(map[string]interface{})))
+			}(in)
 		}(in["cloud_provider"]),
 		ContainerRuntime: func(in interface{}) string {
 			return string(ExpandString(in))
@@ -1084,6 +1090,24 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["snapshot_controller"]),
+		Karpenter: func(in interface{}) *kops.KarpenterConfig {
+			return func(in interface{}) *kops.KarpenterConfig {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.KarpenterConfig) *kops.KarpenterConfig {
+					return &in
+				}(func(in interface{}) kops.KarpenterConfig {
+					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
+						return kops.KarpenterConfig{}
+					}
+					return (ExpandDataSourceKarpenterConfig(in.([]interface{})[0].(map[string]interface{})))
+				}(in))
+			}(in)
+		}(in["karpenter"]),
 		PodIdentityWebhook: func(in interface{}) *kops.PodIdentityWebhookConfig {
 			return func(in interface{}) *kops.PodIdentityWebhookConfig {
 				if in == nil {
@@ -1123,8 +1147,10 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 	out["config_base"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ConfigBase)
-	out["cloud_provider"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["cloud_provider"] = func(in kops.CloudProviderSpec) interface{} {
+		return func(in kops.CloudProviderSpec) []interface{} {
+			return []interface{}{FlattenDataSourceCloudProviderSpec(in)}
+		}(in)
 	}(in.CloudProvider)
 	out["container_runtime"] = func(in string) interface{} {
 		return FlattenString(string(in))
@@ -1775,6 +1801,18 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.SnapshotController)
+	out["karpenter"] = func(in *kops.KarpenterConfig) interface{} {
+		return func(in *kops.KarpenterConfig) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.KarpenterConfig) interface{} {
+				return func(in kops.KarpenterConfig) []interface{} {
+					return []interface{}{FlattenDataSourceKarpenterConfig(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Karpenter)
 	out["pod_identity_webhook"] = func(in *kops.PodIdentityWebhookConfig) interface{} {
 		return func(in *kops.PodIdentityWebhookConfig) interface{} {
 			if in == nil {

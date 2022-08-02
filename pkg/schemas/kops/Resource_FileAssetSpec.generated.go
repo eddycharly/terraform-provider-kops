@@ -16,6 +16,7 @@ func ResourceFileAssetSpec() *schema.Resource {
 			"roles":     OptionalList(String()),
 			"content":   RequiredString(),
 			"is_base64": OptionalBool(),
+			"mode":      OptionalString(),
 		},
 	}
 
@@ -51,6 +52,9 @@ func ExpandResourceFileAssetSpec(in map[string]interface{}) kops.FileAssetSpec {
 		IsBase64: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["is_base64"]),
+		Mode: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["mode"]),
 	}
 }
 
@@ -76,6 +80,9 @@ func FlattenResourceFileAssetSpecInto(in kops.FileAssetSpec, out map[string]inte
 	out["is_base64"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.IsBase64)
+	out["mode"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.Mode)
 }
 
 func FlattenResourceFileAssetSpec(in kops.FileAssetSpec) map[string]interface{} {

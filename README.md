@@ -12,7 +12,7 @@ integration with the kOps api:
 
 ... just **pure go code.**
 
-Currently using kOps `v1.23.2` and compatible with terraform `0.15` and higher.
+Currently using kOps `v1.24.1` and compatible with terraform `0.15` and higher.
 
 **NOTES**
 - For now, provisioning the network is not supported. The network must
@@ -145,10 +145,13 @@ locals {
 resource "kops_cluster" "cluster" {
   name               = local.clusterName
   admin_ssh_key      = file("${path.module}/../dummy_ssh.pub")
-  cloud_provider     = "aws"
   kubernetes_version = "stable"
   dns_zone           = local.dnsZone
   network_id         = local.vpcId
+
+  cloud_provider {
+    aws {}
+  }
 
   iam {
     allow_container_registry = true
