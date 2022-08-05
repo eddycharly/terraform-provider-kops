@@ -84,7 +84,7 @@ resource "kops_cluster" "cluster" {
 ## Argument Reference
 
 The following arguments are supported:
-- `manager` - (Optional) - String - Manager determines what is managing the node lifecycle.
+- `manager` - (Optional) - (Computed) - String - Manager determines what is managing the node lifecycle.
 - `role` - (Required) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Optional) - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Required) - Int - MinSize is the minimum size of the pool.

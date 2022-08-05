@@ -197,7 +197,7 @@ func main() {
 		generate(kops.InstanceGroupSpec{},
 			noSchema(),
 			required("Role", "MinSize", "MaxSize", "MachineType", "Subnets"),
-			computed("Image"),
+			computed("Image", "Manager"),
 		),
 		generate(kops.AccessSpec{}),
 		generate(kops.DNSAccessSpec{}),
