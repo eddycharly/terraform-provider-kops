@@ -42,10 +42,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				return func(in config.Aws) *config.Aws {
 					return &in
 				}(func(in interface{}) config.Aws {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return config.Aws{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandConfigAws(in[0].(map[string]interface{}))
 					}
-					return (ExpandConfigAws(in.([]interface{})[0].(map[string]interface{})))
+					return config.Aws{}
 				}(in))
 			}(in)
 		}(in["aws"]),
@@ -60,10 +60,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				return func(in config.Openstack) *config.Openstack {
 					return &in
 				}(func(in interface{}) config.Openstack {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return config.Openstack{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandConfigOpenstack(in[0].(map[string]interface{}))
 					}
-					return (ExpandConfigOpenstack(in.([]interface{})[0].(map[string]interface{})))
+					return config.Openstack{}
 				}(in))
 			}(in)
 		}(in["openstack"]),
@@ -78,10 +78,10 @@ func ExpandConfigProvider(in map[string]interface{}) config.Provider {
 				return func(in config.Klog) *config.Klog {
 					return &in
 				}(func(in interface{}) config.Klog {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return config.Klog{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandConfigKlog(in[0].(map[string]interface{}))
 					}
-					return (ExpandConfigKlog(in.([]interface{})[0].(map[string]interface{})))
+					return config.Klog{}
 				}(in))
 			}(in)
 		}(in["klog"]),

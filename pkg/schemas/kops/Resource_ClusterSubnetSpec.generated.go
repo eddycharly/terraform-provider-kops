@@ -70,7 +70,7 @@ func ExpandResourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSubn
 						if in == nil {
 							return kops.RouteSpec{}
 						}
-						return (ExpandResourceRouteSpec(in.(map[string]interface{})))
+						return ExpandResourceRouteSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

@@ -42,7 +42,7 @@ func ExpandResourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Amazo
 						if in == nil {
 							return kops.EnvVar{}
 						}
-						return (ExpandResourceEnvVar(in.(map[string]interface{})))
+						return ExpandResourceEnvVar(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

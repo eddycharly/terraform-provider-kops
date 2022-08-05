@@ -35,10 +35,10 @@ func ExpandDataSourceNodeAffinity(in map[string]interface{}) core.NodeAffinity {
 				return func(in core.NodeSelector) *core.NodeSelector {
 					return &in
 				}(func(in interface{}) core.NodeSelector {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return core.NodeSelector{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceNodeSelector(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceNodeSelector(in.([]interface{})[0].(map[string]interface{})))
+					return core.NodeSelector{}
 				}(in))
 			}(in)
 		}(in["required_during_scheduling_ignored_during_execution"]),
@@ -53,7 +53,7 @@ func ExpandDataSourceNodeAffinity(in map[string]interface{}) core.NodeAffinity {
 						if in == nil {
 							return core.PreferredSchedulingTerm{}
 						}
-						return (ExpandDataSourcePreferredSchedulingTerm(in.(map[string]interface{})))
+						return ExpandDataSourcePreferredSchedulingTerm(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

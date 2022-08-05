@@ -54,10 +54,10 @@ func ExpandDataSourceMixedInstancesPolicySpec(in map[string]interface{}) kops.Mi
 				return func(in kops.InstanceRequirementsSpec) *kops.InstanceRequirementsSpec {
 					return &in
 				}(func(in interface{}) kops.InstanceRequirementsSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.InstanceRequirementsSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceInstanceRequirementsSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceInstanceRequirementsSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.InstanceRequirementsSpec{}
 				}(in))
 			}(in)
 		}(in["instance_requirements"]),

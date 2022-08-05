@@ -146,7 +146,7 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 						if in == nil {
 							return kops.LoadBalancerSubnetSpec{}
 						}
-						return (ExpandDataSourceLoadBalancerSubnetSpec(in.(map[string]interface{})))
+						return ExpandDataSourceLoadBalancerSubnetSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -163,10 +163,10 @@ func ExpandDataSourceLoadBalancerAccessSpec(in map[string]interface{}) kops.Load
 				return func(in kops.AccessLogSpec) *kops.AccessLogSpec {
 					return &in
 				}(func(in interface{}) kops.AccessLogSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AccessLogSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceAccessLogSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceAccessLogSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AccessLogSpec{}
 				}(in))
 			}(in)
 		}(in["access_log"]),

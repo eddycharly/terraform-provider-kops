@@ -137,7 +137,7 @@ func (in interface{}) {{ qualifiedName . }} {
 	if in == nil {
 		return {{ qualifiedName . }}{}
 	}
-	return ({{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{})))
+	return {{ mapping . }}Expand{{ scope }}{{ .Name }}(in.(map[string]interface{}))
 }(in)
 {{- else -}}
 {{ template "expand" . }}
@@ -216,10 +216,10 @@ ExpandQuantity(in)
 ExpandIntOrString(in)
 {{- else if isStruct . -}}
 func (in interface{}) {{ qualifiedName . }} {
-	if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-		return {{ qualifiedName . }}{}
+	if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+		return {{ mapping . }}Expand{{ scope }}{{ .Name }}(in[0].(map[string]interface{}))
 	}
-	return ({{ mapping . }}Expand{{ scope }}{{ .Name }}(in.([]interface{})[0].(map[string]interface{})))
+	return {{ qualifiedName . }}{}
 }(in)
 {{- else -}}
 {{ .String }}(Expand{{ schemaType . }}(in))

@@ -55,10 +55,10 @@ func ExpandConfigAws(in map[string]interface{}) config.Aws {
 				return func(in config.AwsAssumeRole) *config.AwsAssumeRole {
 					return &in
 				}(func(in interface{}) config.AwsAssumeRole {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return config.AwsAssumeRole{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandConfigAwsAssumeRole(in[0].(map[string]interface{}))
 					}
-					return (ExpandConfigAwsAssumeRole(in.([]interface{})[0].(map[string]interface{})))
+					return config.AwsAssumeRole{}
 				}(in))
 			}(in)
 		}(in["assume_role"]),

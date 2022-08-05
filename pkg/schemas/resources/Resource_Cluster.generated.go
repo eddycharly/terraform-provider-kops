@@ -193,10 +193,10 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 				return func(in resources.ClusterSecrets) *resources.ClusterSecrets {
 					return &in
 				}(func(in interface{}) resources.ClusterSecrets {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return resources.ClusterSecrets{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceClusterSecrets(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceClusterSecrets(in.([]interface{})[0].(map[string]interface{})))
+					return resources.ClusterSecrets{}
 				}(in))
 			}(in)
 		}(in["secrets"]),

@@ -39,10 +39,10 @@ func ExpandDataSourcePodAffinityTerm(in map[string]interface{}) core.PodAffinity
 				return func(in meta.LabelSelector) *meta.LabelSelector {
 					return &in
 				}(func(in interface{}) meta.LabelSelector {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return meta.LabelSelector{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return metaschemas.ExpandDataSourceLabelSelector(in[0].(map[string]interface{}))
 					}
-					return (metaschemas.ExpandDataSourceLabelSelector(in.([]interface{})[0].(map[string]interface{})))
+					return meta.LabelSelector{}
 				}(in))
 			}(in)
 		}(in["label_selector"]),
@@ -72,10 +72,10 @@ func ExpandDataSourcePodAffinityTerm(in map[string]interface{}) core.PodAffinity
 				return func(in meta.LabelSelector) *meta.LabelSelector {
 					return &in
 				}(func(in interface{}) meta.LabelSelector {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return meta.LabelSelector{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return metaschemas.ExpandDataSourceLabelSelector(in[0].(map[string]interface{}))
 					}
-					return (metaschemas.ExpandDataSourceLabelSelector(in.([]interface{})[0].(map[string]interface{})))
+					return meta.LabelSelector{}
 				}(in))
 			}(in)
 		}(in["namespace_selector"]),

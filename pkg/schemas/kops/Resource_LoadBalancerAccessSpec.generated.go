@@ -146,7 +146,7 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 						if in == nil {
 							return kops.LoadBalancerSubnetSpec{}
 						}
-						return (ExpandResourceLoadBalancerSubnetSpec(in.(map[string]interface{})))
+						return ExpandResourceLoadBalancerSubnetSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -163,10 +163,10 @@ func ExpandResourceLoadBalancerAccessSpec(in map[string]interface{}) kops.LoadBa
 				return func(in kops.AccessLogSpec) *kops.AccessLogSpec {
 					return &in
 				}(func(in interface{}) kops.AccessLogSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AccessLogSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceAccessLogSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceAccessLogSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AccessLogSpec{}
 				}(in))
 			}(in)
 		}(in["access_log"]),

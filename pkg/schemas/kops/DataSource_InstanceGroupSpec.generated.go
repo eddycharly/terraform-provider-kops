@@ -228,7 +228,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.VolumeSpec{}
 						}
-						return (ExpandDataSourceVolumeSpec(in.(map[string]interface{})))
+						return ExpandDataSourceVolumeSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -245,7 +245,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.VolumeMountSpec{}
 						}
-						return (ExpandDataSourceVolumeMountSpec(in.(map[string]interface{})))
+						return ExpandDataSourceVolumeMountSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -286,7 +286,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.HookSpec{}
 						}
-						return (ExpandDataSourceHookSpec(in.(map[string]interface{})))
+						return ExpandDataSourceHookSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -425,7 +425,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.FileAssetSpec{}
 						}
-						return (ExpandDataSourceFileAssetSpec(in.(map[string]interface{})))
+						return ExpandDataSourceFileAssetSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -445,10 +445,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.KubeletConfigSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceKubeletConfigSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.KubeletConfigSpec{}
 				}(in))
 			}(in)
 		}(in["kubelet"]),
@@ -475,10 +475,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
 					return &in
 				}(func(in interface{}) kops.MixedInstancesPolicySpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.MixedInstancesPolicySpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceMixedInstancesPolicySpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceMixedInstancesPolicySpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.MixedInstancesPolicySpec{}
 				}(in))
 			}(in)
 		}(in["mixed_instances_policy"]),
@@ -493,7 +493,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.UserData{}
 						}
-						return (ExpandDataSourceUserData(in.(map[string]interface{})))
+						return ExpandDataSourceUserData(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -522,7 +522,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.LoadBalancer{}
 						}
-						return (ExpandDataSourceLoadBalancer(in.(map[string]interface{})))
+						return ExpandDataSourceLoadBalancer(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -558,10 +558,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
 					return &in
 				}(func(in interface{}) kops.IAMProfileSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.IAMProfileSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceIAMProfileSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceIAMProfileSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.IAMProfileSpec{}
 				}(in))
 			}(in)
 		}(in["iam"]),
@@ -626,10 +626,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.RollingUpdate) *kops.RollingUpdate {
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.RollingUpdate{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceRollingUpdate(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceRollingUpdate(in.([]interface{})[0].(map[string]interface{})))
+					return kops.RollingUpdate{}
 				}(in))
 			}(in)
 		}(in["rolling_update"]),
@@ -682,10 +682,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.InstanceMetadataOptions) *kops.InstanceMetadataOptions {
 					return &in
 				}(func(in interface{}) kops.InstanceMetadataOptions {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.InstanceMetadataOptions{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceInstanceMetadataOptions(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceInstanceMetadataOptions(in.([]interface{})[0].(map[string]interface{})))
+					return kops.InstanceMetadataOptions{}
 				}(in))
 			}(in)
 		}(in["instance_metadata"]),
@@ -719,10 +719,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.WarmPoolSpec) *kops.WarmPoolSpec {
 					return &in
 				}(func(in interface{}) kops.WarmPoolSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.WarmPoolSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceWarmPoolSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceWarmPoolSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.WarmPoolSpec{}
 				}(in))
 			}(in)
 		}(in["warm_pool"]),
@@ -737,10 +737,10 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				return func(in kops.ContainerdConfig) *kops.ContainerdConfig {
 					return &in
 				}(func(in interface{}) kops.ContainerdConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.ContainerdConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceContainerdConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceContainerdConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.ContainerdConfig{}
 				}(in))
 			}(in)
 		}(in["containerd"]),
@@ -767,7 +767,7 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 						if in == nil {
 							return kops.AcceleratorConfig{}
 						}
-						return (ExpandDataSourceAcceleratorConfig(in.(map[string]interface{})))
+						return ExpandDataSourceAcceleratorConfig(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

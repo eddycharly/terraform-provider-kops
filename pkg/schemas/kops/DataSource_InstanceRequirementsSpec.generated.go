@@ -35,10 +35,10 @@ func ExpandDataSourceInstanceRequirementsSpec(in map[string]interface{}) kops.In
 				return func(in kops.MinMaxSpec) *kops.MinMaxSpec {
 					return &in
 				}(func(in interface{}) kops.MinMaxSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.MinMaxSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceMinMaxSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceMinMaxSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.MinMaxSpec{}
 				}(in))
 			}(in)
 		}(in["cpu"]),
@@ -53,10 +53,10 @@ func ExpandDataSourceInstanceRequirementsSpec(in map[string]interface{}) kops.In
 				return func(in kops.MinMaxSpec) *kops.MinMaxSpec {
 					return &in
 				}(func(in interface{}) kops.MinMaxSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.MinMaxSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceMinMaxSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceMinMaxSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.MinMaxSpec{}
 				}(in))
 			}(in)
 		}(in["memory"]),
