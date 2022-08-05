@@ -6,6 +6,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
 // InstanceGroup represents a group of instances (either bastions, nodes or masters) with the same configuration
@@ -69,11 +70,24 @@ func CreateInstanceGroup(clusterName, name string, labels map[string]string, ann
 	if err != nil {
 		return nil, err
 	}
-	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Create(context.Background(), makeKopsInstanceGroup(name, labels, annotations, spec), metav1.CreateOptions{})
+	ig := makeKopsInstanceGroup(name, labels, annotations, spec)
+	channel, err := cloudup.ChannelForCluster(cluster)
 	if err != nil {
 		return nil, err
 	}
-	return makeInstanceGroup(clusterName, instanceGroup), nil
+	cloud, err := cloudup.BuildCloud(cluster)
+	if err != nil {
+		return nil, err
+	}
+	ig, err = cloudup.PopulateInstanceGroupSpec(cluster, ig, cloud, channel)
+	if err != nil {
+		return nil, err
+	}
+	ig, err = clientset.InstanceGroupsFor(cluster).Create(context.Background(), ig, metav1.CreateOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return makeInstanceGroup(clusterName, ig), nil
 }
 
 func UpdateInstanceGroup(clusterName, name string, labels map[string]string, annotations map[string]string, spec kops.InstanceGroupSpec, clientset simple.Clientset) (*InstanceGroup, error) {
@@ -81,9 +95,22 @@ func UpdateInstanceGroup(clusterName, name string, labels map[string]string, ann
 	if err != nil {
 		return nil, err
 	}
-	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Update(context.Background(), makeKopsInstanceGroup(name, labels, annotations, spec), metav1.UpdateOptions{})
+	ig := makeKopsInstanceGroup(name, labels, annotations, spec)
+	channel, err := cloudup.ChannelForCluster(cluster)
 	if err != nil {
 		return nil, err
 	}
-	return makeInstanceGroup(clusterName, instanceGroup), nil
+	cloud, err := cloudup.BuildCloud(cluster)
+	if err != nil {
+		return nil, err
+	}
+	ig, err = cloudup.PopulateInstanceGroupSpec(cluster, ig, cloud, channel)
+	if err != nil {
+		return nil, err
+	}
+	ig, err = clientset.InstanceGroupsFor(cluster).Update(context.Background(), ig, metav1.UpdateOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return makeInstanceGroup(clusterName, ig), nil
 }
