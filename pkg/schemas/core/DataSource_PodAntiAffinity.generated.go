@@ -35,7 +35,7 @@ func ExpandDataSourcePodAntiAffinity(in map[string]interface{}) core.PodAntiAffi
 						if in == nil {
 							return core.PodAffinityTerm{}
 						}
-						return (ExpandDataSourcePodAffinityTerm(in.(map[string]interface{})))
+						return ExpandDataSourcePodAffinityTerm(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -52,7 +52,7 @@ func ExpandDataSourcePodAntiAffinity(in map[string]interface{}) core.PodAntiAffi
 						if in == nil {
 							return core.WeightedPodAffinityTerm{}
 						}
-						return (ExpandDataSourceWeightedPodAffinityTerm(in.(map[string]interface{})))
+						return ExpandDataSourceWeightedPodAffinityTerm(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

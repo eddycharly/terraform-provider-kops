@@ -54,7 +54,7 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 						if in == nil {
 							return kops.EtcdMemberSpec{}
 						}
-						return (ExpandDataSourceEtcdMemberSpec(in.(map[string]interface{})))
+						return ExpandDataSourceEtcdMemberSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -115,10 +115,10 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				return func(in kops.EtcdBackupSpec) *kops.EtcdBackupSpec {
 					return &in
 				}(func(in interface{}) kops.EtcdBackupSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.EtcdBackupSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceEtcdBackupSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceEtcdBackupSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.EtcdBackupSpec{}
 				}(in))
 			}(in)
 		}(in["backups"]),
@@ -133,10 +133,10 @@ func ExpandDataSourceEtcdClusterSpec(in map[string]interface{}) kops.EtcdCluster
 				return func(in kops.EtcdManagerSpec) *kops.EtcdManagerSpec {
 					return &in
 				}(func(in interface{}) kops.EtcdManagerSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.EtcdManagerSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceEtcdManagerSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceEtcdManagerSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.EtcdManagerSpec{}
 				}(in))
 			}(in)
 		}(in["manager"]),

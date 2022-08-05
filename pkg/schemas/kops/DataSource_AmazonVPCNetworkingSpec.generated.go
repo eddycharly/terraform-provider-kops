@@ -42,7 +42,7 @@ func ExpandDataSourceAmazonVPCNetworkingSpec(in map[string]interface{}) kops.Ama
 						if in == nil {
 							return kops.EnvVar{}
 						}
-						return (ExpandDataSourceEnvVar(in.(map[string]interface{})))
+						return ExpandDataSourceEnvVar(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

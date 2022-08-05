@@ -42,10 +42,10 @@ func ExpandResourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 				return func(in kops.OpenstackLoadbalancerConfig) *kops.OpenstackLoadbalancerConfig {
 					return &in
 				}(func(in interface{}) kops.OpenstackLoadbalancerConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackLoadbalancerConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceOpenstackLoadbalancerConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceOpenstackLoadbalancerConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackLoadbalancerConfig{}
 				}(in))
 			}(in)
 		}(in["loadbalancer"]),
@@ -60,10 +60,10 @@ func ExpandResourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 				return func(in kops.OpenstackMonitor) *kops.OpenstackMonitor {
 					return &in
 				}(func(in interface{}) kops.OpenstackMonitor {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackMonitor{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceOpenstackMonitor(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceOpenstackMonitor(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackMonitor{}
 				}(in))
 			}(in)
 		}(in["monitor"]),
@@ -78,10 +78,10 @@ func ExpandResourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 				return func(in kops.OpenstackRouter) *kops.OpenstackRouter {
 					return &in
 				}(func(in interface{}) kops.OpenstackRouter {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackRouter{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceOpenstackRouter(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceOpenstackRouter(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackRouter{}
 				}(in))
 			}(in)
 		}(in["router"]),
@@ -96,10 +96,10 @@ func ExpandResourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 				return func(in kops.OpenstackBlockStorageConfig) *kops.OpenstackBlockStorageConfig {
 					return &in
 				}(func(in interface{}) kops.OpenstackBlockStorageConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackBlockStorageConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceOpenstackBlockStorageConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceOpenstackBlockStorageConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackBlockStorageConfig{}
 				}(in))
 			}(in)
 		}(in["block_storage"]),
@@ -133,10 +133,10 @@ func ExpandResourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 				return func(in kops.OpenstackNetwork) *kops.OpenstackNetwork {
 					return &in
 				}(func(in interface{}) kops.OpenstackNetwork {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackNetwork{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceOpenstackNetwork(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceOpenstackNetwork(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackNetwork{}
 				}(in))
 			}(in)
 		}(in["network"]),
@@ -151,10 +151,10 @@ func ExpandResourceOpenstackSpec(in map[string]interface{}) kops.OpenstackSpec {
 				return func(in kops.OpenstackMetadata) *kops.OpenstackMetadata {
 					return &in
 				}(func(in interface{}) kops.OpenstackMetadata {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackMetadata{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceOpenstackMetadata(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceOpenstackMetadata(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackMetadata{}
 				}(in))
 			}(in)
 		}(in["metadata"]),

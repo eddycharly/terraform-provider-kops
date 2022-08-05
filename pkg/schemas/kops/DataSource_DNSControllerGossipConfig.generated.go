@@ -97,10 +97,10 @@ func ExpandDataSourceDNSControllerGossipConfig(in map[string]interface{}) kops.D
 				return func(in kops.DNSControllerGossipConfigSecondary) *kops.DNSControllerGossipConfigSecondary {
 					return &in
 				}(func(in interface{}) kops.DNSControllerGossipConfigSecondary {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.DNSControllerGossipConfigSecondary{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceDNSControllerGossipConfigSecondary(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceDNSControllerGossipConfigSecondary(in.([]interface{})[0].(map[string]interface{})))
+					return kops.DNSControllerGossipConfigSecondary{}
 				}(in))
 			}(in)
 		}(in["secondary"]),

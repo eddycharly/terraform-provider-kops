@@ -43,10 +43,10 @@ func ExpandDataSourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				return func(in kops.BastionSpec) *kops.BastionSpec {
 					return &in
 				}(func(in interface{}) kops.BastionSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.BastionSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceBastionSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceBastionSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.BastionSpec{}
 				}(in))
 			}(in)
 		}(in["bastion"]),
@@ -61,10 +61,10 @@ func ExpandDataSourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				return func(in kops.DNSSpec) *kops.DNSSpec {
 					return &in
 				}(func(in interface{}) kops.DNSSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.DNSSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceDNSSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceDNSSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.DNSSpec{}
 				}(in))
 			}(in)
 		}(in["dns"]),

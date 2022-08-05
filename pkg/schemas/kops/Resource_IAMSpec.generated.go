@@ -84,7 +84,7 @@ func ExpandResourceIAMSpec(in map[string]interface{}) kops.IAMSpec {
 						if in == nil {
 							return kops.ServiceAccountExternalPermission{}
 						}
-						return (ExpandResourceServiceAccountExternalPermission(in.(map[string]interface{})))
+						return ExpandResourceServiceAccountExternalPermission(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

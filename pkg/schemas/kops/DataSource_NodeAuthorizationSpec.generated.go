@@ -34,10 +34,10 @@ func ExpandDataSourceNodeAuthorizationSpec(in map[string]interface{}) kops.NodeA
 				return func(in kops.NodeAuthorizerSpec) *kops.NodeAuthorizerSpec {
 					return &in
 				}(func(in interface{}) kops.NodeAuthorizerSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.NodeAuthorizerSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceNodeAuthorizerSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceNodeAuthorizerSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.NodeAuthorizerSpec{}
 				}(in))
 			}(in)
 		}(in["node_authorizer"]),

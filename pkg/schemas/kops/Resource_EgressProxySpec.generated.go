@@ -26,10 +26,10 @@ func ExpandResourceEgressProxySpec(in map[string]interface{}) kops.EgressProxySp
 	return kops.EgressProxySpec{
 		HTTPProxy: func(in interface{}) kops.HTTPProxy {
 			return func(in interface{}) kops.HTTPProxy {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return kops.HTTPProxy{}
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandResourceHTTPProxy(in[0].(map[string]interface{}))
 				}
-				return (ExpandResourceHTTPProxy(in.([]interface{})[0].(map[string]interface{})))
+				return kops.HTTPProxy{}
 			}(in)
 		}(in["http_proxy"]),
 		ProxyExcludes: func(in interface{}) string {

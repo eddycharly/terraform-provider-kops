@@ -35,10 +35,10 @@ func ExpandDataSourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				return func(in kops.DNSAccessSpec) *kops.DNSAccessSpec {
 					return &in
 				}(func(in interface{}) kops.DNSAccessSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.DNSAccessSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceDNSAccessSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceDNSAccessSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.DNSAccessSpec{}
 				}(in))
 			}(in)
 		}(in["dns"]),
@@ -53,10 +53,10 @@ func ExpandDataSourceAccessSpec(in map[string]interface{}) kops.AccessSpec {
 				return func(in kops.LoadBalancerAccessSpec) *kops.LoadBalancerAccessSpec {
 					return &in
 				}(func(in interface{}) kops.LoadBalancerAccessSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.LoadBalancerAccessSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceLoadBalancerAccessSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceLoadBalancerAccessSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.LoadBalancerAccessSpec{}
 				}(in))
 			}(in)
 		}(in["load_balancer"]),

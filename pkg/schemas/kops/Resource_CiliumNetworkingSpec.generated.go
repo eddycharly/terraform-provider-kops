@@ -352,10 +352,10 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 				return func(in kops.HubbleSpec) *kops.HubbleSpec {
 					return &in
 				}(func(in interface{}) kops.HubbleSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.HubbleSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceHubbleSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceHubbleSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.HubbleSpec{}
 				}(in))
 			}(in)
 		}(in["hubble"]),

@@ -39,10 +39,10 @@ func ExpandDataSourceCloudProviderSpec(in map[string]interface{}) kops.CloudProv
 				return func(in kops.AWSSpec) *kops.AWSSpec {
 					return &in
 				}(func(in interface{}) kops.AWSSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AWSSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceAWSSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceAWSSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AWSSpec{}
 				}(in))
 			}(in)
 		}(in["aws"]),
@@ -57,10 +57,10 @@ func ExpandDataSourceCloudProviderSpec(in map[string]interface{}) kops.CloudProv
 				return func(in kops.AzureSpec) *kops.AzureSpec {
 					return &in
 				}(func(in interface{}) kops.AzureSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AzureSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceAzureSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceAzureSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AzureSpec{}
 				}(in))
 			}(in)
 		}(in["azure"]),
@@ -75,10 +75,10 @@ func ExpandDataSourceCloudProviderSpec(in map[string]interface{}) kops.CloudProv
 				return func(in kops.DOSpec) *kops.DOSpec {
 					return &in
 				}(func(in interface{}) kops.DOSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.DOSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceDOSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceDOSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.DOSpec{}
 				}(in))
 			}(in)
 		}(in["do"]),
@@ -93,10 +93,10 @@ func ExpandDataSourceCloudProviderSpec(in map[string]interface{}) kops.CloudProv
 				return func(in kops.GCESpec) *kops.GCESpec {
 					return &in
 				}(func(in interface{}) kops.GCESpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.GCESpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceGCESpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceGCESpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.GCESpec{}
 				}(in))
 			}(in)
 		}(in["gce"]),
@@ -111,10 +111,10 @@ func ExpandDataSourceCloudProviderSpec(in map[string]interface{}) kops.CloudProv
 				return func(in kops.HetznerSpec) *kops.HetznerSpec {
 					return &in
 				}(func(in interface{}) kops.HetznerSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.HetznerSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceHetznerSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceHetznerSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.HetznerSpec{}
 				}(in))
 			}(in)
 		}(in["hetzner"]),
@@ -129,10 +129,10 @@ func ExpandDataSourceCloudProviderSpec(in map[string]interface{}) kops.CloudProv
 				return func(in kops.OpenstackSpec) *kops.OpenstackSpec {
 					return &in
 				}(func(in interface{}) kops.OpenstackSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.OpenstackSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceOpenstackSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceOpenstackSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.OpenstackSpec{}
 				}(in))
 			}(in)
 		}(in["openstack"]),

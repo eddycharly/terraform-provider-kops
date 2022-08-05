@@ -101,10 +101,10 @@ func ExpandDataSourceHookSpec(in map[string]interface{}) kops.HookSpec {
 				return func(in kops.ExecContainerAction) *kops.ExecContainerAction {
 					return &in
 				}(func(in interface{}) kops.ExecContainerAction {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.ExecContainerAction{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceExecContainerAction(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceExecContainerAction(in.([]interface{})[0].(map[string]interface{})))
+					return kops.ExecContainerAction{}
 				}(in))
 			}(in)
 		}(in["exec_container"]),

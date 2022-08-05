@@ -44,7 +44,7 @@ func ExpandResourceEtcdManagerSpec(in map[string]interface{}) kops.EtcdManagerSp
 						if in == nil {
 							return kops.EnvVar{}
 						}
-						return (ExpandResourceEnvVar(in.(map[string]interface{})))
+						return ExpandResourceEnvVar(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

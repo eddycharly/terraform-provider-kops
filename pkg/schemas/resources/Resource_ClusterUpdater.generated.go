@@ -57,26 +57,26 @@ func ExpandResourceClusterUpdater(in map[string]interface{}) resources.ClusterUp
 		}(in["keepers"]),
 		Apply: func(in interface{}) resources.ApplyOptions {
 			return func(in interface{}) resources.ApplyOptions {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return resources.ApplyOptions{}
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandResourceApplyOptions(in[0].(map[string]interface{}))
 				}
-				return (ExpandResourceApplyOptions(in.([]interface{})[0].(map[string]interface{})))
+				return resources.ApplyOptions{}
 			}(in)
 		}(in["apply"]),
 		RollingUpdate: func(in interface{}) resources.RollingUpdateOptions {
 			return func(in interface{}) resources.RollingUpdateOptions {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return resources.RollingUpdateOptions{}
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandResourceRollingUpdateOptions(in[0].(map[string]interface{}))
 				}
-				return (ExpandResourceRollingUpdateOptions(in.([]interface{})[0].(map[string]interface{})))
+				return resources.RollingUpdateOptions{}
 			}(in)
 		}(in["rolling_update"]),
 		Validate: func(in interface{}) resources.ValidateOptions {
 			return func(in interface{}) resources.ValidateOptions {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return resources.ValidateOptions{}
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandResourceValidateOptions(in[0].(map[string]interface{}))
 				}
-				return (ExpandResourceValidateOptions(in.([]interface{})[0].(map[string]interface{})))
+				return resources.ValidateOptions{}
 			}(in)
 		}(in["validate"]),
 	}

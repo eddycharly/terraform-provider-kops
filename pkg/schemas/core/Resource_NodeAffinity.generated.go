@@ -35,10 +35,10 @@ func ExpandResourceNodeAffinity(in map[string]interface{}) core.NodeAffinity {
 				return func(in core.NodeSelector) *core.NodeSelector {
 					return &in
 				}(func(in interface{}) core.NodeSelector {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return core.NodeSelector{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceNodeSelector(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceNodeSelector(in.([]interface{})[0].(map[string]interface{})))
+					return core.NodeSelector{}
 				}(in))
 			}(in)
 		}(in["required_during_scheduling_ignored_during_execution"]),
@@ -53,7 +53,7 @@ func ExpandResourceNodeAffinity(in map[string]interface{}) core.NodeAffinity {
 						if in == nil {
 							return core.PreferredSchedulingTerm{}
 						}
-						return (ExpandResourcePreferredSchedulingTerm(in.(map[string]interface{})))
+						return ExpandResourcePreferredSchedulingTerm(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

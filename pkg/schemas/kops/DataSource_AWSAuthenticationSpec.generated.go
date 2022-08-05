@@ -129,7 +129,7 @@ func ExpandDataSourceAWSAuthenticationSpec(in map[string]interface{}) kops.AWSAu
 						if in == nil {
 							return kops.AWSAuthenticationIdentityMappingSpec{}
 						}
-						return (ExpandDataSourceAWSAuthenticationIdentityMappingSpec(in.(map[string]interface{})))
+						return ExpandDataSourceAWSAuthenticationIdentityMappingSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

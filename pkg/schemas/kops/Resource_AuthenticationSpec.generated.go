@@ -35,10 +35,10 @@ func ExpandResourceAuthenticationSpec(in map[string]interface{}) kops.Authentica
 				return func(in kops.KopeioAuthenticationSpec) *kops.KopeioAuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.KopeioAuthenticationSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.KopeioAuthenticationSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceKopeioAuthenticationSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceKopeioAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.KopeioAuthenticationSpec{}
 				}(in))
 			}(in)
 		}(in["kopeio"]),
@@ -53,10 +53,10 @@ func ExpandResourceAuthenticationSpec(in map[string]interface{}) kops.Authentica
 				return func(in kops.AWSAuthenticationSpec) *kops.AWSAuthenticationSpec {
 					return &in
 				}(func(in interface{}) kops.AWSAuthenticationSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AWSAuthenticationSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceAWSAuthenticationSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceAWSAuthenticationSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AWSAuthenticationSpec{}
 				}(in))
 			}(in)
 		}(in["aws"]),

@@ -35,7 +35,7 @@ func ExpandDataSourceNodeSelectorTerm(in map[string]interface{}) core.NodeSelect
 						if in == nil {
 							return core.NodeSelectorRequirement{}
 						}
-						return (ExpandDataSourceNodeSelectorRequirement(in.(map[string]interface{})))
+						return ExpandDataSourceNodeSelectorRequirement(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -52,7 +52,7 @@ func ExpandDataSourceNodeSelectorTerm(in map[string]interface{}) core.NodeSelect
 						if in == nil {
 							return core.NodeSelectorRequirement{}
 						}
-						return (ExpandDataSourceNodeSelectorRequirement(in.(map[string]interface{})))
+						return ExpandDataSourceNodeSelectorRequirement(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
