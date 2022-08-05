@@ -102,10 +102,10 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				return func(in kops.PackagesConfig) *kops.PackagesConfig {
 					return &in
 				}(func(in interface{}) kops.PackagesConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.PackagesConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourcePackagesConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourcePackagesConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.PackagesConfig{}
 				}(in))
 			}(in)
 		}(in["packages"]),
@@ -212,10 +212,10 @@ func ExpandResourceContainerdConfig(in map[string]interface{}) kops.ContainerdCo
 				return func(in kops.NvidiaGPUConfig) *kops.NvidiaGPUConfig {
 					return &in
 				}(func(in interface{}) kops.NvidiaGPUConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.NvidiaGPUConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceNvidiaGPUConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceNvidiaGPUConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.NvidiaGPUConfig{}
 				}(in))
 			}(in)
 		}(in["nvidia_gpu"]),

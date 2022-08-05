@@ -216,7 +216,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.VolumeSpec{}
 						}
-						return (ExpandResourceVolumeSpec(in.(map[string]interface{})))
+						return ExpandResourceVolumeSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -233,7 +233,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.VolumeMountSpec{}
 						}
-						return (ExpandResourceVolumeMountSpec(in.(map[string]interface{})))
+						return ExpandResourceVolumeMountSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -274,7 +274,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.HookSpec{}
 						}
-						return (ExpandResourceHookSpec(in.(map[string]interface{})))
+						return ExpandResourceHookSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -413,7 +413,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.FileAssetSpec{}
 						}
-						return (ExpandResourceFileAssetSpec(in.(map[string]interface{})))
+						return ExpandResourceFileAssetSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -433,10 +433,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.KubeletConfigSpec) *kops.KubeletConfigSpec {
 					return &in
 				}(func(in interface{}) kops.KubeletConfigSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.KubeletConfigSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceKubeletConfigSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceKubeletConfigSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.KubeletConfigSpec{}
 				}(in))
 			}(in)
 		}(in["kubelet"]),
@@ -463,10 +463,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.MixedInstancesPolicySpec) *kops.MixedInstancesPolicySpec {
 					return &in
 				}(func(in interface{}) kops.MixedInstancesPolicySpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.MixedInstancesPolicySpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceMixedInstancesPolicySpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceMixedInstancesPolicySpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.MixedInstancesPolicySpec{}
 				}(in))
 			}(in)
 		}(in["mixed_instances_policy"]),
@@ -481,7 +481,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.UserData{}
 						}
-						return (ExpandResourceUserData(in.(map[string]interface{})))
+						return ExpandResourceUserData(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -510,7 +510,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.LoadBalancer{}
 						}
-						return (ExpandResourceLoadBalancer(in.(map[string]interface{})))
+						return ExpandResourceLoadBalancer(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -546,10 +546,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.IAMProfileSpec) *kops.IAMProfileSpec {
 					return &in
 				}(func(in interface{}) kops.IAMProfileSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.IAMProfileSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceIAMProfileSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceIAMProfileSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.IAMProfileSpec{}
 				}(in))
 			}(in)
 		}(in["iam"]),
@@ -614,10 +614,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.RollingUpdate) *kops.RollingUpdate {
 					return &in
 				}(func(in interface{}) kops.RollingUpdate {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.RollingUpdate{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceRollingUpdate(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceRollingUpdate(in.([]interface{})[0].(map[string]interface{})))
+					return kops.RollingUpdate{}
 				}(in))
 			}(in)
 		}(in["rolling_update"]),
@@ -670,10 +670,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.InstanceMetadataOptions) *kops.InstanceMetadataOptions {
 					return &in
 				}(func(in interface{}) kops.InstanceMetadataOptions {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.InstanceMetadataOptions{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceInstanceMetadataOptions(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceInstanceMetadataOptions(in.([]interface{})[0].(map[string]interface{})))
+					return kops.InstanceMetadataOptions{}
 				}(in))
 			}(in)
 		}(in["instance_metadata"]),
@@ -707,10 +707,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.WarmPoolSpec) *kops.WarmPoolSpec {
 					return &in
 				}(func(in interface{}) kops.WarmPoolSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.WarmPoolSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceWarmPoolSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceWarmPoolSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.WarmPoolSpec{}
 				}(in))
 			}(in)
 		}(in["warm_pool"]),
@@ -725,10 +725,10 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return func(in kops.ContainerdConfig) *kops.ContainerdConfig {
 					return &in
 				}(func(in interface{}) kops.ContainerdConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.ContainerdConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceContainerdConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceContainerdConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.ContainerdConfig{}
 				}(in))
 			}(in)
 		}(in["containerd"]),
@@ -755,7 +755,7 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 						if in == nil {
 							return kops.AcceleratorConfig{}
 						}
-						return (ExpandResourceAcceleratorConfig(in.(map[string]interface{})))
+						return ExpandResourceAcceleratorConfig(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

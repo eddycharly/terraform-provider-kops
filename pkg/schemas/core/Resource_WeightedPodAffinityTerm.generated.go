@@ -29,10 +29,10 @@ func ExpandResourceWeightedPodAffinityTerm(in map[string]interface{}) core.Weigh
 		}(in["weight"]),
 		PodAffinityTerm: func(in interface{}) core.PodAffinityTerm {
 			return func(in interface{}) core.PodAffinityTerm {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return core.PodAffinityTerm{}
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandResourcePodAffinityTerm(in[0].(map[string]interface{}))
 				}
-				return (ExpandResourcePodAffinityTerm(in.([]interface{})[0].(map[string]interface{})))
+				return core.PodAffinityTerm{}
 			}(in)
 		}(in["pod_affinity_term"]),
 	}

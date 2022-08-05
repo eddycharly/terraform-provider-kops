@@ -137,10 +137,10 @@ func ExpandDataSourceCloudControllerManagerConfig(in map[string]interface{}) kop
 				return func(in kops.LeaderElectionConfiguration) *kops.LeaderElectionConfiguration {
 					return &in
 				}(func(in interface{}) kops.LeaderElectionConfiguration {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.LeaderElectionConfiguration{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceLeaderElectionConfiguration(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceLeaderElectionConfiguration(in.([]interface{})[0].(map[string]interface{})))
+					return kops.LeaderElectionConfiguration{}
 				}(in))
 			}(in)
 		}(in["leader_election"]),

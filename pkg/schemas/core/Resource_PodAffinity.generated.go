@@ -35,7 +35,7 @@ func ExpandResourcePodAffinity(in map[string]interface{}) core.PodAffinity {
 						if in == nil {
 							return core.PodAffinityTerm{}
 						}
-						return (ExpandResourcePodAffinityTerm(in.(map[string]interface{})))
+						return ExpandResourcePodAffinityTerm(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -52,7 +52,7 @@ func ExpandResourcePodAffinity(in map[string]interface{}) core.PodAffinity {
 						if in == nil {
 							return core.WeightedPodAffinityTerm{}
 						}
-						return (ExpandResourceWeightedPodAffinityTerm(in.(map[string]interface{})))
+						return ExpandResourceWeightedPodAffinityTerm(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

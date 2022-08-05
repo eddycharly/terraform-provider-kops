@@ -60,10 +60,10 @@ func ExpandResourceBastionSpec(in map[string]interface{}) kops.BastionSpec {
 				return func(in kops.BastionLoadBalancerSpec) *kops.BastionLoadBalancerSpec {
 					return &in
 				}(func(in interface{}) kops.BastionLoadBalancerSpec {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.BastionLoadBalancerSpec{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceBastionLoadBalancerSpec(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceBastionLoadBalancerSpec(in.([]interface{})[0].(map[string]interface{})))
+					return kops.BastionLoadBalancerSpec{}
 				}(in))
 			}(in)
 		}(in["load_balancer"]),

@@ -36,10 +36,10 @@ func ExpandDataSourceAffinity(in map[string]interface{}) core.Affinity {
 				return func(in core.NodeAffinity) *core.NodeAffinity {
 					return &in
 				}(func(in interface{}) core.NodeAffinity {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return core.NodeAffinity{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceNodeAffinity(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceNodeAffinity(in.([]interface{})[0].(map[string]interface{})))
+					return core.NodeAffinity{}
 				}(in))
 			}(in)
 		}(in["node_affinity"]),
@@ -54,10 +54,10 @@ func ExpandDataSourceAffinity(in map[string]interface{}) core.Affinity {
 				return func(in core.PodAffinity) *core.PodAffinity {
 					return &in
 				}(func(in interface{}) core.PodAffinity {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return core.PodAffinity{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourcePodAffinity(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourcePodAffinity(in.([]interface{})[0].(map[string]interface{})))
+					return core.PodAffinity{}
 				}(in))
 			}(in)
 		}(in["pod_affinity"]),
@@ -72,10 +72,10 @@ func ExpandDataSourceAffinity(in map[string]interface{}) core.Affinity {
 				return func(in core.PodAntiAffinity) *core.PodAntiAffinity {
 					return &in
 				}(func(in interface{}) core.PodAntiAffinity {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return core.PodAntiAffinity{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourcePodAntiAffinity(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourcePodAntiAffinity(in.([]interface{})[0].(map[string]interface{})))
+					return core.PodAntiAffinity{}
 				}(in))
 			}(in)
 		}(in["pod_anti_affinity"]),

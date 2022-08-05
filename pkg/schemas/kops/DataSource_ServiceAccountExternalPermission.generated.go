@@ -42,10 +42,10 @@ func ExpandDataSourceServiceAccountExternalPermission(in map[string]interface{})
 				return func(in kops.AWSPermission) *kops.AWSPermission {
 					return &in
 				}(func(in interface{}) kops.AWSPermission {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AWSPermission{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceAWSPermission(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceAWSPermission(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AWSPermission{}
 				}(in))
 			}(in)
 		}(in["aws"]),

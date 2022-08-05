@@ -96,10 +96,10 @@ func ExpandDataSourceGossipConfig(in map[string]interface{}) kops.GossipConfig {
 				return func(in kops.GossipConfigSecondary) *kops.GossipConfigSecondary {
 					return &in
 				}(func(in interface{}) kops.GossipConfigSecondary {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.GossipConfigSecondary{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceGossipConfigSecondary(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceGossipConfigSecondary(in.([]interface{})[0].(map[string]interface{})))
+					return kops.GossipConfigSecondary{}
 				}(in))
 			}(in)
 		}(in["secondary"]),

@@ -214,10 +214,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				return func(in kops.AWSEBSCSIDriver) *kops.AWSEBSCSIDriver {
 					return &in
 				}(func(in interface{}) kops.AWSEBSCSIDriver {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AWSEBSCSIDriver{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceAWSEBSCSIDriver(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceAWSEBSCSIDriver(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AWSEBSCSIDriver{}
 				}(in))
 			}(in)
 		}(in["aws_ebs_csi_driver"]),
@@ -232,10 +232,10 @@ func ExpandDataSourceCloudConfiguration(in map[string]interface{}) kops.CloudCon
 				return func(in kops.GCPPDCSIDriver) *kops.GCPPDCSIDriver {
 					return &in
 				}(func(in interface{}) kops.GCPPDCSIDriver {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.GCPPDCSIDriver{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceGCPPDCSIDriver(in[0].(map[string]interface{}))
 					}
-					return (ExpandDataSourceGCPPDCSIDriver(in.([]interface{})[0].(map[string]interface{})))
+					return kops.GCPPDCSIDriver{}
 				}(in))
 			}(in)
 		}(in["gcp_pd_csi_driver"]),

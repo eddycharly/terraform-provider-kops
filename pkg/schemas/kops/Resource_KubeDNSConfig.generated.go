@@ -60,7 +60,7 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 						if in == nil {
 							return core.Toleration{}
 						}
-						return (coreschemas.ExpandResourceToleration(in.(map[string]interface{})))
+						return coreschemas.ExpandResourceToleration(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -77,10 +77,10 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				return func(in core.Affinity) *core.Affinity {
 					return &in
 				}(func(in interface{}) core.Affinity {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return core.Affinity{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return coreschemas.ExpandResourceAffinity(in[0].(map[string]interface{}))
 					}
-					return (coreschemas.ExpandResourceAffinity(in.([]interface{})[0].(map[string]interface{})))
+					return core.Affinity{}
 				}(in))
 			}(in)
 		}(in["affinity"]),
@@ -214,10 +214,10 @@ func ExpandResourceKubeDNSConfig(in map[string]interface{}) kops.KubeDNSConfig {
 				return func(in kops.NodeLocalDNSConfig) *kops.NodeLocalDNSConfig {
 					return &in
 				}(func(in interface{}) kops.NodeLocalDNSConfig {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.NodeLocalDNSConfig{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceNodeLocalDNSConfig(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceNodeLocalDNSConfig(in.([]interface{})[0].(map[string]interface{})))
+					return kops.NodeLocalDNSConfig{}
 				}(in))
 			}(in)
 		}(in["node_local_dns"]),

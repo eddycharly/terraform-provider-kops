@@ -42,10 +42,10 @@ func ExpandResourceServiceAccountExternalPermission(in map[string]interface{}) k
 				return func(in kops.AWSPermission) *kops.AWSPermission {
 					return &in
 				}(func(in interface{}) kops.AWSPermission {
-					if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-						return kops.AWSPermission{}
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceAWSPermission(in[0].(map[string]interface{}))
 					}
-					return (ExpandResourceAWSPermission(in.([]interface{})[0].(map[string]interface{})))
+					return kops.AWSPermission{}
 				}(in))
 			}(in)
 		}(in["aws"]),

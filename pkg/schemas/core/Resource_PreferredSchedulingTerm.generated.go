@@ -29,10 +29,10 @@ func ExpandResourcePreferredSchedulingTerm(in map[string]interface{}) core.Prefe
 		}(in["weight"]),
 		Preference: func(in interface{}) core.NodeSelectorTerm {
 			return func(in interface{}) core.NodeSelectorTerm {
-				if len(in.([]interface{})) == 0 || in.([]interface{})[0] == nil {
-					return core.NodeSelectorTerm{}
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandResourceNodeSelectorTerm(in[0].(map[string]interface{}))
 				}
-				return (ExpandResourceNodeSelectorTerm(in.([]interface{})[0].(map[string]interface{})))
+				return core.NodeSelectorTerm{}
 			}(in)
 		}(in["preference"]),
 	}

@@ -15,7 +15,7 @@ var _ = Schema
 func ResourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"manager":                        OptionalString(),
+			"manager":                        OptionalComputedString(),
 			"role":                           RequiredString(),
 			"image":                          OptionalComputedString(),
 			"min_size":                       RequiredInt(),

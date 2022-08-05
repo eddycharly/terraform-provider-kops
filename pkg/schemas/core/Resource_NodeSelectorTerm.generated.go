@@ -35,7 +35,7 @@ func ExpandResourceNodeSelectorTerm(in map[string]interface{}) core.NodeSelector
 						if in == nil {
 							return core.NodeSelectorRequirement{}
 						}
-						return (ExpandResourceNodeSelectorRequirement(in.(map[string]interface{})))
+						return ExpandResourceNodeSelectorRequirement(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -52,7 +52,7 @@ func ExpandResourceNodeSelectorTerm(in map[string]interface{}) core.NodeSelector
 						if in == nil {
 							return core.NodeSelectorRequirement{}
 						}
-						return (ExpandResourceNodeSelectorRequirement(in.(map[string]interface{})))
+						return ExpandResourceNodeSelectorRequirement(in.(map[string]interface{}))
 					}(in))
 				}
 				return out

@@ -52,7 +52,7 @@ func ExpandDataSourceLabelSelector(in map[string]interface{}) meta.LabelSelector
 						if in == nil {
 							return meta.LabelSelectorRequirement{}
 						}
-						return (ExpandDataSourceLabelSelectorRequirement(in.(map[string]interface{})))
+						return ExpandDataSourceLabelSelectorRequirement(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
