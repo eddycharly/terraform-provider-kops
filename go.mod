@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/aws/aws-sdk-go v1.44.70
+	github.com/aws/aws-sdk-go v1.44.72
 	github.com/google/go-cmp v0.5.8
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.20.0
 	golang.org/x/tools v0.1.11
