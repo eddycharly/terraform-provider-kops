@@ -8,8 +8,8 @@ require (
 	github.com/google/go-cmp v0.5.8
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.21.0
 	golang.org/x/tools v0.1.11
-	k8s.io/api v0.24.3
-	k8s.io/apimachinery v0.24.3
+	k8s.io/api v0.24.4
+	k8s.io/apimachinery v0.24.4
 	k8s.io/client-go v0.24.3
 	k8s.io/klog v1.0.0
 	k8s.io/kops v1.24.1
