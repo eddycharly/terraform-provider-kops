@@ -1570,6 +1570,7 @@ The following arguments are supported:
 
 ### hubble_spec
 
+
 HubbleSpec configures the Hubble service on the Cilium agent.
 
 #### Argument Reference
