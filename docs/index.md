@@ -15,7 +15,7 @@ Currently using kOps `v1.24.1` and compatible with terraform `0.15` and higher.
 be created separately and given to the provider through cluster attribute
 `network_id` and subnets attributes `provider_id`.
 
-!> The provider has been tested only with AWS and calico networking.
+!> The provider has been tested only with AWS, Calico and Cilium networking.
 If you use it with another cloud or networking provider, please let us know so
 that we can help troubleshooting if necessary and update the docs.
 
