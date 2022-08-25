@@ -8,9 +8,9 @@ on:
     tags-ignore:
       - "*"
   pull_request:
-    types:
-      - opened
-      - reopened
+    branches:
+      - main
+      - v*
 
 jobs:
   build:
