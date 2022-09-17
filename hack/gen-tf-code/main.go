@@ -333,6 +333,7 @@ func main() {
 		generate(kops.OpenstackSpec{}),
 		generate(kops.InstanceRequirementsSpec{}),
 		generate(kops.MinMaxSpec{}),
+		generate(kops.Runc{}),
 	)
 	build(
 		"Config",
@@ -527,5 +528,6 @@ func main() {
 		generate(kops.OpenstackSpec{}),
 		generate(kops.InstanceRequirementsSpec{}),
 		generate(kops.MinMaxSpec{}),
+		generate(kops.Runc{}),
 	)
 }

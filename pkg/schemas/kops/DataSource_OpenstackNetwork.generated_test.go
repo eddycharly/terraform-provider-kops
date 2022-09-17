@@ -22,6 +22,9 @@ func TestExpandDataSourceOpenstackNetwork(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"availability_zone_hints": func() []interface{} { return nil }(),
+					"ipv6_support_disabled":   nil,
+					"public_network_names":    func() []interface{} { return nil }(),
+					"internal_network_names":  func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -40,6 +43,9 @@ func TestExpandDataSourceOpenstackNetwork(t *testing.T) {
 func TestFlattenDataSourceOpenstackNetworkInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"availability_zone_hints": func() []interface{} { return nil }(),
+		"ipv6_support_disabled":   nil,
+		"public_network_names":    func() []interface{} { return nil }(),
+		"internal_network_names":  func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.OpenstackNetwork
@@ -67,6 +73,39 @@ func TestFlattenDataSourceOpenstackNetworkInto(t *testing.T) {
 			},
 			want: _default,
 		},
+		{
+			name: "Ipv6SupportDisabled - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.IPv6SupportDisabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PublicNetworkNames - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.PublicNetworkNames = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InternalNetworkNames - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.InternalNetworkNames = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -82,6 +121,9 @@ func TestFlattenDataSourceOpenstackNetworkInto(t *testing.T) {
 func TestFlattenDataSourceOpenstackNetwork(t *testing.T) {
 	_default := map[string]interface{}{
 		"availability_zone_hints": func() []interface{} { return nil }(),
+		"ipv6_support_disabled":   nil,
+		"public_network_names":    func() []interface{} { return nil }(),
+		"internal_network_names":  func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.OpenstackNetwork
@@ -104,6 +146,39 @@ func TestFlattenDataSourceOpenstackNetwork(t *testing.T) {
 				in: func() kops.OpenstackNetwork {
 					subject := kops.OpenstackNetwork{}
 					subject.AvailabilityZoneHints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6SupportDisabled - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.IPv6SupportDisabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PublicNetworkNames - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.PublicNetworkNames = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InternalNetworkNames - default",
+			args: args{
+				in: func() kops.OpenstackNetwork {
+					subject := kops.OpenstackNetwork{}
+					subject.InternalNetworkNames = nil
 					return subject
 				}(),
 			},
