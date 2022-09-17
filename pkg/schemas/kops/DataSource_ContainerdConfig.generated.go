@@ -23,6 +23,7 @@ func DataSourceContainerdConfig() *schema.Resource {
 			"state":            ComputedString(),
 			"version":          ComputedString(),
 			"nvidia_gpu":       ComputedStruct(DataSourceNvidiaGPUConfig()),
+			"runc":             ComputedStruct(DataSourceRunc()),
 		},
 	}
 
@@ -219,6 +220,24 @@ func ExpandDataSourceContainerdConfig(in map[string]interface{}) kops.Containerd
 				}(in))
 			}(in)
 		}(in["nvidia_gpu"]),
+		Runc: func(in interface{}) *kops.Runc {
+			return func(in interface{}) *kops.Runc {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.Runc) *kops.Runc {
+					return &in
+				}(func(in interface{}) kops.Runc {
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandDataSourceRunc(in[0].(map[string]interface{}))
+					}
+					return kops.Runc{}
+				}(in))
+			}(in)
+		}(in["runc"]),
 	}
 }
 
@@ -331,6 +350,18 @@ func FlattenDataSourceContainerdConfigInto(in kops.ContainerdConfig, out map[str
 			}(*in)
 		}(in)
 	}(in.NvidiaGPU)
+	out["runc"] = func(in *kops.Runc) interface{} {
+		return func(in *kops.Runc) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.Runc) interface{} {
+				return func(in kops.Runc) []interface{} {
+					return []interface{}{FlattenDataSourceRunc(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Runc)
 }
 
 func FlattenDataSourceContainerdConfig(in kops.ContainerdConfig) map[string]interface{} {

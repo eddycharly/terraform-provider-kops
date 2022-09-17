@@ -31,6 +31,7 @@ func TestExpandResourceContainerdConfig(t *testing.T) {
 					"state":            nil,
 					"version":          nil,
 					"nvidia_gpu":       nil,
+					"runc":             nil,
 				},
 			},
 			want: _default,
@@ -58,6 +59,7 @@ func TestFlattenResourceContainerdConfigInto(t *testing.T) {
 		"state":            nil,
 		"version":          nil,
 		"nvidia_gpu":       nil,
+		"runc":             nil,
 	}
 	type args struct {
 		in kops.ContainerdConfig
@@ -179,6 +181,17 @@ func TestFlattenResourceContainerdConfigInto(t *testing.T) {
 				in: func() kops.ContainerdConfig {
 					subject := kops.ContainerdConfig{}
 					subject.NvidiaGPU = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Runc - default",
+			args: args{
+				in: func() kops.ContainerdConfig {
+					subject := kops.ContainerdConfig{}
+					subject.Runc = nil
 					return subject
 				}(),
 			},
@@ -208,6 +221,7 @@ func TestFlattenResourceContainerdConfig(t *testing.T) {
 		"state":            nil,
 		"version":          nil,
 		"nvidia_gpu":       nil,
+		"runc":             nil,
 	}
 	type args struct {
 		in kops.ContainerdConfig
@@ -329,6 +343,17 @@ func TestFlattenResourceContainerdConfig(t *testing.T) {
 				in: func() kops.ContainerdConfig {
 					subject := kops.ContainerdConfig{}
 					subject.NvidiaGPU = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Runc - default",
+			args: args{
+				in: func() kops.ContainerdConfig {
+					subject := kops.ContainerdConfig{}
+					subject.Runc = nil
 					return subject
 				}(),
 			},
