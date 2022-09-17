@@ -279,6 +279,9 @@ OpenstackNetwork defines the config for a network.
 The following arguments are supported:
 
 - `availability_zone_hints` - (Computed) - List(String)
+- `ipv6_support_disabled` - (Computed) - Bool
+- `public_network_names` - (Computed) - List(String)
+- `internal_network_names` - (Computed) - List(String)
 
 ### openstack_metadata
 
@@ -480,6 +483,7 @@ The following arguments are supported:
 - `state` - (Computed) - String - State directory for execution state files (default "/run/containerd").
 - `version` - (Computed) - String - Version used to pick the containerd package.
 - `nvidia_gpu` - (Computed) - [nvidia_gpu_config](#nvidia_gpu_config) - NvidiaGPU configures the Nvidia GPU runtime.
+- `runc` - (Computed) - [runc](#runc) - Runc configures the runc runtime.
 
 ### packages_config
 
@@ -500,6 +504,15 @@ The following arguments are supported:
 
 - `driver_package` - (Computed) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-510-server".
 - `enabled` - (Computed) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
+
+### runc
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `version` - (Computed) - String - Version used to pick the runc package.
+- `packages` - (Computed) - [packages_config](#packages_config) - Packages overrides the URL and hash for the packages.
 
 ### docker_config
 
