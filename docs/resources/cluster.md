@@ -890,7 +890,7 @@ The following arguments are supported:
 - `oidc_issuer_url` - (Optional) - String - OIDCIssuerURL is the URL of the OpenID issuer, only HTTPS scheme will<br />be accepted.<br />If set, it will be used to verify the OIDC JSON Web Token (JWT).
 - `oidc_client_id` - (Optional) - String - OIDCClientID is the client ID for the OpenID Connect client, must be set<br />if oidc-issuer-url is set.
 - `oidc_required_claim` - (Optional) - List(String) - A key=value pair that describes a required claim in the ID Token.<br />If set, the claim is verified to be present in the ID Token with a matching value.<br />Repeat this flag to specify multiple claims.
-- `oidcca_file` - (Optional) - String - OIDCCAFile if set, the OpenID server's certificate will be verified by one<br />of the authorities in the oidc-ca-file.
+- `oidc_ca_file` - (Optional) - String - OIDCCAFile if set, the OpenID server's certificate will be verified by one<br />of the authorities in the oidc-ca-file.
 - `proxy_client_cert_file` - (Optional) - String - The apiserver's client certificate used for outbound requests.
 - `proxy_client_key_file` - (Optional) - String - The apiserver's client key used for outbound requests.
 - `audit_log_format` - (Optional) - String - AuditLogFormat flag specifies the format type for audit log files.
@@ -1230,6 +1230,7 @@ AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 The following arguments are supported:
 
 - `enabled` - (Optional) - Bool - Enabled enables the AWS EBS CSI driver<br />Default: false.
+- `managed` - (Optional) - Bool - Managed controls if aws-ebs-csi-driver is manged and deployed by kOps.<br />The deployment of aws-ebs-csi-driver is skipped if this is set to false.
 - `version` - (Optional) - String - Version is the container image tag used.<br />Default: The latest stable release which is compatible with your Kubernetes version.
 - `volume_attach_limit` - (Optional) - Int - VolumeAttachLimit is the maximum number of volumes attachable per node.<br />If specified, the limit applies to all nodes.<br />If not specified, the value is approximated from the instance type.<br />Default: -.
 - `pod_annotations` - (Optional) - Map(String) - PodAnnotations are the annotations added to AWS EBS CSI node and controller Pods.<br />Default: none.
@@ -1282,7 +1283,7 @@ The following arguments are supported:
 - `enable_prometheus_metrics` - (Optional) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
 - `enable_sqs_termination_draining` - (Optional) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.
 - `exclude_from_load_balancers` - (Optional) - Bool - ExcludeFromLoadBalancers makes node termination handler will mark for exclusion from load balancers before node are cordoned.<br />Default: true.
-- `managed_asg_tag` - (Optional) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on.
+- `managed_asg_tag` - (Optional) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on<br />This field has kept its name even though it now maps to the --managed-tag flag due to keeping the API stable.<br />Node termination handler does no longer check the ASG for this tag, but the actual EC2 instances.
 - `memory_request` - (Optional) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
 - `version` - (Optional) - String - Version is the container image tag used.
@@ -1327,6 +1328,7 @@ The following arguments are supported:
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `default_issuer` - (Optional) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
 - `nameservers` - (Optional) - List(String) - nameservers is a list of nameserver IP addresses to use instead of the pod defaults.<br />Default: none.
+- `hosted_zone_ids` - (Optional) - List(String) - HostedZoneIDs is a list of route53 hostedzone IDs that cert-manager will be allowed to do dns-01 validation for.
 
 ### aws_load_balancer_controller_config
 
@@ -1857,6 +1859,7 @@ The following arguments are supported:
 - `skip_nodes_with_local_storage` - (Required) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
 - `new_pod_scale_up_delay` - (Optional) - String - NewPodScaleUpDelay causes cluster autoscaler to ignore unschedulable pods until they are a certain "age", regardless of the scan-interval<br />Default: 0s.
 - `scale_down_delay_after_add` - (Optional) - String - ScaleDownDelayAfterAdd determines the time after scale up that scale down evaluation resumes<br />Default: 10m0s.
+- `cordon_node_before_terminating` - (Optional) - Bool - CordonNodeBeforeTerminating should CA cordon nodes before terminating during downscale process<br />Default: false.
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `memory_request` - (Optional) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Optional) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.

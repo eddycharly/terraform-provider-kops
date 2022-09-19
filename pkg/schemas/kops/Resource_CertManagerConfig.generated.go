@@ -13,11 +13,12 @@ var _ = Schema
 func ResourceCertManagerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":        RequiredBool(),
-			"managed":        RequiredBool(),
-			"image":          OptionalString(),
-			"default_issuer": OptionalString(),
-			"nameservers":    OptionalList(String()),
+			"enabled":         RequiredBool(),
+			"managed":         RequiredBool(),
+			"image":           OptionalString(),
+			"default_issuer":  OptionalString(),
+			"nameservers":     OptionalList(String()),
+			"hosted_zone_ids": OptionalList(String()),
 		},
 	}
 
@@ -105,6 +106,18 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 				return out
 			}(in)
 		}(in["nameservers"]),
+		HostedZoneIDs: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["hosted_zone_ids"]),
 	}
 }
 
@@ -158,6 +171,15 @@ func FlattenResourceCertManagerConfigInto(in kops.CertManagerConfig, out map[str
 			return out
 		}(in)
 	}(in.Nameservers)
+	out["hosted_zone_ids"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.HostedZoneIDs)
 }
 
 func FlattenResourceCertManagerConfig(in kops.CertManagerConfig) map[string]interface{} {

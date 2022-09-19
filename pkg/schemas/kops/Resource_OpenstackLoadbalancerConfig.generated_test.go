@@ -119,7 +119,7 @@ func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "FloatingNetworkID - default",
+			name: "FloatingNetworkId - default",
 			args: args{
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
@@ -141,7 +141,7 @@ func TestFlattenResourceOpenstackLoadbalancerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "SubnetID - default",
+			name: "SubnetId - default",
 			args: args{
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
@@ -269,7 +269,7 @@ func TestFlattenResourceOpenstackLoadbalancerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "FloatingNetworkID - default",
+			name: "FloatingNetworkId - default",
 			args: args{
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}
@@ -291,7 +291,7 @@ func TestFlattenResourceOpenstackLoadbalancerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "SubnetID - default",
+			name: "SubnetId - default",
 			args: args{
 				in: func() kops.OpenstackLoadbalancerConfig {
 					subject := kops.OpenstackLoadbalancerConfig{}

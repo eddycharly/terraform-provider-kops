@@ -63,7 +63,7 @@ func DataSourceKubeAPIServerConfig() *schema.Resource {
 			"oidc_issuer_url":                              ComputedString(),
 			"oidc_client_id":                               ComputedString(),
 			"oidc_required_claim":                          ComputedList(String()),
-			"oidcca_file":                                  ComputedString(),
+			"oidc_ca_file":                                 ComputedString(),
 			"proxy_client_cert_file":                       ComputedString(),
 			"proxy_client_key_file":                        ComputedString(),
 			"audit_log_format":                             ComputedString(),
@@ -612,7 +612,7 @@ func ExpandDataSourceKubeAPIServerConfig(in map[string]interface{}) kops.KubeAPI
 					return &in
 				}(string(ExpandString(in)))
 			}(in)
-		}(in["oidcca_file"]),
+		}(in["oidc_ca_file"]),
 		ProxyClientCertFile: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -1788,7 +1788,7 @@ func FlattenDataSourceKubeAPIServerConfigInto(in kops.KubeAPIServerConfig, out m
 			return out
 		}(in)
 	}(in.OIDCRequiredClaim)
-	out["oidcca_file"] = func(in *string) interface{} {
+	out["oidc_ca_file"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
 				return nil

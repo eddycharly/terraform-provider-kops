@@ -137,7 +137,7 @@ func TestFlattenResourceEtcdMemberSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "KmsKeyID - default",
+			name: "KmsKeyId - default",
 			args: args{
 				in: func() kops.EtcdMemberSpec {
 					subject := kops.EtcdMemberSpec{}
@@ -263,7 +263,7 @@ func TestFlattenResourceEtcdMemberSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "KmsKeyID - default",
+			name: "KmsKeyId - default",
 			args: args{
 				in: func() kops.EtcdMemberSpec {
 					subject := kops.EtcdMemberSpec{}

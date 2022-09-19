@@ -23,6 +23,7 @@ func ResourceClusterAutoscalerConfig() *schema.Resource {
 			"skip_nodes_with_local_storage":    RequiredBool(),
 			"new_pod_scale_up_delay":           OptionalString(),
 			"scale_down_delay_after_add":       OptionalString(),
+			"cordon_node_before_terminating":   OptionalBool(),
 			"image":                            OptionalString(),
 			"memory_request":                   OptionalQuantity(),
 			"cpu_request":                      OptionalQuantity(),
@@ -198,6 +199,25 @@ func ExpandResourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clust
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["scale_down_delay_after_add"]),
+		CordonNodeBeforeTerminating: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["cordon_node_before_terminating"]),
 		Image: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -369,6 +389,16 @@ func FlattenResourceClusterAutoscalerConfigInto(in kops.ClusterAutoscalerConfig,
 			}(*in)
 		}(in)
 	}(in.ScaleDownDelayAfterAdd)
+	out["cordon_node_before_terminating"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.CordonNodeBeforeTerminating)
 	out["image"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {

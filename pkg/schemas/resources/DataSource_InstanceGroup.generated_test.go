@@ -70,6 +70,7 @@ func TestExpandDataSourceInstanceGroup(t *testing.T) {
 					"packages":                       func() []interface{} { return nil }(),
 					"guest_accelerators":             func() []interface{} { return nil }(),
 					"max_instance_lifetime":          nil,
+					"gcp_provisioning_model":         nil,
 					"labels":                         func() map[string]interface{} { return nil }(),
 					"annotations":                    func() map[string]interface{} { return nil }(),
 					"cluster_name":                   "",
@@ -140,6 +141,7 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 		"packages":                       func() []interface{} { return nil }(),
 		"guest_accelerators":             func() []interface{} { return nil }(),
 		"max_instance_lifetime":          nil,
+		"gcp_provisioning_model":         nil,
 		"labels":                         func() map[string]interface{} { return nil }(),
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
@@ -694,6 +696,17 @@ func TestFlattenDataSourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.MaxInstanceLifetime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GcpProvisioningModel - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.GCPProvisioningModel = nil
 					return subject
 				}(),
 			},
@@ -806,6 +819,7 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 		"packages":                       func() []interface{} { return nil }(),
 		"guest_accelerators":             func() []interface{} { return nil }(),
 		"max_instance_lifetime":          nil,
+		"gcp_provisioning_model":         nil,
 		"labels":                         func() map[string]interface{} { return nil }(),
 		"annotations":                    func() map[string]interface{} { return nil }(),
 		"cluster_name":                   "",
@@ -1360,6 +1374,17 @@ func TestFlattenDataSourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.MaxInstanceLifetime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GcpProvisioningModel - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.GCPProvisioningModel = nil
 					return subject
 				}(),
 			},

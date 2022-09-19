@@ -792,6 +792,25 @@ func ExpandDataSourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceG
 				}(ExpandDuration(in))
 			}(in)
 		}(in["max_instance_lifetime"]),
+		GCPProvisioningModel: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["gcp_provisioning_model"]),
 	}
 }
 
@@ -1269,6 +1288,16 @@ func FlattenDataSourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[s
 			}(*in)
 		}(in)
 	}(in.MaxInstanceLifetime)
+	out["gcp_provisioning_model"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.GCPProvisioningModel)
 }
 
 func FlattenDataSourceInstanceGroupSpec(in kops.InstanceGroupSpec) map[string]interface{} {

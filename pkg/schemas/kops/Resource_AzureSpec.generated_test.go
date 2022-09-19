@@ -65,7 +65,7 @@ func TestFlattenResourceAzureSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "SubscriptionID - default",
+			name: "SubscriptionId - default",
 			args: args{
 				in: func() kops.AzureSpec {
 					subject := kops.AzureSpec{}
@@ -76,7 +76,7 @@ func TestFlattenResourceAzureSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TenantID - default",
+			name: "TenantId - default",
 			args: args{
 				in: func() kops.AzureSpec {
 					subject := kops.AzureSpec{}
@@ -155,7 +155,7 @@ func TestFlattenResourceAzureSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "SubscriptionID - default",
+			name: "SubscriptionId - default",
 			args: args{
 				in: func() kops.AzureSpec {
 					subject := kops.AzureSpec{}
@@ -166,7 +166,7 @@ func TestFlattenResourceAzureSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TenantID - default",
+			name: "TenantId - default",
 			args: args{
 				in: func() kops.AzureSpec {
 					subject := kops.AzureSpec{}
