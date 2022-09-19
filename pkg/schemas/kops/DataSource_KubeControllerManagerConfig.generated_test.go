@@ -304,7 +304,7 @@ func TestFlattenDataSourceKubeControllerManagerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "RootCAFile - default",
+			name: "RootCaFile - default",
 			args: args{
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}
@@ -970,7 +970,7 @@ func TestFlattenDataSourceKubeControllerManagerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "RootCAFile - default",
+			name: "RootCaFile - default",
 			args: args{
 				in: func() kops.KubeControllerManagerConfig {
 					subject := kops.KubeControllerManagerConfig{}

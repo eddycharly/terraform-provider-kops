@@ -335,7 +335,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NetworkID - default",
+			name: "NetworkId - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
@@ -1231,7 +1231,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NetworkID - default",
+			name: "NetworkId - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}

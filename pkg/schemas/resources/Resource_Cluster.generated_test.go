@@ -349,7 +349,7 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NetworkID - default",
+			name: "NetworkId - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
@@ -1317,7 +1317,7 @@ func TestFlattenResourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NetworkID - default",
+			name: "NetworkId - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}

@@ -83,7 +83,7 @@ func TestFlattenResourceLoadBalancerSubnetSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AllocationID - default",
+			name: "AllocationId - default",
 			args: args{
 				in: func() kops.LoadBalancerSubnetSpec {
 					subject := kops.LoadBalancerSubnetSpec{}
@@ -149,7 +149,7 @@ func TestFlattenResourceLoadBalancerSubnetSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AllocationID - default",
+			name: "AllocationId - default",
 			args: args{
 				in: func() kops.LoadBalancerSubnetSpec {
 					subject := kops.LoadBalancerSubnetSpec{}

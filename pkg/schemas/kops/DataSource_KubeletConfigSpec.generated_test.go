@@ -279,7 +279,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ClientCAFile - default",
+			name: "ClientCaFile - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
@@ -983,7 +983,7 @@ func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DockerDisableSharedPID - default",
+			name: "DockerDisableSharedPid - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
@@ -1389,7 +1389,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ClientCAFile - default",
+			name: "ClientCaFile - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}
@@ -2093,7 +2093,7 @@ func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "DockerDisableSharedPID - default",
+			name: "DockerDisableSharedPid - default",
 			args: args{
 				in: func() kops.KubeletConfigSpec {
 					subject := kops.KubeletConfigSpec{}

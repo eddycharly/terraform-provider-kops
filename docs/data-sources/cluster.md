@@ -804,7 +804,7 @@ The following arguments are supported:
 - `oidc_issuer_url` - (Computed) - String - OIDCIssuerURL is the URL of the OpenID issuer, only HTTPS scheme will<br />be accepted.<br />If set, it will be used to verify the OIDC JSON Web Token (JWT).
 - `oidc_client_id` - (Computed) - String - OIDCClientID is the client ID for the OpenID Connect client, must be set<br />if oidc-issuer-url is set.
 - `oidc_required_claim` - (Computed) - List(String) - A key=value pair that describes a required claim in the ID Token.<br />If set, the claim is verified to be present in the ID Token with a matching value.<br />Repeat this flag to specify multiple claims.
-- `oidcca_file` - (Computed) - String - OIDCCAFile if set, the OpenID server's certificate will be verified by one<br />of the authorities in the oidc-ca-file.
+- `oidc_ca_file` - (Computed) - String - OIDCCAFile if set, the OpenID server's certificate will be verified by one<br />of the authorities in the oidc-ca-file.
 - `proxy_client_cert_file` - (Computed) - String - The apiserver's client certificate used for outbound requests.
 - `proxy_client_key_file` - (Computed) - String - The apiserver's client key used for outbound requests.
 - `audit_log_format` - (Computed) - String - AuditLogFormat flag specifies the format type for audit log files.
@@ -1242,7 +1242,7 @@ The following arguments are supported:
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `default_issuer` - (Computed) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
 - `nameservers` - (Computed) - List(String) - nameservers is a list of nameserver IP addresses to use instead of the pod defaults.<br />Default: none.
-- `hosted_zone_i_ds` - (Computed) - List(String) - HostedZoneIDs is a list of route53 hostedzone IDs that cert-manager will be allowed to do dns-01 validation for.
+- `hosted_zone_ids` - (Computed) - List(String) - HostedZoneIDs is a list of route53 hostedzone IDs that cert-manager will be allowed to do dns-01 validation for.
 
 ### aws_load_balancer_controller_config
 

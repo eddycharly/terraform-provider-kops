@@ -13,12 +13,12 @@ var _ = Schema
 func ResourceCertManagerConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":          RequiredBool(),
-			"managed":          RequiredBool(),
-			"image":            OptionalString(),
-			"default_issuer":   OptionalString(),
-			"nameservers":      OptionalList(String()),
-			"hosted_zone_i_ds": OptionalList(String()),
+			"enabled":         RequiredBool(),
+			"managed":         RequiredBool(),
+			"image":           OptionalString(),
+			"default_issuer":  OptionalString(),
+			"nameservers":     OptionalList(String()),
+			"hosted_zone_ids": OptionalList(String()),
 		},
 	}
 
@@ -117,7 +117,7 @@ func ExpandResourceCertManagerConfig(in map[string]interface{}) kops.CertManager
 				}
 				return out
 			}(in)
-		}(in["hosted_zone_i_ds"]),
+		}(in["hosted_zone_ids"]),
 	}
 }
 
@@ -171,7 +171,7 @@ func FlattenResourceCertManagerConfigInto(in kops.CertManagerConfig, out map[str
 			return out
 		}(in)
 	}(in.Nameservers)
-	out["hosted_zone_i_ds"] = func(in []string) interface{} {
+	out["hosted_zone_ids"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
 			for _, in := range in {

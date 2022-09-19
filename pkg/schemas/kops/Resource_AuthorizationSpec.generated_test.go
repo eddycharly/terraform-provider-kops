@@ -70,7 +70,7 @@ func TestFlattenResourceAuthorizationSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "RBAC - default",
+			name: "Rbac - default",
 			args: args{
 				in: func() kops.AuthorizationSpec {
 					subject := kops.AuthorizationSpec{}
@@ -124,7 +124,7 @@ func TestFlattenResourceAuthorizationSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "RBAC - default",
+			name: "Rbac - default",
 			args: args{
 				in: func() kops.AuthorizationSpec {
 					subject := kops.AuthorizationSpec{}

@@ -72,7 +72,7 @@ func TestFlattenResourceServiceAccountIssuerDiscoveryConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EnableAwsOIDCProvider - default",
+			name: "EnableAwsOidcProvider - default",
 			args: args{
 				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
 					subject := kops.ServiceAccountIssuerDiscoveryConfig{}
@@ -138,7 +138,7 @@ func TestFlattenResourceServiceAccountIssuerDiscoveryConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EnableAwsOIDCProvider - default",
+			name: "EnableAwsOidcProvider - default",
 			args: args{
 				in: func() kops.ServiceAccountIssuerDiscoveryConfig {
 					subject := kops.ServiceAccountIssuerDiscoveryConfig{}

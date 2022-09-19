@@ -93,7 +93,7 @@ func TestFlattenDataSourceAWSAuthenticationSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ClusterID - default",
+			name: "ClusterId - default",
 			args: args{
 				in: func() kops.AWSAuthenticationSpec {
 					subject := kops.AWSAuthenticationSpec{}
@@ -219,7 +219,7 @@ func TestFlattenDataSourceAWSAuthenticationSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ClusterID - default",
+			name: "ClusterId - default",
 			args: args{
 				in: func() kops.AWSAuthenticationSpec {
 					subject := kops.AWSAuthenticationSpec{}

@@ -69,7 +69,7 @@ func TestExpandResourceKubeAPIServerConfig(t *testing.T) {
 					"oidc_issuer_url":                              nil,
 					"oidc_client_id":                               nil,
 					"oidc_required_claim":                          func() []interface{} { return nil }(),
-					"oidcca_file":                                  nil,
+					"oidc_ca_file":                                 nil,
 					"proxy_client_cert_file":                       nil,
 					"proxy_client_key_file":                        nil,
 					"audit_log_format":                             nil,
@@ -189,7 +189,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 		"oidc_issuer_url":                              nil,
 		"oidc_client_id":                               nil,
 		"oidc_required_claim":                          func() []interface{} { return nil }(),
-		"oidcca_file":                                  nil,
+		"oidc_ca_file":                                 nil,
 		"proxy_client_cert_file":                       nil,
 		"proxy_client_key_file":                        nil,
 		"audit_log_format":                             nil,
@@ -503,7 +503,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EtcdCAFile - default",
+			name: "EtcdCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -547,7 +547,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ClientCAFile - default",
+			name: "ClientCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -712,7 +712,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCUsernameClaim - default",
+			name: "OidcUsernameClaim - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -723,7 +723,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCUsernamePrefix - default",
+			name: "OidcUsernamePrefix - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -734,7 +734,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCGroupsClaim - default",
+			name: "OidcGroupsClaim - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -745,7 +745,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCGroupsPrefix - default",
+			name: "OidcGroupsPrefix - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -756,7 +756,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCIssuerURL - default",
+			name: "OidcIssuerURL - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -767,7 +767,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCClientID - default",
+			name: "OidcClientId - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -778,7 +778,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCRequiredClaim - default",
+			name: "OidcRequiredClaim - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -789,7 +789,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCCAFile - default",
+			name: "OidcCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1053,7 +1053,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AuthorizationRBACSuperUser - default",
+			name: "AuthorizationRbacSuperUser - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1119,7 +1119,7 @@ func TestFlattenResourceKubeAPIServerConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "RequestheaderClientCAFile - default",
+			name: "RequestheaderClientCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1455,7 +1455,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 		"oidc_issuer_url":                              nil,
 		"oidc_client_id":                               nil,
 		"oidc_required_claim":                          func() []interface{} { return nil }(),
-		"oidcca_file":                                  nil,
+		"oidc_ca_file":                                 nil,
 		"proxy_client_cert_file":                       nil,
 		"proxy_client_key_file":                        nil,
 		"audit_log_format":                             nil,
@@ -1769,7 +1769,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EtcdCAFile - default",
+			name: "EtcdCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1813,7 +1813,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ClientCAFile - default",
+			name: "ClientCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1978,7 +1978,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCUsernameClaim - default",
+			name: "OidcUsernameClaim - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -1989,7 +1989,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCUsernamePrefix - default",
+			name: "OidcUsernamePrefix - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2000,7 +2000,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCGroupsClaim - default",
+			name: "OidcGroupsClaim - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2011,7 +2011,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCGroupsPrefix - default",
+			name: "OidcGroupsPrefix - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2022,7 +2022,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCIssuerURL - default",
+			name: "OidcIssuerURL - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2033,7 +2033,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCClientID - default",
+			name: "OidcClientId - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2044,7 +2044,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCRequiredClaim - default",
+			name: "OidcRequiredClaim - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2055,7 +2055,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "OIDCCAFile - default",
+			name: "OidcCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2319,7 +2319,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AuthorizationRBACSuperUser - default",
+			name: "AuthorizationRbacSuperUser - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}
@@ -2385,7 +2385,7 @@ func TestFlattenResourceKubeAPIServerConfig(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "RequestheaderClientCAFile - default",
+			name: "RequestheaderClientCaFile - default",
 			args: args{
 				in: func() kops.KubeAPIServerConfig {
 					subject := kops.KubeAPIServerConfig{}

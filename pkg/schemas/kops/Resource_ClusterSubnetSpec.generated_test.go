@@ -130,7 +130,7 @@ func TestFlattenResourceClusterSubnetSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ProviderID - default",
+			name: "ProviderId - default",
 			args: args{
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
@@ -280,7 +280,7 @@ func TestFlattenResourceClusterSubnetSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ProviderID - default",
+			name: "ProviderId - default",
 			args: args{
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
