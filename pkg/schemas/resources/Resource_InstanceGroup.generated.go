@@ -64,6 +64,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"packages":                       OptionalList(String()),
 			"guest_accelerators":             OptionalList(kopsschemas.ResourceAcceleratorConfig()),
 			"max_instance_lifetime":          OptionalDuration(),
+			"gcp_provisioning_model":         OptionalString(),
 			"labels":                         OptionalMap(String()),
 			"annotations":                    OptionalMap(String()),
 			"cluster_name":                   ForceNew(RequiredString()),

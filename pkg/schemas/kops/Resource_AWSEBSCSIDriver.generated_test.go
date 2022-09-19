@@ -22,6 +22,7 @@ func TestExpandResourceAWSEBSCSIDriver(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"enabled":             nil,
+					"managed":             nil,
 					"version":             nil,
 					"volume_attach_limit": nil,
 					"pod_annotations":     func() map[string]interface{} { return nil }(),
@@ -43,6 +44,7 @@ func TestExpandResourceAWSEBSCSIDriver(t *testing.T) {
 func TestFlattenResourceAWSEBSCSIDriverInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":             nil,
+		"managed":             nil,
 		"version":             nil,
 		"volume_attach_limit": nil,
 		"pod_annotations":     func() map[string]interface{} { return nil }(),
@@ -68,6 +70,17 @@ func TestFlattenResourceAWSEBSCSIDriverInto(t *testing.T) {
 				in: func() kops.AWSEBSCSIDriver {
 					subject := kops.AWSEBSCSIDriver{}
 					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Managed - default",
+			args: args{
+				in: func() kops.AWSEBSCSIDriver {
+					subject := kops.AWSEBSCSIDriver{}
+					subject.Managed = nil
 					return subject
 				}(),
 			},
@@ -121,6 +134,7 @@ func TestFlattenResourceAWSEBSCSIDriverInto(t *testing.T) {
 func TestFlattenResourceAWSEBSCSIDriver(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":             nil,
+		"managed":             nil,
 		"version":             nil,
 		"volume_attach_limit": nil,
 		"pod_annotations":     func() map[string]interface{} { return nil }(),
@@ -146,6 +160,17 @@ func TestFlattenResourceAWSEBSCSIDriver(t *testing.T) {
 				in: func() kops.AWSEBSCSIDriver {
 					subject := kops.AWSEBSCSIDriver{}
 					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Managed - default",
+			args: args{
+				in: func() kops.AWSEBSCSIDriver {
+					subject := kops.AWSEBSCSIDriver{}
+					subject.Managed = nil
 					return subject
 				}(),
 			},

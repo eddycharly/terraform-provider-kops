@@ -70,6 +70,7 @@ func TestExpandResourceInstanceGroupSpec(t *testing.T) {
 					"packages":                       func() []interface{} { return nil }(),
 					"guest_accelerators":             func() []interface{} { return nil }(),
 					"max_instance_lifetime":          nil,
+					"gcp_provisioning_model":         nil,
 				},
 			},
 			want: _default,
@@ -136,6 +137,7 @@ func TestFlattenResourceInstanceGroupSpecInto(t *testing.T) {
 		"packages":                       func() []interface{} { return nil }(),
 		"guest_accelerators":             func() []interface{} { return nil }(),
 		"max_instance_lifetime":          nil,
+		"gcp_provisioning_model":         nil,
 	}
 	type args struct {
 		in kops.InstanceGroupSpec
@@ -686,6 +688,17 @@ func TestFlattenResourceInstanceGroupSpecInto(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.MaxInstanceLifetime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GcpProvisioningModel - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.GCPProvisioningModel = nil
 					return subject
 				}(),
 			},
@@ -754,6 +767,7 @@ func TestFlattenResourceInstanceGroupSpec(t *testing.T) {
 		"packages":                       func() []interface{} { return nil }(),
 		"guest_accelerators":             func() []interface{} { return nil }(),
 		"max_instance_lifetime":          nil,
+		"gcp_provisioning_model":         nil,
 	}
 	type args struct {
 		in kops.InstanceGroupSpec
@@ -1304,6 +1318,17 @@ func TestFlattenResourceInstanceGroupSpec(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.MaxInstanceLifetime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "GcpProvisioningModel - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.GCPProvisioningModel = nil
 					return subject
 				}(),
 			},

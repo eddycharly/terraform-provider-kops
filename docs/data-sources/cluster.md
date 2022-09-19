@@ -1144,6 +1144,7 @@ AWSEBSCSIDriver is the config for the AWS EBS CSI driver.
 The following arguments are supported:
 
 - `enabled` - (Computed) - Bool - Enabled enables the AWS EBS CSI driver<br />Default: false.
+- `managed` - (Computed) - Bool - Managed controls if aws-ebs-csi-driver is manged and deployed by kOps.<br />The deployment of aws-ebs-csi-driver is skipped if this is set to false.
 - `version` - (Computed) - String - Version is the container image tag used.<br />Default: The latest stable release which is compatible with your Kubernetes version.
 - `volume_attach_limit` - (Computed) - Int - VolumeAttachLimit is the maximum number of volumes attachable per node.<br />If specified, the limit applies to all nodes.<br />If not specified, the value is approximated from the instance type.<br />Default: -.
 - `pod_annotations` - (Computed) - Map(String) - PodAnnotations are the annotations added to AWS EBS CSI node and controller Pods.<br />Default: none.
@@ -1196,7 +1197,7 @@ The following arguments are supported:
 - `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.
 - `enable_sqs_termination_draining` - (Computed) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.
 - `exclude_from_load_balancers` - (Computed) - Bool - ExcludeFromLoadBalancers makes node termination handler will mark for exclusion from load balancers before node are cordoned.<br />Default: true.
-- `managed_asg_tag` - (Computed) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on.
+- `managed_asg_tag` - (Computed) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on<br />This field has kept its name even though it now maps to the --managed-tag flag due to keeping the API stable.<br />Node termination handler does no longer check the ASG for this tag, but the actual EC2 instances.
 - `memory_request` - (Computed) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
 - `version` - (Computed) - String - Version is the container image tag used.
@@ -1241,6 +1242,7 @@ The following arguments are supported:
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `default_issuer` - (Computed) - String - defaultIssuer sets a default clusterIssuer<br />Default: none.
 - `nameservers` - (Computed) - List(String) - nameservers is a list of nameserver IP addresses to use instead of the pod defaults.<br />Default: none.
+- `hosted_zone_i_ds` - (Computed) - List(String) - HostedZoneIDs is a list of route53 hostedzone IDs that cert-manager will be allowed to do dns-01 validation for.
 
 ### aws_load_balancer_controller_config
 
@@ -1771,6 +1773,7 @@ The following arguments are supported:
 - `skip_nodes_with_local_storage` - (Computed) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
 - `new_pod_scale_up_delay` - (Computed) - String - NewPodScaleUpDelay causes cluster autoscaler to ignore unschedulable pods until they are a certain "age", regardless of the scan-interval<br />Default: 0s.
 - `scale_down_delay_after_add` - (Computed) - String - ScaleDownDelayAfterAdd determines the time after scale up that scale down evaluation resumes<br />Default: 10m0s.
+- `cordon_node_before_terminating` - (Computed) - Bool - CordonNodeBeforeTerminating should CA cordon nodes before terminating during downscale process<br />Default: false.
 - `image` - (Computed) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `memory_request` - (Computed) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.

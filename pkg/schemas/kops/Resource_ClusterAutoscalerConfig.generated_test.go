@@ -30,6 +30,7 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 					"skip_nodes_with_local_storage":    nil,
 					"new_pod_scale_up_delay":           nil,
 					"scale_down_delay_after_add":       nil,
+					"cordon_node_before_terminating":   nil,
 					"image":                            nil,
 					"memory_request":                   nil,
 					"cpu_request":                      nil,
@@ -61,6 +62,7 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 		"skip_nodes_with_local_storage":    nil,
 		"new_pod_scale_up_delay":           nil,
 		"scale_down_delay_after_add":       nil,
+		"cordon_node_before_terminating":   nil,
 		"image":                            nil,
 		"memory_request":                   nil,
 		"cpu_request":                      nil,
@@ -176,6 +178,17 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.ScaleDownDelayAfterAdd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CordonNodeBeforeTerminating - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.CordonNodeBeforeTerminating = nil
 					return subject
 				}(),
 			},
@@ -259,6 +272,7 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 		"skip_nodes_with_local_storage":    nil,
 		"new_pod_scale_up_delay":           nil,
 		"scale_down_delay_after_add":       nil,
+		"cordon_node_before_terminating":   nil,
 		"image":                            nil,
 		"memory_request":                   nil,
 		"cpu_request":                      nil,
@@ -374,6 +388,17 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.ScaleDownDelayAfterAdd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CordonNodeBeforeTerminating - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.CordonNodeBeforeTerminating = nil
 					return subject
 				}(),
 			},

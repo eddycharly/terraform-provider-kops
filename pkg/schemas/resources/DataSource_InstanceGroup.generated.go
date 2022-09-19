@@ -64,6 +64,7 @@ func DataSourceInstanceGroup() *schema.Resource {
 			"packages":                       ComputedList(String()),
 			"guest_accelerators":             ComputedList(kopsschemas.DataSourceAcceleratorConfig()),
 			"max_instance_lifetime":          ComputedDuration(),
+			"gcp_provisioning_model":         ComputedString(),
 			"labels":                         ComputedMap(String()),
 			"annotations":                    ComputedMap(String()),
 			"cluster_name":                   RequiredString(),

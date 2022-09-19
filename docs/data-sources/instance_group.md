@@ -100,6 +100,7 @@ The following arguments are supported:
 - `packages` - (Computed) - List(String) - Packages specifies additional packages to be installed.
 - `guest_accelerators` - (Computed) - List([accelerator_config](#accelerator_config)) - GuestAccelerators configures additional accelerators.
 - `max_instance_lifetime` - (Computed) - Duration - MaxInstanceLifetime to the maximum amount of time, in seconds, that an instance can be in service.<br />Value expected must be in form of duration ("ms", "s", "m", "h").
+- `gcp_provisioning_model` - (Computed) - String - GCPProvisioningModel: Specifies the provisioning model of the GCP instance.<br />Valid values:<br />  'STANDARD': (default) standard provisioning with user controlled run time, no discounts<br />  'SPOT': heavily discounted, no guaranteed run time.
 - `labels` - (Computed) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
 - `annotations` - (Computed) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `cluster_name` - (Required) - String - ClusterName defines the cluster name the instance group belongs to.

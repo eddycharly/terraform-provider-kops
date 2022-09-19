@@ -21,11 +21,12 @@ func TestExpandDataSourceCertManagerConfig(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"enabled":        nil,
-					"managed":        nil,
-					"image":          nil,
-					"default_issuer": nil,
-					"nameservers":    func() []interface{} { return nil }(),
+					"enabled":          nil,
+					"managed":          nil,
+					"image":            nil,
+					"default_issuer":   nil,
+					"nameservers":      func() []interface{} { return nil }(),
+					"hosted_zone_i_ds": func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -43,11 +44,12 @@ func TestExpandDataSourceCertManagerConfig(t *testing.T) {
 
 func TestFlattenDataSourceCertManagerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"enabled":        nil,
-		"managed":        nil,
-		"image":          nil,
-		"default_issuer": nil,
-		"nameservers":    func() []interface{} { return nil }(),
+		"enabled":          nil,
+		"managed":          nil,
+		"image":            nil,
+		"default_issuer":   nil,
+		"nameservers":      func() []interface{} { return nil }(),
+		"hosted_zone_i_ds": func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.CertManagerConfig
@@ -114,6 +116,17 @@ func TestFlattenDataSourceCertManagerConfigInto(t *testing.T) {
 				in: func() kops.CertManagerConfig {
 					subject := kops.CertManagerConfig{}
 					subject.Nameservers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HostedZoneIDs - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.HostedZoneIDs = nil
 					return subject
 				}(),
 			},
@@ -133,11 +146,12 @@ func TestFlattenDataSourceCertManagerConfigInto(t *testing.T) {
 
 func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 	_default := map[string]interface{}{
-		"enabled":        nil,
-		"managed":        nil,
-		"image":          nil,
-		"default_issuer": nil,
-		"nameservers":    func() []interface{} { return nil }(),
+		"enabled":          nil,
+		"managed":          nil,
+		"image":            nil,
+		"default_issuer":   nil,
+		"nameservers":      func() []interface{} { return nil }(),
+		"hosted_zone_i_ds": func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.CertManagerConfig
@@ -204,6 +218,17 @@ func TestFlattenDataSourceCertManagerConfig(t *testing.T) {
 				in: func() kops.CertManagerConfig {
 					subject := kops.CertManagerConfig{}
 					subject.Nameservers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HostedZoneIDs - default",
+			args: args{
+				in: func() kops.CertManagerConfig {
+					subject := kops.CertManagerConfig{}
+					subject.HostedZoneIDs = nil
 					return subject
 				}(),
 			},
