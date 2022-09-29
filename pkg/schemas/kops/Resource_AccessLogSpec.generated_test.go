@@ -22,8 +22,8 @@ func TestExpandResourceAccessLogSpec(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"interval":      0,
-					"bucket":        "",
-					"bucket_prefix": "",
+					"bucket":        nil,
+					"bucket_prefix": nil,
 				},
 			},
 			want: _default,
@@ -42,8 +42,8 @@ func TestExpandResourceAccessLogSpec(t *testing.T) {
 func TestFlattenResourceAccessLogSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"interval":      0,
-		"bucket":        "",
-		"bucket_prefix": "",
+		"bucket":        nil,
+		"bucket_prefix": nil,
 	}
 	type args struct {
 		in kops.AccessLogSpec
@@ -76,7 +76,7 @@ func TestFlattenResourceAccessLogSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.AccessLogSpec {
 					subject := kops.AccessLogSpec{}
-					subject.Bucket = ""
+					subject.Bucket = nil
 					return subject
 				}(),
 			},
@@ -87,7 +87,7 @@ func TestFlattenResourceAccessLogSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.AccessLogSpec {
 					subject := kops.AccessLogSpec{}
-					subject.BucketPrefix = ""
+					subject.BucketPrefix = nil
 					return subject
 				}(),
 			},
@@ -108,8 +108,8 @@ func TestFlattenResourceAccessLogSpecInto(t *testing.T) {
 func TestFlattenResourceAccessLogSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"interval":      0,
-		"bucket":        "",
-		"bucket_prefix": "",
+		"bucket":        nil,
+		"bucket_prefix": nil,
 	}
 	type args struct {
 		in kops.AccessLogSpec
@@ -142,7 +142,7 @@ func TestFlattenResourceAccessLogSpec(t *testing.T) {
 			args: args{
 				in: func() kops.AccessLogSpec {
 					subject := kops.AccessLogSpec{}
-					subject.Bucket = ""
+					subject.Bucket = nil
 					return subject
 				}(),
 			},
@@ -153,7 +153,7 @@ func TestFlattenResourceAccessLogSpec(t *testing.T) {
 			args: args{
 				in: func() kops.AccessLogSpec {
 					subject := kops.AccessLogSpec{}
-					subject.BucketPrefix = ""
+					subject.BucketPrefix = nil
 					return subject
 				}(),
 			},
