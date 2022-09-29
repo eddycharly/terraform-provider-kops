@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"reflect"
+
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -28,11 +30,43 @@ func ExpandDataSourceAccessLogSpec(in map[string]interface{}) kops.AccessLogSpec
 		Interval: func(in interface{}) int {
 			return int(ExpandInt(in))
 		}(in["interval"]),
-		Bucket: func(in interface{}) string {
-			return string(ExpandString(in))
+		Bucket: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
 		}(in["bucket"]),
-		BucketPrefix: func(in interface{}) string {
-			return string(ExpandString(in))
+		BucketPrefix: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
 		}(in["bucket_prefix"]),
 	}
 }
@@ -41,11 +75,25 @@ func FlattenDataSourceAccessLogSpecInto(in kops.AccessLogSpec, out map[string]in
 	out["interval"] = func(in int) interface{} {
 		return FlattenInt(int(in))
 	}(in.Interval)
-	out["bucket"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["bucket"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
 	}(in.Bucket)
-	out["bucket_prefix"] = func(in string) interface{} {
-		return FlattenString(string(in))
+	out["bucket_prefix"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
 	}(in.BucketPrefix)
 }
 

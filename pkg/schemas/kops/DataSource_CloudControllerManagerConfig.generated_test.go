@@ -26,6 +26,7 @@ func TestExpandDataSourceCloudControllerManagerConfig(t *testing.T) {
 					"image":                           "",
 					"cloud_provider":                  "",
 					"cluster_name":                    "",
+					"allow_untagged_cloud":            nil,
 					"cluster_cidr":                    "",
 					"allocate_node_cidrs":             nil,
 					"configure_cloud_routes":          nil,
@@ -57,6 +58,7 @@ func TestFlattenDataSourceCloudControllerManagerConfigInto(t *testing.T) {
 		"image":                           "",
 		"cloud_provider":                  "",
 		"cluster_name":                    "",
+		"allow_untagged_cloud":            nil,
 		"cluster_cidr":                    "",
 		"allocate_node_cidrs":             nil,
 		"configure_cloud_routes":          nil,
@@ -132,6 +134,17 @@ func TestFlattenDataSourceCloudControllerManagerConfigInto(t *testing.T) {
 				in: func() kops.CloudControllerManagerConfig {
 					subject := kops.CloudControllerManagerConfig{}
 					subject.ClusterName = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowUntaggedCloud - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.AllowUntaggedCloud = nil
 					return subject
 				}(),
 			},
@@ -255,6 +268,7 @@ func TestFlattenDataSourceCloudControllerManagerConfig(t *testing.T) {
 		"image":                           "",
 		"cloud_provider":                  "",
 		"cluster_name":                    "",
+		"allow_untagged_cloud":            nil,
 		"cluster_cidr":                    "",
 		"allocate_node_cidrs":             nil,
 		"configure_cloud_routes":          nil,
@@ -330,6 +344,17 @@ func TestFlattenDataSourceCloudControllerManagerConfig(t *testing.T) {
 				in: func() kops.CloudControllerManagerConfig {
 					subject := kops.CloudControllerManagerConfig{}
 					subject.ClusterName = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowUntaggedCloud - default",
+			args: args{
+				in: func() kops.CloudControllerManagerConfig {
+					subject := kops.CloudControllerManagerConfig{}
+					subject.AllowUntaggedCloud = nil
 					return subject
 				}(),
 			},
