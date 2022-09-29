@@ -177,8 +177,8 @@ The following arguments are supported:
 - `external_cloud_controller_manager` - (Optional) - [cloud_controller_manager_config](#cloud_controller_manager_config)
 - `kube_scheduler` - (Optional) - [kube_scheduler_config](#kube_scheduler_config)
 - `kube_proxy` - (Optional) - [kube_proxy_config](#kube_proxy_config)
-- `kubelet` - (Optional) - [kubelet_config_spec](#kubelet_config_spec)
-- `master_kubelet` - (Optional) - [kubelet_config_spec](#kubelet_config_spec)
+- `kubelet` - (Optional) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet is the kubelet configuration for nodes not belonging to the control plane.<br />It can be overridden by the kubelet configuration specified in the instance group.
+- `master_kubelet` - (Optional) - [kubelet_config_spec](#kubelet_config_spec) - MasterKubelet is the kubelet configuration for nodes belonging to the control plane<br />It can be overridden by the kubelet configuration specified in the instance group.
 - `cloud_config` - (Optional) - [cloud_configuration](#cloud_configuration)
 - `external_dns` - (Optional) - [external_dns_config](#external_dns_config)
 - `ntp` - (Optional) - [ntp_config](#ntp_config)
@@ -1037,6 +1037,7 @@ The following arguments are supported:
 - `image` - (Optional) - String - Image is the OCI image of the cloud controller manager.
 - `cloud_provider` - (Optional) - String - CloudProvider is the provider for cloud services.
 - `cluster_name` - (Optional) - String - ClusterName is the instance prefix for the cluster.
+- `allow_untagged_cloud` - (Optional) - Bool - Allow the cluster to run without the cluster-id on cloud instances.
 - `cluster_cidr` - (Optional) - String - ClusterCIDR is CIDR Range for Pods in cluster.
 - `allocate_node_cidrs` - (Optional) - Bool - AllocateNodeCIDRs enables CIDRs for Pods to be allocated and, if<br />ConfigureCloudRoutes is true, to be set on the cloud provider.
 - `configure_cloud_routes` - (Optional) - Bool - ConfigureCloudRoutes enables CIDRs allocated with to be configured on the cloud provider.
