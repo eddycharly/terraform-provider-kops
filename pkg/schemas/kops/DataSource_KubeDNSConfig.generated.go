@@ -2,6 +2,7 @@ package schemas
 
 import (
 	"reflect"
+	"sort"
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	coreschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/core"
@@ -277,8 +278,16 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 			if in == nil {
 				return nil
 			}
+			keys := make([]string, 0, len(in))
+			for key := range in {
+				keys = append(keys, key)
+			}
+			sort.SliceStable(keys, func(i, j int) bool {
+				return keys[i] > keys[j]
+			})
 			var out []interface{}
-			for key, in := range in {
+			for _, key := range keys {
+				in := in[key]
 				out = append(out, map[string]interface{}{
 					"key": key,
 					"value": func(in []string) []interface{} {
