@@ -43,7 +43,7 @@ func ResourceInstanceGroup() *schema.Resource {
 			"node_labels":                    OptionalMap(String()),
 			"file_assets":                    OptionalList(kopsschemas.ResourceFileAssetSpec()),
 			"tenancy":                        OptionalString(),
-			"kubelet":                        OptionalStruct(kopsschemas.ResourceKubeletConfigSpec()),
+			"kubelet":                        OptionalComputedStruct(kopsschemas.ResourceKubeletConfigSpec()),
 			"taints":                         OptionalList(String()),
 			"mixed_instances_policy":         OptionalStruct(kopsschemas.ResourceMixedInstancesPolicySpec()),
 			"additional_user_data":           OptionalList(kopsschemas.ResourceUserData()),
