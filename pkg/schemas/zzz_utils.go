@@ -135,7 +135,7 @@ func ExpandDuration(in interface{}) metav1.Duration {
 }
 
 func FlattenDuration(in metav1.Duration) interface{} {
-	return in.String()
+	return in.Duration.String()
 }
 
 // IntOrString
