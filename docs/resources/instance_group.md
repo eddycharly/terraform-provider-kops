@@ -112,7 +112,7 @@ The following arguments are supported:
 - `node_labels` - (Optional) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this instance group.
 - `file_assets` - (Optional) - List([file_asset_spec](#file_asset_spec)) - FileAssets is a collection of file assets for this instance group.
 - `tenancy` - (Optional) - String - Describes the tenancy of this instance group. Can be either default or dedicated. Currently only applies to AWS.
-- `kubelet` - (Optional) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet overrides kubelet config from the ClusterSpec.
+- `kubelet` - (Optional) - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet overrides kubelet config from the ClusterSpec.
 - `taints` - (Optional) - List(String) - Taints indicates the kubernetes taints for nodes in this instance group.
 - `mixed_instances_policy` - (Optional) - [mixed_instances_policy_spec](#mixed_instances_policy_spec) - MixedInstancesPolicy defined a optional backing of an AWS ASG by a EC2 Fleet (AWS Only).
 - `additional_user_data` - (Optional) - List([user_data](#user_data)) - AdditionalUserData is any additional user-data to be passed to the host.
