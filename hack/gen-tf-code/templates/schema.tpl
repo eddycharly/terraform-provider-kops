@@ -286,8 +286,16 @@ func (in map[string]{{ qualifiedName .Elem }}) []interface{} {
 	if in == nil {
 		return nil
 	}
+	keys := make([]string, 0, len(in))
+	for key := range in {
+		keys = append(keys, key)
+	}
+	sort.SliceStable(keys, func(i, j int) bool {
+		return keys[i] < keys[j]
+	})
 	var out []interface{}
-	for key, in := range in {
+	for _, key := range keys {
+	  in := in[key]
 		out = append(out, map[string]interface{}{
 			"key": key,
 			"value": {{ template "flattenElem" .Elem }},
