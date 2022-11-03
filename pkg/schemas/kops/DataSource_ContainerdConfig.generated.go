@@ -2,6 +2,7 @@ package schemas
 
 import (
 	"reflect"
+	"sort"
 
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -289,8 +290,16 @@ func FlattenDataSourceContainerdConfigInto(in kops.ContainerdConfig, out map[str
 			if in == nil {
 				return nil
 			}
+			keys := make([]string, 0, len(in))
+			for key := range in {
+				keys = append(keys, key)
+			}
+			sort.SliceStable(keys, func(i, j int) bool {
+				return keys[i] > keys[j]
+			})
 			var out []interface{}
-			for key, in := range in {
+			for _, key := range keys {
+				in := in[key]
 				out = append(out, map[string]interface{}{
 					"key": key,
 					"value": func(in []string) []interface{} {
