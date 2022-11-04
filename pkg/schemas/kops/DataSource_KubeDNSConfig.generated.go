@@ -283,7 +283,7 @@ func FlattenDataSourceKubeDNSConfigInto(in kops.KubeDNSConfig, out map[string]in
 				keys = append(keys, key)
 			}
 			sort.SliceStable(keys, func(i, j int) bool {
-				return keys[i] > keys[j]
+				return keys[i] < keys[j]
 			})
 			var out []interface{}
 			for _, key := range keys {

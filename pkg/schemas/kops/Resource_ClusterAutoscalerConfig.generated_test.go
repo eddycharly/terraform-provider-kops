@@ -30,6 +30,8 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 					"skip_nodes_with_local_storage":    nil,
 					"new_pod_scale_up_delay":           nil,
 					"scale_down_delay_after_add":       nil,
+					"scale_down_unneeded_time":         nil,
+					"scale_down_unready_time":          nil,
 					"cordon_node_before_terminating":   nil,
 					"image":                            nil,
 					"memory_request":                   nil,
@@ -62,6 +64,8 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 		"skip_nodes_with_local_storage":    nil,
 		"new_pod_scale_up_delay":           nil,
 		"scale_down_delay_after_add":       nil,
+		"scale_down_unneeded_time":         nil,
+		"scale_down_unready_time":          nil,
 		"cordon_node_before_terminating":   nil,
 		"image":                            nil,
 		"memory_request":                   nil,
@@ -178,6 +182,28 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.ScaleDownDelayAfterAdd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ScaleDownUnneededTime - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.ScaleDownUnneededTime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ScaleDownUnreadyTime - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.ScaleDownUnreadyTime = nil
 					return subject
 				}(),
 			},
@@ -272,6 +298,8 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 		"skip_nodes_with_local_storage":    nil,
 		"new_pod_scale_up_delay":           nil,
 		"scale_down_delay_after_add":       nil,
+		"scale_down_unneeded_time":         nil,
+		"scale_down_unready_time":          nil,
 		"cordon_node_before_terminating":   nil,
 		"image":                            nil,
 		"memory_request":                   nil,
@@ -388,6 +416,28 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.ScaleDownDelayAfterAdd = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ScaleDownUnneededTime - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.ScaleDownUnneededTime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ScaleDownUnreadyTime - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.ScaleDownUnreadyTime = nil
 					return subject
 				}(),
 			},
