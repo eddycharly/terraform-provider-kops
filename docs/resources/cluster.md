@@ -1860,6 +1860,8 @@ The following arguments are supported:
 - `skip_nodes_with_local_storage` - (Required) - Bool - SkipNodesWithLocalStorage makes cluster autoscaler skip scale-down of nodes with local storage.<br />Default: true.
 - `new_pod_scale_up_delay` - (Optional) - String - NewPodScaleUpDelay causes cluster autoscaler to ignore unschedulable pods until they are a certain "age", regardless of the scan-interval<br />Default: 0s.
 - `scale_down_delay_after_add` - (Optional) - String - ScaleDownDelayAfterAdd determines the time after scale up that scale down evaluation resumes<br />Default: 10m0s.
+- `scale_down_unneeded_time` - (Optional) - String - scaleDownUnneededTime determines the time a node should be unneeded before it is eligible for scale down<br />Default: 10m0s.
+- `scale_down_unready_time` - (Optional) - String - ScaleDownUnreadyTime determines the time an unready node should be unneeded before it is eligible for scale down<br />Default: 20m0s.
 - `cordon_node_before_terminating` - (Optional) - Bool - CordonNodeBeforeTerminating should CA cordon nodes before terminating during downscale process<br />Default: false.
 - `image` - (Optional) - String - Image is the docker container used.<br />Default: the latest supported image for the specified kubernetes version.
 - `memory_request` - (Optional) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.

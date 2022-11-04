@@ -295,7 +295,7 @@ func FlattenDataSourceContainerdConfigInto(in kops.ContainerdConfig, out map[str
 				keys = append(keys, key)
 			}
 			sort.SliceStable(keys, func(i, j int) bool {
-				return keys[i] > keys[j]
+				return keys[i] < keys[j]
 			})
 			var out []interface{}
 			for _, key := range keys {

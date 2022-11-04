@@ -1323,7 +1323,7 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 						keys = append(keys, key)
 					}
 					sort.SliceStable(keys, func(i, j int) bool {
-						return keys[i] > keys[j]
+						return keys[i] < keys[j]
 					})
 					var out []interface{}
 					for _, key := range keys {
