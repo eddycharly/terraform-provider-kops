@@ -23,6 +23,8 @@ func DataSourceClusterAutoscalerConfig() *schema.Resource {
 			"skip_nodes_with_local_storage":    ComputedBool(),
 			"new_pod_scale_up_delay":           ComputedString(),
 			"scale_down_delay_after_add":       ComputedString(),
+			"scale_down_unneeded_time":         ComputedString(),
+			"scale_down_unready_time":          ComputedString(),
 			"cordon_node_before_terminating":   ComputedBool(),
 			"image":                            ComputedString(),
 			"memory_request":                   ComputedQuantity(),
@@ -211,6 +213,44 @@ func ExpandDataSourceClusterAutoscalerConfig(in map[string]interface{}) kops.Clu
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["scale_down_delay_after_add"]),
+		ScaleDownUnneededTime: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["scale_down_unneeded_time"]),
+		ScaleDownUnreadyTime: func(in interface{}) *string {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *string {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in string) *string {
+					return &in
+				}(string(ExpandString(in)))
+			}(in)
+		}(in["scale_down_unready_time"]),
 		CordonNodeBeforeTerminating: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -401,6 +441,26 @@ func FlattenDataSourceClusterAutoscalerConfigInto(in kops.ClusterAutoscalerConfi
 			}(*in)
 		}(in)
 	}(in.ScaleDownDelayAfterAdd)
+	out["scale_down_unneeded_time"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ScaleDownUnneededTime)
+	out["scale_down_unready_time"] = func(in *string) interface{} {
+		return func(in *string) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in string) interface{} {
+				return FlattenString(string(in))
+			}(*in)
+		}(in)
+	}(in.ScaleDownUnreadyTime)
 	out["cordon_node_before_terminating"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
