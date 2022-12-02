@@ -1,6 +1,7 @@
 .DS_Store
 .ssl
 .vscode
+.tools
 
 .terraform/
 store/
