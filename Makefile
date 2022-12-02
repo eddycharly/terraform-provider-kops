@@ -28,7 +28,7 @@ $(GOIMPORTS):
 gen-tf-code: clean $(GOIMPORTS)
 	@go run ./hack/gen-tf-code/...
 	@go fmt ./pkg/schemas/...
-	@goimports -w ./pkg/schemas
+	@$(GOIMPORTS) -w ./pkg/schemas
 
 .PHONY: gen
 gen: gen-tf-code
