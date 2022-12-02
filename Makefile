@@ -2,7 +2,7 @@ PROVIDER_VERSION := "0.0.1"
 OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
 
 .PHONY: all
-all: clean gen fmt build vet test
+all: clean gen fmt build verify-gen vet test
 
 .PHONY: clean
 clean:
@@ -40,6 +40,13 @@ build: gen
 fmt: build
 	@go fmt ./cmd/...
 	@go fmt ./pkg/...
+
+.PHONY: verify-gen
+verify-gen: fmt
+	@git --no-pager diff .
+	@echo 'If this test fails, it is because the git diff is non-empty after running "make gen".' >&2
+	@echo 'To correct this, locally run "make gen", commit the changes, and re-run tests.' >&2
+	@git diff --quiet --exit-code .
 
 .PHONY: test
 test: fmt
