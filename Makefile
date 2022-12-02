@@ -1,5 +1,8 @@
-PROVIDER_VERSION := "0.0.1"
-OS := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
+PROVIDER_VERSION          := "0.0.1"
+OS                        := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
+TOOLS_DIR                 := $(PWD)/.tools
+GOIMPORTS                 := $(TOOLS_DIR)/goimports
+GOIMPORTS_VERSION         := latest
 
 .PHONY: all
 all: clean gen fmt build verify-gen vet test
@@ -17,14 +20,12 @@ clean:
 	@rm -rf ./docs/provider-config/*.md
 	@rm -rf ./docs/resources/*.md
 
-.PHONY: install-goimports
-install-goimports:
-ifeq (, $(shell which goimports))
-	go install golang.org/x/tools/cmd/goimports@latest
-endif
+$(GOIMPORTS):
+	@echo Install goimports... >&2
+	@GOBIN=$(TOOLS_DIR) go install golang.org/x/tools/cmd/goimports@$(GOIMPORTS_VERSION)
 
 .PHONY: gen-tf-code
-gen-tf-code: clean install-goimports
+gen-tf-code: clean $(GOIMPORTS)
 	@go run ./hack/gen-tf-code/...
 	@go fmt ./pkg/schemas/...
 	@goimports -w ./pkg/schemas
