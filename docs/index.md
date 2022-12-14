@@ -9,7 +9,7 @@ integration with the kOps api:
 
 ... just **pure go code.**
 
-Currently using kOps `v1.25.2` and compatible with terraform `0.15` and higher.
+Currently using kOps `v1.25.3` and compatible with terraform `0.15` and higher.
 
 ~> For now, provisioning the network is not supported. The network must
 be created separately and given to the provider through cluster attribute
@@ -29,7 +29,7 @@ kOps templates manually and force syncing them with the kOps store.
 
 In most cases, getting something idempotent is difficult because you need to
 somewhat keep the state of the cluster and are responsible for deleting obsolete
-instange groups for example.
+instance groups for example.
 
 This is where `terraform` shines in, state management. This provider takes care
 of creating, updating and deleting instance groups as they evolve over time.
@@ -51,7 +51,7 @@ use it in your terraform code:
 - [kops_cluster](/docs/data-sources/cluster) fetches the current state of a cluster
 - [kops_instance_group](/docs/data-sources/instance_group) fetches the current state of a cluster instance group
 - [kops_cluster_status](/docs/data-sources/cluster_status) fetches the current status of a cluster
-- [kops_kube_config](/docs/data-sources/kube_config) fetches the kube config infos of a cluster
+- [kops_kube_config](/docs/data-sources/kube_config) fetches the kube config of a cluster
 
 Finally, a special resource takes care of the cluster lifecyle:
 - [kops_cluster_updater](/docs/resources/cluster_updater) manages cluster updates and/or rolling updates
