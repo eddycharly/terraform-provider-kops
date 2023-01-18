@@ -8,8 +8,8 @@ require (
 	github.com/google/go-cmp v0.5.9
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.1
 	golang.org/x/tools v0.5.0
-	k8s.io/api v0.25.5
-	k8s.io/apimachinery v0.25.5
+	k8s.io/api v0.26.0
+	k8s.io/apimachinery v0.26.0
 	k8s.io/client-go v0.25.5
 	k8s.io/klog v1.0.0
 	k8s.io/kops v1.25.3
@@ -194,7 +194,7 @@ require (
 	k8s.io/component-base v0.25.4 // indirect
 	k8s.io/csi-translation-lib v0.25.4 // indirect
 	k8s.io/klog/v2 v2.80.1 // indirect
-	k8s.io/kube-openapi v0.0.0-20220803164354-a70c9af30aea // indirect
+	k8s.io/kube-openapi v0.0.0-20221012153701-172d655c2280 // indirect
 	k8s.io/kubectl v0.25.4 // indirect
 	k8s.io/legacy-cloud-providers v0.25.4 // indirect
 	k8s.io/utils v0.0.0-20221108210102-8e77b1f39fe2 // indirect
