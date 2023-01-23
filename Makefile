@@ -99,7 +99,7 @@ example-klog: install
 # INTEGRATION TESTS
 
 .PHONY: integration
-integration: integration-basic integration-external-policies
+integration: integration-basic integration-cluster-addons integration-external-policies
 
 .PHONY: integration-reset
 integration-reset:
@@ -112,6 +112,13 @@ integration-basic: integration-reset
 	@terraform -chdir=./tests/basic validate
 	@terraform -chdir=./tests/basic plan
 	@terraform -chdir=./tests/basic apply -auto-approve
+
+.PHONY: integration-cluster-addons
+integration-cluster-addons: integration-reset
+	@terraform -chdir=./tests/cluster-addons init
+	@terraform -chdir=./tests/cluster-addons validate
+	@terraform -chdir=./tests/cluster-addons plan
+	@terraform -chdir=./tests/cluster-addons apply -auto-approve
 
 .PHONY: integration-external-policies
 integration-external-policies: integration-reset

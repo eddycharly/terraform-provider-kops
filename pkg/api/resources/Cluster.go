@@ -116,8 +116,8 @@ func CreateCluster(name string, labels map[string]string, annotations map[string
 	if err != nil {
 		return nil, err
 	}
-	for _, p := range clusterAddons {
-		addon, err := clusteraddons.LoadClusterAddon(p)
+	for _, addon := range clusterAddons {
+		addon, err := clusteraddons.ParseClusterAddon([]byte(addon))
 		if err != nil {
 			return nil, err
 		}
@@ -186,8 +186,8 @@ func UpdateCluster(name string, labels map[string]string, annotations map[string
 	if err != nil {
 		return nil, err
 	}
-	for _, p := range clusterAddons {
-		addon, err := clusteraddons.LoadClusterAddon(p)
+	for _, addon := range clusterAddons {
+		addon, err := clusteraddons.ParseClusterAddon([]byte(addon))
 		if err != nil {
 			return nil, err
 		}
