@@ -101,6 +101,7 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"annotations":                       func() map[string]interface{} { return nil }(),
 					"name":                              "",
 					"admin_ssh_key":                     "",
+					"cluster_addons":                    func() []interface{} { return nil }(),
 					"secrets":                           nil,
 				},
 			},
@@ -197,6 +198,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
+		"cluster_addons":                    func() []interface{} { return nil }(),
 		"secrets":                           nil,
 	}
 	type args struct {
@@ -1045,6 +1047,17 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.AdminSshKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterAddons - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ClusterAddons = nil
 					return subject
 				}(),
 			},
@@ -1153,6 +1166,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
+		"cluster_addons":                    func() []interface{} { return nil }(),
 		"secrets":                           nil,
 	}
 	type args struct {
@@ -2001,6 +2015,17 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.AdminSshKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterAddons - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ClusterAddons = nil
 					return subject
 				}(),
 			},

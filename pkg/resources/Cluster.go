@@ -30,7 +30,16 @@ func Cluster() *schema.Resource {
 
 func ClusterCreate(c context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	in := resourcesschema.ExpandResourceCluster(d.Get("").(map[string]interface{}))
-	if cluster, err := resources.CreateCluster(in.Name, in.Labels, in.Annotations, in.AdminSshKey, in.Secrets, in.ClusterSpec, config.Clientset(m)); err != nil {
+	if cluster, err := resources.CreateCluster(
+		in.Name,
+		in.Labels,
+		in.Annotations,
+		in.AdminSshKey,
+		in.Secrets,
+		in.ClusterAddons,
+		in.ClusterSpec,
+		config.Clientset(m),
+	); err != nil {
 		return diag.FromErr(err)
 	} else {
 		d.SetId(cluster.Name)

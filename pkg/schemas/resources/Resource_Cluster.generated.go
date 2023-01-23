@@ -91,6 +91,7 @@ func ResourceCluster() *schema.Resource {
 			"annotations":                       OptionalMap(String()),
 			"name":                              ForceNew(RequiredString()),
 			"admin_ssh_key":                     Sensitive(OptionalString()),
+			"cluster_addons":                    OptionalList(String()),
 			"secrets":                           OptionalStruct(ResourceClusterSecrets()),
 			"revision":                          ComputedInt(),
 		},
@@ -182,6 +183,18 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		AdminSshKey: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["admin_ssh_key"]),
+		ClusterAddons: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["cluster_addons"]),
 		Secrets: func(in interface{}) *resources.ClusterSecrets {
 			return func(in interface{}) *resources.ClusterSecrets {
 				if in == nil {
@@ -238,6 +251,15 @@ func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}
 	out["admin_ssh_key"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.AdminSshKey)
+	out["cluster_addons"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.ClusterAddons)
 	out["secrets"] = func(in *resources.ClusterSecrets) interface{} {
 		return func(in *resources.ClusterSecrets) interface{} {
 			if in == nil {

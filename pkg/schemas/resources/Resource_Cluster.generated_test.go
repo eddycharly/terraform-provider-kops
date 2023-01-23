@@ -101,6 +101,7 @@ func TestExpandResourceCluster(t *testing.T) {
 					"annotations":                       func() map[string]interface{} { return nil }(),
 					"name":                              "",
 					"admin_ssh_key":                     "",
+					"cluster_addons":                    func() []interface{} { return nil }(),
 					"secrets":                           nil,
 					"revision":                          0,
 				},
@@ -198,6 +199,7 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
+		"cluster_addons":                    func() []interface{} { return nil }(),
 		"secrets":                           nil,
 		"revision":                          0,
 	}
@@ -1047,6 +1049,17 @@ func TestFlattenResourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.AdminSshKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterAddons - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ClusterAddons = nil
 					return subject
 				}(),
 			},
@@ -1166,6 +1179,7 @@ func TestFlattenResourceCluster(t *testing.T) {
 		"annotations":                       func() map[string]interface{} { return nil }(),
 		"name":                              "",
 		"admin_ssh_key":                     "",
+		"cluster_addons":                    func() []interface{} { return nil }(),
 		"secrets":                           nil,
 		"revision":                          0,
 	}
@@ -2015,6 +2029,17 @@ func TestFlattenResourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.AdminSshKey = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterAddons - default",
+			args: args{
+				in: func() resources.Cluster {
+					subject := resources.Cluster{}
+					subject.ClusterAddons = nil
 					return subject
 				}(),
 			},
