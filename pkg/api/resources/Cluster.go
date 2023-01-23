@@ -9,7 +9,6 @@ import (
 	kopsutil "k8s.io/kops/pkg/apis/kops/util"
 	"k8s.io/kops/pkg/client/simple"
 	"k8s.io/kops/pkg/clusteraddons"
-	"k8s.io/kops/pkg/kubemanifest"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
 	"k8s.io/kops/pkg/wellknownoperators"
@@ -164,7 +163,7 @@ func CreateCluster(name string, labels map[string]string, annotations map[string
 	return makeCluster(adminSshKey, secrets, kc), nil
 }
 
-func UpdateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+func UpdateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, clusterAddons []string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
 	kc := makeKopsCluster(name, labels, annotations, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
@@ -173,12 +172,32 @@ func UpdateCluster(name string, labels map[string]string, annotations map[string
 	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
 		return nil, err
 	}
+	// TODO: deep validate ?
+	// TODO: assets builder ?
+	channel, err := cloudup.ChannelForCluster(kc)
+	if err != nil {
+		return nil, err
+	}
+	kubernetesVersion, err := kopsutil.ParseKubernetesVersion(kc.Spec.KubernetesVersion)
+	if err != nil {
+		return nil, err
+	}
+	addons, err := wellknownoperators.CreateAddons(channel, kubernetesVersion, kc)
+	if err != nil {
+		return nil, err
+	}
+	for _, p := range clusterAddons {
+		addon, err := clusteraddons.LoadClusterAddon(p)
+		if err != nil {
+			return nil, err
+		}
+		addons = append(addons, addon.Objects...)
+	}
 	kc, err = clientset.UpdateCluster(context.Background(), kc, nil)
 	if err != nil {
 		return nil, err
 	}
 	addonsClient := clientset.AddonsFor(kc)
-	var addons kubemanifest.ObjectList
 	if err := addonsClient.Replace(addons); err != nil {
 		return nil, err
 	}
