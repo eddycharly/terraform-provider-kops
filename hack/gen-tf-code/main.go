@@ -217,7 +217,7 @@ func main() {
 			required("Name"),
 		),
 		generate(kops.ClusterSubnetSpec{},
-			required("Name", "Type", "Zone"),
+			required("Name", "Type"),
 			computed("CIDR"),
 		),
 		generate(kops.TopologySpec{},

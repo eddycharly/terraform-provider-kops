@@ -14,7 +14,7 @@ func ResourceClusterSubnetSpec() *schema.Resource {
 			"name":              RequiredString(),
 			"cidr":              OptionalComputedString(),
 			"ipv6_cidr":         OptionalString(),
-			"zone":              RequiredString(),
+			"zone":              OptionalString(),
 			"region":            OptionalString(),
 			"id":                OptionalString(),
 			"egress":            OptionalString(),

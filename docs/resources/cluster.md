@@ -1340,7 +1340,7 @@ The following arguments are supported:
 - `name` - (Required) - String - Name is the name of the subnet.
 - `cidr` - (Optional) - (Computed) - String - CIDR is the IPv4 CIDR block assigned to the subnet.
 - `ipv6_cidr` - (Optional) - String - IPv6CIDR is the IPv6 CIDR block assigned to the subnet.
-- `zone` - (Required) - String - Zone is the zone the subnet is in, set for subnets that are zonally scoped.
+- `zone` - (Optional) - String - Zone is the zone the subnet is in, set for subnets that are zonally scoped.
 - `region` - (Optional) - String - Region is the region the subnet is in, set for subnets that are regionally scoped.
 - `id` - (Optional) - String - ID is the cloud provider ID for the objects associated with the zone (the subnet on AWS).
 - `egress` - (Optional) - String - Egress defines the method of traffic egress for this subnet.
