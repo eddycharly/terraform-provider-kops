@@ -1,0 +1,29 @@
+name: Verify codegen
+
+on:
+  pull_request:
+    branches:
+      - main
+      - v*
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-codegen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: /home/runner/go/pkg/mod
+          key: go-mod
+      - name: Verify codegen
+        run: |
+          make verify-gen
