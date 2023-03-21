@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - v*
+
+jobs:
+  build:
+    strategy:
+      fail-fast: true
+      matrix:
+        tf-version: [0.15.5, 1.0.11, 1.1.9, 1.2.9]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: /home/runner/go/pkg/mod
+          key: go-mod
+      - name: Verify codegen
+        run: |
+          make verify-gen
