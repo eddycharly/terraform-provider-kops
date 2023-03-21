@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
-	_default := kops.AWSLoadBalancerControllerConfig{}
+func TestExpandDataSourceLoadBalancerControllerSpec(t *testing.T) {
+	_default := kops.LoadBalancerControllerSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.AWSLoadBalancerControllerConfig
+		want kops.LoadBalancerControllerSpec
 	}{
 		{
 			name: "default",
@@ -33,15 +33,15 @@ func TestExpandDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandDataSourceAWSLoadBalancerControllerConfig(tt.args.in)
+			got := ExpandDataSourceLoadBalancerControllerSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandDataSourceAWSLoadBalancerControllerConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandDataSourceLoadBalancerControllerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
+func TestFlattenDataSourceLoadBalancerControllerSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":       nil,
 		"version":       nil,
@@ -50,7 +50,7 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 		"enable_shield": false,
 	}
 	type args struct {
-		in kops.AWSLoadBalancerControllerConfig
+		in kops.LoadBalancerControllerSpec
 	}
 	tests := []struct {
 		name string
@@ -60,15 +60,15 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.AWSLoadBalancerControllerConfig{},
+				in: kops.LoadBalancerControllerSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.Enabled = nil
 					return subject
 				}(),
@@ -78,8 +78,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 		{
 			name: "Version - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.Version = nil
 					return subject
 				}(),
@@ -89,8 +89,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 		{
 			name: "EnableWAF - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.EnableWAF = false
 					return subject
 				}(),
@@ -100,8 +100,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 		{
 			name: "EnableWAFv2 - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.EnableWAFv2 = false
 					return subject
 				}(),
@@ -111,8 +111,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 		{
 			name: "EnableShield - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.EnableShield = false
 					return subject
 				}(),
@@ -123,15 +123,15 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfigInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenDataSourceAWSLoadBalancerControllerConfigInto(tt.args.in, got)
+			FlattenDataSourceLoadBalancerControllerSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourceAWSLoadBalancerControllerConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourceLoadBalancerControllerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
+func TestFlattenDataSourceLoadBalancerControllerSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":       nil,
 		"version":       nil,
@@ -140,7 +140,7 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 		"enable_shield": false,
 	}
 	type args struct {
-		in kops.AWSLoadBalancerControllerConfig
+		in kops.LoadBalancerControllerSpec
 	}
 	tests := []struct {
 		name string
@@ -150,15 +150,15 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.AWSLoadBalancerControllerConfig{},
+				in: kops.LoadBalancerControllerSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.Enabled = nil
 					return subject
 				}(),
@@ -168,8 +168,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 		{
 			name: "Version - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.Version = nil
 					return subject
 				}(),
@@ -179,8 +179,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 		{
 			name: "EnableWAF - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.EnableWAF = false
 					return subject
 				}(),
@@ -190,8 +190,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 		{
 			name: "EnableWAFv2 - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.EnableWAFv2 = false
 					return subject
 				}(),
@@ -201,8 +201,8 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 		{
 			name: "EnableShield - default",
 			args: args{
-				in: func() kops.AWSLoadBalancerControllerConfig {
-					subject := kops.AWSLoadBalancerControllerConfig{}
+				in: func() kops.LoadBalancerControllerSpec {
+					subject := kops.LoadBalancerControllerSpec{}
 					subject.EnableShield = false
 					return subject
 				}(),
@@ -212,9 +212,9 @@ func TestFlattenDataSourceAWSLoadBalancerControllerConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenDataSourceAWSLoadBalancerControllerConfig(tt.args.in)
+			got := FlattenDataSourceLoadBalancerControllerSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourceAWSLoadBalancerControllerConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourceLoadBalancerControllerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

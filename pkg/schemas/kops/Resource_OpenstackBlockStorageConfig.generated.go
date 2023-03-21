@@ -13,12 +13,14 @@ var _ = Schema
 func ResourceOpenstackBlockStorageConfig() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"version":              OptionalString(),
-			"ignore_az":            OptionalBool(),
-			"override_az":          OptionalString(),
-			"create_storage_class": OptionalBool(),
-			"csi_plugin_image":     OptionalString(),
-			"csi_topology_support": OptionalBool(),
+			"version":                     OptionalString(),
+			"ignore_az":                   OptionalBool(),
+			"override_az":                 OptionalString(),
+			"ignore_volume_micro_version": OptionalBool(),
+			"create_storage_class":        OptionalBool(),
+			"csi_plugin_image":            OptionalString(),
+			"csi_topology_support":        OptionalBool(),
+			"cluster_name":                OptionalString(),
 		},
 	}
 
@@ -87,6 +89,25 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["override_az"]),
+		IgnoreVolumeMicroVersion: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["ignore_volume_micro_version"]),
 		CreateStorageClass: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -128,6 +149,9 @@ func ExpandResourceOpenstackBlockStorageConfig(in map[string]interface{}) kops.O
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["csi_topology_support"]),
+		ClusterName: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["cluster_name"]),
 	}
 }
 
@@ -162,6 +186,16 @@ func FlattenResourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorag
 			}(*in)
 		}(in)
 	}(in.OverrideAZ)
+	out["ignore_volume_micro_version"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.IgnoreVolumeMicroVersion)
 	out["create_storage_class"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -185,6 +219,9 @@ func FlattenResourceOpenstackBlockStorageConfigInto(in kops.OpenstackBlockStorag
 			}(*in)
 		}(in)
 	}(in.CSITopologySupport)
+	out["cluster_name"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ClusterName)
 }
 
 func FlattenResourceOpenstackBlockStorageConfig(in kops.OpenstackBlockStorageConfig) map[string]interface{} {

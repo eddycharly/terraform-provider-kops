@@ -20,7 +20,11 @@ func TestExpandResourceGCESpec(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: map[string]interface{}{},
+				in: map[string]interface{}{
+					"project":         "",
+					"service_account": "",
+					"pd_csi_driver":   nil,
+				},
 			},
 			want: _default,
 		},
@@ -36,7 +40,11 @@ func TestExpandResourceGCESpec(t *testing.T) {
 }
 
 func TestFlattenResourceGCESpecInto(t *testing.T) {
-	_default := map[string]interface{}{}
+	_default := map[string]interface{}{
+		"project":         "",
+		"service_account": "",
+		"pd_csi_driver":   nil,
+	}
 	type args struct {
 		in kops.GCESpec
 	}
@@ -49,6 +57,39 @@ func TestFlattenResourceGCESpecInto(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.GCESpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Project - default",
+			args: args{
+				in: func() kops.GCESpec {
+					subject := kops.GCESpec{}
+					subject.Project = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServiceAccount - default",
+			args: args{
+				in: func() kops.GCESpec {
+					subject := kops.GCESpec{}
+					subject.ServiceAccount = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PDCsiDriver - default",
+			args: args{
+				in: func() kops.GCESpec {
+					subject := kops.GCESpec{}
+					subject.PDCSIDriver = nil
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -65,7 +106,11 @@ func TestFlattenResourceGCESpecInto(t *testing.T) {
 }
 
 func TestFlattenResourceGCESpec(t *testing.T) {
-	_default := map[string]interface{}{}
+	_default := map[string]interface{}{
+		"project":         "",
+		"service_account": "",
+		"pd_csi_driver":   nil,
+	}
 	type args struct {
 		in kops.GCESpec
 	}
@@ -78,6 +123,39 @@ func TestFlattenResourceGCESpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.GCESpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Project - default",
+			args: args{
+				in: func() kops.GCESpec {
+					subject := kops.GCESpec{}
+					subject.Project = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServiceAccount - default",
+			args: args{
+				in: func() kops.GCESpec {
+					subject := kops.GCESpec{}
+					subject.ServiceAccount = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PDCsiDriver - default",
+			args: args{
+				in: func() kops.GCESpec {
+					subject := kops.GCESpec{}
+					subject.PDCSIDriver = nil
+					return subject
+				}(),
 			},
 			want: _default,
 		},

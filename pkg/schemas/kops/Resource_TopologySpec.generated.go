@@ -11,10 +11,10 @@ var _ = Schema
 func ResourceTopologySpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"masters": RequiredString(),
-			"nodes":   RequiredString(),
-			"bastion": OptionalStruct(ResourceBastionSpec()),
-			"dns":     RequiredStruct(ResourceDNSSpec()),
+			"control_plane": RequiredString(),
+			"nodes":         RequiredString(),
+			"bastion":       OptionalStruct(ResourceBastionSpec()),
+			"dns":           RequiredString(),
 		},
 	}
 
@@ -26,9 +26,9 @@ func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 		panic("expand TopologySpec failure, in is nil")
 	}
 	return kops.TopologySpec{
-		Masters: func(in interface{}) string {
+		ControlPlane: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["masters"]),
+		}(in["control_plane"]),
 		Nodes: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["nodes"]),
@@ -50,31 +50,16 @@ func ExpandResourceTopologySpec(in map[string]interface{}) kops.TopologySpec {
 				}(in))
 			}(in)
 		}(in["bastion"]),
-		DNS: func(in interface{}) *kops.DNSSpec {
-			return func(in interface{}) *kops.DNSSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.DNSSpec) *kops.DNSSpec {
-					return &in
-				}(func(in interface{}) kops.DNSSpec {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandResourceDNSSpec(in[0].(map[string]interface{}))
-					}
-					return kops.DNSSpec{}
-				}(in))
-			}(in)
+		DNS: func(in interface{}) kops.DNSType {
+			return kops.DNSType(ExpandString(in))
 		}(in["dns"]),
 	}
 }
 
 func FlattenResourceTopologySpecInto(in kops.TopologySpec, out map[string]interface{}) {
-	out["masters"] = func(in string) interface{} {
+	out["control_plane"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.Masters)
+	}(in.ControlPlane)
 	out["nodes"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Nodes)
@@ -90,17 +75,8 @@ func FlattenResourceTopologySpecInto(in kops.TopologySpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.Bastion)
-	out["dns"] = func(in *kops.DNSSpec) interface{} {
-		return func(in *kops.DNSSpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.DNSSpec) interface{} {
-				return func(in kops.DNSSpec) []interface{} {
-					return []interface{}{FlattenResourceDNSSpec(in)}
-				}(in)
-			}(*in)
-		}(in)
+	out["dns"] = func(in kops.DNSType) interface{} {
+		return FlattenString(string(in))
 	}(in.DNS)
 }
 

@@ -16,7 +16,7 @@ func DataSourceClusterSubnetSpec() *schema.Resource {
 			"ipv6_cidr":         ComputedString(),
 			"zone":              ComputedString(),
 			"region":            ComputedString(),
-			"provider_id":       ComputedString(),
+			"id":                ComputedString(),
 			"egress":            ComputedString(),
 			"type":              ComputedString(),
 			"public_ip":         ComputedString(),
@@ -47,9 +47,9 @@ func ExpandDataSourceClusterSubnetSpec(in map[string]interface{}) kops.ClusterSu
 		Region: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["region"]),
-		ProviderID: func(in interface{}) string {
+		ID: func(in interface{}) string {
 			return string(ExpandString(in))
-		}(in["provider_id"]),
+		}(in["id"]),
 		Egress: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["egress"]),
@@ -95,9 +95,9 @@ func FlattenDataSourceClusterSubnetSpecInto(in kops.ClusterSubnetSpec, out map[s
 	out["region"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Region)
-	out["provider_id"] = func(in string) interface{} {
+	out["id"] = func(in string) interface{} {
 		return FlattenString(string(in))
-	}(in.ProviderID)
+	}(in.ID)
 	out["egress"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Egress)

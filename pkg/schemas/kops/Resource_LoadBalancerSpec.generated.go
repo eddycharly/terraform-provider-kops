@@ -10,7 +10,7 @@ import (
 
 var _ = Schema
 
-func ResourceLoadBalancer() *schema.Resource {
+func ResourceLoadBalancerSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"load_balancer_name": OptionalString(),
@@ -21,11 +21,11 @@ func ResourceLoadBalancer() *schema.Resource {
 	return res
 }
 
-func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
+func ExpandResourceLoadBalancerSpec(in map[string]interface{}) kops.LoadBalancerSpec {
 	if in == nil {
-		panic("expand LoadBalancer failure, in is nil")
+		panic("expand LoadBalancerSpec failure, in is nil")
 	}
-	return kops.LoadBalancer{
+	return kops.LoadBalancerSpec{
 		LoadBalancerName: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -67,7 +67,7 @@ func ExpandResourceLoadBalancer(in map[string]interface{}) kops.LoadBalancer {
 	}
 }
 
-func FlattenResourceLoadBalancerInto(in kops.LoadBalancer, out map[string]interface{}) {
+func FlattenResourceLoadBalancerSpecInto(in kops.LoadBalancerSpec, out map[string]interface{}) {
 	out["load_balancer_name"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
@@ -90,8 +90,8 @@ func FlattenResourceLoadBalancerInto(in kops.LoadBalancer, out map[string]interf
 	}(in.TargetGroupARN)
 }
 
-func FlattenResourceLoadBalancer(in kops.LoadBalancer) map[string]interface{} {
+func FlattenResourceLoadBalancerSpec(in kops.LoadBalancerSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenResourceLoadBalancerInto(in, out)
+	FlattenResourceLoadBalancerSpecInto(in, out)
 	return out
 }

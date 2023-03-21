@@ -10,25 +10,25 @@ import (
 
 var _ = Schema
 
-func ResourceAWSLoadBalancerControllerConfig() *schema.Resource {
+func DataSourceLoadBalancerControllerSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":       OptionalBool(),
-			"version":       OptionalString(),
-			"enable_waf":    OptionalBool(),
-			"enable_wa_fv2": OptionalBool(),
-			"enable_shield": OptionalBool(),
+			"enabled":       ComputedBool(),
+			"version":       ComputedString(),
+			"enable_waf":    ComputedBool(),
+			"enable_wa_fv2": ComputedBool(),
+			"enable_shield": ComputedBool(),
 		},
 	}
 
 	return res
 }
 
-func ExpandResourceAWSLoadBalancerControllerConfig(in map[string]interface{}) kops.AWSLoadBalancerControllerConfig {
+func ExpandDataSourceLoadBalancerControllerSpec(in map[string]interface{}) kops.LoadBalancerControllerSpec {
 	if in == nil {
-		panic("expand AWSLoadBalancerControllerConfig failure, in is nil")
+		panic("expand LoadBalancerControllerSpec failure, in is nil")
 	}
-	return kops.AWSLoadBalancerControllerConfig{
+	return kops.LoadBalancerControllerSpec{
 		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -79,7 +79,7 @@ func ExpandResourceAWSLoadBalancerControllerConfig(in map[string]interface{}) ko
 	}
 }
 
-func FlattenResourceAWSLoadBalancerControllerConfigInto(in kops.AWSLoadBalancerControllerConfig, out map[string]interface{}) {
+func FlattenDataSourceLoadBalancerControllerSpecInto(in kops.LoadBalancerControllerSpec, out map[string]interface{}) {
 	out["enabled"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -111,8 +111,8 @@ func FlattenResourceAWSLoadBalancerControllerConfigInto(in kops.AWSLoadBalancerC
 	}(in.EnableShield)
 }
 
-func FlattenResourceAWSLoadBalancerControllerConfig(in kops.AWSLoadBalancerControllerConfig) map[string]interface{} {
+func FlattenDataSourceLoadBalancerControllerSpec(in kops.LoadBalancerControllerSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenResourceAWSLoadBalancerControllerConfigInto(in, out)
+	FlattenDataSourceLoadBalancerControllerSpecInto(in, out)
 	return out
 }

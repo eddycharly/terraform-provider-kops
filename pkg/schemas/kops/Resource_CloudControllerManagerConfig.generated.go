@@ -6,6 +6,7 @@ import (
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/apimachinery/pkg/api/resource"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 )
 
@@ -29,6 +30,7 @@ func ResourceCloudControllerManagerConfig() *schema.Resource {
 			"use_service_account_credentials": OptionalBool(),
 			"enable_leader_migration":         OptionalBool(),
 			"cpu_request":                     OptionalQuantity(),
+			"node_status_update_frequency":    OptionalDuration(),
 		},
 	}
 
@@ -221,6 +223,25 @@ func ExpandResourceCloudControllerManagerConfig(in map[string]interface{}) kops.
 				}(ExpandQuantity(in))
 			}(in)
 		}(in["cpu_request"]),
+		NodeStatusUpdateFrequency: func(in interface{}) *meta.Duration {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *meta.Duration {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in meta.Duration) *meta.Duration {
+					return &in
+				}(ExpandDuration(in))
+			}(in)
+		}(in["node_status_update_frequency"]),
 	}
 }
 
@@ -334,6 +355,16 @@ func FlattenResourceCloudControllerManagerConfigInto(in kops.CloudControllerMana
 			}(*in)
 		}(in)
 	}(in.CPURequest)
+	out["node_status_update_frequency"] = func(in *meta.Duration) interface{} {
+		return func(in *meta.Duration) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in meta.Duration) interface{} {
+				return FlattenDuration(in)
+			}(*in)
+		}(in)
+	}(in.NodeStatusUpdateFrequency)
 }
 
 func FlattenResourceCloudControllerManagerConfig(in kops.CloudControllerManagerConfig) map[string]interface{} {

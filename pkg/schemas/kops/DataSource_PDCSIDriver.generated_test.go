@@ -7,21 +7,21 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandResourceDNSSpec(t *testing.T) {
-	_default := kops.DNSSpec{}
+func TestExpandDataSourcePDCSIDriver(t *testing.T) {
+	_default := kops.PDCSIDriver{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.DNSSpec
+		want kops.PDCSIDriver
 	}{
 		{
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"type": "",
+					"enabled": nil,
 				},
 			},
 			want: _default,
@@ -29,20 +29,20 @@ func TestExpandResourceDNSSpec(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandResourceDNSSpec(tt.args.in)
+			got := ExpandDataSourcePDCSIDriver(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandResourceDNSSpec() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandDataSourcePDCSIDriver() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceDNSSpecInto(t *testing.T) {
+func TestFlattenDataSourcePDCSIDriverInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"type": "",
+		"enabled": nil,
 	}
 	type args struct {
-		in kops.DNSSpec
+		in kops.PDCSIDriver
 	}
 	tests := []struct {
 		name string
@@ -52,16 +52,16 @@ func TestFlattenResourceDNSSpecInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.DNSSpec{},
+				in: kops.PDCSIDriver{},
 			},
 			want: _default,
 		},
 		{
-			name: "Type - default",
+			name: "Enabled - default",
 			args: args{
-				in: func() kops.DNSSpec {
-					subject := kops.DNSSpec{}
-					subject.Type = ""
+				in: func() kops.PDCSIDriver {
+					subject := kops.PDCSIDriver{}
+					subject.Enabled = nil
 					return subject
 				}(),
 			},
@@ -71,20 +71,20 @@ func TestFlattenResourceDNSSpecInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenResourceDNSSpecInto(tt.args.in, got)
+			FlattenDataSourcePDCSIDriverInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceDNSSpec() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourcePDCSIDriver() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceDNSSpec(t *testing.T) {
+func TestFlattenDataSourcePDCSIDriver(t *testing.T) {
 	_default := map[string]interface{}{
-		"type": "",
+		"enabled": nil,
 	}
 	type args struct {
-		in kops.DNSSpec
+		in kops.PDCSIDriver
 	}
 	tests := []struct {
 		name string
@@ -94,16 +94,16 @@ func TestFlattenResourceDNSSpec(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.DNSSpec{},
+				in: kops.PDCSIDriver{},
 			},
 			want: _default,
 		},
 		{
-			name: "Type - default",
+			name: "Enabled - default",
 			args: args{
-				in: func() kops.DNSSpec {
-					subject := kops.DNSSpec{}
-					subject.Type = ""
+				in: func() kops.PDCSIDriver {
+					subject := kops.PDCSIDriver{}
+					subject.Enabled = nil
 					return subject
 				}(),
 			},
@@ -112,9 +112,9 @@ func TestFlattenResourceDNSSpec(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenResourceDNSSpec(tt.args.in)
+			got := FlattenDataSourcePDCSIDriver(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceDNSSpec() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourcePDCSIDriver() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

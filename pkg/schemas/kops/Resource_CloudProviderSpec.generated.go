@@ -17,6 +17,7 @@ func ResourceCloudProviderSpec() *schema.Resource {
 			"gce":       OptionalStruct(ResourceGCESpec()),
 			"hetzner":   OptionalStruct(ResourceHetznerSpec()),
 			"openstack": OptionalStruct(ResourceOpenstackSpec()),
+			"scaleway":  OptionalStruct(ResourceScalewaySpec()),
 		},
 	}
 
@@ -136,6 +137,24 @@ func ExpandResourceCloudProviderSpec(in map[string]interface{}) kops.CloudProvid
 				}(in))
 			}(in)
 		}(in["openstack"]),
+		Scaleway: func(in interface{}) *kops.ScalewaySpec {
+			return func(in interface{}) *kops.ScalewaySpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.ScalewaySpec) *kops.ScalewaySpec {
+					return &in
+				}(func(in interface{}) kops.ScalewaySpec {
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceScalewaySpec(in[0].(map[string]interface{}))
+					}
+					return kops.ScalewaySpec{}
+				}(in))
+			}(in)
+		}(in["scaleway"]),
 	}
 }
 
@@ -212,6 +231,18 @@ func FlattenResourceCloudProviderSpecInto(in kops.CloudProviderSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.Openstack)
+	out["scaleway"] = func(in *kops.ScalewaySpec) interface{} {
+		return func(in *kops.ScalewaySpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.ScalewaySpec) interface{} {
+				return func(in kops.ScalewaySpec) []interface{} {
+					return []interface{}{FlattenResourceScalewaySpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Scaleway)
 }
 
 func FlattenResourceCloudProviderSpec(in kops.CloudProviderSpec) map[string]interface{} {

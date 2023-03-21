@@ -11,7 +11,7 @@ import (
 
 var _ = Schema
 
-func ResourceNodeTerminationHandlerConfig() *schema.Resource {
+func ResourceNodeTerminationHandlerSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":                           RequiredBool(),
@@ -32,11 +32,11 @@ func ResourceNodeTerminationHandlerConfig() *schema.Resource {
 	return res
 }
 
-func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.NodeTerminationHandlerConfig {
+func ExpandResourceNodeTerminationHandlerSpec(in map[string]interface{}) kops.NodeTerminationHandlerSpec {
 	if in == nil {
-		panic("expand NodeTerminationHandlerConfig failure, in is nil")
+		panic("expand NodeTerminationHandlerSpec failure, in is nil")
 	}
-	return kops.NodeTerminationHandlerConfig{
+	return kops.NodeTerminationHandlerSpec{
 		Enabled: func(in interface{}) *bool {
 			return func(in interface{}) *bool {
 				if in == nil {
@@ -256,7 +256,7 @@ func ExpandResourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.
 	}
 }
 
-func FlattenResourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHandlerConfig, out map[string]interface{}) {
+func FlattenResourceNodeTerminationHandlerSpecInto(in kops.NodeTerminationHandlerSpec, out map[string]interface{}) {
 	out["enabled"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -379,8 +379,8 @@ func FlattenResourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHand
 	}(in.Version)
 }
 
-func FlattenResourceNodeTerminationHandlerConfig(in kops.NodeTerminationHandlerConfig) map[string]interface{} {
+func FlattenResourceNodeTerminationHandlerSpec(in kops.NodeTerminationHandlerSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenResourceNodeTerminationHandlerConfigInto(in, out)
+	FlattenResourceNodeTerminationHandlerSpecInto(in, out)
 	return out
 }

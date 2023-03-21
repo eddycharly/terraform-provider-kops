@@ -34,7 +34,6 @@ import (
 	"k8s.io/klog"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/pkg/cloudinstances"
-	"k8s.io/kops/pkg/dns"
 	kopsValidation "k8s.io/kops/pkg/validation"
 )
 
@@ -98,28 +97,28 @@ func (v *clusterValidatorImpl) Validate() (*kopsValidation.ValidationCluster, er
 
 	validation := &kopsValidation.ValidationCluster{}
 
-	// Do not use if we are running gossip
-	if !dns.IsGossipHostname(clusterName) {
-		hasPlaceHolderIPAddress, err := hasPlaceHolderIP(v.config)
-		if err != nil {
-			return nil, err
-		}
+	// // Do not use if we are running gossip
+	// if !dns.IsGossipHostname(clusterName) {
+	// 	hasPlaceHolderIPAddress, err := hasPlaceHolderIP(v.config)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-		if hasPlaceHolderIPAddress {
-			message := "Validation Failed\n\n" +
-				"The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address." +
-				"  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123." +
-				"  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate." +
-				"  The protokube container and dns-controller deployment logs may contain more diagnostic information." +
-				"  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start."
-			addError(validation, &kopsValidation.ValidationError{
-				Kind:    "dns",
-				Name:    "apiserver",
-				Message: message,
-			})
-			return validation, nil
-		}
-	}
+	// 	if hasPlaceHolderIPAddress {
+	// 		message := "Validation Failed\n\n" +
+	// 			"The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address." +
+	// 			"  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123." +
+	// 			"  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate." +
+	// 			"  The protokube container and dns-controller deployment logs may contain more diagnostic information." +
+	// 			"  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start."
+	// 		addError(validation, &kopsValidation.ValidationError{
+	// 			Kind:    "dns",
+	// 			Name:    "apiserver",
+	// 			Message: message,
+	// 		})
+	// 		return validation, nil
+	// 	}
+	// }
 
 	nodeList, err := v.k8sClient.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {

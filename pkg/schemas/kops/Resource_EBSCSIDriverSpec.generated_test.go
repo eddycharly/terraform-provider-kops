@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandDataSourceAWSEBSCSIDriver(t *testing.T) {
-	_default := kops.AWSEBSCSIDriver{}
+func TestExpandResourceEBSCSIDriverSpec(t *testing.T) {
+	_default := kops.EBSCSIDriverSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.AWSEBSCSIDriver
+		want kops.EBSCSIDriverSpec
 	}{
 		{
 			name: "default",
@@ -33,15 +33,15 @@ func TestExpandDataSourceAWSEBSCSIDriver(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandDataSourceAWSEBSCSIDriver(tt.args.in)
+			got := ExpandResourceEBSCSIDriverSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandDataSourceAWSEBSCSIDriver() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandResourceEBSCSIDriverSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
+func TestFlattenResourceEBSCSIDriverSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":             nil,
 		"managed":             nil,
@@ -50,7 +50,7 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 		"pod_annotations":     func() map[string]interface{} { return nil }(),
 	}
 	type args struct {
-		in kops.AWSEBSCSIDriver
+		in kops.EBSCSIDriverSpec
 	}
 	tests := []struct {
 		name string
@@ -60,15 +60,15 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.AWSEBSCSIDriver{},
+				in: kops.EBSCSIDriverSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.Enabled = nil
 					return subject
 				}(),
@@ -78,8 +78,8 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 		{
 			name: "Managed - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.Managed = nil
 					return subject
 				}(),
@@ -89,8 +89,8 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 		{
 			name: "Version - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.Version = nil
 					return subject
 				}(),
@@ -100,8 +100,8 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 		{
 			name: "VolumeAttachLimit - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.VolumeAttachLimit = nil
 					return subject
 				}(),
@@ -111,8 +111,8 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 		{
 			name: "PodAnnotations - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.PodAnnotations = nil
 					return subject
 				}(),
@@ -123,15 +123,15 @@ func TestFlattenDataSourceAWSEBSCSIDriverInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenDataSourceAWSEBSCSIDriverInto(tt.args.in, got)
+			FlattenResourceEBSCSIDriverSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourceAWSEBSCSIDriver() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceEBSCSIDriverSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
+func TestFlattenResourceEBSCSIDriverSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":             nil,
 		"managed":             nil,
@@ -140,7 +140,7 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 		"pod_annotations":     func() map[string]interface{} { return nil }(),
 	}
 	type args struct {
-		in kops.AWSEBSCSIDriver
+		in kops.EBSCSIDriverSpec
 	}
 	tests := []struct {
 		name string
@@ -150,15 +150,15 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.AWSEBSCSIDriver{},
+				in: kops.EBSCSIDriverSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.Enabled = nil
 					return subject
 				}(),
@@ -168,8 +168,8 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 		{
 			name: "Managed - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.Managed = nil
 					return subject
 				}(),
@@ -179,8 +179,8 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 		{
 			name: "Version - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.Version = nil
 					return subject
 				}(),
@@ -190,8 +190,8 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 		{
 			name: "VolumeAttachLimit - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.VolumeAttachLimit = nil
 					return subject
 				}(),
@@ -201,8 +201,8 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 		{
 			name: "PodAnnotations - default",
 			args: args{
-				in: func() kops.AWSEBSCSIDriver {
-					subject := kops.AWSEBSCSIDriver{}
+				in: func() kops.EBSCSIDriverSpec {
+					subject := kops.EBSCSIDriverSpec{}
 					subject.PodAnnotations = nil
 					return subject
 				}(),
@@ -212,9 +212,9 @@ func TestFlattenDataSourceAWSEBSCSIDriver(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenDataSourceAWSEBSCSIDriver(tt.args.in)
+			got := FlattenResourceEBSCSIDriverSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourceAWSEBSCSIDriver() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceEBSCSIDriverSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandDataSourceLoadBalancer(t *testing.T) {
-	_default := kops.LoadBalancer{}
+func TestExpandResourceLoadBalancerSpec(t *testing.T) {
+	_default := kops.LoadBalancerSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.LoadBalancer
+		want kops.LoadBalancerSpec
 	}{
 		{
 			name: "default",
@@ -30,21 +30,21 @@ func TestExpandDataSourceLoadBalancer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandDataSourceLoadBalancer(tt.args.in)
+			got := ExpandResourceLoadBalancerSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandDataSourceLoadBalancer() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandResourceLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourceLoadBalancerInto(t *testing.T) {
+func TestFlattenResourceLoadBalancerSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"load_balancer_name": nil,
 		"target_group_arn":   nil,
 	}
 	type args struct {
-		in kops.LoadBalancer
+		in kops.LoadBalancerSpec
 	}
 	tests := []struct {
 		name string
@@ -54,15 +54,15 @@ func TestFlattenDataSourceLoadBalancerInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.LoadBalancer{},
+				in: kops.LoadBalancerSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "LoadBalancerName - default",
 			args: args{
-				in: func() kops.LoadBalancer {
-					subject := kops.LoadBalancer{}
+				in: func() kops.LoadBalancerSpec {
+					subject := kops.LoadBalancerSpec{}
 					subject.LoadBalancerName = nil
 					return subject
 				}(),
@@ -72,8 +72,8 @@ func TestFlattenDataSourceLoadBalancerInto(t *testing.T) {
 		{
 			name: "TargetGroupARN - default",
 			args: args{
-				in: func() kops.LoadBalancer {
-					subject := kops.LoadBalancer{}
+				in: func() kops.LoadBalancerSpec {
+					subject := kops.LoadBalancerSpec{}
 					subject.TargetGroupARN = nil
 					return subject
 				}(),
@@ -84,21 +84,21 @@ func TestFlattenDataSourceLoadBalancerInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenDataSourceLoadBalancerInto(tt.args.in, got)
+			FlattenResourceLoadBalancerSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourceLoadBalancer() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourceLoadBalancer(t *testing.T) {
+func TestFlattenResourceLoadBalancerSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"load_balancer_name": nil,
 		"target_group_arn":   nil,
 	}
 	type args struct {
-		in kops.LoadBalancer
+		in kops.LoadBalancerSpec
 	}
 	tests := []struct {
 		name string
@@ -108,15 +108,15 @@ func TestFlattenDataSourceLoadBalancer(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.LoadBalancer{},
+				in: kops.LoadBalancerSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "LoadBalancerName - default",
 			args: args{
-				in: func() kops.LoadBalancer {
-					subject := kops.LoadBalancer{}
+				in: func() kops.LoadBalancerSpec {
+					subject := kops.LoadBalancerSpec{}
 					subject.LoadBalancerName = nil
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenDataSourceLoadBalancer(t *testing.T) {
 		{
 			name: "TargetGroupARN - default",
 			args: args{
-				in: func() kops.LoadBalancer {
-					subject := kops.LoadBalancer{}
+				in: func() kops.LoadBalancerSpec {
+					subject := kops.LoadBalancerSpec{}
 					subject.TargetGroupARN = nil
 					return subject
 				}(),
@@ -137,9 +137,9 @@ func TestFlattenDataSourceLoadBalancer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenDataSourceLoadBalancer(tt.args.in)
+			got := FlattenResourceLoadBalancerSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourceLoadBalancer() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceLoadBalancerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

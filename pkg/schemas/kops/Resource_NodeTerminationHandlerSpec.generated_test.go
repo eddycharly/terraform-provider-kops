@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandResourceNodeTerminationHandlerConfig(t *testing.T) {
-	_default := kops.NodeTerminationHandlerConfig{}
+func TestExpandResourceNodeTerminationHandlerSpec(t *testing.T) {
+	_default := kops.NodeTerminationHandlerSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.NodeTerminationHandlerConfig
+		want kops.NodeTerminationHandlerSpec
 	}{
 		{
 			name: "default",
@@ -40,15 +40,15 @@ func TestExpandResourceNodeTerminationHandlerConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandResourceNodeTerminationHandlerConfig(tt.args.in)
+			got := ExpandResourceNodeTerminationHandlerSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandResourceNodeTerminationHandlerConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandResourceNodeTerminationHandlerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
+func TestFlattenResourceNodeTerminationHandlerSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":                           nil,
 		"enable_spot_interruption_draining": nil,
@@ -64,7 +64,7 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		"version":                           nil,
 	}
 	type args struct {
-		in kops.NodeTerminationHandlerConfig
+		in kops.NodeTerminationHandlerSpec
 	}
 	tests := []struct {
 		name string
@@ -74,15 +74,15 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.NodeTerminationHandlerConfig{},
+				in: kops.NodeTerminationHandlerSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.Enabled = nil
 					return subject
 				}(),
@@ -92,8 +92,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "EnableSpotInterruptionDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableSpotInterruptionDraining = nil
 					return subject
 				}(),
@@ -103,8 +103,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "EnableScheduledEventDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableScheduledEventDraining = nil
 					return subject
 				}(),
@@ -114,8 +114,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "EnableRebalanceMonitoring - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableRebalanceMonitoring = nil
 					return subject
 				}(),
@@ -125,8 +125,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "EnableRebalanceDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableRebalanceDraining = nil
 					return subject
 				}(),
@@ -136,8 +136,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "EnablePrometheusMetrics - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnablePrometheusMetrics = nil
 					return subject
 				}(),
@@ -147,8 +147,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "EnableSqsTerminationDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableSQSTerminationDraining = nil
 					return subject
 				}(),
@@ -158,8 +158,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "ExcludeFromLoadBalancers - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.ExcludeFromLoadBalancers = nil
 					return subject
 				}(),
@@ -169,8 +169,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "ManagedASGTag - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.ManagedASGTag = nil
 					return subject
 				}(),
@@ -180,8 +180,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "MemoryRequest - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.MemoryRequest = nil
 					return subject
 				}(),
@@ -191,8 +191,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "CpuRequest - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.CPURequest = nil
 					return subject
 				}(),
@@ -202,8 +202,8 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 		{
 			name: "Version - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.Version = nil
 					return subject
 				}(),
@@ -214,15 +214,15 @@ func TestFlattenResourceNodeTerminationHandlerConfigInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenResourceNodeTerminationHandlerConfigInto(tt.args.in, got)
+			FlattenResourceNodeTerminationHandlerSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceNodeTerminationHandlerConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceNodeTerminationHandlerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
+func TestFlattenResourceNodeTerminationHandlerSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":                           nil,
 		"enable_spot_interruption_draining": nil,
@@ -238,7 +238,7 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		"version":                           nil,
 	}
 	type args struct {
-		in kops.NodeTerminationHandlerConfig
+		in kops.NodeTerminationHandlerSpec
 	}
 	tests := []struct {
 		name string
@@ -248,15 +248,15 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.NodeTerminationHandlerConfig{},
+				in: kops.NodeTerminationHandlerSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.Enabled = nil
 					return subject
 				}(),
@@ -266,8 +266,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "EnableSpotInterruptionDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableSpotInterruptionDraining = nil
 					return subject
 				}(),
@@ -277,8 +277,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "EnableScheduledEventDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableScheduledEventDraining = nil
 					return subject
 				}(),
@@ -288,8 +288,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "EnableRebalanceMonitoring - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableRebalanceMonitoring = nil
 					return subject
 				}(),
@@ -299,8 +299,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "EnableRebalanceDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableRebalanceDraining = nil
 					return subject
 				}(),
@@ -310,8 +310,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "EnablePrometheusMetrics - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnablePrometheusMetrics = nil
 					return subject
 				}(),
@@ -321,8 +321,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "EnableSqsTerminationDraining - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.EnableSQSTerminationDraining = nil
 					return subject
 				}(),
@@ -332,8 +332,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "ExcludeFromLoadBalancers - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.ExcludeFromLoadBalancers = nil
 					return subject
 				}(),
@@ -343,8 +343,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "ManagedASGTag - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.ManagedASGTag = nil
 					return subject
 				}(),
@@ -354,8 +354,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "MemoryRequest - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.MemoryRequest = nil
 					return subject
 				}(),
@@ -365,8 +365,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "CpuRequest - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.CPURequest = nil
 					return subject
 				}(),
@@ -376,8 +376,8 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 		{
 			name: "Version - default",
 			args: args{
-				in: func() kops.NodeTerminationHandlerConfig {
-					subject := kops.NodeTerminationHandlerConfig{}
+				in: func() kops.NodeTerminationHandlerSpec {
+					subject := kops.NodeTerminationHandlerSpec{}
 					subject.Version = nil
 					return subject
 				}(),
@@ -387,9 +387,9 @@ func TestFlattenResourceNodeTerminationHandlerConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenResourceNodeTerminationHandlerConfig(tt.args.in)
+			got := FlattenResourceNodeTerminationHandlerSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenResourceNodeTerminationHandlerConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenResourceNodeTerminationHandlerSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

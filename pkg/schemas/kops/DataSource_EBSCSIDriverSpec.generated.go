@@ -10,7 +10,7 @@ import (
 
 var _ = Schema
 
-func DataSourceAWSEBSCSIDriver() *schema.Resource {
+func DataSourceEBSCSIDriverSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":             ComputedBool(),
@@ -24,11 +24,11 @@ func DataSourceAWSEBSCSIDriver() *schema.Resource {
 	return res
 }
 
-func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDriver {
+func ExpandDataSourceEBSCSIDriverSpec(in map[string]interface{}) kops.EBSCSIDriverSpec {
 	if in == nil {
-		panic("expand AWSEBSCSIDriver failure, in is nil")
+		panic("expand EBSCSIDriverSpec failure, in is nil")
 	}
-	return kops.AWSEBSCSIDriver{
+	return kops.EBSCSIDriverSpec{
 		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -125,7 +125,7 @@ func ExpandDataSourceAWSEBSCSIDriver(in map[string]interface{}) kops.AWSEBSCSIDr
 	}
 }
 
-func FlattenDataSourceAWSEBSCSIDriverInto(in kops.AWSEBSCSIDriver, out map[string]interface{}) {
+func FlattenDataSourceEBSCSIDriverSpecInto(in kops.EBSCSIDriverSpec, out map[string]interface{}) {
 	out["enabled"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -180,8 +180,8 @@ func FlattenDataSourceAWSEBSCSIDriverInto(in kops.AWSEBSCSIDriver, out map[strin
 	}(in.PodAnnotations)
 }
 
-func FlattenDataSourceAWSEBSCSIDriver(in kops.AWSEBSCSIDriver) map[string]interface{} {
+func FlattenDataSourceEBSCSIDriverSpec(in kops.EBSCSIDriverSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourceAWSEBSCSIDriverInto(in, out)
+	FlattenDataSourceEBSCSIDriverSpecInto(in, out)
 	return out
 }

@@ -10,21 +10,21 @@ import (
 
 var _ = Schema
 
-func DataSourceGCPPDCSIDriver() *schema.Resource {
+func ResourcePDCSIDriver() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled": ComputedBool(),
+			"enabled": OptionalBool(),
 		},
 	}
 
 	return res
 }
 
-func ExpandDataSourceGCPPDCSIDriver(in map[string]interface{}) kops.GCPPDCSIDriver {
+func ExpandResourcePDCSIDriver(in map[string]interface{}) kops.PDCSIDriver {
 	if in == nil {
-		panic("expand GCPPDCSIDriver failure, in is nil")
+		panic("expand PDCSIDriver failure, in is nil")
 	}
-	return kops.GCPPDCSIDriver{
+	return kops.PDCSIDriver{
 		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -47,7 +47,7 @@ func ExpandDataSourceGCPPDCSIDriver(in map[string]interface{}) kops.GCPPDCSIDriv
 	}
 }
 
-func FlattenDataSourceGCPPDCSIDriverInto(in kops.GCPPDCSIDriver, out map[string]interface{}) {
+func FlattenResourcePDCSIDriverInto(in kops.PDCSIDriver, out map[string]interface{}) {
 	out["enabled"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -60,8 +60,8 @@ func FlattenDataSourceGCPPDCSIDriverInto(in kops.GCPPDCSIDriver, out map[string]
 	}(in.Enabled)
 }
 
-func FlattenDataSourceGCPPDCSIDriver(in kops.GCPPDCSIDriver) map[string]interface{} {
+func FlattenResourcePDCSIDriver(in kops.PDCSIDriver) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourceGCPPDCSIDriverInto(in, out)
+	FlattenResourcePDCSIDriverInto(in, out)
 	return out
 }

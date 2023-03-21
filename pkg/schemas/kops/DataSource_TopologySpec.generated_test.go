@@ -21,10 +21,10 @@ func TestExpandDataSourceTopologySpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"masters": "",
-					"nodes":   "",
-					"bastion": nil,
-					"dns":     nil,
+					"control_plane": "",
+					"nodes":         "",
+					"bastion":       nil,
+					"dns":           "",
 				},
 			},
 			want: _default,
@@ -42,10 +42,10 @@ func TestExpandDataSourceTopologySpec(t *testing.T) {
 
 func TestFlattenDataSourceTopologySpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"masters": "",
-		"nodes":   "",
-		"bastion": nil,
-		"dns":     nil,
+		"control_plane": "",
+		"nodes":         "",
+		"bastion":       nil,
+		"dns":           "",
 	}
 	type args struct {
 		in kops.TopologySpec
@@ -63,11 +63,11 @@ func TestFlattenDataSourceTopologySpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Masters - default",
+			name: "ControlPlane - default",
 			args: args{
 				in: func() kops.TopologySpec {
 					subject := kops.TopologySpec{}
-					subject.Masters = ""
+					subject.ControlPlane = ""
 					return subject
 				}(),
 			},
@@ -100,7 +100,7 @@ func TestFlattenDataSourceTopologySpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.TopologySpec {
 					subject := kops.TopologySpec{}
-					subject.DNS = nil
+					subject.DNS = ""
 					return subject
 				}(),
 			},
@@ -120,10 +120,10 @@ func TestFlattenDataSourceTopologySpecInto(t *testing.T) {
 
 func TestFlattenDataSourceTopologySpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"masters": "",
-		"nodes":   "",
-		"bastion": nil,
-		"dns":     nil,
+		"control_plane": "",
+		"nodes":         "",
+		"bastion":       nil,
+		"dns":           "",
 	}
 	type args struct {
 		in kops.TopologySpec
@@ -141,11 +141,11 @@ func TestFlattenDataSourceTopologySpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Masters - default",
+			name: "ControlPlane - default",
 			args: args{
 				in: func() kops.TopologySpec {
 					subject := kops.TopologySpec{}
-					subject.Masters = ""
+					subject.ControlPlane = ""
 					return subject
 				}(),
 			},
@@ -178,7 +178,7 @@ func TestFlattenDataSourceTopologySpec(t *testing.T) {
 			args: args{
 				in: func() kops.TopologySpec {
 					subject := kops.TopologySpec{}
-					subject.DNS = nil
+					subject.DNS = ""
 					return subject
 				}(),
 			},

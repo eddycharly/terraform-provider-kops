@@ -22,6 +22,7 @@ func TestExpandResourceNodeLocalDNSConfig(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"enabled":             nil,
+					"external_core_file":  "",
 					"image":               nil,
 					"local_ip":            "",
 					"forward_to_kube_dns": nil,
@@ -46,6 +47,7 @@ func TestExpandResourceNodeLocalDNSConfig(t *testing.T) {
 func TestFlattenResourceNodeLocalDNSConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":             nil,
+		"external_core_file":  "",
 		"image":               nil,
 		"local_ip":            "",
 		"forward_to_kube_dns": nil,
@@ -74,6 +76,17 @@ func TestFlattenResourceNodeLocalDNSConfigInto(t *testing.T) {
 				in: func() kops.NodeLocalDNSConfig {
 					subject := kops.NodeLocalDNSConfig{}
 					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ExternalCoreFile - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.ExternalCoreFile = ""
 					return subject
 				}(),
 			},
@@ -160,6 +173,7 @@ func TestFlattenResourceNodeLocalDNSConfigInto(t *testing.T) {
 func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":             nil,
+		"external_core_file":  "",
 		"image":               nil,
 		"local_ip":            "",
 		"forward_to_kube_dns": nil,
@@ -188,6 +202,17 @@ func TestFlattenResourceNodeLocalDNSConfig(t *testing.T) {
 				in: func() kops.NodeLocalDNSConfig {
 					subject := kops.NodeLocalDNSConfig{}
 					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ExternalCoreFile - default",
+			args: args{
+				in: func() kops.NodeLocalDNSConfig {
+					subject := kops.NodeLocalDNSConfig{}
+					subject.ExternalCoreFile = ""
 					return subject
 				}(),
 			},

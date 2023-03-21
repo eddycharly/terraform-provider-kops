@@ -8,22 +8,22 @@ import (
 
 var _ = Schema
 
-func DataSourcePodIdentityWebhookConfig() *schema.Resource {
+func ResourcePodIdentityWebhookSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"enabled":  ComputedBool(),
-			"replicas": ComputedInt(),
+			"enabled":  OptionalBool(),
+			"replicas": OptionalInt(),
 		},
 	}
 
 	return res
 }
 
-func ExpandDataSourcePodIdentityWebhookConfig(in map[string]interface{}) kops.PodIdentityWebhookConfig {
+func ExpandResourcePodIdentityWebhookSpec(in map[string]interface{}) kops.PodIdentityWebhookSpec {
 	if in == nil {
-		panic("expand PodIdentityWebhookConfig failure, in is nil")
+		panic("expand PodIdentityWebhookSpec failure, in is nil")
 	}
-	return kops.PodIdentityWebhookConfig{
+	return kops.PodIdentityWebhookSpec{
 		Enabled: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["enabled"]),
@@ -33,7 +33,7 @@ func ExpandDataSourcePodIdentityWebhookConfig(in map[string]interface{}) kops.Po
 	}
 }
 
-func FlattenDataSourcePodIdentityWebhookConfigInto(in kops.PodIdentityWebhookConfig, out map[string]interface{}) {
+func FlattenResourcePodIdentityWebhookSpecInto(in kops.PodIdentityWebhookSpec, out map[string]interface{}) {
 	out["enabled"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.Enabled)
@@ -42,8 +42,8 @@ func FlattenDataSourcePodIdentityWebhookConfigInto(in kops.PodIdentityWebhookCon
 	}(in.Replicas)
 }
 
-func FlattenDataSourcePodIdentityWebhookConfig(in kops.PodIdentityWebhookConfig) map[string]interface{} {
+func FlattenResourcePodIdentityWebhookSpec(in kops.PodIdentityWebhookSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourcePodIdentityWebhookConfigInto(in, out)
+	FlattenResourcePodIdentityWebhookSpecInto(in, out)
 	return out
 }

@@ -1,6 +1,8 @@
 package schemas
 
 import (
+	"reflect"
+
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"k8s.io/kops/pkg/apis/kops"
@@ -11,21 +13,32 @@ var _ = Schema
 func ResourceNetworkingSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"classic":    OptionalStruct(ResourceClassicNetworkingSpec()),
-			"kubenet":    OptionalStruct(ResourceKubenetNetworkingSpec()),
-			"external":   OptionalStruct(ResourceExternalNetworkingSpec()),
-			"cni":        OptionalStruct(ResourceCNINetworkingSpec()),
-			"kopeio":     OptionalStruct(ResourceKopeioNetworkingSpec()),
-			"weave":      OptionalStruct(ResourceWeaveNetworkingSpec()),
-			"flannel":    OptionalStruct(ResourceFlannelNetworkingSpec()),
-			"calico":     OptionalStruct(ResourceCalicoNetworkingSpec()),
-			"canal":      OptionalStruct(ResourceCanalNetworkingSpec()),
-			"kuberouter": OptionalStruct(ResourceKuberouterNetworkingSpec()),
-			"romana":     OptionalStruct(ResourceRomanaNetworkingSpec()),
-			"amazon_vpc": OptionalStruct(ResourceAmazonVPCNetworkingSpec()),
-			"cilium":     OptionalStruct(ResourceCiliumNetworkingSpec()),
-			"lyft_vpc":   OptionalStruct(ResourceLyftVPCNetworkingSpec()),
-			"gce":        OptionalStruct(ResourceGCENetworkingSpec()),
+			"network_id":               OptionalString(),
+			"network_cidr":             OptionalString(),
+			"additional_network_cidrs": OptionalList(String()),
+			"subnets":                  OptionalList(ResourceClusterSubnetSpec()),
+			"tag_subnets":              OptionalBool(),
+			"topology":                 OptionalStruct(ResourceTopologySpec()),
+			"egress_proxy":             OptionalStruct(ResourceEgressProxySpec()),
+			"non_masquerade_cidr":      OptionalString(),
+			"pod_cidr":                 OptionalString(),
+			"service_cluster_ip_range": OptionalString(),
+			"isolate_control_plane":    OptionalBool(),
+			"classic":                  OptionalStruct(ResourceClassicNetworkingSpec()),
+			"kubenet":                  OptionalStruct(ResourceKubenetNetworkingSpec()),
+			"external":                 OptionalStruct(ResourceExternalNetworkingSpec()),
+			"cni":                      OptionalStruct(ResourceCNINetworkingSpec()),
+			"kopeio":                   OptionalStruct(ResourceKopeioNetworkingSpec()),
+			"weave":                    OptionalStruct(ResourceWeaveNetworkingSpec()),
+			"flannel":                  OptionalStruct(ResourceFlannelNetworkingSpec()),
+			"calico":                   OptionalStruct(ResourceCalicoNetworkingSpec()),
+			"canal":                    OptionalStruct(ResourceCanalNetworkingSpec()),
+			"kube_router":              OptionalStruct(ResourceKuberouterNetworkingSpec()),
+			"romana":                   OptionalStruct(ResourceRomanaNetworkingSpec()),
+			"amazon_vpc":               OptionalStruct(ResourceAmazonVPCNetworkingSpec()),
+			"cilium":                   OptionalStruct(ResourceCiliumNetworkingSpec()),
+			"lyft_vpc":                 OptionalStruct(ResourceLyftVPCNetworkingSpec()),
+			"gce":                      OptionalStruct(ResourceGCENetworkingSpec()),
 		},
 	}
 
@@ -37,6 +50,124 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 		panic("expand NetworkingSpec failure, in is nil")
 	}
 	return kops.NetworkingSpec{
+		NetworkID: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["network_id"]),
+		NetworkCIDR: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["network_cidr"]),
+		AdditionalNetworkCIDRs: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["additional_network_cidrs"]),
+		Subnets: func(in interface{}) []kops.ClusterSubnetSpec {
+			return func(in interface{}) []kops.ClusterSubnetSpec {
+				if in == nil {
+					return nil
+				}
+				var out []kops.ClusterSubnetSpec
+				for _, in := range in.([]interface{}) {
+					out = append(out, func(in interface{}) kops.ClusterSubnetSpec {
+						if in == nil {
+							return kops.ClusterSubnetSpec{}
+						}
+						return ExpandResourceClusterSubnetSpec(in.(map[string]interface{}))
+					}(in))
+				}
+				return out
+			}(in)
+		}(in["subnets"]),
+		TagSubnets: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["tag_subnets"]),
+		Topology: func(in interface{}) *kops.TopologySpec {
+			return func(in interface{}) *kops.TopologySpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.TopologySpec) *kops.TopologySpec {
+					return &in
+				}(func(in interface{}) kops.TopologySpec {
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceTopologySpec(in[0].(map[string]interface{}))
+					}
+					return kops.TopologySpec{}
+				}(in))
+			}(in)
+		}(in["topology"]),
+		EgressProxy: func(in interface{}) *kops.EgressProxySpec {
+			return func(in interface{}) *kops.EgressProxySpec {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in kops.EgressProxySpec) *kops.EgressProxySpec {
+					return &in
+				}(func(in interface{}) kops.EgressProxySpec {
+					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+						return ExpandResourceEgressProxySpec(in[0].(map[string]interface{}))
+					}
+					return kops.EgressProxySpec{}
+				}(in))
+			}(in)
+		}(in["egress_proxy"]),
+		NonMasqueradeCIDR: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["non_masquerade_cidr"]),
+		PodCIDR: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["pod_cidr"]),
+		ServiceClusterIPRange: func(in interface{}) string {
+			return string(ExpandString(in))
+		}(in["service_cluster_ip_range"]),
+		IsolateControlPlane: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["isolate_control_plane"]),
 		Classic: func(in interface{}) *kops.ClassicNetworkingSpec {
 			return func(in interface{}) *kops.ClassicNetworkingSpec {
 				if in == nil {
@@ -199,7 +330,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}(in))
 			}(in)
 		}(in["canal"]),
-		Kuberouter: func(in interface{}) *kops.KuberouterNetworkingSpec {
+		KubeRouter: func(in interface{}) *kops.KuberouterNetworkingSpec {
 			return func(in interface{}) *kops.KuberouterNetworkingSpec {
 				if in == nil {
 					return nil
@@ -216,7 +347,7 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 					return kops.KuberouterNetworkingSpec{}
 				}(in))
 			}(in)
-		}(in["kuberouter"]),
+		}(in["kube_router"]),
 		Romana: func(in interface{}) *kops.RomanaNetworkingSpec {
 			return func(in interface{}) *kops.RomanaNetworkingSpec {
 				if in == nil {
@@ -311,6 +442,85 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 }
 
 func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]interface{}) {
+	out["network_id"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NetworkID)
+	out["network_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NetworkCIDR)
+	out["additional_network_cidrs"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.AdditionalNetworkCIDRs)
+	out["subnets"] = func(in []kops.ClusterSubnetSpec) interface{} {
+		return func(in []kops.ClusterSubnetSpec) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, func(in kops.ClusterSubnetSpec) interface{} {
+					return FlattenResourceClusterSubnetSpec(in)
+				}(in))
+			}
+			return out
+		}(in)
+	}(in.Subnets)
+	out["tag_subnets"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.TagSubnets)
+	out["topology"] = func(in *kops.TopologySpec) interface{} {
+		return func(in *kops.TopologySpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.TopologySpec) interface{} {
+				return func(in kops.TopologySpec) []interface{} {
+					return []interface{}{FlattenResourceTopologySpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.Topology)
+	out["egress_proxy"] = func(in *kops.EgressProxySpec) interface{} {
+		return func(in *kops.EgressProxySpec) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in kops.EgressProxySpec) interface{} {
+				return func(in kops.EgressProxySpec) []interface{} {
+					return []interface{}{FlattenResourceEgressProxySpec(in)}
+				}(in)
+			}(*in)
+		}(in)
+	}(in.EgressProxy)
+	out["non_masquerade_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.NonMasqueradeCIDR)
+	out["pod_cidr"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.PodCIDR)
+	out["service_cluster_ip_range"] = func(in string) interface{} {
+		return FlattenString(string(in))
+	}(in.ServiceClusterIPRange)
+	out["isolate_control_plane"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.IsolateControlPlane)
 	out["classic"] = func(in *kops.ClassicNetworkingSpec) interface{} {
 		return func(in *kops.ClassicNetworkingSpec) interface{} {
 			if in == nil {
@@ -419,7 +629,7 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 			}(*in)
 		}(in)
 	}(in.Canal)
-	out["kuberouter"] = func(in *kops.KuberouterNetworkingSpec) interface{} {
+	out["kube_router"] = func(in *kops.KuberouterNetworkingSpec) interface{} {
 		return func(in *kops.KuberouterNetworkingSpec) interface{} {
 			if in == nil {
 				return nil
@@ -430,7 +640,7 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 				}(in)
 			}(*in)
 		}(in)
-	}(in.Kuberouter)
+	}(in.KubeRouter)
 	out["romana"] = func(in *kops.RomanaNetworkingSpec) interface{} {
 		return func(in *kops.RomanaNetworkingSpec) interface{} {
 			if in == nil {

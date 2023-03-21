@@ -29,29 +29,14 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					}(),
 					"container_runtime":                 "",
 					"kubernetes_version":                "",
-					"subnet":                            func() []interface{} { return nil }(),
-					"project":                           "",
-					"master_public_name":                "",
-					"master_internal_name":              "",
-					"network_cidr":                      "",
-					"additional_network_cidrs":          func() []interface{} { return nil }(),
-					"network_id":                        "",
-					"topology":                          nil,
 					"secret_store":                      "",
 					"key_store":                         "",
 					"config_store":                      "",
 					"dns_zone":                          "",
-					"additional_sans":                   func() []interface{} { return nil }(),
 					"cluster_dns_domain":                "",
-					"service_cluster_ip_range":          "",
-					"pod_cidr":                          "",
-					"non_masquerade_cidr":               "",
 					"ssh_access":                        func() []interface{} { return nil }(),
 					"node_port_access":                  func() []interface{} { return nil }(),
-					"egress_proxy":                      nil,
 					"ssh_key_name":                      nil,
-					"kubernetes_api_access":             func() []interface{} { return nil }(),
-					"isolate_masters":                   nil,
 					"update_policy":                     nil,
 					"external_policies":                 nil,
 					"additional_policies":               nil,
@@ -66,17 +51,15 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					"kube_scheduler":                    nil,
 					"kube_proxy":                        nil,
 					"kubelet":                           nil,
-					"master_kubelet":                    nil,
+					"control_plane_kubelet":             nil,
 					"cloud_config":                      nil,
 					"external_dns":                      nil,
 					"ntp":                               nil,
-					"node_termination_handler":          nil,
 					"node_problem_detector":             nil,
 					"metrics_server":                    nil,
 					"cert_manager":                      nil,
-					"aws_load_balancer_controller":      nil,
-					"networking":                        nil,
-					"api":                               nil,
+					"networking":                        func() []interface{} { return []interface{}{FlattenDataSourceNetworkingSpec(kops.NetworkingSpec{})} }(),
+					"api":                               func() []interface{} { return []interface{}{FlattenDataSourceAPISpec(kops.APISpec{})} }(),
 					"authentication":                    nil,
 					"authorization":                     nil,
 					"node_authorization":                nil,
@@ -85,16 +68,13 @@ func TestExpandDataSourceClusterSpec(t *testing.T) {
 					"assets":                            nil,
 					"iam":                               nil,
 					"encryption_config":                 nil,
-					"tag_subnets":                       nil,
 					"use_host_certificates":             nil,
 					"sysctl_parameters":                 func() []interface{} { return nil }(),
 					"rolling_update":                    nil,
 					"cluster_autoscaler":                nil,
-					"warm_pool":                         nil,
 					"service_account_issuer_discovery":  nil,
 					"snapshot_controller":               nil,
 					"karpenter":                         nil,
-					"pod_identity_webhook":              nil,
 				},
 			},
 			want: _default,
@@ -120,29 +100,14 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
-		"subnet":                            func() []interface{} { return nil }(),
-		"project":                           "",
-		"master_public_name":                "",
-		"master_internal_name":              "",
-		"network_cidr":                      "",
-		"additional_network_cidrs":          func() []interface{} { return nil }(),
-		"network_id":                        "",
-		"topology":                          nil,
 		"secret_store":                      "",
 		"key_store":                         "",
 		"config_store":                      "",
 		"dns_zone":                          "",
-		"additional_sans":                   func() []interface{} { return nil }(),
 		"cluster_dns_domain":                "",
-		"service_cluster_ip_range":          "",
-		"pod_cidr":                          "",
-		"non_masquerade_cidr":               "",
 		"ssh_access":                        func() []interface{} { return nil }(),
 		"node_port_access":                  func() []interface{} { return nil }(),
-		"egress_proxy":                      nil,
 		"ssh_key_name":                      nil,
-		"kubernetes_api_access":             func() []interface{} { return nil }(),
-		"isolate_masters":                   nil,
 		"update_policy":                     nil,
 		"external_policies":                 nil,
 		"additional_policies":               nil,
@@ -157,17 +122,15 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		"kube_scheduler":                    nil,
 		"kube_proxy":                        nil,
 		"kubelet":                           nil,
-		"master_kubelet":                    nil,
+		"control_plane_kubelet":             nil,
 		"cloud_config":                      nil,
 		"external_dns":                      nil,
 		"ntp":                               nil,
-		"node_termination_handler":          nil,
 		"node_problem_detector":             nil,
 		"metrics_server":                    nil,
 		"cert_manager":                      nil,
-		"aws_load_balancer_controller":      nil,
-		"networking":                        nil,
-		"api":                               nil,
+		"networking":                        func() []interface{} { return []interface{}{FlattenDataSourceNetworkingSpec(kops.NetworkingSpec{})} }(),
+		"api":                               func() []interface{} { return []interface{}{FlattenDataSourceAPISpec(kops.APISpec{})} }(),
 		"authentication":                    nil,
 		"authorization":                     nil,
 		"node_authorization":                nil,
@@ -176,16 +139,13 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
 		"cluster_autoscaler":                nil,
-		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
 		"karpenter":                         nil,
-		"pod_identity_webhook":              nil,
 	}
 	type args struct {
 		in kops.ClusterSpec
@@ -269,94 +229,6 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Subnet - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.Subnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Project - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.Project = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterPublicName - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.MasterPublicName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterInternalName - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.MasterInternalName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkCidr - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NetworkCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "AdditionalNetworkCidrs - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.AdditionalNetworkCIDRs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkId - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NetworkID = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Topology - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.Topology = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SecretStore - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -401,55 +273,11 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AdditionalSans - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.AdditionalSANs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ClusterDnsDomain - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.ClusterDNSDomain = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "ServiceClusterIpRange - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.ServiceClusterIPRange = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodCidr - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.PodCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NonMasqueradeCidr - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NonMasqueradeCIDR = ""
 					return subject
 				}(),
 			},
@@ -478,44 +306,11 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EgressProxy - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.EgressProxy = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SshKeyName - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SSHKeyName = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "KubernetesApiAccess - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.KubernetesAPIAccess = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "IsolateMasters - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.IsolateMasters = nil
 					return subject
 				}(),
 			},
@@ -676,11 +471,11 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "MasterKubelet - default",
+			name: "ControlPlaneKubelet - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.MasterKubelet = nil
+					subject.ControlPlaneKubelet = nil
 					return subject
 				}(),
 			},
@@ -720,17 +515,6 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NodeTerminationHandler - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NodeTerminationHandler = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "NodeProblemDetector - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -764,22 +548,11 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AwsLoadBalancerController - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.AWSLoadBalancerController = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "Networking - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.Networking = nil
+					subject.Networking = kops.NetworkingSpec{}
 					return subject
 				}(),
 			},
@@ -790,7 +563,7 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.API = nil
+					subject.API = kops.APISpec{}
 					return subject
 				}(),
 			},
@@ -885,17 +658,6 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TagSubnets - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.TagSubnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "UseHostCertificates - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -940,17 +702,6 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "WarmPool - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.WarmPool = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ServiceAccountIssuerDiscovery - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -978,17 +729,6 @@ func TestFlattenDataSourceClusterSpecInto(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.Karpenter = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodIdentityWebhook - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},
@@ -1016,29 +756,14 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
-		"subnet":                            func() []interface{} { return nil }(),
-		"project":                           "",
-		"master_public_name":                "",
-		"master_internal_name":              "",
-		"network_cidr":                      "",
-		"additional_network_cidrs":          func() []interface{} { return nil }(),
-		"network_id":                        "",
-		"topology":                          nil,
 		"secret_store":                      "",
 		"key_store":                         "",
 		"config_store":                      "",
 		"dns_zone":                          "",
-		"additional_sans":                   func() []interface{} { return nil }(),
 		"cluster_dns_domain":                "",
-		"service_cluster_ip_range":          "",
-		"pod_cidr":                          "",
-		"non_masquerade_cidr":               "",
 		"ssh_access":                        func() []interface{} { return nil }(),
 		"node_port_access":                  func() []interface{} { return nil }(),
-		"egress_proxy":                      nil,
 		"ssh_key_name":                      nil,
-		"kubernetes_api_access":             func() []interface{} { return nil }(),
-		"isolate_masters":                   nil,
 		"update_policy":                     nil,
 		"external_policies":                 nil,
 		"additional_policies":               nil,
@@ -1053,17 +778,15 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		"kube_scheduler":                    nil,
 		"kube_proxy":                        nil,
 		"kubelet":                           nil,
-		"master_kubelet":                    nil,
+		"control_plane_kubelet":             nil,
 		"cloud_config":                      nil,
 		"external_dns":                      nil,
 		"ntp":                               nil,
-		"node_termination_handler":          nil,
 		"node_problem_detector":             nil,
 		"metrics_server":                    nil,
 		"cert_manager":                      nil,
-		"aws_load_balancer_controller":      nil,
-		"networking":                        nil,
-		"api":                               nil,
+		"networking":                        func() []interface{} { return []interface{}{FlattenDataSourceNetworkingSpec(kops.NetworkingSpec{})} }(),
+		"api":                               func() []interface{} { return []interface{}{FlattenDataSourceAPISpec(kops.APISpec{})} }(),
 		"authentication":                    nil,
 		"authorization":                     nil,
 		"node_authorization":                nil,
@@ -1072,16 +795,13 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 		"assets":                            nil,
 		"iam":                               nil,
 		"encryption_config":                 nil,
-		"tag_subnets":                       nil,
 		"use_host_certificates":             nil,
 		"sysctl_parameters":                 func() []interface{} { return nil }(),
 		"rolling_update":                    nil,
 		"cluster_autoscaler":                nil,
-		"warm_pool":                         nil,
 		"service_account_issuer_discovery":  nil,
 		"snapshot_controller":               nil,
 		"karpenter":                         nil,
-		"pod_identity_webhook":              nil,
 	}
 	type args struct {
 		in kops.ClusterSpec
@@ -1165,94 +885,6 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Subnet - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.Subnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Project - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.Project = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterPublicName - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.MasterPublicName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterInternalName - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.MasterInternalName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkCidr - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NetworkCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "AdditionalNetworkCidrs - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.AdditionalNetworkCIDRs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkId - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NetworkID = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Topology - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.Topology = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SecretStore - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -1297,55 +929,11 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AdditionalSans - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.AdditionalSANs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ClusterDnsDomain - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.ClusterDNSDomain = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "ServiceClusterIpRange - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.ServiceClusterIPRange = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodCidr - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.PodCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NonMasqueradeCidr - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NonMasqueradeCIDR = ""
 					return subject
 				}(),
 			},
@@ -1374,44 +962,11 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EgressProxy - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.EgressProxy = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SshKeyName - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.SSHKeyName = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "KubernetesApiAccess - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.KubernetesAPIAccess = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "IsolateMasters - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.IsolateMasters = nil
 					return subject
 				}(),
 			},
@@ -1572,11 +1127,11 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "MasterKubelet - default",
+			name: "ControlPlaneKubelet - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.MasterKubelet = nil
+					subject.ControlPlaneKubelet = nil
 					return subject
 				}(),
 			},
@@ -1616,17 +1171,6 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NodeTerminationHandler - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.NodeTerminationHandler = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "NodeProblemDetector - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -1660,22 +1204,11 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AwsLoadBalancerController - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.AWSLoadBalancerController = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "Networking - default",
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.Networking = nil
+					subject.Networking = kops.NetworkingSpec{}
 					return subject
 				}(),
 			},
@@ -1686,7 +1219,7 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
-					subject.API = nil
+					subject.API = kops.APISpec{}
 					return subject
 				}(),
 			},
@@ -1781,17 +1314,6 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TagSubnets - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.TagSubnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "UseHostCertificates - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -1836,17 +1358,6 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "WarmPool - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.WarmPool = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ServiceAccountIssuerDiscovery - default",
 			args: args{
 				in: func() kops.ClusterSpec {
@@ -1874,17 +1385,6 @@ func TestFlattenDataSourceClusterSpec(t *testing.T) {
 				in: func() kops.ClusterSpec {
 					subject := kops.ClusterSpec{}
 					subject.Karpenter = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodIdentityWebhook - default",
-			args: args{
-				in: func() kops.ClusterSpec {
-					subject := kops.ClusterSpec{}
-					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},

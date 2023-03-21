@@ -22,7 +22,7 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 			args: args{
 				in: map[string]interface{}{
 					"enabled":                          nil,
-					"expander":                         nil,
+					"expander":                         "",
 					"balance_similar_node_groups":      nil,
 					"aws_use_static_instance_list":     nil,
 					"scale_down_utilization_threshold": nil,
@@ -38,6 +38,8 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 					"cpu_request":                      nil,
 					"max_node_provision_time":          "",
 					"pod_annotations":                  func() map[string]interface{} { return nil }(),
+					"create_priority_expender_config":  nil,
+					"custom_priority_expander_config":  func() []interface{} { return nil }(),
 				},
 			},
 			want: _default,
@@ -56,7 +58,7 @@ func TestExpandResourceClusterAutoscalerConfig(t *testing.T) {
 func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":                          nil,
-		"expander":                         nil,
+		"expander":                         "",
 		"balance_similar_node_groups":      nil,
 		"aws_use_static_instance_list":     nil,
 		"scale_down_utilization_threshold": nil,
@@ -72,6 +74,8 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 		"cpu_request":                      nil,
 		"max_node_provision_time":          "",
 		"pod_annotations":                  func() map[string]interface{} { return nil }(),
+		"create_priority_expender_config":  nil,
+		"custom_priority_expander_config":  func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ClusterAutoscalerConfig
@@ -104,7 +108,7 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
-					subject.Expander = nil
+					subject.Expander = ""
 					return subject
 				}(),
 			},
@@ -270,6 +274,28 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.PodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CreatePriorityExpenderConfig - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.CreatePriorityExpenderConfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CustomPriorityExpanderConfig - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.CustomPriorityExpanderConfig = nil
 					return subject
 				}(),
 			},
@@ -290,7 +316,7 @@ func TestFlattenResourceClusterAutoscalerConfigInto(t *testing.T) {
 func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":                          nil,
-		"expander":                         nil,
+		"expander":                         "",
 		"balance_similar_node_groups":      nil,
 		"aws_use_static_instance_list":     nil,
 		"scale_down_utilization_threshold": nil,
@@ -306,6 +332,8 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 		"cpu_request":                      nil,
 		"max_node_provision_time":          "",
 		"pod_annotations":                  func() map[string]interface{} { return nil }(),
+		"create_priority_expender_config":  nil,
+		"custom_priority_expander_config":  func() []interface{} { return nil }(),
 	}
 	type args struct {
 		in kops.ClusterAutoscalerConfig
@@ -338,7 +366,7 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 			args: args{
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
-					subject.Expander = nil
+					subject.Expander = ""
 					return subject
 				}(),
 			},
@@ -504,6 +532,28 @@ func TestFlattenResourceClusterAutoscalerConfig(t *testing.T) {
 				in: func() kops.ClusterAutoscalerConfig {
 					subject := kops.ClusterAutoscalerConfig{}
 					subject.PodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CreatePriorityExpenderConfig - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.CreatePriorityExpenderConfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CustomPriorityExpanderConfig - default",
+			args: args{
+				in: func() kops.ClusterAutoscalerConfig {
+					subject := kops.ClusterAutoscalerConfig{}
+					subject.CustomPriorityExpanderConfig = nil
 					return subject
 				}(),
 			},

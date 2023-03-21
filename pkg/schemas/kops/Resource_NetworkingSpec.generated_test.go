@@ -21,21 +21,32 @@ func TestExpandResourceNetworkingSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"classic":    nil,
-					"kubenet":    nil,
-					"external":   nil,
-					"cni":        nil,
-					"kopeio":     nil,
-					"weave":      nil,
-					"flannel":    nil,
-					"calico":     nil,
-					"canal":      nil,
-					"kuberouter": nil,
-					"romana":     nil,
-					"amazon_vpc": nil,
-					"cilium":     nil,
-					"lyft_vpc":   nil,
-					"gce":        nil,
+					"network_id":               "",
+					"network_cidr":             "",
+					"additional_network_cidrs": func() []interface{} { return nil }(),
+					"subnets":                  func() []interface{} { return nil }(),
+					"tag_subnets":              nil,
+					"topology":                 nil,
+					"egress_proxy":             nil,
+					"non_masquerade_cidr":      "",
+					"pod_cidr":                 "",
+					"service_cluster_ip_range": "",
+					"isolate_control_plane":    nil,
+					"classic":                  nil,
+					"kubenet":                  nil,
+					"external":                 nil,
+					"cni":                      nil,
+					"kopeio":                   nil,
+					"weave":                    nil,
+					"flannel":                  nil,
+					"calico":                   nil,
+					"canal":                    nil,
+					"kube_router":              nil,
+					"romana":                   nil,
+					"amazon_vpc":               nil,
+					"cilium":                   nil,
+					"lyft_vpc":                 nil,
+					"gce":                      nil,
 				},
 			},
 			want: _default,
@@ -53,21 +64,32 @@ func TestExpandResourceNetworkingSpec(t *testing.T) {
 
 func TestFlattenResourceNetworkingSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"classic":    nil,
-		"kubenet":    nil,
-		"external":   nil,
-		"cni":        nil,
-		"kopeio":     nil,
-		"weave":      nil,
-		"flannel":    nil,
-		"calico":     nil,
-		"canal":      nil,
-		"kuberouter": nil,
-		"romana":     nil,
-		"amazon_vpc": nil,
-		"cilium":     nil,
-		"lyft_vpc":   nil,
-		"gce":        nil,
+		"network_id":               "",
+		"network_cidr":             "",
+		"additional_network_cidrs": func() []interface{} { return nil }(),
+		"subnets":                  func() []interface{} { return nil }(),
+		"tag_subnets":              nil,
+		"topology":                 nil,
+		"egress_proxy":             nil,
+		"non_masquerade_cidr":      "",
+		"pod_cidr":                 "",
+		"service_cluster_ip_range": "",
+		"isolate_control_plane":    nil,
+		"classic":                  nil,
+		"kubenet":                  nil,
+		"external":                 nil,
+		"cni":                      nil,
+		"kopeio":                   nil,
+		"weave":                    nil,
+		"flannel":                  nil,
+		"calico":                   nil,
+		"canal":                    nil,
+		"kube_router":              nil,
+		"romana":                   nil,
+		"amazon_vpc":               nil,
+		"cilium":                   nil,
+		"lyft_vpc":                 nil,
+		"gce":                      nil,
 	}
 	type args struct {
 		in kops.NetworkingSpec
@@ -81,6 +103,127 @@ func TestFlattenResourceNetworkingSpecInto(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.NetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkId - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.NetworkID = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkCidr - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.NetworkCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalNetworkCidrs - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.AdditionalNetworkCIDRs = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Subnets - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Subnets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TagSubnets - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.TagSubnets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Topology - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Topology = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EgressProxy - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.EgressProxy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NonMasqueradeCidr - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.NonMasqueradeCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodCidr - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.PodCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServiceClusterIpRange - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.ServiceClusterIPRange = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IsolateControlPlane - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.IsolateControlPlane = nil
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -184,11 +327,11 @@ func TestFlattenResourceNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Kuberouter - default",
+			name: "KubeRouter - default",
 			args: args{
 				in: func() kops.NetworkingSpec {
 					subject := kops.NetworkingSpec{}
-					subject.Kuberouter = nil
+					subject.KubeRouter = nil
 					return subject
 				}(),
 			},
@@ -263,21 +406,32 @@ func TestFlattenResourceNetworkingSpecInto(t *testing.T) {
 
 func TestFlattenResourceNetworkingSpec(t *testing.T) {
 	_default := map[string]interface{}{
-		"classic":    nil,
-		"kubenet":    nil,
-		"external":   nil,
-		"cni":        nil,
-		"kopeio":     nil,
-		"weave":      nil,
-		"flannel":    nil,
-		"calico":     nil,
-		"canal":      nil,
-		"kuberouter": nil,
-		"romana":     nil,
-		"amazon_vpc": nil,
-		"cilium":     nil,
-		"lyft_vpc":   nil,
-		"gce":        nil,
+		"network_id":               "",
+		"network_cidr":             "",
+		"additional_network_cidrs": func() []interface{} { return nil }(),
+		"subnets":                  func() []interface{} { return nil }(),
+		"tag_subnets":              nil,
+		"topology":                 nil,
+		"egress_proxy":             nil,
+		"non_masquerade_cidr":      "",
+		"pod_cidr":                 "",
+		"service_cluster_ip_range": "",
+		"isolate_control_plane":    nil,
+		"classic":                  nil,
+		"kubenet":                  nil,
+		"external":                 nil,
+		"cni":                      nil,
+		"kopeio":                   nil,
+		"weave":                    nil,
+		"flannel":                  nil,
+		"calico":                   nil,
+		"canal":                    nil,
+		"kube_router":              nil,
+		"romana":                   nil,
+		"amazon_vpc":               nil,
+		"cilium":                   nil,
+		"lyft_vpc":                 nil,
+		"gce":                      nil,
 	}
 	type args struct {
 		in kops.NetworkingSpec
@@ -291,6 +445,127 @@ func TestFlattenResourceNetworkingSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.NetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkId - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.NetworkID = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkCidr - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.NetworkCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AdditionalNetworkCidrs - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.AdditionalNetworkCIDRs = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Subnets - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Subnets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TagSubnets - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.TagSubnets = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Topology - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.Topology = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EgressProxy - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.EgressProxy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NonMasqueradeCidr - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.NonMasqueradeCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodCidr - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.PodCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServiceClusterIpRange - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.ServiceClusterIPRange = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IsolateControlPlane - default",
+			args: args{
+				in: func() kops.NetworkingSpec {
+					subject := kops.NetworkingSpec{}
+					subject.IsolateControlPlane = nil
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -394,11 +669,11 @@ func TestFlattenResourceNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Kuberouter - default",
+			name: "KubeRouter - default",
 			args: args{
 				in: func() kops.NetworkingSpec {
 					subject := kops.NetworkingSpec{}
-					subject.Kuberouter = nil
+					subject.KubeRouter = nil
 					return subject
 				}(),
 			},

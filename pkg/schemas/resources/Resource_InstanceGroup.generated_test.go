@@ -27,6 +27,7 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 					"min_size":                       nil,
 					"max_size":                       nil,
 					"autoscale":                      nil,
+					"autoscale_priority":             0,
 					"machine_type":                   "",
 					"root_volume_size":               nil,
 					"root_volume_type":               nil,
@@ -52,6 +53,7 @@ func TestExpandResourceInstanceGroup(t *testing.T) {
 					"kubelet":                        nil,
 					"taints":                         func() []interface{} { return nil }(),
 					"mixed_instances_policy":         nil,
+					"capacity_rebalance":             nil,
 					"additional_user_data":           func() []interface{} { return nil }(),
 					"suspend_processes":              func() []interface{} { return nil }(),
 					"external_load_balancers":        func() []interface{} { return nil }(),
@@ -99,6 +101,7 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 		"min_size":                       nil,
 		"max_size":                       nil,
 		"autoscale":                      nil,
+		"autoscale_priority":             0,
 		"machine_type":                   "",
 		"root_volume_size":               nil,
 		"root_volume_type":               nil,
@@ -124,6 +127,7 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 		"kubelet":                        nil,
 		"taints":                         func() []interface{} { return nil }(),
 		"mixed_instances_policy":         nil,
+		"capacity_rebalance":             nil,
 		"additional_user_data":           func() []interface{} { return nil }(),
 		"suspend_processes":              func() []interface{} { return nil }(),
 		"external_load_balancers":        func() []interface{} { return nil }(),
@@ -225,6 +229,17 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Autoscale = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoscalePriority - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.AutoscalePriority = 0
 					return subject
 				}(),
 			},
@@ -500,6 +515,17 @@ func TestFlattenResourceInstanceGroupInto(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.MixedInstancesPolicy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CapacityRebalance - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.CapacityRebalance = nil
 					return subject
 				}(),
 			},
@@ -789,6 +815,7 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 		"min_size":                       nil,
 		"max_size":                       nil,
 		"autoscale":                      nil,
+		"autoscale_priority":             0,
 		"machine_type":                   "",
 		"root_volume_size":               nil,
 		"root_volume_type":               nil,
@@ -814,6 +841,7 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 		"kubelet":                        nil,
 		"taints":                         func() []interface{} { return nil }(),
 		"mixed_instances_policy":         nil,
+		"capacity_rebalance":             nil,
 		"additional_user_data":           func() []interface{} { return nil }(),
 		"suspend_processes":              func() []interface{} { return nil }(),
 		"external_load_balancers":        func() []interface{} { return nil }(),
@@ -915,6 +943,17 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.Autoscale = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoscalePriority - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.AutoscalePriority = 0
 					return subject
 				}(),
 			},
@@ -1190,6 +1229,17 @@ func TestFlattenResourceInstanceGroup(t *testing.T) {
 				in: func() resources.InstanceGroup {
 					subject := resources.InstanceGroup{}
 					subject.MixedInstancesPolicy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CapacityRebalance - default",
+			args: args{
+				in: func() resources.InstanceGroup {
+					subject := resources.InstanceGroup{}
+					subject.CapacityRebalance = nil
 					return subject
 				}(),
 			},

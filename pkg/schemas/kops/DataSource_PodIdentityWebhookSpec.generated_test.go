@@ -7,15 +7,15 @@ import (
 	"k8s.io/kops/pkg/apis/kops"
 )
 
-func TestExpandDataSourcePodIdentityWebhookConfig(t *testing.T) {
-	_default := kops.PodIdentityWebhookConfig{}
+func TestExpandDataSourcePodIdentityWebhookSpec(t *testing.T) {
+	_default := kops.PodIdentityWebhookSpec{}
 	type args struct {
 		in map[string]interface{}
 	}
 	tests := []struct {
 		name string
 		args args
-		want kops.PodIdentityWebhookConfig
+		want kops.PodIdentityWebhookSpec
 	}{
 		{
 			name: "default",
@@ -30,21 +30,21 @@ func TestExpandDataSourcePodIdentityWebhookConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExpandDataSourcePodIdentityWebhookConfig(tt.args.in)
+			got := ExpandDataSourcePodIdentityWebhookSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("ExpandDataSourcePodIdentityWebhookConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("ExpandDataSourcePodIdentityWebhookSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourcePodIdentityWebhookConfigInto(t *testing.T) {
+func TestFlattenDataSourcePodIdentityWebhookSpecInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":  false,
 		"replicas": 0,
 	}
 	type args struct {
-		in kops.PodIdentityWebhookConfig
+		in kops.PodIdentityWebhookSpec
 	}
 	tests := []struct {
 		name string
@@ -54,15 +54,15 @@ func TestFlattenDataSourcePodIdentityWebhookConfigInto(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.PodIdentityWebhookConfig{},
+				in: kops.PodIdentityWebhookSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.PodIdentityWebhookConfig {
-					subject := kops.PodIdentityWebhookConfig{}
+				in: func() kops.PodIdentityWebhookSpec {
+					subject := kops.PodIdentityWebhookSpec{}
 					subject.Enabled = false
 					return subject
 				}(),
@@ -72,8 +72,8 @@ func TestFlattenDataSourcePodIdentityWebhookConfigInto(t *testing.T) {
 		{
 			name: "Replicas - default",
 			args: args{
-				in: func() kops.PodIdentityWebhookConfig {
-					subject := kops.PodIdentityWebhookConfig{}
+				in: func() kops.PodIdentityWebhookSpec {
+					subject := kops.PodIdentityWebhookSpec{}
 					subject.Replicas = 0
 					return subject
 				}(),
@@ -84,21 +84,21 @@ func TestFlattenDataSourcePodIdentityWebhookConfigInto(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := map[string]interface{}{}
-			FlattenDataSourcePodIdentityWebhookConfigInto(tt.args.in, got)
+			FlattenDataSourcePodIdentityWebhookSpecInto(tt.args.in, got)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourcePodIdentityWebhookConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourcePodIdentityWebhookSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}
 }
 
-func TestFlattenDataSourcePodIdentityWebhookConfig(t *testing.T) {
+func TestFlattenDataSourcePodIdentityWebhookSpec(t *testing.T) {
 	_default := map[string]interface{}{
 		"enabled":  false,
 		"replicas": 0,
 	}
 	type args struct {
-		in kops.PodIdentityWebhookConfig
+		in kops.PodIdentityWebhookSpec
 	}
 	tests := []struct {
 		name string
@@ -108,15 +108,15 @@ func TestFlattenDataSourcePodIdentityWebhookConfig(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: kops.PodIdentityWebhookConfig{},
+				in: kops.PodIdentityWebhookSpec{},
 			},
 			want: _default,
 		},
 		{
 			name: "Enabled - default",
 			args: args{
-				in: func() kops.PodIdentityWebhookConfig {
-					subject := kops.PodIdentityWebhookConfig{}
+				in: func() kops.PodIdentityWebhookSpec {
+					subject := kops.PodIdentityWebhookSpec{}
 					subject.Enabled = false
 					return subject
 				}(),
@@ -126,8 +126,8 @@ func TestFlattenDataSourcePodIdentityWebhookConfig(t *testing.T) {
 		{
 			name: "Replicas - default",
 			args: args{
-				in: func() kops.PodIdentityWebhookConfig {
-					subject := kops.PodIdentityWebhookConfig{}
+				in: func() kops.PodIdentityWebhookSpec {
+					subject := kops.PodIdentityWebhookSpec{}
 					subject.Replicas = 0
 					return subject
 				}(),
@@ -137,9 +137,9 @@ func TestFlattenDataSourcePodIdentityWebhookConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FlattenDataSourcePodIdentityWebhookConfig(tt.args.in)
+			got := FlattenDataSourcePodIdentityWebhookSpec(tt.args.in)
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("FlattenDataSourcePodIdentityWebhookConfig() mismatch (-want +got):\n%s", diff)
+				t.Errorf("FlattenDataSourcePodIdentityWebhookSpec() mismatch (-want +got):\n%s", diff)
 			}
 		})
 	}

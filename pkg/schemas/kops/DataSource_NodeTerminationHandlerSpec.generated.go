@@ -11,7 +11,7 @@ import (
 
 var _ = Schema
 
-func DataSourceNodeTerminationHandlerConfig() *schema.Resource {
+func DataSourceNodeTerminationHandlerSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"enabled":                           ComputedBool(),
@@ -32,11 +32,11 @@ func DataSourceNodeTerminationHandlerConfig() *schema.Resource {
 	return res
 }
 
-func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kops.NodeTerminationHandlerConfig {
+func ExpandDataSourceNodeTerminationHandlerSpec(in map[string]interface{}) kops.NodeTerminationHandlerSpec {
 	if in == nil {
-		panic("expand NodeTerminationHandlerConfig failure, in is nil")
+		panic("expand NodeTerminationHandlerSpec failure, in is nil")
 	}
-	return kops.NodeTerminationHandlerConfig{
+	return kops.NodeTerminationHandlerSpec{
 		Enabled: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -268,7 +268,7 @@ func ExpandDataSourceNodeTerminationHandlerConfig(in map[string]interface{}) kop
 	}
 }
 
-func FlattenDataSourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHandlerConfig, out map[string]interface{}) {
+func FlattenDataSourceNodeTerminationHandlerSpecInto(in kops.NodeTerminationHandlerSpec, out map[string]interface{}) {
 	out["enabled"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -391,8 +391,8 @@ func FlattenDataSourceNodeTerminationHandlerConfigInto(in kops.NodeTerminationHa
 	}(in.Version)
 }
 
-func FlattenDataSourceNodeTerminationHandlerConfig(in kops.NodeTerminationHandlerConfig) map[string]interface{} {
+func FlattenDataSourceNodeTerminationHandlerSpec(in kops.NodeTerminationHandlerSpec) map[string]interface{} {
 	out := map[string]interface{}{}
-	FlattenDataSourceNodeTerminationHandlerConfigInto(in, out)
+	FlattenDataSourceNodeTerminationHandlerSpecInto(in, out)
 	return out
 }
