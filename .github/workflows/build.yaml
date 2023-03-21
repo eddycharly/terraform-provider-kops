@@ -1,16 +1,14 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - main
-      - v*
-    tags-ignore:
-      - "*"
   pull_request:
     branches:
       - main
       - v*
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
