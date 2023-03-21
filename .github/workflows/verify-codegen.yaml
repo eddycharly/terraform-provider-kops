@@ -1,4 +1,4 @@
-name: Build
+name: Verify codegen
 
 on:
   pull_request:
