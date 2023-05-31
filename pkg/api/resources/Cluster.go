@@ -6,9 +6,12 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
+	kopsutil "k8s.io/kops/pkg/apis/kops/util"
 	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/pkg/clusteraddons"
 	"k8s.io/kops/pkg/resources"
 	"k8s.io/kops/pkg/resources/ops"
+	"k8s.io/kops/pkg/wellknownoperators"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
@@ -27,6 +30,8 @@ type Cluster struct {
 	Name string
 	// AdminSshKey defines the cluster admin ssh key
 	AdminSshKey string
+	// ClusterAddons defines the cluster addons
+	ClusterAddons []string
 	// Secrets defines the cluster secret
 	Secrets *ClusterSecrets
 	// Revision is incremented every time the resource changes, this is useful for triggering cluster updater
@@ -88,7 +93,7 @@ func GetCluster(name string, clientset simple.Clientset) (*Cluster, error) {
 	return cluster, nil
 }
 
-func CreateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+func CreateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, clusterAddons []string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
 	kc := makeKopsCluster(name, labels, annotations, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
@@ -97,12 +102,37 @@ func CreateCluster(name string, labels map[string]string, annotations map[string
 	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
 		return nil, err
 	}
+	// TODO: deep validate ?
+	// TODO: assets builder ?
+	channel, err := cloudup.ChannelForCluster(kc)
+	if err != nil {
+		return nil, err
+	}
+	kubernetesVersion, err := kopsutil.ParseKubernetesVersion(kc.Spec.KubernetesVersion)
+	if err != nil {
+		return nil, err
+	}
+	addons, err := wellknownoperators.CreateAddons(channel, kubernetesVersion, kc)
+	if err != nil {
+		return nil, err
+	}
+	for _, addon := range clusterAddons {
+		addon, err := clusteraddons.ParseClusterAddon([]byte(addon))
+		if err != nil {
+			return nil, err
+		}
+		addons = append(addons, addon.Objects...)
+	}
 	_, err = clientset.CreateCluster(context.Background(), kc)
 	if err != nil {
 		return nil, err
 	}
 	kc, err = clientset.GetCluster(context.Background(), name)
 	if err != nil {
+		return nil, err
+	}
+	addonsClient := clientset.AddonsFor(kc)
+	if err := addonsClient.Replace(addons); err != nil {
 		return nil, err
 	}
 	if adminSshKey != "" {
@@ -133,7 +163,7 @@ func CreateCluster(name string, labels map[string]string, annotations map[string
 	return makeCluster(adminSshKey, secrets, kc), nil
 }
 
-func UpdateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
+func UpdateCluster(name string, labels map[string]string, annotations map[string]string, adminSshKey string, secrets *ClusterSecrets, clusterAddons []string, spec kops.ClusterSpec, clientset simple.Clientset) (*Cluster, error) {
 	kc := makeKopsCluster(name, labels, annotations, spec)
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {
@@ -142,8 +172,33 @@ func UpdateCluster(name string, labels map[string]string, annotations map[string
 	if err := cloudup.PerformAssignments(kc, cloud); err != nil {
 		return nil, err
 	}
+	// TODO: deep validate ?
+	// TODO: assets builder ?
+	channel, err := cloudup.ChannelForCluster(kc)
+	if err != nil {
+		return nil, err
+	}
+	kubernetesVersion, err := kopsutil.ParseKubernetesVersion(kc.Spec.KubernetesVersion)
+	if err != nil {
+		return nil, err
+	}
+	addons, err := wellknownoperators.CreateAddons(channel, kubernetesVersion, kc)
+	if err != nil {
+		return nil, err
+	}
+	for _, addon := range clusterAddons {
+		addon, err := clusteraddons.ParseClusterAddon([]byte(addon))
+		if err != nil {
+			return nil, err
+		}
+		addons = append(addons, addon.Objects...)
+	}
 	kc, err = clientset.UpdateCluster(context.Background(), kc, nil)
 	if err != nil {
+		return nil, err
+	}
+	addonsClient := clientset.AddonsFor(kc)
+	if err := addonsClient.Replace(addons); err != nil {
 		return nil, err
 	}
 	sshCredentialStore, err := clientset.SSHCredentialStore(kc)

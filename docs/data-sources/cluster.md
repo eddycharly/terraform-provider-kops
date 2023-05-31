@@ -126,6 +126,7 @@ The following arguments are supported:
 - `annotations` - (Computed) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `name` - (Required) - String - Name defines the cluster name.
 - `admin_ssh_key` - (Computed) - String - AdminSshKey defines the cluster admin ssh key.
+- `cluster_addons` - (Computed) - List(String) - ClusterAddons defines the cluster addons.
 - `secrets` - (Computed) - [cluster_secrets](#cluster_secrets) - Secrets defines the cluster secret.
 
 ## Nested resources
