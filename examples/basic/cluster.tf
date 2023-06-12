@@ -3,7 +3,6 @@ resource "kops_cluster" "cluster" {
   admin_ssh_key      = file("${path.module}/../dummy_ssh.pub")
   kubernetes_version = "stable"
   dns_zone           = local.dnsZone
-  network_id         = local.vpcId
 
   cloud_provider {
     aws {}
@@ -14,53 +13,53 @@ resource "kops_cluster" "cluster" {
   }
 
   networking {
-    calico {}
-  }
+    network_id = local.vpcId
 
-  topology {
-    masters = "private"
-    nodes   = "private"
-    dns {
+    # private subnets
+    subnets {
+      name = "private-0"
       type = "Private"
+      id   = local.privateSubnets[0].subnetId
+      zone = local.privateSubnets[0].zone
     }
-  }
+    subnets {
+      name = "private-1"
+      type = "Private"
+      id   = local.privateSubnets[1].subnetId
+      zone = local.privateSubnets[1].zone
+    }
+    subnets {
+      name = "private-2"
+      type = "Private"
+      id   = local.privateSubnets[2].subnetId
+      zone = local.privateSubnets[2].zone
+    }
+    subnets {
+      name = "utility-0"
+      type = "Utility"
+      id   = local.utilitySubnets[0].subnetId
+      zone = local.utilitySubnets[0].zone
+    }
+    subnets {
+      name = "utility-1"
+      type = "Utility"
+      id   = local.utilitySubnets[1].subnetId
+      zone = local.utilitySubnets[1].zone
+    }
+    subnets {
+      name = "utility-2"
+      type = "Utility"
+      id   = local.utilitySubnets[2].subnetId
+      zone = local.utilitySubnets[2].zone
+    }
 
-  # private subnets
-  subnet {
-    name        = "private-0"
-    type        = "Private"
-    provider_id = local.privateSubnets[0].subnetId
-    zone        = local.privateSubnets[0].zone
-  }
-  subnet {
-    name        = "private-1"
-    type        = "Private"
-    provider_id = local.privateSubnets[1].subnetId
-    zone        = local.privateSubnets[1].zone
-  }
-  subnet {
-    name        = "private-2"
-    type        = "Private"
-    provider_id = local.privateSubnets[2].subnetId
-    zone        = local.privateSubnets[2].zone
-  }
-  subnet {
-    name        = "utility-0"
-    type        = "Utility"
-    provider_id = local.utilitySubnets[0].subnetId
-    zone        = local.utilitySubnets[0].zone
-  }
-  subnet {
-    name        = "utility-1"
-    type        = "Utility"
-    provider_id = local.utilitySubnets[1].subnetId
-    zone        = local.utilitySubnets[1].zone
-  }
-  subnet {
-    name        = "utility-2"
-    type        = "Utility"
-    provider_id = local.utilitySubnets[2].subnetId
-    zone        = local.utilitySubnets[2].zone
+    calico {}
+
+    topology {
+      control_plane = "private"
+      nodes         = "private"
+      dns           = "Private"
+    }
   }
 
   # etcd clusters

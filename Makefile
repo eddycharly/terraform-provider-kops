@@ -3,6 +3,7 @@ OS                        := $(shell echo `uname` | tr '[:upper:]' '[:lower:]')
 TOOLS_DIR                 := $(PWD)/.tools
 GOIMPORTS                 := $(TOOLS_DIR)/goimports
 GOIMPORTS_VERSION         := latest
+GOARCH                    ?= amd64
 
 .PHONY: all
 all: clean gen fmt build verify-gen vet test
@@ -58,9 +59,9 @@ vet: fmt
 	@go vet ./...
 
 .PHONY: install
-install: all
-	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64
-	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_amd64/terraform-provider-kops
+install: clean gen fmt build
+	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_${GOARCH}
+	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_${GOARCH}/terraform-provider-kops
 
 # EXAMPLES FOR TERRAFORM >= 0.15
 
