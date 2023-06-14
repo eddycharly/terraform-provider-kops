@@ -59,7 +59,7 @@ vet: fmt
 	@go vet ./...
 
 .PHONY: install
-install: clean gen fmt build
+install: all
 	@mkdir -p ${HOME}/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_${GOARCH}
 	@cp terraform-provider-kops $(HOME)/.terraform.d/plugins/github/eddycharly/kops/${PROVIDER_VERSION}/${OS}_${GOARCH}/terraform-provider-kops
 
