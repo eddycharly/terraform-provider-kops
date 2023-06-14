@@ -1302,14 +1302,14 @@ NetworkingSpec configures networking.
 
 The following arguments are supported:
 
-- `network_id` - (Optional) - String - NetworkID is the cloud provider's identifier of the existing network (for example, AWS VPC) the cluster should use.<br />If not specified, kOps will create a new network.
-- `network_cidr` - (Optional) - String - NetworkCIDR is the primary IPv4 CIDR used for the cloud provider's network.<br />It is not required on GCE.<br />On DO, it maps to the VPC CIDR.
+- `network_id` - (Required) - String - NetworkID is the cloud provider's identifier of the existing network (for example, AWS VPC) the cluster should use.<br />If not specified, kOps will create a new network.
+- `network_cidr` - (Optional) - (Computed) - String - NetworkCIDR is the primary IPv4 CIDR used for the cloud provider's network.<br />It is not required on GCE.<br />On DO, it maps to the VPC CIDR.
 - `additional_network_cidrs` - (Optional) - List(String) - AdditionalNetworkCIDRs is a list of additional CIDR used for the AWS VPC<br />or otherwise allocated to k8s. This is a real CIDR, not the internal k8s network<br />On AWS, it maps to any additional CIDRs added to a VPC.
-- `subnets` - (Optional) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Subnets are the subnets that the cluster can use.
-- `tag_subnets` - (Optional) - Bool - TagSubnets controls if tags are added to subnets to enable use by load balancers (AWS only). Default: true.
-- `topology` - (Optional) - [topology_spec](#topology_spec) - Topology defines the type of network topology to use on the cluster - default public<br />This is heavily weighted towards AWS for the time being, but should also be agnostic enough<br />to port out to GCE later if needed.
+- `subnet` - (Required) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Subnets are the subnets that the cluster can use.
+- `tag_subnets` - (Optional) - Bool([Nullable](#nullable-arguments)) - TagSubnets controls if tags are added to subnets to enable use by load balancers (AWS only). Default: true.
+- `topology` - (Required) - [topology_spec](#topology_spec) - Topology defines the type of network topology to use on the cluster - default public<br />This is heavily weighted towards AWS for the time being, but should also be agnostic enough<br />to port out to GCE later if needed.
 - `egress_proxy` - (Optional) - [egress_proxy_spec](#egress_proxy_spec) - HTTPProxy defines connection information to support use of a private cluster behind an forward HTTP Proxy.
-- `non_masquerade_cidr` - (Optional) - String - NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)<br />It cannot overlap ServiceClusterIPRange.
+- `non_masquerade_cidr` - (Optional) - (Computed) - String - NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)<br />It cannot overlap ServiceClusterIPRange.
 - `pod_cidr` - (Optional) - String - PodCIDR is the CIDR from which we allocate IPs for pods.
 - `service_cluster_ip_range` - (Optional) - String - ServiceClusterIPRange is the CIDR, from the internal network, where we allocate IPs for services.
 - `isolate_control_plane` - (Optional) - Bool - IsolateControlPlane determines whether we should lock down masters so that they are not on the pod network.<br />true is the kube-up behaviour, but it is very surprising: it means that daemonsets only work on the master<br />if they have hostNetwork=true.<br />false is now the default, and it will:<br /> * give the master a normal PodCIDR<br /> * run kube-proxy on the master<br /> * enable debugging handlers on the master, so kubectl logs works.
@@ -1383,7 +1383,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `type` - (Optional) - String - Type of load balancer to create, it can be Public or Internal.
+- `type` - (Required) - String - Type of load balancer to create, it can be Public or Internal.
 
 ### egress_proxy_spec
 

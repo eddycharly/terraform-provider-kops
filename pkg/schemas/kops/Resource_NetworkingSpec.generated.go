@@ -13,14 +13,14 @@ var _ = Schema
 func ResourceNetworkingSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"network_id":               OptionalString(),
-			"network_cidr":             OptionalString(),
+			"network_id":               RequiredString(),
+			"network_cidr":             OptionalComputedString(),
 			"additional_network_cidrs": OptionalList(String()),
-			"subnets":                  OptionalList(ResourceClusterSubnetSpec()),
-			"tag_subnets":              OptionalBool(),
-			"topology":                 OptionalStruct(ResourceTopologySpec()),
+			"subnet":                   RequiredList(ResourceClusterSubnetSpec()),
+			"tag_subnets":              Nullable(OptionalBool()),
+			"topology":                 RequiredStruct(ResourceTopologySpec()),
 			"egress_proxy":             OptionalStruct(ResourceEgressProxySpec()),
-			"non_masquerade_cidr":      OptionalString(),
+			"non_masquerade_cidr":      OptionalComputedString(),
 			"pod_cidr":                 OptionalString(),
 			"service_cluster_ip_range": OptionalString(),
 			"isolate_control_plane":    OptionalBool(),
@@ -84,25 +84,27 @@ func ExpandResourceNetworkingSpec(in map[string]interface{}) kops.NetworkingSpec
 				}
 				return out
 			}(in)
-		}(in["subnets"]),
+		}(in["subnet"]),
 		TagSubnets: func(in interface{}) *bool {
 			if in == nil {
 				return nil
 			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *bool {
+					return func(in interface{}) *bool {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in bool) *bool {
+							return &in
+						}(bool(ExpandBool(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
+			return nil
 		}(in["tag_subnets"]),
 		Topology: func(in interface{}) *kops.TopologySpec {
 			return func(in interface{}) *kops.TopologySpec {
@@ -457,7 +459,7 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 			return out
 		}(in)
 	}(in.AdditionalNetworkCIDRs)
-	out["subnets"] = func(in []kops.ClusterSubnetSpec) interface{} {
+	out["subnet"] = func(in []kops.ClusterSubnetSpec) interface{} {
 		return func(in []kops.ClusterSubnetSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
@@ -469,14 +471,17 @@ func FlattenResourceNetworkingSpecInto(in kops.NetworkingSpec, out map[string]in
 		}(in)
 	}(in.Subnets)
 	out["tag_subnets"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *bool) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in bool) interface{} {
 				return FlattenBool(bool(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.TagSubnets)
 	out["topology"] = func(in *kops.TopologySpec) interface{} {
 		return func(in *kops.TopologySpec) interface{} {

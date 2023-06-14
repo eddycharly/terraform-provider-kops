@@ -24,7 +24,7 @@ func TestExpandDataSourceNetworkingSpec(t *testing.T) {
 					"network_id":               "",
 					"network_cidr":             "",
 					"additional_network_cidrs": func() []interface{} { return nil }(),
-					"subnets":                  func() []interface{} { return nil }(),
+					"subnet":                   func() []interface{} { return nil }(),
 					"tag_subnets":              nil,
 					"topology":                 nil,
 					"egress_proxy":             nil,
@@ -67,7 +67,7 @@ func TestFlattenDataSourceNetworkingSpecInto(t *testing.T) {
 		"network_id":               "",
 		"network_cidr":             "",
 		"additional_network_cidrs": func() []interface{} { return nil }(),
-		"subnets":                  func() []interface{} { return nil }(),
+		"subnet":                   func() []interface{} { return nil }(),
 		"tag_subnets":              nil,
 		"topology":                 nil,
 		"egress_proxy":             nil,
@@ -140,7 +140,7 @@ func TestFlattenDataSourceNetworkingSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Subnets - default",
+			name: "Subnet - default",
 			args: args{
 				in: func() kops.NetworkingSpec {
 					subject := kops.NetworkingSpec{}
@@ -409,7 +409,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 		"network_id":               "",
 		"network_cidr":             "",
 		"additional_network_cidrs": func() []interface{} { return nil }(),
-		"subnets":                  func() []interface{} { return nil }(),
+		"subnet":                   func() []interface{} { return nil }(),
 		"tag_subnets":              nil,
 		"topology":                 nil,
 		"egress_proxy":             nil,
@@ -482,7 +482,7 @@ func TestFlattenDataSourceNetworkingSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Subnets - default",
+			name: "Subnet - default",
 			args: args{
 				in: func() kops.NetworkingSpec {
 					subject := kops.NetworkingSpec{}

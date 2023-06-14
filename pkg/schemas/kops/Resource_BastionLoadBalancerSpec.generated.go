@@ -11,7 +11,7 @@ var _ = Schema
 func ResourceBastionLoadBalancerSpec() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"type": OptionalString(),
+			"type": RequiredString(),
 		},
 	}
 
