@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -100,7 +101,7 @@ func createOrUpdateClusterKeypair(keyStore fi.CAStore, c string, k string) error
 	if err != nil {
 		return fmt.Errorf("error creating keyset: %v", err)
 	}
-	err = keyStore.StoreKeyset(fi.CertificateIDCA, ks)
+	err = keyStore.StoreKeyset(context.TODO(), fi.CertificateIDCA, ks)
 	if err != nil {
 		return fmt.Errorf("error storing keyset: %v", err)
 	}

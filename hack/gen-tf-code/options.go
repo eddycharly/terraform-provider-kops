@@ -14,29 +14,29 @@ type optionsDoc struct {
 type options struct {
 	noSchema     bool
 	version      *int
-	exclude      sets.String
+	exclude      sets.Set[string]
 	rename       map[string]string
-	nullable     sets.String
-	required     sets.String
-	computed     sets.String
-	computedOnly sets.String
-	forceNew     sets.String
-	sensitive    sets.String
-	suppressDiff sets.String
+	nullable     sets.Set[string]
+	required     sets.Set[string]
+	computed     sets.Set[string]
+	computedOnly sets.Set[string]
+	forceNew     sets.Set[string]
+	sensitive    sets.Set[string]
+	suppressDiff sets.Set[string]
 	doc          *optionsDoc
 }
 
 func newOptions() *options {
 	return &options{
-		exclude:      sets.NewString(),
+		exclude:      sets.New[string](),
 		rename:       make(map[string]string),
-		nullable:     sets.NewString(),
-		required:     sets.NewString(),
-		computed:     sets.NewString(),
-		computedOnly: sets.NewString(),
-		forceNew:     sets.NewString(),
-		sensitive:    sets.NewString(),
-		suppressDiff: sets.NewString(),
+		nullable:     sets.New[string](),
+		required:     sets.New[string](),
+		computed:     sets.New[string](),
+		computedOnly: sets.New[string](),
+		forceNew:     sets.New[string](),
+		sensitive:    sets.New[string](),
+		suppressDiff: sets.New[string](),
 	}
 }
 
@@ -110,28 +110,28 @@ func doc(header, footer string) func(o *options) {
 }
 
 func (o *options) verify(t reflect.Type) error {
-	if err := verifyFields(t, o.sensitive.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.sensitive)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.exclude.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.exclude)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.nullable.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.nullable)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.required.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.required)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.computed.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.computed)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.computedOnly.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.computedOnly)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.forceNew.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.forceNew)...); err != nil {
 		return err
 	}
-	if err := verifyFields(t, o.suppressDiff.List()...); err != nil {
+	if err := verifyFields(t, sets.List(o.suppressDiff)...); err != nil {
 		return err
 	}
 	for k := range o.rename {

@@ -18,13 +18,10 @@ func ResourceCloudConfiguration() *schema.Resource {
 			"node_tags":                      OptionalString(),
 			"node_instance_prefix":           OptionalString(),
 			"node_ip_families":               OptionalList(String()),
-			"gce_service_account":            OptionalString(),
 			"disable_security_group_ingress": OptionalBool(),
 			"elb_security_group":             OptionalString(),
 			"spotinst_product":               OptionalString(),
 			"spotinst_orientation":           OptionalString(),
-			"aws_ebs_csi_driver":             OptionalStruct(ResourceAWSEBSCSIDriver()),
-			"gcp_pd_csi_driver":              OptionalStruct(ResourceGCPPDCSIDriver()),
 		},
 	}
 
@@ -124,9 +121,6 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 				return out
 			}(in)
 		}(in["node_ip_families"]),
-		GCEServiceAccount: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["gce_service_account"]),
 		DisableSecurityGroupIngress: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -203,42 +197,6 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["spotinst_orientation"]),
-		AWSEBSCSIDriver: func(in interface{}) *kops.AWSEBSCSIDriver {
-			return func(in interface{}) *kops.AWSEBSCSIDriver {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.AWSEBSCSIDriver) *kops.AWSEBSCSIDriver {
-					return &in
-				}(func(in interface{}) kops.AWSEBSCSIDriver {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandResourceAWSEBSCSIDriver(in[0].(map[string]interface{}))
-					}
-					return kops.AWSEBSCSIDriver{}
-				}(in))
-			}(in)
-		}(in["aws_ebs_csi_driver"]),
-		GCPPDCSIDriver: func(in interface{}) *kops.GCPPDCSIDriver {
-			return func(in interface{}) *kops.GCPPDCSIDriver {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.GCPPDCSIDriver) *kops.GCPPDCSIDriver {
-					return &in
-				}(func(in interface{}) kops.GCPPDCSIDriver {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandResourceGCPPDCSIDriver(in[0].(map[string]interface{}))
-					}
-					return kops.GCPPDCSIDriver{}
-				}(in))
-			}(in)
-		}(in["gcp_pd_csi_driver"]),
 	}
 }
 
@@ -292,9 +250,6 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 			return out
 		}(in)
 	}(in.NodeIPFamilies)
-	out["gce_service_account"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.GCEServiceAccount)
 	out["disable_security_group_ingress"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -335,30 +290,6 @@ func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[s
 			}(*in)
 		}(in)
 	}(in.SpotinstOrientation)
-	out["aws_ebs_csi_driver"] = func(in *kops.AWSEBSCSIDriver) interface{} {
-		return func(in *kops.AWSEBSCSIDriver) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.AWSEBSCSIDriver) interface{} {
-				return func(in kops.AWSEBSCSIDriver) []interface{} {
-					return []interface{}{FlattenResourceAWSEBSCSIDriver(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.AWSEBSCSIDriver)
-	out["gcp_pd_csi_driver"] = func(in *kops.GCPPDCSIDriver) interface{} {
-		return func(in *kops.GCPPDCSIDriver) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.GCPPDCSIDriver) interface{} {
-				return func(in kops.GCPPDCSIDriver) []interface{} {
-					return []interface{}{FlattenResourceGCPPDCSIDriver(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.GCPPDCSIDriver)
 }
 
 func FlattenResourceCloudConfiguration(in kops.CloudConfiguration) map[string]interface{} {

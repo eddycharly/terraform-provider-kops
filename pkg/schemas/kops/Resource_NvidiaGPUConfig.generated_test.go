@@ -23,6 +23,7 @@ func TestExpandResourceNvidiaGPUConfig(t *testing.T) {
 				in: map[string]interface{}{
 					"driver_package": "",
 					"enabled":        nil,
+					"dcgm_exporter":  nil,
 				},
 			},
 			want: _default,
@@ -42,6 +43,7 @@ func TestFlattenResourceNvidiaGPUConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
 		"driver_package": "",
 		"enabled":        nil,
+		"dcgm_exporter":  nil,
 	}
 	type args struct {
 		in kops.NvidiaGPUConfig
@@ -75,6 +77,17 @@ func TestFlattenResourceNvidiaGPUConfigInto(t *testing.T) {
 				in: func() kops.NvidiaGPUConfig {
 					subject := kops.NvidiaGPUConfig{}
 					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DCGMExporter - default",
+			args: args{
+				in: func() kops.NvidiaGPUConfig {
+					subject := kops.NvidiaGPUConfig{}
+					subject.DCGMExporter = nil
 					return subject
 				}(),
 			},
@@ -96,6 +109,7 @@ func TestFlattenResourceNvidiaGPUConfig(t *testing.T) {
 	_default := map[string]interface{}{
 		"driver_package": "",
 		"enabled":        nil,
+		"dcgm_exporter":  nil,
 	}
 	type args struct {
 		in kops.NvidiaGPUConfig
@@ -129,6 +143,17 @@ func TestFlattenResourceNvidiaGPUConfig(t *testing.T) {
 				in: func() kops.NvidiaGPUConfig {
 					subject := kops.NvidiaGPUConfig{}
 					subject.Enabled = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DCGMExporter - default",
+			args: args{
+				in: func() kops.NvidiaGPUConfig {
+					subject := kops.NvidiaGPUConfig{}
+					subject.DCGMExporter = nil
 					return subject
 				}(),
 			},

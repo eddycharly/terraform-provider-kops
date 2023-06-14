@@ -52,11 +52,12 @@ resource "kops_cluster" "cluster" {
 
 The following arguments are supported:
 - `manager` - (Computed) - String - Manager determines what is managing the node lifecycle.
-- `role` - (Computed) - String - Type determines the role of instances in this instance group: masters or nodes.
+- `role` - (Computed) - String - Role determines the role of instances in this instance group.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Computed) - Int - MaxSize is the maximum size of the pool.
 - `autoscale` - (Computed) - Bool - Autoscale determines if autoscaling will be enabled for this instance group if cluster autoscaler is enabled.
+- `autoscale_priority` - (Computed) - Int - AutoscalePriority determines the InstanceGroup priority for scaling when cluster autoscaler uses the priority expander.
 - `machine_type` - (Computed) - String - MachineType is the instance class.
 - `root_volume_size` - (Computed) - Int - RootVolumeSize is the size of the EBS root volume to use, in GB.
 - `root_volume_type` - (Computed) - String - RootVolumeType is the type of the EBS root volume to use (e.g. gp2).
@@ -82,9 +83,10 @@ The following arguments are supported:
 - `kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet overrides kubelet config from the ClusterSpec.
 - `taints` - (Computed) - List(String) - Taints indicates the kubernetes taints for nodes in this instance group.
 - `mixed_instances_policy` - (Computed) - [mixed_instances_policy_spec](#mixed_instances_policy_spec) - MixedInstancesPolicy defined a optional backing of an AWS ASG by a EC2 Fleet (AWS Only).
+- `capacity_rebalance` - (Computed) - Bool - CapacityRebalance makes ASGs proactively replace spot instances when the ASG receives a rebalance recommendation (AWS Only).
 - `additional_user_data` - (Computed) - List([user_data](#user_data)) - AdditionalUserData is any additional user-data to be passed to the host.
 - `suspend_processes` - (Computed) - List(String) - SuspendProcesses disables the listed Scaling Policies.
-- `external_load_balancers` - (Computed) - List([load_balancer](#load_balancer)) - ExternalLoadBalancers define loadbalancers that should be attached to this instance group.
+- `external_load_balancers` - (Computed) - List([load_balancer_spec](#load_balancer_spec)) - ExternalLoadBalancers define loadbalancers that should be attached to this instance group.
 - `detailed_instance_monitoring` - (Computed) - Bool - DetailedInstanceMonitoring defines if detailed-monitoring is enabled (AWS only).
 - `iam` - (Computed) - [iam_profile_spec](#iam_profile_spec) - IAMProfileSpec defines the identity of the cloud group IAM profile (AWS only).
 - `security_group_override` - (Computed) - String - SecurityGroupOverride overrides the default security group created by Kops for this IG (AWS only).
@@ -330,7 +332,7 @@ The following arguments are supported:
 - `type` - (Computed) - String - Type is the type of user-data.
 - `content` - (Computed) - String - Content is the user-data content.
 
-### load_balancer
+### load_balancer_spec
 
 LoadBalancer defines a load balancer.
 
@@ -421,6 +423,17 @@ The following arguments are supported:
 
 - `driver_package` - (Computed) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-510-server".
 - `enabled` - (Computed) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
+- `dcgm_exporter` - (Computed) - [dcgm_exporter_config](#dcgm_exporter_config) - DCGMExporterConfig configures the DCGM exporter.
+
+### dcgm_exporter_config
+
+DCGMExporterConfig configures the DCGM exporter.<br />Only the DCGMExporterConfig in the cluster level takes effect. Configurations on the Instance Group are ignored.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled determines if kOps will install the DCGM exporter.
 
 ### runc
 

@@ -27,6 +27,7 @@ func TestExpandDataSourceInstanceGroupSpec(t *testing.T) {
 					"min_size":                       nil,
 					"max_size":                       nil,
 					"autoscale":                      nil,
+					"autoscale_priority":             0,
 					"machine_type":                   "",
 					"root_volume_size":               nil,
 					"root_volume_type":               nil,
@@ -52,6 +53,7 @@ func TestExpandDataSourceInstanceGroupSpec(t *testing.T) {
 					"kubelet":                        nil,
 					"taints":                         func() []interface{} { return nil }(),
 					"mixed_instances_policy":         nil,
+					"capacity_rebalance":             nil,
 					"additional_user_data":           func() []interface{} { return nil }(),
 					"suspend_processes":              func() []interface{} { return nil }(),
 					"external_load_balancers":        func() []interface{} { return nil }(),
@@ -94,6 +96,7 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 		"min_size":                       nil,
 		"max_size":                       nil,
 		"autoscale":                      nil,
+		"autoscale_priority":             0,
 		"machine_type":                   "",
 		"root_volume_size":               nil,
 		"root_volume_type":               nil,
@@ -119,6 +122,7 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 		"kubelet":                        nil,
 		"taints":                         func() []interface{} { return nil }(),
 		"mixed_instances_policy":         nil,
+		"capacity_rebalance":             nil,
 		"additional_user_data":           func() []interface{} { return nil }(),
 		"suspend_processes":              func() []interface{} { return nil }(),
 		"external_load_balancers":        func() []interface{} { return nil }(),
@@ -215,6 +219,17 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.Autoscale = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoscalePriority - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.AutoscalePriority = 0
 					return subject
 				}(),
 			},
@@ -490,6 +505,17 @@ func TestFlattenDataSourceInstanceGroupSpecInto(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.MixedInstancesPolicy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CapacityRebalance - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.CapacityRebalance = nil
 					return subject
 				}(),
 			},
@@ -724,6 +750,7 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 		"min_size":                       nil,
 		"max_size":                       nil,
 		"autoscale":                      nil,
+		"autoscale_priority":             0,
 		"machine_type":                   "",
 		"root_volume_size":               nil,
 		"root_volume_type":               nil,
@@ -749,6 +776,7 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 		"kubelet":                        nil,
 		"taints":                         func() []interface{} { return nil }(),
 		"mixed_instances_policy":         nil,
+		"capacity_rebalance":             nil,
 		"additional_user_data":           func() []interface{} { return nil }(),
 		"suspend_processes":              func() []interface{} { return nil }(),
 		"external_load_balancers":        func() []interface{} { return nil }(),
@@ -845,6 +873,17 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.Autoscale = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoscalePriority - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.AutoscalePriority = 0
 					return subject
 				}(),
 			},
@@ -1120,6 +1159,17 @@ func TestFlattenDataSourceInstanceGroupSpec(t *testing.T) {
 				in: func() kops.InstanceGroupSpec {
 					subject := kops.InstanceGroupSpec{}
 					subject.MixedInstancesPolicy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CapacityRebalance - default",
+			args: args{
+				in: func() kops.InstanceGroupSpec {
+					subject := kops.InstanceGroupSpec{}
+					subject.CapacityRebalance = nil
 					return subject
 				}(),
 			},

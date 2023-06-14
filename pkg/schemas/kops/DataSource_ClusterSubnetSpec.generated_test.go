@@ -26,7 +26,7 @@ func TestExpandDataSourceClusterSubnetSpec(t *testing.T) {
 					"ipv6_cidr":         "",
 					"zone":              "",
 					"region":            "",
-					"provider_id":       "",
+					"id":                "",
 					"egress":            "",
 					"type":              "",
 					"public_ip":         "",
@@ -53,7 +53,7 @@ func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 		"ipv6_cidr":         "",
 		"zone":              "",
 		"region":            "",
-		"provider_id":       "",
+		"id":                "",
 		"egress":            "",
 		"type":              "",
 		"public_ip":         "",
@@ -130,11 +130,11 @@ func TestFlattenDataSourceClusterSubnetSpecInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ProviderId - default",
+			name: "Id - default",
 			args: args{
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
-					subject.ProviderID = ""
+					subject.ID = ""
 					return subject
 				}(),
 			},
@@ -203,7 +203,7 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 		"ipv6_cidr":         "",
 		"zone":              "",
 		"region":            "",
-		"provider_id":       "",
+		"id":                "",
 		"egress":            "",
 		"type":              "",
 		"public_ip":         "",
@@ -280,11 +280,11 @@ func TestFlattenDataSourceClusterSubnetSpec(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "ProviderId - default",
+			name: "Id - default",
 			args: args{
 				in: func() kops.ClusterSubnetSpec {
 					subject := kops.ClusterSubnetSpec{}
-					subject.ProviderID = ""
+					subject.ID = ""
 					return subject
 				}(),
 			},

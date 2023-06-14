@@ -21,12 +21,14 @@ func TestExpandDataSourceOpenstackBlockStorageConfig(t *testing.T) {
 			name: "default",
 			args: args{
 				in: map[string]interface{}{
-					"version":              nil,
-					"ignore_az":            nil,
-					"override_az":          nil,
-					"create_storage_class": nil,
-					"csi_plugin_image":     "",
-					"csi_topology_support": nil,
+					"version":                     nil,
+					"ignore_az":                   nil,
+					"override_az":                 nil,
+					"ignore_volume_micro_version": nil,
+					"create_storage_class":        nil,
+					"csi_plugin_image":            "",
+					"csi_topology_support":        nil,
+					"cluster_name":                "",
 				},
 			},
 			want: _default,
@@ -44,12 +46,14 @@ func TestExpandDataSourceOpenstackBlockStorageConfig(t *testing.T) {
 
 func TestFlattenDataSourceOpenstackBlockStorageConfigInto(t *testing.T) {
 	_default := map[string]interface{}{
-		"version":              nil,
-		"ignore_az":            nil,
-		"override_az":          nil,
-		"create_storage_class": nil,
-		"csi_plugin_image":     "",
-		"csi_topology_support": nil,
+		"version":                     nil,
+		"ignore_az":                   nil,
+		"override_az":                 nil,
+		"ignore_volume_micro_version": nil,
+		"create_storage_class":        nil,
+		"csi_plugin_image":            "",
+		"csi_topology_support":        nil,
+		"cluster_name":                "",
 	}
 	type args struct {
 		in kops.OpenstackBlockStorageConfig
@@ -100,6 +104,17 @@ func TestFlattenDataSourceOpenstackBlockStorageConfigInto(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "IgnoreVolumeMicroVersion - default",
+			args: args{
+				in: func() kops.OpenstackBlockStorageConfig {
+					subject := kops.OpenstackBlockStorageConfig{}
+					subject.IgnoreVolumeMicroVersion = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "CreateStorageClass - default",
 			args: args{
 				in: func() kops.OpenstackBlockStorageConfig {
@@ -127,6 +142,17 @@ func TestFlattenDataSourceOpenstackBlockStorageConfigInto(t *testing.T) {
 				in: func() kops.OpenstackBlockStorageConfig {
 					subject := kops.OpenstackBlockStorageConfig{}
 					subject.CSITopologySupport = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterName - default",
+			args: args{
+				in: func() kops.OpenstackBlockStorageConfig {
+					subject := kops.OpenstackBlockStorageConfig{}
+					subject.ClusterName = ""
 					return subject
 				}(),
 			},
@@ -146,12 +172,14 @@ func TestFlattenDataSourceOpenstackBlockStorageConfigInto(t *testing.T) {
 
 func TestFlattenDataSourceOpenstackBlockStorageConfig(t *testing.T) {
 	_default := map[string]interface{}{
-		"version":              nil,
-		"ignore_az":            nil,
-		"override_az":          nil,
-		"create_storage_class": nil,
-		"csi_plugin_image":     "",
-		"csi_topology_support": nil,
+		"version":                     nil,
+		"ignore_az":                   nil,
+		"override_az":                 nil,
+		"ignore_volume_micro_version": nil,
+		"create_storage_class":        nil,
+		"csi_plugin_image":            "",
+		"csi_topology_support":        nil,
+		"cluster_name":                "",
 	}
 	type args struct {
 		in kops.OpenstackBlockStorageConfig
@@ -202,6 +230,17 @@ func TestFlattenDataSourceOpenstackBlockStorageConfig(t *testing.T) {
 			want: _default,
 		},
 		{
+			name: "IgnoreVolumeMicroVersion - default",
+			args: args{
+				in: func() kops.OpenstackBlockStorageConfig {
+					subject := kops.OpenstackBlockStorageConfig{}
+					subject.IgnoreVolumeMicroVersion = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
 			name: "CreateStorageClass - default",
 			args: args{
 				in: func() kops.OpenstackBlockStorageConfig {
@@ -229,6 +268,17 @@ func TestFlattenDataSourceOpenstackBlockStorageConfig(t *testing.T) {
 				in: func() kops.OpenstackBlockStorageConfig {
 					subject := kops.OpenstackBlockStorageConfig{}
 					subject.CSITopologySupport = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterName - default",
+			args: args{
+				in: func() kops.OpenstackBlockStorageConfig {
+					subject := kops.OpenstackBlockStorageConfig{}
+					subject.ClusterName = ""
 					return subject
 				}(),
 			},

@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"reflect"
 	"strings"
 )
 
 func readFile(path string) string {
-	if out, err := ioutil.ReadFile(path); err != nil {
+	if out, err := os.ReadFile(path); err != nil {
 		panic(err)
 	} else {
 		return string(out)

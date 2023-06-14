@@ -69,6 +69,9 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["autoscale"]),
+		AutoscalePriority: func(in interface{}) int16 {
+			return int16(ExpandInt(in))
+		}(in["autoscale_priority"]),
 		MachineType: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["machine_type"]),
@@ -470,6 +473,25 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				}(in))
 			}(in)
 		}(in["mixed_instances_policy"]),
+		CapacityRebalance: func(in interface{}) *bool {
+			if in == nil {
+				return nil
+			}
+			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
+				return nil
+			}
+			return func(in interface{}) *bool {
+				if in == nil {
+					return nil
+				}
+				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+					return nil
+				}
+				return func(in bool) *bool {
+					return &in
+				}(bool(ExpandBool(in)))
+			}(in)
+		}(in["capacity_rebalance"]),
 		AdditionalUserData: func(in interface{}) []kops.UserData {
 			return func(in interface{}) []kops.UserData {
 				if in == nil {
@@ -499,18 +521,18 @@ func ExpandResourceInstanceGroupSpec(in map[string]interface{}) kops.InstanceGro
 				return out
 			}(in)
 		}(in["suspend_processes"]),
-		ExternalLoadBalancers: func(in interface{}) []kops.LoadBalancer {
-			return func(in interface{}) []kops.LoadBalancer {
+		ExternalLoadBalancers: func(in interface{}) []kops.LoadBalancerSpec {
+			return func(in interface{}) []kops.LoadBalancerSpec {
 				if in == nil {
 					return nil
 				}
-				var out []kops.LoadBalancer
+				var out []kops.LoadBalancerSpec
 				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) kops.LoadBalancer {
+					out = append(out, func(in interface{}) kops.LoadBalancerSpec {
 						if in == nil {
-							return kops.LoadBalancer{}
+							return kops.LoadBalancerSpec{}
 						}
-						return ExpandResourceLoadBalancer(in.(map[string]interface{}))
+						return ExpandResourceLoadBalancerSpec(in.(map[string]interface{}))
 					}(in))
 				}
 				return out
@@ -842,6 +864,9 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.Autoscale)
+	out["autoscale_priority"] = func(in int16) interface{} {
+		return FlattenInt(int(in))
+	}(in.AutoscalePriority)
 	out["machine_type"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.MachineType)
@@ -1086,6 +1111,16 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			}(*in)
 		}(in)
 	}(in.MixedInstancesPolicy)
+	out["capacity_rebalance"] = func(in *bool) interface{} {
+		return func(in *bool) interface{} {
+			if in == nil {
+				return nil
+			}
+			return func(in bool) interface{} {
+				return FlattenBool(bool(in))
+			}(*in)
+		}(in)
+	}(in.CapacityRebalance)
 	out["additional_user_data"] = func(in []kops.UserData) interface{} {
 		return func(in []kops.UserData) []interface{} {
 			var out []interface{}
@@ -1106,12 +1141,12 @@ func FlattenResourceInstanceGroupSpecInto(in kops.InstanceGroupSpec, out map[str
 			return out
 		}(in)
 	}(in.SuspendProcesses)
-	out["external_load_balancers"] = func(in []kops.LoadBalancer) interface{} {
-		return func(in []kops.LoadBalancer) []interface{} {
+	out["external_load_balancers"] = func(in []kops.LoadBalancerSpec) interface{} {
+		return func(in []kops.LoadBalancerSpec) []interface{} {
 			var out []interface{}
 			for _, in := range in {
-				out = append(out, func(in kops.LoadBalancer) interface{} {
-					return FlattenResourceLoadBalancer(in)
+				out = append(out, func(in kops.LoadBalancerSpec) interface{} {
+					return FlattenResourceLoadBalancerSpec(in)
 				}(in))
 			}
 			return out

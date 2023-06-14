@@ -20,7 +20,13 @@ func TestExpandDataSourceAWSSpec(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				in: map[string]interface{}{},
+				in: map[string]interface{}{
+					"ebs_csi_driver":           nil,
+					"node_termination_handler": nil,
+					"load_balancer_controller": nil,
+					"pod_identity_webhook":     nil,
+					"warm_pool":                nil,
+				},
 			},
 			want: _default,
 		},
@@ -36,7 +42,13 @@ func TestExpandDataSourceAWSSpec(t *testing.T) {
 }
 
 func TestFlattenDataSourceAWSSpecInto(t *testing.T) {
-	_default := map[string]interface{}{}
+	_default := map[string]interface{}{
+		"ebs_csi_driver":           nil,
+		"node_termination_handler": nil,
+		"load_balancer_controller": nil,
+		"pod_identity_webhook":     nil,
+		"warm_pool":                nil,
+	}
 	type args struct {
 		in kops.AWSSpec
 	}
@@ -49,6 +61,61 @@ func TestFlattenDataSourceAWSSpecInto(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.AWSSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "EbsCsiDriver - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.EBSCSIDriver = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeTerminationHandler - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.NodeTerminationHandler = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LoadBalancerController - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.LoadBalancerController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.PodIdentityWebhook = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "WarmPool - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.WarmPool = nil
+					return subject
+				}(),
 			},
 			want: _default,
 		},
@@ -65,7 +132,13 @@ func TestFlattenDataSourceAWSSpecInto(t *testing.T) {
 }
 
 func TestFlattenDataSourceAWSSpec(t *testing.T) {
-	_default := map[string]interface{}{}
+	_default := map[string]interface{}{
+		"ebs_csi_driver":           nil,
+		"node_termination_handler": nil,
+		"load_balancer_controller": nil,
+		"pod_identity_webhook":     nil,
+		"warm_pool":                nil,
+	}
 	type args struct {
 		in kops.AWSSpec
 	}
@@ -78,6 +151,61 @@ func TestFlattenDataSourceAWSSpec(t *testing.T) {
 			name: "default",
 			args: args{
 				in: kops.AWSSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "EbsCsiDriver - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.EBSCSIDriver = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeTerminationHandler - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.NodeTerminationHandler = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LoadBalancerController - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.LoadBalancerController = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodIdentityWebhook - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.PodIdentityWebhook = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "WarmPool - default",
+			args: args{
+				in: func() kops.AWSSpec {
+					subject := kops.AWSSpec{}
+					subject.WarmPool = nil
+					return subject
+				}(),
 			},
 			want: _default,
 		},

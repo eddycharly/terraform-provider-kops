@@ -26,13 +26,10 @@ func TestExpandResourceCloudConfiguration(t *testing.T) {
 					"node_tags":                      nil,
 					"node_instance_prefix":           nil,
 					"node_ip_families":               func() []interface{} { return nil }(),
-					"gce_service_account":            "",
 					"disable_security_group_ingress": nil,
 					"elb_security_group":             nil,
 					"spotinst_product":               nil,
 					"spotinst_orientation":           nil,
-					"aws_ebs_csi_driver":             nil,
-					"gcp_pd_csi_driver":              nil,
 				},
 			},
 			want: _default,
@@ -55,13 +52,10 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 		"node_tags":                      nil,
 		"node_instance_prefix":           nil,
 		"node_ip_families":               func() []interface{} { return nil }(),
-		"gce_service_account":            "",
 		"disable_security_group_ingress": nil,
 		"elb_security_group":             nil,
 		"spotinst_product":               nil,
 		"spotinst_orientation":           nil,
-		"aws_ebs_csi_driver":             nil,
-		"gcp_pd_csi_driver":              nil,
 	}
 	type args struct {
 		in kops.CloudConfiguration
@@ -134,17 +128,6 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "GCEServiceAccount - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.GCEServiceAccount = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "DisableSecurityGroupIngress - default",
 			args: args{
 				in: func() kops.CloudConfiguration {
@@ -183,28 +166,6 @@ func TestFlattenResourceCloudConfigurationInto(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.SpotinstOrientation = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "AwsEbsCsiDriver - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.AWSEBSCSIDriver = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "GcpPDCsiDriver - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.GCPPDCSIDriver = nil
 					return subject
 				}(),
 			},
@@ -229,13 +190,10 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 		"node_tags":                      nil,
 		"node_instance_prefix":           nil,
 		"node_ip_families":               func() []interface{} { return nil }(),
-		"gce_service_account":            "",
 		"disable_security_group_ingress": nil,
 		"elb_security_group":             nil,
 		"spotinst_product":               nil,
 		"spotinst_orientation":           nil,
-		"aws_ebs_csi_driver":             nil,
-		"gcp_pd_csi_driver":              nil,
 	}
 	type args struct {
 		in kops.CloudConfiguration
@@ -308,17 +266,6 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "GCEServiceAccount - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.GCEServiceAccount = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "DisableSecurityGroupIngress - default",
 			args: args{
 				in: func() kops.CloudConfiguration {
@@ -357,28 +304,6 @@ func TestFlattenResourceCloudConfiguration(t *testing.T) {
 				in: func() kops.CloudConfiguration {
 					subject := kops.CloudConfiguration{}
 					subject.SpotinstOrientation = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "AwsEbsCsiDriver - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.AWSEBSCSIDriver = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "GcpPDCsiDriver - default",
-			args: args{
-				in: func() kops.CloudConfiguration {
-					subject := kops.CloudConfiguration{}
-					subject.GCPPDCSIDriver = nil
 					return subject
 				}(),
 			},

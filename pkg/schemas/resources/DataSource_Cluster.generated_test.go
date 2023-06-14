@@ -31,29 +31,14 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					}(),
 					"container_runtime":                 "",
 					"kubernetes_version":                "",
-					"subnet":                            func() []interface{} { return nil }(),
-					"project":                           "",
-					"master_public_name":                "",
-					"master_internal_name":              "",
-					"network_cidr":                      "",
-					"additional_network_cidrs":          func() []interface{} { return nil }(),
-					"network_id":                        "",
-					"topology":                          nil,
 					"secret_store":                      "",
 					"key_store":                         "",
 					"config_store":                      "",
 					"dns_zone":                          "",
-					"additional_sans":                   func() []interface{} { return nil }(),
 					"cluster_dns_domain":                "",
-					"service_cluster_ip_range":          "",
-					"pod_cidr":                          "",
-					"non_masquerade_cidr":               "",
 					"ssh_access":                        func() []interface{} { return nil }(),
 					"node_port_access":                  func() []interface{} { return nil }(),
-					"egress_proxy":                      nil,
 					"ssh_key_name":                      nil,
-					"kubernetes_api_access":             func() []interface{} { return nil }(),
-					"isolate_masters":                   nil,
 					"update_policy":                     nil,
 					"external_policies":                 nil,
 					"additional_policies":               nil,
@@ -68,40 +53,37 @@ func TestExpandDataSourceCluster(t *testing.T) {
 					"kube_scheduler":                    nil,
 					"kube_proxy":                        nil,
 					"kubelet":                           nil,
-					"master_kubelet":                    nil,
+					"control_plane_kubelet":             nil,
 					"cloud_config":                      nil,
 					"external_dns":                      nil,
 					"ntp":                               nil,
-					"node_termination_handler":          nil,
 					"node_problem_detector":             nil,
 					"metrics_server":                    nil,
 					"cert_manager":                      nil,
-					"aws_load_balancer_controller":      nil,
-					"networking":                        nil,
-					"api":                               nil,
-					"authentication":                    nil,
-					"authorization":                     nil,
-					"node_authorization":                nil,
-					"cloud_labels":                      func() map[string]interface{} { return nil }(),
-					"hooks":                             func() []interface{} { return nil }(),
-					"assets":                            nil,
-					"iam":                               nil,
-					"encryption_config":                 nil,
-					"tag_subnets":                       nil,
-					"use_host_certificates":             nil,
-					"sysctl_parameters":                 func() []interface{} { return nil }(),
-					"rolling_update":                    nil,
-					"cluster_autoscaler":                nil,
-					"warm_pool":                         nil,
-					"service_account_issuer_discovery":  nil,
-					"snapshot_controller":               nil,
-					"karpenter":                         nil,
-					"pod_identity_webhook":              nil,
-					"labels":                            func() map[string]interface{} { return nil }(),
-					"annotations":                       func() map[string]interface{} { return nil }(),
-					"name":                              "",
-					"admin_ssh_key":                     "",
-					"secrets":                           nil,
+					"networking": func() []interface{} {
+						return []interface{}{kopsschemas.FlattenDataSourceNetworkingSpec(kops.NetworkingSpec{})}
+					}(),
+					"api":                              func() []interface{} { return []interface{}{kopsschemas.FlattenDataSourceAPISpec(kops.APISpec{})} }(),
+					"authentication":                   nil,
+					"authorization":                    nil,
+					"node_authorization":               nil,
+					"cloud_labels":                     func() map[string]interface{} { return nil }(),
+					"hooks":                            func() []interface{} { return nil }(),
+					"assets":                           nil,
+					"iam":                              nil,
+					"encryption_config":                nil,
+					"use_host_certificates":            nil,
+					"sysctl_parameters":                func() []interface{} { return nil }(),
+					"rolling_update":                   nil,
+					"cluster_autoscaler":               nil,
+					"service_account_issuer_discovery": nil,
+					"snapshot_controller":              nil,
+					"karpenter":                        nil,
+					"labels":                           func() map[string]interface{} { return nil }(),
+					"annotations":                      func() map[string]interface{} { return nil }(),
+					"name":                             "",
+					"admin_ssh_key":                    "",
+					"secrets":                          nil,
 				},
 			},
 			want: _default,
@@ -127,29 +109,14 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
-		"subnet":                            func() []interface{} { return nil }(),
-		"project":                           "",
-		"master_public_name":                "",
-		"master_internal_name":              "",
-		"network_cidr":                      "",
-		"additional_network_cidrs":          func() []interface{} { return nil }(),
-		"network_id":                        "",
-		"topology":                          nil,
 		"secret_store":                      "",
 		"key_store":                         "",
 		"config_store":                      "",
 		"dns_zone":                          "",
-		"additional_sans":                   func() []interface{} { return nil }(),
 		"cluster_dns_domain":                "",
-		"service_cluster_ip_range":          "",
-		"pod_cidr":                          "",
-		"non_masquerade_cidr":               "",
 		"ssh_access":                        func() []interface{} { return nil }(),
 		"node_port_access":                  func() []interface{} { return nil }(),
-		"egress_proxy":                      nil,
 		"ssh_key_name":                      nil,
-		"kubernetes_api_access":             func() []interface{} { return nil }(),
-		"isolate_masters":                   nil,
 		"update_policy":                     nil,
 		"external_policies":                 nil,
 		"additional_policies":               nil,
@@ -164,40 +131,37 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 		"kube_scheduler":                    nil,
 		"kube_proxy":                        nil,
 		"kubelet":                           nil,
-		"master_kubelet":                    nil,
+		"control_plane_kubelet":             nil,
 		"cloud_config":                      nil,
 		"external_dns":                      nil,
 		"ntp":                               nil,
-		"node_termination_handler":          nil,
 		"node_problem_detector":             nil,
 		"metrics_server":                    nil,
 		"cert_manager":                      nil,
-		"aws_load_balancer_controller":      nil,
-		"networking":                        nil,
-		"api":                               nil,
-		"authentication":                    nil,
-		"authorization":                     nil,
-		"node_authorization":                nil,
-		"cloud_labels":                      func() map[string]interface{} { return nil }(),
-		"hooks":                             func() []interface{} { return nil }(),
-		"assets":                            nil,
-		"iam":                               nil,
-		"encryption_config":                 nil,
-		"tag_subnets":                       nil,
-		"use_host_certificates":             nil,
-		"sysctl_parameters":                 func() []interface{} { return nil }(),
-		"rolling_update":                    nil,
-		"cluster_autoscaler":                nil,
-		"warm_pool":                         nil,
-		"service_account_issuer_discovery":  nil,
-		"snapshot_controller":               nil,
-		"karpenter":                         nil,
-		"pod_identity_webhook":              nil,
-		"labels":                            func() map[string]interface{} { return nil }(),
-		"annotations":                       func() map[string]interface{} { return nil }(),
-		"name":                              "",
-		"admin_ssh_key":                     "",
-		"secrets":                           nil,
+		"networking": func() []interface{} {
+			return []interface{}{kopsschemas.FlattenDataSourceNetworkingSpec(kops.NetworkingSpec{})}
+		}(),
+		"api":                              func() []interface{} { return []interface{}{kopsschemas.FlattenDataSourceAPISpec(kops.APISpec{})} }(),
+		"authentication":                   nil,
+		"authorization":                    nil,
+		"node_authorization":               nil,
+		"cloud_labels":                     func() map[string]interface{} { return nil }(),
+		"hooks":                            func() []interface{} { return nil }(),
+		"assets":                           nil,
+		"iam":                              nil,
+		"encryption_config":                nil,
+		"use_host_certificates":            nil,
+		"sysctl_parameters":                func() []interface{} { return nil }(),
+		"rolling_update":                   nil,
+		"cluster_autoscaler":               nil,
+		"service_account_issuer_discovery": nil,
+		"snapshot_controller":              nil,
+		"karpenter":                        nil,
+		"labels":                           func() map[string]interface{} { return nil }(),
+		"annotations":                      func() map[string]interface{} { return nil }(),
+		"name":                             "",
+		"admin_ssh_key":                    "",
+		"secrets":                          nil,
 	}
 	type args struct {
 		in resources.Cluster
@@ -281,94 +245,6 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Subnet - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.Subnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Project - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.Project = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterPublicName - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.MasterPublicName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterInternalName - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.MasterInternalName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkCidr - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NetworkCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "AdditionalNetworkCidrs - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.AdditionalNetworkCIDRs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkId - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NetworkID = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Topology - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.Topology = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SecretStore - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -413,55 +289,11 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AdditionalSans - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.AdditionalSANs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ClusterDnsDomain - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.ClusterDNSDomain = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "ServiceClusterIpRange - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.ServiceClusterIPRange = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodCidr - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.PodCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NonMasqueradeCidr - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NonMasqueradeCIDR = ""
 					return subject
 				}(),
 			},
@@ -490,44 +322,11 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EgressProxy - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.EgressProxy = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SshKeyName - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SSHKeyName = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "KubernetesApiAccess - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.KubernetesAPIAccess = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "IsolateMasters - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.IsolateMasters = nil
 					return subject
 				}(),
 			},
@@ -688,11 +487,11 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "MasterKubelet - default",
+			name: "ControlPlaneKubelet - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.MasterKubelet = nil
+					subject.ControlPlaneKubelet = nil
 					return subject
 				}(),
 			},
@@ -732,17 +531,6 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NodeTerminationHandler - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NodeTerminationHandler = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "NodeProblemDetector - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -776,22 +564,11 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AwsLoadBalancerController - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.AWSLoadBalancerController = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "Networking - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.Networking = nil
+					subject.Networking = kops.NetworkingSpec{}
 					return subject
 				}(),
 			},
@@ -802,7 +579,7 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.API = nil
+					subject.API = kops.APISpec{}
 					return subject
 				}(),
 			},
@@ -897,17 +674,6 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TagSubnets - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.TagSubnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "UseHostCertificates - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -952,17 +718,6 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "WarmPool - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.WarmPool = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ServiceAccountIssuerDiscovery - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -990,17 +745,6 @@ func TestFlattenDataSourceClusterInto(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Karpenter = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodIdentityWebhook - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},
@@ -1083,29 +827,14 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		}(),
 		"container_runtime":                 "",
 		"kubernetes_version":                "",
-		"subnet":                            func() []interface{} { return nil }(),
-		"project":                           "",
-		"master_public_name":                "",
-		"master_internal_name":              "",
-		"network_cidr":                      "",
-		"additional_network_cidrs":          func() []interface{} { return nil }(),
-		"network_id":                        "",
-		"topology":                          nil,
 		"secret_store":                      "",
 		"key_store":                         "",
 		"config_store":                      "",
 		"dns_zone":                          "",
-		"additional_sans":                   func() []interface{} { return nil }(),
 		"cluster_dns_domain":                "",
-		"service_cluster_ip_range":          "",
-		"pod_cidr":                          "",
-		"non_masquerade_cidr":               "",
 		"ssh_access":                        func() []interface{} { return nil }(),
 		"node_port_access":                  func() []interface{} { return nil }(),
-		"egress_proxy":                      nil,
 		"ssh_key_name":                      nil,
-		"kubernetes_api_access":             func() []interface{} { return nil }(),
-		"isolate_masters":                   nil,
 		"update_policy":                     nil,
 		"external_policies":                 nil,
 		"additional_policies":               nil,
@@ -1120,40 +849,37 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 		"kube_scheduler":                    nil,
 		"kube_proxy":                        nil,
 		"kubelet":                           nil,
-		"master_kubelet":                    nil,
+		"control_plane_kubelet":             nil,
 		"cloud_config":                      nil,
 		"external_dns":                      nil,
 		"ntp":                               nil,
-		"node_termination_handler":          nil,
 		"node_problem_detector":             nil,
 		"metrics_server":                    nil,
 		"cert_manager":                      nil,
-		"aws_load_balancer_controller":      nil,
-		"networking":                        nil,
-		"api":                               nil,
-		"authentication":                    nil,
-		"authorization":                     nil,
-		"node_authorization":                nil,
-		"cloud_labels":                      func() map[string]interface{} { return nil }(),
-		"hooks":                             func() []interface{} { return nil }(),
-		"assets":                            nil,
-		"iam":                               nil,
-		"encryption_config":                 nil,
-		"tag_subnets":                       nil,
-		"use_host_certificates":             nil,
-		"sysctl_parameters":                 func() []interface{} { return nil }(),
-		"rolling_update":                    nil,
-		"cluster_autoscaler":                nil,
-		"warm_pool":                         nil,
-		"service_account_issuer_discovery":  nil,
-		"snapshot_controller":               nil,
-		"karpenter":                         nil,
-		"pod_identity_webhook":              nil,
-		"labels":                            func() map[string]interface{} { return nil }(),
-		"annotations":                       func() map[string]interface{} { return nil }(),
-		"name":                              "",
-		"admin_ssh_key":                     "",
-		"secrets":                           nil,
+		"networking": func() []interface{} {
+			return []interface{}{kopsschemas.FlattenDataSourceNetworkingSpec(kops.NetworkingSpec{})}
+		}(),
+		"api":                              func() []interface{} { return []interface{}{kopsschemas.FlattenDataSourceAPISpec(kops.APISpec{})} }(),
+		"authentication":                   nil,
+		"authorization":                    nil,
+		"node_authorization":               nil,
+		"cloud_labels":                     func() map[string]interface{} { return nil }(),
+		"hooks":                            func() []interface{} { return nil }(),
+		"assets":                           nil,
+		"iam":                              nil,
+		"encryption_config":                nil,
+		"use_host_certificates":            nil,
+		"sysctl_parameters":                func() []interface{} { return nil }(),
+		"rolling_update":                   nil,
+		"cluster_autoscaler":               nil,
+		"service_account_issuer_discovery": nil,
+		"snapshot_controller":              nil,
+		"karpenter":                        nil,
+		"labels":                           func() map[string]interface{} { return nil }(),
+		"annotations":                      func() map[string]interface{} { return nil }(),
+		"name":                             "",
+		"admin_ssh_key":                    "",
+		"secrets":                          nil,
 	}
 	type args struct {
 		in resources.Cluster
@@ -1237,94 +963,6 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "Subnet - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.Subnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Project - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.Project = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterPublicName - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.MasterPublicName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "MasterInternalName - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.MasterInternalName = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkCidr - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NetworkCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "AdditionalNetworkCidrs - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.AdditionalNetworkCIDRs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NetworkId - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NetworkID = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "Topology - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.Topology = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SecretStore - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -1369,55 +1007,11 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AdditionalSans - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.AdditionalSANs = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ClusterDnsDomain - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.ClusterDNSDomain = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "ServiceClusterIpRange - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.ServiceClusterIPRange = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodCidr - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.PodCIDR = ""
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "NonMasqueradeCidr - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NonMasqueradeCIDR = ""
 					return subject
 				}(),
 			},
@@ -1446,44 +1040,11 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "EgressProxy - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.EgressProxy = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "SshKeyName - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.SSHKeyName = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "KubernetesApiAccess - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.KubernetesAPIAccess = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "IsolateMasters - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.IsolateMasters = nil
 					return subject
 				}(),
 			},
@@ -1644,11 +1205,11 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "MasterKubelet - default",
+			name: "ControlPlaneKubelet - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.MasterKubelet = nil
+					subject.ControlPlaneKubelet = nil
 					return subject
 				}(),
 			},
@@ -1688,17 +1249,6 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "NodeTerminationHandler - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.NodeTerminationHandler = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "NodeProblemDetector - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -1732,22 +1282,11 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "AwsLoadBalancerController - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.AWSLoadBalancerController = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "Networking - default",
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.Networking = nil
+					subject.Networking = kops.NetworkingSpec{}
 					return subject
 				}(),
 			},
@@ -1758,7 +1297,7 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			args: args{
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
-					subject.API = nil
+					subject.API = kops.APISpec{}
 					return subject
 				}(),
 			},
@@ -1853,17 +1392,6 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "TagSubnets - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.TagSubnets = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "UseHostCertificates - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -1908,17 +1436,6 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 			want: _default,
 		},
 		{
-			name: "WarmPool - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.WarmPool = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
 			name: "ServiceAccountIssuerDiscovery - default",
 			args: args{
 				in: func() resources.Cluster {
@@ -1946,17 +1463,6 @@ func TestFlattenDataSourceCluster(t *testing.T) {
 				in: func() resources.Cluster {
 					subject := resources.Cluster{}
 					subject.Karpenter = nil
-					return subject
-				}(),
-			},
-			want: _default,
-		},
-		{
-			name: "PodIdentityWebhook - default",
-			args: args{
-				in: func() resources.Cluster {
-					subject := resources.Cluster{}
-					subject.PodIdentityWebhook = nil
 					return subject
 				}(),
 			},

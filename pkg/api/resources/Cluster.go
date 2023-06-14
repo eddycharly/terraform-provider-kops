@@ -110,7 +110,7 @@ func CreateCluster(name string, labels map[string]string, annotations map[string
 		if err != nil {
 			return nil, err
 		}
-		if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
+		if err = sshCredentialStore.AddSSHPublicKey(context.TODO(), []byte(adminSshKey)); err != nil {
 			return nil, fmt.Errorf("error adding SSH public key: %v", err)
 		}
 	}
@@ -151,7 +151,7 @@ func UpdateCluster(name string, labels map[string]string, annotations map[string
 		return nil, err
 	}
 	if adminSshKey != "" {
-		if err = sshCredentialStore.AddSSHPublicKey([]byte(adminSshKey)); err != nil {
+		if err = sshCredentialStore.AddSSHPublicKey(context.TODO(), []byte(adminSshKey)); err != nil {
 			return nil, fmt.Errorf("error adding SSH public key: %v", err)
 		}
 	} else {
@@ -191,7 +191,7 @@ func DeleteCluster(name string, clientset simple.Clientset) error {
 	if err != nil {
 		return err
 	}
-	allResources, err := ops.ListResources(cloud, kc, "")
+	allResources, err := ops.ListResources(cloud, kc)
 	if err != nil {
 		return err
 	}

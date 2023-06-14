@@ -20,29 +20,14 @@ func DataSourceClusterSpec() *schema.Resource {
 			"cloud_provider":                    ComputedStruct(DataSourceCloudProviderSpec()),
 			"container_runtime":                 ComputedString(),
 			"kubernetes_version":                ComputedString(),
-			"subnet":                            ComputedList(DataSourceClusterSubnetSpec()),
-			"project":                           ComputedString(),
-			"master_public_name":                ComputedString(),
-			"master_internal_name":              ComputedString(),
-			"network_cidr":                      ComputedString(),
-			"additional_network_cidrs":          ComputedList(String()),
-			"network_id":                        ComputedString(),
-			"topology":                          ComputedStruct(DataSourceTopologySpec()),
 			"secret_store":                      ComputedString(),
 			"key_store":                         ComputedString(),
 			"config_store":                      ComputedString(),
 			"dns_zone":                          ComputedString(),
-			"additional_sans":                   ComputedList(String()),
 			"cluster_dns_domain":                ComputedString(),
-			"service_cluster_ip_range":          ComputedString(),
-			"pod_cidr":                          ComputedString(),
-			"non_masquerade_cidr":               ComputedString(),
 			"ssh_access":                        ComputedList(String()),
 			"node_port_access":                  ComputedList(String()),
-			"egress_proxy":                      ComputedStruct(DataSourceEgressProxySpec()),
 			"ssh_key_name":                      ComputedString(),
-			"kubernetes_api_access":             ComputedList(String()),
-			"isolate_masters":                   ComputedBool(),
 			"update_policy":                     ComputedString(),
 			"external_policies":                 ComputedComplexMap(List(String())),
 			"additional_policies":               ComputedMap(String()),
@@ -57,17 +42,15 @@ func DataSourceClusterSpec() *schema.Resource {
 			"kube_scheduler":                    ComputedStruct(DataSourceKubeSchedulerConfig()),
 			"kube_proxy":                        ComputedStruct(DataSourceKubeProxyConfig()),
 			"kubelet":                           ComputedStruct(DataSourceKubeletConfigSpec()),
-			"master_kubelet":                    ComputedStruct(DataSourceKubeletConfigSpec()),
+			"control_plane_kubelet":             ComputedStruct(DataSourceKubeletConfigSpec()),
 			"cloud_config":                      ComputedStruct(DataSourceCloudConfiguration()),
 			"external_dns":                      ComputedStruct(DataSourceExternalDNSConfig()),
 			"ntp":                               ComputedStruct(DataSourceNTPConfig()),
-			"node_termination_handler":          ComputedStruct(DataSourceNodeTerminationHandlerConfig()),
 			"node_problem_detector":             ComputedStruct(DataSourceNodeProblemDetectorConfig()),
 			"metrics_server":                    ComputedStruct(DataSourceMetricsServerConfig()),
 			"cert_manager":                      ComputedStruct(DataSourceCertManagerConfig()),
-			"aws_load_balancer_controller":      ComputedStruct(DataSourceAWSLoadBalancerControllerConfig()),
 			"networking":                        ComputedStruct(DataSourceNetworkingSpec()),
-			"api":                               ComputedStruct(DataSourceAccessSpec()),
+			"api":                               ComputedStruct(DataSourceAPISpec()),
 			"authentication":                    ComputedStruct(DataSourceAuthenticationSpec()),
 			"authorization":                     ComputedStruct(DataSourceAuthorizationSpec()),
 			"node_authorization":                ComputedStruct(DataSourceNodeAuthorizationSpec()),
@@ -76,16 +59,13 @@ func DataSourceClusterSpec() *schema.Resource {
 			"assets":                            ComputedStruct(DataSourceAssets()),
 			"iam":                               ComputedStruct(DataSourceIAMSpec()),
 			"encryption_config":                 ComputedBool(),
-			"tag_subnets":                       Nullable(ComputedBool()),
 			"use_host_certificates":             ComputedBool(),
 			"sysctl_parameters":                 ComputedList(String()),
 			"rolling_update":                    ComputedStruct(DataSourceRollingUpdate()),
 			"cluster_autoscaler":                ComputedStruct(DataSourceClusterAutoscalerConfig()),
-			"warm_pool":                         ComputedStruct(DataSourceWarmPoolSpec()),
 			"service_account_issuer_discovery":  ComputedStruct(DataSourceServiceAccountIssuerDiscoveryConfig()),
 			"snapshot_controller":               ComputedStruct(DataSourceSnapshotControllerConfig()),
 			"karpenter":                         ComputedStruct(DataSourceKarpenterConfig()),
-			"pod_identity_webhook":              ComputedStruct(DataSourcePodIdentityWebhookConfig()),
 		},
 	}
 
@@ -134,68 +114,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		KubernetesVersion: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["kubernetes_version"]),
-		Subnets: func(in interface{}) []kops.ClusterSubnetSpec {
-			return func(in interface{}) []kops.ClusterSubnetSpec {
-				if in == nil {
-					return nil
-				}
-				var out []kops.ClusterSubnetSpec
-				for _, in := range in.([]interface{}) {
-					out = append(out, func(in interface{}) kops.ClusterSubnetSpec {
-						if in == nil {
-							return kops.ClusterSubnetSpec{}
-						}
-						return ExpandDataSourceClusterSubnetSpec(in.(map[string]interface{}))
-					}(in))
-				}
-				return out
-			}(in)
-		}(in["subnet"]),
-		Project: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["project"]),
-		MasterPublicName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["master_public_name"]),
-		MasterInternalName: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["master_internal_name"]),
-		NetworkCIDR: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["network_cidr"]),
-		AdditionalNetworkCIDRs: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["additional_network_cidrs"]),
-		NetworkID: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["network_id"]),
-		Topology: func(in interface{}) *kops.TopologySpec {
-			return func(in interface{}) *kops.TopologySpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.TopologySpec) *kops.TopologySpec {
-					return &in
-				}(func(in interface{}) kops.TopologySpec {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceTopologySpec(in[0].(map[string]interface{}))
-					}
-					return kops.TopologySpec{}
-				}(in))
-			}(in)
-		}(in["topology"]),
 		SecretStore: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["secret_store"]),
@@ -208,30 +126,9 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 		DNSZone: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["dns_zone"]),
-		AdditionalSANs: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["additional_sans"]),
 		ClusterDNSDomain: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["cluster_dns_domain"]),
-		ServiceClusterIPRange: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["service_cluster_ip_range"]),
-		PodCIDR: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["pod_cidr"]),
-		NonMasqueradeCIDR: func(in interface{}) string {
-			return string(ExpandString(in))
-		}(in["non_masquerade_cidr"]),
 		SSHAccess: func(in interface{}) []string {
 			return func(in interface{}) []string {
 				if in == nil {
@@ -256,24 +153,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				return out
 			}(in)
 		}(in["node_port_access"]),
-		EgressProxy: func(in interface{}) *kops.EgressProxySpec {
-			return func(in interface{}) *kops.EgressProxySpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.EgressProxySpec) *kops.EgressProxySpec {
-					return &in
-				}(func(in interface{}) kops.EgressProxySpec {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceEgressProxySpec(in[0].(map[string]interface{}))
-					}
-					return kops.EgressProxySpec{}
-				}(in))
-			}(in)
-		}(in["egress_proxy"]),
 		SSHKeyName: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -293,37 +172,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(string(ExpandString(in)))
 			}(in)
 		}(in["ssh_key_name"]),
-		KubernetesAPIAccess: func(in interface{}) []string {
-			return func(in interface{}) []string {
-				if in == nil {
-					return nil
-				}
-				var out []string
-				for _, in := range in.([]interface{}) {
-					out = append(out, string(ExpandString(in)))
-				}
-				return out
-			}(in)
-		}(in["kubernetes_api_access"]),
-		IsolateMasters: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
-			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
-		}(in["isolate_masters"]),
 		UpdatePolicy: func(in interface{}) *string {
 			if in == nil {
 				return nil
@@ -608,7 +456,7 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["kubelet"]),
-		MasterKubelet: func(in interface{}) *kops.KubeletConfigSpec {
+		ControlPlaneKubelet: func(in interface{}) *kops.KubeletConfigSpec {
 			return func(in interface{}) *kops.KubeletConfigSpec {
 				if in == nil {
 					return nil
@@ -625,7 +473,7 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 					return kops.KubeletConfigSpec{}
 				}(in))
 			}(in)
-		}(in["master_kubelet"]),
+		}(in["control_plane_kubelet"]),
 		CloudConfig: func(in interface{}) *kops.CloudConfiguration {
 			return func(in interface{}) *kops.CloudConfiguration {
 				if in == nil {
@@ -680,24 +528,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["ntp"]),
-		NodeTerminationHandler: func(in interface{}) *kops.NodeTerminationHandlerConfig {
-			return func(in interface{}) *kops.NodeTerminationHandlerConfig {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.NodeTerminationHandlerConfig) *kops.NodeTerminationHandlerConfig {
-					return &in
-				}(func(in interface{}) kops.NodeTerminationHandlerConfig {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceNodeTerminationHandlerConfig(in[0].(map[string]interface{}))
-					}
-					return kops.NodeTerminationHandlerConfig{}
-				}(in))
-			}(in)
-		}(in["node_termination_handler"]),
 		NodeProblemDetector: func(in interface{}) *kops.NodeProblemDetectorConfig {
 			return func(in interface{}) *kops.NodeProblemDetectorConfig {
 				if in == nil {
@@ -752,58 +582,20 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["cert_manager"]),
-		AWSLoadBalancerController: func(in interface{}) *kops.AWSLoadBalancerControllerConfig {
-			return func(in interface{}) *kops.AWSLoadBalancerControllerConfig {
-				if in == nil {
-					return nil
+		Networking: func(in interface{}) kops.NetworkingSpec {
+			return func(in interface{}) kops.NetworkingSpec {
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandDataSourceNetworkingSpec(in[0].(map[string]interface{}))
 				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.AWSLoadBalancerControllerConfig) *kops.AWSLoadBalancerControllerConfig {
-					return &in
-				}(func(in interface{}) kops.AWSLoadBalancerControllerConfig {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceAWSLoadBalancerControllerConfig(in[0].(map[string]interface{}))
-					}
-					return kops.AWSLoadBalancerControllerConfig{}
-				}(in))
-			}(in)
-		}(in["aws_load_balancer_controller"]),
-		Networking: func(in interface{}) *kops.NetworkingSpec {
-			return func(in interface{}) *kops.NetworkingSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.NetworkingSpec) *kops.NetworkingSpec {
-					return &in
-				}(func(in interface{}) kops.NetworkingSpec {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceNetworkingSpec(in[0].(map[string]interface{}))
-					}
-					return kops.NetworkingSpec{}
-				}(in))
+				return kops.NetworkingSpec{}
 			}(in)
 		}(in["networking"]),
-		API: func(in interface{}) *kops.AccessSpec {
-			return func(in interface{}) *kops.AccessSpec {
-				if in == nil {
-					return nil
+		API: func(in interface{}) kops.APISpec {
+			return func(in interface{}) kops.APISpec {
+				if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
+					return ExpandDataSourceAPISpec(in[0].(map[string]interface{}))
 				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.AccessSpec) *kops.AccessSpec {
-					return &in
-				}(func(in interface{}) kops.AccessSpec {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceAccessSpec(in[0].(map[string]interface{}))
-					}
-					return kops.AccessSpec{}
-				}(in))
+				return kops.APISpec{}
 			}(in)
 		}(in["api"]),
 		Authentication: func(in interface{}) *kops.AuthenticationSpec {
@@ -949,27 +741,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(bool(ExpandBool(in)))
 			}(in)
 		}(in["encryption_config"]),
-		TagSubnets: func(in interface{}) *bool {
-			if in == nil {
-				return nil
-			}
-			if in, ok := in.([]interface{}); ok && len(in) == 1 {
-				return func(in interface{}) *bool {
-					return func(in interface{}) *bool {
-						if in == nil {
-							return nil
-						}
-						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-							return nil
-						}
-						return func(in bool) *bool {
-							return &in
-						}(bool(ExpandBool(in)))
-					}(in)
-				}(in[0].(map[string]interface{})["value"])
-			}
-			return nil
-		}(in["tag_subnets"]),
 		UseHostCertificates: func(in interface{}) *bool {
 			if in == nil {
 				return nil
@@ -1037,24 +808,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["cluster_autoscaler"]),
-		WarmPool: func(in interface{}) *kops.WarmPoolSpec {
-			return func(in interface{}) *kops.WarmPoolSpec {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.WarmPoolSpec) *kops.WarmPoolSpec {
-					return &in
-				}(func(in interface{}) kops.WarmPoolSpec {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourceWarmPoolSpec(in[0].(map[string]interface{}))
-					}
-					return kops.WarmPoolSpec{}
-				}(in))
-			}(in)
-		}(in["warm_pool"]),
 		ServiceAccountIssuerDiscovery: func(in interface{}) *kops.ServiceAccountIssuerDiscoveryConfig {
 			return func(in interface{}) *kops.ServiceAccountIssuerDiscoveryConfig {
 				if in == nil {
@@ -1109,24 +862,6 @@ func ExpandDataSourceClusterSpec(in map[string]interface{}) kops.ClusterSpec {
 				}(in))
 			}(in)
 		}(in["karpenter"]),
-		PodIdentityWebhook: func(in interface{}) *kops.PodIdentityWebhookConfig {
-			return func(in interface{}) *kops.PodIdentityWebhookConfig {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in kops.PodIdentityWebhookConfig) *kops.PodIdentityWebhookConfig {
-					return &in
-				}(func(in interface{}) kops.PodIdentityWebhookConfig {
-					if in, ok := in.([]interface{}); ok && len(in) == 1 && in[0] != nil {
-						return ExpandDataSourcePodIdentityWebhookConfig(in[0].(map[string]interface{}))
-					}
-					return kops.PodIdentityWebhookConfig{}
-				}(in))
-			}(in)
-		}(in["pod_identity_webhook"]),
 	}
 }
 
@@ -1159,53 +894,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 	out["kubernetes_version"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.KubernetesVersion)
-	out["subnet"] = func(in []kops.ClusterSubnetSpec) interface{} {
-		return func(in []kops.ClusterSubnetSpec) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, func(in kops.ClusterSubnetSpec) interface{} {
-					return FlattenDataSourceClusterSubnetSpec(in)
-				}(in))
-			}
-			return out
-		}(in)
-	}(in.Subnets)
-	out["project"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.Project)
-	out["master_public_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.MasterPublicName)
-	out["master_internal_name"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.MasterInternalName)
-	out["network_cidr"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.NetworkCIDR)
-	out["additional_network_cidrs"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.AdditionalNetworkCIDRs)
-	out["network_id"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.NetworkID)
-	out["topology"] = func(in *kops.TopologySpec) interface{} {
-		return func(in *kops.TopologySpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.TopologySpec) interface{} {
-				return func(in kops.TopologySpec) []interface{} {
-					return []interface{}{FlattenDataSourceTopologySpec(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.Topology)
 	out["secret_store"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.SecretStore)
@@ -1218,27 +906,9 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 	out["dns_zone"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.DNSZone)
-	out["additional_sans"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.AdditionalSANs)
 	out["cluster_dns_domain"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.ClusterDNSDomain)
-	out["service_cluster_ip_range"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.ServiceClusterIPRange)
-	out["pod_cidr"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.PodCIDR)
-	out["non_masquerade_cidr"] = func(in string) interface{} {
-		return FlattenString(string(in))
-	}(in.NonMasqueradeCIDR)
 	out["ssh_access"] = func(in []string) interface{} {
 		return func(in []string) []interface{} {
 			var out []interface{}
@@ -1257,18 +927,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			return out
 		}(in)
 	}(in.NodePortAccess)
-	out["egress_proxy"] = func(in *kops.EgressProxySpec) interface{} {
-		return func(in *kops.EgressProxySpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.EgressProxySpec) interface{} {
-				return func(in kops.EgressProxySpec) []interface{} {
-					return []interface{}{FlattenDataSourceEgressProxySpec(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.EgressProxy)
 	out["ssh_key_name"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
@@ -1279,25 +937,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.SSHKeyName)
-	out["kubernetes_api_access"] = func(in []string) interface{} {
-		return func(in []string) []interface{} {
-			var out []interface{}
-			for _, in := range in {
-				out = append(out, FlattenString(string(in)))
-			}
-			return out
-		}(in)
-	}(in.KubernetesAPIAccess)
-	out["isolate_masters"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
-		}(in)
-	}(in.IsolateMasters)
 	out["update_policy"] = func(in *string) interface{} {
 		return func(in *string) interface{} {
 			if in == nil {
@@ -1493,7 +1132,7 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.Kubelet)
-	out["master_kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
+	out["control_plane_kubelet"] = func(in *kops.KubeletConfigSpec) interface{} {
 		return func(in *kops.KubeletConfigSpec) interface{} {
 			if in == nil {
 				return nil
@@ -1504,7 +1143,7 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 				}(in)
 			}(*in)
 		}(in)
-	}(in.MasterKubelet)
+	}(in.ControlPlaneKubelet)
 	out["cloud_config"] = func(in *kops.CloudConfiguration) interface{} {
 		return func(in *kops.CloudConfiguration) interface{} {
 			if in == nil {
@@ -1541,18 +1180,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.NTP)
-	out["node_termination_handler"] = func(in *kops.NodeTerminationHandlerConfig) interface{} {
-		return func(in *kops.NodeTerminationHandlerConfig) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.NodeTerminationHandlerConfig) interface{} {
-				return func(in kops.NodeTerminationHandlerConfig) []interface{} {
-					return []interface{}{FlattenDataSourceNodeTerminationHandlerConfig(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.NodeTerminationHandler)
 	out["node_problem_detector"] = func(in *kops.NodeProblemDetectorConfig) interface{} {
 		return func(in *kops.NodeProblemDetectorConfig) interface{} {
 			if in == nil {
@@ -1589,40 +1216,14 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.CertManager)
-	out["aws_load_balancer_controller"] = func(in *kops.AWSLoadBalancerControllerConfig) interface{} {
-		return func(in *kops.AWSLoadBalancerControllerConfig) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.AWSLoadBalancerControllerConfig) interface{} {
-				return func(in kops.AWSLoadBalancerControllerConfig) []interface{} {
-					return []interface{}{FlattenDataSourceAWSLoadBalancerControllerConfig(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.AWSLoadBalancerController)
-	out["networking"] = func(in *kops.NetworkingSpec) interface{} {
-		return func(in *kops.NetworkingSpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.NetworkingSpec) interface{} {
-				return func(in kops.NetworkingSpec) []interface{} {
-					return []interface{}{FlattenDataSourceNetworkingSpec(in)}
-				}(in)
-			}(*in)
+	out["networking"] = func(in kops.NetworkingSpec) interface{} {
+		return func(in kops.NetworkingSpec) []interface{} {
+			return []interface{}{FlattenDataSourceNetworkingSpec(in)}
 		}(in)
 	}(in.Networking)
-	out["api"] = func(in *kops.AccessSpec) interface{} {
-		return func(in *kops.AccessSpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.AccessSpec) interface{} {
-				return func(in kops.AccessSpec) []interface{} {
-					return []interface{}{FlattenDataSourceAccessSpec(in)}
-				}(in)
-			}(*in)
+	out["api"] = func(in kops.APISpec) interface{} {
+		return func(in kops.APISpec) []interface{} {
+			return []interface{}{FlattenDataSourceAPISpec(in)}
 		}(in)
 	}(in.API)
 	out["authentication"] = func(in *kops.AuthenticationSpec) interface{} {
@@ -1718,19 +1319,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.EncryptionConfig)
-	out["tag_subnets"] = func(in *bool) interface{} {
-		if in == nil {
-			return nil
-		}
-		return []interface{}{map[string]interface{}{"value": func(in *bool) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in bool) interface{} {
-				return FlattenBool(bool(in))
-			}(*in)
-		}(in)}}
-	}(in.TagSubnets)
 	out["use_host_certificates"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
 			if in == nil {
@@ -1774,18 +1362,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.ClusterAutoscaler)
-	out["warm_pool"] = func(in *kops.WarmPoolSpec) interface{} {
-		return func(in *kops.WarmPoolSpec) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.WarmPoolSpec) interface{} {
-				return func(in kops.WarmPoolSpec) []interface{} {
-					return []interface{}{FlattenDataSourceWarmPoolSpec(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.WarmPool)
 	out["service_account_issuer_discovery"] = func(in *kops.ServiceAccountIssuerDiscoveryConfig) interface{} {
 		return func(in *kops.ServiceAccountIssuerDiscoveryConfig) interface{} {
 			if in == nil {
@@ -1822,18 +1398,6 @@ func FlattenDataSourceClusterSpecInto(in kops.ClusterSpec, out map[string]interf
 			}(*in)
 		}(in)
 	}(in.Karpenter)
-	out["pod_identity_webhook"] = func(in *kops.PodIdentityWebhookConfig) interface{} {
-		return func(in *kops.PodIdentityWebhookConfig) interface{} {
-			if in == nil {
-				return nil
-			}
-			return func(in kops.PodIdentityWebhookConfig) interface{} {
-				return func(in kops.PodIdentityWebhookConfig) []interface{} {
-					return []interface{}{FlattenDataSourcePodIdentityWebhookConfig(in)}
-				}(in)
-			}(*in)
-		}(in)
-	}(in.PodIdentityWebhook)
 }
 
 func FlattenDataSourceClusterSpec(in kops.ClusterSpec) map[string]interface{} {
