@@ -16,37 +16,37 @@ resource "kops_cluster" "cluster" {
     network_id = local.vpcId
 
     # private subnets
-    subnets {
+    subnet {
       name = "private-0"
       type = "Private"
       id   = local.privateSubnets[0].subnetId
       zone = local.privateSubnets[0].zone
     }
-    subnets {
+    subnet {
       name = "private-1"
       type = "Private"
       id   = local.privateSubnets[1].subnetId
       zone = local.privateSubnets[1].zone
     }
-    subnets {
+    subnet {
       name = "private-2"
       type = "Private"
       id   = local.privateSubnets[2].subnetId
       zone = local.privateSubnets[2].zone
     }
-    subnets {
+    subnet {
       name = "utility-0"
       type = "Utility"
       id   = local.utilitySubnets[0].subnetId
       zone = local.utilitySubnets[0].zone
     }
-    subnets {
+    subnet {
       name = "utility-1"
       type = "Utility"
       id   = local.utilitySubnets[1].subnetId
       zone = local.utilitySubnets[1].zone
     }
-    subnets {
+    subnet {
       name = "utility-2"
       type = "Utility"
       id   = local.utilitySubnets[2].subnetId
