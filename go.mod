@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go v1.44.283
 	github.com/google/go-cmp v0.5.9
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
-	golang.org/x/tools v0.9.3
+	golang.org/x/tools v0.10.0
 	k8s.io/api v0.26.3
 	k8s.io/apimachinery v0.26.3
 	k8s.io/client-go v0.26.3
@@ -148,15 +148,15 @@ require (
 	github.com/zclconf/go-cty v1.13.1 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5 // indirect
-	golang.org/x/crypto v0.7.0 // indirect
+	golang.org/x/crypto v0.10.0 // indirect
 	golang.org/x/exp v0.0.0-20230307190834-24139beb5833 // indirect
-	golang.org/x/mod v0.10.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/mod v0.11.0 // indirect
+	golang.org/x/net v0.11.0 // indirect
 	golang.org/x/oauth2 v0.6.0 // indirect
-	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/term v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/sync v0.3.0 // indirect
+	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/term v0.9.0 // indirect
+	golang.org/x/text v0.10.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/api v0.111.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
