@@ -1123,7 +1123,7 @@ CloudConfiguration defines the cloud provider configuration.
 
 The following arguments are supported:
 
-- `manage_storage_classes` - (Computed) - Bool - ManageStorageClasses specifies whether kOps should create and maintain a set of<br />StorageClasses, one of which it nominates as the default class for the cluster.
+- `manage_storage_classes` - (Computed) - Bool([Nullable](#nullable-arguments)) - ManageStorageClasses specifies whether kOps should create and maintain a set of<br />StorageClasses, one of which it nominates as the default class for the cluster.
 - `multizone` - (Computed) - Bool - GCE cloud-config options.
 - `node_tags` - (Computed) - String
 - `node_instance_prefix` - (Computed) - String
