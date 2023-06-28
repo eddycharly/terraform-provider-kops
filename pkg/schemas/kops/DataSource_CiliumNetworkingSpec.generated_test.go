@@ -40,6 +40,7 @@ func TestExpandDataSourceCiliumNetworkingSpec(t *testing.T) {
 					"identity_change_grace_period":      "",
 					"masquerade":                        nil,
 					"agent_pod_annotations":             func() map[string]interface{} { return nil }(),
+					"operator_pod_annotations":          func() map[string]interface{} { return nil }(),
 					"tunnel":                            "",
 					"monitor_aggregation":               "",
 					"bpfct_global_tcp_max":              0,
@@ -102,6 +103,7 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 		"identity_change_grace_period":      "",
 		"masquerade":                        nil,
 		"agent_pod_annotations":             func() map[string]interface{} { return nil }(),
+		"operator_pod_annotations":          func() map[string]interface{} { return nil }(),
 		"tunnel":                            "",
 		"monitor_aggregation":               "",
 		"bpfct_global_tcp_max":              0,
@@ -348,6 +350,17 @@ func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.AgentPodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "OperatorPodAnnotations - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.OperatorPodAnnotations = nil
 					return subject
 				}(),
 			},
@@ -672,6 +685,7 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 		"identity_change_grace_period":      "",
 		"masquerade":                        nil,
 		"agent_pod_annotations":             func() map[string]interface{} { return nil }(),
+		"operator_pod_annotations":          func() map[string]interface{} { return nil }(),
 		"tunnel":                            "",
 		"monitor_aggregation":               "",
 		"bpfct_global_tcp_max":              0,
@@ -918,6 +932,17 @@ func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
 				in: func() kops.CiliumNetworkingSpec {
 					subject := kops.CiliumNetworkingSpec{}
 					subject.AgentPodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "OperatorPodAnnotations - default",
+			args: args{
+				in: func() kops.CiliumNetworkingSpec {
+					subject := kops.CiliumNetworkingSpec{}
+					subject.OperatorPodAnnotations = nil
 					return subject
 				}(),
 			},
