@@ -40,7 +40,7 @@ func makeValidator(clientset simple.Clientset, clusterName string) (validation.C
 	if err != nil {
 		return nil, err
 	}
-	config, err := configBuilder.BuildRestConfig()
+	config, err := BuildRestConfig(configBuilder)
 	if err != nil {
 		return nil, err
 	}
