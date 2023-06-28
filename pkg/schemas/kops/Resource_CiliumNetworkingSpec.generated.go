@@ -33,6 +33,7 @@ func ResourceCiliumNetworkingSpec() *schema.Resource {
 			"identity_change_grace_period":      OptionalString(),
 			"masquerade":                        OptionalBool(),
 			"agent_pod_annotations":             OptionalMap(String()),
+			"operator_pod_annotations":          OptionalMap(String()),
 			"tunnel":                            OptionalString(),
 			"monitor_aggregation":               OptionalString(),
 			"bpfct_global_tcp_max":              OptionalInt(),
@@ -246,6 +247,23 @@ func ExpandResourceCiliumNetworkingSpec(in map[string]interface{}) kops.CiliumNe
 				return nil
 			}(in)
 		}(in["agent_pod_annotations"]),
+		OperatorPodAnnotations: func(in interface{}) map[string]string {
+			return func(in interface{}) map[string]string {
+				if in == nil {
+					return nil
+				}
+				if in, ok := in.(map[string]interface{}); ok {
+					if len(in) > 0 {
+						out := map[string]string{}
+						for key, in := range in {
+							out[key] = string(ExpandString(in))
+						}
+						return out
+					}
+				}
+				return nil
+			}(in)
+		}(in["operator_pod_annotations"]),
 		Tunnel: func(in interface{}) string {
 			return string(ExpandString(in))
 		}(in["tunnel"]),
@@ -499,6 +517,18 @@ func FlattenResourceCiliumNetworkingSpecInto(in kops.CiliumNetworkingSpec, out m
 			return out
 		}(in)
 	}(in.AgentPodAnnotations)
+	out["operator_pod_annotations"] = func(in map[string]string) interface{} {
+		return func(in map[string]string) map[string]interface{} {
+			if in == nil {
+				return nil
+			}
+			out := map[string]interface{}{}
+			for key, in := range in {
+				out[key] = FlattenString(string(in))
+			}
+			return out
+		}(in)
+	}(in.OperatorPodAnnotations)
 	out["tunnel"] = func(in string) interface{} {
 		return FlattenString(string(in))
 	}(in.Tunnel)

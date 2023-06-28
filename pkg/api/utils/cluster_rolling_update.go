@@ -49,7 +49,7 @@ func ClusterInstanceGroupsNeedingUpdate(clientset simple.Clientset, clusterName 
 	if err != nil {
 		return nil, err
 	}
-	config, err := configBuilder.BuildRestConfig()
+	config, err := BuildRestConfig(configBuilder)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 	if err != nil {
 		return err
 	}
-	config, err := configBuilder.BuildRestConfig()
+	config, err := BuildRestConfig(configBuilder)
 	if err != nil {
 		return err
 	}
