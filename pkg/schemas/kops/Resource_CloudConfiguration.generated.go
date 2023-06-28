@@ -13,7 +13,7 @@ var _ = Schema
 func ResourceCloudConfiguration() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"manage_storage_classes":         OptionalBool(),
+			"manage_storage_classes":         Nullable(OptionalBool()),
 			"multizone":                      OptionalBool(),
 			"node_tags":                      OptionalString(),
 			"node_instance_prefix":           OptionalString(),
@@ -37,20 +37,22 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 			if in == nil {
 				return nil
 			}
-			if reflect.DeepEqual(in, reflect.Zero(reflect.TypeOf(in)).Interface()) {
-				return nil
+			if in, ok := in.([]interface{}); ok && len(in) == 1 {
+				return func(in interface{}) *bool {
+					return func(in interface{}) *bool {
+						if in == nil {
+							return nil
+						}
+						if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
+							return nil
+						}
+						return func(in bool) *bool {
+							return &in
+						}(bool(ExpandBool(in)))
+					}(in)
+				}(in[0].(map[string]interface{})["value"])
 			}
-			return func(in interface{}) *bool {
-				if in == nil {
-					return nil
-				}
-				if _, ok := in.([]interface{}); ok && len(in.([]interface{})) == 0 {
-					return nil
-				}
-				return func(in bool) *bool {
-					return &in
-				}(bool(ExpandBool(in)))
-			}(in)
+			return nil
 		}(in["manage_storage_classes"]),
 		Multizone: func(in interface{}) *bool {
 			if in == nil {
@@ -202,14 +204,17 @@ func ExpandResourceCloudConfiguration(in map[string]interface{}) kops.CloudConfi
 
 func FlattenResourceCloudConfigurationInto(in kops.CloudConfiguration, out map[string]interface{}) {
 	out["manage_storage_classes"] = func(in *bool) interface{} {
-		return func(in *bool) interface{} {
+		if in == nil {
+			return nil
+		}
+		return []interface{}{map[string]interface{}{"value": func(in *bool) interface{} {
 			if in == nil {
 				return nil
 			}
 			return func(in bool) interface{} {
 				return FlattenBool(bool(in))
 			}(*in)
-		}(in)
+		}(in)}}
 	}(in.ManageStorageClasses)
 	out["multizone"] = func(in *bool) interface{} {
 		return func(in *bool) interface{} {
