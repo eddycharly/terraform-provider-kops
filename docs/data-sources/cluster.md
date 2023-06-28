@@ -1505,6 +1505,7 @@ The following arguments are supported:
 - `identity_change_grace_period` - (Computed) - String - IdentityChangeGracePeriod specifies the duration to wait before using a changed identity.<br />Default: 5s.
 - `masquerade` - (Computed) - Bool - Masquerade enables masquerading IPv4 traffic to external destinations behind the node IP.<br />Default: false if IPAM is "eni" or in IPv6 mode, otherwise true.
 - `agent_pod_annotations` - (Computed) - Map(String) - AgentPodAnnotations makes possible to add additional annotations to cilium agent.<br />Default: none.
+- `operator_pod_annotations` - (Computed) - Map(String) - OperatorPodAnnotations makes possible to add additional annotations to cilium operator.<br />Default: none.
 - `tunnel` - (Computed) - String - Tunnel specifies the Cilium tunnelling mode. Possible values are "vxlan", "geneve", or "disabled".<br />Default: vxlan.
 - `monitor_aggregation` - (Computed) - String - MonitorAggregation sets the level of packet monitoring. Possible values are "low", "medium", or "maximum".<br />Default: medium.
 - `bpfct_global_tcp_max` - (Computed) - Int - BPFCTGlobalTCPMax is the maximum number of entries in the TCP CT table.<br />Default: 524288.
