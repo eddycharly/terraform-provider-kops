@@ -1,0 +1,546 @@
+package schemas
+
+import (
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
+)
+
+func TestExpandDataSourceKubeDNSConfig(t *testing.T) {
+	_default := kopsv1alpha2.KubeDNSConfig{}
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want kopsv1alpha2.KubeDNSConfig
+	}{
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"cache_max_size":       0,
+					"cache_max_concurrent": 0,
+					"tolerations":          func() []interface{} { return nil }(),
+					"affinity":             nil,
+					"core_dns_image":       "",
+					"cpa_image":            "",
+					"domain":               "",
+					"external_core_file":   "",
+					"image":                "",
+					"replicas":             0,
+					"provider":             "",
+					"server_ip":            "",
+					"stub_domains":         func() []interface{} { return nil }(),
+					"upstream_nameservers": func() []interface{} { return nil }(),
+					"memory_request":       nil,
+					"cpu_request":          nil,
+					"memory_limit":         nil,
+					"node_local_dns":       nil,
+				},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ExpandDataSourceKubeDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKubeDNSConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceKubeDNSConfigInto(t *testing.T) {
+	_default := map[string]interface{}{
+		"cache_max_size":       0,
+		"cache_max_concurrent": 0,
+		"tolerations":          func() []interface{} { return nil }(),
+		"affinity":             nil,
+		"core_dns_image":       "",
+		"cpa_image":            "",
+		"domain":               "",
+		"external_core_file":   "",
+		"image":                "",
+		"replicas":             0,
+		"provider":             "",
+		"server_ip":            "",
+		"stub_domains":         func() []interface{} { return nil }(),
+		"upstream_nameservers": func() []interface{} { return nil }(),
+		"memory_request":       nil,
+		"cpu_request":          nil,
+		"memory_limit":         nil,
+		"node_local_dns":       nil,
+	}
+	type args struct {
+		in kopsv1alpha2.KubeDNSConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.KubeDNSConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "CacheMaxSize - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CacheMaxSize = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CacheMaxConcurrent - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CacheMaxConcurrent = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Tolerations - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Tolerations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Affinity - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Affinity = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CoreDnsImage - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CoreDNSImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CPAImage - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CPAImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Domain - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Domain = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ExternalCoreFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.ExternalCoreFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Image - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Image = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Replicas - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Replicas = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Provider - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Provider = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServerIp - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.ServerIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "StubDomains - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.StubDomains = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "UpstreamNameservers - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.UpstreamNameservers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.MemoryLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeLocalDns - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.NodeLocalDNS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			FlattenDataSourceKubeDNSConfigInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceKubeDNSConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceKubeDNSConfig(t *testing.T) {
+	_default := map[string]interface{}{
+		"cache_max_size":       0,
+		"cache_max_concurrent": 0,
+		"tolerations":          func() []interface{} { return nil }(),
+		"affinity":             nil,
+		"core_dns_image":       "",
+		"cpa_image":            "",
+		"domain":               "",
+		"external_core_file":   "",
+		"image":                "",
+		"replicas":             0,
+		"provider":             "",
+		"server_ip":            "",
+		"stub_domains":         func() []interface{} { return nil }(),
+		"upstream_nameservers": func() []interface{} { return nil }(),
+		"memory_request":       nil,
+		"cpu_request":          nil,
+		"memory_limit":         nil,
+		"node_local_dns":       nil,
+	}
+	type args struct {
+		in kopsv1alpha2.KubeDNSConfig
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.KubeDNSConfig{},
+			},
+			want: _default,
+		},
+		{
+			name: "CacheMaxSize - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CacheMaxSize = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CacheMaxConcurrent - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CacheMaxConcurrent = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Tolerations - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Tolerations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Affinity - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Affinity = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CoreDnsImage - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CoreDNSImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CPAImage - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CPAImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Domain - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Domain = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ExternalCoreFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.ExternalCoreFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Image - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Image = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Replicas - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Replicas = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Provider - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.Provider = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ServerIp - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.ServerIP = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "StubDomains - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.StubDomains = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "UpstreamNameservers - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.UpstreamNameservers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.MemoryLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeLocalDns - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeDNSConfig {
+					subject := kopsv1alpha2.KubeDNSConfig{}
+					subject.NodeLocalDNS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceKubeDNSConfig(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceKubeDNSConfig() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}

@@ -52,18 +52,33 @@ resource "kops_cluster" "cluster" {
 The following arguments are supported:
 - `channel` - (Computed) - String - The Channel we are following.
 - `addons` - (Computed) - List([addon_spec](#addon_spec)) - Additional addons that should be installed on the cluster.
-- `config_base` - (Computed) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different than the location where the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).
-- `cloud_provider` - (Computed) - [cloud_provider_spec](#cloud_provider_spec) - CloudProvider configures the cloud provider to use.
+- `config_base` - (Computed) - String - ConfigBase is the path where we store configuration for the cluster<br />This might be different that the location when the cluster spec itself is stored,<br />both because this must be accessible to the cluster,<br />and because it might be on a different cloud or storage system (etcd vs S3).
+- `legacy_cloud_provider` - (Computed) - String - The CloudProvider to use (aws or gce)<br />+k8s:conversion-gen=false.
 - `container_runtime` - (Computed) - String - Container runtime to use for Kubernetes.
 - `kubernetes_version` - (Computed) - String - The version of kubernetes to install (optional, and can be a "spec" like stable).
+- `subnets` - (Computed) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Configuration of subnets we are targeting<br />+k8s:conversion-gen=false.
+- `project` - (Computed) - String - Project is the cloud project we should use, required on GCE<br />+k8s:conversion-gen=false.
+- `master_public_name` - (Computed) - String - MasterPublicName is the external DNS name for the master nodes<br />+k8s:conversion-gen=false.
+- `master_internal_name` - (Computed) - String - MasterInternalName is unused.<br />+k8s:conversion-gen=false.
+- `network_cidr` - (Computed) - String - NetworkCIDR is the CIDR used for the AWS VPC / GCE Network, or otherwise allocated to k8s<br />This is a real CIDR, not the internal k8s network<br />On AWS, it maps to the VPC CIDR.  It is not required on GCE.<br />+k8s:conversion-gen=false.
+- `additional_network_cidrs` - (Computed) - List(String) - AdditionalNetworkCIDRs is a list of additional CIDR used for the AWS VPC<br />or otherwise allocated to k8s. This is a real CIDR, not the internal k8s network<br />On AWS, it maps to any additional CIDRs added to a VPC.<br />+k8s:conversion-gen=false.
+- `network_id` - (Computed) - String - NetworkID is an identifier of a network, if we want to reuse/share an existing network (e.g. an AWS VPC)<br />+k8s:conversion-gen=false.
+- `topology` - (Computed) - [topology_spec](#topology_spec) - Topology defines the type of network topology to use on the cluster - default public<br />This is heavily weighted towards AWS for the time being, but should also be agnostic enough<br />to port out to GCE later if needed<br />+k8s:conversion-gen=false.
 - `secret_store` - (Computed) - String - SecretStore is the VFS path to where secrets are stored.
 - `key_store` - (Computed) - String - KeyStore is the VFS path to where SSL keys and certificates are stored.
 - `config_store` - (Computed) - String - ConfigStore is the VFS path to where the configuration (Cluster, InstanceGroups etc) is stored.
 - `dns_zone` - (Computed) - String - DNSZone is the DNS zone we should use when configuring DNS<br />This is because some clouds let us define a managed zone foo.bar, and then have<br />kubernetes.dev.foo.bar, without needing to define dev.foo.bar as a hosted zone.<br />DNSZone will probably be a suffix of the MasterPublicName.<br />Note that DNSZone can either by the host name of the zone (containing dots),<br />or can be an identifier for the zone.
+- `additional_sans` - (Computed) - List(String) - AdditionalSANs adds additional Subject Alternate Names to apiserver cert that kops generates<br />+k8s:conversion-gen=false.
 - `cluster_dns_domain` - (Computed) - String - ClusterDNSDomain is the suffix we use for internal DNS names (normally cluster.local).
-- `ssh_access` - (Computed) - List(String) - SSHAccess is a list of the CIDRs that can access SSH.
+- `service_cluster_ip_range` - (Computed) - String - ServiceClusterIPRange is the CIDR, from the internal network, where we allocate IPs for services<br />+k8s:conversion-gen=false.
+- `pod_cidr` - (Computed) - String - PodCIDR is the CIDR from which we allocate IPs for pods<br />+k8s:conversion-gen=false.
+- `non_masquerade_cidr` - (Computed) - String - MasterIPRange                 string `json:",omitempty"`<br />NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)<br />It cannot overlap ServiceClusterIPRange<br />+k8s:conversion-gen=false.
+- `ssh_access` - (Computed) - List(String) - SSHAccess determines the permitted access to SSH<br />Currently only a single CIDR is supported (though a richer grammar could be added in future).
 - `node_port_access` - (Computed) - List(String) - NodePortAccess is a list of the CIDRs that can access the node ports range (30000-32767).
+- `egress_proxy` - (Computed) - [egress_proxy_spec](#egress_proxy_spec) - HTTPProxy defines connection information to support use of a private cluster behind an forward HTTP Proxy<br />+k8s:conversion-gen=false.
 - `ssh_key_name` - (Computed) - String - SSHKeyName specifies a preexisting SSH key to use.
+- `kubernetes_api_access` - (Computed) - List(String) - KubernetesAPIAccess determines the permitted access to the API endpoints (master HTTPS)<br />Currently only a single CIDR is supported (though a richer grammar could be added in future)<br />+k8s:conversion-gen=false.
+- `isolate_masters` - (Computed) - Bool - IsolateMasters determines whether we should lock down masters so that they are not on the pod network.<br />true is the kube-up behaviour, but it is very surprising: it means that daemonsets only work on the master<br />if they have hostNetwork=true.<br />false is now the default, and it will:<br /> * give the master a normal PodCIDR<br /> * run kube-proxy on the master<br /> * enable debugging handlers on the master, so kubectl logs works<br />+k8s:conversion-gen=false.
 - `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
 - `external_policies` - (Computed) - Map(List(String)) - ExternalPolicies allows the insertion of pre-existing managed policies on IG Roles.
 - `additional_policies` - (Computed) - Map(String) - Additional policies to add for roles.
@@ -78,30 +93,37 @@ The following arguments are supported:
 - `kube_scheduler` - (Computed) - [kube_scheduler_config](#kube_scheduler_config)
 - `kube_proxy` - (Computed) - [kube_proxy_config](#kube_proxy_config)
 - `kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet is the kubelet configuration for nodes not belonging to the control plane.<br />It can be overridden by the kubelet configuration specified in the instance group.
-- `control_plane_kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - ControlPlaneKubelet is the kubelet configuration for nodes belonging to the control plane<br />It can be overridden by the kubelet configuration specified in the instance group.
+- `control_plane_kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - MasterKubelet is the kubelet configuration for nodes belonging to the control plane<br />It can be overridden by the kubelet configuration specified in the instance group.
 - `cloud_config` - (Computed) - [cloud_configuration](#cloud_configuration)
 - `external_dns` - (Computed) - [external_dns_config](#external_dns_config)
 - `ntp` - (Computed) - [ntp_config](#ntp_config)
+- `node_termination_handler` - (Computed) - [node_termination_handler_spec](#node_termination_handler_spec) - NodeTerminationHandler determines the cluster autoscaler configuration.<br />+k8s:conversion-gen=false.
 - `node_problem_detector` - (Computed) - [node_problem_detector_config](#node_problem_detector_config) - NodeProblemDetector determines the node problem detector configuration.
 - `metrics_server` - (Computed) - [metrics_server_config](#metrics_server_config) - MetricsServer determines the metrics server configuration.
 - `cert_manager` - (Computed) - [cert_manager_config](#cert_manager_config) - CertManager determines the metrics server configuration.
-- `networking` - (Computed) - [networking_spec](#networking_spec) - Networking configures networking.
-- `api` - (Computed) - [api_spec](#api_spec) - API controls how the Kubernetes API is exposed.
+- `aws_load_balancer_controller` - (Computed) - [load_balancer_controller_spec](#load_balancer_controller_spec) - AWSLoadbalancerControllerConfig determines the AWS LB controller configuration.<br />+k8s:conversion-gen=false.
+- `legacy_networking` - (Computed) - [networking_spec](#networking_spec) - Networking configuration<br />+k8s:conversion-gen=false.
+- `networking` - (Computed) - [networking_spec](#networking_spec)
+- `legacy_api` - (Computed) - [api_spec](#api_spec) - API field controls how the API is exposed outside the cluster<br />+k8s:conversion-gen=false.
+- `api` - (Computed) - [api_spec](#api_spec)
 - `authentication` - (Computed) - [authentication_spec](#authentication_spec) - Authentication field controls how the cluster is configured for authentication.
 - `authorization` - (Computed) - [authorization_spec](#authorization_spec) - Authorization field controls how the cluster is configured for authorization.
 - `node_authorization` - (Computed) - [node_authorization_spec](#node_authorization_spec) - NodeAuthorization defined the custom node authorization configuration.
 - `cloud_labels` - (Computed) - Map(String) - CloudLabels defines additional tags or labels on cloud provider resources.
 - `hooks` - (Computed) - List([hook_spec](#hook_spec)) - Hooks for custom actions e.g. on first installation.
-- `assets` - (Computed) - [assets](#assets) - Assets is alternative locations for files and containers; the API under construction, will remove this comment once this API is fully functional.
+- `assets` - (Computed) - [assets](#assets) - Alternative locations for files and containers.
 - `iam` - (Computed) - [iam_spec](#iam_spec) - IAM field adds control over the IAM security policies applied to resources.
-- `encryption_config` - (Computed) - Bool - EncryptionConfig controls if encryption is enabled.
+- `encryption_config` - (Computed) - Bool - EncryptionConfig holds the encryption config.
+- `tag_subnets` - (Computed) - Bool - DisableSubnetTags controls if subnets are tagged in AWS<br />+k8s:conversion-gen=false.
 - `use_host_certificates` - (Computed) - Bool - UseHostCertificates will mount /etc/ssl/certs to inside needed containers.<br />This is needed if some APIs do have self-signed certs.
 - `sysctl_parameters` - (Computed) - List(String) - SysctlParameters will configure kernel parameters using sysctl(8). When<br />specified, each parameter must follow the form variable=value, the way<br />it would appear in sysctl.conf.
 - `rolling_update` - (Computed) - [rolling_update](#rolling_update) - RollingUpdate defines the default rolling-update settings for instance groups.
-- `cluster_autoscaler` - (Computed) - [cluster_autoscaler_config](#cluster_autoscaler_config) - ClusterAutoscaler defines the cluster autoscaler configuration.
+- `cluster_autoscaler` - (Computed) - [cluster_autoscaler_config](#cluster_autoscaler_config) - ClusterAutoscaler defines the cluaster autoscaler configuration.
+- `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool defines the default warm pool settings for instance groups (AWS only).<br />+k8s:conversion-gen=false.
 - `service_account_issuer_discovery` - (Computed) - [service_account_issuer_discovery_config](#service_account_issuer_discovery_config) - ServiceAccountIssuerDiscovery configures the OIDC Issuer for ServiceAccounts.
 - `snapshot_controller` - (Computed) - [snapshot_controller_config](#snapshot_controller_config) - SnapshotController defines the CSI Snapshot Controller configuration.
 - `karpenter` - (Computed) - [karpenter_config](#karpenter_config) - Karpenter defines the Karpenter configuration.
+- `pod_identity_webhook` - (Computed) - [pod_identity_webhook_spec](#pod_identity_webhook_spec) - PodIdentityWebhook determines the EKS Pod Identity Webhook configuration.<br />+k8s:conversion-gen=false.
 - `labels` - (Computed) - Map(String) - Map of string keys and values that can be used to organize and categorize<br />(scope and select) objects. May match selectors of replication controllers<br />and services.
 - `annotations` - (Computed) - Map(String) - Annotations is an unstructured key value map stored with a resource that may be<br />set by external tools to store and retrieve arbitrary metadata. They are not<br />queryable and should be preserved when modifying objects.
 - `name` - (Required) - String - Name defines the cluster name.
@@ -120,260 +142,88 @@ The following arguments are supported:
 
 - `manifest` - (Computed) - String - Manifest is a path to the manifest that defines the addon.
 
-### cloud_provider_spec
-
-CloudProviderSpec configures the cloud provider to use.
+### cluster_subnet_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `aws` - (Computed) - [aws_spec](#aws_spec) - AWS configures the AWS cloud provider.
-- `azure` - (Computed) - [azure_spec](#azure_spec) - Azure configures the Azure cloud provider.
-- `do` - (Computed) - [do_spec](#do_spec) - DO configures the Digital Ocean cloud provider.
-- `gce` - (Computed) - [gce_spec](#gce_spec) - GCE configures the GCE cloud provider.
-- `hetzner` - (Computed) - [hetzner_spec](#hetzner_spec) - Hetzner configures the Hetzner cloud provider.
-- `openstack` - (Computed) - [openstack_spec](#openstack_spec) - Openstack configures the Openstack cloud provider.
-- `scaleway` - (Computed) - [scaleway_spec](#scaleway_spec) - Scaleway configures the Scaleway cloud provider.
+- `name` - (Computed) - String
+- `zone` - (Computed) - String - Zone is the zone the subnet is in, set for subnets that are zonally scoped.
+- `region` - (Computed) - String - Region is the region the subnet is in, set for subnets that are regionally scoped.
+- `cidr` - (Computed) - String - CIDR is the IPv4 CIDR block assigned to the subnet.
+- `ipv6_cidr` - (Computed) - String - IPv6CIDR is the IPv6 CIDR block assigned to the subnet.
+- `id` - (Computed) - String - ID is the cloud provider ID for the objects associated with the zone (the subnet on AWS).
+- `egress` - (Computed) - String - Egress defines the method of traffic egress for this subnet.
+- `type` - (Computed) - String
+- `public_ip` - (Computed) - String - PublicIP to attach to NatGateway.
+- `additional_routes` - (Computed) - List([route_spec](#route_spec)) - AdditionalRoutes to attach to the subnet's route table.
 
-### aws_spec
-
-AWSSpec configures the AWS cloud provider.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `ebs_csi_driver` - (Computed) - [ebs_csi_driver_spec](#ebs_csi_driver_spec) - EBSCSIDriverSpec is the config for the EBS CSI driver.
-- `node_termination_handler` - (Computed) - [node_termination_handler_spec](#node_termination_handler_spec) - NodeTerminationHandler determines the node termination handler configuration.
-- `load_balancer_controller` - (Computed) - [load_balancer_controller_spec](#load_balancer_controller_spec) - LoadbalancerController determines the Load Balancer Controller configuration.
-- `pod_identity_webhook` - (Computed) - [pod_identity_webhook_spec](#pod_identity_webhook_spec) - PodIdentityWebhook determines the EKS Pod Identity Webhook configuration.
-- `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool defines the default warm pool settings for instance groups.
-
-### ebs_csi_driver_spec
-
-EBSCSIDriverSpec is the config for the AWS EBS CSI driver.
+### route_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `enabled` - (Computed) - Bool - Enabled enables the AWS EBS CSI driver<br />Default: false.
-- `managed` - (Computed) - Bool - Managed controls if aws-ebs-csi-driver is manged and deployed by kOps.<br />The deployment of aws-ebs-csi-driver is skipped if this is set to false.
-- `version` - (Computed) - String - Version is the container image tag used.<br />Default: The latest stable release which is compatible with your Kubernetes version.
-- `volume_attach_limit` - (Computed) - Int - VolumeAttachLimit is the maximum number of volumes attachable per node.<br />If specified, the limit applies to all nodes.<br />If not specified, the value is approximated from the instance type.<br />Default: -.
-- `pod_annotations` - (Computed) - Map(String) - PodAnnotations are the annotations added to AWS EBS CSI node and controller Pods.<br />Default: none.
+- `cidr` - (Computed) - String - CIDR destination of the route.
+- `target` - (Computed) - String - Target of the route.
 
-### node_termination_handler_spec
-
-NodeTerminationHandlerSpec determines the node termination handler configuration.
+### topology_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `enabled` - (Computed) - Bool - Enabled enables the node termination handler.<br />Default: true.
-- `enable_spot_interruption_draining` - (Computed) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Cannot be disabled in queue-processor mode.<br />Default: true.
-- `enable_scheduled_event_draining` - (Computed) - Bool - EnableScheduledEventDraining makes node termination handler drain nodes before the maintenance window starts for an EC2 instance scheduled event.<br />Cannot be disabled in queue-processor mode.<br />Default: true.
-- `enable_rebalance_monitoring` - (Computed) - Bool - EnableRebalanceMonitoring makes node termination handler cordon nodes when the rebalance recommendation notice is received.<br />In queue-processor mode, cannot be enabled without rebalance draining.<br />Default: false.
-- `enable_rebalance_draining` - (Computed) - Bool - EnableRebalanceDraining makes node termination handler drain nodes when the rebalance recommendation notice is received.<br />Default: false.
-- `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.<br />Default: false.
-- `enable_sqs_termination_draining` - (Computed) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.<br />Default: true.
-- `exclude_from_load_balancers` - (Computed) - Bool - ExcludeFromLoadBalancers makes node termination handler will mark for exclusion from load balancers before node are cordoned.<br />Default: true.
-- `managed_asg_tag` - (Computed) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on<br />This field has kept its name even though it now maps to the --managed-tag flag due to keeping the API stable.<br />Node termination handler does no longer check the ASG for this tag, but the actual EC2 instances.
-- `memory_request` - (Computed) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
-- `cpu_request` - (Computed) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
-- `version` - (Computed) - String - Version is the container image tag used.
+- `control_plane` - (Computed) - String - The environment to launch the Kubernetes masters in public|private.
+- `nodes` - (Computed) - String - The environment to launch the Kubernetes nodes in public|private.
+- `bastion` - (Computed) - [bastion_spec](#bastion_spec) - Bastion provide an external facing point of entry into a network<br />containing private network instances. This host can provide a single<br />point of fortification or audit and can be started and stopped to enable<br />or disable inbound SSH communication from the Internet, some call bastion<br />as the "jump server".
+- `dns` - (Computed) - String
+- `legacy_dns` - (Computed) - [dns_spec](#dns_spec) - DNS configures options relating to DNS, in particular whether we use a public or a private hosted zone<br />+k8s:conversion-gen=false.
 
-### load_balancer_controller_spec
-
-LoadBalancerControllerSpec determines the AWS LB controller configuration.
+### bastion_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `enabled` - (Computed) - Bool - Enabled enables the loadbalancer controller.<br />Default: false.
-- `version` - (Computed) - String - Version is the container image tag used.
-- `enable_waf` - (Computed) - Bool - EnableWAF specifies whether the controller can use WAFs (Classic Regional).<br />Default: false.
-- `enable_wa_fv2` - (Computed) - Bool - EnableWAFv2 specifies whether the controller can use WAFs (V2).<br />Default: false.
-- `enable_shield` - (Computed) - Bool - EnableShield specifies whether the controller can enable Shield Advanced.<br />Default: false.
+- `bastion_public_name` - (Computed) - String
+- `idle_timeout_seconds` - (Computed) - Int - IdleTimeoutSeconds is unused<br />+k8s:conversion-gen=false.
+- `load_balancer` - (Computed) - [bastion_load_balancer_spec](#bastion_load_balancer_spec)
 
-### pod_identity_webhook_spec
-
-PodIdentityWebhookSpec configures an EKS Pod Identity Webhook.
+### bastion_load_balancer_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `enabled` - (Computed) - Bool
-- `replicas` - (Computed) - Int
+- `additional_security_groups` - (Computed) - List(String) - AdditionalSecurityGroups is unused<br />+k8s:conversion-gen=false.
+- `type` - (Computed) - String - Type of load balancer to create, it can be Public or Internal.
 
-### warm_pool_spec
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `min_size` - (Computed) - Int - MinSize is the minimum size of the warm pool.
-- `max_size` - (Computed) - Int - MaxSize is the maximum size of the warm pool. The desired size of the instance group<br />is subtracted from this number to determine the desired size of the warm pool<br />(unless the resulting number is smaller than MinSize).<br />The default is the instance group's MaxSize.
-- `enable_lifecycle_hook` - (Computed) - Bool - EnableLifecyleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
-
-### azure_spec
-
-AzureSpec defines Azure specific cluster configuration.
+### dns_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `subscription_id` - (Computed) - String - SubscriptionID specifies the subscription used for the cluster installation.
-- `tenant_id` - (Computed) - String - TenantID is the ID of the tenant that the cluster is deployed in.
-- `resource_group_name` - (Computed) - String - ResourceGroupName specifies the name of the resource group<br />where the cluster is built.<br />If this is empty, kops will create a new resource group<br />whose name is same as the cluster name. If this is not<br />empty, kops will not create a new resource group, and<br />it will just reuse the existing resource group of the name.<br />This follows the model that kops takes for AWS VPC.
-- `route_table_name` - (Computed) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
-- `admin_user` - (Computed) - String - AdminUser specifies the admin user of VMs.
+- `type` - (Required) - String
 
-### do_spec
-
-DOSpec configures the Digital Ocean cloud provider.
-
-
-This resource has no attributes.
-
-### gce_spec
-
-GCESpec configures the GCE cloud provider.
+### egress_proxy_spec
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `project` - (Computed) - String - Project is the cloud project we should use.
-- `service_account` - (Computed) - String - ServiceAccount specifies the service account with which the GCE VM runs.
-- `pd_csi_driver` - (Computed) - [pd_csi_driver](#pd_csi_driver) - PDCSIDriver is the config for the PD CSI driver.
+- `http_proxy` - (Computed) - [http_proxy](#http_proxy)
+- `proxy_excludes` - (Computed) - String
 
-### pd_csi_driver
-
-PDCSIDriver is the config for the GCP PD CSI driver.
+### http_proxy
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `enabled` - (Computed) - Bool - Enabled enables the GCP PD CSI driver.
-
-### hetzner_spec
-
-HetznerSpec configures the Hetzner cloud provider.
-
-
-This resource has no attributes.
-
-### openstack_spec
-
-OpenstackSpec defines cloud config elements for the openstack cloud provider.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `loadbalancer` - (Computed) - [openstack_loadbalancer_config](#openstack_loadbalancer_config)
-- `monitor` - (Computed) - [openstack_monitor](#openstack_monitor)
-- `router` - (Computed) - [openstack_router](#openstack_router)
-- `block_storage` - (Computed) - [openstack_block_storage_config](#openstack_block_storage_config)
-- `insecure_skip_verify` - (Computed) - Bool
-- `network` - (Computed) - [openstack_network](#openstack_network)
-- `metadata` - (Computed) - [openstack_metadata](#openstack_metadata)
-
-### openstack_loadbalancer_config
-
-OpenstackLoadbalancerConfig defines the config for a neutron loadbalancer.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `method` - (Computed) - String
-- `provider` - (Computed) - String
-- `use_octavia` - (Computed) - Bool
-- `floating_network` - (Computed) - String
-- `floating_network_id` - (Computed) - String
-- `floating_subnet` - (Computed) - String
-- `subnet_id` - (Computed) - String
-- `manage_sec_groups` - (Computed) - Bool
-- `enable_ingress_hostname` - (Computed) - Bool
-- `ingress_hostname_suffix` - (Computed) - String
-
-### openstack_monitor
-
-OpenstackMonitor defines the config for a health monitor.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `delay` - (Computed) - String
-- `timeout` - (Computed) - String
-- `max_retries` - (Computed) - Int
-
-### openstack_router
-
-OpenstackRouter defines the config for a router.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `external_network` - (Computed) - String
-- `dns_servers` - (Computed) - String
-- `external_subnet` - (Computed) - String
-- `availability_zone_hints` - (Computed) - List(String)
-
-### openstack_block_storage_config
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `version` - (Computed) - String
-- `ignore_az` - (Computed) - Bool
-- `override_az` - (Computed) - String
-- `ignore_volume_micro_version` - (Computed) - Bool
-- `create_storage_class` - (Computed) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
-- `csi_plugin_image` - (Computed) - String
-- `csi_topology_support` - (Computed) - Bool
-- `cluster_name` - (Computed) - String - ClusterName sets the --cluster flag for the cinder-csi-plugin to the provided name.
-
-### openstack_network
-
-OpenstackNetwork defines the config for a network.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `availability_zone_hints` - (Computed) - List(String)
-- `ipv6_support_disabled` - (Computed) - Bool
-- `public_network_names` - (Computed) - List(String)
-- `internal_network_names` - (Computed) - List(String)
-
-### openstack_metadata
-
-OpenstackMetadata defines config for metadata service related settings.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `config_drive` - (Computed) - Bool - ConfigDrive specifies to use config drive for retrieving user data instead of the metadata service when launching instances.
-
-### scaleway_spec
-
-ScalewaySpec configures the Scaleway cloud provider.
-
-
-This resource has no attributes.
+- `host` - (Computed) - String
+- `port` - (Computed) - Int
 
 ### file_asset_spec
 
@@ -401,6 +251,8 @@ The following arguments are supported:
 - `name` - (Computed) - String - Name is the name of the etcd cluster (main, events etc).
 - `provider` - (Computed) - String - Provider is the provider used to run etcd: Manager, Legacy.<br />Defaults to Manager.
 - `member` - (Computed) - List([etcd_member_spec](#etcd_member_spec)) - Members stores the configurations for each member of the cluster (including the data volume).
+- `enable_etcd_tls` - (Computed) - Bool - EnableEtcdTLS is unused.<br />+k8s:conversion-gen=false.
+- `enable_tls_auth` - (Computed) - Bool - EnableTLSAuth is unused.<br />+k8s:conversion-gen=false.
 - `version` - (Computed) - String - Version is the version of etcd to run.
 - `leader_election_timeout` - (Computed) - Duration - LeaderElectionTimeout is the time (in milliseconds) for an etcd leader election timeout.
 - `heartbeat_interval` - (Computed) - Duration - HeartbeatInterval is the time (in milliseconds) for an etcd heartbeat interval.
@@ -447,7 +299,7 @@ EtcdManagerSpec describes how we configure the etcd manager.
 The following arguments are supported:
 
 - `image` - (Computed) - String - Image is the etcd manager image to use.
-- `env` - (Computed) - List([env_var](#env_var)) - Env allows users to pass in env variables to the etcd-manager container.<br />Variables starting with ETCD_ will be further passed down to the etcd process.<br />This allows etcd setting to be overwriten. No config validation is done.<br />A list of etcd config ENV vars can be found at https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/configuration.md.
+- `env` - (Computed) - List([env_var](#env_var)) - Env allows users to pass in env variables to the etcd-manager container.<br />Variables starting with ETCD_ will be further passed down to the etcd process.<br />This allows etcd setting to be configured/overwriten. No config validation is done.<br />A list of etcd config ENV vars can be found at https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/configuration.md.
 - `backup_interval` - (Computed) - Duration - BackupInterval which is used for backups. The default is 15 minutes.
 - `discovery_poll_interval` - (Computed) - Duration - DiscoveryPollInterval which is used for discovering other cluster members. The default is 60 seconds.
 - `log_level` - (Computed) - Int - LogLevel allows the klog library verbose log level to be set for etcd-manager. The default is 6.<br />https://github.com/google/glog#verbose-logging.
@@ -500,7 +352,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `driver_package` - (Computed) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-510-server".
+- `driver_package` - (Computed) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-460-server".
 - `enabled` - (Computed) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
 - `dcgm_exporter` - (Computed) - [dcgm_exporter_config](#dcgm_exporter_config) - DCGMExporterConfig configures the DCGM exporter.
 
@@ -582,6 +434,8 @@ The following arguments are supported:
 - `cpa_image` - (Computed) - String - CPAImage is used to override the default image used for Cluster Proportional Autoscaler.
 - `domain` - (Computed) - String - Domain is the dns domain.
 - `external_core_file` - (Computed) - String - ExternalCoreFile is used to provide a complete CoreDNS CoreFile by the user - ignores other provided flags which modify the CoreFile.
+- `image` - (Computed) - String - Image is unused.<br />+k8s:conversion-gen=false.
+- `replicas` - (Computed) - Int - Replicas is unused.<br />+k8s:conversion-gen=false.
 - `provider` - (Computed) - String - Provider indicates whether CoreDNS or kube-dns will be the default service discovery.
 - `server_ip` - (Computed) - String - ServerIP is the server ip.
 - `stub_domains` - (Computed) - Map(List(String)) - StubDomains redirects a domains to another DNS service.
@@ -867,8 +721,8 @@ The following arguments are supported:
 - `audit_dynamic_configuration` - (Computed) - Bool - AuditDynamicConfiguration enables dynamic audit configuration via AuditSinks.
 - `enable_profiling` - (Computed) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
 - `cors_allowed_origins` - (Computed) - List(String) - CorsAllowedOrigins is a list of origins for CORS. An allowed origin can be a regular<br />expression to support subdomain matching. If this list is empty CORS will not be enabled.
-- `default_not_ready_toleration_seconds` - (Computed) - Int - DefaultNotReadyTolerationSeconds indicates the tolerationSeconds of the toleration for notReady:NoExecute that is added by default to every pod that does not already have such a toleration.
-- `default_unreachable_toleration_seconds` - (Computed) - Int - DefaultUnreachableTolerationSeconds indicates the tolerationSeconds of the toleration for unreachable:NoExecute that is added by default to every pod that does not already have such a toleration.
+- `default_not_ready_toleration_seconds` - (Computed) - Int - DefaultNotReadyTolerationSeconds.
+- `default_unreachable_toleration_seconds` - (Computed) - Int - DefaultUnreachableTolerationSeconds.
 
 ### kube_controller_manager_config
 
@@ -893,7 +747,7 @@ The following arguments are supported:
 - `cidr_allocator_type` - (Computed) - String - CIDRAllocatorType specifies the type of CIDR allocator to use.
 - `root_ca_file` - (Computed) - String - rootCAFile is the root certificate authority will be included in service account's token secret. This must be a valid PEM-encoded CA bundle.
 - `leader_election` - (Computed) - [leader_election_configuration](#leader_election_configuration) - LeaderElection defines the configuration of leader election client.
-- `attach_detach_reconcile_sync_period` - (Computed) - Duration - AttachDetachReconcileSyncPeriod is the amount of time the reconciler sync states loop<br />wait between successive executions. Is set to 1 min by kops by default.
+- `attach_detach_reconcile_sync_period` - (Computed) - Duration - ReconcilerSyncLoopPeriod is the amount of time the reconciler sync states loop<br />wait between successive executions. Is set to 1 min by kops by default.
 - `disable_attach_detach_reconcile_sync` - (Computed) - Bool - DisableAttachDetachReconcileSync disables the reconcile sync loop in the attach-detach controller.<br />This can cause volumes to become mismatched with pods.
 - `terminated_pod_gc_threshold` - (Computed) - Int - TerminatedPodGCThreshold is the number of terminated pods that can exist<br />before the terminated pod garbage collector starts deleting terminated pods.<br />If <= 0, the terminated pod garbage collector is disabled.
 - `node_monitor_period` - (Computed) - Duration - NodeMonitorPeriod is the period for syncing NodeStatus in NodeController. (default 5s).
@@ -924,11 +778,11 @@ The following arguments are supported:
 - `concurrent_service_syncs` - (Computed) - Int - The number of service objects that are allowed to sync concurrently.
 - `concurrent_resource_quota_syncs` - (Computed) - Int - The number of resourcequota objects that are allowed to sync concurrently.
 - `concurrent_serviceaccount_token_syncs` - (Computed) - Int - The number of serviceaccount objects that are allowed to sync concurrently to create tokens.
-- `concurrent_rc_syncs` - (Computed) - Int - The number of replicationcontroller objects that are allowed to sync concurrently.
+- `concurrent_rc_syncs` - (Computed) - Int - The number of replicationcontroller objects that are allowed to sync concurrently.<br />This only works on kubernetes >= 1.14.
 - `authentication_kubeconfig` - (Computed) - String - AuthenticationKubeconfig is the path to an Authentication Kubeconfig.
 - `authorization_kubeconfig` - (Computed) - String - AuthorizationKubeconfig is the path to an Authorization Kubeconfig.
 - `authorization_always_allow_paths` - (Computed) - List(String) - AuthorizationAlwaysAllowPaths is the list of HTTP paths to skip during authorization.
-- `external_cloud_volume_plugin` - (Computed) - String - ExternalCloudVolumePlugin is a fallback mechanism that allows a legacy, in-tree cloudprovider to be used for volume plugins<br />even when an external cloud controller manager is being used.  This can be used instead of installing CSI.  The value should<br />be the same as is used for the --cloud-provider flag, i.e. "aws".
+- `external_cloud_volume_plugin` - (Computed) - String - ExternalCloudVolumePlugin is a fallback mechanism that allows a legacy, in-tree cloudprovider to be used for volume plugins even when an external cloud controller manager is being used.  This can be used instead of installing CSI.  The value should be the same as is used for the --cloud-provider flag, i.e. "aws".
 - `enable_profiling` - (Computed) - Bool - EnableProfiling enables profiling via web interface host:port/debug/pprof/.
 - `enable_leader_migration` - (Computed) - Bool - EnableLeaderMigration enables controller leader migration.
 
@@ -970,7 +824,7 @@ The following arguments are supported:
 - `leader_election` - (Computed) - [leader_election_configuration](#leader_election_configuration) - LeaderElection defines the configuration of leader election client.
 - `use_service_account_credentials` - (Computed) - Bool - UseServiceAccountCredentials controls whether we use individual service account credentials for each controller.
 - `enable_leader_migration` - (Computed) - Bool - EnableLeaderMigration enables controller leader migration.
-- `cpu_request` - (Computed) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 200m.
+- `cpu_request` - (Computed) - Quantity - CPURequest of CloudControllerManager container.<br />Default: 200m.
 - `node_status_update_frequency` - (Computed) - Duration - NodeStatusUpdateFrequency is the duration between node status updates. (default: 5m).
 
 ### kube_scheduler_config
@@ -1018,7 +872,7 @@ The following arguments are supported:
 - `master` - (Computed) - String - Master is the address of the Kubernetes API server (overrides any value in kubeconfig).
 - `metrics_bind_address` - (Computed) - String - MetricsBindAddress is the IP address for the metrics server to serve on.
 - `enabled` - (Computed) - Bool - Enabled allows enabling or disabling kube-proxy.
-- `proxy_mode` - (Computed) - String - Which proxy mode to use: (userspace, iptables(default), ipvs).
+- `proxy_mode` - (Computed) - String - Which proxy mode to use: (userspace, iptables, ipvs).
 - `ip_vs_exclude_cidrs` - (Computed) - List(String) - IPVSExcludeCIDRs is comma-separated list of CIDR's which the ipvs proxier should not touch when cleaning up IPVS rules.
 - `ip_vs_min_sync_period` - (Computed) - Duration - IPVSMinSyncPeriod is the minimum interval of how often the ipvs rules can be refreshed as endpoints and services change (e.g. '5s', '1m', '2h22m').
 - `ip_vs_scheduler` - (Computed) - String - IPVSScheduler is the ipvs scheduler type when proxy mode is ipvs.
@@ -1139,10 +993,158 @@ The following arguments are supported:
 - `node_tags` - (Computed) - String
 - `node_instance_prefix` - (Computed) - String
 - `node_ip_families` - (Computed) - List(String) - NodeIPFamilies controls the IP families reported for each node (AWS only).
+- `gce_service_account` - (Computed) - String - GCEServiceAccount specifies the service account with which the GCE VM runs<br />+k8s:conversion-gen=false.
 - `disable_security_group_ingress` - (Computed) - Bool - AWS cloud-config options.
 - `elb_security_group` - (Computed) - String
+- `v_sphere_username` - (Computed) - String - VSphereUsername is unused.<br />+k8s:conversion-gen=false.
+- `v_sphere_password` - (Computed) - String - VSpherePassword is unused.<br />+k8s:conversion-gen=false.
+- `v_sphere_server` - (Computed) - String - VSphereServer is unused.<br />+k8s:conversion-gen=false.
+- `v_sphere_datacenter` - (Computed) - String - VShpereDatacenter is unused.<br />+k8s:conversion-gen=false.
+- `v_sphere_resource_pool` - (Computed) - String - VSphereResourcePool is unused.<br />+k8s:conversion-gen=false.
+- `v_sphere_datastore` - (Computed) - String - VSphereDatastore is unused.<br />+k8s:conversion-gen=false.
+- `v_sphere_core_dns_server` - (Computed) - String - VSphereCoreDNSServer is unused.<br />+k8s:conversion-gen=false.
 - `spotinst_product` - (Computed) - String - Spotinst cloud-config specs.
 - `spotinst_orientation` - (Computed) - String
+- `openstack` - (Computed) - [openstack_spec](#openstack_spec) - Openstack cloud-config options<br />+k8s:conversion-gen=false.
+- `azure` - (Computed) - [azure_spec](#azure_spec) - Azure cloud-config options<br />+k8s:conversion-gen=false.
+- `aws_ebs_csi_driver` - (Computed) - [ebs_csi_driver_spec](#ebs_csi_driver_spec) - AWSEBSCSIDriver is the config for the AWS EBS CSI driver<br />+k8s:conversion-gen=false.
+- `gcp_pd_csi_driver` - (Computed) - [pd_csi_driver](#pd_csi_driver) - GCPPDCSIDriver is the config for the GCP PD CSI driver<br />+k8s:conversion-gen=false.
+
+### openstack_spec
+
+OpenstackSpec defines cloud config elements for the openstack cloud provider.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `loadbalancer` - (Computed) - [openstack_loadbalancer_config](#openstack_loadbalancer_config)
+- `monitor` - (Computed) - [openstack_monitor](#openstack_monitor)
+- `router` - (Computed) - [openstack_router](#openstack_router)
+- `block_storage` - (Computed) - [openstack_block_storage_config](#openstack_block_storage_config)
+- `insecure_skip_verify` - (Computed) - Bool
+- `network` - (Computed) - [openstack_network](#openstack_network)
+- `metadata` - (Computed) - [openstack_metadata](#openstack_metadata)
+
+### openstack_loadbalancer_config
+
+OpenstackLoadbalancerConfig defines the config for a neutron loadbalancer.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `method` - (Computed) - String
+- `provider` - (Computed) - String
+- `use_octavia` - (Computed) - Bool
+- `floating_network` - (Computed) - String
+- `floating_network_id` - (Computed) - String
+- `floating_subnet` - (Computed) - String
+- `subnet_id` - (Computed) - String
+- `manage_sec_groups` - (Computed) - Bool
+- `enable_ingress_hostname` - (Computed) - Bool
+- `ingress_hostname_suffix` - (Computed) - String
+
+### openstack_monitor
+
+OpenstackMonitor defines the config for a health monitor.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `delay` - (Computed) - String
+- `timeout` - (Computed) - String
+- `max_retries` - (Computed) - Int
+
+### openstack_router
+
+OpenstackRouter defines the config for a router.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `external_network` - (Computed) - String
+- `dns_servers` - (Computed) - String
+- `external_subnet` - (Computed) - String
+- `availability_zone_hints` - (Computed) - List(String)
+
+### openstack_block_storage_config
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `version` - (Computed) - String
+- `ignore_az` - (Computed) - Bool
+- `override_az` - (Computed) - String
+- `ignore_volume_micro_version` - (Computed) - Bool
+- `create_storage_class` - (Computed) - Bool - CreateStorageClass provisions a default class for the Cinder plugin.
+- `csi_plugin_image` - (Computed) - String
+- `csi_topology_support` - (Computed) - Bool
+- `cluster_name` - (Computed) - String - ClusterName sets the --cluster flag for the cinder-csi-plugin to the provided name.
+
+### openstack_network
+
+OpenstackNetwork defines the config for a network.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `availability_zone_hints` - (Computed) - List(String)
+- `ipv6_support_disabled` - (Computed) - Bool
+- `public_network_names` - (Computed) - List(String)
+- `internal_network_names` - (Computed) - List(String)
+
+### openstack_metadata
+
+OpenstackMetadata defines config for metadata service related settings.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `config_drive` - (Computed) - Bool - ConfigDrive specifies to use config drive for retrieving user data instead of the metadata service when launching instances.
+
+### azure_spec
+
+AzureSpec defines Azure specific cluster configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `subscription_id` - (Computed) - String - SubscriptionID specifies the subscription used for the cluster installation.
+- `tenant_id` - (Computed) - String - TenantID is the ID of the tenant that the cluster is deployed in.
+- `resource_group_name` - (Computed) - String - ResourceGroupName specifies the name of the resource group<br />where the cluster is built.<br />If this is empty, kops will create a new resource group<br />whose name is same as the cluster name. If this is not<br />empty, kops will not create a new resource group, and<br />it will just reuse the existing resource group of the name.<br />This follows the model that kops takes for AWS VPC.
+- `route_table_name` - (Computed) - String - RouteTableName is the name of the route table attached to the subnet that the cluster is deployed in.
+- `admin_user` - (Computed) - String - AdminUser specifies the admin user of VMs.
+
+### ebs_csi_driver_spec
+
+EBSCSIDriverSpec is the config for the AWS EBS CSI driver.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the AWS EBS CSI driver<br />Default: false.
+- `managed` - (Computed) - Bool - Managed controls if aws-ebs-csi-driver is manged and deployed by kOps.<br />The deployment of aws-ebs-csi-driver is skipped if this is set to false.
+- `version` - (Computed) - String - Version is the container image tag used.<br />Default: The latest stable release which is compatible with your Kubernetes version.
+- `volume_attach_limit` - (Computed) - Int - VolumeAttachLimit is the maximum number of volumes attachable per node.<br />If specified, the limit applies to all nodes.<br />If not specified, the value is approximated from the instance type.<br />Default: -.
+- `pod_annotations` - (Computed) - Map(String) - PodAnnotations are the annotations added to AWS EBS CSI node and controller Pods.<br />Default: none.
+
+### pd_csi_driver
+
+PDCSIDriver is the config for the GCP PD CSI driver.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the GCP PD CSI driver.
 
 ### external_dns_config
 
@@ -1152,6 +1154,7 @@ ExternalDNSConfig are options of the dns-controller.
 
 The following arguments are supported:
 
+- `disable` - (Computed) - Bool - Disable indicates we do not wish to run the dns-controller addon<br />+k8s:conversion-gen=false.
 - `watch_ingress` - (Computed) - Bool - WatchIngress indicates you want the dns-controller to watch and create dns entries for ingress resources.<br />Default: true if provider is 'external-dns', false otherwise.
 - `watch_namespace` - (Computed) - String - WatchNamespace is namespace to watch, defaults to all (use to control whom can creates dns entries).
 - `provider` - (Computed) - String - Provider determines which implementation of ExternalDNS to use.<br />'dns-controller' will use kOps DNS Controller.<br />'external-dns' will use kubernetes-sigs/external-dns.
@@ -1165,6 +1168,27 @@ NTPConfig is the configuration for NTP.
 The following arguments are supported:
 
 - `managed` - (Computed) - Bool - Managed controls if the NTP configuration is managed by kOps.<br />The NTP configuration task is skipped if this is set to false.
+
+### node_termination_handler_spec
+
+NodeTerminationHandlerSpec determines the node termination handler configuration.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool - Enabled enables the node termination handler.<br />Default: true.
+- `enable_spot_interruption_draining` - (Computed) - Bool - EnableSpotInterruptionDraining makes node termination handler drain nodes when spot interruption termination notice is received.<br />Cannot be disabled in queue-processor mode.<br />Default: true.
+- `enable_scheduled_event_draining` - (Computed) - Bool - EnableScheduledEventDraining makes node termination handler drain nodes before the maintenance window starts for an EC2 instance scheduled event.<br />Cannot be disabled in queue-processor mode.<br />Default: true.
+- `enable_rebalance_monitoring` - (Computed) - Bool - EnableRebalanceMonitoring makes node termination handler cordon nodes when the rebalance recommendation notice is received.<br />In queue-processor mode, cannot be enabled without rebalance draining.<br />Default: false.
+- `enable_rebalance_draining` - (Computed) - Bool - EnableRebalanceDraining makes node termination handler drain nodes when the rebalance recommendation notice is received.<br />Default: false.
+- `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the "/metrics" endpoint.<br />Default: false.
+- `enable_sqs_termination_draining` - (Computed) - Bool - EnableSQSTerminationDraining enables queue-processor mode which drains nodes when an SQS termination event is received.<br />Default: true.
+- `exclude_from_load_balancers` - (Computed) - Bool - ExcludeFromLoadBalancers makes node termination handler will mark for exclusion from load balancers before node are cordoned.<br />Default: true.
+- `managed_asg_tag` - (Computed) - String - ManagedASGTag is the tag used to determine which nodes NTH can take action on<br />This field has kept its name even though it now maps to the --managed-tag flag due to keeping the API stable.<br />Node termination handler does no longer check the ASG for this tag, but the actual EC2 instances.
+- `memory_request` - (Computed) - Quantity - MemoryRequest of NodeTerminationHandler container.<br />Default: 64Mi.
+- `cpu_request` - (Computed) - Quantity - CPURequest of NodeTerminationHandler container.<br />Default: 50m.
+- `version` - (Computed) - String - Version is the container image tag used.
 
 ### node_problem_detector_config
 
@@ -1208,25 +1232,39 @@ The following arguments are supported:
 - `nameservers` - (Computed) - List(String) - nameservers is a list of nameserver IP addresses to use instead of the pod defaults.<br />Default: none.
 - `hosted_zone_ids` - (Computed) - List(String) - HostedZoneIDs is a list of route53 hostedzone IDs that cert-manager will be allowed to do dns-01 validation for.
 
-### networking_spec
+### load_balancer_controller_spec
 
-NetworkingSpec configures networking.
+LoadBalancerControllerSpec determines the AWS LB controller configuration.
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `network_id` - (Computed) - String - NetworkID is the cloud provider's identifier of the existing network (for example, AWS VPC) the cluster should use.<br />If not specified, kOps will create a new network.
-- `network_cidr` - (Computed) - String - NetworkCIDR is the primary IPv4 CIDR used for the cloud provider's network.<br />It is not required on GCE.<br />On DO, it maps to the VPC CIDR.
-- `additional_network_cidrs` - (Computed) - List(String) - AdditionalNetworkCIDRs is a list of additional CIDR used for the AWS VPC<br />or otherwise allocated to k8s. This is a real CIDR, not the internal k8s network<br />On AWS, it maps to any additional CIDRs added to a VPC.
-- `subnet` - (Computed) - List([cluster_subnet_spec](#cluster_subnet_spec)) - Subnets are the subnets that the cluster can use.
-- `tag_subnets` - (Computed) - Bool([Nullable](#nullable-arguments)) - TagSubnets controls if tags are added to subnets to enable use by load balancers (AWS only). Default: true.
-- `topology` - (Computed) - [topology_spec](#topology_spec) - Topology defines the type of network topology to use on the cluster - default public<br />This is heavily weighted towards AWS for the time being, but should also be agnostic enough<br />to port out to GCE later if needed.
-- `egress_proxy` - (Computed) - [egress_proxy_spec](#egress_proxy_spec) - HTTPProxy defines connection information to support use of a private cluster behind an forward HTTP Proxy.
-- `non_masquerade_cidr` - (Computed) - String - NonMasqueradeCIDR is the CIDR for the internal k8s network (on which pods & services live)<br />It cannot overlap ServiceClusterIPRange.
-- `pod_cidr` - (Computed) - String - PodCIDR is the CIDR from which we allocate IPs for pods.
-- `service_cluster_ip_range` - (Computed) - String - ServiceClusterIPRange is the CIDR, from the internal network, where we allocate IPs for services.
-- `isolate_control_plane` - (Computed) - Bool - IsolateControlPlane determines whether we should lock down masters so that they are not on the pod network.<br />true is the kube-up behaviour, but it is very surprising: it means that daemonsets only work on the master<br />if they have hostNetwork=true.<br />false is now the default, and it will:<br /> * give the master a normal PodCIDR<br /> * run kube-proxy on the master<br /> * enable debugging handlers on the master, so kubectl logs works.
+- `enabled` - (Computed) - Bool - Enabled enables the loadbalancer controller.<br />Default: false.
+- `version` - (Computed) - String - Version is the container image tag used.
+- `enable_waf` - (Computed) - Bool - EnableWAF specifies whether the controller can use WAFs (Classic Regional).<br />Default: false.
+- `enable_wa_fv2` - (Computed) - Bool - EnableWAFv2 specifies whether the controller can use WAFs (V2).<br />Default: false.
+- `enable_shield` - (Computed) - Bool - EnableShield specifies whether the controller can enable Shield Advanced.<br />Default: false.
+
+### networking_spec
+
+NetworkingSpec allows selection and configuration of a networking plugin.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `network_id` - (Computed) - String
+- `network_cidr` - (Computed) - String
+- `additional_network_cidrs` - (Computed) - List(String)
+- `subnet` - (Computed) - List([cluster_subnet_spec](#cluster_subnet_spec))
+- `tag_subnets` - (Computed) - Bool([Nullable](#nullable-arguments))
+- `topology` - (Computed) - [topology_spec](#topology_spec)
+- `egress_proxy` - (Computed) - [egress_proxy_spec](#egress_proxy_spec)
+- `non_masquerade_cidr` - (Computed) - String
+- `pod_cidr` - (Computed) - String
+- `service_cluster_ip_range` - (Computed) - String
+- `isolate_control_plane` - (Computed) - Bool
 - `classic` - (Computed) - [classic_networking_spec](#classic_networking_spec)
 - `kubenet` - (Computed) - [kubenet_networking_spec](#kubenet_networking_spec)
 - `external` - (Computed) - [external_networking_spec](#external_networking_spec)
@@ -1242,80 +1280,6 @@ The following arguments are supported:
 - `cilium` - (Computed) - [cilium_networking_spec](#cilium_networking_spec)
 - `lyft_vpc` - (Computed) - [lyft_vpc_networking_spec](#lyft_vpc_networking_spec)
 - `gce` - (Computed) - [gce_networking_spec](#gce_networking_spec)
-
-### cluster_subnet_spec
-
-ClusterSubnetSpec defines a subnet<br />TODO: move to networking.go.
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `name` - (Computed) - String - Name is the name of the subnet.
-- `cidr` - (Computed) - String - CIDR is the IPv4 CIDR block assigned to the subnet.
-- `ipv6_cidr` - (Computed) - String - IPv6CIDR is the IPv6 CIDR block assigned to the subnet.
-- `zone` - (Computed) - String - Zone is the zone the subnet is in, set for subnets that are zonally scoped.
-- `region` - (Computed) - String - Region is the region the subnet is in, set for subnets that are regionally scoped.
-- `id` - (Computed) - String - ID is the cloud provider ID for the objects associated with the zone (the subnet on AWS).
-- `egress` - (Computed) - String - Egress defines the method of traffic egress for this subnet.
-- `type` - (Computed) - String - Type define which one if the internal types (public, utility, private) the network is.
-- `public_ip` - (Computed) - String - PublicIP to attach to NatGateway.
-- `additional_routes` - (Computed) - List([route_spec](#route_spec)) - AdditionalRoutes to attach to the subnet's route table.
-
-### route_spec
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `cidr` - (Computed) - String - CIDR destination of the route.
-- `target` - (Computed) - String - Target of the route.
-
-### topology_spec
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `control_plane` - (Computed) - String - ControlPlane specifies the environment for launching the control plane nodes. (public, private).
-- `nodes` - (Computed) - String - Nodes specifies the environment for launching the worker nodes. (public, private).
-- `bastion` - (Computed) - [bastion_spec](#bastion_spec) - Bastion provide an external facing point of entry into a network<br />containing private network instances. This host can provide a single<br />point of fortification or audit and can be started and stopped to enable<br />or disable inbound SSH communication from the Internet. Some call the bastion<br />the "jump server".
-- `dns` - (Computed) - String - DNS specifies the environment for hosted DNS zones. (Public, Private, None).
-
-### bastion_spec
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `bastion_public_name` - (Computed) - String - PublicName is the domain name for the bastion load balancer.
-- `load_balancer` - (Computed) - [bastion_load_balancer_spec](#bastion_load_balancer_spec) - LoadBalancer contains settings for the load balancer fronting bastion instances.
-
-### bastion_load_balancer_spec
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `type` - (Computed) - String - Type of load balancer to create, it can be Public or Internal.
-
-### egress_proxy_spec
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `http_proxy` - (Computed) - [http_proxy](#http_proxy)
-- `proxy_excludes` - (Computed) - String
-
-### http_proxy
-
-#### Argument Reference
-
-The following arguments are supported:
-
-- `host` - (Computed) - String
-- `port` - (Computed) - Int
 
 ### classic_networking_spec
 
@@ -1387,6 +1351,7 @@ FlannelNetworkingSpec declares that we want Flannel networking.
 The following arguments are supported:
 
 - `backend` - (Computed) - String - Backend is the backend overlay type we want to use (vxlan or udp).
+- `disable_tx_checksum_offloading` - (Computed) - Bool - DisableTxChecksumOffloading is unused.<br />+k8s:conversion-gen=false.
 - `iptables_resync_seconds` - (Computed) - Int - IptablesResyncSeconds sets resync period for iptables rules, in seconds.
 
 ### calico_networking_spec
@@ -1419,6 +1384,7 @@ The following arguments are supported:
 - `prometheus_metrics_port` - (Computed) - Int - PrometheusMetricsPort is the TCP port that the experimental Prometheus<br />metrics server should bind to (default: 9091).
 - `prometheus_go_metrics_enabled` - (Computed) - Bool - PrometheusGoMetricsEnabled enables Prometheus Go runtime metrics collection.
 - `prometheus_process_metrics_enabled` - (Computed) - Bool - PrometheusProcessMetricsEnabled enables Prometheus process metrics collection.
+- `major_version` - (Computed) - String - MajorVersion is unused.<br />+k8s:conversion-gen=false.
 - `typha_prometheus_metrics_enabled` - (Computed) - Bool - TyphaPrometheusMetricsEnabled enables Prometheus metrics collection from Typha<br />(default: false).
 - `typha_prometheus_metrics_port` - (Computed) - Int - TyphaPrometheusMetricsPort is the TCP port the typha Prometheus metrics server<br />should bind to (default: 9093).
 - `typha_replicas` - (Computed) - Int - TyphaReplicas is the number of replicas of Typha to deploy.
@@ -1436,7 +1402,8 @@ The following arguments are supported:
 - `chain_insert_mode` - (Computed) - String - ChainInsertMode controls whether Felix inserts rules to the top of iptables chains, or<br />appends to the bottom. Leaving the default option is safest to prevent accidentally<br />breaking connectivity. Default: 'insert' (other options: 'append').
 - `cpu_request` - (Computed) - Quantity - CPURequest CPU request of Canal container. Default: 100m.
 - `default_endpoint_to_host_action` - (Computed) - String - DefaultEndpointToHostAction allows users to configure the default behaviour<br />for traffic between pod to host after calico rules have been processed.<br />Default: ACCEPT (other options: DROP, RETURN).
-- `flanneld_iptables_forward_rules` - (Computed) - Bool - FlanneldIptablesForwardRules configures Flannel to add the<br />default ACCEPT traffic rules to the iptables FORWARD chain. (default: true).
+- `flanneld_iptables_forward_rules` - (Computed) - Bool - DisableFlannelForwardRules configures Flannel to NOT add the<br />default ACCEPT traffic rules to the iptables FORWARD chain.
+- `disable_tx_checksum_offloading` - (Computed) - Bool - DisableTxChecksumOffloading is unused.<br />+k8s:conversion-gen=false.
 - `iptables_backend` - (Computed) - String - IptablesBackend controls which variant of iptables binary Felix uses<br />Default: Auto (other options: Legacy, NFT).
 - `log_severity_sys` - (Computed) - String - LogSeveritySys the severity to set for logs which are sent to syslog<br />Default: INFO (other options: DEBUG, WARNING, ERROR, CRITICAL, NONE).
 - `mtu` - (Computed) - Int - MTU to be set in the cni-network-config (default: 1500).
@@ -1474,8 +1441,8 @@ AmazonVPCNetworkingSpec declares that we want Amazon VPC CNI networking.
 
 The following arguments are supported:
 
-- `image` - (Computed) - String - Image is the container image name to use.
-- `init_image` - (Computed) - String - InitImage is the init container image name to use.
+- `image` - (Computed) - String - ImageName is the container image name to use.
+- `init_image` - (Computed) - String - InitImageName is the init container image name to use.
 - `env` - (Computed) - List([env_var](#env_var)) - Env is a list of environment variables to set in the container.
 
 ### cilium_networking_spec
@@ -1489,24 +1456,70 @@ The following arguments are supported:
 - `version` - (Computed) - String - Version is the version of the Cilium agent and the Cilium Operator.
 - `memory_request` - (Computed) - Quantity - MemoryRequest memory request of Cilium agent + operator container. (default: 128Mi).
 - `cpu_request` - (Computed) - Quantity - CPURequest CPU request of Cilium agent + operator container. (default: 25m).
+- `access_log` - (Computed) - String - AccessLog is unused.<br />+k8s:conversion-gen=false.
+- `agent_labels` - (Computed) - List(String) - AgentLabels is unused.<br />+k8s:conversion-gen=false.
 - `agent_prometheus_port` - (Computed) - Int - AgentPrometheusPort is the port to listen to for Prometheus metrics.<br />Defaults to 9090.
 - `metrics` - (Computed) - List(String) - Metrics is a list of metrics to add or remove from the default list of metrics the agent exposes.
+- `allow_localhost` - (Computed) - String - AllowLocalhost is unused.<br />+k8s:conversion-gen=false.
+- `auto_ipv6_node_routes` - (Computed) - Bool - AutoIpv6NodeRoutes is unused.<br />+k8s:conversion-gen=false.
+- `bpf_root` - (Computed) - String - BPFRoot is unused.<br />+k8s:conversion-gen=false.
 - `chaining_mode` - (Computed) - String - ChainingMode allows using Cilium in combination with other CNI plugins.<br />With Cilium CNI chaining, the base network connectivity and IP address management is managed<br />by the non-Cilium CNI plugin, but Cilium attaches eBPF programs to the network devices created<br />by the non-Cilium plugin to provide L3/L4 network visibility, policy enforcement and other advanced features.<br />Default: none.
+- `container_runtime` - (Computed) - List(String) - ContainerRuntime is unused.<br />+k8s:conversion-gen=false.
+- `container_runtime_endpoint` - (Computed) - Map(String) - ContainerRuntimeEndpoint is unused.<br />+k8s:conversion-gen=false.
 - `debug` - (Computed) - Bool - Debug runs Cilium in debug mode.
+- `debug_verbose` - (Computed) - List(String) - DebugVerbose is unused.<br />+k8s:conversion-gen=false.
+- `device` - (Computed) - String - Device is unused.<br />+k8s:conversion-gen=false.
+- `disable_conntrack` - (Computed) - Bool - DisableConntrack is unused.<br />+k8s:conversion-gen=false.
 - `disable_endpoint_crd` - (Computed) - Bool - DisableEndpointCRD disables usage of CiliumEndpoint CRD.<br />Default: false.
+- `disable_ipv4` - (Computed) - Bool - DisableIpv4 is unused.<br />+k8s:conversion-gen=false.
+- `disable_k_8s_services` - (Computed) - Bool - DisableK8sServices is unused.<br />+k8s:conversion-gen=false.
 - `enable_policy` - (Computed) - String - EnablePolicy specifies the policy enforcement mode.<br />"default": Follows Kubernetes policy enforcement.<br />"always": Cilium restricts all traffic if no policy is in place.<br />"never": Cilium allows all traffic regardless of policies in place.<br />If unspecified, "default" policy mode will be used.
 - `enable_l7_proxy` - (Computed) - Bool - EnableL7Proxy enables L7 proxy for L7 policy enforcement.<br />Default: true.
 - `enable_bpf_masquerade` - (Computed) - Bool - EnableBPFMasquerade enables masquerading packets from endpoints leaving the host with BPF instead of iptables.<br />Default: false.
 - `enable_endpoint_health_checking` - (Computed) - Bool - EnableEndpointHealthChecking enables connectivity health checking between virtual endpoints.<br />Default: true.
+- `enable_tracing` - (Computed) - Bool - EnableTracing is unused.<br />+k8s:conversion-gen=false.
 - `enable_prometheus_metrics` - (Computed) - Bool - EnablePrometheusMetrics enables the Cilium "/metrics" endpoint for both the agent and the operator.
 - `enable_encryption` - (Computed) - Bool - EnableEncryption enables Cilium Encryption.<br />Default: false.
 - `encryption_type` - (Computed) - String - EncryptionType specifies Cilium Encryption method ("ipsec", "wireguard").<br />Default: ipsec.
+- `envoy_log` - (Computed) - String - EnvoyLog is unused.<br />+k8s:conversion-gen=false.
 - `identity_allocation_mode` - (Computed) - String - IdentityAllocationMode specifies in which backend identities are stored ("crd", "kvstore").<br />Default: crd.
 - `identity_change_grace_period` - (Computed) - String - IdentityChangeGracePeriod specifies the duration to wait before using a changed identity.<br />Default: 5s.
-- `masquerade` - (Computed) - Bool - Masquerade enables masquerading IPv4 traffic to external destinations behind the node IP.<br />Default: false if IPAM is "eni" or in IPv6 mode, otherwise true.
-- `agent_pod_annotations` - (Computed) - Map(String) - AgentPodAnnotations makes possible to add additional annotations to cilium agent.<br />Default: none.
+- `ipv4_cluster_cidr_mask_size` - (Computed) - Int - Ipv4ClusterCIDRMaskSize is unused.<br />+k8s:conversion-gen=false.
+- `ipv4_node` - (Computed) - String - Ipv4Node is unused.<br />+k8s:conversion-gen=false.
+- `ipv4_range` - (Computed) - String - Ipv4Range is unused.<br />+k8s:conversion-gen=false.
+- `ipv4_service_range` - (Computed) - String - Ipv4ServiceRange is unused.<br />+k8s:conversion-gen=false.
+- `ipv6_cluster_alloc_cidr` - (Computed) - String - Ipv6ClusterAllocCidr is unused.<br />+k8s:conversion-gen=false.
+- `ipv6_node` - (Computed) - String - Ipv6Node is unused.<br />+k8s:conversion-gen=false.
+- `ipv6_range` - (Computed) - String - Ipv6Range is unused.<br />+k8s:conversion-gen=false.
+- `ipv6_service_range` - (Computed) - String - Ipv6ServiceRange is unused.<br />+k8s:conversion-gen=false.
+- `k_8s_api_server` - (Computed) - String - K8sAPIServer is unused.<br />+k8s:conversion-gen=false.
+- `k_8s_kubeconfig_path` - (Computed) - String - K8sKubeconfigPath is unused.<br />+k8s:conversion-gen=false.
+- `keep_bpf_templates` - (Computed) - Bool - KeepBPFTemplates is unused.<br />+k8s:conversion-gen=false.
+- `keep_config` - (Computed) - Bool - KeepConfig is unused.<br />+k8s:conversion-gen=false.
+- `label_prefix_file` - (Computed) - String - LabelPrefixFile is unused.<br />+k8s:conversion-gen=false.
+- `labels` - (Computed) - List(String) - Labels is unused.<br />+k8s:conversion-gen=false.
+- `lb` - (Computed) - String - LB is unused.<br />+k8s:conversion-gen=false.
+- `lib_dir` - (Computed) - String - LibDir is unused.<br />+k8s:conversion-gen=false.
+- `log_drivers` - (Computed) - List(String) - LogDrivers is unused.<br />+k8s:conversion-gen=false.
+- `log_opt` - (Computed) - Map(String) - LogOpt is unused.<br />+k8s:conversion-gen=false.
+- `logstash` - (Computed) - Bool - Logstash is unused.<br />+k8s:conversion-gen=false.
+- `logstash_agent` - (Computed) - String - LogstashAgent is unused.<br />+k8s:conversion-gen=false.
+- `logstash_probe_timer` - (Computed) - Int - LogstashProbeTimer is unused.<br />+k8s:conversion-gen=false.
+- `masquerade` - (Computed) - Bool - DisableMasquerade disables masquerading traffic to external destinations behind the node IP.
+- `nat46_range` - (Computed) - String - Nat46Range is unused.<br />+k8s:conversion-gen=false.
+- `agent_pod_annotations` - (Computed) - Map(String) - AgentPodAnnotations makes possible to add additional annotations to the cilium agent.<br />Default: none.
 - `operator_pod_annotations` - (Computed) - Map(String) - OperatorPodAnnotations makes possible to add additional annotations to cilium operator.<br />Default: none.
+- `pprof` - (Computed) - Bool - Pprof is unused.<br />+k8s:conversion-gen=false.
+- `prefilter_device` - (Computed) - String - PrefilterDevice is unused.<br />+k8s:conversion-gen=false.
+- `prometheus_serve_addr` - (Computed) - String - PrometheusServeAddr is unused.<br />+k8s:conversion-gen=false.
+- `restore` - (Computed) - Bool - Restore is unused.<br />+k8s:conversion-gen=false.
+- `single_cluster_route` - (Computed) - Bool - SingleClusterRoute is unused.<br />+k8s:conversion-gen=false.
+- `socket_path` - (Computed) - String - SocketPath is unused.<br />+k8s:conversion-gen=false.
+- `state_dir` - (Computed) - String - StateDir is unused.<br />+k8s:conversion-gen=false.
+- `trace_payload_len` - (Computed) - Int - TracePayloadLen is unused.<br />+k8s:conversion-gen=false.
 - `tunnel` - (Computed) - String - Tunnel specifies the Cilium tunnelling mode. Possible values are "vxlan", "geneve", or "disabled".<br />Default: vxlan.
+- `enable_ipv6` - (Computed) - Bool - EnableIpv6 is unused.<br />+k8s:conversion-gen=false.
+- `enable_ipv4` - (Computed) - Bool - EnableIpv4 is unused.<br />+k8s:conversion-gen=false.
 - `monitor_aggregation` - (Computed) - String - MonitorAggregation sets the level of packet monitoring. Possible values are "low", "medium", or "maximum".<br />Default: medium.
 - `bpfct_global_tcp_max` - (Computed) - Int - BPFCTGlobalTCPMax is the maximum number of entries in the TCP CT table.<br />Default: 524288.
 - `bpfct_global_any_max` - (Computed) - Int - BPFCTGlobalAnyMax is the maximum number of entries in the non-TCP CT table.<br />Default: 262144.
@@ -1522,14 +1535,20 @@ The following arguments are supported:
 - `cluster_name` - (Computed) - String - ClusterName is the name of the cluster. It is only relevant when building a mesh of clusters.
 - `to_fqdns_dns_reject_response_code` - (Computed) - String - ToFQDNsDNSRejectResponseCode sets the DNS response code for rejecting DNS requests.<br />Possible values are "nameError" or "refused".<br />Default: refused.
 - `to_fqdns_enable_poller` - (Computed) - Bool - ToFQDNsEnablePoller replaces the DNS proxy-based implementation of FQDN policies<br />with the less powerful legacy implementation.<br />Default: false.
+- `container_runtime_labels` - (Computed) - String - ContainerRuntimeLabels is unused.<br />+k8s:conversion-gen=false.
 - `ipam` - (Computed) - String - IPAM specifies the IP address allocation mode to use.<br />Possible values are "crd" and "eni".<br />"eni" will use AWS native networking for pods. Eni requires masquerade to be set to false.<br />"crd" will use CRDs for controlling IP address management.<br />"hostscope" will use hostscope IPAM mode.<br />"kubernetes" will use addersing based on node pod CIDR.<br />Default: "kubernetes".
-- `install_iptables_rules` - (Computed) - Bool - InstallIptablesRules enables installing the base IPTables rules used for masquerading and kube-proxy.<br />Default: true.
+- `install_iptables_rules` - (Computed) - Bool - IPTablesRulesNoinstall disables installing the base IPTables rules used for masquerading and kube-proxy.<br />Default: false.
 - `auto_direct_node_routes` - (Computed) - Bool - AutoDirectNodeRoutes adds automatic L2 routing between nodes.<br />Default: false.
 - `enable_host_reachable_services` - (Computed) - Bool - EnableHostReachableServices configures Cilium to enable services to be<br />reached from the host namespace in addition to pod namespaces.<br />https://docs.cilium.io/en/v1.9/gettingstarted/host-services/<br />Default: false.
 - `enable_node_port` - (Computed) - Bool - EnableNodePort replaces kube-proxy with Cilium's BPF implementation.<br />Requires spec.kubeProxy.enabled be set to false.<br />Default: false.
 - `etcd_managed` - (Computed) - Bool - EtcdManagd installs an additional etcd cluster that is used for Cilium state change.<br />The cluster is operated by cilium-etcd-operator.<br />Default: false.
 - `enable_remote_node_identity` - (Computed) - Bool - EnableRemoteNodeIdentity enables the remote-node-identity.<br />Default: true.
 - `hubble` - (Computed) - [hubble_spec](#hubble_spec) - Hubble configures the Hubble service on the Cilium agent.
+- `remove_cbr_bridge` - (Computed) - Bool - RemoveCbrBridge is unused.<br />+k8s:conversion-gen=false.
+- `restart_pods` - (Computed) - Bool - RestartPods is unused.<br />+k8s:conversion-gen=false.
+- `reconfigure_kubelet` - (Computed) - Bool - ReconfigureKubelet is unused.<br />+k8s:conversion-gen=false.
+- `node_init_bootstrap_file` - (Computed) - String - NodeInitBootstrapFile is unused.<br />+k8s:conversion-gen=false.
+- `cni_bin_path` - (Computed) - String - CniBinPath is unused.<br />+k8s:conversion-gen=false.
 - `disable_cnp_status_updates` - (Computed) - Bool - DisableCNPStatusUpdates determines if CNP NodeStatus updates will be sent to the Kubernetes api-server.
 - `enable_service_topology` - (Computed) - Bool - EnableServiceTopology determine if cilium should use topology aware hints.
 
@@ -1563,17 +1582,17 @@ This resource has no attributes.
 
 ### api_spec
 
-APISpec provides configuration details related to the Kubernetes API.
+APISpec provides configuration details related to kubeapi dns and ELB access.
 
 #### Argument Reference
 
 The following arguments are supported:
 
-- `dns` - (Computed) - [dns_access_spec](#dns_access_spec) - DNS will be used to provide configuration for the Kubernetes API's DNS server.
-- `load_balancer` - (Computed) - [load_balancer_access_spec](#load_balancer_access_spec) - LoadBalancer is the configuration for the Kubernetes API load balancer.
-- `public_name` - (Computed) - String - PublicName is the external DNS name for the Kubernetes API.
-- `additional_sans` - (Computed) - List(String) - AdditionalSANs adds additional Subject Alternate Names to the Kubernetes API certificate.
-- `access` - (Computed) - List(String) - Access is a list of the CIDRs that can access the Kubernetes API endpoint.
+- `dns` - (Computed) - [dns_access_spec](#dns_access_spec) - DNS will be used to provide config on kube-apiserver ELB DNS.
+- `load_balancer` - (Computed) - [load_balancer_access_spec](#load_balancer_access_spec) - LoadBalancer is the configuration for the kube-apiserver ELB.
+- `public_name` - (Computed) - String
+- `additional_sans` - (Computed) - List(String)
+- `access` - (Computed) - List(String)
 
 ### dns_access_spec
 
@@ -1618,9 +1637,9 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `interval` - (Computed) - Int - Interval is the publishing interval in minutes. This parameter is only used with classic load balancer.
-- `bucket` - (Computed) - String - Bucket is the S3 bucket name to store the logs in.
-- `bucket_prefix` - (Computed) - String - BucketPrefix is the S3 bucket prefix. Logs are stored in the root if not configured.
+- `interval` - (Computed) - Int - Interval is publishing interval in minutes. This parameter is only used with classic load balancer.
+- `bucket` - (Computed) - String - Bucket is S3 bucket name to store the logs in.
+- `bucket_prefix` - (Computed) - String - BucketPrefix is S3 bucket prefix. Logs are stored in the root if not configured.
 
 ### authentication_spec
 
@@ -1642,7 +1661,7 @@ This resource has no attributes.
 
 The following arguments are supported:
 
-- `image` - (Computed) - String - Image is the AWS IAM Authenticator docker image to use.
+- `image` - (Computed) - String - Image is the AWS IAM Authenticator docker image to uses.
 - `backend_mode` - (Computed) - String - BackendMode is the AWS IAM Authenticator backend to use. Default MountedFile.
 - `cluster_id` - (Computed) - String - ClusterID identifies the cluster performing authentication to prevent certain replay attacks. Default master public DNS name.
 - `memory_request` - (Computed) - Quantity - MemoryRequest memory request of AWS IAM Authenticator container. Default 20Mi.
@@ -1716,7 +1735,7 @@ HookSpec is a definition hook.
 The following arguments are supported:
 
 - `name` - (Computed) - String - Name is an optional name for the hook, otherwise the name is kops-hook-<index>.
-- `enabled` - (Computed) - Bool - Enabled indicates if you want the unit switched on. Default: true.
+- `enabled` - (Computed) - Bool - Disabled indicates if you want the unit switched off.
 - `roles` - (Computed) - List(String) - Roles is an optional list of roles the hook should be rolled out to, defaults to all.
 - `requires` - (Computed) - List(String) - Requires is a series of systemd units the action requires.
 - `before` - (Computed) - List(String) - Before is a series of systemd units which this hook must run before.
@@ -1738,7 +1757,7 @@ The following arguments are supported:
 
 ### assets
 
-Assets defines the privately hosted assets.
+Assets defined the privately hosted assets.
 
 #### Argument Reference
 
@@ -1819,9 +1838,19 @@ The following arguments are supported:
 - `memory_request` - (Computed) - Quantity - MemoryRequest of cluster autoscaler container.<br />Default: 300Mi.
 - `cpu_request` - (Computed) - Quantity - CPURequest of cluster autoscaler container.<br />Default: 100m.
 - `max_node_provision_time` - (Computed) - String - MaxNodeProvisionTime determines how long CAS will wait for a node to join the cluster.
-- `pod_annotations` - (Computed) - Map(String) - PodAnnotations are the annotations added to cluster autoscaler pods when they are created.<br />Default: none.
+- `pod_annotations` - (Computed) - Map(String) - PodAnnotations are the annotations added to cluster autoscaler pod when they are created.<br />Default: none.
 - `create_priority_expender_config` - (Computed) - Bool - CreatePriorityExpenderConfig makes kOps create the priority-expander ConfigMap<br />Default: true.
 - `custom_priority_expander_config` - (Computed) - Map(List(String)) - CustomPriorityExpanderConfig overides the priority-expander ConfigMap with the provided configuration. Any InstanceGroup configuration will be ignored if this is set.<br />This could be useful in order to use regex on priorities configuration.
+
+### warm_pool_spec
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.
+- `max_size` - (Computed) - Int - MaxSize is the maximum size of the warm pool. The desired size of the instance group<br />is subtracted from this number to determine the desired size of the warm pool<br />(unless the resulting number is smaller than MinSize).<br />The default is the instance group's MaxSize.
+- `enable_lifecycle_hook` - (Computed) - Bool - EnableLifecycleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
 
 ### service_account_issuer_discovery_config
 
@@ -1853,6 +1882,17 @@ The following arguments are supported:
 The following arguments are supported:
 
 - `enabled` - (Computed) - Bool
+
+### pod_identity_webhook_spec
+
+PodIdentityWebhookSpec configures an EKS Pod Identity Webhook.
+
+#### Argument Reference
+
+The following arguments are supported:
+
+- `enabled` - (Computed) - Bool
+- `replicas` - (Computed) - Int
 
 ### cluster_secrets
 

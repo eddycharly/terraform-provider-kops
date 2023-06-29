@@ -1,0 +1,2346 @@
+package schemas
+
+import (
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
+)
+
+func TestExpandDataSourceKubeletConfigSpec(t *testing.T) {
+	_default := kopsv1alpha2.KubeletConfigSpec{}
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want kopsv1alpha2.KubeletConfigSpec
+	}{
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"api_servers":                            "",
+					"anonymous_auth":                         nil,
+					"authorization_mode":                     "",
+					"bootstrap_kubeconfig":                   "",
+					"client_ca_file":                         "",
+					"tls_cert_file":                          "",
+					"tls_private_key_file":                   "",
+					"tls_cipher_suites":                      func() []interface{} { return nil }(),
+					"tls_min_version":                        "",
+					"kubeconfig_path":                        "",
+					"require_kubeconfig":                     nil,
+					"log_format":                             "",
+					"log_level":                              nil,
+					"pod_manifest_path":                      "",
+					"hostname_override":                      "",
+					"pod_infra_container_image":              "",
+					"seccomp_profile_root":                   nil,
+					"allow_privileged":                       nil,
+					"enable_debugging_handlers":              nil,
+					"register_node":                          nil,
+					"node_status_update_frequency":           nil,
+					"cluster_domain":                         "",
+					"cluster_dns":                            "",
+					"network_plugin_name":                    nil,
+					"cloud_provider":                         "",
+					"kubelet_cgroups":                        "",
+					"runtime_cgroups":                        "",
+					"read_only_port":                         nil,
+					"system_cgroups":                         "",
+					"cgroup_root":                            "",
+					"configure_cbr0":                         nil,
+					"hairpin_mode":                           "",
+					"babysit_daemons":                        nil,
+					"max_pods":                               nil,
+					"nvidia_gp_us":                           0,
+					"pod_cidr":                               "",
+					"resolver_config":                        nil,
+					"reconcile_cidr":                         nil,
+					"register_schedulable":                   nil,
+					"serialize_image_pulls":                  nil,
+					"node_labels":                            func() map[string]interface{} { return nil }(),
+					"non_masquerade_cidr":                    nil,
+					"enable_custom_metrics":                  nil,
+					"network_plugin_mtu":                     nil,
+					"image_gc_high_threshold_percent":        nil,
+					"image_gc_low_threshold_percent":         nil,
+					"image_pull_progress_deadline":           nil,
+					"eviction_hard":                          nil,
+					"eviction_soft":                          "",
+					"eviction_soft_grace_period":             "",
+					"eviction_pressure_transition_period":    nil,
+					"eviction_max_pod_grace_period":          0,
+					"eviction_minimum_reclaim":               "",
+					"volume_plugin_directory":                "",
+					"taints":                                 func() []interface{} { return nil }(),
+					"feature_gates":                          func() map[string]interface{} { return nil }(),
+					"kernel_memcg_notification":              nil,
+					"kube_reserved":                          func() map[string]interface{} { return nil }(),
+					"kube_reserved_cgroup":                   "",
+					"system_reserved":                        func() map[string]interface{} { return nil }(),
+					"system_reserved_cgroup":                 "",
+					"enforce_node_allocatable":               "",
+					"runtime_request_timeout":                nil,
+					"volume_stats_agg_period":                nil,
+					"fail_swap_on":                           nil,
+					"experimental_allowed_unsafe_sysctls":    func() []interface{} { return nil }(),
+					"allowed_unsafe_sysctls":                 func() []interface{} { return nil }(),
+					"streaming_connection_idle_timeout":      nil,
+					"docker_disable_shared_pid":              nil,
+					"root_dir":                               "",
+					"authentication_token_webhook":           nil,
+					"authentication_token_webhook_cache_ttl": nil,
+					"cpu_cfs_quota":                          nil,
+					"cpu_cfs_quota_period":                   nil,
+					"cpu_manager_policy":                     "",
+					"registry_pull_qps":                      nil,
+					"registry_burst":                         nil,
+					"topology_manager_policy":                "",
+					"rotate_certificates":                    nil,
+					"protect_kernel_defaults":                nil,
+					"cgroup_driver":                          "",
+					"housekeeping_interval":                  nil,
+					"event_qps":                              nil,
+					"event_burst":                            nil,
+					"container_log_max_size":                 "",
+					"container_log_max_files":                nil,
+					"enable_cadvisor_json_endpoints":         nil,
+					"pod_pids_limit":                         nil,
+					"shutdown_grace_period":                  nil,
+					"shutdown_grace_period_critical_pods":    nil,
+				},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ExpandDataSourceKubeletConfigSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceKubeletConfigSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceKubeletConfigSpecInto(t *testing.T) {
+	_default := map[string]interface{}{
+		"api_servers":                            "",
+		"anonymous_auth":                         nil,
+		"authorization_mode":                     "",
+		"bootstrap_kubeconfig":                   "",
+		"client_ca_file":                         "",
+		"tls_cert_file":                          "",
+		"tls_private_key_file":                   "",
+		"tls_cipher_suites":                      func() []interface{} { return nil }(),
+		"tls_min_version":                        "",
+		"kubeconfig_path":                        "",
+		"require_kubeconfig":                     nil,
+		"log_format":                             "",
+		"log_level":                              nil,
+		"pod_manifest_path":                      "",
+		"hostname_override":                      "",
+		"pod_infra_container_image":              "",
+		"seccomp_profile_root":                   nil,
+		"allow_privileged":                       nil,
+		"enable_debugging_handlers":              nil,
+		"register_node":                          nil,
+		"node_status_update_frequency":           nil,
+		"cluster_domain":                         "",
+		"cluster_dns":                            "",
+		"network_plugin_name":                    nil,
+		"cloud_provider":                         "",
+		"kubelet_cgroups":                        "",
+		"runtime_cgroups":                        "",
+		"read_only_port":                         nil,
+		"system_cgroups":                         "",
+		"cgroup_root":                            "",
+		"configure_cbr0":                         nil,
+		"hairpin_mode":                           "",
+		"babysit_daemons":                        nil,
+		"max_pods":                               nil,
+		"nvidia_gp_us":                           0,
+		"pod_cidr":                               "",
+		"resolver_config":                        nil,
+		"reconcile_cidr":                         nil,
+		"register_schedulable":                   nil,
+		"serialize_image_pulls":                  nil,
+		"node_labels":                            func() map[string]interface{} { return nil }(),
+		"non_masquerade_cidr":                    nil,
+		"enable_custom_metrics":                  nil,
+		"network_plugin_mtu":                     nil,
+		"image_gc_high_threshold_percent":        nil,
+		"image_gc_low_threshold_percent":         nil,
+		"image_pull_progress_deadline":           nil,
+		"eviction_hard":                          nil,
+		"eviction_soft":                          "",
+		"eviction_soft_grace_period":             "",
+		"eviction_pressure_transition_period":    nil,
+		"eviction_max_pod_grace_period":          0,
+		"eviction_minimum_reclaim":               "",
+		"volume_plugin_directory":                "",
+		"taints":                                 func() []interface{} { return nil }(),
+		"feature_gates":                          func() map[string]interface{} { return nil }(),
+		"kernel_memcg_notification":              nil,
+		"kube_reserved":                          func() map[string]interface{} { return nil }(),
+		"kube_reserved_cgroup":                   "",
+		"system_reserved":                        func() map[string]interface{} { return nil }(),
+		"system_reserved_cgroup":                 "",
+		"enforce_node_allocatable":               "",
+		"runtime_request_timeout":                nil,
+		"volume_stats_agg_period":                nil,
+		"fail_swap_on":                           nil,
+		"experimental_allowed_unsafe_sysctls":    func() []interface{} { return nil }(),
+		"allowed_unsafe_sysctls":                 func() []interface{} { return nil }(),
+		"streaming_connection_idle_timeout":      nil,
+		"docker_disable_shared_pid":              nil,
+		"root_dir":                               "",
+		"authentication_token_webhook":           nil,
+		"authentication_token_webhook_cache_ttl": nil,
+		"cpu_cfs_quota":                          nil,
+		"cpu_cfs_quota_period":                   nil,
+		"cpu_manager_policy":                     "",
+		"registry_pull_qps":                      nil,
+		"registry_burst":                         nil,
+		"topology_manager_policy":                "",
+		"rotate_certificates":                    nil,
+		"protect_kernel_defaults":                nil,
+		"cgroup_driver":                          "",
+		"housekeeping_interval":                  nil,
+		"event_qps":                              nil,
+		"event_burst":                            nil,
+		"container_log_max_size":                 "",
+		"container_log_max_files":                nil,
+		"enable_cadvisor_json_endpoints":         nil,
+		"pod_pids_limit":                         nil,
+		"shutdown_grace_period":                  nil,
+		"shutdown_grace_period_critical_pods":    nil,
+	}
+	type args struct {
+		in kopsv1alpha2.KubeletConfigSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.KubeletConfigSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "ApiServers - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.APIServers = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AnonymousAuth - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AnonymousAuth = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AuthorizationMode - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AuthorizationMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BootstrapKubeconfig - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.BootstrapKubeconfig = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClientCaFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ClientCAFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSCertFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSCertFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSPrivateKeyFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSPrivateKeyFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSCipherSuites - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSCipherSuites = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSMinVersion - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSMinVersion = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeconfigPath - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeconfigPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RequireKubeconfig - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RequireKubeconfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.LogFormat = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogLevel - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.LogLevel = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodManifestPath - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodManifestPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HostnameOverride - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.HostnameOverride = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodInfraContainerImage - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodInfraContainerImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SeccompProfileRoot - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SeccompProfileRoot = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowPrivileged - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AllowPrivileged = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableDebuggingHandlers - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnableDebuggingHandlers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegisterNode - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegisterNode = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeStatusUpdateFrequency - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NodeStatusUpdateFrequency = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterDomain - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ClusterDomain = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterDns - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ClusterDNS = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkPluginName - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NetworkPluginName = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CloudProvider - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CloudProvider = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeletCgroups - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeletCgroups = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RuntimeCgroups - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RuntimeCgroups = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ReadOnlyPort - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ReadOnlyPort = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SystemCgroups - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SystemCgroups = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CgroupRoot - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CgroupRoot = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ConfigureCBR0 - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ConfigureCBR0 = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HairpinMode - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.HairpinMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BabysitDaemons - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.BabysitDaemons = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxPods - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.MaxPods = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NvidiaGPUs - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NvidiaGPUs = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ResolverConfig - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ResolverConfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ReconcileCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ReconcileCIDR = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegisterSchedulable - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegisterSchedulable = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SerializeImagePulls - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SerializeImagePulls = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeLabels - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NodeLabels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NonMasqueradeCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NonMasqueradeCIDR = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableCustomMetrics - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnableCustomMetrics = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkPluginMTU - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NetworkPluginMTU = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ImageGCHighThresholdPercent - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ImageGCHighThresholdPercent = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ImageGCLowThresholdPercent - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ImageGCLowThresholdPercent = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ImagePullProgressDeadline - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ImagePullProgressDeadline = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionHard - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionHard = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionSoft - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionSoft = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionSoftGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionSoftGracePeriod = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionPressureTransitionPeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionPressureTransitionPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionMaxPodGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionMaxPodGracePeriod = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionMinimumReclaim - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionMinimumReclaim = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VolumePluginDirectory - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.VolumePluginDirectory = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Taints - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.Taints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "FeatureGates - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.FeatureGates = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KernelMemcgNotification - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KernelMemcgNotification = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeReserved - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeReserved = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeReservedCgroup - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeReservedCgroup = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SystemReserved - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SystemReserved = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SystemReservedCgroup - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SystemReservedCgroup = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnforceNodeAllocatable - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnforceNodeAllocatable = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RuntimeRequestTimeout - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RuntimeRequestTimeout = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VolumeStatsAggPeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.VolumeStatsAggPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "FailSwapOn - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.FailSwapOn = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ExperimentalAllowedUnsafeSysctls - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ExperimentalAllowedUnsafeSysctls = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowedUnsafeSysctls - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AllowedUnsafeSysctls = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "StreamingConnectionIdleTimeout - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.StreamingConnectionIdleTimeout = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DockerDisableSharedPid - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.DockerDisableSharedPID = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RootDir - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RootDir = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AuthenticationTokenWebhook - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AuthenticationTokenWebhook = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AuthenticationTokenWebhookCacheTTL - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AuthenticationTokenWebhookCacheTTL = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuCFSQuota - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CPUCFSQuota = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuCFSQuotaPeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CPUCFSQuotaPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuManagerPolicy - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CpuManagerPolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegistryPullQPS - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegistryPullQPS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegistryBurst - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegistryBurst = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TopologyManagerPolicy - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TopologyManagerPolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RotateCertificates - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RotateCertificates = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProtectKernelDefaults - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ProtectKernelDefaults = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CgroupDriver - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CgroupDriver = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HousekeepingInterval - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.HousekeepingInterval = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EventQPS - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EventQPS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EventBurst - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EventBurst = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerLogMaxSize - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ContainerLogMaxSize = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerLogMaxFiles - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ContainerLogMaxFiles = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableCadvisorJsonEndpoints - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnableCadvisorJsonEndpoints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodPidsLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodPidsLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ShutdownGracePeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriodCriticalPods - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ShutdownGracePeriodCriticalPods = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			FlattenDataSourceKubeletConfigSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceKubeletConfigSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceKubeletConfigSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"api_servers":                            "",
+		"anonymous_auth":                         nil,
+		"authorization_mode":                     "",
+		"bootstrap_kubeconfig":                   "",
+		"client_ca_file":                         "",
+		"tls_cert_file":                          "",
+		"tls_private_key_file":                   "",
+		"tls_cipher_suites":                      func() []interface{} { return nil }(),
+		"tls_min_version":                        "",
+		"kubeconfig_path":                        "",
+		"require_kubeconfig":                     nil,
+		"log_format":                             "",
+		"log_level":                              nil,
+		"pod_manifest_path":                      "",
+		"hostname_override":                      "",
+		"pod_infra_container_image":              "",
+		"seccomp_profile_root":                   nil,
+		"allow_privileged":                       nil,
+		"enable_debugging_handlers":              nil,
+		"register_node":                          nil,
+		"node_status_update_frequency":           nil,
+		"cluster_domain":                         "",
+		"cluster_dns":                            "",
+		"network_plugin_name":                    nil,
+		"cloud_provider":                         "",
+		"kubelet_cgroups":                        "",
+		"runtime_cgroups":                        "",
+		"read_only_port":                         nil,
+		"system_cgroups":                         "",
+		"cgroup_root":                            "",
+		"configure_cbr0":                         nil,
+		"hairpin_mode":                           "",
+		"babysit_daemons":                        nil,
+		"max_pods":                               nil,
+		"nvidia_gp_us":                           0,
+		"pod_cidr":                               "",
+		"resolver_config":                        nil,
+		"reconcile_cidr":                         nil,
+		"register_schedulable":                   nil,
+		"serialize_image_pulls":                  nil,
+		"node_labels":                            func() map[string]interface{} { return nil }(),
+		"non_masquerade_cidr":                    nil,
+		"enable_custom_metrics":                  nil,
+		"network_plugin_mtu":                     nil,
+		"image_gc_high_threshold_percent":        nil,
+		"image_gc_low_threshold_percent":         nil,
+		"image_pull_progress_deadline":           nil,
+		"eviction_hard":                          nil,
+		"eviction_soft":                          "",
+		"eviction_soft_grace_period":             "",
+		"eviction_pressure_transition_period":    nil,
+		"eviction_max_pod_grace_period":          0,
+		"eviction_minimum_reclaim":               "",
+		"volume_plugin_directory":                "",
+		"taints":                                 func() []interface{} { return nil }(),
+		"feature_gates":                          func() map[string]interface{} { return nil }(),
+		"kernel_memcg_notification":              nil,
+		"kube_reserved":                          func() map[string]interface{} { return nil }(),
+		"kube_reserved_cgroup":                   "",
+		"system_reserved":                        func() map[string]interface{} { return nil }(),
+		"system_reserved_cgroup":                 "",
+		"enforce_node_allocatable":               "",
+		"runtime_request_timeout":                nil,
+		"volume_stats_agg_period":                nil,
+		"fail_swap_on":                           nil,
+		"experimental_allowed_unsafe_sysctls":    func() []interface{} { return nil }(),
+		"allowed_unsafe_sysctls":                 func() []interface{} { return nil }(),
+		"streaming_connection_idle_timeout":      nil,
+		"docker_disable_shared_pid":              nil,
+		"root_dir":                               "",
+		"authentication_token_webhook":           nil,
+		"authentication_token_webhook_cache_ttl": nil,
+		"cpu_cfs_quota":                          nil,
+		"cpu_cfs_quota_period":                   nil,
+		"cpu_manager_policy":                     "",
+		"registry_pull_qps":                      nil,
+		"registry_burst":                         nil,
+		"topology_manager_policy":                "",
+		"rotate_certificates":                    nil,
+		"protect_kernel_defaults":                nil,
+		"cgroup_driver":                          "",
+		"housekeeping_interval":                  nil,
+		"event_qps":                              nil,
+		"event_burst":                            nil,
+		"container_log_max_size":                 "",
+		"container_log_max_files":                nil,
+		"enable_cadvisor_json_endpoints":         nil,
+		"pod_pids_limit":                         nil,
+		"shutdown_grace_period":                  nil,
+		"shutdown_grace_period_critical_pods":    nil,
+	}
+	type args struct {
+		in kopsv1alpha2.KubeletConfigSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.KubeletConfigSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "ApiServers - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.APIServers = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AnonymousAuth - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AnonymousAuth = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AuthorizationMode - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AuthorizationMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BootstrapKubeconfig - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.BootstrapKubeconfig = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClientCaFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ClientCAFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSCertFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSCertFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSPrivateKeyFile - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSPrivateKeyFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSCipherSuites - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSCipherSuites = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TLSMinVersion - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TLSMinVersion = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeconfigPath - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeconfigPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RequireKubeconfig - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RequireKubeconfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogFormat - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.LogFormat = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogLevel - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.LogLevel = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodManifestPath - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodManifestPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HostnameOverride - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.HostnameOverride = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodInfraContainerImage - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodInfraContainerImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SeccompProfileRoot - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SeccompProfileRoot = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowPrivileged - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AllowPrivileged = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableDebuggingHandlers - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnableDebuggingHandlers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegisterNode - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegisterNode = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeStatusUpdateFrequency - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NodeStatusUpdateFrequency = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterDomain - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ClusterDomain = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterDns - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ClusterDNS = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkPluginName - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NetworkPluginName = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CloudProvider - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CloudProvider = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeletCgroups - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeletCgroups = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RuntimeCgroups - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RuntimeCgroups = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ReadOnlyPort - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ReadOnlyPort = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SystemCgroups - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SystemCgroups = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CgroupRoot - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CgroupRoot = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ConfigureCBR0 - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ConfigureCBR0 = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HairpinMode - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.HairpinMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BabysitDaemons - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.BabysitDaemons = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MaxPods - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.MaxPods = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NvidiaGPUs - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NvidiaGPUs = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodCIDR = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ResolverConfig - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ResolverConfig = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ReconcileCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ReconcileCIDR = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegisterSchedulable - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegisterSchedulable = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SerializeImagePulls - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SerializeImagePulls = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeLabels - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NodeLabels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NonMasqueradeCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NonMasqueradeCIDR = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableCustomMetrics - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnableCustomMetrics = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetworkPluginMTU - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.NetworkPluginMTU = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ImageGCHighThresholdPercent - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ImageGCHighThresholdPercent = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ImageGCLowThresholdPercent - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ImageGCLowThresholdPercent = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ImagePullProgressDeadline - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ImagePullProgressDeadline = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionHard - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionHard = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionSoft - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionSoft = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionSoftGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionSoftGracePeriod = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionPressureTransitionPeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionPressureTransitionPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionMaxPodGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionMaxPodGracePeriod = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EvictionMinimumReclaim - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EvictionMinimumReclaim = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VolumePluginDirectory - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.VolumePluginDirectory = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Taints - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.Taints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "FeatureGates - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.FeatureGates = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KernelMemcgNotification - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KernelMemcgNotification = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeReserved - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeReserved = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KubeReservedCgroup - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.KubeReservedCgroup = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SystemReserved - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SystemReserved = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SystemReservedCgroup - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.SystemReservedCgroup = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnforceNodeAllocatable - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnforceNodeAllocatable = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RuntimeRequestTimeout - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RuntimeRequestTimeout = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "VolumeStatsAggPeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.VolumeStatsAggPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "FailSwapOn - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.FailSwapOn = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ExperimentalAllowedUnsafeSysctls - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ExperimentalAllowedUnsafeSysctls = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowedUnsafeSysctls - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AllowedUnsafeSysctls = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "StreamingConnectionIdleTimeout - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.StreamingConnectionIdleTimeout = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DockerDisableSharedPid - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.DockerDisableSharedPID = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RootDir - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RootDir = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AuthenticationTokenWebhook - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AuthenticationTokenWebhook = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AuthenticationTokenWebhookCacheTTL - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.AuthenticationTokenWebhookCacheTTL = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuCFSQuota - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CPUCFSQuota = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuCFSQuotaPeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CPUCFSQuotaPeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuManagerPolicy - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CpuManagerPolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegistryPullQPS - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegistryPullQPS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RegistryBurst - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RegistryBurst = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TopologyManagerPolicy - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.TopologyManagerPolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RotateCertificates - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.RotateCertificates = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ProtectKernelDefaults - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ProtectKernelDefaults = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CgroupDriver - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.CgroupDriver = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "HousekeepingInterval - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.HousekeepingInterval = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EventQPS - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EventQPS = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EventBurst - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EventBurst = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerLogMaxSize - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ContainerLogMaxSize = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerLogMaxFiles - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ContainerLogMaxFiles = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableCadvisorJsonEndpoints - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.EnableCadvisorJsonEndpoints = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PodPidsLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.PodPidsLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ShutdownGracePeriod = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ShutdownGracePeriodCriticalPods - default",
+			args: args{
+				in: func() kopsv1alpha2.KubeletConfigSpec {
+					subject := kopsv1alpha2.KubeletConfigSpec{}
+					subject.ShutdownGracePeriodCriticalPods = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceKubeletConfigSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceKubeletConfigSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}

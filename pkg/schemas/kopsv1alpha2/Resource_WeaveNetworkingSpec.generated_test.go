@@ -1,0 +1,446 @@
+package schemas
+
+import (
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
+)
+
+func TestExpandResourceWeaveNetworkingSpec(t *testing.T) {
+	_default := kopsv1alpha2.WeaveNetworkingSpec{}
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want kopsv1alpha2.WeaveNetworkingSpec
+	}{
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"mtu":                nil,
+					"conn_limit":         nil,
+					"no_masq_local":      nil,
+					"memory_request":     nil,
+					"cpu_request":        nil,
+					"memory_limit":       nil,
+					"cpu_limit":          nil,
+					"net_extra_args":     "",
+					"npc_memory_request": nil,
+					"npc_cpu_request":    nil,
+					"npc_memory_limit":   nil,
+					"npc_cpu_limit":      nil,
+					"npc_extra_args":     "",
+					"version":            "",
+				},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ExpandResourceWeaveNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandResourceWeaveNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceWeaveNetworkingSpecInto(t *testing.T) {
+	_default := map[string]interface{}{
+		"mtu":                nil,
+		"conn_limit":         nil,
+		"no_masq_local":      nil,
+		"memory_request":     nil,
+		"cpu_request":        nil,
+		"memory_limit":       nil,
+		"cpu_limit":          nil,
+		"net_extra_args":     "",
+		"npc_memory_request": nil,
+		"npc_cpu_request":    nil,
+		"npc_memory_limit":   nil,
+		"npc_cpu_limit":      nil,
+		"npc_extra_args":     "",
+		"version":            "",
+	}
+	type args struct {
+		in kopsv1alpha2.WeaveNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.WeaveNetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "MTU - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.MTU = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ConnLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.ConnLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NoMasqLocal - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NoMasqLocal = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.MemoryLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.CPULimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetExtraArgs - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NetExtraArgs = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcMemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCMemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcCpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCCPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcMemoryLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCMemoryLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcCpuLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCCPULimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcExtraArgs - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCExtraArgs = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.Version = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			FlattenResourceWeaveNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceWeaveNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenResourceWeaveNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"mtu":                nil,
+		"conn_limit":         nil,
+		"no_masq_local":      nil,
+		"memory_request":     nil,
+		"cpu_request":        nil,
+		"memory_limit":       nil,
+		"cpu_limit":          nil,
+		"net_extra_args":     "",
+		"npc_memory_request": nil,
+		"npc_cpu_request":    nil,
+		"npc_memory_limit":   nil,
+		"npc_cpu_limit":      nil,
+		"npc_extra_args":     "",
+		"version":            "",
+	}
+	type args struct {
+		in kopsv1alpha2.WeaveNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.WeaveNetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "MTU - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.MTU = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ConnLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.ConnLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NoMasqLocal - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NoMasqLocal = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.MemoryLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.CPULimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NetExtraArgs - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NetExtraArgs = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcMemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCMemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcCpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCCPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcMemoryLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCMemoryLimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcCpuLimit - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCCPULimit = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NpcExtraArgs - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.NPCExtraArgs = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kopsv1alpha2.WeaveNetworkingSpec {
+					subject := kopsv1alpha2.WeaveNetworkingSpec{}
+					subject.Version = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenResourceWeaveNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenResourceWeaveNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
