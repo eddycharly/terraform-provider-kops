@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.27.0
 	golang.org/x/tools v0.10.0
 	k8s.io/api v0.26.4
-	k8s.io/apimachinery v0.26.4
+	k8s.io/apimachinery v0.27.3
 	k8s.io/client-go v0.26.4
 	k8s.io/klog v1.0.0
 	k8s.io/kops v1.26.4
@@ -60,8 +60,8 @@ require (
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
-	github.com/go-openapi/jsonpointer v0.19.5 // indirect
-	github.com/go-openapi/jsonreference v0.20.0 // indirect
+	github.com/go-openapi/jsonpointer v0.19.6 // indirect
+	github.com/go-openapi/jsonreference v0.20.1 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
@@ -177,7 +177,7 @@ require (
 	k8s.io/component-base v0.26.2 // indirect
 	k8s.io/csi-translation-lib v0.26.0 // indirect
 	k8s.io/klog/v2 v2.90.1 // indirect
-	k8s.io/kube-openapi v0.0.0-20221207184640-f3cff1453715 // indirect
+	k8s.io/kube-openapi v0.0.0-20230501164219-8b0f38b5fd1f // indirect
 	k8s.io/kubectl v0.26.2 // indirect
 	k8s.io/mount-utils v0.26.2 // indirect
 	k8s.io/utils v0.0.0-20230308161112-d77c459e9343 // indirect
