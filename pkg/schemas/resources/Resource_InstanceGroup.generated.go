@@ -5,9 +5,9 @@ import (
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
-	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
+	kopsv1alpha2schemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kopsv1alpha2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"k8s.io/kops/pkg/apis/kops"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
 )
 
 var _ = Schema
@@ -15,63 +15,64 @@ var _ = Schema
 func ResourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"manager":                        OptionalComputedString(),
-			"role":                           RequiredString(),
-			"image":                          OptionalComputedString(),
-			"min_size":                       RequiredInt(),
-			"max_size":                       RequiredInt(),
-			"autoscale":                      OptionalBool(),
-			"autoscale_priority":             OptionalInt(),
-			"machine_type":                   RequiredString(),
-			"root_volume_size":               OptionalInt(),
-			"root_volume_type":               OptionalString(),
-			"root_volume_iops":               OptionalInt(),
-			"root_volume_throughput":         OptionalInt(),
-			"root_volume_optimization":       OptionalBool(),
-			"root_volume_encryption":         OptionalBool(),
-			"root_volume_encryption_key":     OptionalString(),
-			"volumes":                        OptionalList(kopsschemas.ResourceVolumeSpec()),
-			"volume_mounts":                  OptionalList(kopsschemas.ResourceVolumeMountSpec()),
-			"subnets":                        RequiredList(String()),
-			"zones":                          OptionalList(String()),
-			"hooks":                          OptionalList(kopsschemas.ResourceHookSpec()),
-			"max_price":                      OptionalString(),
-			"spot_duration_in_minutes":       OptionalInt(),
-			"cpu_credits":                    OptionalString(),
-			"associate_public_ip":            OptionalBool(),
-			"additional_security_groups":     OptionalList(String()),
-			"cloud_labels":                   OptionalMap(String()),
-			"node_labels":                    OptionalMap(String()),
-			"file_assets":                    OptionalList(kopsschemas.ResourceFileAssetSpec()),
-			"tenancy":                        OptionalString(),
-			"kubelet":                        OptionalComputedStruct(kopsschemas.ResourceKubeletConfigSpec()),
-			"taints":                         OptionalList(String()),
-			"mixed_instances_policy":         OptionalStruct(kopsschemas.ResourceMixedInstancesPolicySpec()),
-			"capacity_rebalance":             OptionalBool(),
-			"additional_user_data":           OptionalList(kopsschemas.ResourceUserData()),
-			"suspend_processes":              OptionalList(String()),
-			"external_load_balancers":        OptionalList(kopsschemas.ResourceLoadBalancerSpec()),
-			"detailed_instance_monitoring":   OptionalBool(),
-			"iam":                            OptionalStruct(kopsschemas.ResourceIAMProfileSpec()),
-			"security_group_override":        OptionalString(),
-			"instance_protection":            OptionalBool(),
-			"sysctl_parameters":              OptionalList(String()),
-			"rolling_update":                 OptionalStruct(kopsschemas.ResourceRollingUpdate()),
-			"instance_interruption_behavior": OptionalString(),
-			"compress_user_data":             OptionalBool(),
-			"instance_metadata":              OptionalStruct(kopsschemas.ResourceInstanceMetadataOptions()),
-			"update_policy":                  OptionalString(),
-			"warm_pool":                      OptionalStruct(kopsschemas.ResourceWarmPoolSpec()),
-			"containerd":                     OptionalStruct(kopsschemas.ResourceContainerdConfig()),
-			"packages":                       OptionalList(String()),
-			"guest_accelerators":             OptionalList(kopsschemas.ResourceAcceleratorConfig()),
-			"max_instance_lifetime":          OptionalDuration(),
-			"gcp_provisioning_model":         OptionalString(),
-			"labels":                         OptionalMap(String()),
-			"annotations":                    OptionalMap(String()),
-			"cluster_name":                   ForceNew(RequiredString()),
-			"name":                           ForceNew(RequiredString()),
-			"revision":                       ComputedInt(),
+			"manager":                           OptionalComputedString(),
+			"role":                              RequiredString(),
+			"image":                             OptionalComputedString(),
+			"min_size":                          RequiredInt(),
+			"max_size":                          RequiredInt(),
+			"autoscale":                         OptionalBool(),
+			"autoscale_priority":                OptionalInt(),
+			"machine_type":                      RequiredString(),
+			"root_volume_size":                  OptionalInt(),
+			"root_volume_type":                  OptionalString(),
+			"root_volume_iops":                  OptionalInt(),
+			"root_volume_throughput":            OptionalInt(),
+			"root_volume_optimization":          OptionalBool(),
+			"root_volume_delete_on_termination": OptionalBool(),
+			"root_volume_encryption":            OptionalBool(),
+			"root_volume_encryption_key":        OptionalString(),
+			"volumes":                           OptionalList(kopsv1alpha2schemas.ResourceVolumeSpec()),
+			"volume_mounts":                     OptionalList(kopsv1alpha2schemas.ResourceVolumeMountSpec()),
+			"subnets":                           RequiredList(String()),
+			"zones":                             OptionalList(String()),
+			"hooks":                             OptionalList(kopsv1alpha2schemas.ResourceHookSpec()),
+			"max_price":                         OptionalString(),
+			"spot_duration_in_minutes":          OptionalInt(),
+			"cpu_credits":                       OptionalString(),
+			"associate_public_ip":               OptionalBool(),
+			"additional_security_groups":        OptionalList(String()),
+			"cloud_labels":                      OptionalMap(String()),
+			"node_labels":                       OptionalMap(String()),
+			"file_assets":                       OptionalList(kopsv1alpha2schemas.ResourceFileAssetSpec()),
+			"tenancy":                           OptionalString(),
+			"kubelet":                           OptionalComputedStruct(kopsv1alpha2schemas.ResourceKubeletConfigSpec()),
+			"taints":                            OptionalList(String()),
+			"mixed_instances_policy":            OptionalStruct(kopsv1alpha2schemas.ResourceMixedInstancesPolicySpec()),
+			"capacity_rebalance":                OptionalBool(),
+			"additional_user_data":              OptionalList(kopsv1alpha2schemas.ResourceUserData()),
+			"suspend_processes":                 OptionalList(String()),
+			"external_load_balancers":           OptionalList(kopsv1alpha2schemas.ResourceLoadBalancerSpec()),
+			"detailed_instance_monitoring":      OptionalBool(),
+			"iam":                               OptionalStruct(kopsv1alpha2schemas.ResourceIAMProfileSpec()),
+			"security_group_override":           OptionalString(),
+			"instance_protection":               OptionalBool(),
+			"sysctl_parameters":                 OptionalList(String()),
+			"rolling_update":                    OptionalStruct(kopsv1alpha2schemas.ResourceRollingUpdate()),
+			"instance_interruption_behavior":    OptionalString(),
+			"compress_user_data":                OptionalBool(),
+			"instance_metadata":                 OptionalStruct(kopsv1alpha2schemas.ResourceInstanceMetadataOptions()),
+			"update_policy":                     OptionalString(),
+			"warm_pool":                         OptionalStruct(kopsv1alpha2schemas.ResourceWarmPoolSpec()),
+			"containerd":                        OptionalStruct(kopsv1alpha2schemas.ResourceContainerdConfig()),
+			"packages":                          OptionalList(String()),
+			"guest_accelerators":                OptionalList(kopsv1alpha2schemas.ResourceAcceleratorConfig()),
+			"max_instance_lifetime":             OptionalDuration(),
+			"gcp_provisioning_model":            OptionalString(),
+			"labels":                            OptionalMap(String()),
+			"annotations":                       OptionalMap(String()),
+			"cluster_name":                      ForceNew(RequiredString()),
+			"name":                              ForceNew(RequiredString()),
+			"revision":                          ComputedInt(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -102,8 +103,8 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
-		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
-			return kopsschemas.ExpandResourceInstanceGroupSpec(in.(map[string]interface{}))
+		InstanceGroupSpec: func(in interface{}) kopsv1alpha2.InstanceGroupSpec {
+			return kopsv1alpha2schemas.ExpandResourceInstanceGroupSpec(in.(map[string]interface{}))
 		}(in),
 		Labels: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
@@ -152,7 +153,7 @@ func ExpandResourceInstanceGroup(in map[string]interface{}) resources.InstanceGr
 }
 
 func FlattenResourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
-	kopsschemas.FlattenResourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
+	kopsv1alpha2schemas.FlattenResourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
 	out["labels"] = func(in map[string]string) interface{} {
 		return func(in map[string]string) map[string]interface{} {
 			if in == nil {

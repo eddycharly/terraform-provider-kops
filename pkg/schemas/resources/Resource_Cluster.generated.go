@@ -5,9 +5,9 @@ import (
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
-	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
+	kopsv1alpha2schemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kopsv1alpha2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"k8s.io/kops/pkg/apis/kops"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
 )
 
 var _ = Schema
@@ -16,57 +16,79 @@ func ResourceCluster() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"channel":                           OptionalString(),
-			"addons":                            OptionalList(kopsschemas.ResourceAddonSpec()),
+			"addons":                            OptionalList(kopsv1alpha2schemas.ResourceAddonSpec()),
 			"config_base":                       OptionalComputedString(),
-			"cloud_provider":                    RequiredStruct(kopsschemas.ResourceCloudProviderSpec()),
+			"legacy_cloud_provider":             OptionalString(),
 			"container_runtime":                 OptionalString(),
 			"kubernetes_version":                OptionalString(),
+			"subnets":                           OptionalList(kopsv1alpha2schemas.ResourceClusterSubnetSpec()),
+			"project":                           OptionalString(),
+			"master_public_name":                OptionalString(),
+			"master_internal_name":              OptionalString(),
+			"network_cidr":                      OptionalString(),
+			"additional_network_cidrs":          OptionalList(String()),
+			"network_id":                        OptionalString(),
+			"topology":                          OptionalStruct(kopsv1alpha2schemas.ResourceTopologySpec()),
 			"secret_store":                      OptionalString(),
 			"key_store":                         OptionalString(),
 			"config_store":                      OptionalString(),
 			"dns_zone":                          OptionalString(),
+			"additional_sans":                   OptionalList(String()),
 			"cluster_dns_domain":                OptionalString(),
+			"service_cluster_ip_range":          OptionalString(),
+			"pod_cidr":                          OptionalString(),
+			"non_masquerade_cidr":               OptionalString(),
 			"ssh_access":                        OptionalList(String()),
 			"node_port_access":                  OptionalList(String()),
+			"egress_proxy":                      OptionalStruct(kopsv1alpha2schemas.ResourceEgressProxySpec()),
 			"ssh_key_name":                      OptionalString(),
+			"kubernetes_api_access":             OptionalList(String()),
+			"isolate_masters":                   OptionalBool(),
 			"update_policy":                     OptionalString(),
 			"external_policies":                 OptionalComplexMap(List(String())),
 			"additional_policies":               OptionalMap(String()),
-			"file_assets":                       OptionalList(kopsschemas.ResourceFileAssetSpec()),
-			"etcd_cluster":                      RequiredList(kopsschemas.ResourceEtcdClusterSpec()),
-			"containerd":                        OptionalStruct(kopsschemas.ResourceContainerdConfig()),
-			"docker":                            OptionalStruct(kopsschemas.ResourceDockerConfig()),
-			"kube_dns":                          OptionalStruct(kopsschemas.ResourceKubeDNSConfig()),
-			"kube_api_server":                   OptionalStruct(kopsschemas.ResourceKubeAPIServerConfig()),
-			"kube_controller_manager":           OptionalStruct(kopsschemas.ResourceKubeControllerManagerConfig()),
-			"external_cloud_controller_manager": OptionalStruct(kopsschemas.ResourceCloudControllerManagerConfig()),
-			"kube_scheduler":                    OptionalStruct(kopsschemas.ResourceKubeSchedulerConfig()),
-			"kube_proxy":                        OptionalStruct(kopsschemas.ResourceKubeProxyConfig()),
-			"kubelet":                           OptionalStruct(kopsschemas.ResourceKubeletConfigSpec()),
-			"control_plane_kubelet":             OptionalStruct(kopsschemas.ResourceKubeletConfigSpec()),
-			"cloud_config":                      OptionalStruct(kopsschemas.ResourceCloudConfiguration()),
-			"external_dns":                      OptionalStruct(kopsschemas.ResourceExternalDNSConfig()),
-			"ntp":                               OptionalStruct(kopsschemas.ResourceNTPConfig()),
-			"node_problem_detector":             OptionalStruct(kopsschemas.ResourceNodeProblemDetectorConfig()),
-			"metrics_server":                    OptionalStruct(kopsschemas.ResourceMetricsServerConfig()),
-			"cert_manager":                      OptionalStruct(kopsschemas.ResourceCertManagerConfig()),
-			"networking":                        RequiredStruct(kopsschemas.ResourceNetworkingSpec()),
-			"api":                               OptionalStruct(kopsschemas.ResourceAPISpec()),
-			"authentication":                    OptionalStruct(kopsschemas.ResourceAuthenticationSpec()),
-			"authorization":                     OptionalStruct(kopsschemas.ResourceAuthorizationSpec()),
-			"node_authorization":                OptionalStruct(kopsschemas.ResourceNodeAuthorizationSpec()),
+			"file_assets":                       OptionalList(kopsv1alpha2schemas.ResourceFileAssetSpec()),
+			"etcd_cluster":                      RequiredList(kopsv1alpha2schemas.ResourceEtcdClusterSpec()),
+			"containerd":                        OptionalStruct(kopsv1alpha2schemas.ResourceContainerdConfig()),
+			"docker":                            OptionalStruct(kopsv1alpha2schemas.ResourceDockerConfig()),
+			"kube_dns":                          OptionalStruct(kopsv1alpha2schemas.ResourceKubeDNSConfig()),
+			"kube_api_server":                   OptionalStruct(kopsv1alpha2schemas.ResourceKubeAPIServerConfig()),
+			"kube_controller_manager":           OptionalStruct(kopsv1alpha2schemas.ResourceKubeControllerManagerConfig()),
+			"external_cloud_controller_manager": OptionalStruct(kopsv1alpha2schemas.ResourceCloudControllerManagerConfig()),
+			"kube_scheduler":                    OptionalStruct(kopsv1alpha2schemas.ResourceKubeSchedulerConfig()),
+			"kube_proxy":                        OptionalStruct(kopsv1alpha2schemas.ResourceKubeProxyConfig()),
+			"kubelet":                           OptionalStruct(kopsv1alpha2schemas.ResourceKubeletConfigSpec()),
+			"control_plane_kubelet":             OptionalStruct(kopsv1alpha2schemas.ResourceKubeletConfigSpec()),
+			"cloud_config":                      OptionalStruct(kopsv1alpha2schemas.ResourceCloudConfiguration()),
+			"external_dns":                      OptionalStruct(kopsv1alpha2schemas.ResourceExternalDNSConfig()),
+			"ntp":                               OptionalStruct(kopsv1alpha2schemas.ResourceNTPConfig()),
+			"node_termination_handler":          OptionalStruct(kopsv1alpha2schemas.ResourceNodeTerminationHandlerSpec()),
+			"node_problem_detector":             OptionalStruct(kopsv1alpha2schemas.ResourceNodeProblemDetectorConfig()),
+			"metrics_server":                    OptionalStruct(kopsv1alpha2schemas.ResourceMetricsServerConfig()),
+			"cert_manager":                      OptionalStruct(kopsv1alpha2schemas.ResourceCertManagerConfig()),
+			"aws_load_balancer_controller":      OptionalStruct(kopsv1alpha2schemas.ResourceLoadBalancerControllerSpec()),
+			"legacy_networking":                 OptionalStruct(kopsv1alpha2schemas.ResourceNetworkingSpec()),
+			"networking":                        RequiredStruct(kopsv1alpha2schemas.ResourceNetworkingSpec()),
+			"legacy_api":                        OptionalStruct(kopsv1alpha2schemas.ResourceAPISpec()),
+			"api":                               OptionalStruct(kopsv1alpha2schemas.ResourceAPISpec()),
+			"authentication":                    OptionalStruct(kopsv1alpha2schemas.ResourceAuthenticationSpec()),
+			"authorization":                     OptionalStruct(kopsv1alpha2schemas.ResourceAuthorizationSpec()),
+			"node_authorization":                OptionalStruct(kopsv1alpha2schemas.ResourceNodeAuthorizationSpec()),
 			"cloud_labels":                      OptionalMap(String()),
-			"hooks":                             OptionalList(kopsschemas.ResourceHookSpec()),
-			"assets":                            OptionalStruct(kopsschemas.ResourceAssets()),
-			"iam":                               OptionalComputedStruct(kopsschemas.ResourceIAMSpec()),
+			"hooks":                             OptionalList(kopsv1alpha2schemas.ResourceHookSpec()),
+			"assets":                            OptionalStruct(kopsv1alpha2schemas.ResourceAssets()),
+			"iam":                               OptionalComputedStruct(kopsv1alpha2schemas.ResourceIAMSpec()),
 			"encryption_config":                 OptionalBool(),
+			"tag_subnets":                       OptionalBool(),
 			"use_host_certificates":             OptionalBool(),
 			"sysctl_parameters":                 OptionalList(String()),
-			"rolling_update":                    OptionalStruct(kopsschemas.ResourceRollingUpdate()),
-			"cluster_autoscaler":                OptionalStruct(kopsschemas.ResourceClusterAutoscalerConfig()),
-			"service_account_issuer_discovery":  OptionalStruct(kopsschemas.ResourceServiceAccountIssuerDiscoveryConfig()),
-			"snapshot_controller":               OptionalStruct(kopsschemas.ResourceSnapshotControllerConfig()),
-			"karpenter":                         OptionalStruct(kopsschemas.ResourceKarpenterConfig()),
+			"rolling_update":                    OptionalStruct(kopsv1alpha2schemas.ResourceRollingUpdate()),
+			"cluster_autoscaler":                OptionalStruct(kopsv1alpha2schemas.ResourceClusterAutoscalerConfig()),
+			"warm_pool":                         OptionalStruct(kopsv1alpha2schemas.ResourceWarmPoolSpec()),
+			"service_account_issuer_discovery":  OptionalStruct(kopsv1alpha2schemas.ResourceServiceAccountIssuerDiscoveryConfig()),
+			"snapshot_controller":               OptionalStruct(kopsv1alpha2schemas.ResourceSnapshotControllerConfig()),
+			"karpenter":                         OptionalStruct(kopsv1alpha2schemas.ResourceKarpenterConfig()),
+			"pod_identity_webhook":              OptionalStruct(kopsv1alpha2schemas.ResourcePodIdentityWebhookSpec()),
 			"labels":                            OptionalMap(String()),
 			"annotations":                       OptionalMap(String()),
 			"name":                              ForceNew(RequiredString()),
@@ -119,8 +141,8 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 		panic("expand Cluster failure, in is nil")
 	}
 	return resources.Cluster{
-		ClusterSpec: func(in interface{}) kops.ClusterSpec {
-			return kopsschemas.ExpandResourceClusterSpec(in.(map[string]interface{}))
+		ClusterSpec: func(in interface{}) kopsv1alpha2.ClusterSpec {
+			return kopsv1alpha2schemas.ExpandResourceClusterSpec(in.(map[string]interface{}))
 		}(in),
 		Labels: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
@@ -187,7 +209,7 @@ func ExpandResourceCluster(in map[string]interface{}) resources.Cluster {
 }
 
 func FlattenResourceClusterInto(in resources.Cluster, out map[string]interface{}) {
-	kopsschemas.FlattenResourceClusterSpecInto(in.ClusterSpec, out)
+	kopsv1alpha2schemas.FlattenResourceClusterSpecInto(in.ClusterSpec, out)
 	out["labels"] = func(in map[string]string) interface{} {
 		return func(in map[string]string) map[string]interface{} {
 			if in == nil {

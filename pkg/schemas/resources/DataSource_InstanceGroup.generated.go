@@ -5,9 +5,9 @@ import (
 
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/resources"
 	. "github.com/eddycharly/terraform-provider-kops/pkg/schemas"
-	kopsschemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kops"
+	kopsv1alpha2schemas "github.com/eddycharly/terraform-provider-kops/pkg/schemas/kopsv1alpha2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"k8s.io/kops/pkg/apis/kops"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
 )
 
 var _ = Schema
@@ -15,62 +15,63 @@ var _ = Schema
 func DataSourceInstanceGroup() *schema.Resource {
 	res := &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"manager":                        ComputedString(),
-			"role":                           ComputedString(),
-			"image":                          ComputedString(),
-			"min_size":                       ComputedInt(),
-			"max_size":                       ComputedInt(),
-			"autoscale":                      ComputedBool(),
-			"autoscale_priority":             ComputedInt(),
-			"machine_type":                   ComputedString(),
-			"root_volume_size":               ComputedInt(),
-			"root_volume_type":               ComputedString(),
-			"root_volume_iops":               ComputedInt(),
-			"root_volume_throughput":         ComputedInt(),
-			"root_volume_optimization":       ComputedBool(),
-			"root_volume_encryption":         ComputedBool(),
-			"root_volume_encryption_key":     ComputedString(),
-			"volumes":                        ComputedList(kopsschemas.DataSourceVolumeSpec()),
-			"volume_mounts":                  ComputedList(kopsschemas.DataSourceVolumeMountSpec()),
-			"subnets":                        ComputedList(String()),
-			"zones":                          ComputedList(String()),
-			"hooks":                          ComputedList(kopsschemas.DataSourceHookSpec()),
-			"max_price":                      ComputedString(),
-			"spot_duration_in_minutes":       ComputedInt(),
-			"cpu_credits":                    ComputedString(),
-			"associate_public_ip":            ComputedBool(),
-			"additional_security_groups":     ComputedList(String()),
-			"cloud_labels":                   ComputedMap(String()),
-			"node_labels":                    ComputedMap(String()),
-			"file_assets":                    ComputedList(kopsschemas.DataSourceFileAssetSpec()),
-			"tenancy":                        ComputedString(),
-			"kubelet":                        ComputedStruct(kopsschemas.DataSourceKubeletConfigSpec()),
-			"taints":                         ComputedList(String()),
-			"mixed_instances_policy":         ComputedStruct(kopsschemas.DataSourceMixedInstancesPolicySpec()),
-			"capacity_rebalance":             ComputedBool(),
-			"additional_user_data":           ComputedList(kopsschemas.DataSourceUserData()),
-			"suspend_processes":              ComputedList(String()),
-			"external_load_balancers":        ComputedList(kopsschemas.DataSourceLoadBalancerSpec()),
-			"detailed_instance_monitoring":   ComputedBool(),
-			"iam":                            ComputedStruct(kopsschemas.DataSourceIAMProfileSpec()),
-			"security_group_override":        ComputedString(),
-			"instance_protection":            ComputedBool(),
-			"sysctl_parameters":              ComputedList(String()),
-			"rolling_update":                 ComputedStruct(kopsschemas.DataSourceRollingUpdate()),
-			"instance_interruption_behavior": ComputedString(),
-			"compress_user_data":             ComputedBool(),
-			"instance_metadata":              ComputedStruct(kopsschemas.DataSourceInstanceMetadataOptions()),
-			"update_policy":                  ComputedString(),
-			"warm_pool":                      ComputedStruct(kopsschemas.DataSourceWarmPoolSpec()),
-			"containerd":                     ComputedStruct(kopsschemas.DataSourceContainerdConfig()),
-			"packages":                       ComputedList(String()),
-			"guest_accelerators":             ComputedList(kopsschemas.DataSourceAcceleratorConfig()),
-			"max_instance_lifetime":          ComputedDuration(),
-			"gcp_provisioning_model":         ComputedString(),
-			"labels":                         ComputedMap(String()),
-			"annotations":                    ComputedMap(String()),
-			"cluster_name":                   RequiredString(),
-			"name":                           RequiredString(),
+			"manager":                           ComputedString(),
+			"role":                              ComputedString(),
+			"image":                             ComputedString(),
+			"min_size":                          ComputedInt(),
+			"max_size":                          ComputedInt(),
+			"autoscale":                         ComputedBool(),
+			"autoscale_priority":                ComputedInt(),
+			"machine_type":                      ComputedString(),
+			"root_volume_size":                  ComputedInt(),
+			"root_volume_type":                  ComputedString(),
+			"root_volume_iops":                  ComputedInt(),
+			"root_volume_throughput":            ComputedInt(),
+			"root_volume_optimization":          ComputedBool(),
+			"root_volume_delete_on_termination": ComputedBool(),
+			"root_volume_encryption":            ComputedBool(),
+			"root_volume_encryption_key":        ComputedString(),
+			"volumes":                           ComputedList(kopsv1alpha2schemas.DataSourceVolumeSpec()),
+			"volume_mounts":                     ComputedList(kopsv1alpha2schemas.DataSourceVolumeMountSpec()),
+			"subnets":                           ComputedList(String()),
+			"zones":                             ComputedList(String()),
+			"hooks":                             ComputedList(kopsv1alpha2schemas.DataSourceHookSpec()),
+			"max_price":                         ComputedString(),
+			"spot_duration_in_minutes":          ComputedInt(),
+			"cpu_credits":                       ComputedString(),
+			"associate_public_ip":               ComputedBool(),
+			"additional_security_groups":        ComputedList(String()),
+			"cloud_labels":                      ComputedMap(String()),
+			"node_labels":                       ComputedMap(String()),
+			"file_assets":                       ComputedList(kopsv1alpha2schemas.DataSourceFileAssetSpec()),
+			"tenancy":                           ComputedString(),
+			"kubelet":                           ComputedStruct(kopsv1alpha2schemas.DataSourceKubeletConfigSpec()),
+			"taints":                            ComputedList(String()),
+			"mixed_instances_policy":            ComputedStruct(kopsv1alpha2schemas.DataSourceMixedInstancesPolicySpec()),
+			"capacity_rebalance":                ComputedBool(),
+			"additional_user_data":              ComputedList(kopsv1alpha2schemas.DataSourceUserData()),
+			"suspend_processes":                 ComputedList(String()),
+			"external_load_balancers":           ComputedList(kopsv1alpha2schemas.DataSourceLoadBalancerSpec()),
+			"detailed_instance_monitoring":      ComputedBool(),
+			"iam":                               ComputedStruct(kopsv1alpha2schemas.DataSourceIAMProfileSpec()),
+			"security_group_override":           ComputedString(),
+			"instance_protection":               ComputedBool(),
+			"sysctl_parameters":                 ComputedList(String()),
+			"rolling_update":                    ComputedStruct(kopsv1alpha2schemas.DataSourceRollingUpdate()),
+			"instance_interruption_behavior":    ComputedString(),
+			"compress_user_data":                ComputedBool(),
+			"instance_metadata":                 ComputedStruct(kopsv1alpha2schemas.DataSourceInstanceMetadataOptions()),
+			"update_policy":                     ComputedString(),
+			"warm_pool":                         ComputedStruct(kopsv1alpha2schemas.DataSourceWarmPoolSpec()),
+			"containerd":                        ComputedStruct(kopsv1alpha2schemas.DataSourceContainerdConfig()),
+			"packages":                          ComputedList(String()),
+			"guest_accelerators":                ComputedList(kopsv1alpha2schemas.DataSourceAcceleratorConfig()),
+			"max_instance_lifetime":             ComputedDuration(),
+			"gcp_provisioning_model":            ComputedString(),
+			"labels":                            ComputedMap(String()),
+			"annotations":                       ComputedMap(String()),
+			"cluster_name":                      RequiredString(),
+			"name":                              RequiredString(),
 		},
 	}
 	res.SchemaVersion = 2
@@ -101,8 +102,8 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 		panic("expand InstanceGroup failure, in is nil")
 	}
 	return resources.InstanceGroup{
-		InstanceGroupSpec: func(in interface{}) kops.InstanceGroupSpec {
-			return kopsschemas.ExpandDataSourceInstanceGroupSpec(in.(map[string]interface{}))
+		InstanceGroupSpec: func(in interface{}) kopsv1alpha2.InstanceGroupSpec {
+			return kopsv1alpha2schemas.ExpandDataSourceInstanceGroupSpec(in.(map[string]interface{}))
 		}(in),
 		Labels: func(in interface{}) map[string]string {
 			return func(in interface{}) map[string]string {
@@ -148,7 +149,7 @@ func ExpandDataSourceInstanceGroup(in map[string]interface{}) resources.Instance
 }
 
 func FlattenDataSourceInstanceGroupInto(in resources.InstanceGroup, out map[string]interface{}) {
-	kopsschemas.FlattenDataSourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
+	kopsv1alpha2schemas.FlattenDataSourceInstanceGroupSpecInto(in.InstanceGroupSpec, out)
 	out["labels"] = func(in map[string]string) interface{} {
 		return func(in map[string]string) map[string]interface{} {
 			if in == nil {

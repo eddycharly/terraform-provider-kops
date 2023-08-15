@@ -38,6 +38,7 @@ var (
 )
 
 func getSubResources(t reflect.Type, seen map[reflect.Type]bool, isExcluded func(in _field) bool) []reflect.Type {
+	fmt.Println(t)
 	if t.Kind() == reflect.Array || t.Kind() == reflect.Map || t.Kind() == reflect.Slice || t.Kind() == reflect.Ptr {
 		return getSubResources(t.Elem(), seen, isExcluded)
 	}

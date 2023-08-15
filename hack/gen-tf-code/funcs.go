@@ -76,6 +76,7 @@ func optionFuncs(dataSource bool, optionsMap map[reflect.Type]*options, parser *
 			return *(optionsMap[t].version)
 		},
 		"isExcluded": func(in _field) bool {
+			fmt.Println(in)
 			return optionsMap[in.Owner].exclude.Has(in.Name)
 		},
 		"isRequired": isRequired,
@@ -133,6 +134,7 @@ func docFuncs(header, footer string, parser *parser, optionsMap map[reflect.Type
 			return getAttributeComment(f.Owner.PkgPath(), f.Owner.Name(), f.Name, parser.packs)
 		},
 		"subResources": func(t reflect.Type) []reflect.Type {
+			fmt.Println(t)
 			return getSubResources(t, map[reflect.Type]bool{}, func(in _field) bool {
 				return optionsMap[in.Owner].exclude.Has(in.Name)
 			})[1:]

@@ -1,0 +1,2546 @@
+package schemas
+
+import (
+	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
+)
+
+func TestExpandDataSourceCiliumNetworkingSpec(t *testing.T) {
+	_default := kopsv1alpha2.CiliumNetworkingSpec{}
+	type args struct {
+		in map[string]interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want kopsv1alpha2.CiliumNetworkingSpec
+	}{
+		{
+			name: "default",
+			args: args{
+				in: map[string]interface{}{
+					"version":                           "",
+					"memory_request":                    nil,
+					"cpu_request":                       nil,
+					"access_log":                        "",
+					"agent_labels":                      func() []interface{} { return nil }(),
+					"agent_prometheus_port":             0,
+					"metrics":                           func() []interface{} { return nil }(),
+					"allow_localhost":                   "",
+					"auto_ipv6_node_routes":             false,
+					"bpf_root":                          "",
+					"chaining_mode":                     "",
+					"container_runtime":                 func() []interface{} { return nil }(),
+					"container_runtime_endpoint":        func() map[string]interface{} { return nil }(),
+					"debug":                             false,
+					"debug_verbose":                     func() []interface{} { return nil }(),
+					"device":                            "",
+					"disable_conntrack":                 false,
+					"disable_endpoint_crd":              false,
+					"disable_ipv4":                      false,
+					"disable_k_8s_services":             false,
+					"enable_policy":                     "",
+					"enable_l7_proxy":                   nil,
+					"enable_bpf_masquerade":             nil,
+					"enable_endpoint_health_checking":   nil,
+					"enable_tracing":                    false,
+					"enable_prometheus_metrics":         false,
+					"enable_encryption":                 false,
+					"encryption_type":                   "",
+					"envoy_log":                         "",
+					"identity_allocation_mode":          "",
+					"identity_change_grace_period":      "",
+					"ipv4_cluster_cidr_mask_size":       0,
+					"ipv4_node":                         "",
+					"ipv4_range":                        "",
+					"ipv4_service_range":                "",
+					"ipv6_cluster_alloc_cidr":           "",
+					"ipv6_node":                         "",
+					"ipv6_range":                        "",
+					"ipv6_service_range":                "",
+					"k_8s_api_server":                   "",
+					"k_8s_kubeconfig_path":              "",
+					"keep_bpf_templates":                false,
+					"keep_config":                       false,
+					"label_prefix_file":                 "",
+					"labels":                            func() []interface{} { return nil }(),
+					"lb":                                "",
+					"lib_dir":                           "",
+					"log_drivers":                       func() []interface{} { return nil }(),
+					"log_opt":                           func() map[string]interface{} { return nil }(),
+					"logstash":                          false,
+					"logstash_agent":                    "",
+					"logstash_probe_timer":              0,
+					"masquerade":                        nil,
+					"nat46_range":                       "",
+					"agent_pod_annotations":             func() map[string]interface{} { return nil }(),
+					"operator_pod_annotations":          func() map[string]interface{} { return nil }(),
+					"pprof":                             false,
+					"prefilter_device":                  "",
+					"prometheus_serve_addr":             "",
+					"restore":                           false,
+					"single_cluster_route":              false,
+					"socket_path":                       "",
+					"state_dir":                         "",
+					"trace_payload_len":                 0,
+					"tunnel":                            "",
+					"enable_ipv6":                       false,
+					"enable_ipv4":                       false,
+					"monitor_aggregation":               "",
+					"bpfct_global_tcp_max":              0,
+					"bpfct_global_any_max":              0,
+					"bpflb_algorithm":                   "",
+					"bpflb_maglev_table_size":           "",
+					"bpfnat_global_max":                 0,
+					"bpf_neigh_global_max":              0,
+					"bpf_policy_map_max":                0,
+					"bpflb_map_max":                     0,
+					"bpflb_sock_host_ns_only":           false,
+					"preallocate_bpf_maps":              false,
+					"sidecar_istio_proxy_image":         "",
+					"cluster_name":                      "",
+					"to_fqdns_dns_reject_response_code": "",
+					"to_fqdns_enable_poller":            false,
+					"container_runtime_labels":          "",
+					"ipam":                              "",
+					"install_iptables_rules":            nil,
+					"auto_direct_node_routes":           false,
+					"enable_host_reachable_services":    false,
+					"enable_node_port":                  false,
+					"etcd_managed":                      false,
+					"enable_remote_node_identity":       nil,
+					"hubble":                            nil,
+					"remove_cbr_bridge":                 false,
+					"restart_pods":                      false,
+					"reconfigure_kubelet":               false,
+					"node_init_bootstrap_file":          "",
+					"cni_bin_path":                      "",
+					"disable_cnp_status_updates":        nil,
+					"enable_service_topology":           false,
+				},
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ExpandDataSourceCiliumNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("ExpandDataSourceCiliumNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceCiliumNetworkingSpecInto(t *testing.T) {
+	_default := map[string]interface{}{
+		"version":                           "",
+		"memory_request":                    nil,
+		"cpu_request":                       nil,
+		"access_log":                        "",
+		"agent_labels":                      func() []interface{} { return nil }(),
+		"agent_prometheus_port":             0,
+		"metrics":                           func() []interface{} { return nil }(),
+		"allow_localhost":                   "",
+		"auto_ipv6_node_routes":             false,
+		"bpf_root":                          "",
+		"chaining_mode":                     "",
+		"container_runtime":                 func() []interface{} { return nil }(),
+		"container_runtime_endpoint":        func() map[string]interface{} { return nil }(),
+		"debug":                             false,
+		"debug_verbose":                     func() []interface{} { return nil }(),
+		"device":                            "",
+		"disable_conntrack":                 false,
+		"disable_endpoint_crd":              false,
+		"disable_ipv4":                      false,
+		"disable_k_8s_services":             false,
+		"enable_policy":                     "",
+		"enable_l7_proxy":                   nil,
+		"enable_bpf_masquerade":             nil,
+		"enable_endpoint_health_checking":   nil,
+		"enable_tracing":                    false,
+		"enable_prometheus_metrics":         false,
+		"enable_encryption":                 false,
+		"encryption_type":                   "",
+		"envoy_log":                         "",
+		"identity_allocation_mode":          "",
+		"identity_change_grace_period":      "",
+		"ipv4_cluster_cidr_mask_size":       0,
+		"ipv4_node":                         "",
+		"ipv4_range":                        "",
+		"ipv4_service_range":                "",
+		"ipv6_cluster_alloc_cidr":           "",
+		"ipv6_node":                         "",
+		"ipv6_range":                        "",
+		"ipv6_service_range":                "",
+		"k_8s_api_server":                   "",
+		"k_8s_kubeconfig_path":              "",
+		"keep_bpf_templates":                false,
+		"keep_config":                       false,
+		"label_prefix_file":                 "",
+		"labels":                            func() []interface{} { return nil }(),
+		"lb":                                "",
+		"lib_dir":                           "",
+		"log_drivers":                       func() []interface{} { return nil }(),
+		"log_opt":                           func() map[string]interface{} { return nil }(),
+		"logstash":                          false,
+		"logstash_agent":                    "",
+		"logstash_probe_timer":              0,
+		"masquerade":                        nil,
+		"nat46_range":                       "",
+		"agent_pod_annotations":             func() map[string]interface{} { return nil }(),
+		"operator_pod_annotations":          func() map[string]interface{} { return nil }(),
+		"pprof":                             false,
+		"prefilter_device":                  "",
+		"prometheus_serve_addr":             "",
+		"restore":                           false,
+		"single_cluster_route":              false,
+		"socket_path":                       "",
+		"state_dir":                         "",
+		"trace_payload_len":                 0,
+		"tunnel":                            "",
+		"enable_ipv6":                       false,
+		"enable_ipv4":                       false,
+		"monitor_aggregation":               "",
+		"bpfct_global_tcp_max":              0,
+		"bpfct_global_any_max":              0,
+		"bpflb_algorithm":                   "",
+		"bpflb_maglev_table_size":           "",
+		"bpfnat_global_max":                 0,
+		"bpf_neigh_global_max":              0,
+		"bpf_policy_map_max":                0,
+		"bpflb_map_max":                     0,
+		"bpflb_sock_host_ns_only":           false,
+		"preallocate_bpf_maps":              false,
+		"sidecar_istio_proxy_image":         "",
+		"cluster_name":                      "",
+		"to_fqdns_dns_reject_response_code": "",
+		"to_fqdns_enable_poller":            false,
+		"container_runtime_labels":          "",
+		"ipam":                              "",
+		"install_iptables_rules":            nil,
+		"auto_direct_node_routes":           false,
+		"enable_host_reachable_services":    false,
+		"enable_node_port":                  false,
+		"etcd_managed":                      false,
+		"enable_remote_node_identity":       nil,
+		"hubble":                            nil,
+		"remove_cbr_bridge":                 false,
+		"restart_pods":                      false,
+		"reconfigure_kubelet":               false,
+		"node_init_bootstrap_file":          "",
+		"cni_bin_path":                      "",
+		"disable_cnp_status_updates":        nil,
+		"enable_service_topology":           false,
+	}
+	type args struct {
+		in kopsv1alpha2.CiliumNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.CiliumNetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Version = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AccessLog - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AccessLog = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AgentLabels - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AgentLabels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AgentPrometheusPort - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AgentPrometheusPort = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Metrics - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Metrics = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowLocalhost - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AllowLocalhost = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoIpv6NodeRoutes - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AutoIpv6NodeRoutes = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFRoot - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFRoot = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ChainingMode - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ChainingMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerRuntime - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ContainerRuntime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerRuntimeEndpoint - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ContainerRuntimeEndpoint = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Debug - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Debug = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DebugVerbose - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DebugVerbose = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Device - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Device = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableConntrack - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableConntrack = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableEndpointCRD - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableEndpointCRD = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableIpv4 - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableIpv4 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableK8sServices - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableK8sServices = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnablePolicy - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnablePolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableL7Proxy - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableL7Proxy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableBPFMasquerade - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableBPFMasquerade = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableEndpointHealthChecking - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableEndpointHealthChecking = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableTracing - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableTracing = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnablePrometheusMetrics - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnablePrometheusMetrics = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableEncryption - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableEncryption = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EncryptionType - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EncryptionType = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnvoyLog - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnvoyLog = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityAllocationMode - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.IdentityAllocationMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityChangeGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.IdentityChangeGracePeriod = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4ClusterCidrMaskSize - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4ClusterCIDRMaskSize = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4Node - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4Node = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4Range - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4Range = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4ServiceRange - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4ServiceRange = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6ClusterAllocCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6ClusterAllocCidr = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6Node - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6Node = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6Range - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6Range = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6ServiceRange - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6ServiceRange = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "K8sApiServer - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.K8sAPIServer = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "K8sKubeconfigPath - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.K8sKubeconfigPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KeepBPFTemplates - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.KeepBPFTemplates = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KeepConfig - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.KeepConfig = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LabelPrefixFile - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LabelPrefixFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Labels - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LB - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LB = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LibDir - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LibDir = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogDrivers - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogDrivers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogOpt - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogOpt = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Logstash - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Logstash = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogstashAgent - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogstashAgent = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogstashProbeTimer - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogstashProbeTimer = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Masquerade - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Masquerade = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Nat46Range - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Nat46Range = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AgentPodAnnotations - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AgentPodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "OperatorPodAnnotations - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.OperatorPodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Pprof - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Pprof = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PrefilterDevice - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.PrefilterDevice = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PrometheusServeAddr - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.PrometheusServeAddr = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Restore - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Restore = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SingleClusterRoute - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.SingleClusterRoute = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SocketPath - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.SocketPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "StateDir - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.StateDir = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TracePayloadLen - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.TracePayloadLen = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Tunnel - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Tunnel = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableIpv6 - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableIpv6 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableIpv4 - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableIpv4 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MonitorAggregation - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.MonitorAggregation = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFCTGlobalTCPMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFCTGlobalTCPMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFCTGlobalAnyMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFCTGlobalAnyMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBAlgorithm - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBAlgorithm = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMaglevTableSize - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBMaglevTableSize = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNATGlobalMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFNATGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNeighGlobalMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFNeighGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFPolicyMapMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFPolicyMapMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMapMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBMapMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBSockHostNSOnly - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBSockHostNSOnly = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PreallocateBPFMaps - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.PreallocateBPFMaps = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SidecarIstioProxyImage - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.SidecarIstioProxyImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterName - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ClusterName = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ToFqdnsDnsRejectResponseCode - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ToFQDNsDNSRejectResponseCode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ToFqdnsEnablePoller - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ToFQDNsEnablePoller = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerRuntimeLabels - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ContainerRuntimeLabels = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipam - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.IPAM = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstallIptablesRules - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.InstallIptablesRules = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoDirectNodeRoutes - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AutoDirectNodeRoutes = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableHostReachableServices - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableHostReachableServices = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableNodePort - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableNodePort = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EtcdManaged - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EtcdManaged = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableRemoteNodeIdentity - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableRemoteNodeIdentity = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Hubble - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Hubble = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RemoveCbrBridge - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.RemoveCbrBridge = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RestartPods - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.RestartPods = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ReconfigureKubelet - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ReconfigureKubelet = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeInitBootstrapFile - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.NodeInitBootstrapFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CniBinPath - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.CniBinPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableCNPStatusUpdates - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableCNPStatusUpdates = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableServiceTopology - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableServiceTopology = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]interface{}{}
+			FlattenDataSourceCiliumNetworkingSpecInto(tt.args.in, got)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceCiliumNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestFlattenDataSourceCiliumNetworkingSpec(t *testing.T) {
+	_default := map[string]interface{}{
+		"version":                           "",
+		"memory_request":                    nil,
+		"cpu_request":                       nil,
+		"access_log":                        "",
+		"agent_labels":                      func() []interface{} { return nil }(),
+		"agent_prometheus_port":             0,
+		"metrics":                           func() []interface{} { return nil }(),
+		"allow_localhost":                   "",
+		"auto_ipv6_node_routes":             false,
+		"bpf_root":                          "",
+		"chaining_mode":                     "",
+		"container_runtime":                 func() []interface{} { return nil }(),
+		"container_runtime_endpoint":        func() map[string]interface{} { return nil }(),
+		"debug":                             false,
+		"debug_verbose":                     func() []interface{} { return nil }(),
+		"device":                            "",
+		"disable_conntrack":                 false,
+		"disable_endpoint_crd":              false,
+		"disable_ipv4":                      false,
+		"disable_k_8s_services":             false,
+		"enable_policy":                     "",
+		"enable_l7_proxy":                   nil,
+		"enable_bpf_masquerade":             nil,
+		"enable_endpoint_health_checking":   nil,
+		"enable_tracing":                    false,
+		"enable_prometheus_metrics":         false,
+		"enable_encryption":                 false,
+		"encryption_type":                   "",
+		"envoy_log":                         "",
+		"identity_allocation_mode":          "",
+		"identity_change_grace_period":      "",
+		"ipv4_cluster_cidr_mask_size":       0,
+		"ipv4_node":                         "",
+		"ipv4_range":                        "",
+		"ipv4_service_range":                "",
+		"ipv6_cluster_alloc_cidr":           "",
+		"ipv6_node":                         "",
+		"ipv6_range":                        "",
+		"ipv6_service_range":                "",
+		"k_8s_api_server":                   "",
+		"k_8s_kubeconfig_path":              "",
+		"keep_bpf_templates":                false,
+		"keep_config":                       false,
+		"label_prefix_file":                 "",
+		"labels":                            func() []interface{} { return nil }(),
+		"lb":                                "",
+		"lib_dir":                           "",
+		"log_drivers":                       func() []interface{} { return nil }(),
+		"log_opt":                           func() map[string]interface{} { return nil }(),
+		"logstash":                          false,
+		"logstash_agent":                    "",
+		"logstash_probe_timer":              0,
+		"masquerade":                        nil,
+		"nat46_range":                       "",
+		"agent_pod_annotations":             func() map[string]interface{} { return nil }(),
+		"operator_pod_annotations":          func() map[string]interface{} { return nil }(),
+		"pprof":                             false,
+		"prefilter_device":                  "",
+		"prometheus_serve_addr":             "",
+		"restore":                           false,
+		"single_cluster_route":              false,
+		"socket_path":                       "",
+		"state_dir":                         "",
+		"trace_payload_len":                 0,
+		"tunnel":                            "",
+		"enable_ipv6":                       false,
+		"enable_ipv4":                       false,
+		"monitor_aggregation":               "",
+		"bpfct_global_tcp_max":              0,
+		"bpfct_global_any_max":              0,
+		"bpflb_algorithm":                   "",
+		"bpflb_maglev_table_size":           "",
+		"bpfnat_global_max":                 0,
+		"bpf_neigh_global_max":              0,
+		"bpf_policy_map_max":                0,
+		"bpflb_map_max":                     0,
+		"bpflb_sock_host_ns_only":           false,
+		"preallocate_bpf_maps":              false,
+		"sidecar_istio_proxy_image":         "",
+		"cluster_name":                      "",
+		"to_fqdns_dns_reject_response_code": "",
+		"to_fqdns_enable_poller":            false,
+		"container_runtime_labels":          "",
+		"ipam":                              "",
+		"install_iptables_rules":            nil,
+		"auto_direct_node_routes":           false,
+		"enable_host_reachable_services":    false,
+		"enable_node_port":                  false,
+		"etcd_managed":                      false,
+		"enable_remote_node_identity":       nil,
+		"hubble":                            nil,
+		"remove_cbr_bridge":                 false,
+		"restart_pods":                      false,
+		"reconfigure_kubelet":               false,
+		"node_init_bootstrap_file":          "",
+		"cni_bin_path":                      "",
+		"disable_cnp_status_updates":        nil,
+		"enable_service_topology":           false,
+	}
+	type args struct {
+		in kopsv1alpha2.CiliumNetworkingSpec
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]interface{}
+	}{
+		{
+			name: "default",
+			args: args{
+				in: kopsv1alpha2.CiliumNetworkingSpec{},
+			},
+			want: _default,
+		},
+		{
+			name: "Version - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Version = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MemoryRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.MemoryRequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CpuRequest - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.CPURequest = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AccessLog - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AccessLog = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AgentLabels - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AgentLabels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AgentPrometheusPort - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AgentPrometheusPort = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Metrics - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Metrics = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AllowLocalhost - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AllowLocalhost = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoIpv6NodeRoutes - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AutoIpv6NodeRoutes = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFRoot - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFRoot = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ChainingMode - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ChainingMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerRuntime - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ContainerRuntime = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerRuntimeEndpoint - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ContainerRuntimeEndpoint = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Debug - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Debug = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DebugVerbose - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DebugVerbose = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Device - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Device = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableConntrack - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableConntrack = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableEndpointCRD - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableEndpointCRD = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableIpv4 - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableIpv4 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableK8sServices - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableK8sServices = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnablePolicy - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnablePolicy = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableL7Proxy - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableL7Proxy = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableBPFMasquerade - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableBPFMasquerade = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableEndpointHealthChecking - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableEndpointHealthChecking = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableTracing - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableTracing = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnablePrometheusMetrics - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnablePrometheusMetrics = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableEncryption - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableEncryption = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EncryptionType - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EncryptionType = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnvoyLog - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnvoyLog = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityAllocationMode - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.IdentityAllocationMode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "IdentityChangeGracePeriod - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.IdentityChangeGracePeriod = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4ClusterCidrMaskSize - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4ClusterCIDRMaskSize = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4Node - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4Node = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4Range - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4Range = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv4ServiceRange - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv4ServiceRange = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6ClusterAllocCidr - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6ClusterAllocCidr = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6Node - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6Node = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6Range - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6Range = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipv6ServiceRange - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Ipv6ServiceRange = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "K8sApiServer - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.K8sAPIServer = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "K8sKubeconfigPath - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.K8sKubeconfigPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KeepBPFTemplates - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.KeepBPFTemplates = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "KeepConfig - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.KeepConfig = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LabelPrefixFile - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LabelPrefixFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Labels - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Labels = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LB - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LB = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LibDir - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LibDir = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogDrivers - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogDrivers = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogOpt - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogOpt = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Logstash - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Logstash = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogstashAgent - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogstashAgent = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "LogstashProbeTimer - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.LogstashProbeTimer = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Masquerade - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Masquerade = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Nat46Range - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Nat46Range = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AgentPodAnnotations - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AgentPodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "OperatorPodAnnotations - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.OperatorPodAnnotations = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Pprof - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Pprof = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PrefilterDevice - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.PrefilterDevice = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PrometheusServeAddr - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.PrometheusServeAddr = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Restore - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Restore = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SingleClusterRoute - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.SingleClusterRoute = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SocketPath - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.SocketPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "StateDir - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.StateDir = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "TracePayloadLen - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.TracePayloadLen = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Tunnel - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Tunnel = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableIpv6 - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableIpv6 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableIpv4 - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableIpv4 = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "MonitorAggregation - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.MonitorAggregation = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFCTGlobalTCPMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFCTGlobalTCPMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFCTGlobalAnyMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFCTGlobalAnyMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBAlgorithm - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBAlgorithm = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMaglevTableSize - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBMaglevTableSize = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNATGlobalMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFNATGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFNeighGlobalMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFNeighGlobalMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFPolicyMapMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFPolicyMapMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBMapMax - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBMapMax = 0
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "BPFLBSockHostNSOnly - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.BPFLBSockHostNSOnly = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "PreallocateBPFMaps - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.PreallocateBPFMaps = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "SidecarIstioProxyImage - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.SidecarIstioProxyImage = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ClusterName - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ClusterName = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ToFqdnsDnsRejectResponseCode - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ToFQDNsDNSRejectResponseCode = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ToFqdnsEnablePoller - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ToFQDNsEnablePoller = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ContainerRuntimeLabels - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ContainerRuntimeLabels = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Ipam - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.IPAM = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstallIptablesRules - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.InstallIptablesRules = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "AutoDirectNodeRoutes - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.AutoDirectNodeRoutes = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableHostReachableServices - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableHostReachableServices = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableNodePort - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableNodePort = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EtcdManaged - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EtcdManaged = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableRemoteNodeIdentity - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableRemoteNodeIdentity = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "Hubble - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.Hubble = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RemoveCbrBridge - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.RemoveCbrBridge = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "RestartPods - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.RestartPods = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "ReconfigureKubelet - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.ReconfigureKubelet = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "NodeInitBootstrapFile - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.NodeInitBootstrapFile = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "CniBinPath - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.CniBinPath = ""
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "DisableCNPStatusUpdates - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.DisableCNPStatusUpdates = nil
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "EnableServiceTopology - default",
+			args: args{
+				in: func() kopsv1alpha2.CiliumNetworkingSpec {
+					subject := kopsv1alpha2.CiliumNetworkingSpec{}
+					subject.EnableServiceTopology = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FlattenDataSourceCiliumNetworkingSpec(tt.args.in)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("FlattenDataSourceCiliumNetworkingSpec() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}

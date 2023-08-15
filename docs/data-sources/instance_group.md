@@ -52,7 +52,7 @@ resource "kops_cluster" "cluster" {
 
 The following arguments are supported:
 - `manager` - (Computed) - String - Manager determines what is managing the node lifecycle.
-- `role` - (Computed) - String - Role determines the role of instances in this instance group.
+- `role` - (Computed) - String - Type determines the role of instances in this instance group: masters or nodes.
 - `image` - (Computed) - String - Image is the instance (ami etc) we should use.
 - `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Computed) - Int - MaxSize is the maximum size of the pool.
@@ -64,22 +64,23 @@ The following arguments are supported:
 - `root_volume_iops` - (Computed) - Int - RootVolumeIOPS is the provisioned IOPS when the volume type is io1, io2 or gp3 (AWS only).
 - `root_volume_throughput` - (Computed) - Int - RootVolumeThroughput is the volume throughput in MBps when the volume type is gp3 (AWS only).
 - `root_volume_optimization` - (Computed) - Bool - RootVolumeOptimization enables EBS optimization for an instance.
+- `root_volume_delete_on_termination` - (Computed) - Bool - RootVolumeDeleteOnTermination is unused.<br />+k8s:conversion-gen=false.
 - `root_volume_encryption` - (Computed) - Bool - RootVolumeEncryption enables EBS root volume encryption for an instance.
 - `root_volume_encryption_key` - (Computed) - String - RootVolumeEncryptionKey provides the key identifier for root volume encryption.
-- `volumes` - (Computed) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this instance group.
+- `volumes` - (Computed) - List([volume_spec](#volume_spec)) - Volumes is a collection of additional volumes to create for instances within this InstanceGroup.
 - `volume_mounts` - (Computed) - List([volume_mount_spec](#volume_mount_spec)) - VolumeMounts a collection of volume mounts.
 - `subnets` - (Computed) - List(String) - Subnets is the names of the Subnets (as specified in the Cluster) where machines in this instance group should be placed.
 - `zones` - (Computed) - List(String) - Zones is the names of the Zones where machines in this instance group should be placed<br />This is needed for regional subnets (e.g. GCE), to restrict placement to particular zones.
-- `hooks` - (Computed) - List([hook_spec](#hook_spec)) - Hooks is a list of hooks for this instance group, note: these can override the cluster wide ones if required.
+- `hooks` - (Computed) - List([hook_spec](#hook_spec)) - Hooks is a list of hooks for this instanceGroup, note: these can override the cluster wide ones if required.
 - `max_price` - (Computed) - String - MaxPrice indicates this is a spot-pricing group, with the specified value as our max-price bid.
-- `spot_duration_in_minutes` - (Computed) - Int - SpotDurationInMinutes reserves a spot block for the period specified.
+- `spot_duration_in_minutes` - (Computed) - Int - SpotDurationInMinutes indicates this is a spot-block group, with the specified value as the spot reservation time.
 - `cpu_credits` - (Computed) - String - CPUCredits is the credit option for CPU Usage on burstable instance types (AWS only).
 - `associate_public_ip` - (Computed) - Bool - AssociatePublicIP is true if we want instances to have a public IP.
 - `additional_security_groups` - (Computed) - List(String) - AdditionalSecurityGroups attaches additional security groups (e.g. i-123456).
 - `cloud_labels` - (Computed) - Map(String) - CloudLabels defines additional tags or labels on cloud provider resources.
 - `node_labels` - (Computed) - Map(String) - NodeLabels indicates the kubernetes labels for nodes in this instance group.
 - `file_assets` - (Computed) - List([file_asset_spec](#file_asset_spec)) - FileAssets is a collection of file assets for this instance group.
-- `tenancy` - (Computed) - String - Describes the tenancy of this instance group. Can be either default or dedicated. Currently only applies to AWS.
+- `tenancy` - (Computed) - String - Describes the tenancy of this instance group. Can be either default or dedicated.<br />Currently only applies to AWS.
 - `kubelet` - (Computed) - [kubelet_config_spec](#kubelet_config_spec) - Kubelet overrides kubelet config from the ClusterSpec.
 - `taints` - (Computed) - List(String) - Taints indicates the kubernetes taints for nodes in this instance group.
 - `mixed_instances_policy` - (Computed) - [mixed_instances_policy_spec](#mixed_instances_policy_spec) - MixedInstancesPolicy defined a optional backing of an AWS ASG by a EC2 Fleet (AWS Only).
@@ -97,7 +98,7 @@ The following arguments are supported:
 - `compress_user_data` - (Computed) - Bool - CompressUserData compresses parts of the user data to save space.
 - `instance_metadata` - (Computed) - [instance_metadata_options](#instance_metadata_options) - InstanceMetadata defines the EC2 instance metadata service options (AWS Only).
 - `update_policy` - (Computed) - String - UpdatePolicy determines the policy for applying upgrades automatically.<br />If specified, this value overrides a value specified in the Cluster's "spec.updatePolicy" field.<br />Valid values:<br />  'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)<br />  'external': do not apply updates automatically; they are applied manually or by an external system.
-- `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool specifies a pool of pre-warmed instances for later use (AWS only).
+- `warm_pool` - (Computed) - [warm_pool_spec](#warm_pool_spec) - WarmPool configures an ASG warm pool for the instance group.
 - `containerd` - (Computed) - [containerd_config](#containerd_config) - Containerd specifies override configuration for instance group.
 - `packages` - (Computed) - List(String) - Packages specifies additional packages to be installed.
 - `guest_accelerators` - (Computed) - List([accelerator_config](#accelerator_config)) - GuestAccelerators configures additional accelerators.
@@ -138,7 +139,7 @@ The following arguments are supported:
 - `device` - (Computed) - String - Device is the device name to provision and mount.
 - `filesystem` - (Computed) - String - Filesystem is the filesystem to mount.
 - `format_options` - (Computed) - List(String) - FormatOptions is a collection of options passed when formatting the device.
-- `mount_options` - (Computed) - List(String) - MountOptions is a collection of mount options - @TODO need to be added.
+- `mount_options` - (Computed) - List(String) - MountOptions is a collection of mount options.
 - `path` - (Computed) - String - Path is the location to mount the device.
 
 ### hook_spec
@@ -150,7 +151,7 @@ HookSpec is a definition hook.
 The following arguments are supported:
 
 - `name` - (Computed) - String - Name is an optional name for the hook, otherwise the name is kops-hook-<index>.
-- `enabled` - (Computed) - Bool - Enabled indicates if you want the unit switched on. Default: true.
+- `enabled` - (Computed) - Bool - Disabled indicates if you want the unit switched off.
 - `roles` - (Computed) - List(String) - Roles is an optional list of roles the hook should be rolled out to, defaults to all.
 - `requires` - (Computed) - List(String) - Requires is a series of systemd units the action requires.
 - `before` - (Computed) - List(String) - Before is a series of systemd units which this hook must run before.
@@ -351,7 +352,7 @@ IAMProfileSpec is the AWS IAM Profile to attach to instances in this instance<br
 
 The following arguments are supported:
 
-- `profile` - (Computed) - String - Profile is the AWS IAM Profile to attach to instances in this instance group.<br />Specify the ARN for the IAM instance profile. (AWS only).
+- `profile` - (Computed) - String - Profile of the cloud group IAM profile. In aws this is the arn<br />for the iam instance profile.
 
 ### rolling_update
 
@@ -380,9 +381,9 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `min_size` - (Computed) - Int - MinSize is the minimum size of the warm pool.
+- `min_size` - (Computed) - Int - MinSize is the minimum size of the pool.
 - `max_size` - (Computed) - Int - MaxSize is the maximum size of the warm pool. The desired size of the instance group<br />is subtracted from this number to determine the desired size of the warm pool<br />(unless the resulting number is smaller than MinSize).<br />The default is the instance group's MaxSize.
-- `enable_lifecycle_hook` - (Computed) - Bool - EnableLifecyleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
+- `enable_lifecycle_hook` - (Computed) - Bool - EnableLifecycleHook determines if an ASG lifecycle hook will be added ensuring that nodeup runs to completion.<br />Note that the metadata API must be protected from arbitrary Pods when this is enabled.
 
 ### containerd_config
 
@@ -421,7 +422,7 @@ The following arguments are supported:
 
 The following arguments are supported:
 
-- `driver_package` - (Computed) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-510-server".
+- `driver_package` - (Computed) - String - Package is the name of the nvidia driver package that will be installed.<br />Default is "nvidia-headless-460-server".
 - `enabled` - (Computed) - Bool - Enabled determines if kOps will install the Nvidia GPU runtime and drivers.<br />They will only be installed on intances that has an Nvidia GPU.
 - `dcgm_exporter` - (Computed) - [dcgm_exporter_config](#dcgm_exporter_config) - DCGMExporterConfig configures the DCGM exporter.
 

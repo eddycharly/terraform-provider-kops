@@ -9,6 +9,7 @@ import (
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	core "k8s.io/api/core/v1"
 	"k8s.io/kops/pkg/apis/kops"
+	kopsv1alpha2 "k8s.io/kops/pkg/apis/kops/v1alpha2"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/config"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/datasources"
 	"github.com/eddycharly/terraform-provider-kops/pkg/api/kube"
