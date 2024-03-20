@@ -78,6 +78,18 @@ func ExpandResourceRollingUpdateOptions(in map[string]interface{}) utils.Rolling
 		FailOnValidate: func(in interface{}) bool {
 			return bool(ExpandBool(in))
 		}(in["fail_on_validate"]),
+		InstanceGroups: func(in interface{}) []string {
+			return func(in interface{}) []string {
+				if in == nil {
+					return nil
+				}
+				var out []string
+				for _, in := range in.([]interface{}) {
+					out = append(out, string(ExpandString(in)))
+				}
+				return out
+			}(in)
+		}(in["instance_groups"]),
 		PostDrainDelay: func(in interface{}) *meta.Duration {
 			if in == nil {
 				return nil
@@ -181,6 +193,15 @@ func FlattenResourceRollingUpdateOptionsInto(in utils.RollingUpdateOptions, out 
 	out["fail_on_validate"] = func(in bool) interface{} {
 		return FlattenBool(bool(in))
 	}(in.FailOnValidate)
+	out["instance_groups"] = func(in []string) interface{} {
+		return func(in []string) []interface{} {
+			var out []interface{}
+			for _, in := range in {
+				out = append(out, FlattenString(string(in)))
+			}
+			return out
+		}(in)
+	}(in.InstanceGroups)
 	out["post_drain_delay"] = func(in *meta.Duration) interface{} {
 		return func(in *meta.Duration) interface{} {
 			if in == nil {

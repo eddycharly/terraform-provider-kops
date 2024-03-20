@@ -26,6 +26,8 @@ type RollingUpdateOptions struct {
 	FailOnDrainError bool
 	// FailOnValidate will fail when a validation error occurs
 	FailOnValidate bool
+	// InstanceGroups will limit the rolling update to only the instance groups in this list
+	InstanceGroups []string
 	// PostDrainDelay is the duration we wait after draining each node
 	PostDrainDelay *metav1.Duration
 	// ValidationTimeout is the maximum time to wait for the cluster to validate, once we start validation
@@ -136,6 +138,22 @@ func ClusterRollingUpdate(clientset simple.Clientset, clusterName string, option
 	var instanceGroups []*kops.InstanceGroup
 	for i := range list.Items {
 		instanceGroups = append(instanceGroups, &list.Items[i])
+	}
+	if len(options.InstanceGroups) > 0 {
+		var filtered []*kops.InstanceGroup
+		for _, instanceGroupName := range options.InstanceGroups {
+			var found *kops.InstanceGroup
+			for _, ig := range instanceGroups {
+				if ig.ObjectMeta.Name == instanceGroupName {
+					found = ig
+					break
+				}
+			}
+			if found == nil {
+				return fmt.Errorf("InstanceGroup %q not found", instanceGroupName)
+			}
+			instanceGroups = filtered
+		}
 	}
 	cloud, err := cloudup.BuildCloud(kc)
 	if err != nil {

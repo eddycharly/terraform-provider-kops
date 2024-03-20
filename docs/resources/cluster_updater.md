@@ -121,6 +121,7 @@ The following arguments are supported:
 - `bastion_interval` - (Optional) - Duration - BastionInterval is the amount of time to wait after stopping a bastion instance.
 - `fail_on_drain_error` - (Optional) - Bool - FailOnDrainError will fail when a drain error occurs.
 - `fail_on_validate` - (Optional) - Bool - FailOnValidate will fail when a validation error occurs.
+- `instance_groups` - (Optional) - List(String) - InstanceGroups will limit the rolling update to only the instance groups in this list.
 - `post_drain_delay` - (Optional) - Duration - PostDrainDelay is the duration we wait after draining each node.
 - `validation_timeout` - (Optional) - Duration - ValidationTimeout is the maximum time to wait for the cluster to validate, once we start validation.
 - `validate_count` - (Optional) - Int - ValidateCount is the amount of time that a cluster needs to be validated after single node update.
