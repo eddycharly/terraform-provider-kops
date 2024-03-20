@@ -27,6 +27,7 @@ func TestExpandResourceRollingUpdateOptions(t *testing.T) {
 					"bastion_interval":    nil,
 					"fail_on_drain_error": false,
 					"fail_on_validate":    false,
+					"instance_groups":     func() []interface{} { return nil }(),
 					"post_drain_delay":    nil,
 					"validation_timeout":  nil,
 					"validate_count":      nil,
@@ -55,6 +56,7 @@ func TestFlattenResourceRollingUpdateOptionsInto(t *testing.T) {
 		"bastion_interval":    nil,
 		"fail_on_drain_error": false,
 		"fail_on_validate":    false,
+		"instance_groups":     func() []interface{} { return nil }(),
 		"post_drain_delay":    nil,
 		"validation_timeout":  nil,
 		"validate_count":      nil,
@@ -137,6 +139,17 @@ func TestFlattenResourceRollingUpdateOptionsInto(t *testing.T) {
 				in: func() resources.RollingUpdateOptions {
 					subject := resources.RollingUpdateOptions{}
 					subject.FailOnValidate = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstanceGroups - default",
+			args: args{
+				in: func() resources.RollingUpdateOptions {
+					subject := resources.RollingUpdateOptions{}
+					subject.InstanceGroups = nil
 					return subject
 				}(),
 			},
@@ -217,6 +230,7 @@ func TestFlattenResourceRollingUpdateOptions(t *testing.T) {
 		"bastion_interval":    nil,
 		"fail_on_drain_error": false,
 		"fail_on_validate":    false,
+		"instance_groups":     func() []interface{} { return nil }(),
 		"post_drain_delay":    nil,
 		"validation_timeout":  nil,
 		"validate_count":      nil,
@@ -299,6 +313,17 @@ func TestFlattenResourceRollingUpdateOptions(t *testing.T) {
 				in: func() resources.RollingUpdateOptions {
 					subject := resources.RollingUpdateOptions{}
 					subject.FailOnValidate = false
+					return subject
+				}(),
+			},
+			want: _default,
+		},
+		{
+			name: "InstanceGroups - default",
+			args: args{
+				in: func() resources.RollingUpdateOptions {
+					subject := resources.RollingUpdateOptions{}
+					subject.InstanceGroups = nil
 					return subject
 				}(),
 			},

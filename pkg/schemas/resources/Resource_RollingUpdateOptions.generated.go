@@ -19,6 +19,7 @@ func ResourceRollingUpdateOptions() *schema.Resource {
 			"bastion_interval":    OptionalDuration(),
 			"fail_on_drain_error": OptionalBool(),
 			"fail_on_validate":    OptionalBool(),
+			"instance_groups":     OptionalList(String()),
 			"post_drain_delay":    OptionalDuration(),
 			"validation_timeout":  OptionalDuration(),
 			"validate_count":      OptionalInt(),
